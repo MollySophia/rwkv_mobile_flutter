@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ffi' as ffi;
 import 'package:ffi/ffi.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:rwkv_mobile_flutter/rwkv_mobile_ffi.dart';
 
@@ -74,17 +75,18 @@ class RWKVMobile {
     int maxLength = 2000;
 
     // bool isGenerating = false;
-    await for (final message in receivePort) {
+    await for (final (String, dynamic) message in receivePort) {
+      // print("💬 message: ${message.runtimeType}");
       // message: (String command, Dynamic args)
-      final command = message[0] as String;
+      final command = message.$1;
       if (command == 'setMaxLength') {
-        final arg = message[1] as int;
+        final arg = message.$2 as int;
         if (maxLength > 0) {
           maxLength = arg;
         }
       }
       else if (command == 'message') {
-        final messages = message[1] as List<String>;
+        final messages = message.$2 as List<String>;
         // to ffi const char **inputs, int num_inputs
         final inputs = calloc.allocate<ffi.Pointer<ffi.Char>>(messages.length);
         for (var i = 0; i < messages.length; i++) {
@@ -101,6 +103,8 @@ class RWKVMobile {
         calloc.free(inputs);
         calloc.free(responseBuffer);
         sendPort.send({'response': response});
+      } else {
+        if (kDebugMode) print("😡 unknown command: $command");
       }
     }
   }

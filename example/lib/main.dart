@@ -1,5 +1,6 @@
 import 'dart:isolate';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -8,16 +9,22 @@ import 'package:rwkv_mobile_flutter/rwkv_mobile_flutter.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  initRWKV();
+  runApp(const MyApp());
+}
+
+Future<void> initRWKV() async {
+  if (kDebugMode) print("✅ initRWKV start");
   final rootIsolateToken = RootIsolateToken.instance;
   final rwkvMobile = RWKVMobile();
   final receivePort = ReceivePort();
   SendPort? sendPort;
   rwkvMobile.runIsolate(
-    "/data/local/tmp/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096-ncnn.bin",
-    "/data/local/tmp/b_rwkv_vocab_v20230424.txt",
-    "ncnn",
-    receivePort.sendPort, rootIsolateToken!
-  );
+      "/data/local/tmp/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096-ncnn.bin",
+      "/data/local/tmp/b_rwkv_vocab_v20230424.txt",
+      "ncnn",
+      receivePort.sendPort,
+      rootIsolateToken!);
   receivePort.listen((message) {
     if (message is SendPort) {
       sendPort = message;
@@ -27,11 +34,11 @@ void main() {
   });
   List<String> messagesList = ["Hello!"];
   while (sendPort == null) {
-    print("Waiting for sendPort...");
-    Future.delayed(const Duration(milliseconds: 1000));
+    if (kDebugMode) print("💬 waiting for sendPort...");
+    await Future.delayed(const Duration(milliseconds: 500));
   }
-  sendPort?.send(("message", messagesList));
-  runApp(const MyApp());
+  sendPort!.send(("message", messagesList));
+  if (kDebugMode) print("✅ initRWKV end");
 }
 
 class MyApp extends StatefulWidget {
