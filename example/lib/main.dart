@@ -26,6 +26,10 @@ void main() {
     }
   });
   List<String> messagesList = ["Hello!"];
+  while (sendPort == null) {
+    print("Waiting for sendPort...");
+    Future.delayed(const Duration(milliseconds: 1000));
+  }
   sendPort?.send(("message", messagesList));
   runApp(const MyApp());
 }
@@ -53,7 +57,7 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Hello world!\n'),
+          child: Text('Hello World!'),
         ),
       ),
     );
