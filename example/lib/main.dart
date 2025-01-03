@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:isolate';
 
 import 'package:flutter/foundation.dart';
@@ -18,11 +19,42 @@ SendPort? sendPort;
 StreamController<String> messagesController = StreamController<String>();
 
 Future<void> _initRWKV() async {
+  late final String modelPath;
+  late final String tokenizerPath;
+  late final String backendName;
+
+  if (Platform.isAndroid) {
+    // adb push ./* /data/local/tmp
+    modelPath = "/data/local/tmp/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096-ncnn.bin";
+    tokenizerPath = "/data/local/tmp/b_rwkv_vocab_v20230424.txt";
+    backendName = "ncnn";
+  } else if (Platform.isIOS) {
+    // TODO: Waiting for arm64 librwkv_mobile.a
+    // TODO: Add to assets
+    modelPath = "/Users/wangce/Documents/flutter/packages/rwkv_mobile_flutter/example/assets/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096-ncnn.bin";
+    tokenizerPath = "/Users/wangce/Documents/flutter/packages/rwkv_mobile_flutter/example/assets/b_rwkv_vocab_v20230424.txt";
+    backendName = "ncnn";
+  } else if (Platform.isMacOS) {
+    // TODO: Waiting for arm64 librwkv_mobile.dylib
+    // TODO: Add to assets
+    modelPath = "/Users/wangce/Downloads/x/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096-ncnn.bin";
+    tokenizerPath = "/Users/wangce/Downloads/x/b_rwkv_vocab_v20230424.txt";
+    backendName = "ncnn";
+  } else {
+    throw Exception("Unsupported platform");
+  }
+
   if (kDebugMode) print("✅ initRWKV start");
   final rootIsolateToken = RootIsolateToken.instance;
   final rwkvMobile = RWKVMobile();
   final receivePort = ReceivePort();
-  rwkvMobile.runIsolate("/data/local/tmp/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096-ncnn.bin", "/data/local/tmp/b_rwkv_vocab_v20230424.txt", "ncnn", receivePort.sendPort, rootIsolateToken!);
+  rwkvMobile.runIsolate(
+    modelPath,
+    tokenizerPath,
+    backendName,
+    receivePort.sendPort,
+    rootIsolateToken!,
+  );
   receivePort.listen((message) {
     if (message is SendPort) {
       sendPort = message;
