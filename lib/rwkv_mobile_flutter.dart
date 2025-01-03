@@ -74,6 +74,9 @@ class RWKVMobile {
     // initializations done
 
     int maxLength = 2000;
+    int maxMessages = 1000;
+    ffi.Pointer<ffi.Char> responseBuffer = calloc.allocate<ffi.Char>(maxLength);
+    final inputsPtr = calloc.allocate<ffi.Pointer<ffi.Char>>(maxMessages);
 
     // bool isGenerating = false;
     await for (final (String, dynamic) message in receivePort) {
@@ -84,31 +87,24 @@ class RWKVMobile {
         final arg = message.$2 as int;
         if (maxLength > 0) {
           maxLength = arg;
+          calloc.free(responseBuffer);
+          responseBuffer = calloc.allocate<ffi.Char>(maxLength);
         }
       } else if (command == 'message') {
         final messages = message.$2 as List<String>;
-        // to ffi const char **inputs, int num_inputs
-        if (kDebugMode) print("💬 calloc.allocate<ffi.Pointer<ffi.Char>>(messages.length);");
-        final inputs = calloc.allocate<ffi.Pointer<ffi.Char>>(messages.length);
         for (var i = 0; i < messages.length; i++) {
-          inputs[i] = messages[i].toNativeUtf8().cast<ffi.Char>();
+          inputsPtr[i] = messages[i].toNativeUtf8().cast<ffi.Char>();
         }
         final numInputs = messages.length;
-        if (kDebugMode) print("💬 calloc.allocate<ffi.Char>(maxLength);");
-        final responseBuffer = calloc.allocate<ffi.Char>(maxLength);
         // TODO: callback function to send response back dynamically
 
         if (kDebugMode) print("💬 Start to call LLM");
-        retVal = rwkvMobile.rwkvmobile_runtime_eval_chat_with_history(runtime, inputs, numInputs, responseBuffer, maxLength, ffi.nullptr);
+        retVal = rwkvMobile.rwkvmobile_runtime_eval_chat_with_history(runtime, inputsPtr, numInputs, responseBuffer, maxLength, ffi.nullptr);
         if (kDebugMode) print("💬 Call LLM done");
         if (retVal != 0) {
           throw Exception('Failed to evaluate chat');
         }
         final response = responseBuffer.cast<Utf8>().toDartString();
-        if (kDebugMode) print("💬 calloc.free(inputs);");
-        calloc.free(inputs);
-        if (kDebugMode) print("💬 calloc.free(responseBuffer);");
-        calloc.free(responseBuffer);
         sendPort.send({'response': response});
       } else {
         if (kDebugMode) print("😡 unknown command: $command");
