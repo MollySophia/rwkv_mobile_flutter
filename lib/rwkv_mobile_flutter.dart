@@ -99,7 +99,6 @@ class RWKVMobile {
         // TODO: callback function to send response back dynamically
 
         if (kDebugMode) print("💬 Start to call LLM");
-        debugger();
         retVal = rwkvMobile.rwkvmobile_runtime_eval_chat_with_history(runtime, inputs, numInputs, responseBuffer, maxLength, ffi.nullptr);
         if (kDebugMode) print("💬 Call LLM done");
         if (retVal != 0) {
