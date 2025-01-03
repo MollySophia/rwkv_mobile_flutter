@@ -51,6 +51,8 @@ Future<void> _initRWKV() async {
   if (kDebugMode) print("✅ initRWKV start");
   final rootIsolateToken = RootIsolateToken.instance;
   final rwkvMobile = RWKVMobile();
+  final availableBackendNames = rwkvMobile.getAvailableBackendNames();
+  if (kDebugMode) print("💬 availableBackendNames: $availableBackendNames");
   final receivePort = ReceivePort();
   rwkvMobile.runIsolate(
     modelPath,
