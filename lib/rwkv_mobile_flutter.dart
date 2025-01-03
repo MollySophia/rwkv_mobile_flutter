@@ -23,16 +23,16 @@ class RWKVMobile {
 
   ffi.DynamicLibrary getDynamicLibrary() {
     if (Platform.isAndroid) {
-        return ffi.DynamicLibrary.open('librwkv_mobile.so');
-      } else if (Platform.isIOS) {
-        return ffi.DynamicLibrary.process();
-      } else if (Platform.isMacOS) {
-        return ffi.DynamicLibrary.open('librwkv_mobile.dylib');
-      } else if (Platform.isWindows) {
-        return ffi.DynamicLibrary.open('librwkv_mobile.dll');
-      } else {
-        throw Exception('Unsupported platform');
-      }
+      return ffi.DynamicLibrary.open('librwkv_mobile.so');
+    } else if (Platform.isIOS) {
+      return ffi.DynamicLibrary.process();
+    } else if (Platform.isMacOS) {
+      return ffi.DynamicLibrary.open('librwkv_mobile.dylib');
+    } else if (Platform.isWindows) {
+      return ffi.DynamicLibrary.open('librwkv_mobile.dll');
+    } else {
+      throw Exception('Unsupported platform');
+    }
   }
 
   // TODO: rwkv_mobile has this function, but it's not exported yet
@@ -84,8 +84,7 @@ class RWKVMobile {
         if (maxLength > 0) {
           maxLength = arg;
         }
-      }
-      else if (command == 'message') {
+      } else if (command == 'message') {
         final messages = message.$2 as List<String>;
         // to ffi const char **inputs, int num_inputs
         final inputs = calloc.allocate<ffi.Pointer<ffi.Char>>(messages.length);

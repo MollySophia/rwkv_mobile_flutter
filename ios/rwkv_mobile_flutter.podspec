@@ -3,11 +3,11 @@
 # Run `pod lib lint onnxruntime.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-    s.name             = 'rwkv_mobile'
+    s.name             = 'rwkv_mobile_flutter'
     s.version          = '0.0.1'
-    s.summary          = 'rwkv_mobile plugin for Flutter apps.'
+    s.summary          = 'rwkv_mobile_flutter plugin for Flutter apps.'
     s.description      = <<-DESC
-  rwkv_mobile plugin for Flutter apps.
+  rwkv_mobile_flutter plugin for Flutter apps.
                          DESC
     s.homepage         = 'http://example.com'
     s.license          = { :file => '../LICENSE' }
