@@ -1,5 +1,6 @@
 library rwkv_mobile_flutter;
 
+import 'dart:developer';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ffi' as ffi;
@@ -87,19 +88,27 @@ class RWKVMobile {
       } else if (command == 'message') {
         final messages = message.$2 as List<String>;
         // to ffi const char **inputs, int num_inputs
+        if (kDebugMode) print("💬 calloc.allocate<ffi.Pointer<ffi.Char>>(messages.length);");
         final inputs = calloc.allocate<ffi.Pointer<ffi.Char>>(messages.length);
         for (var i = 0; i < messages.length; i++) {
           inputs[i] = messages[i].toNativeUtf8().cast<ffi.Char>();
         }
         final numInputs = messages.length;
+        if (kDebugMode) print("💬 calloc.allocate<ffi.Char>(maxLength);");
         final responseBuffer = calloc.allocate<ffi.Char>(maxLength);
         // TODO: callback function to send response back dynamically
+
+        if (kDebugMode) print("💬 Start to call LLM");
+        debugger();
         retVal = rwkvMobile.rwkvmobile_runtime_eval_chat_with_history(runtime, inputs, numInputs, responseBuffer, maxLength, ffi.nullptr);
+        if (kDebugMode) print("💬 Call LLM done");
         if (retVal != 0) {
           throw Exception('Failed to evaluate chat');
         }
         final response = responseBuffer.cast<Utf8>().toDartString();
+        if (kDebugMode) print("💬 calloc.free(inputs);");
         calloc.free(inputs);
+        if (kDebugMode) print("💬 calloc.free(responseBuffer);");
         calloc.free(responseBuffer);
         sendPort.send({'response': response});
       } else {

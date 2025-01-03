@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:isolate';
 
@@ -6,8 +7,23 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:rwkv_mobile_flutter/rwkv_mobile_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:rwkv_mobile_flutter/rwkv_mobile_flutter.dart';
+import 'package:path/path.dart' as path;
+
+Future<String> getModelPath(String assetsPath) async {
+  try {
+    final data = await rootBundle.load(assetsPath);
+    final tempDir = await getTemporaryDirectory();
+    final tempFile = File(path.join(tempDir.path, assetsPath));
+    await tempFile.create(recursive: true);
+    await tempFile.writeAsBytes(data.buffer.asUint8List());
+    return tempFile.path;
+  } catch (e) {
+    if (kDebugMode) print("😡 $e");
+    return "";
+  }
+}
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,36 +35,18 @@ SendPort? sendPort;
 
 StreamController<String> messagesController = StreamController<String>();
 
+const firstMessage = "Hello!";
+
 Future<void> _initRWKV() async {
   late final String modelPath;
   late final String tokenizerPath;
   late final String backendName;
 
-  // copy tokenizer file from assets to cache
-  final cacheDir = await getTemporaryDirectory();
-  final rawAssetFile = await rootBundle.load("assets/b_rwkv_vocab_v20230424.txt");
-  final rawAssetBytes = rawAssetFile.buffer.asUint8List();
-  tokenizerPath = "${cacheDir.path}/b_rwkv_vocab_v20230424.txt";
-  final tokenizerFile = File(tokenizerPath);
-  await tokenizerFile.writeAsBytes(rawAssetBytes);
-
-  if (Platform.isAndroid) {
-    // adb push ./* /data/local/tmp
-    modelPath = "/data/local/tmp/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096-ncnn.bin";
-    backendName = "ncnn";
-  } else if (Platform.isIOS) {
-    // TODO: Waiting for arm64 librwkv_mobile.a
-    // TODO: Add to assets
-    modelPath = "/Users/wangce/Documents/flutter/packages/rwkv_mobile_flutter/example/assets/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096-ncnn.bin";
-    backendName = "ncnn";
-  } else if (Platform.isMacOS) {
-    // TODO: Waiting for arm64 librwkv_mobile.dylib
-    // TODO: Add to assets
-    modelPath = "/Users/wangce/Downloads/x/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096-ncnn.bin";
-    backendName = "ncnn";
-  } else {
-    throw Exception("Unsupported platform");
-  }
+  // TODO: Deal with different platform
+  modelPath = await getModelPath("assets/model/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096-ncnn.bin");
+  await getModelPath("assets/model/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096-ncnn.param");
+  tokenizerPath = await getModelPath("assets/model/b_rwkv_vocab_v20230424.txt");
+  backendName = "ncnn";
 
   if (kDebugMode) print("✅ initRWKV start");
   final rootIsolateToken = RootIsolateToken.instance;
@@ -68,7 +66,7 @@ Future<void> _initRWKV() async {
       messagesController.add(message["response"].toString());
     }
   });
-  List<String> messagesList = ["Hello!"];
+  List<String> messagesList = [firstMessage];
   while (sendPort == null) {
     if (kDebugMode) print("💬 waiting for sendPort...");
     await Future.delayed(const Duration(milliseconds: 500));
@@ -85,7 +83,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  List<String> _messages = [];
+  final List<String> _messages = [firstMessage];
 
   @override
   void initState() {
