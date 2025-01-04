@@ -33,7 +33,7 @@ void main() {
 
 SendPort? sendPort;
 
-StreamController<String> messagesController = StreamController<String>();
+StreamController<dynamic> messagesController = StreamController<dynamic>();
 
 const firstMessage = "Hello!";
 
@@ -65,8 +65,11 @@ Future<void> _initRWKV() async {
     if (message is SendPort) {
       sendPort = message;
     } else {
+      if (message["generateStart"] == true) {
+        messagesController.add({'generateStart': true});
+      }
       if (message["response"] != null) {
-        messagesController.add(message["response"].toString());
+        messagesController.add({'finalResponse': message["response"].toString()});
       }
       if (message["samplerParams"] != null) {
         if (kDebugMode) print("💬 Got samplerParams: ${message["samplerParams"]}");
@@ -75,7 +78,7 @@ Future<void> _initRWKV() async {
         if (kDebugMode) print("💬 Got currentPrompt: \"${message["currentPrompt"]}\"");
       }
       if (message["streamResponse"] != null) {
-        if (kDebugMode) print("💬 Got streamResponse: \"${message["streamResponse"]}\"");
+        messagesController.add({'streamResponse': message["streamResponse"].toString()});
       }
     }
   });
@@ -107,7 +110,11 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     messagesController.stream.listen((message) {
-      _messages.add(message);
+      if (message["generateStart"] == true) {
+        _messages.add("");
+      } else if (message["streamResponse"] != null) {
+        _messages[_messages.length - 1] = message["streamResponse"];
+      }
       setState(() {});
     });
   }

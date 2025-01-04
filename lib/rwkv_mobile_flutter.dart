@@ -146,6 +146,7 @@ class RWKVMobile {
 
         final nativeCallable = ffi.NativeCallable<ffi.Void Function(ffi.Pointer<ffi.Char>)>.isolateLocal(callbackFunction);
 
+        sendPort.send({'generateStart': true});
         if (kDebugMode) print("💬 Start to call LLM");
         retVal = rwkvMobile.rwkvmobile_runtime_eval_chat_with_history(runtime, inputsPtr, numInputs, responseBuffer, maxLength, nativeCallable.nativeFunction);
         if (kDebugMode) print("💬 Call LLM done");
