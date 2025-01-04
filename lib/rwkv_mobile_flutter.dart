@@ -48,7 +48,7 @@ class RWKVMobile {
 
   static callbackFunction(ffi.Pointer<ffi.Char> responseBuffer) {
     final response = responseBuffer.cast<Utf8>().toDartString();
-    if (kDebugMode) print("💬 streamResponse: $response");
+    if (kDebugMode) print("💬 streamResponse: \"$response\"");
   }
 
   void isolateMain(options) async {
@@ -98,13 +98,52 @@ class RWKVMobile {
           calloc.free(responseBuffer);
           responseBuffer = calloc.allocate<ffi.Char>(maxLength);
         }
+      } else if (command == 'setPrompt') {
+        final prompt = message.$2 as String;
+        final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
+        retVal = rwkvMobile.rwkvmobile_runtime_set_prompt(runtime, promptPtr);
+        if (retVal != 0) {
+          throw Exception('Failed to set prompt');
+        }
+      } else if (command == 'getPrompt') {
+        final stringBuffer = calloc.allocate<ffi.Char>(maxLength);
+        rwkvMobile.rwkvmobile_runtime_get_prompt(runtime, stringBuffer, maxLength);
+        final prompt = stringBuffer.cast<Utf8>().toDartString();
+        sendPort.send({'currentPrompt': prompt});
+        calloc.free(stringBuffer);
+      } else if (command == 'setSamplerParams') {
+        final args = message.$2 as Map<String, dynamic>;
+        final samplerParams = ffi.Struct.create<sampler_params>();
+        final penaltyParams = ffi.Struct.create<penalty_params>();
+        samplerParams.temperature = args['temperature'] as double;
+        samplerParams.top_k = args['top_k'] as int;
+        samplerParams.top_p = args['top_p'] as double;
+        penaltyParams.presence_penalty = args['presence_penalty'] as double;
+        penaltyParams.frequency_penalty = args['frequency_penalty'] as double;
+        penaltyParams.penalty_decay = args['penalty_decay'] as double;
+        rwkvMobile.rwkvmobile_runtime_set_sampler_params(runtime, samplerParams);
+        rwkvMobile.rwkvmobile_runtime_set_penalty_params(runtime, penaltyParams);
+      } else if (command == 'getSamplerParams') {
+        final samplerParams = rwkvMobile.rwkvmobile_runtime_get_sampler_params(runtime);
+        final penaltyParams = rwkvMobile.rwkvmobile_runtime_get_penalty_params(runtime);
+        sendPort.send({
+          'samplerParams': {
+            'temperature': samplerParams.temperature,
+            'top_k': samplerParams.top_k,
+            'top_p': samplerParams.top_p,
+            'presence_penalty': penaltyParams.presence_penalty,
+            'frequency_penalty': penaltyParams.frequency_penalty,
+            'penalty_decay': penaltyParams.penalty_decay,
+          }
+        });
       } else if (command == 'message') {
         final messages = message.$2 as List<String>;
         for (var i = 0; i < messages.length; i++) {
           inputsPtr[i] = messages[i].toNativeUtf8().cast<ffi.Char>();
         }
         final numInputs = messages.length;
-        // TODO: callback function to send response back dynamically
+
+        // callback function to let the native code send response back streamingly
         ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>)>> callbackPointer = ffi.Pointer.fromFunction<ffi.Void Function(ffi.Pointer<ffi.Char>)>(
           RWKVMobile.callbackFunction,
         );

@@ -65,7 +65,15 @@ Future<void> _initRWKV() async {
     if (message is SendPort) {
       sendPort = message;
     } else {
-      messagesController.add(message["response"].toString());
+      if (message["response"] != null) {
+        messagesController.add(message["response"].toString());
+      }
+      if (message["samplerParams"] != null) {
+        if (kDebugMode) print("💬 Got samplerParams: ${message["samplerParams"]}");
+      }
+      if (message["currentPrompt"] != null) {
+        if (kDebugMode) print("💬 Got currentPrompt: ${message["currentPrompt"]}");
+      }
     }
   });
   List<String> messagesList = [firstMessage];
@@ -73,6 +81,11 @@ Future<void> _initRWKV() async {
     if (kDebugMode) print("💬 waiting for sendPort...");
     await Future.delayed(const Duration(milliseconds: 500));
   }
+  // TODO: Decide a better prompt to use
+  sendPort!.send(("setPrompt", "User: hi\n\nAssistant: Hi. I am your assistant and I will provide expert full response in full details. Please feel free to ask any question and I will always answer it.\n\n"));
+  sendPort!.send(("getPrompt", null));
+  sendPort!.send(("setSamplerParams", {"temperature": 2.0, "top_k": 128, "top_p": 0.5, "presence_penalty": 0.5, "frequency_penalty": 0.5, "penalty_decay": 0.996}));
+  sendPort!.send(("getSamplerParams", null));
   sendPort!.send(("message", messagesList));
   if (kDebugMode) print("✅ initRWKV end");
 }
