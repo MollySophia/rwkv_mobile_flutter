@@ -46,11 +46,6 @@ class RWKVMobile {
     return response;
   }
 
-  static callbackFunction(ffi.Pointer<ffi.Char> responseBuffer) {
-    final response = responseBuffer.cast<Utf8>().toDartString();
-    if (kDebugMode) print("💬 streamResponse: \"$response\"");
-  }
-
   void isolateMain(options) async {
     final sendPort = options.$1 as SendPort;
     final rootIsolateToken = options.$2 as RootIsolateToken;
@@ -143,13 +138,16 @@ class RWKVMobile {
         }
         final numInputs = messages.length;
 
-        // callback function to let the native code send response back streamingly
-        ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>)>> callbackPointer = ffi.Pointer.fromFunction<ffi.Void Function(ffi.Pointer<ffi.Char>)>(
-          RWKVMobile.callbackFunction,
-        );
+        callbackFunction(ffi.Pointer<ffi.Char> responseBuffer) {
+          final response = responseBuffer.cast<Utf8>().toDartString();
+          sendPort.send({'streamResponse': response});
+          // TODO: send stop signal back to native code
+        }
+
+        final nativeCallable = ffi.NativeCallable<ffi.Void Function(ffi.Pointer<ffi.Char>)>.isolateLocal(callbackFunction);
 
         if (kDebugMode) print("💬 Start to call LLM");
-        retVal = rwkvMobile.rwkvmobile_runtime_eval_chat_with_history(runtime, inputsPtr, numInputs, responseBuffer, maxLength, callbackPointer);
+        retVal = rwkvMobile.rwkvmobile_runtime_eval_chat_with_history(runtime, inputsPtr, numInputs, responseBuffer, maxLength, nativeCallable.nativeFunction);
         if (kDebugMode) print("💬 Call LLM done");
         if (retVal != 0) {
           throw Exception('Failed to evaluate chat');

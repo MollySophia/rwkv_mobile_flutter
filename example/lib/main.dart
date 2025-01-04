@@ -72,7 +72,10 @@ Future<void> _initRWKV() async {
         if (kDebugMode) print("💬 Got samplerParams: ${message["samplerParams"]}");
       }
       if (message["currentPrompt"] != null) {
-        if (kDebugMode) print("💬 Got currentPrompt: ${message["currentPrompt"]}");
+        if (kDebugMode) print("💬 Got currentPrompt: \"${message["currentPrompt"]}\"");
+      }
+      if (message["streamResponse"] != null) {
+        if (kDebugMode) print("💬 Got streamResponse: \"${message["streamResponse"]}\"");
       }
     }
   });
