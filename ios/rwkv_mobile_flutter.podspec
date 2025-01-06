@@ -20,7 +20,12 @@ Pod::Spec.new do |s|
     s.source           = { :path => '.' }
     # s.source_files = 'Classes/**/*'
     s.dependency 'Flutter'
-    s.vendored_libraries = '*.a'
+    s.preserve_paths = '*.a'
+
+    s.xcconfig = {
+      'OTHER_LDFLAGS' => '-all_load -lrwkv_mobile -lweb_rwkv_ffi',
+    }
+    s.vendored_libraries = 'librwkv_mobile.a', 'libweb_rwkv_ffi.a'
     s.platform = :ios, '11.0'
     s.static_framework = true
   

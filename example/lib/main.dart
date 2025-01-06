@@ -42,11 +42,17 @@ Future<void> _initRWKV() async {
   late final String tokenizerPath;
   late final String backendName;
 
-  // TODO: Deal with different platform
-  modelPath = await getModelPath("assets/model/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096-ncnn.bin");
-  await getModelPath("assets/model/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096-ncnn.param");
-  tokenizerPath = await getModelPath("assets/model/b_rwkv_vocab_v20230424.txt");
-  backendName = "ncnn";
+  // TODO: More backends
+  if (Platform.isIOS || Platform.isMacOS) {
+    modelPath = await getModelPath("assets/model/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096.st");
+    tokenizerPath = await getModelPath("assets/model/b_rwkv_vocab_v20230424.txt");
+    backendName = "web-rwkv";
+  } else {
+    modelPath = await getModelPath("assets/model/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096-ncnn.bin");
+    await getModelPath("assets/model/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096-ncnn.param");
+    tokenizerPath = await getModelPath("assets/model/b_rwkv_vocab_v20230424.txt");
+    backendName = "ncnn";
+  }
 
   if (kDebugMode) print("✅ initRWKV start");
   final rootIsolateToken = RootIsolateToken.instance;
