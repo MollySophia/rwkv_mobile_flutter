@@ -28,7 +28,7 @@ SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
-  rwkv_mobile_flutter: ec50366fe6cd6fbc05f8286528db36f056401f1c
+  rwkv_mobile_flutter: 1b65905d7efee312d39b48674d2992440715fdf5
 
 PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
 
