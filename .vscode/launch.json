@@ -23,7 +23,7 @@
       "args": [
         // "--dart-define=locale=zh_Hans",
         "--dart-define=show_home=true",
-        "--dart-define=use_fake_messages=true",
+        // "--dart-define=use_fake_messages=true",
         // "--dart-define=locale=en_US",
       ]
     },

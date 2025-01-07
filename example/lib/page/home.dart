@@ -1,3 +1,4 @@
+import 'package:chat/config.dart';
 import 'package:chat/func/gen_fake_messages.dart';
 import 'package:chat/route/method.dart';
 import 'package:chat/route/page_key.dart';
@@ -16,9 +17,11 @@ class PageHome extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          genFakeMessages().then((messages) {
-            P.chat.messages.u(messages);
-          });
+          if (Config.useFakeMessages) {
+            genFakeMessages().then((messages) {
+              P.chat.messages.u(messages);
+            });
+          }
           push(PageKey.chat);
         },
         child: const Icon(Icons.chat),
