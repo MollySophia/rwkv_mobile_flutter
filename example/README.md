@@ -1,6 +1,6 @@
-# rwkv_mobile_flutter_example
+# chat
 
-Demonstrates how to use the rwkv_mobile_flutter plugin.
+A new Flutter project.
 
 ## Getting Started
 

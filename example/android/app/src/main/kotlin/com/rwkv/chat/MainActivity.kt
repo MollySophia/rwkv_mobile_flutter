@@ -1,4 +1,4 @@
-package com.example.rwkv_mobile_flutter_example
+package com.rwkv.chat
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,0 +1,11 @@
+{
+  "dart.lineLength": 1000,
+  "files.exclude": {
+    "**/.gitkeep": true,
+    "**/Base.lproj": true,
+    "**/Assets.xcassets": true,
+    "**/*.xcodeproj": true,
+    "**/.travis.yml": true,
+    "**/LICENSE": true,
+  }
+}

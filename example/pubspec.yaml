@@ -1,56 +1,55 @@
-name: rwkv_mobile_flutter_example
-description: 'Demonstrates how to use the rwkv_mobile_flutter plugin.'
+name: chat
+description: 'A new Flutter project.'
 publish_to: 'none'
 version: 1.0.0+100
 
 environment:
-  sdk: ^3.5.4
+  sdk: ^3.6.0
 
-# Dependencies specify other packages that your package needs in order to work.
-# To automatically upgrade your package dependencies to the latest versions
-# consider running `flutter pub upgrade --major-versions`. Alternatively,
-# dependencies can be manually updated by changing the version numbers below to
-# the latest version available on pub.dev. To see which dependencies have newer
-# versions available, run `flutter pub outdated`.
 dependencies:
   flutter:
     sdk: flutter
-  path:
-  path_provider:
+
+  flutter_localizations:
+    sdk: flutter
 
   rwkv_mobile_flutter:
-    # When depending on this package from a real application you should use:
-    #   rwkv_mobile_flutter: ^x.y.z
-    # See https://dart.dev/tools/pub/dependencies#version-constraints
-    # The example app is bundled with the plugin so we use a path dependency on
-    # the parent directory to use the current plugin's version.
     path: ../
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.8
+  adaptive_dialog: ^2.4.0 # https://pub.dev/packages/adaptive_dialog/
+  auto_size_text: # https://pub.dev/packages/auto_size_text/
+  collection: # https://pub.dev/packages/collection/
+  device_info_plus: # https://pub.dev/packages/device_info_plus/
+  flutter_cache_manager: # https://pub.dev/packages/flutter_cache_manager/
+  flutter_native_splash: # https://pub.dev/packages/flutter_native_splash/
+  flutter_riverpod: # https://pub.dev/packages/flutter_riverpod/
+  flutter_svg: # https://pub.dev/packages/flutter_svg/
+  go_router: # https://pub.dev/packages/go_router/
+  halo: # https://pub.dev/packages/halo/
+  http: # https://pub.dev/packages/http/
+  intl: # https://pub.dev/packages/intl/
+  package_info_plus: # https://pub.dev/packages/package_info_plus/
+  path: # https://pub.dev/packages/path/
+  path_provider: # https://pub.dev/packages/path_provider/
+  shared_preferences: # https://pub.dev/packages/shared_preferences/
 
 dev_dependencies:
-  integration_test:
-    sdk: flutter
-  flutter_test:
-    sdk: flutter
+  flutter_lints: # https://pub.dev/packages/flutter_lints/
+  icons_launcher: # https://pub.dev/packages/icons_launcher/
+  flutter_gen_runner: # https://pub.dev/packages/flutter_gen_runner:/
+  custom_lint: # https://pub.dev/packages/custom_lint/
+  riverpod_lint: # https://pub.dev/packages/riverpod_lint/
 
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
-  flutter_lints: ^4.0.0
-
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
-
-# The following section is specific to Flutter packages.
 flutter:
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
   uses-material-design: true
+
   assets:
     - assets/model/
+
+flutter_intl:
+  enabled: true # Required. Must be set to true to activate the package. Default: false
+  class_name: S # Optional. Sets the name for the generated localization class. Default: S
+  main_locale: zh_Hans
+  arb_dir: lib/l10n # Optional. Sets the directory of your ARB resource files. Provided value should be a valid path on your system. Default: lib/l10n
+  output_dir: lib/gen # Optional. Sets the directory of generated localization files. Provided value should be a valid path on your system. Default: lib/generated
+  use_deferred_loading: false # Optional. Must be set to true to generate localization code that is loaded with deferred loading. Default: false
