@@ -29,30 +29,13 @@ extension $RWKV on _RWKV {
     final existingMessages = P.chat.messages.v.m((e) => e.content);
     final newMessages = [...existingMessages];
     if (kDebugMode) print("💬 $runtimeType.send: ${newMessages.length} messages");
-    sendPort!.send(("message", newMessages));
-  }
-
-  void sendAt(String message, int index) {
-    // TODO: @wangce
-    final existingMessages = P.chat.messages.v.m((e) => e.content);
-    final newMessages = [...existingMessages];
-    if (kDebugMode) print("💬 $runtimeType.sendAt: ${newMessages.length} messages");
-    sendPort!.send(("message", newMessages));
-  }
-
-  void regenerateAt(int index) {
-    // TODO: @wangce
-    final existingMessages = P.chat.messages.v.m((e) => e.content);
-    final newMessages = existingMessages.sublist(0, index);
-    if (kDebugMode) print("💬 $runtimeType.regenerateAt: ${newMessages.length} messages");
-    sendPort!.send(("message", newMessages));
-  }
-
-  void modifyAt(int index, String message) {
-    // TODO: @wangce
-    final existingMessages = P.chat.messages.v.m((e) => e.content);
-    final newMessages = [...existingMessages];
-    if (kDebugMode) print("💬 $runtimeType.modifyAt: ${newMessages.length} messages");
+    if (kDebugMode) {
+      newMessages.forEach((e) {
+        if (kDebugMode) {
+          print("💬 $runtimeType.send: $e");
+        }
+      });
+    }
     sendPort!.send(("message", newMessages));
   }
 }
@@ -103,7 +86,7 @@ extension _$RWKV on _RWKV {
       if (kDebugMode) print("💬 waiting for sendPort...");
       await Future.delayed(const Duration(milliseconds: 50));
     }
-    // TODO: Decide a better prompt to use
+    // TODO: @Molly Decide a better prompt to use
     sendPort!.send(("setPrompt", "User: hi\n\nAssistant: Hi. I am your assistant and I will provide expert full response in full details. Please feel free to ask any question and I will always answer it.\n\n"));
     sendPort!.send(("getPrompt", null));
     sendPort!.send(("setSamplerParams", {"temperature": 2.0, "top_k": 128, "top_p": 0.5, "presence_penalty": 0.5, "frequency_penalty": 0.5, "penalty_decay": 0.996}));

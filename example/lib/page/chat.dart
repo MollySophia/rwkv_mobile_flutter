@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:math';
 import 'dart:ui';
 
@@ -27,7 +28,11 @@ class PageChat extends ConsumerWidget {
             child: GD(
               onTap: () {
                 P.chat.focusNode.unfocus();
-                P.chat.editIndex.u(null);
+                final editingIndex = P.chat.editingIndex.v;
+                if (editingIndex != null) {
+                  P.chat.editingIndex.u(null);
+                  P.chat.textEditingController.value = TextEditingValue(text: "");
+                }
               },
               child: _List(),
             ),
@@ -90,7 +95,7 @@ class _List extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO: Use select to improve performance
+    // TODO: @wangce Use select to improve performance
     final messages = ref.watch(P.chat.messages);
     final paddingTop = ref.watch(P.app.paddingTop);
     final inputHeight = ref.watch(P.chat.inputHeight);
@@ -115,7 +120,7 @@ class _List extends ConsumerWidget {
         itemBuilder: (context, index) {
           final finalIndex = useReverse ? messages.length - 1 - index : index;
           final msg = messages[finalIndex];
-          return _Message(msg);
+          return _Message(msg, finalIndex);
         },
         separatorBuilder: (context, index) {
           return const SB(height: 15);
@@ -127,8 +132,29 @@ class _List extends ConsumerWidget {
 
 class _Message extends ConsumerWidget {
   final Message msg;
+  final int index;
 
-  const _Message(this.msg);
+  const _Message(this.msg, this.index);
+
+  void _onUserEditPressed() {
+    final content = msg.content;
+    P.chat.textEditingController.value = TextEditingValue(text: content);
+    P.chat.focusNode.requestFocus();
+    P.chat.editingIndex.u(index);
+  }
+
+  void _onBotEditPressed() {
+    // TODO: @wangce
+  }
+
+  void _onRegeneratePressed() {
+    // TODO: @wangce
+  }
+
+  void _onCopyPressed() {
+    Alert.success(S.current.chat_copied_to_clipboard);
+    Clipboard.setData(ClipboardData(text: msg.content));
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -149,118 +175,139 @@ class _Message extends ConsumerWidget {
 
     final color = Colors.deepPurple;
 
+    final editingIndex = ref.watch(P.chat.editingIndex);
+
+    final isHistoryForEditing = editingIndex != null && editingIndex > index;
+    final isEditing = editingIndex != null && editingIndex == index;
+    final isFutureForEditing = editingIndex != null && editingIndex < index;
+
+    double opacity = 1;
+
+    if (isHistoryForEditing) {
+      opacity = 0.667;
+    } else if (isFutureForEditing) {
+      opacity = 0.333;
+    } else if (isEditing) {
+      opacity = 1;
+    } else {
+      opacity = 1;
+    }
+
+    // debugger();
+
     return LayoutBuilder(builder: (context, constraints) {
       final width = constraints.maxWidth;
       return Align(
         alignment: alignment,
         child: Stack(
           children: [
-            Padding(
-              padding: const EI.s(h: marginHorizontal, v: marginVertical),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: width - kBubbleMaxWidthAdjust,
-                  minHeight: kBubbleMinHeight,
-                ),
-                child: C(
-                  padding: const EI.a(12),
-                  decoration: BD(
-                    color: isMine ? const Color.fromARGB(255, 58, 79, 154) : kW,
-                    border: Border.all(color: color.wo(0.2)),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(isMine ? 20 : 0),
-                      topRight: const Radius.circular(20),
-                      bottomLeft: const Radius.circular(20),
-                      bottomRight: Radius.circular(isMine ? 0 : 20),
+            IgnorePointer(
+              ignoring: editingIndex != null && editingIndex != index,
+              child: AnimatedOpacity(
+                opacity: opacity,
+                duration: 250.ms,
+                child: Padding(
+                  padding: const EI.s(h: marginHorizontal, v: marginVertical),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: width - kBubbleMaxWidthAdjust,
+                      minHeight: kBubbleMinHeight,
                     ),
-                  ),
-                  child: Co(
-                    c: isMine ? CAA.end : CAA.start,
-                    children: [
-                      T(finalContent, s: TS(c: isMine ? kW : kB)),
-                      if (isMine) 12.h,
-                      if (isMine)
-                        Ro(
-                          m: MAA.end,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            GD(
-                              onTap: () {
-                                P.chat.textEditingController.value = TextEditingValue(text: finalContent);
-                              },
-                              child: Icon(
-                                Icons.edit,
-                                color: kW.wo(0.8),
-                                size: 20,
-                              ),
-                            ),
-                            4.w,
-                            GD(
-                              onTap: () {
-                                Alert.success(S.current.chat_copied_to_clipboard);
-                                Clipboard.setData(ClipboardData(text: finalContent));
-                              },
-                              child: Icon(
-                                Icons.copy,
-                                color: kW.wo(0.8),
-                                size: 20,
-                              ),
-                            ),
-                          ],
+                    child: C(
+                      padding: const EI.a(12),
+                      decoration: BD(
+                        color: isMine ? const Color.fromARGB(255, 58, 79, 154) : kW,
+                        border: Border.all(color: color.wo(0.2)),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(isMine ? 20 : 0),
+                          topRight: const Radius.circular(20),
+                          bottomLeft: const Radius.circular(20),
+                          bottomRight: Radius.circular(isMine ? 0 : 20),
                         ),
-                      if (!isMine) 12.h,
-                      if (!isMine)
-                        Ro(
-                          m: MAA.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (msg.changing)
-                              GD(
-                                child: TweenAnimationBuilder(
-                                  tween: Tween(begin: 0.0, end: 1.0),
-                                  duration: const Duration(milliseconds: 1000000000),
-                                  builder: (context, value, child) => Transform.rotate(
-                                    angle: value * 2 * pi * 1000000,
-                                    child: child,
-                                  ),
+                      ),
+                      child: Co(
+                        c: isMine ? CAA.end : CAA.start,
+                        children: [
+                          T(finalContent, s: TS(c: isMine ? kW : kB)),
+                          if (isMine) 12.h,
+                          if (isMine)
+                            Ro(
+                              m: MAA.end,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                GD(
+                                  onTap: _onUserEditPressed,
                                   child: Icon(
-                                    Icons.hourglass_top,
-                                    color: color,
+                                    Icons.edit,
+                                    color: kW.wo(0.8),
                                     size: 20,
                                   ),
                                 ),
-                              ),
-                            4.w,
-                            GD(
-                              child: Icon(
-                                Icons.refresh,
-                                color: color.wo(0.8),
-                                size: 20,
-                              ),
+                                4.w,
+                                GD(
+                                  onTap: _onCopyPressed,
+                                  child: Icon(
+                                    Icons.copy,
+                                    color: kW.wo(0.8),
+                                    size: 20,
+                                  ),
+                                ),
+                              ],
                             ),
-                            4.w,
-                            GD(
-                              child: Icon(
-                                Icons.edit,
-                                color: color.wo(0.8),
-                                size: 20,
-                              ),
+                          if (!isMine) 12.h,
+                          if (!isMine)
+                            Ro(
+                              m: MAA.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (msg.changing)
+                                  GD(
+                                    child: TweenAnimationBuilder(
+                                      tween: Tween(begin: 0.0, end: 1.0),
+                                      duration: const Duration(milliseconds: 1000000000),
+                                      builder: (context, value, child) => Transform.rotate(
+                                        angle: value * 2 * pi * 1000000,
+                                        child: child,
+                                      ),
+                                      child: Icon(
+                                        Icons.hourglass_top,
+                                        color: color,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ),
+                                4.w,
+                                GD(
+                                  onTap: _onRegeneratePressed,
+                                  child: Icon(
+                                    Icons.refresh,
+                                    color: color.wo(0.8),
+                                    size: 20,
+                                  ),
+                                ),
+                                4.w,
+                                GD(
+                                  onTap: _onBotEditPressed,
+                                  child: Icon(
+                                    Icons.edit,
+                                    color: color.wo(0.8),
+                                    size: 20,
+                                  ),
+                                ),
+                                4.w,
+                                GD(
+                                  onTap: _onCopyPressed,
+                                  child: Icon(
+                                    Icons.copy,
+                                    color: color.wo(0.8),
+                                    size: 20,
+                                  ),
+                                ),
+                              ],
                             ),
-                            4.w,
-                            GD(
-                              onTap: () {
-                                Alert.success(S.current.chat_copied_to_clipboard);
-                                Clipboard.setData(ClipboardData(text: finalContent));
-                              },
-                              child: Icon(
-                                Icons.copy,
-                                color: color.wo(0.8),
-                                size: 20,
-                              ),
-                            ),
-                          ],
-                        ),
-                    ],
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -309,10 +356,6 @@ class _Input extends ConsumerWidget {
   void _onSendPressed() async {
     if (kDebugMode) print("💬 $runtimeType._onSendPressed");
     await P.chat.onSendPressed();
-  }
-
-  void _onMicPressed() {
-    if (kDebugMode) print("💬 $runtimeType._onMicPressed");
   }
 
   @override

@@ -23,6 +23,22 @@ final class Message {
     );
   }
 
-  // TODO: Use cursor to add "其他的" 结构
-}
+  Message copyWith({
+    int? id,
+    String? content,
+    bool? isMine,
+    bool? changing,
+  }) {
+    return Message(
+      id: id ?? this.id,
+      content: content ?? this.content,
+      isMine: isMine ?? this.isMine,
+      changing: changing ?? this.changing,
+    );
+  }
 
+  @override
+  String toString() {
+    return "Message(\nid: $id\ncontent: $content\nisMine: $isMine\nchanging: $changing)";
+  }
+}

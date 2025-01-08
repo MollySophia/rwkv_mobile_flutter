@@ -36,10 +36,10 @@ class RWKVMobile {
     }
   }
 
-  // TODO: rwkv_mobile has this function, but it's not exported yet
+  // TODO: @Molly rwkv_mobile has this function, but it's not exported yet
   String getAvailableBackendNames() {
     final rwkvMobile = rwkv_mobile(getDynamicLibrary());
-    final backendNamesLength = 64; // should be enough
+    const backendNamesLength = 64; // should be enough
     ffi.Pointer<ffi.Char> responseBuffer = calloc.allocate<ffi.Char>(backendNamesLength);
     rwkvMobile.rwkvmobile_runtime_get_available_backend_names(responseBuffer, backendNamesLength);
     final response = responseBuffer.cast<Utf8>().toDartString();
@@ -141,7 +141,7 @@ class RWKVMobile {
         callbackFunction(ffi.Pointer<ffi.Char> responseBuffer) {
           final response = responseBuffer.cast<Utf8>().toDartString();
           sendPort.send({'streamResponse': response});
-          // TODO: send stop signal back to native code
+          // TODO: @Molly send stop signal back to native code
         }
 
         final nativeCallable = ffi.NativeCallable<ffi.Void Function(ffi.Pointer<ffi.Char>)>.isolateLocal(callbackFunction);

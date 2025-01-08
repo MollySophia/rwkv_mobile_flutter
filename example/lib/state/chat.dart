@@ -23,8 +23,6 @@ class _Chat {
 
   late final parsedStream = StreamController<String>();
 
-  late final _currentStorageKey = _gsn<String>();
-
   late final scrollOffset = _gs(0.0);
 
   late final inputHeight = _gs(77.0);
@@ -41,7 +39,7 @@ class _Chat {
 
   late final receiveId = _gsn<int>();
 
-  late final editIndex = _gsn<int>();
+  late final editingIndex = _gsn<int>();
 }
 
 /// Public methods
@@ -50,7 +48,7 @@ extension $Chat on _Chat {
     final textToSend = text.v.trim();
     text.uc();
     focusNode.unfocus();
-    await send(textToSend);
+    await _send(textToSend);
   }
 
   FV onEditingComplete() async {
@@ -63,54 +61,7 @@ extension $Chat on _Chat {
     if (textToSend.isEmpty) return;
     text.uc();
     focusNode.unfocus();
-    await send(textToSend);
-  }
-
-  FV send(String message) async {
-    // debugger();
-    if (kDebugMode) print("💬 $runtimeType.send: $message");
-
-    final id = DateTime.now().microsecondsSinceEpoch;
-    final msg = Message(
-      id: id,
-      content: message,
-      isMine: true,
-    );
-    messages.ua(msg);
-    Future.delayed(34.ms).then((_) {
-      scrollToBottom();
-    });
-
-    P.rwkv.send(message);
-
-    received.uc();
-    receiving.u(true);
-
-    final receiveId = DateTime.now().microsecondsSinceEpoch;
-    this.receiveId.u(receiveId);
-    final receiveMsg = Message(
-      id: receiveId,
-      content: "",
-      isMine: false,
-      changing: true,
-    );
-
-    messages.ua(receiveMsg);
-  }
-
-  FV sendAt(int index) async {
-    // TODO: @wangce
-    P.rwkv.sendAt(messages.v[index].content, index);
-  }
-
-  FV regenerateAt(int index) async {
-    // TODO: @wangce
-    P.rwkv.regenerateAt(index);
-  }
-
-  FV modifyAt(int index, String message) async {
-    // TODO: @wangce
-    P.rwkv.modifyAt(index, message);
+    await _send(textToSend);
   }
 
   FV scrollToBottom({Duration? duration, bool? animate = true}) async {
@@ -176,6 +127,47 @@ multiple ... channels are changing?
     }, onError: (error, stackTrace) {
       _onStreamError(error: error, stackTrace: stackTrace);
     });
+  }
+
+  FV _send(String message) async {
+    // debugger();
+    if (kDebugMode) print("💬 $runtimeType.send: $message");
+
+    final _editingIndex = editingIndex.v;
+    if (_editingIndex != null) {
+      assert(_editingIndex >= 0 && _editingIndex < messages.v.length);
+      final messagesWithoutEditing = messages.v.sublist(0, _editingIndex);
+      debugger();
+      messages.u(messagesWithoutEditing);
+    }
+
+    final id = DateTime.now().microsecondsSinceEpoch;
+    final msg = Message(
+      id: id,
+      content: message,
+      isMine: true,
+    );
+    messages.ua(msg);
+    Future.delayed(34.ms).then((_) {
+      scrollToBottom();
+    });
+
+    P.rwkv.send(message);
+    editingIndex.u(null);
+
+    received.uc();
+    receiving.u(true);
+
+    final receiveId = DateTime.now().microsecondsSinceEpoch;
+    this.receiveId.u(receiveId);
+    final receiveMsg = Message(
+      id: receiveId,
+      content: "",
+      isMine: false,
+      changing: true,
+    );
+
+    messages.ua(receiveMsg);
   }
 
   void _onPageKeyChanged(PageKey pageKey) {

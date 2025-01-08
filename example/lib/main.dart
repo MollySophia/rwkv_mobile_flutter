@@ -1,3 +1,4 @@
+import 'package:chat/widgets/debugger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -54,6 +55,7 @@ class _App extends StatelessWidget {
               C(color: Theme.of(context).scaffoldBackgroundColor),
               if (child != null) child,
               Alert.deploy(),
+              if (Config.enableDebugger) const Debugger(),
             ],
           );
         },
