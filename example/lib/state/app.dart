@@ -82,15 +82,6 @@ extension _$App on _App {
     }
 
     WidgetsBinding.instance.addObserver(this);
-
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.light,
-        systemNavigationBarColor: kCR,
-        systemNavigationBarIconBrightness: Brightness.light,
-      ),
-    );
   }
 
   void _routerListener() {
