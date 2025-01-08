@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:math';
 import 'dart:ui';
 
@@ -26,14 +25,7 @@ class PageChat extends ConsumerWidget {
         children: [
           Positioned.fill(
             child: GD(
-              onTap: () {
-                P.chat.focusNode.unfocus();
-                final editingIndex = P.chat.editingIndex.v;
-                if (editingIndex != null) {
-                  P.chat.editingIndex.u(null);
-                  P.chat.textEditingController.value = TextEditingValue(text: "");
-                }
-              },
+              onTap: P.chat.onTapMessageList,
               child: _List(),
             ),
           ),
@@ -136,19 +128,16 @@ class _Message extends ConsumerWidget {
 
   const _Message(this.msg, this.index);
 
-  void _onUserEditPressed() {
-    final content = msg.content;
-    P.chat.textEditingController.value = TextEditingValue(text: content);
-    P.chat.focusNode.requestFocus();
-    P.chat.editingIndex.u(index);
+  void _onUserEditPressed() async {
+    await P.chat.onTapEditInUserMessageBubble(index: index);
   }
 
-  void _onBotEditPressed() {
-    // TODO: @wangce
+  void _onBotEditPressed() async {
+    await P.chat.onTapEditInBotMessageBubble(index: index);
   }
 
-  void _onRegeneratePressed() {
-    // TODO: @wangce
+  void _onRegeneratePressed() async {
+    await P.chat.onRegeneratePressed(index: index);
   }
 
   void _onCopyPressed() {

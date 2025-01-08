@@ -64,6 +64,40 @@ extension $Chat on _Chat {
     await _send(textToSend);
   }
 
+  FV onTapMessageList() async {
+    P.chat.focusNode.unfocus();
+    final _editingIndex = P.chat.editingIndex.v;
+    if (_editingIndex == null) return;
+    editingIndex.u(null);
+    textEditingController.value = TextEditingValue(text: "");
+  }
+
+  FV onTapEditInUserMessageBubble({required int index}) async {
+    final content = messages.v[index].content;
+    textEditingController.value = TextEditingValue(text: content);
+    focusNode.requestFocus();
+    editingIndex.u(index);
+  }
+
+  FV onTapEditInBotMessageBubble({required int index}) async {
+    // TODO: @wangce
+    // final content = messages.v[index].content;
+    // textEditingController.value = TextEditingValue(text: content);
+    // focusNode.requestFocus();
+    // editingIndex.u(index);
+  }
+
+  FV onRegeneratePressed({required int index}) async {
+    // final editingIndex = editingIndex.v;
+    // if (editingIndex != null && editingIndex > index) return;
+    // editingIndex.u(index - 1);
+    // onSendPressed();
+    editingIndex.u(index - 1);
+    text.uc();
+    focusNode.unfocus();
+    await _send(messages.v[index - 1].content);
+  }
+
   FV scrollToBottom({Duration? duration, bool? animate = true}) async {
     final useReverse = P.chat.useReverse.v;
 
@@ -137,7 +171,7 @@ multiple ... channels are changing?
     if (_editingIndex != null) {
       assert(_editingIndex >= 0 && _editingIndex < messages.v.length);
       final messagesWithoutEditing = messages.v.sublist(0, _editingIndex);
-      debugger();
+      // debugger();
       messages.u(messagesWithoutEditing);
     }
 
@@ -152,7 +186,7 @@ multiple ... channels are changing?
       scrollToBottom();
     });
 
-    P.rwkv.send(message);
+    P.rwkv.send(messages.v.m((e) => e.content));
     editingIndex.u(null);
 
     received.uc();

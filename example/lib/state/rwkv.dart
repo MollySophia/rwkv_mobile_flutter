@@ -25,18 +25,8 @@ class _RWKV {
 
 /// Public methods
 extension $RWKV on _RWKV {
-  void send(String message) {
-    final existingMessages = P.chat.messages.v.m((e) => e.content);
-    final newMessages = [...existingMessages];
-    if (kDebugMode) print("💬 $runtimeType.send: ${newMessages.length} messages");
-    if (kDebugMode) {
-      newMessages.forEach((e) {
-        if (kDebugMode) {
-          print("💬 $runtimeType.send: $e");
-        }
-      });
-    }
-    sendPort!.send(("message", newMessages));
+  void send(List<String> messages) {
+    sendPort!.send(("message", messages));
   }
 }
 
