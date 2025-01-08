@@ -342,9 +342,9 @@ class _Input extends ConsumerWidget {
     // P.chat.focusNode.unfocus();
   }
 
-  void _onSendPressed() async {
+  void _onRightButtonPressed() async {
     if (kDebugMode) print("💬 $runtimeType._onSendPressed");
-    await P.chat.onSendPressed();
+    await P.chat.onInputRightButtonPressed();
   }
 
   @override
@@ -352,6 +352,7 @@ class _Input extends ConsumerWidget {
     final paddingBottom = ref.watch(P.app.paddingBottom);
     final receiving = ref.watch(P.chat.receiving);
     final canSend = ref.watch(P.chat.canSend);
+    final editingBotMessage = ref.watch(P.chat.editingBotMessage);
 
     final color = Colors.deepPurple;
 
@@ -420,9 +421,9 @@ class _Input extends ConsumerWidget {
                             opacity: canSend ? 1 : 0.333,
                             duration: 250.ms,
                             child: IconButton(
-                              onPressed: canSend ? _onSendPressed : null,
+                              onPressed: canSend ? _onRightButtonPressed : null,
                               icon: Icon(
-                                Icons.send,
+                                editingBotMessage ? Icons.edit : Icons.send,
                                 color: color,
                               ),
                             ),

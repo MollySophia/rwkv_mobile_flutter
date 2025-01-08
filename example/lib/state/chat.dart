@@ -40,14 +40,38 @@ class _Chat {
   late final receiveId = _gsn<int>();
 
   late final editingIndex = _gsn<int>();
+
+  late final editingBotMessage = _P<bool>((ref) {
+    final editingIndex = ref.watch(this.editingIndex);
+    if (editingIndex == null) return false;
+    return messages.v[editingIndex].isMine == false;
+  });
 }
 
 /// Public methods
 extension $Chat on _Chat {
-  FV onSendPressed() async {
+  FV onInputRightButtonPressed() async {
+    focusNode.unfocus();
     final textToSend = text.v.trim();
     text.uc();
-    focusNode.unfocus();
+
+    final _editingBotMessage = editingBotMessage.v;
+    if (_editingBotMessage) {
+      // final currentMessages = [...messages.v];
+      final _editingIndex = editingIndex.v!;
+      final id = DateTime.now().microsecondsSinceEpoch;
+      final newBotMessage = Message(id: id, content: textToSend, isMine: false, changing: false);
+      // currentMessages.replaceRange(_editingIndex, _editingIndex + 1, [newBotMessage]);
+      final newMessages = [
+        ...messages.v.sublist(0, _editingIndex),
+        newBotMessage,
+      ];
+      messages.u(newMessages);
+      editingIndex.u(null);
+      Alert.success("Bot message edited, you can now send new message");
+      return;
+    }
+
     await _send(textToSend);
   }
 
@@ -81,10 +105,10 @@ extension $Chat on _Chat {
 
   FV onTapEditInBotMessageBubble({required int index}) async {
     // TODO: @wangce
-    // final content = messages.v[index].content;
-    // textEditingController.value = TextEditingValue(text: content);
-    // focusNode.requestFocus();
-    // editingIndex.u(index);
+    final content = messages.v[index].content;
+    textEditingController.value = TextEditingValue(text: content);
+    focusNode.requestFocus();
+    editingIndex.u(index);
   }
 
   FV onRegeneratePressed({required int index}) async {
