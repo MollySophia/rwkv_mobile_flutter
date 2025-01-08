@@ -2,8 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:archive/archive.dart';
 
-int calculate() {
-  return 6 * 7;
+void removeAssetLine({required String assetFileName}) {
+  final file = File('../pubspec.yaml');
+  if (!file.existsSync()) return;
+
+  final lines = file.readAsLinesSync();
+  final newLines = lines.where((line) => !line.trim().contains(assetFileName)).toList();
+
+  file.writeAsStringSync(newLines.join('\n'));
 }
 
 void buildApk({
