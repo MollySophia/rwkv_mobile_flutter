@@ -364,10 +364,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_svg
-      sha256: "54900a1a1243f3c4a5506d853a2b5c2dbc38d5f27e52a52618a8054401431123"
+      sha256: c200fd79c918a40c5cd50ea0877fa13f81bdaf6f0a5d3dbcc2a13e3285d6aa1b
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.16"
+    version: "2.0.17"
   flutter_test:
     dependency: transitive
     description: flutter
@@ -478,10 +478,10 @@ packages:
     dependency: transitive
     description:
       name: image_size_getter
-      sha256: c769a86b21a2f5ccc6d6a94e16243a1e04004afa15d0960589d6254ce73c82fe
+      sha256: c3900f04e31468a81aa23b09b1c7d09c3c952122bbe9ecdae336977b7be24c05
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.0"
+    version: "2.3.0+1"
   intersperse:
     dependency: transitive
     description:
@@ -550,10 +550,10 @@ packages:
     dependency: transitive
     description:
       name: macos_ui
-      sha256: c524398d3db161ac52254ebc9617c3399bdcf269ce7a70e014f202b5c4da5ea4
+      sha256: "94753db0a67f6b065c1877c57563459afd717d800acd5d83a663a0a6e09747c5"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.4"
+    version: "2.1.5"
   macos_window_utils:
     dependency: transitive
     description:

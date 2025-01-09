@@ -24,6 +24,7 @@ Pod::Spec.new do |s|
 
     s.xcconfig = {
       'OTHER_LDFLAGS' => '-all_load -lrwkv_mobile -lweb_rwkv_ffi',
+      'DEAD_CODE_STRIPPING' => 'NO',
     }
     s.vendored_libraries = 'librwkv_mobile.a', 'libweb_rwkv_ffi.a'
     s.platform = :ios, '11.0'
