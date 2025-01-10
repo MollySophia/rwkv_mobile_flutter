@@ -1,7 +1,7 @@
 name: chat
 description: 'A new Flutter project.'
 publish_to: 'none'
-version: 1.0.0+202
+version: 1.0.0+220
 
 environment:
   sdk: ^3.6.0
@@ -44,8 +44,10 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/model/b_rwkv_vocab_v20230424.txt
+    - assets/model/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096-ncnn.bin
+    - assets/model/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096-ncnn.param
     - assets/model/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096.st
+    - assets/model/b_rwkv_vocab_v20230424.txt
 
 flutter_intl:
   enabled: true # Required. Must be set to true to activate the package. Default: false
