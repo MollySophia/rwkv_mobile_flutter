@@ -76,8 +76,17 @@ class RWKVMobile {
     }
     // initializations done
 
+    callbackFunction(ffi.Pointer<ffi.Char> responseBuffer) {
+      final response = responseBuffer.cast<Utf8>().toDartString();
+      sendPort.send({'streamResponse': response});
+      // TODO: @Molly send stop signal back to native code
+    }
+
+    final nativeCallable = ffi.NativeCallable<ffi.Void Function(ffi.Pointer<ffi.Char>)>.isolateLocal(callbackFunction);
+
     int maxLength = 2000;
     int maxMessages = 1000;
+    int generationStopToken = 0; // Takes effect in 'generation' mode; not used in 'chat' mode
     ffi.Pointer<ffi.Char> responseBuffer = calloc.allocate<ffi.Char>(maxLength);
     final inputsPtr = calloc.allocate<ffi.Pointer<ffi.Char>>(maxMessages);
 
@@ -88,10 +97,17 @@ class RWKVMobile {
       final command = message.$1;
       if (command == 'setMaxLength') {
         final arg = message.$2 as int;
-        if (maxLength > 0) {
+        if (arg > 0) {
           maxLength = arg;
           calloc.free(responseBuffer);
           responseBuffer = calloc.allocate<ffi.Char>(maxLength);
+        }
+      } else if (command == 'clearStates') {
+        rwkvMobile.rwkvmobile_runtime_clear_state(runtime);
+      } else if (command == 'setGenerationStopToken') {
+        final arg = message.$2 as int;
+        if (arg >= 0) {
+          generationStopToken = arg;
         }
       } else if (command == 'setPrompt') {
         final prompt = message.$2 as String;
@@ -138,20 +154,25 @@ class RWKVMobile {
         }
         final numInputs = messages.length;
 
-        callbackFunction(ffi.Pointer<ffi.Char> responseBuffer) {
-          final response = responseBuffer.cast<Utf8>().toDartString();
-          sendPort.send({'streamResponse': response});
-          // TODO: @Molly send stop signal back to native code
-        }
-
-        final nativeCallable = ffi.NativeCallable<ffi.Void Function(ffi.Pointer<ffi.Char>)>.isolateLocal(callbackFunction);
-
         sendPort.send({'generateStart': true});
-        if (kDebugMode) print("💬 Start to call LLM");
+        if (kDebugMode) print("💬 Start to call LLM (chat mode)");
         retVal = rwkvMobile.rwkvmobile_runtime_eval_chat_with_history(runtime, inputsPtr, numInputs, responseBuffer, maxLength, nativeCallable.nativeFunction);
-        if (kDebugMode) print("💬 Call LLM done");
+        if (kDebugMode) print("💬 Call LLM done (chat mode)");
         if (retVal != 0) {
           throw Exception('Failed to evaluate chat');
+        }
+        final response = responseBuffer.cast<Utf8>().toDartString();
+        sendPort.send({'response': response});
+      } else if (command == 'generate') {
+        final prompt = message.$2 as String;
+        final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
+
+        sendPort.send({'generateStart': true});
+        if (kDebugMode) print("💬 Start to call LLM (gen mode), maxlength = $maxLength");
+        retVal = rwkvMobile.rwkvmobile_runtime_gen_completion(runtime, promptPtr, responseBuffer, maxLength, generationStopToken, nativeCallable.nativeFunction);
+        if (kDebugMode) print("💬 Call LLM done (gen mode)");
+        if (retVal != 0) {
+          throw Exception('Failed to evaluate generation');
         }
         final response = responseBuffer.cast<Utf8>().toDartString();
         sendPort.send({'response': response});

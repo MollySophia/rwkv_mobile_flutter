@@ -167,18 +167,22 @@ class rwkv_mobile {
     rwkvmobile_runtime_t runtime,
     ffi.Pointer<ffi.Char> prompt,
     ffi.Pointer<ffi.Char> completion,
-    int length,
+    int max_length,
+    int stop_code,
+    ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>)>> callback,
   ) {
     return _rwkvmobile_runtime_gen_completion(
       runtime,
       prompt,
       completion,
-      length,
+      max_length,
+      stop_code,
+      callback,
     );
   }
 
-  late final _rwkvmobile_runtime_gen_completionPtr = _lookup<ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Int)>>('rwkvmobile_runtime_gen_completion');
-  late final _rwkvmobile_runtime_gen_completion = _rwkvmobile_runtime_gen_completionPtr.asFunction<int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, int)>();
+  late final _rwkvmobile_runtime_gen_completionPtr = _lookup<ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Int, ffi.Int, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>)>>)>>('rwkvmobile_runtime_gen_completion');
+  late final _rwkvmobile_runtime_gen_completion = _rwkvmobile_runtime_gen_completionPtr.asFunction<int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, int, int, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>)>>)>();
 
   int rwkvmobile_runtime_clear_state(
     rwkvmobile_runtime_t runtime,
