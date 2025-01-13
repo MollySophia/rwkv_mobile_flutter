@@ -46,12 +46,12 @@ extension _$RWKV on _RWKV {
     late final String backendName;
 
     if (Platform.isIOS || Platform.isMacOS) {
-      modelPath = await getModelPath("assets/model/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096.st");
+      modelPath = await getModelPath("assets/model/RWKV-x070-World-0.4B-v2.9-20250107-ctx4096.st");
       tokenizerPath = await getModelPath("assets/model/b_rwkv_vocab_v20230424.txt");
       backendName = "web-rwkv";
     } else {
-      modelPath = await getModelPath("assets/model/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096-ncnn.bin");
-      await getModelPath("assets/model/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096-ncnn.param");
+      modelPath = await getModelPath("assets/model/RWKV-x070-World-0.4B-v2.9-20250107-ctx4096-ncnn.bin");
+      await getModelPath("assets/model/RWKV-x070-World-0.4B-v2.9-20250107-ctx4096-ncnn.param");
       tokenizerPath = await getModelPath("assets/model/b_rwkv_vocab_v20230424.txt");
       backendName = "ncnn";
     }

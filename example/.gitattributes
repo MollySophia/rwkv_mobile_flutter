@@ -1,0 +1,4 @@
+/lib/gen/* linguist-generated=true
+/**/*.g.dart linguist-generated=true
+/lib/gen/intl/* -diff
+/lib/gen/l10n.dart -diff

@@ -21,9 +21,5 @@ class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ja';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "chat_title": MessageLookupByLibrary.simpleMessage("RWKV Chat v7 0.1B"),
-        "chat_title_placeholder":
-            MessageLookupByLibrary.simpleMessage("メッセージを入力してください...")
-      };
+  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{"chat_title": MessageLookupByLibrary.simpleMessage("RWKV Chat v7 0.4B"), "chat_title_placeholder": MessageLookupByLibrary.simpleMessage("メッセージを入力してください...")};
 }

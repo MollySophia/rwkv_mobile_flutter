@@ -1,7 +1,7 @@
 name: chat
 description: 'A new Flutter project.'
 publish_to: 'none'
-version: 1.0.0+220
+version: 1.0.0+230
 
 environment:
   sdk: ^3.6.0
@@ -44,9 +44,9 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/model/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096-ncnn.bin
-    - assets/model/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096-ncnn.param
-    - assets/model/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096.st
+    # - assets/model/RWKV-x070-World-0.4B-v2.9-20250107-ctx4096-ncnn.bin
+    # - assets/model/RWKV-x070-World-0.4B-v2.9-20250107-ctx4096-ncnn.param
+    - assets/model/RWKV-x070-World-0.4B-v2.9-20250107-ctx4096.st
     - assets/model/b_rwkv_vocab_v20230424.txt
 
 flutter_intl:
