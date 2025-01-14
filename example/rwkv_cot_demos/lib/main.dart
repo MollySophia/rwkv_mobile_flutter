@@ -11,9 +11,12 @@ Future<void> _initRWKV() async {
   late final String backendName;
 
   // TODO: @Molly support iOS with WebRWKV backend
-  // currently only Android is supported
-  modelPath = await getModelPath("assets/model/rwkv7_othello_26m_L10_D448_extended-ncnn.bin");
-  await getModelPath("assets/model/rwkv7_othello_26m_L10_D448_extended-ncnn.param");
+  // currently only ncnn is supported
+  final modelName = "rwkv7_othello_26m_L10_D448_extended-ncnn";
+  // final modelName = "rwkv7_othello_26m_L10_D448-ncnn";
+  // final modelName = "rwkv7_othello_9m_L10_D256_extended-ncnn";
+  modelPath = await getModelPath("assets/model/$modelName.bin");
+  await getModelPath("assets/model/$modelName.param");
   tokenizerPath = await getModelPath("assets/model/b_othello_vocab.txt");
   backendName = "ncnn";
 
