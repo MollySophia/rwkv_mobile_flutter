@@ -9,17 +9,17 @@ import 'func/get_model_path.dart';
 
 Future<void> _initRWKV() async {
   late final String modelPath;
-  late final String backendName;
+  late final Backend backend;
 
   final modelName = "rwkv7_othello_26m_L10_D448_extended";
   final tokenizerPath = await getModelPath("assets/model/b_othello_vocab.txt");
   if (Platform.isAndroid) {
     modelPath = await getModelPath("assets/model/$modelName-ncnn.bin");
     await getModelPath("assets/model/$modelName-ncnn.param");
-    backendName = "ncnn";
+    backend = Backend.ncnn;
   } else {
     modelPath = await getModelPath("assets/model/$modelName.st");
-    backendName = "web-rwkv";
+    backend = Backend.webRwkv;
   }
 
   final rootIsolateToken = RootIsolateToken.instance;
@@ -31,7 +31,7 @@ Future<void> _initRWKV() async {
   rwkvMobile.runIsolate(
     modelPath,
     tokenizerPath,
-    backendName,
+    backend,
     receivePort.sendPort,
     rootIsolateToken!,
   );

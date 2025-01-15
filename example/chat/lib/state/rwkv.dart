@@ -43,17 +43,17 @@ extension _$RWKV on _RWKV {
   Future<void> _initRWKV() async {
     late final String modelPath;
     late final String tokenizerPath;
-    late final String backendName;
+    late final Backend backend;
 
     if (Platform.isIOS || Platform.isMacOS) {
       modelPath = await getModelPath("assets/model/RWKV-x070-World-0.4B-v2.9-20250107-ctx4096.st");
       tokenizerPath = await getModelPath("assets/model/b_rwkv_vocab_v20230424.txt");
-      backendName = "web-rwkv";
+      backend = Backend.webRwkv;
     } else {
       modelPath = await getModelPath("assets/model/RWKV-x070-World-0.4B-v2.9-20250107-ctx4096-ncnn.bin");
       await getModelPath("assets/model/RWKV-x070-World-0.4B-v2.9-20250107-ctx4096-ncnn.param");
       tokenizerPath = await getModelPath("assets/model/b_rwkv_vocab_v20230424.txt");
-      backendName = "ncnn";
+      backend = Backend.ncnn;
     }
 
     final rootIsolateToken = RootIsolateToken.instance;
@@ -65,7 +65,7 @@ extension _$RWKV on _RWKV {
     rwkvMobile.runIsolate(
       modelPath,
       tokenizerPath,
-      backendName,
+      backend,
       receivePort.sendPort,
       rootIsolateToken!,
     );

@@ -9,18 +9,70 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:rwkv_mobile_flutter/rwkv_mobile_ffi.dart';
 
+/// Runtime backend of RWKV flutter
+enum Backend {
+  /// Currently we use it on Android, Windows and Linux
+  ///
+  /// https://github.com/Tencent/ncnn
+  ncnn,
+
+  /// Currently only support iOS and macOS
+  ///
+  /// https://github.com/cryscan/web-rwkv
+  webRwkv;
+
+  String get asArgument {
+    switch (this) {
+      case Backend.ncnn:
+        return 'ncnn';
+      case Backend.webRwkv:
+        return 'web-rwkv';
+    }
+  }
+}
+
+class StartOptions {
+  final String modelPath;
+  final String tokenizerPath;
+  final Backend backend;
+  final SendPort sendPort;
+  final RootIsolateToken rootIsolateToken;
+
+  const StartOptions(
+    this.modelPath,
+    this.tokenizerPath,
+    this.backend,
+    this.sendPort,
+    this.rootIsolateToken,
+  );
+}
+
 class RWKVMobile {
   Isolate? _isolate;
 
-  Future runIsolate(String modelPath, String tokenizerPath, String backendName, SendPort sendPort, RootIsolateToken rootIsolateToken) async {
+  bool get isRunning => _isolate != null;
+
+  Future<void> runIsolate(
+    String modelPath,
+    String tokenizerPath,
+    Backend backend,
+    SendPort sendPort,
+    RootIsolateToken rootIsolateToken,
+  ) async {
     if (_isolate != null) {
       throw Exception('Isolate already running');
     }
 
-    _isolate = await Isolate.spawn(isolateMain, (sendPort, rootIsolateToken, modelPath, backendName, tokenizerPath));
+    _isolate = await Isolate.spawn(
+        isolateMain,
+        StartOptions(
+          modelPath,
+          tokenizerPath,
+          backend,
+          sendPort,
+          rootIsolateToken,
+        ));
   }
-
-  bool get isRunning => _isolate != null;
 
   ffi.DynamicLibrary getDynamicLibrary() {
     if (Platform.isAndroid) {
@@ -46,12 +98,12 @@ class RWKVMobile {
     return response;
   }
 
-  void isolateMain(options) async {
-    final sendPort = options.$1 as SendPort;
-    final rootIsolateToken = options.$2 as RootIsolateToken;
-    final modelPath = options.$3 as String;
-    final modelBackend = options.$4 as String;
-    final tokenizerPath = options.$5 as String;
+  void isolateMain(StartOptions options) async {
+    final sendPort = options.sendPort;
+    final rootIsolateToken = options.rootIsolateToken;
+    final modelPath = options.modelPath;
+    final modelBackend = options.backend.asArgument;
+    final tokenizerPath = options.tokenizerPath;
     final receivePort = ReceivePort();
     sendPort.send(receivePort.sendPort);
 
