@@ -43,6 +43,9 @@ Future<void> _initRWKV() async {
         if (message["response"] != null) {
           print("💬 response: ${message["response"]}");
         }
+        if (message["streamResponse"] != null) {
+          print("💬 streamResponse: ${message["streamResponse"]}");
+        }
       }
     }
   });

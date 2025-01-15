@@ -76,14 +76,6 @@ class RWKVMobile {
     }
     // initializations done
 
-    callbackFunction(ffi.Pointer<ffi.Char> responseBuffer) {
-      final response = responseBuffer.cast<Utf8>().toDartString();
-      sendPort.send({'streamResponse': response});
-      // TODO: @Molly send stop signal back to native code
-    }
-
-    final nativeCallable = ffi.NativeCallable<ffi.Void Function(ffi.Pointer<ffi.Char>)>.isolateLocal(callbackFunction);
-
     int maxLength = 2000;
     int maxMessages = 1000;
     int generationStopToken = 0; // Takes effect in 'generation' mode; not used in 'chat' mode
@@ -154,6 +146,14 @@ class RWKVMobile {
         }
         final numInputs = messages.length;
 
+        callbackFunction(ffi.Pointer<ffi.Char> responseBuffer) {
+          final response = responseBuffer.cast<Utf8>().toDartString();
+          sendPort.send({'streamResponse': response});
+          // TODO: @Molly send stop signal back to native code
+        }
+
+        final nativeCallable = ffi.NativeCallable<ffi.Void Function(ffi.Pointer<ffi.Char>)>.isolateLocal(callbackFunction);
+
         sendPort.send({'generateStart': true});
         if (kDebugMode) print("💬 Start to call LLM (chat mode)");
         retVal = rwkvMobile.rwkvmobile_runtime_eval_chat_with_history(runtime, inputsPtr, numInputs, responseBuffer, maxLength, nativeCallable.nativeFunction);
@@ -163,10 +163,18 @@ class RWKVMobile {
         }
         final response = responseBuffer.cast<Utf8>().toDartString();
         sendPort.send({'response': response});
+        sendPort.send({'generateStop': true});
       } else if (command == 'generate') {
         final prompt = message.$2 as String;
         final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
+        String response = prompt;
 
+        callbackFunction(ffi.Pointer<ffi.Char> stream, int idx) {
+          response += stream.cast<Utf8>().toDartString();
+          sendPort.send({'streamResponse': stream.cast<Utf8>().toDartString(), 'streamResponseToken': idx});
+        }
+
+        final nativeCallable = ffi.NativeCallable<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int)>.isolateLocal(callbackFunction);
         sendPort.send({'generateStart': true});
         if (kDebugMode) print("💬 Start to call LLM (gen mode), maxlength = $maxLength");
         retVal = rwkvMobile.rwkvmobile_runtime_gen_completion(runtime, promptPtr, responseBuffer, maxLength, generationStopToken, nativeCallable.nativeFunction);
@@ -174,8 +182,9 @@ class RWKVMobile {
         if (retVal != 0) {
           throw Exception('Failed to evaluate generation');
         }
-        final response = responseBuffer.cast<Utf8>().toDartString();
+
         sendPort.send({'response': response});
+        sendPort.send({'generateStop': true});
       } else {
         if (kDebugMode) print("😡 unknown command: $command");
       }
