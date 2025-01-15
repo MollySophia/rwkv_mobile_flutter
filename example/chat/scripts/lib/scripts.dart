@@ -79,7 +79,7 @@ void buildApk({
   final fileName = apkFile.uri.pathSegments.last;
   archive.addFile(ArchiveFile(fileName, bytes.length, bytes));
   final zipBytes = ZipEncoder().encode(archive);
-  zipFile.writeAsBytesSync(zipBytes!);
+  zipFile.writeAsBytesSync(zipBytes);
 
   // open the folder containing the apk file
   //
