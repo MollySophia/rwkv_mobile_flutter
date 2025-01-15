@@ -1,24 +1,26 @@
+import 'dart:io';
+import 'dart:isolate';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rwkv_mobile_flutter/rwkv_mobile_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'func/get_model_path.dart';
-import 'dart:isolate';
 
 Future<void> _initRWKV() async {
   late final String modelPath;
-  late final String tokenizerPath;
   late final String backendName;
 
-  // TODO: @Molly support iOS with WebRWKV backend
-  // currently only ncnn is supported
-  final modelName = "rwkv7_othello_26m_L10_D448_extended-ncnn";
-  // final modelName = "rwkv7_othello_26m_L10_D448-ncnn";
-  // final modelName = "rwkv7_othello_9m_L10_D256_extended-ncnn";
-  modelPath = await getModelPath("assets/model/$modelName.bin");
-  await getModelPath("assets/model/$modelName.param");
-  tokenizerPath = await getModelPath("assets/model/b_othello_vocab.txt");
-  backendName = "ncnn";
+  final modelName = "rwkv7_othello_26m_L10_D448_extended";
+  final tokenizerPath = await getModelPath("assets/model/b_othello_vocab.txt");
+  if (Platform.isAndroid) {
+    modelPath = await getModelPath("assets/model/$modelName-ncnn.bin");
+    await getModelPath("assets/model/$modelName-ncnn.param");
+    backendName = "ncnn";
+  } else {
+    modelPath = await getModelPath("assets/model/$modelName.st");
+    backendName = "web-rwkv";
+  }
 
   final rootIsolateToken = RootIsolateToken.instance;
   final rwkvMobile = RWKVMobile();

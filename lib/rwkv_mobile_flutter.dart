@@ -167,10 +167,10 @@ class RWKVMobile {
       } else if (command == 'generate') {
         final prompt = message.$2 as String;
         final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
-        String response = prompt;
+        String responseStr = prompt;
 
         callbackFunction(ffi.Pointer<ffi.Char> stream, int idx) {
-          response += stream.cast<Utf8>().toDartString();
+          responseStr += stream.cast<Utf8>().toDartString();
           sendPort.send({'streamResponse': stream.cast<Utf8>().toDartString(), 'streamResponseToken': idx});
         }
 
@@ -183,7 +183,7 @@ class RWKVMobile {
           throw Exception('Failed to evaluate generation');
         }
 
-        sendPort.send({'response': response});
+        sendPort.send({'response': responseStr});
         sendPort.send({'generateStop': true});
       } else {
         if (kDebugMode) print("😡 unknown command: $command");
