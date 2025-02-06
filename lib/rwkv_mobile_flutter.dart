@@ -212,9 +212,14 @@ class RWKVMobile {
         if (retVal != 0) {
           throw Exception('Failed to evaluate chat');
         }
-        final response = responseBuffer.cast<Utf8>().toDartString();
-        sendPort.send({'response': response});
-        sendPort.send({'generateStop': true});
+        try {
+          final response = responseBuffer.cast<Utf8>().toDartString();
+          sendPort.send({'response': response});
+          sendPort.send({'generateStop': true});
+        } catch (e) {
+          if (kDebugMode) print("😡 Error: $e");
+          sendPort.send({'generateStop': true});
+        }
       } else if (command == 'generate') {
         final prompt = message.$2 as String;
         final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
