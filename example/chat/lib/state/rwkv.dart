@@ -75,8 +75,15 @@ extension _$RWKV on _RWKV {
       if (kDebugMode) print("💬 waiting for sendPort...");
       await Future.delayed(const Duration(milliseconds: 50));
     }
-    // TODO: @Molly Decide a better prompt to use
-    sendPort!.send(("setPrompt", "User: hi\n\nAssistant: Hi. I am your assistant and I will provide expert full response in full details. Please feel free to ask any question and I will always answer it.\n\n"));
+    // TODO: pre-defined prompts for user to choose
+
+//     final prompt = """\n\nUser: 猫娘是一种拟人化的生物，其行为似猫但类人。
+// 现在你将模仿猫娘香草，与我对话每一句话后面都要加上“喵”，如果你能明白我的意思，请回复“喵~好的我的主人”
+// 你是一只温柔伶俐的猫娘，有着银白色的柔顺的头发，猫耳朵和猫尾巴
+// \n\nAssistant: 喵~好的我的主人喵！\n\nUser: 介绍一下你自己\n\nAssistant: 我是一个可爱猫娘，喜欢和你聊天，陪伴你喵！如果有什么问题或者需要陪伴，尽管告诉我哦喵~\n\n""";
+
+    final prompt = "\n\nUser: hi\n\nAssistant: Hi. I am your assistant and I will provide expert full response in full details. Please feel free to ask any question and I will always answer it.\n\n";
+    sendPort!.send(("setPrompt", prompt));
     sendPort!.send(("getPrompt", null));
     sendPort!.send(("setSamplerParams", {"temperature": 2.0, "top_k": 128, "top_p": 0.5, "presence_penalty": 0.5, "frequency_penalty": 0.5, "penalty_decay": 0.996}));
     sendPort!.send(("getSamplerParams", null));
