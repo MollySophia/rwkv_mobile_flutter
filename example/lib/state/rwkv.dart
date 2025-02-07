@@ -31,10 +31,9 @@ class _RWKV {
 
   late final _messagesController = StreamController<JSON>();
 
+  /// 当前正在运行的任务
   late final demoType = _gsn<DemoType>();
 
-  @Deprecated("Use modelLoadingState instead")
-  late final _ready = _gs(false);
   late final modelLoadingState = _gsn<ModelLoadingState>();
 
   late final generating = _gs(false);
@@ -72,6 +71,7 @@ extension _$RWKV on _RWKV {
         break;
       case PageKey.chat:
         await _loadChat();
+        break;
       case PageKey.fifthteenPuzzle:
         await _loadFifthteenPuzzle();
         break;
@@ -209,9 +209,6 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
   FV _loadSudoku() async {
     throw "Not support, please contact the developer";
   }
-
-  @Deprecated("")
-  Future<void> _initRWKV() async {}
 
   void _onMessage(message) {
     if (message is SendPort) {
