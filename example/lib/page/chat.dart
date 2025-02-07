@@ -26,11 +26,11 @@ class PageChat extends ConsumerWidget {
           Positioned.fill(
             child: GD(
               onTap: P.chat.onTapMessageList,
-              child: _List(),
+              child: const _List(),
             ),
           ),
-          _ScrollToBottomButton(),
-          Positioned(
+          const _ScrollToBottomButton(),
+          const Positioned(
             bottom: 0,
             left: 0,
             right: 0,
@@ -483,7 +483,7 @@ class _ScrollToBottomButton extends ConsumerWidget {
                 ),
                 height: buttonSize,
                 width: buttonSize,
-                child: Icon(
+                child: const Icon(
                   Icons.arrow_downward,
                   color: kW,
                 ),

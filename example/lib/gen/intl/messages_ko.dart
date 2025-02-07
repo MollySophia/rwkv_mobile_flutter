@@ -1,5 +1,5 @@
 // DO NOT EDIT. This is code generated via package:intl/generate_localized.dart
-// This is a library that provides messages for a en_CN locale. All the
+// This is a library that provides messages for a ko locale. All the
 // messages from the main program should be duplicated here with the same
 // function name.
 
@@ -18,16 +18,17 @@ final messages = new MessageLookup();
 typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 
 class MessageLookup extends MessageLookupByLibrary {
-  String get localeName => 'en_CN';
+  String get localeName => 'ko';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "chat_copied_to_clipboard": MessageLookupByLibrary.simpleMessage(
-      "Copied to clipboard",
+      "클립보드에 복사됨",
     ),
-    "chat_title": MessageLookupByLibrary.simpleMessage("RWKV Chat v7 0.4B"),
+    "chat_title": MessageLookupByLibrary.simpleMessage("RWKV World v7"),
     "chat_title_placeholder": MessageLookupByLibrary.simpleMessage(
-      "Enter your message...",
+      "메시지를 입력하세요...",
     ),
+    "othello_title": MessageLookupByLibrary.simpleMessage("RWKV 흑백 체스"),
   };
 }

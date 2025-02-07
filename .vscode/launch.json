@@ -8,7 +8,7 @@
       "name": "debug",
       "request": "launch",
       "type": "dart",
-      "program": "example/chat/lib/main.dart",
+      "program": "example/lib/main.dart",
       "flutterMode": "debug",
       "args": [
         "--dart-define=locale=zh_Hans",
@@ -18,7 +18,7 @@
       "name": "debug (Halo)",
       "request": "launch",
       "type": "dart",
-      "program": "example/chat/lib/main.dart",
+      "program": "example/lib/main.dart",
       "flutterMode": "debug",
       "args": [
         // "--dart-define=locale=zh_Hans",
@@ -32,7 +32,7 @@
       "name": "release",
       "request": "launch",
       "type": "dart",
-      "program": "example/chat/lib/main.dart",
+      "program": "example/lib/main.dart",
       "flutterMode": "release",
       "args": [
         // "--dart-define=locale=zh_Hans",

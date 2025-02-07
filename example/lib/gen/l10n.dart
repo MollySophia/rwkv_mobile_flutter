@@ -55,30 +55,40 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `RWKV Chat v7 0.4B`
+  /// `RWKV World v7`
   String get chat_title {
     return Intl.message(
-      'RWKV Chat v7 0.4B',
+      'RWKV World v7',
       name: 'chat_title',
       desc: '',
       args: [],
     );
   }
 
-  /// `输入你的消息...`
+  /// `RWKV Othello`
+  String get othello_title {
+    return Intl.message(
+      'RWKV Othello',
+      name: 'othello_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter your message...`
   String get chat_title_placeholder {
     return Intl.message(
-      '输入你的消息...',
+      'Enter your message...',
       name: 'chat_title_placeholder',
       desc: '',
       args: [],
     );
   }
 
-  /// `已复制到剪贴板`
+  /// `Copied to clipboard`
   String get chat_copied_to_clipboard {
     return Intl.message(
-      '已复制到剪贴板',
+      'Copied to clipboard',
       name: 'chat_copied_to_clipboard',
       desc: '',
       args: [],
@@ -91,15 +101,10 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
 
   List<Locale> get supportedLocales {
     return const <Locale>[
-      Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
       Locale.fromSubtags(languageCode: 'en'),
-      Locale.fromSubtags(languageCode: 'en', countryCode: 'CN'),
       Locale.fromSubtags(languageCode: 'ja'),
-      Locale.fromSubtags(
-        languageCode: 'zh',
-        scriptCode: 'Hans',
-        countryCode: 'CN',
-      ),
+      Locale.fromSubtags(languageCode: 'ko'),
+      Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
       Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
     ];
   }

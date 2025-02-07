@@ -1,8 +1,6 @@
-import 'dart:developer';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
@@ -27,9 +25,9 @@ class PageOthello extends ConsumerWidget {
               children: [
                 paddingTop.h,
                 12.h,
-                _Title(),
+                const _Title(),
                 12.h,
-                _Score(),
+                const _Score(),
                 4.h,
                 Ro(
                   c: CAA.center,
@@ -37,8 +35,8 @@ class PageOthello extends ConsumerWidget {
                     Exp(
                       child: Co(
                         children: [
-                          _ModelSettings(),
-                          if (playerShouldAtSameColumnWithSettings) _Players(),
+                          const _ModelSettings(),
+                          if (playerShouldAtSameColumnWithSettings) const _Players(),
                         ],
                       ),
                     ),
@@ -46,27 +44,27 @@ class PageOthello extends ConsumerWidget {
                     8.w,
                   ],
                 ),
-                if (!playerShouldAtSameColumnWithSettings) _Players(),
-                Exp(child: _Console()),
+                if (!playerShouldAtSameColumnWithSettings) const _Players(),
+                const Exp(child: _Console()),
               ],
             )
           : Ro(
               children: [
-                Exp(child: _Console()),
+                const Exp(child: _Console()),
                 Co(
                   // c: CAA.center,
                   children: [
-                    _Title(),
+                    const _Title(),
                     4.h,
-                    _Score(),
+                    const _Score(),
                     4.h,
                     Ro(
                       children: [
                         Co(
                           children: [
                             const _Othello(),
-                            if (!settingsAndPlayersShouldAtDifferentColumnIsHorizontal) _ModelSettings(),
-                            if (!settingsAndPlayersShouldAtDifferentColumnIsHorizontal) _Players(),
+                            if (!settingsAndPlayersShouldAtDifferentColumnIsHorizontal) const _ModelSettings(),
+                            if (!settingsAndPlayersShouldAtDifferentColumnIsHorizontal) const _Players(),
                           ],
                         ),
                         if (settingsAndPlayersShouldAtDifferentColumnIsHorizontal)
@@ -74,7 +72,7 @@ class PageOthello extends ConsumerWidget {
                             constraints: BoxConstraints(
                               maxWidth: screenWidth * 0.33,
                             ),
-                            child: Co(
+                            child: const Co(
                               c: CAA.center,
                               m: MAA.center,
                               children: [
@@ -99,7 +97,7 @@ class _Title extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return T("RWKV Othello", s: TS(c: kB, s: 20, w: FW.w700));
+    return const T("RWKV Othello", s: TS(c: kB, s: 20, w: FW.w700));
   }
 }
 
@@ -128,10 +126,10 @@ class _ModelSettings extends ConsumerWidget {
                   P.othello.searchDepth.ua(-1);
                 }
               : null,
-          icon: Icon(Icons.remove),
+          icon: const Icon(Icons.remove),
           iconSize: 14,
           style: ButtonStyle(
-            minimumSize: WidgetStateProperty.all(Size(16, 16)),
+            minimumSize: WidgetStateProperty.all(const Size(16, 16)),
             padding: WidgetStateProperty.all(EdgeInsets.zero),
           ),
         ),
@@ -146,10 +144,10 @@ class _ModelSettings extends ConsumerWidget {
                   P.othello.searchDepth.ua(1);
                 }
               : null,
-          icon: Icon(Icons.add),
+          icon: const Icon(Icons.add),
           iconSize: 14,
           style: ButtonStyle(
-            minimumSize: WidgetStateProperty.all(Size(16, 16)),
+            minimumSize: WidgetStateProperty.all(const Size(16, 16)),
             padding: WidgetStateProperty.all(EdgeInsets.zero),
           ),
         ),
@@ -166,10 +164,10 @@ class _ModelSettings extends ConsumerWidget {
                   P.othello.searchBreadth.ua(-1);
                 }
               : null,
-          icon: Icon(Icons.remove),
+          icon: const Icon(Icons.remove),
           iconSize: 14,
           style: ButtonStyle(
-            minimumSize: WidgetStateProperty.all(Size(16, 16)),
+            minimumSize: WidgetStateProperty.all(const Size(16, 16)),
             padding: WidgetStateProperty.all(EdgeInsets.zero),
           ),
         ),
@@ -184,10 +182,10 @@ class _ModelSettings extends ConsumerWidget {
                   P.othello.searchBreadth.ua(1);
                 }
               : null,
-          icon: Icon(Icons.add),
+          icon: const Icon(Icons.add),
           iconSize: 14,
           style: ButtonStyle(
-            minimumSize: WidgetStateProperty.all(Size(16, 16)),
+            minimumSize: WidgetStateProperty.all(const Size(16, 16)),
             padding: WidgetStateProperty.all(EdgeInsets.zero),
           ),
         ),
@@ -196,10 +194,10 @@ class _ModelSettings extends ConsumerWidget {
 
     return Material(
       color: kB.wo(0.0),
-      textStyle: TS(ff: "monospace", c: kB, s: 10),
+      textStyle: const TS(ff: "monospace", c: kB, s: 10),
       child: C(
-        padding: EI.a(4),
-        margin: EI.a(4),
+        padding: const EI.a(4),
+        margin: const EI.a(4),
         decoration: BD(
           color: kB.wo(0.0),
           borderRadius: 4.r,
@@ -209,7 +207,7 @@ class _ModelSettings extends ConsumerWidget {
           c: CAA.start,
           m: MAA.center,
           children: [
-            T(
+            const T(
               "Model Settings",
               s: TS(w: FW.w700),
             ),
@@ -220,10 +218,10 @@ class _ModelSettings extends ConsumerWidget {
                 ? Co(
                     c: CAA.stretch,
                     children: [
-                      T("Search Depth", textAlign: TextAlign.center),
+                      const T("Search Depth", textAlign: TextAlign.center),
                       searchDepthControls,
                       4.h,
-                      T("Search Breadth", textAlign: TextAlign.center),
+                      const T("Search Breadth", textAlign: TextAlign.center),
                       searchBreadthControls,
                     ],
                   )
@@ -231,13 +229,13 @@ class _ModelSettings extends ConsumerWidget {
                     children: [
                       Row(
                         children: [
-                          T("Search Depth", textAlign: TextAlign.center),
+                          const T("Search Depth", textAlign: TextAlign.center),
                           searchDepthControls,
                         ],
                       ),
                       Row(
                         children: [
-                          T("Search Breadth", textAlign: TextAlign.center),
+                          const T("Search Breadth", textAlign: TextAlign.center),
                           searchBreadthControls,
                         ],
                       ),
@@ -263,11 +261,11 @@ class _Players extends ConsumerWidget {
 
     final blackOptions = C(
       decoration: BD(color: kC, borderRadius: 4.r, border: Border.all(color: kB.wo(0.5), width: 0.5)),
-      padding: EI.o(l: 8, r: 8, t: 8),
+      padding: const EI.o(l: 8, r: 8, t: 8),
       child: Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
-          T("Black:", textAlign: TextAlign.center, s: TS(w: FW.w700)),
+          const T("Black:", textAlign: TextAlign.center, s: TS(w: FW.w700)),
           Wrap(
             children: [
               Ro(
@@ -280,7 +278,7 @@ class _Players extends ConsumerWidget {
                       P.othello.blackIsAI.u(false);
                     },
                   ),
-                  T("Human"),
+                  const T("Human"),
                 ],
               ),
               Ro(
@@ -293,7 +291,7 @@ class _Players extends ConsumerWidget {
                       P.othello.blackIsAI.u(true);
                     },
                   ),
-                  T("AI"),
+                  const T("AI"),
                 ],
               ),
             ],
@@ -304,11 +302,11 @@ class _Players extends ConsumerWidget {
 
     final whiteOptions = C(
       decoration: BD(color: kC, borderRadius: 4.r, border: Border.all(color: kB.wo(0.5), width: 0.5)),
-      padding: EI.o(l: 8, r: 8, t: 8),
+      padding: const EI.o(l: 8, r: 8, t: 8),
       child: Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
-          T("White:", textAlign: TextAlign.center, s: TS(w: FW.w700)),
+          const T("White:", textAlign: TextAlign.center, s: TS(w: FW.w700)),
           Wrap(
             children: [
               Ro(
@@ -321,7 +319,7 @@ class _Players extends ConsumerWidget {
                       P.othello.whiteIsAI.u(false);
                     },
                   ),
-                  T("Human"),
+                  const T("Human"),
                 ],
               ),
               Ro(
@@ -334,7 +332,7 @@ class _Players extends ConsumerWidget {
                       P.othello.whiteIsAI.u(true);
                     },
                   ),
-                  T("AI"),
+                  const T("AI"),
                 ],
               ),
             ],
@@ -345,10 +343,10 @@ class _Players extends ConsumerWidget {
 
     return Material(
       color: kB.wo(0.0),
-      textStyle: TS(ff: "monospace", c: kB, s: 10),
+      textStyle: const TS(ff: "monospace", c: kB, s: 10),
       child: C(
-        margin: EI.a(4),
-        padding: EI.a(4),
+        margin: const EI.a(4),
+        padding: const EI.a(4),
         decoration: BD(
           color: kB.wo(0.0),
           borderRadius: 4.r,
@@ -357,7 +355,7 @@ class _Players extends ConsumerWidget {
         child: Co(
           c: CAA.start,
           children: [
-            T(
+            const T(
               "Players",
               s: TS(w: FW.w700),
             ),
@@ -431,7 +429,7 @@ class _Score extends ConsumerWidget {
           : () {
               P.othello.start();
             },
-      child: T("New Game", s: TS(c: kB, s: 10, w: FW.w500)),
+      child: const T("New Game", s: TS(c: kB, s: 10, w: FW.w500)),
     );
 
     return Ro(
@@ -446,7 +444,7 @@ class _Score extends ConsumerWidget {
         ),
         16.w,
         C(
-          padding: EI.o(t: 0, b: 8, l: 8, r: 8),
+          padding: const EI.o(t: 0, b: 8, l: 8, r: 8),
           decoration: BD(
             color: kC,
             borderRadius: 8.r,
@@ -454,10 +452,10 @@ class _Score extends ConsumerWidget {
           ),
           child: Co(
             children: [
-              T("Currnet"),
+              const T("Currnet"),
               4.h,
-              if (blackTurn) _Black(minSize: 5, maxSize: 25),
-              if (!blackTurn) _White(minSize: 5, maxSize: 25),
+              if (blackTurn) const _Black(minSize: 5, maxSize: 25),
+              if (!blackTurn) const _White(minSize: 5, maxSize: 25),
             ],
           ),
         ),
@@ -488,7 +486,7 @@ class _Othello extends ConsumerWidget {
             maxWidth: screenWidth * 0.65,
             maxHeight: screenHeight * 0.65,
           ),
-          child: _Grid(),
+          child: const _Grid(),
         ),
       ],
     );
@@ -540,7 +538,7 @@ class _Grid extends ConsumerWidget {
                       _onCellTap(row: row, col: col);
                     },
                     child: C(
-                      decoration: BD(color: Color(0xFF808080).wo(0.5)),
+                      decoration: BD(color: const Color(0xFF808080).wo(0.5)),
                       child: _Cell(
                         row: row,
                         col: col,
@@ -562,7 +560,7 @@ class _Grid extends ConsumerWidget {
             top: 0,
             width: sizeForCell,
             height: labelSize,
-            child: Center(child: T(e, s: TS(c: kB, s: 10, w: FW.w700))),
+            child: Center(child: T(e, s: const TS(c: kB, s: 10, w: FW.w700))),
           );
         }).toList();
 
@@ -573,14 +571,14 @@ class _Grid extends ConsumerWidget {
             top: top,
             height: sizeForCell,
             width: labelSize,
-            child: Center(child: T(e, s: TS(c: kB, s: 10, w: FW.w700))),
+            child: Center(child: T(e, s: const TS(c: kB, s: 10, w: FW.w700))),
           );
         }).toList();
 
         return C(
           width: size,
           height: size,
-          decoration: BD(color: kC),
+          decoration: const BD(color: kC),
           child: Stack(
             children: [
               ...cells,
@@ -641,8 +639,8 @@ class _Cell extends StatelessWidget {
 
       switch (cellType) {
         case CellType.empty:
-          return Center(
-            child: const SizedBox.shrink(),
+          return const Center(
+            child: SizedBox.shrink(),
           );
         case CellType.black:
           return Center(
@@ -679,12 +677,12 @@ class _White extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: kB.wo(0.3),
-            offset: Offset(1, 1),
+            offset: const Offset(1, 1),
             blurRadius: 3,
           ),
         ],
         gradient: RadialGradient(
-          center: Alignment(-0.5, -0.5),
+          center: const Alignment(-0.5, -0.5),
           colors: [
             Colors.white,
             Colors.grey[300]!,
@@ -718,12 +716,12 @@ class _Black extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: kB.wo(0.3),
-            offset: Offset(1, 1),
+            offset: const Offset(1, 1),
             blurRadius: 3,
           ),
         ],
         gradient: RadialGradient(
-          center: Alignment(-0.5, -0.5),
+          center: const Alignment(-0.5, -0.5),
           colors: [
             Colors.grey[700]!,
             Colors.black,
@@ -791,16 +789,16 @@ class _Console extends ConsumerWidget {
                 if (girds.isNotEmpty)
                   ...girds.map((e) {
                     if (e == CellType.black) {
-                      return WidgetSpan(child: _ConsoleCell(cellType: CellType.black));
+                      return const WidgetSpan(child: _ConsoleCell(cellType: CellType.black));
                     } else if (e == CellType.white) {
-                      return WidgetSpan(child: _ConsoleCell(cellType: CellType.white));
+                      return const WidgetSpan(child: _ConsoleCell(cellType: CellType.white));
                     } else {
-                      return WidgetSpan(child: _ConsoleCell(cellType: CellType.empty));
+                      return const WidgetSpan(child: _ConsoleCell(cellType: CellType.empty));
                     }
                   }),
               ],
             ),
-            style: TS(c: kW, s: 12, w: FW.w500),
+            style: const TS(c: kW, s: 12, w: FW.w500),
           );
         },
       ),
@@ -830,7 +828,7 @@ class _ConsoleCell extends StatelessWidget {
     return C(
       height: 12,
       width: 12,
-      margin: EI.s(h: 1),
+      margin: const EI.s(h: 1),
       decoration: BD(color: kW.wo(0.33)),
       child: Center(
         child: Icon(

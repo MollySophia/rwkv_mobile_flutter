@@ -1,11 +1,9 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 import 'dart:isolate';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:zone/func/get_model_path.dart';
-import 'package:zone/gen/l10n.dart';
 import 'package:zone/launch_arguments.dart';
 import 'package:zone/model/cell_type.dart';
 import 'package:zone/model/message.dart';

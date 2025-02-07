@@ -1,5 +1,6 @@
 {
-  "chat_title": "RWKV Chat v7 0.4B",
+  "chat_title": "RWKV Chat v7",
+  "othello_title": "RWKV 黑白棋",
   "chat_title_placeholder": "输入你的消息...",
   "chat_copied_to_clipboard": "已复制到剪贴板"
 }

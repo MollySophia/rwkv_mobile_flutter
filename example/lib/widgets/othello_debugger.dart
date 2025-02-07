@@ -36,7 +36,7 @@ class OthelloDebugger extends ConsumerWidget {
               child: Co(
                 c: CAA.start,
                 children: [
-                  T("Debugger"),
+                  const T("Debugger"),
                   T("${"blackTurn".codeToName}\n" + blackTurn.toString()),
                   T("${"thinking".codeToName}\n" + thinking.toString()),
                   T("${"screenWidth".codeToName}\n" + screenWidth.toString()),

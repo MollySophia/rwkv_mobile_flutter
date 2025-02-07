@@ -14,7 +14,7 @@ dependencies:
     sdk: flutter
 
   rwkv_mobile_flutter:
-    git: https://github.com/MollySophia/rwkv_mobile_flutter.git
+    path: ../
 
   adaptive_dialog: ^2.4.0 # https://pub.dev/packages/adaptive_dialog/
   auto_size_text: # https://pub.dev/packages/auto_size_text/
@@ -51,7 +51,7 @@ flutter:
 flutter_intl:
   enabled: true # Required. Must be set to true to activate the package. Default: false
   class_name: S # Optional. Sets the name for the generated localization class. Default: S
-  main_locale: zh_Hans
+  main_locale: en
   arb_dir: lib/l10n # Optional. Sets the directory of your ARB resource files. Provided value should be a valid path on your system. Default: lib/l10n
   output_dir: lib/gen # Optional. Sets the directory of generated localization files. Provided value should be a valid path on your system. Default: lib/generated
   use_deferred_loading: false # Optional. Must be set to true to generate localization code that is loaded with deferred loading. Default: false

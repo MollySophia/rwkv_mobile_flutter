@@ -242,10 +242,10 @@ packages:
     dependency: "direct main"
     description:
       name: device_info_plus
-      sha256: e3fc9a65820fef83035af8ee8c09004a719d5d1d54e6de978fcb0d84bbeb241a
+      sha256: "72d146c6d7098689ff5c5f66bcf593ac11efc530095385356e131070333e64da"
       url: "https://pub.dev"
     source: hosted
-    version: "11.2.2"
+    version: "11.3.0"
   device_info_plus_platform_interface:
     dependency: transitive
     description:
@@ -622,10 +622,10 @@ packages:
     dependency: "direct main"
     description:
       name: package_info_plus
-      sha256: c447a3c3e7be4addf129b8f9ab6a4bd5d166b78918223e223b61fddf4d07e254
+      sha256: "67eae327b1b0faf761964a1d2e5d323c797f3799db0e85aa232db8d9e922bc35"
       url: "https://pub.dev"
     source: hosted
-    version: "8.2.0"
+    version: "8.2.1"
   package_info_plus_platform_interface:
     dependency: transitive
     description:
@@ -773,11 +773,9 @@ packages:
   rwkv_mobile_flutter:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "5d2ff1de362949271ff33ba54f47ecca0ae84f84"
-      url: "https://github.com/MollySophia/rwkv_mobile_flutter.git"
-    source: git
+      path: ".."
+      relative: true
+    source: path
     version: "0.0.1"
   rxdart:
     dependency: transitive

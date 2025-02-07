@@ -1,5 +1,6 @@
 import 'package:halo/halo.dart';
 import 'package:zone/func/gen_fake_messages.dart';
+import 'package:zone/gen/l10n.dart';
 import 'package:zone/launch_arguments.dart';
 import 'package:zone/route/method.dart';
 import 'package:zone/route/page_key.dart';
@@ -14,7 +15,7 @@ class PageHome extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: T("RWKV Zone"),
+        title: const T("RWKV Zone"),
       ),
       body: Column(
         children: [
@@ -22,26 +23,15 @@ class PageHome extends ConsumerWidget {
             onPressed: () {
               push(PageKey.othello);
             },
-            child: Text("RWKV Othello"),
+            child: T(S.current.othello_title),
           ),
           TextButton(
             onPressed: () {
               push(PageKey.chat);
             },
-            child: Text("RWKV Chat v7"),
+            child: T(S.current.chat_title),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if (LaunchArgs.useFakeMessages) {
-            genFakeMessages().then((messages) {
-              P.chat.messages.u(messages);
-            });
-          }
-          push(PageKey.chat);
-        },
-        child: const Icon(Icons.chat),
       ),
     );
   }

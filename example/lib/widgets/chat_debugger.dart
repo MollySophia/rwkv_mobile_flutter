@@ -29,7 +29,7 @@ class ChatDebugger extends ConsumerWidget {
               child: Co(
                 m: MAA.center,
                 children: [
-                  T("Debugger"),
+                  const T("Debugger"),
                   T("${"editingIndex".codeToName}\n" + editingIndex.toString()),
                   T("${"messages".codeToName}\n\n" + messages.map((e) => e.toString()).join("\n\n")),
                 ],

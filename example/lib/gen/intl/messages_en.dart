@@ -25,9 +25,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "chat_copied_to_clipboard": MessageLookupByLibrary.simpleMessage(
       "Copied to clipboard",
     ),
-    "chat_title": MessageLookupByLibrary.simpleMessage("RWKV Chat v7 0.4B"),
+    "chat_title": MessageLookupByLibrary.simpleMessage("RWKV World v7"),
     "chat_title_placeholder": MessageLookupByLibrary.simpleMessage(
       "Enter your message...",
     ),
+    "othello_title": MessageLookupByLibrary.simpleMessage("RWKV Othello"),
   };
 }

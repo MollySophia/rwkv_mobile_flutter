@@ -1,4 +1,6 @@
 {
-  "chat_title": "RWKV Chat v7 0.4B",
-  "chat_title_placeholder": "メッセージを入力してください..."
+  "chat_title": "RWKV World v7",
+  "othello_title": "RWKV 黒と白のチェス",
+  "chat_title_placeholder": "メッセージを入力してください...",
+  "chat_copied_to_clipboard": "クリップボードにコピーしました"
 }

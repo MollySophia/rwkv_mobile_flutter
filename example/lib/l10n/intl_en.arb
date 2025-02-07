@@ -1,5 +1,6 @@
 {
-  "chat_title": "RWKV Chat v7 0.4B",
+  "chat_title": "RWKV World v7",
+  "othello_title": "RWKV Othello",
   "chat_title_placeholder": "Enter your message...",
   "chat_copied_to_clipboard": "Copied to clipboard"
 }

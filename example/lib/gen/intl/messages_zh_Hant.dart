@@ -22,7 +22,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-    "chat_title": MessageLookupByLibrary.simpleMessage("RWKV Chat v7 0.4B"),
-    "chat_title_placeholder": MessageLookupByLibrary.simpleMessage("輸入你的消息..."),
+    "chat_copied_to_clipboard": MessageLookupByLibrary.simpleMessage("已複製到剪貼簿"),
+    "chat_title": MessageLookupByLibrary.simpleMessage("RWKV 世界 v7"),
+    "chat_title_placeholder": MessageLookupByLibrary.simpleMessage("輸入你的訊息..."),
+    "othello_title": MessageLookupByLibrary.simpleMessage("RWKV 黑白棋"),
   };
 }

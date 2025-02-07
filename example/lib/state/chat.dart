@@ -93,7 +93,7 @@ extension $Chat on _Chat {
     final _editingIndex = P.chat.editingIndex.v;
     if (_editingIndex == null) return;
     editingIndex.u(null);
-    textEditingController.value = TextEditingValue(text: "");
+    textEditingController.value = const TextEditingValue(text: "");
   }
 
   FV onTapEditInUserMessageBubble({required int index}) async {
