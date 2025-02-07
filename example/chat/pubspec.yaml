@@ -44,8 +44,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    # - assets/model/RWKV-x070-World-0.4B-v2.9-20250107-ctx4096-ncnn.bin
-    # - assets/model/RWKV-x070-World-0.4B-v2.9-20250107-ctx4096-ncnn.param
+    # - assets/model/rwkv7-world-0.4B-Q8_0.gguf
 
     - assets/model/RWKV-x070-World-0.4B-v2.9-20250107-ctx4096.st
 

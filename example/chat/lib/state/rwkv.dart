@@ -50,10 +50,9 @@ extension _$RWKV on _RWKV {
       tokenizerPath = await getModelPath("assets/model/b_rwkv_vocab_v20230424.txt");
       backend = Backend.webRwkv;
     } else {
-      modelPath = await getModelPath("assets/model/RWKV-x070-World-0.4B-v2.9-20250107-ctx4096-ncnn.bin");
-      await getModelPath("assets/model/RWKV-x070-World-0.4B-v2.9-20250107-ctx4096-ncnn.param");
+      modelPath = await getModelPath("assets/model/rwkv7-world-0.4B-Q8_0.gguf");
       tokenizerPath = await getModelPath("assets/model/b_rwkv_vocab_v20230424.txt");
-      backend = Backend.ncnn;
+      backend = Backend.llamacpp;
     }
 
     final rootIsolateToken = RootIsolateToken.instance;

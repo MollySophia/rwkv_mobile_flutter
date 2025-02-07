@@ -18,7 +18,8 @@ enum Backend {
   /// Not really optimal for larger chat models
   ncnn,
 
-  // TODO: @Molly llama.cpp backend for better performance for chat models
+  /// Supports Android, Windows, Linux and macOS (iOS maybe in the future. not used for now)
+  llamacpp,
 
   /// Currently only support iOS and macOS
   ///
@@ -31,6 +32,8 @@ enum Backend {
         return 'ncnn';
       case Backend.webRwkv:
         return 'web-rwkv';
+      case Backend.llamacpp:
+        return 'llama.cpp';
     }
   }
 }
