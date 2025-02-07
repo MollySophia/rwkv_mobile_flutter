@@ -125,12 +125,12 @@ class RWKVMobile {
 
     int retVal = rwkvMobile.rwkvmobile_runtime_load_tokenizer(runtime, tokenizerPath.toNativeUtf8().cast<ffi.Char>());
     if (retVal != 0) {
-      throw Exception('Failed to load tokenizer');
+      throw Exception('Failed to load tokenizer, tokenizer path: $tokenizerPath');
     }
 
     retVal = rwkvMobile.rwkvmobile_runtime_load_model(runtime, modelPathPointer.cast<ffi.Char>());
     if (retVal != 0) {
-      throw Exception('Failed to load model');
+      throw Exception('Failed to load model, model path: $modelPath');
     }
     // initializations done
 
