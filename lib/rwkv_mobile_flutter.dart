@@ -13,7 +13,12 @@ enum Backend {
   /// Currently we use it on Android, Windows and Linux
   ///
   /// https://github.com/Tencent/ncnn
+  ///
+  /// This is suitable for running small puzzle models on various platforms
+  /// Not really optimal for larger chat models
   ncnn,
+
+  // TODO: @Molly llama.cpp backend for better performance for chat models
 
   /// Currently only support iOS and macOS
   ///
@@ -87,7 +92,6 @@ class RWKVMobile {
     }
   }
 
-  // TODO: @Molly rwkv_mobile has this function, but it's not exported yet
   String getAvailableBackendNames() {
     final rwkvMobile = rwkv_mobile(getDynamicLibrary());
     const backendNamesLength = 64; // should be enough
@@ -241,6 +245,19 @@ class RWKVMobile {
 
         sendPort.send({'response': responseStr});
         sendPort.send({'generateStop': true});
+      } else if (command == 'stopIsolate') {
+        if (kDebugMode) print("💬 Stop isolate");
+        rwkvMobile.rwkvmobile_runtime_release(runtime);
+        calloc.free(responseBuffer);
+        for (var i = 0; i < maxMessages; i++) {
+          if (inputsPtr[i] != ffi.nullptr) {
+            calloc.free(inputsPtr[i]);
+          }
+        }
+        calloc.free(inputsPtr);
+        sendPort.send({'isolateStopped': true});
+        receivePort.close();
+        return;
       } else {
         if (kDebugMode) print("😡 unknown command: $command");
       }
