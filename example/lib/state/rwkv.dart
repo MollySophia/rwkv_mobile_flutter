@@ -27,7 +27,8 @@ enum ModelLoadingState {
 }
 
 class _RWKV {
-  SendPort? sendPort;
+  SendPort? _sendPort;
+  late final _receivePort = ReceivePort();
 
   late final _messagesController = StreamController<JSON>();
 
@@ -49,11 +50,11 @@ class _RWKV {
 /// Public methods
 extension $RWKV on _RWKV {
   void send(List<String> messages) {
-    sendPort!.send(("message", messages));
+    _sendPort!.send(("message", messages));
   }
 
   void generate(String prompt) {
-    sendPort!.send(("generate", prompt));
+    _sendPort!.send(("generate", prompt));
   }
 }
 
@@ -61,6 +62,7 @@ extension $RWKV on _RWKV {
 extension _$RWKV on _RWKV {
   FV _init() async {
     P.app.pageKey.lv(_onPageKeyChanged);
+    _receivePort.listen(_onMessage);
   }
 
   FV _onPageKeyChanged() async {
@@ -88,15 +90,13 @@ extension _$RWKV on _RWKV {
   FV _clearRuntime() async {
     if (demoType.v != null) {
       if (kDebugMode) print("💬 stopping isolate...");
-      sendPort?.send(("stopIsolate", null));
+      _sendPort?.send(("initRuntime", null));
       await Future.delayed(const Duration(milliseconds: 50));
       demoType.uc();
     }
   }
 
   FV _loadChat() async {
-    await _clearRuntime();
-
     late final String modelPath;
     late final Backend backend;
 
@@ -114,19 +114,26 @@ extension _$RWKV on _RWKV {
     final rwkvMobile = RWKVMobile();
     final availableBackendNames = rwkvMobile.getAvailableBackendNames();
     if (kDebugMode) print("💬 availableBackendNames: $availableBackendNames");
-    final receivePort = ReceivePort();
 
-    await rwkvMobile.runIsolate(
-      modelPath,
-      tokenizerPath,
-      backend,
-      receivePort.sendPort,
-      rootIsolateToken!,
-    );
+    if (_sendPort != null) {
+      // @Molly: 我通过 send port 不为空来判断当前在 cpp side 是否已经存在 model
+      // 如果存在，则调用 initRuntime 方法, 期望可以 “重置” 已经在内存中的权重
+      // 🚧 但是, 调用该方法后发现, 依然崩溃, 且崩溃位置和昨天的相同
+      _sendPort!.send((
+        "initRuntime",
+        {"modelPath": modelPath, "backend": backend.name, "tokenizerPath": tokenizerPath},
+      ));
+    } else {
+      await rwkvMobile.runIsolate(
+        modelPath,
+        tokenizerPath,
+        backend,
+        _receivePort.sendPort,
+        rootIsolateToken!,
+      );
+    }
 
-    receivePort.listen(_onMessage);
-
-    while (sendPort == null) {
+    while (_sendPort == null) {
       if (kDebugMode) print("💬 waiting for sendPort...");
       await Future.delayed(const Duration(milliseconds: 50));
     }
@@ -147,15 +154,13 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
 
     demoType.u(DemoType.chat);
 
-    sendPort!.send(("setPrompt", prompt));
-    sendPort!.send(("getPrompt", null));
-    sendPort!.send(("setSamplerParams", {"temperature": 2.0, "top_k": 128, "top_p": 0.5, "presence_penalty": 0.5, "frequency_penalty": 0.5, "penalty_decay": 0.996}));
-    sendPort!.send(("getSamplerParams", null));
+    _sendPort!.send(("setPrompt", prompt));
+    _sendPort!.send(("getPrompt", null));
+    _sendPort!.send(("setSamplerParams", {"temperature": 2.0, "top_k": 128, "top_p": 0.5, "presence_penalty": 0.5, "frequency_penalty": 0.5, "penalty_decay": 0.996}));
+    _sendPort!.send(("getSamplerParams", null));
   }
 
   FV _loadOthello() async {
-    await _clearRuntime();
-
     late final String modelPath;
     late final Backend backend;
 
@@ -174,30 +179,34 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
     final rwkvMobile = RWKVMobile();
     final availableBackendNames = rwkvMobile.getAvailableBackendNames();
     if (kDebugMode) print("💬 availableBackendNames: $availableBackendNames");
-    final receivePort = ReceivePort();
 
-    await rwkvMobile.runIsolate(
-      modelPath,
-      tokenizerPath,
-      backend,
-      receivePort.sendPort,
-      rootIsolateToken!,
-    );
+    if (_sendPort != null) {
+      _sendPort!.send((
+        "initRuntime",
+        {"modelPath": modelPath, "backend": backend.name, "tokenizerPath": tokenizerPath},
+      ));
+    } else {
+      await rwkvMobile.runIsolate(
+        modelPath,
+        tokenizerPath,
+        backend,
+        _receivePort.sendPort,
+        rootIsolateToken!,
+      );
+    }
 
-    receivePort.listen(_onMessage);
-
-    while (sendPort == null) {
+    while (_sendPort == null) {
       if (kDebugMode) print("💬 waiting for sendPort...");
       await Future.delayed(const Duration(milliseconds: 50));
     }
 
     demoType.u(DemoType.othello);
 
-    sendPort!.send(("setMaxLength", 64000));
-    sendPort!.send(("setSamplerParams", {"temperature": 1.0, "top_k": 1, "top_p": 1.0, "presence_penalty": 0.0, "frequency_penalty": 0.0, "penalty_decay": 0.0}));
-    sendPort!.send(("getSamplerParams", null));
-    sendPort!.send(("setGenerationStopToken", 0));
-    sendPort!.send(("clearStates", null));
+    _sendPort!.send(("setMaxLength", 64000));
+    _sendPort!.send(("setSamplerParams", {"temperature": 1.0, "top_k": 1, "top_p": 1.0, "presence_penalty": 0.0, "frequency_penalty": 0.0, "penalty_decay": 0.0}));
+    _sendPort!.send(("getSamplerParams", null));
+    _sendPort!.send(("setGenerationStopToken", 0));
+    _sendPort!.send(("clearStates", null));
   }
 
   // ignore: unused_element
@@ -212,7 +221,7 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
 
   void _onMessage(message) {
     if (message is SendPort) {
-      sendPort = message;
+      _sendPort = message;
       return;
     }
 
