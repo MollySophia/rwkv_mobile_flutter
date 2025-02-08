@@ -34,6 +34,7 @@ dependencies:
   path_provider: # https://pub.dev/packages/path_provider/
   shared_preferences: # https://pub.dev/packages/shared_preferences/
   vclibs: # https://pub.dev/packages/vclibs/
+  background_downloader: # https://pub.dev/packages/background_downloader/
 
 dev_dependencies:
   flutter_lints: # https://pub.dev/packages/flutter_lints/
