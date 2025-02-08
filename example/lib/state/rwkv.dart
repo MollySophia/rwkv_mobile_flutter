@@ -121,7 +121,7 @@ extension _$RWKV on _RWKV {
       // 🚧 但是, 调用该方法后发现, 依然崩溃, 且崩溃位置和昨天的相同
       _sendPort!.send((
         "initRuntime",
-        {"modelPath": modelPath, "backend": backend.name, "tokenizerPath": tokenizerPath},
+        {"modelPath": modelPath, "backend": backend, "tokenizerPath": tokenizerPath},
       ));
     } else {
       await rwkvMobile.runIsolate(
@@ -183,7 +183,7 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
     if (_sendPort != null) {
       _sendPort!.send((
         "initRuntime",
-        {"modelPath": modelPath, "backend": backend.name, "tokenizerPath": tokenizerPath},
+        {"modelPath": modelPath, "backend": backend, "tokenizerPath": tokenizerPath},
       ));
     } else {
       await rwkvMobile.runIsolate(

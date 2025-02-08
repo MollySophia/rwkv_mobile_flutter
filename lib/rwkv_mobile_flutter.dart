@@ -258,7 +258,7 @@ class RWKVMobile {
       } else if (command == 'initRuntime') {
         final args = message.$2 as Map<String, dynamic>;
         modelPath = args['modelPath'] as String;
-        modelBackend = args['backend'] as String;
+        modelBackend = args['backend'].asArgument;
         tokenizerPath = args['tokenizerPath'] as String;
         if (runtime.address != 0) {
           rwkvMobile.rwkvmobile_runtime_release(runtime);
