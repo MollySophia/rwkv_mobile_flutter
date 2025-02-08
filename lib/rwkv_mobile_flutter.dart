@@ -107,40 +107,43 @@ class RWKVMobile {
   void isolateMain(StartOptions options) async {
     final sendPort = options.sendPort;
     final rootIsolateToken = options.rootIsolateToken;
-    final modelPath = options.modelPath;
-    final modelBackend = options.backend.asArgument;
-    final tokenizerPath = options.tokenizerPath;
     final receivePort = ReceivePort();
     sendPort.send(receivePort.sendPort);
 
     BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
 
     final rwkvMobile = rwkv_mobile(getDynamicLibrary());
-    final modelPathPointer = modelPath.toNativeUtf8();
 
-    final runtime = rwkvMobile.rwkvmobile_runtime_init_with_name(modelBackend.toNativeUtf8().cast<ffi.Char>());
-    if (runtime == ffi.nullptr) {
+    // definitions
+    int maxLength = 2000;
+    int maxMessages = 1000;
+    int generationStopToken = 0; // Takes effect in 'generation' mode; not used in 'chat' mode
+    int retVal = 0;
+    // bool isGenerating = false;
+
+    ffi.Pointer<ffi.Char> responseBuffer = calloc.allocate<ffi.Char>(maxLength);
+    final inputsPtr = calloc.allocate<ffi.Pointer<ffi.Char>>(maxMessages);
+
+    var modelPath = options.modelPath;
+    var modelBackend = options.backend.asArgument;
+    var tokenizerPath = options.tokenizerPath;
+
+    // runtime initializations
+    var runtime = rwkvMobile.rwkvmobile_runtime_init_with_name(modelBackend.toNativeUtf8().cast<ffi.Char>());
+    if (runtime.address == 0) {
       throw Exception('Failed to initialize runtime');
     }
 
-    int retVal = rwkvMobile.rwkvmobile_runtime_load_tokenizer(runtime, tokenizerPath.toNativeUtf8().cast<ffi.Char>());
+    retVal = rwkvMobile.rwkvmobile_runtime_load_tokenizer(runtime, tokenizerPath.toNativeUtf8().cast<ffi.Char>());
     if (retVal != 0) {
       throw Exception('Failed to load tokenizer, tokenizer path: $tokenizerPath');
     }
 
-    retVal = rwkvMobile.rwkvmobile_runtime_load_model(runtime, modelPathPointer.cast<ffi.Char>());
+    retVal = rwkvMobile.rwkvmobile_runtime_load_model(runtime, modelPath.toNativeUtf8().cast<ffi.Char>());
     if (retVal != 0) {
       throw Exception('Failed to load model, model path: $modelPath');
     }
-    // initializations done
 
-    int maxLength = 2000;
-    int maxMessages = 1000;
-    int generationStopToken = 0; // Takes effect in 'generation' mode; not used in 'chat' mode
-    ffi.Pointer<ffi.Char> responseBuffer = calloc.allocate<ffi.Char>(maxLength);
-    final inputsPtr = calloc.allocate<ffi.Pointer<ffi.Char>>(maxMessages);
-
-    // bool isGenerating = false;
     await for (final (String, dynamic) message in receivePort) {
       // print("💬 message: ${message.runtimeType}");
       // message: (String command, Dynamic args)
@@ -248,19 +251,33 @@ class RWKVMobile {
 
         sendPort.send({'response': responseStr});
         sendPort.send({'generateStop': true});
-      } else if (command == 'stopIsolate') {
-        if (kDebugMode) print("💬 Stop isolate");
+      } else if (command == 'releaseModel') {
+        if (kDebugMode) print("💬 Releasing model");
         rwkvMobile.rwkvmobile_runtime_release(runtime);
-        calloc.free(responseBuffer);
-        for (var i = 0; i < maxMessages; i++) {
-          if (inputsPtr[i] != ffi.nullptr) {
-            calloc.free(inputsPtr[i]);
-          }
+        runtime = ffi.nullptr;
+      } else if (command == 'initRuntime') {
+        final args = message.$2 as Map<String, dynamic>;
+        modelPath = args['modelPath'] as String;
+        modelBackend = args['backend'] as String;
+        tokenizerPath = args['tokenizerPath'] as String;
+        if (runtime.address != 0) {
+          rwkvMobile.rwkvmobile_runtime_release(runtime);
         }
-        calloc.free(inputsPtr);
-        sendPort.send({'isolateStopped': true});
-        receivePort.close();
-        return;
+
+        runtime = rwkvMobile.rwkvmobile_runtime_init_with_name(modelBackend.toNativeUtf8().cast<ffi.Char>());
+        if (runtime.address == 0) {
+          throw Exception('Failed to initialize runtime');
+        }
+
+        retVal = rwkvMobile.rwkvmobile_runtime_load_tokenizer(runtime, tokenizerPath.toNativeUtf8().cast<ffi.Char>());
+        if (retVal != 0) {
+          throw Exception('Failed to load tokenizer, tokenizer path: $tokenizerPath');
+        }
+
+        retVal = rwkvMobile.rwkvmobile_runtime_load_model(runtime, modelPath.toNativeUtf8().cast<ffi.Char>());
+        if (retVal != 0) {
+          throw Exception('Failed to load model, model path: $modelPath');
+        }
       } else {
         if (kDebugMode) print("😡 unknown command: $command");
       }
