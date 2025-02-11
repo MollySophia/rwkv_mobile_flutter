@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:math';
 import 'dart:ui';
 
@@ -97,8 +98,7 @@ class _List extends ConsumerWidget {
       radius: 100.rr,
       thickness: 4,
       thumbColor: kB.wo(0.4),
-      padding:
-          EI.o(r: 4, b: inputHeight + 4, t: paddingTop + kToolbarHeight + 4),
+      padding: EI.o(r: 4, b: inputHeight + 4, t: paddingTop + kToolbarHeight + 4),
       controller: P.chat.scrollController,
       child: ListView.separated(
         reverse: useReverse,
@@ -159,8 +159,7 @@ class _Message extends ConsumerWidget {
     final changing = msg.changing;
 
     // Do not rebuild if message is not changing.
-    final received =
-        ref.watch(P.chat.received.select((v) => msg.changing ? v : ""));
+    final received = ref.watch(P.chat.received.select((v) => msg.changing ? v : ""));
 
     final finalContent = changing ? received : content;
 
@@ -207,9 +206,7 @@ class _Message extends ConsumerWidget {
                     child: C(
                       padding: const EI.a(12),
                       decoration: BD(
-                        color: isMine
-                            ? const Color.fromARGB(255, 58, 79, 154)
-                            : kW,
+                        color: isMine ? const Color.fromARGB(255, 58, 79, 154) : kW,
                         border: Border.all(color: color.wo(0.2)),
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(isMine ? 20 : 0),
@@ -257,10 +254,8 @@ class _Message extends ConsumerWidget {
                                   GD(
                                     child: TweenAnimationBuilder(
                                       tween: Tween(begin: 0.0, end: 1.0),
-                                      duration: const Duration(
-                                          milliseconds: 1000000000),
-                                      builder: (context, value, child) =>
-                                          Transform.rotate(
+                                      duration: const Duration(milliseconds: 1000000000),
+                                      builder: (context, value, child) => Transform.rotate(
                                         angle: value * 2 * pi * 1000000,
                                         child: child,
                                       ),
@@ -355,6 +350,24 @@ class _Input extends ConsumerWidget {
     await P.chat.onInputRightButtonPressed();
   }
 
+  void _onKeyEvent(KeyEvent event) {
+    final character = event.character;
+    final isShiftPressed = HardwareKeyboard.instance.isShiftPressed;
+    final isEnterPressed = event.logicalKey == LogicalKeyboardKey.enter && character != null;
+    if (!isEnterPressed) return;
+    if (isShiftPressed) {
+      final currentValue = P.chat.textEditingController.value;
+      if (currentValue.text.trim().isNotEmpty) {
+        P.chat.textEditingController.value = TextEditingValue(text: P.chat.textEditingController.value.text);
+      } else {
+        Alert.warning(S.current.chat_empty_message);
+        P.chat.textEditingController.value = TextEditingValue(text: "");
+      }
+    } else {
+      P.chat.onInputRightButtonPressed();
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final paddingBottom = ref.watch(P.app.paddingBottom);
@@ -376,66 +389,69 @@ class _Input extends ConsumerWidget {
             padding: EI.o(l: 12, r: 12, b: paddingBottom + 12, t: 12),
             child: Stack(
               children: [
-                TextField(
+                KeyboardListener(
+                  onKeyEvent: _onKeyEvent,
                   focusNode: P.chat.focusNode,
-                  controller: P.chat.textEditingController,
-                  onSubmitted: P.chat.onSubmitted,
-                  onChanged: _onChanged,
-                  onEditingComplete: P.chat.onEditingComplete,
-                  onAppPrivateCommand: _onAppPrivateCommand,
-                  onTap: _onTap,
-                  onTapOutside: _onTapOutside,
-                  keyboardType: TextInputType.multiline,
-                  enableSuggestions: true,
-                  textInputAction: TextInputAction.newline,
-                  maxLines: 10,
-                  minLines: 1,
-                  decoration: InputDecoration(
-                    fillColor: kW,
-                    focusColor: kW,
-                    hoverColor: kW,
-                    iconColor: kW,
-                    border: OutlineInputBorder(
-                      borderRadius: 28.r,
-                      borderSide: BorderSide(color: color),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: 28.r,
-                      borderSide: BorderSide(color: color),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: 28.r,
-                      borderSide: BorderSide(color: color),
-                    ),
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderRadius: 28.r,
-                      borderSide: BorderSide(color: color),
-                    ),
-                    hintText: S.current.chat_title_placeholder,
-                    suffixIcon: receiving
-                        ? SB(
-                            width: 46,
-                            child: Center(
-                              child: SB(
-                                width: 24,
-                                height: 24,
-                                child: CircularProgressIndicator(
-                                  color: color.wo(0.5),
+                  child: TextField(
+                    controller: P.chat.textEditingController,
+                    onSubmitted: P.chat.onSubmitted,
+                    onChanged: _onChanged,
+                    onEditingComplete: P.chat.onEditingComplete,
+                    onAppPrivateCommand: _onAppPrivateCommand,
+                    onTap: _onTap,
+                    onTapOutside: _onTapOutside,
+                    keyboardType: TextInputType.multiline,
+                    enableSuggestions: true,
+                    textInputAction: TextInputAction.newline,
+                    maxLines: 10,
+                    minLines: 1,
+                    decoration: InputDecoration(
+                      fillColor: kW,
+                      focusColor: kW,
+                      hoverColor: kW,
+                      iconColor: kW,
+                      border: OutlineInputBorder(
+                        borderRadius: 28.r,
+                        borderSide: BorderSide(color: color),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: 28.r,
+                        borderSide: BorderSide(color: color),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: 28.r,
+                        borderSide: BorderSide(color: color),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: 28.r,
+                        borderSide: BorderSide(color: color),
+                      ),
+                      hintText: S.current.chat_title_placeholder,
+                      suffixIcon: receiving
+                          ? SB(
+                              width: 46,
+                              child: Center(
+                                child: SB(
+                                  width: 24,
+                                  height: 24,
+                                  child: CircularProgressIndicator(
+                                    color: color.wo(0.5),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : AnimatedOpacity(
+                              opacity: canSend ? 1 : 0.333,
+                              duration: 250.ms,
+                              child: IconButton(
+                                onPressed: canSend ? _onRightButtonPressed : null,
+                                icon: Icon(
+                                  editingBotMessage ? Icons.edit : Icons.send,
+                                  color: color,
                                 ),
                               ),
                             ),
-                          )
-                        : AnimatedOpacity(
-                            opacity: canSend ? 1 : 0.333,
-                            duration: 250.ms,
-                            child: IconButton(
-                              onPressed: canSend ? _onRightButtonPressed : null,
-                              icon: Icon(
-                                editingBotMessage ? Icons.edit : Icons.send,
-                                color: color,
-                              ),
-                            ),
-                          ),
+                    ),
                   ),
                 ),
               ],
@@ -476,8 +492,7 @@ class _ScrollToBottomButton extends ConsumerWidget {
               filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
               child: C(
                 decoration: BD(
-                  border: Border.all(
-                      color: Theme.of(context).colorScheme.primary.wo(0.333)),
+                  border: Border.all(color: Theme.of(context).colorScheme.primary.wo(0.333)),
                   color: Theme.of(context).colorScheme.primary.wo(0.333),
                   borderRadius: 8.r,
                 ),

@@ -1,6 +1,8 @@
 {
+  "@@locale": "en",
   "chat_title": "RWKV World v7",
   "othello_title": "RWKV Othello",
   "chat_title_placeholder": "Enter your message...",
-  "chat_copied_to_clipboard": "Copied to clipboard"
+  "chat_copied_to_clipboard": "Copied to clipboard",
+  "chat_empty_message": "Please enter a message"
 }

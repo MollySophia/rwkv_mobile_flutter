@@ -25,6 +25,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "chat_copied_to_clipboard": MessageLookupByLibrary.simpleMessage(
       "클립보드에 복사됨",
     ),
+    "chat_empty_message": MessageLookupByLibrary.simpleMessage("메시지를 입력하세요"),
     "chat_title": MessageLookupByLibrary.simpleMessage("RWKV World v7"),
     "chat_title_placeholder": MessageLookupByLibrary.simpleMessage(
       "메시지를 입력하세요...",

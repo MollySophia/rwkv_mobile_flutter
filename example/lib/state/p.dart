@@ -24,12 +24,14 @@ part "app.dart";
 part "chat.dart";
 part "rwkv.dart";
 part "othello.dart";
+part "remote_file.dart";
 
 abstract class P {
   static final app = _App();
   static final chat = _Chat();
   static final rwkv = _RWKV();
   static final othello = _Othello();
+  static final remoteFile = _RemoteFile();
 
   static FV init() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -43,6 +45,7 @@ abstract class P {
       rwkv._init(),
       chat._init(),
       othello._init(),
+      remoteFile._init(),
     ]);
   }
 }

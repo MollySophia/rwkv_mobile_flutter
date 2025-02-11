@@ -1,11 +1,11 @@
 name: rwkv_mobile_flutter
-description: "A new Flutter package project."
+description: 'A new Flutter package project.'
 version: 0.0.1
-homepage:
+homepage: null
 
 environment:
   sdk: ^3.5.4
-  flutter: ">=1.17.0"
+  flutter: '>=1.17.0'
 
 dependencies:
   ffi: ^2.1.3

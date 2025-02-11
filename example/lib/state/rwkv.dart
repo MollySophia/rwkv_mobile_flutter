@@ -87,15 +87,6 @@ extension _$RWKV on _RWKV {
     }
   }
 
-  FV _clearRuntime() async {
-    if (demoType.v != null) {
-      if (kDebugMode) print("💬 stopping isolate...");
-      _sendPort?.send(("initRuntime", null));
-      await Future.delayed(const Duration(milliseconds: 50));
-      demoType.uc();
-    }
-  }
-
   FV _loadChat() async {
     late final String modelPath;
     late final Backend backend;

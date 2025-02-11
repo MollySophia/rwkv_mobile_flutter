@@ -94,6 +94,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Please enter a message`
+  String get chat_empty_message {
+    return Intl.message(
+      'Please enter a message',
+      name: 'chat_empty_message',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

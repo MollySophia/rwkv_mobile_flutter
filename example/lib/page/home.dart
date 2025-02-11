@@ -1,10 +1,7 @@
 import 'package:halo/halo.dart';
-import 'package:zone/func/gen_fake_messages.dart';
 import 'package:zone/gen/l10n.dart';
-import 'package:zone/launch_arguments.dart';
 import 'package:zone/route/method.dart';
 import 'package:zone/route/page_key.dart';
-import 'package:zone/state/p.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
