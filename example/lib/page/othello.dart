@@ -97,7 +97,20 @@ class _Title extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const T("RWKV Othello", s: TS(c: kB, s: 20, w: FW.w700));
+    final version = ref.watch(P.app.version);
+    final buildNumber = ref.watch(P.app.buildNumber);
+    return Ro(
+      m: MAA.center,
+      children: [
+        12.w,
+        T("$version.$buildNumber", s: TS(c: kB.wo(0.0), s: 10)),
+        Spacer(),
+        T("RWKV Othello", s: TS(c: kB, s: 20, w: FW.w700)),
+        Spacer(),
+        T("$version.$buildNumber", s: TS(c: kB.wo(0.5), s: 10)),
+        12.w,
+      ],
+    );
   }
 }
 
@@ -429,7 +442,7 @@ class _Score extends ConsumerWidget {
           : () {
               P.othello.start();
             },
-      child: const T("New Game", s: TS(c: kB, s: 10, w: FW.w500)),
+      child: T("New Game", s: TS(c: kB, s: 10, w: FW.w500)),
     );
 
     return Ro(

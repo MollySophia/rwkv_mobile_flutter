@@ -1,3 +1,4 @@
+// ignore: unused_import
 import 'dart:developer';
 import 'dart:math';
 import 'dart:ui';
@@ -57,27 +58,44 @@ class PageChat extends ConsumerWidget {
               color: kB.wo(0.1),
             ),
           ),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: ClipRRect(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-                child: AppBar(
-                  backgroundColor: kW.wo(0.6),
-                  elevation: 0,
-                  title: AutoSizeText(
-                    S.current.chat_title,
-                    style: const TextStyle(fontSize: 20),
-                    minFontSize: 0,
-                    maxLines: 2,
-                  ),
-                ),
-              ),
-            ),
-          ),
+          _AppBar(),
         ],
+      ),
+    );
+  }
+}
+
+class _AppBar extends ConsumerWidget {
+  const _AppBar();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final version = ref.watch(P.app.version);
+    final buildNumber = ref.watch(P.app.buildNumber);
+    return Positioned(
+      top: 0,
+      left: 0,
+      right: 0,
+      child: ClipRRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+          child: AppBar(
+            backgroundColor: kW.wo(0.6),
+            elevation: 0,
+            title: AutoSizeText(
+              S.current.chat_title,
+              style: const TextStyle(fontSize: 20),
+              minFontSize: 0,
+              maxLines: 2,
+            ),
+            actions: [
+              C(
+                margin: EI.o(r: 12),
+                child: T("$version.$buildNumber", s: TS(c: kB.wo(0.5), s: 10)),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -14,7 +14,8 @@ class PageHome extends ConsumerWidget {
       appBar: AppBar(
         title: const T("RWKV Zone"),
       ),
-      body: Column(
+      body: Co(
+        c: CAA.start,
         children: [
           TextButton(
             onPressed: () {
