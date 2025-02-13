@@ -4,6 +4,7 @@ import 'package:zone/route/method.dart';
 import 'package:zone/route/page_key.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zone/state/p.dart';
 
 class PageHome extends ConsumerWidget {
   const PageHome({super.key});
@@ -30,6 +31,12 @@ class PageHome extends ConsumerWidget {
             child: T(S.current.chat_title),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          P.remoteFile.getFile(fileKey: FileKey.test);
+        },
+        child: const Icon(Icons.download),
       ),
     );
   }

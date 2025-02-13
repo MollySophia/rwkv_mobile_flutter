@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:background_downloader/background_downloader.dart';
 import 'package:zone/func/get_model_path.dart';
 import 'package:zone/launch_arguments.dart';
 import 'package:zone/model/cell_type.dart';

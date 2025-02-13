@@ -89,9 +89,9 @@ class _AppBar extends ConsumerWidget {
               maxLines: 2,
             ),
             actions: [
-              C(
-                margin: EI.o(r: 12),
-                child: T("$version.$buildNumber", s: TS(c: kB.wo(0.5), s: 10)),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.settings),
               ),
             ],
           ),

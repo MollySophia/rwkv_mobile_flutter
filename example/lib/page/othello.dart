@@ -83,7 +83,7 @@ class PageOthello extends ConsumerWidget {
                           ),
                       ],
                     )
-                  ],
+                  ]
                 ),
                 paddingRight.w,
               ],
