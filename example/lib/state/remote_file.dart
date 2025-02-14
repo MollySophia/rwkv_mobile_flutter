@@ -7,14 +7,12 @@ class _RemoteFile {
     return FileInfo(key: key);
   });
 
-  late final runningTaskIds = _gs<Set<String>>({});
+  late final downloadingFiles = _gs<Map<String, FileKey>>({});
 }
 
 /// Public methods
 extension $RemoteFile on _RemoteFile {
-  FV getFile({
-    required FileKey fileKey,
-  }) async {
+  FV getFile({required FileKey fileKey}) async {
     // 1. check file
     // 2. check zip file
     // 3. if zip file, unzip it, return the path
@@ -34,6 +32,8 @@ extension $RemoteFile on _RemoteFile {
       httpRequestMethod: "GET",
     );
 
+    downloadingFiles.uv({task.taskId: fileKey});
+
     final success = await FileDownloader().enqueue(task);
 
     if (!success) {
@@ -41,10 +41,8 @@ extension $RemoteFile on _RemoteFile {
       return;
     }
 
-    runningTaskIds.ua(task.taskId);
-
-    final modelFile = FileInfo(key: fileKey, taskId: task.taskId);
-    files(fileKey).u(modelFile);
+    final modelFile = files(fileKey).v;
+    files(fileKey).u(modelFile.copyWith(taskId: task.taskId));
   }
 }
 
@@ -62,6 +60,18 @@ extension _$RemoteFile on _RemoteFile {
     // print(_taskUpdate);
     final task = _taskUpdate.task;
     final taskId = task.taskId;
+
+    final downloadingFiles = this.downloadingFiles.v;
+    final fileKey = downloadingFiles[taskId];
+
+    if (fileKey == null) {
+      if (kDebugMode) print("😡 _onTaskUpdate:");
+      if (kDebugMode) print("😡 taskId: $taskId not found");
+      return;
+    }
+
+    final modelFile = files(fileKey).v;
+
     switch (_taskUpdate) {
       case TaskProgressUpdate progressUpdate:
         final progress = progressUpdate.progress;
@@ -69,6 +79,12 @@ extension _$RemoteFile on _RemoteFile {
         final timeRemaining = progressUpdate.timeRemaining;
         final expectedFileSize = progressUpdate.expectedFileSize;
         if (kDebugMode) print("💬 $progress $networkSpeed $timeRemaining $expectedFileSize");
+        files(fileKey).u(modelFile.copyWith(
+          progress: progress,
+          networkSpeed: networkSpeed,
+          timeRemaining: timeRemaining,
+          expectedFileSize: expectedFileSize,
+        ));
         return;
       case TaskStatusUpdate statusUpdate:
         final status = statusUpdate.status;

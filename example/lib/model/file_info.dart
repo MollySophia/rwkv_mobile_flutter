@@ -1,6 +1,9 @@
 // ignore_for_file: constant_identifier_names
 
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:zone/state/p.dart';
+
+part 'file_info.freezed.dart';
 
 enum FileKey {
   v7_world_0_1b_st,
@@ -69,42 +72,19 @@ enum FileKey {
   String get path => '${P.app.supportDir.v!.path}/$fileName';
 }
 
-final class FileInfo {
-  final FileKey key;
-
-  final int zipSize;
-  final int downloadedZipSize;
-  final String? taskId;
-  final int fileSize;
-  final bool zipGot;
-  final bool fileGot;
-
-  const FileInfo({
-    required this.key,
-    this.zipSize = 1,
-    this.downloadedZipSize = 0,
-    this.fileSize = 1,
-    this.taskId,
-    this.zipGot = false,
-    this.fileGot = false,
-  });
-
-  FileInfo copyWith({
-    int? zipSize,
-    int? downloadedZipSize,
-    int? fileSize,
+@freezed
+class FileInfo with _$FileInfo {
+  const factory FileInfo({
+    required FileKey key,
     String? taskId,
-    bool? zipGot,
-    bool? fileGot,
-  }) {
-    return FileInfo(
-      key: key,
-      zipSize: zipSize ?? this.zipSize,
-      downloadedZipSize: downloadedZipSize ?? this.downloadedZipSize,
-      fileSize: fileSize ?? this.fileSize,
-      taskId: taskId ?? this.taskId,
-      zipGot: zipGot ?? this.zipGot,
-      fileGot: fileGot ?? this.fileGot,
-    );
-  }
+    @Default(1) int zipSize,
+    @Default(0) int downloadedZipSize,
+    @Default(1) int fileSize,
+    @Default(false) bool hasZip,
+    @Default(false) bool hasFile,
+    @Default(0) double progress,
+    @Default(0) double networkSpeed,
+    @Default(Duration.zero) Duration timeRemaining,
+    @Default(0) int expectedFileSize,
+  }) = _FileInfo;
 }

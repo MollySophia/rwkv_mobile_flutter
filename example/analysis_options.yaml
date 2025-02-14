@@ -17,6 +17,8 @@ analyzer:
   exclude: [build/**, lib/generated/**, lib/gen/**]
   plugins:
     # - custom_lint
+  errors:
+    invalid_annotation_target: ignore
 
 custom_lint:
   rules:

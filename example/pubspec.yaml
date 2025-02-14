@@ -35,6 +35,7 @@ dependencies:
   shared_preferences: # https://pub.dev/packages/shared_preferences/
   vclibs: # https://pub.dev/packages/vclibs/
   background_downloader: # https://pub.dev/packages/background_downloader/
+  freezed_annotation: ^2.4.4
 
 dev_dependencies:
   flutter_lints: # https://pub.dev/packages/flutter_lints/
@@ -42,6 +43,8 @@ dev_dependencies:
   flutter_gen_runner: # https://pub.dev/packages/flutter_gen_runner:/
   custom_lint: # https://pub.dev/packages/custom_lint/
   riverpod_lint: # https://pub.dev/packages/riverpod_lint/
+  build_runner: ^2.4.15
+  freezed: ^2.5.8
 
 flutter:
   uses-material-design: true

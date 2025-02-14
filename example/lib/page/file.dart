@@ -59,6 +59,10 @@ class _Cell extends ConsumerWidget {
           T(file.zipSize.toString()),
           T(file.downloadedZipSize.toString()),
           T(file.fileSize.toString()),
+          T(file.progress.toString()),
+          T(file.networkSpeed.toString()),
+          T(file.timeRemaining.toString()),
+          T(file.expectedFileSize.toString()),
         ],
       ),
     );
