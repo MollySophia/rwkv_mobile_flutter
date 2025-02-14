@@ -1,6 +1,7 @@
 import 'package:zone/launch_arguments.dart';
 import 'package:zone/page/chat.dart';
 import 'package:zone/page/empty.dart';
+import 'package:zone/page/file.dart';
 import 'package:zone/page/home.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -13,6 +14,7 @@ enum PageKey {
   othello,
   fifthteenPuzzle,
   sudoku,
+  file,
   ;
 
   String get path => "/$name";
@@ -31,6 +33,8 @@ enum PageKey {
         return const PageEmpty();
       case PageKey.sudoku:
         return const PageEmpty();
+      case PageKey.file:
+        return const PageFile();
     }
   }
 
@@ -44,6 +48,7 @@ enum PageKey {
     if (LaunchArgs.firstPageIsHome) return PageKey.home;
     if (LaunchArgs.firstPageIsChat) return PageKey.chat;
     if (LaunchArgs.firstPageIsOthello) return PageKey.othello;
+    if (LaunchArgs.firstPageIsFile) return PageKey.file;
     return PageKey.home;
   }
 }

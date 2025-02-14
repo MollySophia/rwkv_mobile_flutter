@@ -19,8 +19,7 @@ class Alert {
     //  添加
     final c = _Alert.alert.v;
 
-    final containMessage =
-        c.firstWhereOrNull((e) => e.message == message) != null;
+    final containMessage = c.firstWhereOrNull((e) => e.message == message) != null;
     if (containMessage) return;
 
     final nC1 = [...c, _AlertItem(id, 0, message, notifyStatus)];
@@ -83,8 +82,7 @@ class _AlertItem {
 }
 
 class _Alert extends ConsumerWidget {
-  static final alert =
-      StateProvider((ref) => List<_AlertItem>.empty(growable: true));
+  static final alert = StateProvider((ref) => List<_AlertItem>.empty(growable: true));
   static final hasBeenDeployed = StateProvider((ref) => false);
 
   const _Alert();
@@ -124,15 +122,11 @@ class _Alert extends ConsumerWidget {
 
           return AnimatedPositioned(
             duration: 250.ms,
-            curve: item.displayStatus == 1
-                ? Curves.easeOutBack
-                : Curves.easeInBack,
+            curve: item.displayStatus == 1 ? Curves.easeOutBack : Curves.easeInBack,
             top: item.displayStatus == 1 ? top : 0,
             child: AnimatedOpacity(
               duration: 250.ms,
-              curve: item.displayStatus == 1
-                  ? Curves.easeOutBack
-                  : Curves.easeInBack,
+              curve: item.displayStatus == 1 ? Curves.easeOutBack : Curves.easeInBack,
               opacity: item.displayStatus == 1 ? 1 : 0,
               child: C(
                 margin: const EI.o(l: 24, r: 24),
@@ -161,8 +155,7 @@ class _Alert extends ConsumerWidget {
                           Icon(iconData, color: c),
                           8.w,
                           ConstrainedBox(
-                            constraints:
-                                BoxConstraints(maxWidth: screenWidth - 100),
+                            constraints: BoxConstraints(maxWidth: screenWidth - 100),
                             child: T(
                               message,
                               s: TS(

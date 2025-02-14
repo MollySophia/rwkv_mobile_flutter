@@ -1,12 +1,13 @@
 abstract class LaunchArgs {
-  static final localeString = const String.fromEnvironment("locale");
-  static final firstPageIsHome = const bool.fromEnvironment("first_page_is_home", defaultValue: true);
-  static final firstPageIsChat = const bool.fromEnvironment("first_page_is_chat", defaultValue: false);
-  // TODO: @halo change it when chat integration is done
-  static final firstPageIsOthello = const bool.fromEnvironment("first_page_is_othello", defaultValue: false);
-  static final useFakeMessages = const bool.fromEnvironment("use_fake_messages");
-  static final enableChatDebugger = const bool.fromEnvironment("enable_chat_debugger");
-  static final enableOthelloDebugger = const bool.fromEnvironment("enable_othello_debugger");
-  static final hideDebugBanner = const bool.fromEnvironment("hide_debug_banner");
-  static final othelloTestCase = const int.fromEnvironment("othello_test_case", defaultValue: -1);
+  static const localeString = String.fromEnvironment("locale");
+  static const useFakeMessages = bool.fromEnvironment("use_fake_messages");
+  static const enableChatDebugger = bool.fromEnvironment("enable_chat_debugger");
+  static const enableOthelloDebugger = bool.fromEnvironment("enable_othello_debugger");
+  static const hideDebugBanner = bool.fromEnvironment("hide_debug_banner");
+  static const othelloTestCase = int.fromEnvironment("othello_test_case", defaultValue: -1);
+
+  static const firstPageIsHome = bool.fromEnvironment("first_page_is_home", defaultValue: false);
+  static const firstPageIsChat = bool.fromEnvironment("first_page_is_chat", defaultValue: true);
+  static const firstPageIsOthello = bool.fromEnvironment("first_page_is_othello", defaultValue: false);
+  static const firstPageIsFile = bool.fromEnvironment("first_page_is_file", defaultValue: false);
 }

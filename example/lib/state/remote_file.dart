@@ -2,88 +2,9 @@
 
 part of 'p.dart';
 
-enum FileKey {
-  v7_world_0_1b_st,
-  v7_world_0_1ncnn,
-
-  v7_world_0_4b_st,
-  v7_world_0_4b_ncnn,
-  v7_world_0_4gguf,
-
-  v7_world_1_5b_st,
-  v7_world_1_5b_ncnn,
-  v7_world_1_5b_gguf,
-
-  v7_world_3b_st,
-  v7_world_3b_ncnn,
-  v7_world_3b_gguf,
-
-  world_vocab,
-  othello_vocab,
-
-  test,
-  ;
-
-  String get url {
-    const baseUrl = 'https://api-model.rwkvos.com/download';
-    switch (this) {
-      case FileKey.v7_world_0_1b_st:
-        return '$baseUrl/v7_world_0_1b_st';
-      case FileKey.v7_world_0_1ncnn:
-        return '$baseUrl/v7_world_0_1ncnn';
-      case FileKey.v7_world_0_4b_st:
-        return '$baseUrl/v7_world_0_4b_st';
-      case FileKey.v7_world_0_4b_ncnn:
-        return '$baseUrl/v7_world_0_4b_ncnn';
-      case FileKey.v7_world_0_4gguf:
-        return '$baseUrl/rwkv7-world-0.4B-Q8_0.gguf.zip';
-      case FileKey.v7_world_1_5b_st:
-        return '$baseUrl/v7_world_1_5b_st';
-      case FileKey.v7_world_1_5b_ncnn:
-        return '$baseUrl/v7_world_1_5b_ncnn';
-      case FileKey.v7_world_3b_st:
-        return '$baseUrl/v7_world_3b_st';
-      case FileKey.v7_world_3b_ncnn:
-        return '$baseUrl/v7_world_3b_ncnn';
-      case FileKey.v7_world_3b_gguf:
-        return '$baseUrl/v7_world_3b_gguf';
-      case FileKey.test:
-        return '$baseUrl/test.jpeg.zip';
-      case FileKey.v7_world_1_5b_gguf:
-        return '$baseUrl/rwkv7-world-1.5B-Q8_0.gguf.zip';
-      case FileKey.world_vocab:
-        return '$baseUrl/rwkv7-world-vocab.bin';
-      case FileKey.othello_vocab:
-        return '$baseUrl/rwkv7-othello-vocab.bin';
-    }
-  }
-}
-
-class FileInfo {
-  final FileKey key;
-  final String url;
-  final String? localPath;
-  final String? zipPath;
-  final String? unzipPath;
-  final int size;
-  final int downloadSize;
-  final String? taskId;
-
-  const FileInfo({
-    required this.key,
-    required this.url,
-    this.localPath,
-    this.zipPath,
-    this.unzipPath,
-    this.size = 1,
-    this.downloadSize = 0,
-    this.taskId,
-  });
-}
-
 class _RemoteFile {
   late final files = StateProvider.family<FileInfo, FileKey>((ref, key) {
-    return FileInfo(key: key, url: key.url);
+    return FileInfo(key: key);
   });
 
   late final runningTaskIds = _gs<Set<String>>({});
@@ -122,7 +43,7 @@ extension $RemoteFile on _RemoteFile {
 
     runningTaskIds.ua(task.taskId);
 
-    final modelFile = FileInfo(key: fileKey, url: fileKey.url, taskId: task.taskId);
+    final modelFile = FileInfo(key: fileKey, taskId: task.taskId);
     files(fileKey).u(modelFile);
   }
 }
@@ -147,6 +68,7 @@ extension _$RemoteFile on _RemoteFile {
         final networkSpeed = progressUpdate.networkSpeed;
         final timeRemaining = progressUpdate.timeRemaining;
         final expectedFileSize = progressUpdate.expectedFileSize;
+        if (kDebugMode) print("💬 $progress $networkSpeed $timeRemaining $expectedFileSize");
         return;
       case TaskStatusUpdate statusUpdate:
         final status = statusUpdate.status;
@@ -156,6 +78,7 @@ extension _$RemoteFile on _RemoteFile {
         final responseStatusCode = statusUpdate.responseStatusCode;
         final mimeType = statusUpdate.mimeType;
         final charSet = statusUpdate.charSet;
+        if (kDebugMode) print("💬 $status $exception $responseBody $responseHeaders $responseStatusCode $mimeType $charSet");
         return;
     }
   }

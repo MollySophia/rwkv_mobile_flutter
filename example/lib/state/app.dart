@@ -37,6 +37,13 @@ class _App with WidgetsBindingObserver {
 
   late final locale = _gsn<Locale>();
 
+  late final tempDir = _gsn<Directory>();
+  late final cacheDir = _gsn<Directory>();
+  late final supportDir = _gsn<Directory>();
+  late final libraryDir = _gsn<Directory>();
+  late final downloadsDir = _gsn<Directory>();
+  late final documentsDir = _gsn<Directory>();
+
   @override
   void didChangeMetrics() {
     final context = getContext();
@@ -59,12 +66,20 @@ extension $App on _App {
 extension _$App on _App {
   FV _init() async {
     if (kDebugMode) print("💬 $runtimeType._init");
+
     try {
       final packageInfo = await PackageInfo.fromPlatform();
       final version = packageInfo.version;
       final buildNumber = packageInfo.buildNumber;
       this.version.u(version);
       this.buildNumber.u(buildNumber);
+
+      tempDir.u(await getTemporaryDirectory());
+      cacheDir.u(await getApplicationCacheDirectory());
+      supportDir.u(await getApplicationSupportDirectory());
+      libraryDir.u(await getLibraryDirectory());
+      downloadsDir.u(await getDownloadsDirectory());
+      documentsDir.u(await getApplicationDocumentsDirectory());
     } catch (e) {
       if (kDebugMode) print("😡 Error when calling _App._init");
       if (kDebugMode) print("😡 $e");

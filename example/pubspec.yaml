@@ -46,9 +46,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  assets:
-    - assets/model/
-
 flutter_intl:
   enabled: true # Required. Must be set to true to activate the package. Default: false
   class_name: S # Optional. Sets the name for the generated localization class. Default: S

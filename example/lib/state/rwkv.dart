@@ -81,8 +81,8 @@ extension _$RWKV on _RWKV {
         await _loadSudoku();
         break;
       case PageKey.home:
-        break;
       case PageKey.empty:
+      case PageKey.file:
         break;
     }
   }
