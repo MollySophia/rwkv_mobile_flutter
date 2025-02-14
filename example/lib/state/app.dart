@@ -77,7 +77,6 @@ extension _$App on _App {
       tempDir.u(await getTemporaryDirectory());
       cacheDir.u(await getApplicationCacheDirectory());
       supportDir.u(await getApplicationSupportDirectory());
-      libraryDir.u(await getLibraryDirectory());
       downloadsDir.u(await getDownloadsDirectory());
       documentsDir.u(await getApplicationDocumentsDirectory());
     } catch (e) {

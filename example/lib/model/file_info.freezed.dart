@@ -18,15 +18,16 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$FileInfo {
   FileKey get key => throw _privateConstructorUsedError;
   String? get taskId => throw _privateConstructorUsedError;
+
+  /// 压缩包文件大小, bytes
   int get zipSize => throw _privateConstructorUsedError;
-  int get downloadedZipSize => throw _privateConstructorUsedError;
   int get fileSize => throw _privateConstructorUsedError;
   bool get hasZip => throw _privateConstructorUsedError;
   bool get hasFile => throw _privateConstructorUsedError;
   double get progress => throw _privateConstructorUsedError;
   double get networkSpeed => throw _privateConstructorUsedError;
   Duration get timeRemaining => throw _privateConstructorUsedError;
-  int get expectedFileSize => throw _privateConstructorUsedError;
+  bool get downloading => throw _privateConstructorUsedError;
 
   /// Create a copy of FileInfo
   /// with the given fields replaced by the non-null parameter values.
@@ -44,14 +45,13 @@ abstract class $FileInfoCopyWith<$Res> {
       {FileKey key,
       String? taskId,
       int zipSize,
-      int downloadedZipSize,
       int fileSize,
       bool hasZip,
       bool hasFile,
       double progress,
       double networkSpeed,
       Duration timeRemaining,
-      int expectedFileSize});
+      bool downloading});
 }
 
 /// @nodoc
@@ -72,14 +72,13 @@ class _$FileInfoCopyWithImpl<$Res, $Val extends FileInfo>
     Object? key = null,
     Object? taskId = freezed,
     Object? zipSize = null,
-    Object? downloadedZipSize = null,
     Object? fileSize = null,
     Object? hasZip = null,
     Object? hasFile = null,
     Object? progress = null,
     Object? networkSpeed = null,
     Object? timeRemaining = null,
-    Object? expectedFileSize = null,
+    Object? downloading = null,
   }) {
     return _then(_value.copyWith(
       key: null == key
@@ -93,10 +92,6 @@ class _$FileInfoCopyWithImpl<$Res, $Val extends FileInfo>
       zipSize: null == zipSize
           ? _value.zipSize
           : zipSize // ignore: cast_nullable_to_non_nullable
-              as int,
-      downloadedZipSize: null == downloadedZipSize
-          ? _value.downloadedZipSize
-          : downloadedZipSize // ignore: cast_nullable_to_non_nullable
               as int,
       fileSize: null == fileSize
           ? _value.fileSize
@@ -122,10 +117,10 @@ class _$FileInfoCopyWithImpl<$Res, $Val extends FileInfo>
           ? _value.timeRemaining
           : timeRemaining // ignore: cast_nullable_to_non_nullable
               as Duration,
-      expectedFileSize: null == expectedFileSize
-          ? _value.expectedFileSize
-          : expectedFileSize // ignore: cast_nullable_to_non_nullable
-              as int,
+      downloading: null == downloading
+          ? _value.downloading
+          : downloading // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -142,14 +137,13 @@ abstract class _$$FileInfoImplCopyWith<$Res>
       {FileKey key,
       String? taskId,
       int zipSize,
-      int downloadedZipSize,
       int fileSize,
       bool hasZip,
       bool hasFile,
       double progress,
       double networkSpeed,
       Duration timeRemaining,
-      int expectedFileSize});
+      bool downloading});
 }
 
 /// @nodoc
@@ -168,14 +162,13 @@ class __$$FileInfoImplCopyWithImpl<$Res>
     Object? key = null,
     Object? taskId = freezed,
     Object? zipSize = null,
-    Object? downloadedZipSize = null,
     Object? fileSize = null,
     Object? hasZip = null,
     Object? hasFile = null,
     Object? progress = null,
     Object? networkSpeed = null,
     Object? timeRemaining = null,
-    Object? expectedFileSize = null,
+    Object? downloading = null,
   }) {
     return _then(_$FileInfoImpl(
       key: null == key
@@ -189,10 +182,6 @@ class __$$FileInfoImplCopyWithImpl<$Res>
       zipSize: null == zipSize
           ? _value.zipSize
           : zipSize // ignore: cast_nullable_to_non_nullable
-              as int,
-      downloadedZipSize: null == downloadedZipSize
-          ? _value.downloadedZipSize
-          : downloadedZipSize // ignore: cast_nullable_to_non_nullable
               as int,
       fileSize: null == fileSize
           ? _value.fileSize
@@ -218,10 +207,10 @@ class __$$FileInfoImplCopyWithImpl<$Res>
           ? _value.timeRemaining
           : timeRemaining // ignore: cast_nullable_to_non_nullable
               as Duration,
-      expectedFileSize: null == expectedFileSize
-          ? _value.expectedFileSize
-          : expectedFileSize // ignore: cast_nullable_to_non_nullable
-              as int,
+      downloading: null == downloading
+          ? _value.downloading
+          : downloading // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -233,25 +222,23 @@ class _$FileInfoImpl implements _FileInfo {
       {required this.key,
       this.taskId,
       this.zipSize = 1,
-      this.downloadedZipSize = 0,
       this.fileSize = 1,
       this.hasZip = false,
       this.hasFile = false,
       this.progress = 0,
       this.networkSpeed = 0,
       this.timeRemaining = Duration.zero,
-      this.expectedFileSize = 0});
+      this.downloading = false});
 
   @override
   final FileKey key;
   @override
   final String? taskId;
+
+  /// 压缩包文件大小, bytes
   @override
   @JsonKey()
   final int zipSize;
-  @override
-  @JsonKey()
-  final int downloadedZipSize;
   @override
   @JsonKey()
   final int fileSize;
@@ -272,11 +259,11 @@ class _$FileInfoImpl implements _FileInfo {
   final Duration timeRemaining;
   @override
   @JsonKey()
-  final int expectedFileSize;
+  final bool downloading;
 
   @override
   String toString() {
-    return 'FileInfo(key: $key, taskId: $taskId, zipSize: $zipSize, downloadedZipSize: $downloadedZipSize, fileSize: $fileSize, hasZip: $hasZip, hasFile: $hasFile, progress: $progress, networkSpeed: $networkSpeed, timeRemaining: $timeRemaining, expectedFileSize: $expectedFileSize)';
+    return 'FileInfo(key: $key, taskId: $taskId, zipSize: $zipSize, fileSize: $fileSize, hasZip: $hasZip, hasFile: $hasFile, progress: $progress, networkSpeed: $networkSpeed, timeRemaining: $timeRemaining, downloading: $downloading)';
   }
 
   @override
@@ -287,8 +274,6 @@ class _$FileInfoImpl implements _FileInfo {
             (identical(other.key, key) || other.key == key) &&
             (identical(other.taskId, taskId) || other.taskId == taskId) &&
             (identical(other.zipSize, zipSize) || other.zipSize == zipSize) &&
-            (identical(other.downloadedZipSize, downloadedZipSize) ||
-                other.downloadedZipSize == downloadedZipSize) &&
             (identical(other.fileSize, fileSize) ||
                 other.fileSize == fileSize) &&
             (identical(other.hasZip, hasZip) || other.hasZip == hasZip) &&
@@ -299,24 +284,13 @@ class _$FileInfoImpl implements _FileInfo {
                 other.networkSpeed == networkSpeed) &&
             (identical(other.timeRemaining, timeRemaining) ||
                 other.timeRemaining == timeRemaining) &&
-            (identical(other.expectedFileSize, expectedFileSize) ||
-                other.expectedFileSize == expectedFileSize));
+            (identical(other.downloading, downloading) ||
+                other.downloading == downloading));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      key,
-      taskId,
-      zipSize,
-      downloadedZipSize,
-      fileSize,
-      hasZip,
-      hasFile,
-      progress,
-      networkSpeed,
-      timeRemaining,
-      expectedFileSize);
+  int get hashCode => Object.hash(runtimeType, key, taskId, zipSize, fileSize,
+      hasZip, hasFile, progress, networkSpeed, timeRemaining, downloading);
 
   /// Create a copy of FileInfo
   /// with the given fields replaced by the non-null parameter values.
@@ -332,23 +306,22 @@ abstract class _FileInfo implements FileInfo {
       {required final FileKey key,
       final String? taskId,
       final int zipSize,
-      final int downloadedZipSize,
       final int fileSize,
       final bool hasZip,
       final bool hasFile,
       final double progress,
       final double networkSpeed,
       final Duration timeRemaining,
-      final int expectedFileSize}) = _$FileInfoImpl;
+      final bool downloading}) = _$FileInfoImpl;
 
   @override
   FileKey get key;
   @override
   String? get taskId;
+
+  /// 压缩包文件大小, bytes
   @override
   int get zipSize;
-  @override
-  int get downloadedZipSize;
   @override
   int get fileSize;
   @override
@@ -362,7 +335,7 @@ abstract class _FileInfo implements FileInfo {
   @override
   Duration get timeRemaining;
   @override
-  int get expectedFileSize;
+  bool get downloading;
 
   /// Create a copy of FileInfo
   /// with the given fields replaced by the non-null parameter values.

@@ -42,7 +42,7 @@ extension $RemoteFile on _RemoteFile {
     }
 
     final modelFile = files(fileKey).v;
-    files(fileKey).u(modelFile.copyWith(taskId: task.taskId));
+    files(fileKey).u(modelFile.copyWith(taskId: task.taskId, downloading: true));
   }
 }
 
@@ -56,8 +56,6 @@ extension _$RemoteFile on _RemoteFile {
   }
 
   void _onTaskUpdate(TaskUpdate _taskUpdate) {
-    // debugger();
-    // print(_taskUpdate);
     final task = _taskUpdate.task;
     final taskId = task.taskId;
 
@@ -79,23 +77,63 @@ extension _$RemoteFile on _RemoteFile {
         final timeRemaining = progressUpdate.timeRemaining;
         final expectedFileSize = progressUpdate.expectedFileSize;
         if (kDebugMode) print("💬 $progress $networkSpeed $timeRemaining $expectedFileSize");
+        final done = progress >= 1.0;
         files(fileKey).u(modelFile.copyWith(
           progress: progress,
-          networkSpeed: networkSpeed,
-          timeRemaining: timeRemaining,
-          expectedFileSize: expectedFileSize,
+          networkSpeed: done ? modelFile.networkSpeed : networkSpeed,
+          timeRemaining: done ? modelFile.timeRemaining : timeRemaining,
+          zipSize: done ? modelFile.zipSize : expectedFileSize,
+          downloading: done ? false : true,
         ));
         return;
       case TaskStatusUpdate statusUpdate:
-        final status = statusUpdate.status;
-        final exception = statusUpdate.exception;
-        final responseBody = statusUpdate.responseBody;
-        final responseHeaders = statusUpdate.responseHeaders;
-        final responseStatusCode = statusUpdate.responseStatusCode;
-        final mimeType = statusUpdate.mimeType;
-        final charSet = statusUpdate.charSet;
-        if (kDebugMode) print("💬 $status $exception $responseBody $responseHeaders $responseStatusCode $mimeType $charSet");
+        _onStatusUpdate(statusUpdate);
         return;
     }
+  }
+
+  void _onStatusUpdate(TaskStatusUpdate statusUpdate) {
+    final task = statusUpdate.task;
+    final taskId = task.taskId;
+
+    final downloadingFiles = this.downloadingFiles.v;
+    final fileKey = downloadingFiles[taskId];
+
+    if (fileKey == null) {
+      if (kDebugMode) print("😡 _onTaskUpdate:");
+      if (kDebugMode) print("😡 taskId: $taskId not found");
+      return;
+    }
+
+    final modelFile = files(fileKey).v;
+
+    if (kDebugMode) print("✅ _onStatusUpdate:");
+    final status = statusUpdate.status;
+    final exception = statusUpdate.exception;
+    final responseBody = statusUpdate.responseBody;
+    final responseHeaders = statusUpdate.responseHeaders;
+    final responseStatusCode = statusUpdate.responseStatusCode;
+
+    bool downloading = false;
+    switch (status) {
+      case TaskStatus.enqueued:
+        downloading = false;
+      case TaskStatus.running:
+        downloading = true;
+      case TaskStatus.complete:
+        downloading = false;
+      case TaskStatus.notFound:
+        downloading = false;
+      case TaskStatus.failed:
+        downloading = false;
+      case TaskStatus.canceled:
+        downloading = false;
+      case TaskStatus.waitingToRetry:
+        downloading = true;
+      case TaskStatus.paused:
+        downloading = false;
+    }
+
+    files(fileKey).u(modelFile.copyWith(downloading: downloading));
   }
 }

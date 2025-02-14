@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
-import 'package:zone/model/file_info.dart';
+import 'package:zone/model/file_key.dart';
 import 'package:zone/state/p.dart';
 
 class PageFile extends ConsumerWidget {
@@ -12,7 +12,7 @@ class PageFile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final list = FileKey.values;
+    final list = FileKey.values.where((e) => e.available).toList();
     return Scaffold(
       appBar: AppBar(
         title: Text("File"),
@@ -49,21 +49,39 @@ class _Cell extends ConsumerWidget {
       ),
       margin: EI.a(8),
       padding: EI.a(8),
-      child: Co(
-        c: CAA.start,
-        children: [
-          SB(width: 160, child: T(file.key.name)),
-          SB(width: 560, child: T(file.key.url)),
-          T(file.key.zipPath),
-          T(file.key.path),
-          T(file.zipSize.toString()),
-          T(file.downloadedZipSize.toString()),
-          T(file.fileSize.toString()),
-          T(file.progress.toString()),
-          T(file.networkSpeed.toString()),
-          T(file.timeRemaining.toString()),
-          T(file.expectedFileSize.toString()),
-        ],
+      child: SelectableRegion(
+        focusNode: FocusNode(),
+        selectionControls: MaterialTextSelectionControls(),
+        child: Co(
+          c: CAA.start,
+          children: [
+            T(file.key.name),
+            T(file.key.url),
+            T("${"zipPath".codeToName}: " + file.key.zipPath.replaceAll("/Users/wangce/Library/Containers/", "")),
+            T("${"path".codeToName}: " + file.key.path.replaceAll("/Users/wangce/Library/Containers/", "")),
+            T("${"zipSize".codeToName} (mb): " + (file.zipSize / 1024 / 1024).toStringAsFixed(2)),
+            T("${"fileSize".codeToName} (bytes): " + file.fileSize.toString()),
+            T("${"progress".codeToName}: " + file.progress.toString()),
+            T("${"networkSpeed".codeToName} (MB/s): " + file.networkSpeed.toString()),
+            T("${"timeRemaining".codeToName}: " + file.timeRemaining.toString()),
+            if (!file.downloading)
+              IconButton(
+                onPressed: () {
+                  P.remoteFile.getFile(fileKey: file.key);
+                },
+                icon: const Icon(Icons.download),
+              ),
+            if (file.downloading)
+              C(
+                padding: EI.a(12),
+                child: SB(
+                  height: 22,
+                  width: 22,
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

@@ -93,11 +93,11 @@ extension _$RWKV on _RWKV {
 
     final tokenizerPath = await getModelPath("assets/model/b_rwkv_vocab_v20230424.txt");
 
-    if (Platform.isIOS || Platform.isMacOS) {
+    if (Platform.isIOS) {
       modelPath = await getModelPath("assets/model/RWKV-x070-World-0.4B-v2.9-20250107-ctx4096.st");
       backend = Backend.webRwkv;
     } else {
-      modelPath = await getModelPath("assets/model/rwkv7-world-0.4B-Q8_0.gguf");
+      modelPath = FileKey.v7_world_0_4gguf.path;
       backend = Backend.llamacpp;
     }
 
