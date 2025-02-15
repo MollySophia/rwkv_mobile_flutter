@@ -29,6 +29,12 @@ class PageHome extends ConsumerWidget {
             },
             child: T(S.current.chat_title),
           ),
+          TextButton(
+            onPressed: () {
+              push(PageKey.file);
+            },
+            child: T("💬 测试"),
+          ),
         ],
       ),
     );

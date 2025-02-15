@@ -97,7 +97,7 @@ extension _$RWKV on _RWKV {
       modelPath = await getModelPath("assets/model/RWKV-x070-World-0.4B-v2.9-20250107-ctx4096.st");
       backend = Backend.webRwkv;
     } else {
-      modelPath = FileKey.v7_world_0_4gguf.path;
+      modelPath = FileKey.v7_world_3b_gguf.path;
       backend = Backend.llamacpp;
     }
 

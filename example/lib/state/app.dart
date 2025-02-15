@@ -75,10 +75,19 @@ extension _$App on _App {
       this.buildNumber.u(buildNumber);
 
       tempDir.u(await getTemporaryDirectory());
-      cacheDir.u(await getApplicationCacheDirectory());
       supportDir.u(await getApplicationSupportDirectory());
+      cacheDir.u(await getApplicationCacheDirectory());
       downloadsDir.u(await getDownloadsDirectory());
       documentsDir.u(await getApplicationDocumentsDirectory());
+
+      if (kDebugMode) {
+        print("""💬
+${tempDir.v!.path}
+${supportDir.v!.path}
+${cacheDir.v!.path}
+${downloadsDir.v!.path}
+${documentsDir.v!.path}""");
+      }
     } catch (e) {
       if (kDebugMode) print("😡 Error when calling _App._init");
       if (kDebugMode) print("😡 $e");

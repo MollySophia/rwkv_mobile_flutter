@@ -12,9 +12,9 @@ class FileInfo with _$FileInfo {
     String? taskId,
 
     /// 压缩包文件大小, bytes
-    @Default(1) int zipSize,
+    @Deprecated("") @Default(1) int zipSize,
     @Default(1) int fileSize,
-    @Default(false) bool hasZip,
+    @Deprecated("") @Default(false) bool hasZip,
     @Default(false) bool hasFile,
     @Default(0) double progress,
     @Default(0) double networkSpeed,

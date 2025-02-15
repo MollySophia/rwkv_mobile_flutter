@@ -23,7 +23,7 @@ extension $RemoteFile on _RemoteFile {
       headers: {
         'x-api-key': '4s5aWqs2f4PzKfgLjuRZgXKvvmal5Z5iq0OzkTPwaA2axgNgSbayfQEX5FgOpTxyyeUM4gsFHHDZroaFDIE3NtSJD6evdz3lAVctyN026keeXMoJ7tmUy5zriMJHJ9aM',
       },
-      baseDirectory: BaseDirectory.temporary,
+      baseDirectory: BaseDirectory.applicationDocuments,
       filename: fileKey.url.split('/').last,
       updates: Updates.statusAndProgress, // request status and progress updates
       requiresWiFi: false,
@@ -44,6 +44,16 @@ extension $RemoteFile on _RemoteFile {
     final modelFile = files(fileKey).v;
     files(fileKey).u(modelFile.copyWith(taskId: task.taskId, downloading: true));
   }
+
+  FV checkLocalFile() async {
+    await HF.wait(17);
+    final keys = FileKey.values.where((e) => e.available).toList();
+    for (final key in keys) {
+      final path = key.path;
+      final pathExists = await File(path).exists();
+      files(key).u(FileInfo(key: key, hasFile: pathExists));
+    }
+  }
 }
 
 /// Private methods
@@ -53,6 +63,7 @@ extension _$RemoteFile on _RemoteFile {
     // 2. check zip file
     await FileDownloader().ready;
     FileDownloader().updates.listen(_onTaskUpdate);
+    checkLocalFile();
   }
 
   void _onTaskUpdate(TaskUpdate _taskUpdate) {
@@ -82,7 +93,7 @@ extension _$RemoteFile on _RemoteFile {
           progress: progress,
           networkSpeed: done ? modelFile.networkSpeed : networkSpeed,
           timeRemaining: done ? modelFile.timeRemaining : timeRemaining,
-          zipSize: done ? modelFile.zipSize : expectedFileSize,
+          fileSize: done ? modelFile.fileSize : expectedFileSize,
           downloading: done ? false : true,
         ));
         return;
@@ -114,6 +125,8 @@ extension _$RemoteFile on _RemoteFile {
     final responseHeaders = statusUpdate.responseHeaders;
     final responseStatusCode = statusUpdate.responseStatusCode;
 
+    if (kDebugMode) print("💬 $status $exception $responseBody $responseHeaders $responseStatusCode");
+
     bool downloading = false;
     switch (status) {
       case TaskStatus.enqueued:
@@ -135,5 +148,6 @@ extension _$RemoteFile on _RemoteFile {
     }
 
     files(fileKey).u(modelFile.copyWith(downloading: downloading));
+    checkLocalFile();
   }
 }

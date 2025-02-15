@@ -20,8 +20,10 @@ mixin _$FileInfo {
   String? get taskId => throw _privateConstructorUsedError;
 
   /// 压缩包文件大小, bytes
+  @Deprecated("")
   int get zipSize => throw _privateConstructorUsedError;
   int get fileSize => throw _privateConstructorUsedError;
+  @Deprecated("")
   bool get hasZip => throw _privateConstructorUsedError;
   bool get hasFile => throw _privateConstructorUsedError;
   double get progress => throw _privateConstructorUsedError;
@@ -44,9 +46,9 @@ abstract class $FileInfoCopyWith<$Res> {
   $Res call(
       {FileKey key,
       String? taskId,
-      int zipSize,
+      @Deprecated("") int zipSize,
       int fileSize,
-      bool hasZip,
+      @Deprecated("") bool hasZip,
       bool hasFile,
       double progress,
       double networkSpeed,
@@ -136,9 +138,9 @@ abstract class _$$FileInfoImplCopyWith<$Res>
   $Res call(
       {FileKey key,
       String? taskId,
-      int zipSize,
+      @Deprecated("") int zipSize,
       int fileSize,
-      bool hasZip,
+      @Deprecated("") bool hasZip,
       bool hasFile,
       double progress,
       double networkSpeed,
@@ -221,9 +223,9 @@ class _$FileInfoImpl implements _FileInfo {
   const _$FileInfoImpl(
       {required this.key,
       this.taskId,
-      this.zipSize = 1,
+      @Deprecated("") this.zipSize = 1,
       this.fileSize = 1,
-      this.hasZip = false,
+      @Deprecated("") this.hasZip = false,
       this.hasFile = false,
       this.progress = 0,
       this.networkSpeed = 0,
@@ -238,12 +240,14 @@ class _$FileInfoImpl implements _FileInfo {
   /// 压缩包文件大小, bytes
   @override
   @JsonKey()
+  @Deprecated("")
   final int zipSize;
   @override
   @JsonKey()
   final int fileSize;
   @override
   @JsonKey()
+  @Deprecated("")
   final bool hasZip;
   @override
   @JsonKey()
@@ -305,9 +309,9 @@ abstract class _FileInfo implements FileInfo {
   const factory _FileInfo(
       {required final FileKey key,
       final String? taskId,
-      final int zipSize,
+      @Deprecated("") final int zipSize,
       final int fileSize,
-      final bool hasZip,
+      @Deprecated("") final bool hasZip,
       final bool hasFile,
       final double progress,
       final double networkSpeed,
@@ -321,10 +325,12 @@ abstract class _FileInfo implements FileInfo {
 
   /// 压缩包文件大小, bytes
   @override
+  @Deprecated("")
   int get zipSize;
   @override
   int get fileSize;
   @override
+  @Deprecated("")
   bool get hasZip;
   @override
   bool get hasFile;
