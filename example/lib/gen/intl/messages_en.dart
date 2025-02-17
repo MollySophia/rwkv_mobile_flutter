@@ -43,6 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "You need to download the model first, before you can use it",
         ),
+    "chatting": MessageLookupByLibrary.simpleMessage("Chatting"),
     "choose_prebuilt_character": MessageLookupByLibrary.simpleMessage(
       "Choose prebuilt character",
     ),

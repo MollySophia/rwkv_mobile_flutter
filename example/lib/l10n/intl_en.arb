@@ -13,5 +13,6 @@
   "choose_prebuilt_character": "Choose prebuilt character",
   "start_to_chat": "Start to chat",
   "chat_model_name": "Model name",
-  "foo_bar": "foo bar"
+  "foo_bar": "foo bar",
+  "chatting": "Chatting"
 }

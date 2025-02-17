@@ -79,15 +79,6 @@ extension _$App on _App {
       cacheDir.u(await getApplicationCacheDirectory());
       downloadsDir.u(await getDownloadsDirectory());
       documentsDir.u(await getApplicationDocumentsDirectory());
-
-      if (kDebugMode) {
-        print("""💬
-${tempDir.v!.path}
-${supportDir.v!.path}
-${cacheDir.v!.path}
-${downloadsDir.v!.path}
-${documentsDir.v!.path}""");
-      }
     } catch (e) {
       if (kDebugMode) print("😡 Error when calling _App._init");
       if (kDebugMode) print("😡 $e");

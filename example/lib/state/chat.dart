@@ -46,6 +46,14 @@ class _Chat {
     if (editingIndex == null) return false;
     return messages.v[editingIndex].isMine == false;
   });
+
+  late final loaded = _gp((ref) {
+    final currentModel = ref.watch(this.currentModel);
+    return currentModel != null;
+  });
+  late final currentModel = _gsn<FileKey>();
+  late final showingModelSelector = _gs(false);
+  late final showingCharacterSelector = _gs(false);
 }
 
 /// Public methods
@@ -153,22 +161,6 @@ extension _$Chat on _Chat {
   FV _init() async {
     if (kDebugMode) print("💬 $runtimeType._init");
 
-    if (kDebugMode) {
-      messages.l((messages) {
-        final changingMessages = messages.where((m) => m.changing).toList();
-        if (changingMessages.length > 1) {
-          if (kDebugMode) {
-            print("""
-😡 Changing messages count is bigger than 1,
-check ...,
-think about it,
-multiple ... channels are changing?
-          """);
-          }
-        }
-      });
-    }
-
     textEditingController.addListener(_onTextEditingControllerValueChanged);
     text.l(_onTextChanged);
 
@@ -235,9 +227,14 @@ multiple ... channels are changing?
   }
 
   void _onPageKeyChanged(PageKey pageKey) {
+    if (kDebugMode) print("💬 _onPageKeyChanged: $pageKey");
     Future.delayed(200.ms).then((_) {
       messages.u([]);
     });
+
+    if (!loaded.v) {
+      showingModelSelector.u(true);
+    }
   }
 
   void _onTextEditingControllerValueChanged() {

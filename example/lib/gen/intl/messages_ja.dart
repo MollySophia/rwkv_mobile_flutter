@@ -28,10 +28,26 @@ class MessageLookup extends MessageLookupByLibrary {
     "chat_empty_message": MessageLookupByLibrary.simpleMessage(
       "メッセージを入力してください",
     ),
+    "chat_model_name": MessageLookupByLibrary.simpleMessage("モデル名"),
+    "chat_please_select_a_model": MessageLookupByLibrary.simpleMessage(
+      "モデルを選択してください",
+    ),
     "chat_title": MessageLookupByLibrary.simpleMessage("RWKV World v7"),
     "chat_title_placeholder": MessageLookupByLibrary.simpleMessage(
       "メッセージを入力してください...",
     ),
+    "chat_welcome_to_use": MessageLookupByLibrary.simpleMessage(
+      "RWKV World v7をご利用いただきありがとうございます",
+    ),
+    "chat_you_need_download_model_if_you_want_to_use_it":
+        MessageLookupByLibrary.simpleMessage("使用する前にモデルをダウンロードする必要があります"),
+    "choose_prebuilt_character": MessageLookupByLibrary.simpleMessage(
+      "プリビルトキャラクターを選択",
+    ),
+    "download_model": MessageLookupByLibrary.simpleMessage("モデルをダウンロード"),
+    "foo_bar": MessageLookupByLibrary.simpleMessage("ふーばー"),
     "othello_title": MessageLookupByLibrary.simpleMessage("RWKV 黒と白のチェス"),
+    "start_to_chat": MessageLookupByLibrary.simpleMessage("チャットを開始"),
+    "use_it_now": MessageLookupByLibrary.simpleMessage("今すぐ使用"),
   };
 }

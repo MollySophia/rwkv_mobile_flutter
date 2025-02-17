@@ -6,6 +6,7 @@ import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/file_key.dart';
+import 'package:zone/route/router.dart';
 import 'package:zone/widgets/alert.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +16,54 @@ import 'package:halo/halo.dart';
 import 'package:zone/model/message.dart';
 import 'package:zone/state/p.dart';
 
-class PageChat extends StatelessWidget {
+class PageChat extends StatefulWidget {
   const PageChat({super.key});
+
+  @override
+  State<PageChat> createState() => _PageChatState();
+}
+
+class _PageChatState extends State<PageChat> {
+  void _onShowingCharacterSelectorChanged(bool showing) async {
+    if (!showing) return;
+  }
+
+  void _onShowingModelSelectorChanged(bool showing) async {
+    if (!showing) return;
+    P.remoteFile.checkLocalFile();
+    await showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (context) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.8,
+          minChildSize: 0.6,
+          maxChildSize: 0.85,
+          expand: false,
+          snap: false,
+          builder: (BuildContext context, ScrollController scrollController) {
+            return _ModelSelector(
+              scrollController: scrollController,
+            );
+          },
+        );
+      },
+    );
+    P.chat.showingModelSelector.u(false);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    P.chat.showingModelSelector.l(_onShowingModelSelectorChanged);
+    P.chat.showingCharacterSelector.l(_onShowingCharacterSelectorChanged);
+    HF.wait(1000).then((_) {
+      final loaded = P.chat.loaded.v;
+      if (!loaded) {
+        P.chat.showingModelSelector.u(true);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,41 +71,73 @@ class PageChat extends StatelessWidget {
       body: Stack(
         children: const [
           _List(),
+          //
           _AppBar(),
           _NavigationBarBottomLine(),
+          //
           _ScrollToBottomButton(),
+          //
           _InputTopLine(),
           _Input(),
-          _WelcomeToChat(),
+          //
+          _SelectModelButton(),
         ],
       ),
     );
   }
 }
 
-class _WelcomeToChat extends ConsumerWidget {
-  const _WelcomeToChat();
+class _SelectModelButton extends ConsumerWidget {
+  const _SelectModelButton();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Positioned(
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      child: ListView(
-        children: [
-          T(S.current.chat_welcome_to_use),
-          T(S.current.chat_please_select_a_model),
-          T(S.current.chat_model_name),
-          T(S.current.chat_you_need_download_model_if_you_want_to_use_it),
-          const _ModelItem(FileKey.v7_world_0_1b_st),
-          const _ModelItem(FileKey.v7_world_0_4b_gguf),
-          const _ModelItem(FileKey.v7_world_1_5b_gguf),
-          const _ModelItem(FileKey.v7_world_3b_gguf),
-          const _ModelItem(FileKey.test),
-        ],
+    final loaded = ref.watch(P.chat.loaded);
+    if (loaded) return Positioned.fill(child: IgnorePointer(child: Container()));
+    return Positioned.fill(
+      child: Center(
+        child: IconButton(
+          onPressed: () {
+            P.chat.showingModelSelector.u(false);
+            P.chat.showingModelSelector.u(true);
+          },
+          icon: Co(
+            mainAxisSize: MainAxisSize.min,
+            m: MAA.center,
+            children: [
+              50.h,
+              Icon(Icons.message),
+              T("Please click here to select a model"),
+              50.h,
+            ],
+          ),
+        ),
       ),
+    );
+  }
+}
+
+class _ModelSelector extends ConsumerWidget {
+  final ScrollController scrollController;
+
+  const _ModelSelector({required this.scrollController});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListView(
+      padding: EI.o(t: 24, l: 12, r: 12),
+      controller: scrollController,
+      children: [
+        T(
+          S.current.chat_welcome_to_use,
+          s: TS(s: 16, w: FW.w600),
+        ),
+        4.h,
+        T(S.current.chat_please_select_a_model),
+        4.h,
+        T(S.current.chat_you_need_download_model_if_you_want_to_use_it),
+        for (final fileKey in FileKey.availableModels) _ModelItem(fileKey),
+      ],
     );
   }
 }
@@ -67,6 +146,29 @@ class _ModelItem extends ConsumerWidget {
   final FileKey fileKey;
 
   const _ModelItem(this.fileKey);
+
+  void _onLoadTap() async {
+    if (kDebugMode) print("💬 _onLoadTap");
+    final modelPath = fileKey.path;
+    final backend = fileKey.backend;
+
+    try {
+      await P.rwkv.loadChat(modelPath: modelPath, backend: backend);
+    } catch (e) {
+      Alert.error(e.toString());
+      return;
+    }
+
+    P.chat.currentModel.u(fileKey);
+
+    Alert.success("You can now start to chat with RWKV");
+
+    Navigator.pop(getContext()!);
+  }
+
+  void _onDownloadTap() async {
+    P.remoteFile.getFile(fileKey: fileKey);
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -77,18 +179,142 @@ class _ModelItem extends ConsumerWidget {
     final fileSizeGB = fileSizeMB / 1024;
     final fileSizeGBString = fileSizeGB.toStringAsFixed(2);
     final shouldShowGB = fileSizeGB > 1;
-    if (kDebugMode) print("💬 $fileKey: $fileSize");
+    final progress = file.progress;
+    final hasFile = file.hasFile;
+    final downloading = file.downloading;
+    final modelSizeB = fileKey.modelSizeB;
+    final q = fileKey.q;
+    final networkSpeed = file.networkSpeed;
+    final timeRemaining = file.timeRemaining;
+    final currentModel = ref.watch(P.chat.currentModel);
+    final isCurrentModel = currentModel == fileKey;
+
     return C(
-      decoration: BD(color: kW),
-      padding: EI.a(12),
+      decoration: BD(color: kW, borderRadius: 8.r),
+      margin: EI.o(t: 8),
+      padding: EI.a(8),
       child: SB(
-        child: Co(
-          c: CAA.center,
+        child: Ro(
           children: [
-            T(fileKey.name),
-            T(fileSize.toString()),
-            if (shouldShowGB) T("$fileSizeGBString GB"),
-            if (!shouldShowGB) T("$fileSizeString MB"),
+            Exp(
+              child: Co(
+                c: CAA.start,
+                children: [
+                  Ro(
+                    children: [
+                      T(
+                        fileKey.name,
+                        s: TS(c: kB, w: FW.w600),
+                      ),
+                      8.w,
+                      if (shouldShowGB) T("$fileSizeGBString GB"),
+                      if (!shouldShowGB) T("$fileSizeString MB"),
+                    ],
+                  ),
+                  4.h,
+                  Ro(
+                    children: [
+                      C(
+                        decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
+                        padding: EI.s(h: 4),
+                        child: T(fileKey.backend.asArgument),
+                      ),
+                      if (modelSizeB > 0) 8.w,
+                      if (modelSizeB > 0)
+                        C(
+                          decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
+                          padding: EI.s(h: 4),
+                          child: T("${modelSizeB}B"),
+                        ),
+                      if (q.isNotEmpty) 8.w,
+                      if (q.isNotEmpty)
+                        C(
+                          decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
+                          padding: EI.s(h: 4),
+                          child: T(q),
+                        ),
+                    ],
+                  ),
+                  if (downloading) 8.h,
+                  if (downloading)
+                    Ro(
+                      children: [
+                        Exp(
+                          flex: (100 * progress).toInt(),
+                          child: C(
+                            decoration: BD(
+                              borderRadius: BorderRadius.only(topLeft: 8.rr, bottomLeft: 8.rr),
+                              color: kCG,
+                            ),
+                            height: 4,
+                          ),
+                        ),
+                        Exp(
+                          flex: 100 - (100 * progress).toInt(),
+                          child: C(
+                            decoration: BD(
+                              borderRadius: BorderRadius.only(topRight: 8.rr, bottomRight: 8.rr),
+                              color: kG.wo(0.5),
+                            ),
+                            height: 4,
+                          ),
+                        ),
+                      ],
+                    ),
+                  if (downloading) 4.h,
+                  if (downloading)
+                    Row(
+                      children: [
+                        T("Speed: "),
+                        T("${networkSpeed.toStringAsFixed(1)}mb/s"),
+                        12.w,
+                        T("Remaining: "),
+                        if (timeRemaining.inMinutes > 0) T("${timeRemaining.inMinutes}m"),
+                        if (timeRemaining.inMinutes == 0) T("${timeRemaining.inSeconds}s"),
+                      ],
+                    ),
+                ],
+              ),
+            ),
+            8.w,
+            if (!hasFile && !downloading)
+              IconButton(
+                onPressed: _onDownloadTap,
+                icon: Icon(Icons.download),
+              ),
+            if (downloading)
+              C(
+                margin: EI.o(r: 8),
+                child: SB(
+                  height: 24,
+                  width: 24,
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+            if (hasFile && !isCurrentModel)
+              GD(
+                onTap: _onLoadTap,
+                child: C(
+                  decoration: BD(
+                    color: kCG,
+                    borderRadius: 8.r,
+                  ),
+                  padding: EI.a(8),
+                  child: T(S.current.start_to_chat, s: TS(c: kW)),
+                ),
+              ),
+            if (isCurrentModel)
+              GD(
+                onTap: null,
+                child: C(
+                  decoration: BD(
+                    color: kG.wo(0.5),
+                    borderRadius: 8.r,
+                  ),
+                  padding: EI.a(8),
+                  child: T(S.current.chatting, s: TS(c: kW)),
+                ),
+              ),
           ],
         ),
       ),
@@ -139,6 +365,7 @@ class _AppBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final loaded = ref.watch(P.chat.loaded);
     return Positioned(
       top: 0,
       left: 0,
@@ -157,7 +384,12 @@ class _AppBar extends ConsumerWidget {
             ),
             actions: [
               IconButton(
-                onPressed: () {},
+                onPressed: loaded
+                    ? () {
+                        P.chat.showingModelSelector.u(false);
+                        P.chat.showingModelSelector.u(true);
+                      }
+                    : null,
                 icon: const Icon(Icons.settings),
               ),
             ],
@@ -178,6 +410,7 @@ class _List extends ConsumerWidget {
     final paddingTop = ref.watch(P.app.paddingTop);
     final inputHeight = ref.watch(P.chat.inputHeight);
     final useReverse = ref.watch(P.chat.useReverse);
+    final loaded = ref.watch(P.chat.loaded);
 
     return Positioned.fill(
       child: GD(
@@ -190,7 +423,7 @@ class _List extends ConsumerWidget {
           controller: P.chat.scrollController,
           child: ListView.separated(
             reverse: useReverse,
-            physics: const AlwaysScrollableScrollPhysics(),
+            physics: loaded ? const AlwaysScrollableScrollPhysics() : const NeverScrollableScrollPhysics(),
             padding: EI.o(
               t: paddingTop + kToolbarHeight + 12,
               b: inputHeight + 12,
@@ -467,6 +700,8 @@ class _Input extends ConsumerWidget {
 
     final color = Colors.deepPurple;
 
+    final loaded = ref.watch(P.chat.loaded);
+
     return Positioned(
       bottom: 0,
       left: 0,
@@ -487,6 +722,7 @@ class _Input extends ConsumerWidget {
                     onKeyEvent: _onKeyEvent,
                     focusNode: P.chat.focusNode,
                     child: TextField(
+                      enabled: loaded,
                       controller: P.chat.textEditingController,
                       onSubmitted: P.chat.onSubmitted,
                       onChanged: _onChanged,
@@ -566,7 +802,9 @@ class _ScrollToBottomButton extends ConsumerWidget {
     final inputHeight = ref.watch(P.chat.inputHeight);
     final atBottom = ref.watch(P.chat.atBottom);
     final screenWidth = ref.watch(P.app.screenWidth);
+    final loaded = ref.watch(P.chat.loaded);
     final buttonSize = 36.0;
+    if (!loaded) return Positioned.fill(child: IgnorePointer(child: Container()));
     return AnimatedPositioned(
       duration: 350.ms,
       curve: Curves.easeInOutBack,

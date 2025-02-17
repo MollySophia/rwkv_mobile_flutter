@@ -184,6 +184,11 @@ class S {
   String get foo_bar {
     return Intl.message('foo bar', name: 'foo_bar', desc: '', args: []);
   }
+
+  /// `Chatting`
+  String get chatting {
+    return Intl.message('Chatting', name: 'chatting', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -20,8 +20,7 @@ mixin _$FileInfo {
   @Deprecated("")
   String? get taskId => throw _privateConstructorUsedError;
 
-  /// 压缩包文件大小, bytes
-  int get fileSize => throw _privateConstructorUsedError;
+  /// 是否已下载
   bool get hasFile => throw _privateConstructorUsedError;
   double get progress => throw _privateConstructorUsedError;
   double get networkSpeed => throw _privateConstructorUsedError;
@@ -43,7 +42,6 @@ abstract class $FileInfoCopyWith<$Res> {
   $Res call(
       {FileKey key,
       @Deprecated("") String? taskId,
-      int fileSize,
       bool hasFile,
       double progress,
       double networkSpeed,
@@ -68,7 +66,6 @@ class _$FileInfoCopyWithImpl<$Res, $Val extends FileInfo>
   $Res call({
     Object? key = null,
     Object? taskId = freezed,
-    Object? fileSize = null,
     Object? hasFile = null,
     Object? progress = null,
     Object? networkSpeed = null,
@@ -84,10 +81,6 @@ class _$FileInfoCopyWithImpl<$Res, $Val extends FileInfo>
           ? _value.taskId
           : taskId // ignore: cast_nullable_to_non_nullable
               as String?,
-      fileSize: null == fileSize
-          ? _value.fileSize
-          : fileSize // ignore: cast_nullable_to_non_nullable
-              as int,
       hasFile: null == hasFile
           ? _value.hasFile
           : hasFile // ignore: cast_nullable_to_non_nullable
@@ -123,7 +116,6 @@ abstract class _$$FileInfoImplCopyWith<$Res>
   $Res call(
       {FileKey key,
       @Deprecated("") String? taskId,
-      int fileSize,
       bool hasFile,
       double progress,
       double networkSpeed,
@@ -146,7 +138,6 @@ class __$$FileInfoImplCopyWithImpl<$Res>
   $Res call({
     Object? key = null,
     Object? taskId = freezed,
-    Object? fileSize = null,
     Object? hasFile = null,
     Object? progress = null,
     Object? networkSpeed = null,
@@ -162,10 +153,6 @@ class __$$FileInfoImplCopyWithImpl<$Res>
           ? _value.taskId
           : taskId // ignore: cast_nullable_to_non_nullable
               as String?,
-      fileSize: null == fileSize
-          ? _value.fileSize
-          : fileSize // ignore: cast_nullable_to_non_nullable
-              as int,
       hasFile: null == hasFile
           ? _value.hasFile
           : hasFile // ignore: cast_nullable_to_non_nullable
@@ -192,16 +179,16 @@ class __$$FileInfoImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$FileInfoImpl implements _FileInfo {
+class _$FileInfoImpl extends _FileInfo {
   const _$FileInfoImpl(
       {required this.key,
       @Deprecated("") this.taskId,
-      this.fileSize = 1,
       this.hasFile = false,
       this.progress = 0,
       this.networkSpeed = 0,
       this.timeRemaining = Duration.zero,
-      this.downloading = false});
+      this.downloading = false})
+      : super._();
 
   @override
   final FileKey key;
@@ -209,10 +196,7 @@ class _$FileInfoImpl implements _FileInfo {
   @Deprecated("")
   final String? taskId;
 
-  /// 压缩包文件大小, bytes
-  @override
-  @JsonKey()
-  final int fileSize;
+  /// 是否已下载
   @override
   @JsonKey()
   final bool hasFile;
@@ -231,7 +215,7 @@ class _$FileInfoImpl implements _FileInfo {
 
   @override
   String toString() {
-    return 'FileInfo(key: $key, taskId: $taskId, fileSize: $fileSize, hasFile: $hasFile, progress: $progress, networkSpeed: $networkSpeed, timeRemaining: $timeRemaining, downloading: $downloading)';
+    return 'FileInfo(key: $key, taskId: $taskId, hasFile: $hasFile, progress: $progress, networkSpeed: $networkSpeed, timeRemaining: $timeRemaining, downloading: $downloading)';
   }
 
   @override
@@ -241,8 +225,6 @@ class _$FileInfoImpl implements _FileInfo {
             other is _$FileInfoImpl &&
             (identical(other.key, key) || other.key == key) &&
             (identical(other.taskId, taskId) || other.taskId == taskId) &&
-            (identical(other.fileSize, fileSize) ||
-                other.fileSize == fileSize) &&
             (identical(other.hasFile, hasFile) || other.hasFile == hasFile) &&
             (identical(other.progress, progress) ||
                 other.progress == progress) &&
@@ -255,8 +237,8 @@ class _$FileInfoImpl implements _FileInfo {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, key, taskId, fileSize, hasFile,
-      progress, networkSpeed, timeRemaining, downloading);
+  int get hashCode => Object.hash(runtimeType, key, taskId, hasFile, progress,
+      networkSpeed, timeRemaining, downloading);
 
   /// Create a copy of FileInfo
   /// with the given fields replaced by the non-null parameter values.
@@ -267,16 +249,16 @@ class _$FileInfoImpl implements _FileInfo {
       __$$FileInfoImplCopyWithImpl<_$FileInfoImpl>(this, _$identity);
 }
 
-abstract class _FileInfo implements FileInfo {
+abstract class _FileInfo extends FileInfo {
   const factory _FileInfo(
       {required final FileKey key,
       @Deprecated("") final String? taskId,
-      final int fileSize,
       final bool hasFile,
       final double progress,
       final double networkSpeed,
       final Duration timeRemaining,
       final bool downloading}) = _$FileInfoImpl;
+  const _FileInfo._() : super._();
 
   @override
   FileKey get key;
@@ -284,9 +266,7 @@ abstract class _FileInfo implements FileInfo {
   @Deprecated("")
   String? get taskId;
 
-  /// 压缩包文件大小, bytes
-  @override
-  int get fileSize;
+  /// 是否已下载
   @override
   bool get hasFile;
   @override

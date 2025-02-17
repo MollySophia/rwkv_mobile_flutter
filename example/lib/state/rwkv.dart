@@ -66,50 +66,12 @@ extension $RWKV on _RWKV {
     }
     sendPort.send(("generate", prompt));
   }
-}
 
-/// Private methods
-extension _$RWKV on _RWKV {
-  FV _init() async {
-    P.app.pageKey.lv(_onPageKeyChanged);
-    _receivePort.listen(_onMessage);
-  }
-
-  FV _onPageKeyChanged() async {
-    final pageKey = P.app.pageKey.v;
-    switch (pageKey) {
-      case PageKey.othello:
-        await _loadOthello();
-        break;
-      case PageKey.chat:
-        await _loadChat();
-        break;
-      case PageKey.fifthteenPuzzle:
-        await _loadFifthteenPuzzle();
-        break;
-      case PageKey.sudoku:
-        await _loadSudoku();
-        break;
-      case PageKey.home:
-      case PageKey.empty:
-      case PageKey.file:
-        break;
-    }
-  }
-
-  FV _loadChat() async {
-    late final String modelPath;
-    late final Backend backend;
-
+  FV loadChat({
+    required String modelPath,
+    required Backend backend,
+  }) async {
     final tokenizerPath = await getModelPath("assets/model/b_rwkv_vocab_v20230424.txt");
-
-    if (Platform.isIOS) {
-      modelPath = await getModelPath("assets/model/RWKV-x070-World-0.4B-v2.9-20250107-ctx4096.st");
-      backend = Backend.webRwkv;
-    } else {
-      modelPath = FileKey.v7_world_3b_gguf.path;
-      backend = Backend.llamacpp;
-    }
 
     final rootIsolateToken = RootIsolateToken.instance;
     final rwkvMobile = RWKVMobile();
@@ -159,6 +121,36 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
     _sendPort!.send(("getPrompt", null));
     _sendPort!.send(("setSamplerParams", {"temperature": 2.0, "top_k": 128, "top_p": 0.5, "presence_penalty": 0.5, "frequency_penalty": 0.5, "penalty_decay": 0.996}));
     _sendPort!.send(("getSamplerParams", null));
+  }
+}
+
+/// Private methods
+extension _$RWKV on _RWKV {
+  FV _init() async {
+    P.app.pageKey.lv(_onPageKeyChanged);
+    _receivePort.listen(_onMessage);
+  }
+
+  FV _onPageKeyChanged() async {
+    final pageKey = P.app.pageKey.v;
+    switch (pageKey) {
+      case PageKey.othello:
+        await _loadOthello();
+        break;
+      case PageKey.chat:
+        // await _loadChat();
+        break;
+      case PageKey.fifthteenPuzzle:
+        await _loadFifthteenPuzzle();
+        break;
+      case PageKey.sudoku:
+        await _loadSudoku();
+        break;
+      case PageKey.home:
+      case PageKey.empty:
+      case PageKey.file:
+        break;
+    }
   }
 
   FV _loadOthello() async {

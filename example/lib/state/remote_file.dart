@@ -28,7 +28,7 @@ extension $RemoteFile on _RemoteFile {
       updates: Updates.statusAndProgress, // request status and progress updates
       requiresWiFi: false,
       retries: 5,
-      allowPause: true,
+      allowPause: false,
       httpRequestMethod: "GET",
     );
 
@@ -47,17 +47,12 @@ extension $RemoteFile on _RemoteFile {
 
   FV checkLocalFile() async {
     await HF.wait(17);
-    final keys = FileKey.values.where((e) => e.available).toList();
-    for (final key in keys) {
+    final fileKeys = FileKey.values.where((e) => e.available).toList();
+    for (final key in fileKeys) {
       final path = key.path;
       final pathExists = await File(path).exists();
-      late final int fileSize;
-      if (pathExists) {
-        fileSize = await File(path).length();
-      } else {
-        fileSize = 0;
-      }
-      files(key).u(FileInfo(key: key, hasFile: pathExists, fileSize: fileSize));
+      final modelFile = files(key).v;
+      files(key).u(modelFile.copyWith(hasFile: pathExists));
     }
   }
 }
@@ -82,6 +77,7 @@ extension _$RemoteFile on _RemoteFile {
     if (fileKey == null) {
       if (kDebugMode) print("😡 _onTaskUpdate:");
       if (kDebugMode) print("😡 taskId: $taskId not found");
+      FileDownloader().cancelTaskWithId(taskId);
       return;
     }
 
@@ -99,8 +95,6 @@ extension _$RemoteFile on _RemoteFile {
           progress: progress,
           networkSpeed: done ? modelFile.networkSpeed : networkSpeed,
           timeRemaining: done ? modelFile.timeRemaining : timeRemaining,
-          fileSize: done ? modelFile.fileSize : expectedFileSize,
-          downloading: done ? false : true,
         ));
         return;
       case TaskStatusUpdate statusUpdate:
@@ -134,9 +128,10 @@ extension _$RemoteFile on _RemoteFile {
     if (kDebugMode) print("💬 $status $exception $responseBody $responseHeaders $responseStatusCode");
 
     bool downloading = false;
+    if (kDebugMode) print("🔥 $status");
     switch (status) {
       case TaskStatus.enqueued:
-        downloading = false;
+        downloading = true;
       case TaskStatus.running:
         downloading = true;
       case TaskStatus.complete:
