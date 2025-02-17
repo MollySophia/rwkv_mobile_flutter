@@ -28,10 +28,28 @@ class MessageLookup extends MessageLookupByLibrary {
     "chat_empty_message": MessageLookupByLibrary.simpleMessage(
       "Please enter a message",
     ),
+    "chat_model_name": MessageLookupByLibrary.simpleMessage("Model name"),
+    "chat_please_select_a_model": MessageLookupByLibrary.simpleMessage(
+      "Please select a model",
+    ),
     "chat_title": MessageLookupByLibrary.simpleMessage("RWKV World v7"),
     "chat_title_placeholder": MessageLookupByLibrary.simpleMessage(
       "Enter your message...",
     ),
+    "chat_welcome_to_use": MessageLookupByLibrary.simpleMessage(
+      "Welcome to use RWKV World v7",
+    ),
+    "chat_you_need_download_model_if_you_want_to_use_it":
+        MessageLookupByLibrary.simpleMessage(
+          "You need to download the model first, before you can use it",
+        ),
+    "choose_prebuilt_character": MessageLookupByLibrary.simpleMessage(
+      "Choose prebuilt character",
+    ),
+    "download_model": MessageLookupByLibrary.simpleMessage("Download model"),
+    "foo_bar": MessageLookupByLibrary.simpleMessage("foo bar"),
     "othello_title": MessageLookupByLibrary.simpleMessage("RWKV Othello"),
+    "start_to_chat": MessageLookupByLibrary.simpleMessage("Start to chat"),
+    "use_it_now": MessageLookupByLibrary.simpleMessage("Use it now"),
   };
 }

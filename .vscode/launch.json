@@ -24,10 +24,10 @@
         // "--dart-define=locale=zh_Hans",
         //
         // "--dart-define=first_page_is_file=true",
-        "--dart-define=first_page_is_chat=false",
+        "--dart-define=first_page_is_chat=true",
         // "--dart-define=first_page_is_chat=true",
         // "--dart-define=first_page_is_othello=false",
-        "--dart-define=first_page_is_home=true",
+        "--dart-define=first_page_is_home=false",
         // "--dart-define=first_page_is_home=false",
         // "--dart-define=use_fake_messages=true",
         // "--dart-define=locale=en_US",

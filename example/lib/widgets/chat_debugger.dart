@@ -13,6 +13,9 @@ class ChatDebugger extends ConsumerWidget {
     final messages = ref.watch(P.chat.messages);
     final pageKey = ref.watch(P.app.pageKey);
     if (pageKey != PageKey.chat) return const SizedBox.shrink();
+
+    final demoType = ref.watch(P.rwkv.demoType);
+
     return Positioned(
       left: 0,
       child: IgnorePointer(
@@ -32,6 +35,7 @@ class ChatDebugger extends ConsumerWidget {
                   const T("Debugger"),
                   T("${"editingIndex".codeToName}\n" + editingIndex.toString()),
                   T("${"messages".codeToName}\n\n" + messages.map((e) => e.toString()).join("\n\n")),
+                  T("${"demoType".codeToName}\n" + demoType.toString()),
                 ],
               ),
             ),

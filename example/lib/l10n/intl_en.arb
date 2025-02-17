@@ -4,5 +4,14 @@
   "othello_title": "RWKV Othello",
   "chat_title_placeholder": "Enter your message...",
   "chat_copied_to_clipboard": "Copied to clipboard",
-  "chat_empty_message": "Please enter a message"
+  "chat_empty_message": "Please enter a message",
+  "chat_welcome_to_use": "Welcome to use RWKV World v7",
+  "chat_please_select_a_model": "Please select a model",
+  "chat_you_need_download_model_if_you_want_to_use_it": "You need to download the model first, before you can use it",
+  "download_model": "Download model",
+  "use_it_now": "Use it now",
+  "choose_prebuilt_character": "Choose prebuilt character",
+  "start_to_chat": "Start to chat",
+  "chat_model_name": "Model name",
+  "foo_bar": "foo bar"
 }

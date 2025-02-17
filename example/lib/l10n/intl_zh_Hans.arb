@@ -4,5 +4,13 @@
   "othello_title": "RWKV 黑白棋",
   "chat_title_placeholder": "输入你的消息...",
   "chat_copied_to_clipboard": "已复制到剪贴板",
-  "chat_empty_message": "请输入消息"
+  "chat_empty_message": "请输入消息",
+  "chat_welcome_to_use": "欢迎使用 RWKV Chat v7",
+  "chat_please_select_a_model": "请选择一个模型",
+  "chat_you_need_download_model_if_you_want_to_use_it": "你需要先下载模型, 才能使用它们",
+  "download_model": "下载模型",
+  "use_it_now": "立即使用",
+  "choose_prebuilt_character": "选择预设角色",
+  "start_to_chat": "开始聊天",
+  "chat_model_name": "模型名称"
 }

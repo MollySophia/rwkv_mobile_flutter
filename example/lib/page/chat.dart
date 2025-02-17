@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:zone/gen/l10n.dart';
+import 'package:zone/model/file_key.dart';
 import 'package:zone/widgets/alert.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -14,52 +15,120 @@ import 'package:halo/halo.dart';
 import 'package:zone/model/message.dart';
 import 'package:zone/state/p.dart';
 
-class PageChat extends ConsumerWidget {
+class PageChat extends StatelessWidget {
   const PageChat({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: const [
+          _List(),
+          _AppBar(),
+          _NavigationBarBottomLine(),
+          _ScrollToBottomButton(),
+          _InputTopLine(),
+          _Input(),
+          _WelcomeToChat(),
+        ],
+      ),
+    );
+  }
+}
+
+class _WelcomeToChat extends ConsumerWidget {
+  const _WelcomeToChat();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Positioned(
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      child: ListView(
+        children: [
+          T(S.current.chat_welcome_to_use),
+          T(S.current.chat_please_select_a_model),
+          T(S.current.chat_model_name),
+          T(S.current.chat_you_need_download_model_if_you_want_to_use_it),
+          const _ModelItem(FileKey.v7_world_0_1b_st),
+          const _ModelItem(FileKey.v7_world_0_4b_gguf),
+          const _ModelItem(FileKey.v7_world_1_5b_gguf),
+          const _ModelItem(FileKey.v7_world_3b_gguf),
+          const _ModelItem(FileKey.test),
+        ],
+      ),
+    );
+  }
+}
+
+class _ModelItem extends ConsumerWidget {
+  final FileKey fileKey;
+
+  const _ModelItem(this.fileKey);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final file = ref.watch(P.remoteFile.files(fileKey));
+    final fileSize = file.fileSize;
+    final fileSizeMB = fileSize / 1024 / 1024;
+    final fileSizeString = fileSizeMB.toStringAsFixed(2);
+    final fileSizeGB = fileSizeMB / 1024;
+    final fileSizeGBString = fileSizeGB.toStringAsFixed(2);
+    final shouldShowGB = fileSizeGB > 1;
+    if (kDebugMode) print("💬 $fileKey: $fileSize");
+    return C(
+      decoration: BD(color: kW),
+      padding: EI.a(12),
+      child: SB(
+        child: Co(
+          c: CAA.center,
+          children: [
+            T(fileKey.name),
+            T(fileSize.toString()),
+            if (shouldShowGB) T("$fileSizeGBString GB"),
+            if (!shouldShowGB) T("$fileSizeString MB"),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _InputTopLine extends ConsumerWidget {
+  const _InputTopLine();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final inputHeight = ref.watch(P.chat.inputHeight);
+    return Positioned(
+      bottom: inputHeight,
+      left: 0,
+      right: 0,
+      height: 0.5,
+      child: C(
+        height: kToolbarHeight,
+        color: kB.wo(0.1),
+      ),
+    );
+  }
+}
+
+class _NavigationBarBottomLine extends ConsumerWidget {
+  const _NavigationBarBottomLine();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final paddingTop = ref.watch(P.app.paddingTop);
-    final inputHeight = ref.watch(P.chat.inputHeight);
-
-    return Scaffold(
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: GD(
-              onTap: P.chat.onTapMessageList,
-              child: const _List(),
-            ),
-          ),
-          const _ScrollToBottomButton(),
-          const Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: _Input(),
-          ),
-          Positioned(
-            bottom: inputHeight,
-            left: 0,
-            right: 0,
-            height: 0.5,
-            child: C(
-              height: kToolbarHeight,
-              color: kB.wo(0.1),
-            ),
-          ),
-          Positioned(
-            top: paddingTop + kToolbarHeight,
-            left: 0,
-            right: 0,
-            height: 0.5,
-            child: C(
-              height: kToolbarHeight,
-              color: kB.wo(0.1),
-            ),
-          ),
-          _AppBar(),
-        ],
+    return Positioned(
+      top: paddingTop + kToolbarHeight,
+      left: 0,
+      right: 0,
+      height: 0.5,
+      child: C(
+        height: kToolbarHeight,
+        color: kB.wo(0.1),
       ),
     );
   }
@@ -70,8 +139,6 @@ class _AppBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final version = ref.watch(P.app.version);
-    final buildNumber = ref.watch(P.app.buildNumber);
     return Positioned(
       top: 0,
       left: 0,
@@ -112,30 +179,35 @@ class _List extends ConsumerWidget {
     final inputHeight = ref.watch(P.chat.inputHeight);
     final useReverse = ref.watch(P.chat.useReverse);
 
-    return RawScrollbar(
-      radius: 100.rr,
-      thickness: 4,
-      thumbColor: kB.wo(0.4),
-      padding: EI.o(r: 4, b: inputHeight + 4, t: paddingTop + kToolbarHeight + 4),
-      controller: P.chat.scrollController,
-      child: ListView.separated(
-        reverse: useReverse,
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: EI.o(
-          t: paddingTop + kToolbarHeight + 12,
-          b: inputHeight + 12,
+    return Positioned.fill(
+      child: GD(
+        onTap: P.chat.onTapMessageList,
+        child: RawScrollbar(
+          radius: 100.rr,
+          thickness: 4,
+          thumbColor: kB.wo(0.4),
+          padding: EI.o(r: 4, b: inputHeight + 4, t: paddingTop + kToolbarHeight + 4),
+          controller: P.chat.scrollController,
+          child: ListView.separated(
+            reverse: useReverse,
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: EI.o(
+              t: paddingTop + kToolbarHeight + 12,
+              b: inputHeight + 12,
+            ),
+            controller: P.chat.scrollController,
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
+            itemCount: messages.length,
+            itemBuilder: (context, index) {
+              final finalIndex = useReverse ? messages.length - 1 - index : index;
+              final msg = messages[finalIndex];
+              return _Message(msg, finalIndex);
+            },
+            separatorBuilder: (context, index) {
+              return const SB(height: 15);
+            },
+          ),
         ),
-        controller: P.chat.scrollController,
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
-        itemCount: messages.length,
-        itemBuilder: (context, index) {
-          final finalIndex = useReverse ? messages.length - 1 - index : index;
-          final msg = messages[finalIndex];
-          return _Message(msg, finalIndex);
-        },
-        separatorBuilder: (context, index) {
-          return const SB(height: 15);
-        },
       ),
     );
   }
@@ -395,84 +467,89 @@ class _Input extends ConsumerWidget {
 
     final color = Colors.deepPurple;
 
-    return MeasureSize(
-      onChange: (size) {
-        P.chat.inputHeight.u(size.height);
-      },
-      child: ClipRRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-          child: C(
-            decoration: BD(color: kW.wo(0.8)),
-            padding: EI.o(l: 12, r: 12, b: paddingBottom + 12, t: 12),
-            child: Stack(
-              children: [
-                KeyboardListener(
-                  onKeyEvent: _onKeyEvent,
-                  focusNode: P.chat.focusNode,
-                  child: TextField(
-                    controller: P.chat.textEditingController,
-                    onSubmitted: P.chat.onSubmitted,
-                    onChanged: _onChanged,
-                    onEditingComplete: P.chat.onEditingComplete,
-                    onAppPrivateCommand: _onAppPrivateCommand,
-                    onTap: _onTap,
-                    onTapOutside: _onTapOutside,
-                    keyboardType: TextInputType.multiline,
-                    enableSuggestions: true,
-                    textInputAction: TextInputAction.newline,
-                    maxLines: 10,
-                    minLines: 1,
-                    decoration: InputDecoration(
-                      fillColor: kW,
-                      focusColor: kW,
-                      hoverColor: kW,
-                      iconColor: kW,
-                      border: OutlineInputBorder(
-                        borderRadius: 28.r,
-                        borderSide: BorderSide(color: color),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: 28.r,
-                        borderSide: BorderSide(color: color),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: 28.r,
-                        borderSide: BorderSide(color: color),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: 28.r,
-                        borderSide: BorderSide(color: color),
-                      ),
-                      hintText: S.current.chat_title_placeholder,
-                      suffixIcon: receiving
-                          ? SB(
-                              width: 46,
-                              child: Center(
-                                child: SB(
-                                  width: 24,
-                                  height: 24,
-                                  child: CircularProgressIndicator(
-                                    color: color.wo(0.5),
+    return Positioned(
+      bottom: 0,
+      left: 0,
+      right: 0,
+      child: MeasureSize(
+        onChange: (size) {
+          P.chat.inputHeight.u(size.height);
+        },
+        child: ClipRRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+            child: C(
+              decoration: BD(color: kW.wo(0.8)),
+              padding: EI.o(l: 12, r: 12, b: paddingBottom + 12, t: 12),
+              child: Stack(
+                children: [
+                  KeyboardListener(
+                    onKeyEvent: _onKeyEvent,
+                    focusNode: P.chat.focusNode,
+                    child: TextField(
+                      controller: P.chat.textEditingController,
+                      onSubmitted: P.chat.onSubmitted,
+                      onChanged: _onChanged,
+                      onEditingComplete: P.chat.onEditingComplete,
+                      onAppPrivateCommand: _onAppPrivateCommand,
+                      onTap: _onTap,
+                      onTapOutside: _onTapOutside,
+                      keyboardType: TextInputType.multiline,
+                      enableSuggestions: true,
+                      textInputAction: TextInputAction.newline,
+                      maxLines: 10,
+                      minLines: 1,
+                      decoration: InputDecoration(
+                        fillColor: kW,
+                        focusColor: kW,
+                        hoverColor: kW,
+                        iconColor: kW,
+                        border: OutlineInputBorder(
+                          borderRadius: 28.r,
+                          borderSide: BorderSide(color: color),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: 28.r,
+                          borderSide: BorderSide(color: color),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: 28.r,
+                          borderSide: BorderSide(color: color),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: 28.r,
+                          borderSide: BorderSide(color: color),
+                        ),
+                        hintText: S.current.chat_title_placeholder,
+                        suffixIcon: receiving
+                            ? SB(
+                                width: 46,
+                                child: Center(
+                                  child: SB(
+                                    width: 24,
+                                    height: 24,
+                                    child: CircularProgressIndicator(
+                                      color: color.wo(0.5),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : AnimatedOpacity(
+                                opacity: canSend ? 1 : 0.333,
+                                duration: 250.ms,
+                                child: IconButton(
+                                  onPressed: canSend ? _onRightButtonPressed : null,
+                                  icon: Icon(
+                                    editingBotMessage ? Icons.edit : Icons.send,
+                                    color: color,
                                   ),
                                 ),
                               ),
-                            )
-                          : AnimatedOpacity(
-                              opacity: canSend ? 1 : 0.333,
-                              duration: 250.ms,
-                              child: IconButton(
-                                onPressed: canSend ? _onRightButtonPressed : null,
-                                icon: Icon(
-                                  editingBotMessage ? Icons.edit : Icons.send,
-                                  color: color,
-                                ),
-                              ),
-                            ),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

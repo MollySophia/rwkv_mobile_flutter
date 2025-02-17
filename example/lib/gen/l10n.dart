@@ -104,6 +104,86 @@ class S {
       args: [],
     );
   }
+
+  /// `Welcome to use RWKV World v7`
+  String get chat_welcome_to_use {
+    return Intl.message(
+      'Welcome to use RWKV World v7',
+      name: 'chat_welcome_to_use',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select a model`
+  String get chat_please_select_a_model {
+    return Intl.message(
+      'Please select a model',
+      name: 'chat_please_select_a_model',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You need to download the model first, before you can use it`
+  String get chat_you_need_download_model_if_you_want_to_use_it {
+    return Intl.message(
+      'You need to download the model first, before you can use it',
+      name: 'chat_you_need_download_model_if_you_want_to_use_it',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Download model`
+  String get download_model {
+    return Intl.message(
+      'Download model',
+      name: 'download_model',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Use it now`
+  String get use_it_now {
+    return Intl.message('Use it now', name: 'use_it_now', desc: '', args: []);
+  }
+
+  /// `Choose prebuilt character`
+  String get choose_prebuilt_character {
+    return Intl.message(
+      'Choose prebuilt character',
+      name: 'choose_prebuilt_character',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start to chat`
+  String get start_to_chat {
+    return Intl.message(
+      'Start to chat',
+      name: 'start_to_chat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Model name`
+  String get chat_model_name {
+    return Intl.message(
+      'Model name',
+      name: 'chat_model_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `foo bar`
+  String get foo_bar {
+    return Intl.message('foo bar', name: 'foo_bar', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

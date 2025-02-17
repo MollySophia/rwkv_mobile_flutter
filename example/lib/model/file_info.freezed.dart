@@ -17,14 +17,11 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$FileInfo {
   FileKey get key => throw _privateConstructorUsedError;
+  @Deprecated("")
   String? get taskId => throw _privateConstructorUsedError;
 
   /// 压缩包文件大小, bytes
-  @Deprecated("")
-  int get zipSize => throw _privateConstructorUsedError;
   int get fileSize => throw _privateConstructorUsedError;
-  @Deprecated("")
-  bool get hasZip => throw _privateConstructorUsedError;
   bool get hasFile => throw _privateConstructorUsedError;
   double get progress => throw _privateConstructorUsedError;
   double get networkSpeed => throw _privateConstructorUsedError;
@@ -45,10 +42,8 @@ abstract class $FileInfoCopyWith<$Res> {
   @useResult
   $Res call(
       {FileKey key,
-      String? taskId,
-      @Deprecated("") int zipSize,
+      @Deprecated("") String? taskId,
       int fileSize,
-      @Deprecated("") bool hasZip,
       bool hasFile,
       double progress,
       double networkSpeed,
@@ -73,9 +68,7 @@ class _$FileInfoCopyWithImpl<$Res, $Val extends FileInfo>
   $Res call({
     Object? key = null,
     Object? taskId = freezed,
-    Object? zipSize = null,
     Object? fileSize = null,
-    Object? hasZip = null,
     Object? hasFile = null,
     Object? progress = null,
     Object? networkSpeed = null,
@@ -91,18 +84,10 @@ class _$FileInfoCopyWithImpl<$Res, $Val extends FileInfo>
           ? _value.taskId
           : taskId // ignore: cast_nullable_to_non_nullable
               as String?,
-      zipSize: null == zipSize
-          ? _value.zipSize
-          : zipSize // ignore: cast_nullable_to_non_nullable
-              as int,
       fileSize: null == fileSize
           ? _value.fileSize
           : fileSize // ignore: cast_nullable_to_non_nullable
               as int,
-      hasZip: null == hasZip
-          ? _value.hasZip
-          : hasZip // ignore: cast_nullable_to_non_nullable
-              as bool,
       hasFile: null == hasFile
           ? _value.hasFile
           : hasFile // ignore: cast_nullable_to_non_nullable
@@ -137,10 +122,8 @@ abstract class _$$FileInfoImplCopyWith<$Res>
   @useResult
   $Res call(
       {FileKey key,
-      String? taskId,
-      @Deprecated("") int zipSize,
+      @Deprecated("") String? taskId,
       int fileSize,
-      @Deprecated("") bool hasZip,
       bool hasFile,
       double progress,
       double networkSpeed,
@@ -163,9 +146,7 @@ class __$$FileInfoImplCopyWithImpl<$Res>
   $Res call({
     Object? key = null,
     Object? taskId = freezed,
-    Object? zipSize = null,
     Object? fileSize = null,
-    Object? hasZip = null,
     Object? hasFile = null,
     Object? progress = null,
     Object? networkSpeed = null,
@@ -181,18 +162,10 @@ class __$$FileInfoImplCopyWithImpl<$Res>
           ? _value.taskId
           : taskId // ignore: cast_nullable_to_non_nullable
               as String?,
-      zipSize: null == zipSize
-          ? _value.zipSize
-          : zipSize // ignore: cast_nullable_to_non_nullable
-              as int,
       fileSize: null == fileSize
           ? _value.fileSize
           : fileSize // ignore: cast_nullable_to_non_nullable
               as int,
-      hasZip: null == hasZip
-          ? _value.hasZip
-          : hasZip // ignore: cast_nullable_to_non_nullable
-              as bool,
       hasFile: null == hasFile
           ? _value.hasFile
           : hasFile // ignore: cast_nullable_to_non_nullable
@@ -222,10 +195,8 @@ class __$$FileInfoImplCopyWithImpl<$Res>
 class _$FileInfoImpl implements _FileInfo {
   const _$FileInfoImpl(
       {required this.key,
-      this.taskId,
-      @Deprecated("") this.zipSize = 1,
+      @Deprecated("") this.taskId,
       this.fileSize = 1,
-      @Deprecated("") this.hasZip = false,
       this.hasFile = false,
       this.progress = 0,
       this.networkSpeed = 0,
@@ -235,20 +206,13 @@ class _$FileInfoImpl implements _FileInfo {
   @override
   final FileKey key;
   @override
+  @Deprecated("")
   final String? taskId;
 
   /// 压缩包文件大小, bytes
   @override
   @JsonKey()
-  @Deprecated("")
-  final int zipSize;
-  @override
-  @JsonKey()
   final int fileSize;
-  @override
-  @JsonKey()
-  @Deprecated("")
-  final bool hasZip;
   @override
   @JsonKey()
   final bool hasFile;
@@ -267,7 +231,7 @@ class _$FileInfoImpl implements _FileInfo {
 
   @override
   String toString() {
-    return 'FileInfo(key: $key, taskId: $taskId, zipSize: $zipSize, fileSize: $fileSize, hasZip: $hasZip, hasFile: $hasFile, progress: $progress, networkSpeed: $networkSpeed, timeRemaining: $timeRemaining, downloading: $downloading)';
+    return 'FileInfo(key: $key, taskId: $taskId, fileSize: $fileSize, hasFile: $hasFile, progress: $progress, networkSpeed: $networkSpeed, timeRemaining: $timeRemaining, downloading: $downloading)';
   }
 
   @override
@@ -277,10 +241,8 @@ class _$FileInfoImpl implements _FileInfo {
             other is _$FileInfoImpl &&
             (identical(other.key, key) || other.key == key) &&
             (identical(other.taskId, taskId) || other.taskId == taskId) &&
-            (identical(other.zipSize, zipSize) || other.zipSize == zipSize) &&
             (identical(other.fileSize, fileSize) ||
                 other.fileSize == fileSize) &&
-            (identical(other.hasZip, hasZip) || other.hasZip == hasZip) &&
             (identical(other.hasFile, hasFile) || other.hasFile == hasFile) &&
             (identical(other.progress, progress) ||
                 other.progress == progress) &&
@@ -293,8 +255,8 @@ class _$FileInfoImpl implements _FileInfo {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, key, taskId, zipSize, fileSize,
-      hasZip, hasFile, progress, networkSpeed, timeRemaining, downloading);
+  int get hashCode => Object.hash(runtimeType, key, taskId, fileSize, hasFile,
+      progress, networkSpeed, timeRemaining, downloading);
 
   /// Create a copy of FileInfo
   /// with the given fields replaced by the non-null parameter values.
@@ -308,10 +270,8 @@ class _$FileInfoImpl implements _FileInfo {
 abstract class _FileInfo implements FileInfo {
   const factory _FileInfo(
       {required final FileKey key,
-      final String? taskId,
-      @Deprecated("") final int zipSize,
+      @Deprecated("") final String? taskId,
       final int fileSize,
-      @Deprecated("") final bool hasZip,
       final bool hasFile,
       final double progress,
       final double networkSpeed,
@@ -321,17 +281,12 @@ abstract class _FileInfo implements FileInfo {
   @override
   FileKey get key;
   @override
+  @Deprecated("")
   String? get taskId;
 
   /// 压缩包文件大小, bytes
   @override
-  @Deprecated("")
-  int get zipSize;
-  @override
   int get fileSize;
-  @override
-  @Deprecated("")
-  bool get hasZip;
   @override
   bool get hasFile;
   @override

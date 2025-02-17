@@ -24,8 +24,21 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "chat_copied_to_clipboard": MessageLookupByLibrary.simpleMessage("已复制到剪贴板"),
     "chat_empty_message": MessageLookupByLibrary.simpleMessage("请输入消息"),
+    "chat_model_name": MessageLookupByLibrary.simpleMessage("模型名称"),
+    "chat_please_select_a_model": MessageLookupByLibrary.simpleMessage(
+      "请选择一个模型",
+    ),
     "chat_title": MessageLookupByLibrary.simpleMessage("RWKV Chat v7"),
     "chat_title_placeholder": MessageLookupByLibrary.simpleMessage("输入你的消息..."),
+    "chat_welcome_to_use": MessageLookupByLibrary.simpleMessage(
+      "欢迎使用 RWKV Chat v7",
+    ),
+    "chat_you_need_download_model_if_you_want_to_use_it":
+        MessageLookupByLibrary.simpleMessage("你需要先下载模型, 才能使用它们"),
+    "choose_prebuilt_character": MessageLookupByLibrary.simpleMessage("选择预设角色"),
+    "download_model": MessageLookupByLibrary.simpleMessage("下载模型"),
     "othello_title": MessageLookupByLibrary.simpleMessage("RWKV 黑白棋"),
+    "start_to_chat": MessageLookupByLibrary.simpleMessage("开始聊天"),
+    "use_it_now": MessageLookupByLibrary.simpleMessage("立即使用"),
   };
 }

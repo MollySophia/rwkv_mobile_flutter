@@ -51,7 +51,13 @@ extension $RemoteFile on _RemoteFile {
     for (final key in keys) {
       final path = key.path;
       final pathExists = await File(path).exists();
-      files(key).u(FileInfo(key: key, hasFile: pathExists));
+      late final int fileSize;
+      if (pathExists) {
+        fileSize = await File(path).length();
+      } else {
+        fileSize = 0;
+      }
+      files(key).u(FileInfo(key: key, hasFile: pathExists, fileSize: fileSize));
     }
   }
 }

@@ -9,12 +9,10 @@ part 'file_info.freezed.dart';
 class FileInfo with _$FileInfo {
   const factory FileInfo({
     required FileKey key,
-    String? taskId,
+    @Deprecated("") String? taskId,
 
     /// 压缩包文件大小, bytes
-    @Deprecated("") @Default(1) int zipSize,
     @Default(1) int fileSize,
-    @Deprecated("") @Default(false) bool hasZip,
     @Default(false) bool hasFile,
     @Default(0) double progress,
     @Default(0) double networkSpeed,

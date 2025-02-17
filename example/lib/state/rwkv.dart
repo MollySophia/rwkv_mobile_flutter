@@ -50,11 +50,21 @@ class _RWKV {
 /// Public methods
 extension $RWKV on _RWKV {
   void send(List<String> messages) {
-    _sendPort!.send(("message", messages));
+    final sendPort = _sendPort;
+    if (sendPort == null) {
+      if (kDebugMode) print("😡 sendPort is null");
+      return;
+    }
+    sendPort.send(("message", messages));
   }
 
   void generate(String prompt) {
-    _sendPort!.send(("generate", prompt));
+    final sendPort = _sendPort;
+    if (sendPort == null) {
+      if (kDebugMode) print("😡 sendPort is null");
+      return;
+    }
+    sendPort.send(("generate", prompt));
   }
 }
 

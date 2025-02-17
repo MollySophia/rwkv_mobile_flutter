@@ -4,11 +4,11 @@ import 'package:zone/state/p.dart';
 
 enum FileKey {
   v7_world_0_1b_st,
-  v7_world_0_1ncnn,
+  v7_world_0_1_ncnn,
 
   v7_world_0_4b_st,
   v7_world_0_4b_ncnn,
-  v7_world_0_4gguf,
+  v7_world_0_4b_gguf,
 
   v7_world_1_5b_st,
   v7_world_1_5b_ncnn,
@@ -32,7 +32,7 @@ enum FileKey {
         return 'RWKV-x070-World-0.1B-v2.8-20241210-ctx4096.st';
       case v7_world_0_4b_st:
         return 'RWKV-x070-World-0.4B-v2.9-20250107-ctx4096.st';
-      case v7_world_0_4gguf:
+      case v7_world_0_4b_gguf:
         return 'rwkv7-world-0.4B-Q8_0.gguf';
       case v7_world_3b_gguf:
         return 'rwkv7-world-2.9B-Q4_K_M.gguf';
@@ -42,12 +42,37 @@ enum FileKey {
       case world_vocab:
       case othello_vocab:
       case v7_world_0_4b_ncnn:
-      case v7_world_0_1ncnn:
+      case v7_world_0_1_ncnn:
       case v7_world_1_5b_st:
       case v7_world_1_5b_ncnn:
       case v7_world_3b_st:
       case v7_world_3b_ncnn:
         return '';
+    }
+  }
+
+  int get fileSize {
+    switch (this) {
+      case v7_world_0_1b_st:
+        return 1;
+      case v7_world_0_4b_st:
+        return 1;
+      case v7_world_0_4b_gguf:
+        return 491113248;
+      case v7_world_3b_gguf:
+        return 1875792416;
+      case test:
+        return 10668720;
+      case v7_world_1_5b_gguf:
+      case world_vocab:
+      case othello_vocab:
+      case v7_world_0_4b_ncnn:
+      case v7_world_0_1_ncnn:
+      case v7_world_1_5b_st:
+      case v7_world_1_5b_ncnn:
+      case v7_world_3b_st:
+      case v7_world_3b_ncnn:
+        return 1;
     }
   }
 

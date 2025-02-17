@@ -4,5 +4,14 @@
   "othello_title": "RWKV 黒と白のチェス",
   "chat_title_placeholder": "メッセージを入力してください...",
   "chat_copied_to_clipboard": "クリップボードにコピーしました",
-  "chat_empty_message": "メッセージを入力してください"
+  "chat_empty_message": "メッセージを入力してください",
+  "chat_welcome_to_use": "RWKV World v7をご利用いただきありがとうございます",
+  "chat_please_select_a_model": "モデルを選択してください",
+  "chat_you_need_download_model_if_you_want_to_use_it": "使用する前にモデルをダウンロードする必要があります",
+  "download_model": "モデルをダウンロード",
+  "use_it_now": "今すぐ使用",
+  "choose_prebuilt_character": "プリビルトキャラクターを選択",
+  "start_to_chat": "チャットを開始",
+  "chat_model_name": "モデル名",
+  "foo_bar": "ふーばー"
 }

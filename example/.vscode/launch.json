@@ -19,7 +19,7 @@
       "flutterMode": "debug",
       "args": [
         // "--dart-define=locale=zh_Hans",
-        // "--dart-define=enable_chat_debugger=true",
+        "--dart-define=enableChatDebugger=true",
         // "--dart-define=enable_othello_debugger=true",
         // "--dart-define=first_page_is_home=true",
         // "--dart-define=first_page_is_chat=true",
@@ -30,62 +30,11 @@
         // "--dart-define=locale=en_US",
       ]
     },
-    {
-      "name": "debug (Halo), xiaomi",
-      "request": "launch",
-      "type": "dart",
-      "program": "lib/main.dart",
-      "flutterMode": "debug",
-      "deviceId": "90313e34",
-      "args": [
-        // "--dart-define=locale=zh_Hans",
-        // "--dart-define=enable_chat_debugger=true",
-        // "--dart-define=enable_othello_debugger=true",
-        // "--dart-define=first_page_is_home=true",
-        // "--dart-define=first_page_is_chat=true",
-        "--dart-define=first_page_is_othello=true",
-        "--dart-define=hide_debug_banner=true",
-        // "--dart-define=use_fake_messages=true",
-        // "--dart-define=locale=en_US",
-      ]
-    },
-    {
-      "name": "debug (Halo), macos",
-      "request": "launch",
-      "type": "dart",
-      "program": "lib/main.dart",
-      "flutterMode": "debug",
-      "deviceId": "macos",
-      "args": [
-        // "--dart-define=locale=zh_Hans",
-        // "--dart-define=enable_chat_debugger=true",
-        // "--dart-define=enable_othello_debugger=true",
-        // "--dart-define=first_page_is_home=true",
-        // "--dart-define=first_page_is_chat=true",
-        "--dart-define=first_page_is_othello=true",
-        "--dart-define=hide_debug_banner=true",
-        // "--dart-define=use_fake_messages=true",
-        // "--dart-define=locale=en_US",
-      ]
-    },
-    {
-      "name": "release",
-      "request": "launch",
-      "type": "dart",
-      "program": "lib/main.dart",
-      "flutterMode": "release",
-      "args": [
-        // "--dart-define=locale=zh_Hans",
-      ]
-    },
   ],
   "compounds": [
     {
       "name": "All",
-      "configurations": [
-        "debug (Halo), macos",
-        "debug (Halo), xiaomi",
-      ],
+      "configurations": [],
     }
   ]
 }
