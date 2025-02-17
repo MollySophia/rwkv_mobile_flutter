@@ -242,6 +242,17 @@ class rwkv_mobile {
 
   late final _rwkvmobile_runtime_set_penalty_paramsPtr = _lookup<ffi.NativeFunction<ffi.Void Function(rwkvmobile_runtime_t, penalty_params)>>('rwkvmobile_runtime_set_penalty_params');
   late final _rwkvmobile_runtime_set_penalty_params = _rwkvmobile_runtime_set_penalty_paramsPtr.asFunction<void Function(rwkvmobile_runtime_t, penalty_params)>();
+
+  void rwkvmobile_runtime_add_adsp_library_path(
+    ffi.Pointer<ffi.Char> path,
+  ) {
+    return _rwkvmobile_runtime_add_adsp_library_path(
+      path,
+    );
+  }
+
+  late final _rwkvmobile_runtime_add_adsp_library_pathPtr = _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>)>>('rwkvmobile_runtime_add_adsp_library_path');
+  late final _rwkvmobile_runtime_add_adsp_library_path = _rwkvmobile_runtime_add_adsp_library_pathPtr.asFunction<void Function(ffi.Pointer<ffi.Char>)>();
 }
 
 final class sampler_params extends ffi.Struct {
