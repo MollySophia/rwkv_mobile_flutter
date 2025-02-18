@@ -30,7 +30,7 @@ extension $RemoteFile on _RemoteFile {
         'x-api-key': '4s5aWqs2f4PzKfgLjuRZgXKvvmal5Z5iq0OzkTPwaA2axgNgSbayfQEX5FgOpTxyyeUM4gsFHHDZroaFDIE3NtSJD6evdz3lAVctyN026keeXMoJ7tmUy5zriMJHJ9aM',
       },
       baseDirectory: BaseDirectory.applicationDocuments,
-      filename: fileKey.url.split('/').last,
+      filename: fileKey.url.split('/').last.split('?')[0],
       updates: Updates.statusAndProgress, // request status and progress updates
       requiresWiFi: false,
       retries: 5,

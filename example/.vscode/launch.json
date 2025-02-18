@@ -5,36 +5,50 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "debug",
+      "name": "iPhone16simulator",
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
       "flutterMode": "debug",
+      "deviceId": "9DAF9CC5-FC15-4AC5-8B3D-546F4597DA79",
+      "args": [
+        "--dart-define=enableChatDebugger=true",
+        "--dart-define=hide_debug_banner=true",
+      ]
     },
     {
-      "name": "debug (Halo)",
+      "name": "xiaomi14",
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
       "flutterMode": "debug",
+      "deviceId": "90313e34",
       "args": [
-        // "--dart-define=locale=zh_Hans",
         "--dart-define=enableChatDebugger=true",
-        // "--dart-define=enable_othello_debugger=true",
-        // "--dart-define=first_page_is_home=true",
-        // "--dart-define=first_page_is_chat=true",
-        // "--dart-define=first_page_is_othello=true",
         "--dart-define=hide_debug_banner=true",
-        // "--dart-define=othello_test_case=1",
-        // "--dart-define=use_fake_messages=true",
-        // "--dart-define=locale=en_US",
+      ]
+    },
+    {
+      "name": "macos",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "flutterMode": "debug",
+      "deviceId": "macos",
+      "args": [
+        "--dart-define=enableChatDebugger=true",
+        "--dart-define=hide_debug_banner=true",
       ]
     },
   ],
   "compounds": [
     {
       "name": "All",
-      "configurations": [],
+      "configurations": [
+        // "iPhone16simulator",
+        "xiaomi14",
+        "macos"
+      ],
     }
   ]
 }

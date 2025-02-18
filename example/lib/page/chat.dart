@@ -4,6 +4,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:zone/gen/assets.gen.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/file_key.dart';
 import 'package:zone/route/router.dart';
@@ -26,6 +27,25 @@ class PageChat extends StatefulWidget {
 class _PageChatState extends State<PageChat> {
   void _onShowingCharacterSelectorChanged(bool showing) async {
     if (!showing) return;
+    await showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (context) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.8,
+          minChildSize: 0.6,
+          maxChildSize: 0.85,
+          expand: false,
+          snap: false,
+          builder: (BuildContext context, ScrollController scrollController) {
+            return _RoleSelector(
+              scrollController: scrollController,
+            );
+          },
+        );
+      },
+    );
+    P.chat.showingCharacterSelector.u(false);
   }
 
   void _onShowingModelSelectorChanged(bool showing) async {
@@ -72,6 +92,7 @@ class _PageChatState extends State<PageChat> {
       body: Stack(
         children: const [
           _List(),
+          _Welcome(),
           //
           _AppBar(),
           _NavigationBarBottomLine(),
@@ -82,6 +103,70 @@ class _PageChatState extends State<PageChat> {
           _Input(),
           //
           _SelectModelButton(),
+        ],
+      ),
+    );
+  }
+}
+
+class _Welcome extends ConsumerWidget {
+  const _Welcome();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final paddingTop = ref.watch(P.app.paddingTop);
+    return AnimatedPositioned(
+      duration: 350.ms,
+      curve: Curves.easeInOutBack,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      top: 0,
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Co(
+              c: CAA.center,
+              children: [
+                Spacer(),
+                Assets.img.logoSquare.image(width: 140),
+                12.h,
+                T(S.current.chat_welcome_to_use, s: TS(s: 18, w: FW.w600)),
+                12.h,
+                T(S.current.chat_please_select_a_model),
+                12.h,
+                T("You are now using RWKV World v7 3B"),
+                Spacer(),
+              ],
+            ),
+          ),
+          Positioned(
+            top: paddingTop + kToolbarHeight + 12,
+            left: 12,
+            right: 0,
+            height: 100,
+            child: T(
+              "Click here to start a new chat",
+              s: TS(
+                // s: 20,
+                // w: FW.w600,
+                c: kB.wo(0.8),
+              ),
+            ),
+          ),
+          Positioned(
+            top: paddingTop + kToolbarHeight + 12,
+            left: 0,
+            right: 12,
+            // width: 100,
+            child: T(
+              "Click here to select a new chat",
+              textAlign: TextAlign.end,
+              s: TS(
+                c: kB.wo(0.8),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -125,20 +210,101 @@ class _ModelSelector extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ListView(
-      padding: EI.o(t: 24, l: 12, r: 12),
-      controller: scrollController,
-      children: [
-        T(
-          S.current.chat_welcome_to_use,
-          s: TS(s: 16, w: FW.w600),
+    return ClipRRect(
+      borderRadius: 16.r,
+      child: C(
+        margin: EI.o(t: 16),
+        child: ListView(
+          padding: EI.o(t: 24, l: 12, r: 12),
+          controller: scrollController,
+          children: [
+            T(
+              S.current.chat_welcome_to_use,
+              s: TS(s: 16, w: FW.w600),
+            ),
+            4.h,
+            T(S.current.chat_please_select_a_model),
+            4.h,
+            T(S.current.chat_you_need_download_model_if_you_want_to_use_it),
+            for (final fileKey in FileKey.availableModels) _ModelItem(fileKey),
+            16.h,
+          ],
         ),
-        4.h,
-        T(S.current.chat_please_select_a_model),
-        4.h,
-        T(S.current.chat_you_need_download_model_if_you_want_to_use_it),
-        for (final fileKey in FileKey.availableModels) _ModelItem(fileKey),
-      ],
+      ),
+    );
+  }
+}
+
+class _RoleSelector extends ConsumerWidget {
+  final ScrollController scrollController;
+
+  const _RoleSelector({required this.scrollController});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final roles = ref.watch(P.chat.roles);
+    return ClipRRect(
+      borderRadius: 16.r,
+      child: C(
+        margin: EI.o(t: 16),
+        child: Co(
+          children: [
+            T("New chat", s: TS(s: 16, w: FW.w600)),
+            12.h,
+            T("You can select a role to chat"),
+            12.h,
+            Exp(
+              child: ListView.builder(
+                padding: EI.o(t: 24, l: 12, r: 12),
+                controller: scrollController,
+                itemBuilder: (context, index) {
+                  return C(
+                    margin: EI.o(b: 12),
+                    child: Row(
+                      children: [
+                        Exp(
+                          child: SelectionArea(
+                            child: Co(
+                              c: CAA.start,
+                              children: [
+                                T(roles[index].key, s: TS(s: 14, w: FW.w600)),
+                                T(roles[index].value, s: TS(s: 12)),
+                              ],
+                            ),
+                          ),
+                        ),
+                        12.w,
+                        GD(
+                          onTap: () {
+                            // TODO: @wangce
+                          },
+                          child: C(
+                            decoration: BD(
+                              color: kCG,
+                              borderRadius: 8.r,
+                            ),
+                            padding: EI.a(8),
+                            child: T(S.current.start_to_chat, s: TS(c: kW)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                itemCount: roles.length,
+              ),
+            ),
+            12.h,
+            TextButton(
+              onPressed: () {
+                // TODO: @wangce
+              },
+              child: T("Start a new chat", s: TS(c: kB, s: 20)),
+            ),
+            12.h,
+          ],
+        ),
+      ),
     );
   }
 }
@@ -190,44 +356,50 @@ class _ModelItem extends ConsumerWidget {
     final currentModel = ref.watch(P.chat.currentModel);
     final isCurrentModel = currentModel == fileKey;
 
-    return C(
-      decoration: BD(color: kW, borderRadius: 8.r),
-      margin: EI.o(t: 8),
-      padding: EI.a(8),
-      child: SB(
-        child: Ro(
-          children: [
-            Exp(
-              child: Co(
+    return ClipRRect(
+      borderRadius: 8.r,
+      child: C(
+        decoration: BD(color: kW, borderRadius: 8.r),
+        margin: EI.o(t: 8),
+        padding: EI.a(8),
+        child: SB(
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            alignment: WrapAlignment.spaceBetween,
+            // alignment: WrapAlignment.start,
+            children: [
+              Co(
                 c: CAA.start,
                 children: [
-                  Ro(
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
                     children: [
                       T(
                         fileKey.name,
                         s: TS(c: kB, w: FW.w600),
                       ),
-                      8.w,
                       if (shouldShowGB) T("$fileSizeGBString GB"),
                       if (!shouldShowGB) T("$fileSizeString MB"),
                     ],
                   ),
                   4.h,
-                  Ro(
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
                     children: [
                       C(
                         decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
                         padding: EI.s(h: 4),
                         child: T(fileKey.backend.asArgument),
                       ),
-                      if (modelSizeB > 0) 8.w,
                       if (modelSizeB > 0)
                         C(
                           decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
                           padding: EI.s(h: 4),
                           child: T("${modelSizeB}B"),
                         ),
-                      if (q.isNotEmpty) 8.w,
                       if (q.isNotEmpty)
                         C(
                           decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
@@ -238,33 +410,41 @@ class _ModelItem extends ConsumerWidget {
                   ),
                   if (downloading) 8.h,
                   if (downloading)
-                    Ro(
-                      children: [
-                        Exp(
-                          flex: (100 * progress).toInt(),
-                          child: C(
-                            decoration: BD(
-                              borderRadius: BorderRadius.only(topLeft: 8.rr, bottomLeft: 8.rr),
-                              color: kCG,
-                            ),
-                            height: 4,
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        final width = constraints.maxWidth;
+                        return SB(
+                          width: width - 100,
+                          child: Ro(
+                            children: [
+                              Exp(
+                                flex: (100 * progress).toInt(),
+                                child: C(
+                                  decoration: BD(
+                                    borderRadius: BorderRadius.only(topLeft: 8.rr, bottomLeft: 8.rr),
+                                    color: kCG,
+                                  ),
+                                  height: 4,
+                                ),
+                              ),
+                              Exp(
+                                flex: 100 - (100 * progress).toInt(),
+                                child: C(
+                                  decoration: BD(
+                                    borderRadius: BorderRadius.only(topRight: 8.rr, bottomRight: 8.rr),
+                                    color: kG.wo(0.5),
+                                  ),
+                                  height: 4,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        Exp(
-                          flex: 100 - (100 * progress).toInt(),
-                          child: C(
-                            decoration: BD(
-                              borderRadius: BorderRadius.only(topRight: 8.rr, bottomRight: 8.rr),
-                              color: kG.wo(0.5),
-                            ),
-                            height: 4,
-                          ),
-                        ),
-                      ],
+                        );
+                      },
                     ),
                   if (downloading) 4.h,
                   if (downloading)
-                    Row(
+                    Wrap(
                       children: [
                         T("Speed: "),
                         T("${networkSpeed.toStringAsFixed(1)}mb/s"),
@@ -276,47 +456,47 @@ class _ModelItem extends ConsumerWidget {
                     ),
                 ],
               ),
-            ),
-            8.w,
-            if (!hasFile && !downloading)
-              IconButton(
-                onPressed: _onDownloadTap,
-                icon: Icon(Icons.download),
-              ),
-            if (downloading)
-              C(
-                margin: EI.o(r: 8),
-                child: SB(
-                  height: 24,
-                  width: 24,
-                  child: CircularProgressIndicator(),
+              8.w,
+              if (!hasFile && !downloading)
+                IconButton(
+                  onPressed: _onDownloadTap,
+                  icon: Icon(Icons.download),
                 ),
-              ),
-            if (hasFile && !isCurrentModel)
-              GD(
-                onTap: _onLoadTap,
-                child: C(
-                  decoration: BD(
-                    color: kCG,
-                    borderRadius: 8.r,
+              if (downloading)
+                C(
+                  margin: EI.o(r: 8),
+                  child: SB(
+                    height: 24,
+                    width: 24,
+                    child: CircularProgressIndicator(),
                   ),
-                  padding: EI.a(8),
-                  child: T(S.current.start_to_chat, s: TS(c: kW)),
                 ),
-              ),
-            if (isCurrentModel)
-              GD(
-                onTap: null,
-                child: C(
-                  decoration: BD(
-                    color: kG.wo(0.5),
-                    borderRadius: 8.r,
+              if (hasFile && !isCurrentModel)
+                GD(
+                  onTap: _onLoadTap,
+                  child: C(
+                    decoration: BD(
+                      color: kCG,
+                      borderRadius: 8.r,
+                    ),
+                    padding: EI.a(8),
+                    child: T(S.current.start_to_chat, s: TS(c: kW)),
                   ),
-                  padding: EI.a(8),
-                  child: T(S.current.chatting, s: TS(c: kW)),
                 ),
-              ),
-          ],
+              if (isCurrentModel)
+                GD(
+                  onTap: null,
+                  child: C(
+                    decoration: BD(
+                      color: kG.wo(0.5),
+                      borderRadius: 8.r,
+                    ),
+                    padding: EI.a(8),
+                    child: T(S.current.chatting, s: TS(c: kW)),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
@@ -382,6 +562,13 @@ class _AppBar extends ConsumerWidget {
               style: const TextStyle(fontSize: 20),
               minFontSize: 0,
               maxLines: 2,
+            ),
+            leading: IconButton(
+              onPressed: () {
+                P.chat.showingCharacterSelector.u(false);
+                P.chat.showingCharacterSelector.u(true);
+              },
+              icon: const Icon(Icons.add_comment_outlined),
             ),
             actions: [
               IconButton(
@@ -717,75 +904,71 @@ class _Input extends ConsumerWidget {
             child: C(
               decoration: BD(color: kW.wo(0.8)),
               padding: EI.o(l: 12, r: 12, b: paddingBottom + 12, t: 12),
-              child: Stack(
-                children: [
-                  KeyboardListener(
-                    onKeyEvent: _onKeyEvent,
-                    focusNode: P.chat.focusNode,
-                    child: TextField(
-                      enabled: loaded,
-                      controller: P.chat.textEditingController,
-                      onSubmitted: P.chat.onSubmitted,
-                      onChanged: _onChanged,
-                      onEditingComplete: P.chat.onEditingComplete,
-                      onAppPrivateCommand: _onAppPrivateCommand,
-                      onTap: _onTap,
-                      onTapOutside: _onTapOutside,
-                      keyboardType: TextInputType.multiline,
-                      enableSuggestions: true,
-                      textInputAction: TextInputAction.newline,
-                      maxLines: 10,
-                      minLines: 1,
-                      decoration: InputDecoration(
-                        fillColor: kW,
-                        focusColor: kW,
-                        hoverColor: kW,
-                        iconColor: kW,
-                        border: OutlineInputBorder(
-                          borderRadius: 28.r,
-                          borderSide: BorderSide(color: color),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: 28.r,
-                          borderSide: BorderSide(color: color),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: 28.r,
-                          borderSide: BorderSide(color: color),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: 28.r,
-                          borderSide: BorderSide(color: color),
-                        ),
-                        hintText: S.current.chat_title_placeholder,
-                        suffixIcon: receiving
-                            ? SB(
-                                width: 46,
-                                child: Center(
-                                  child: SB(
-                                    width: 24,
-                                    height: 24,
-                                    child: CircularProgressIndicator(
-                                      color: color.wo(0.5),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : AnimatedOpacity(
-                                opacity: canSend ? 1 : 0.333,
-                                duration: 250.ms,
-                                child: IconButton(
-                                  onPressed: canSend ? _onRightButtonPressed : null,
-                                  icon: Icon(
-                                    editingBotMessage ? Icons.edit : Icons.send,
-                                    color: color,
-                                  ),
+              child: KeyboardListener(
+                onKeyEvent: _onKeyEvent,
+                focusNode: P.chat.focusNode,
+                child: TextField(
+                  enabled: loaded,
+                  controller: P.chat.textEditingController,
+                  onSubmitted: P.chat.onSubmitted,
+                  onChanged: _onChanged,
+                  onEditingComplete: P.chat.onEditingComplete,
+                  onAppPrivateCommand: _onAppPrivateCommand,
+                  onTap: _onTap,
+                  onTapOutside: _onTapOutside,
+                  keyboardType: TextInputType.multiline,
+                  enableSuggestions: true,
+                  textInputAction: TextInputAction.newline,
+                  maxLines: 10,
+                  minLines: 1,
+                  decoration: InputDecoration(
+                    fillColor: kW,
+                    focusColor: kW,
+                    hoverColor: kW,
+                    iconColor: kW,
+                    border: OutlineInputBorder(
+                      borderRadius: 28.r,
+                      borderSide: BorderSide(color: color),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: 28.r,
+                      borderSide: BorderSide(color: color),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: 28.r,
+                      borderSide: BorderSide(color: color),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderRadius: 28.r,
+                      borderSide: BorderSide(color: color),
+                    ),
+                    hintText: S.current.chat_title_placeholder,
+                    suffixIcon: receiving
+                        ? SB(
+                            width: 46,
+                            child: Center(
+                              child: SB(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(
+                                  color: color.wo(0.5),
                                 ),
                               ),
-                      ),
-                    ),
+                            ),
+                          )
+                        : AnimatedOpacity(
+                            opacity: canSend ? 1 : 0.333,
+                            duration: 250.ms,
+                            child: IconButton(
+                              onPressed: canSend ? _onRightButtonPressed : null,
+                              icon: Icon(
+                                editingBotMessage ? Icons.edit : Icons.send,
+                                color: color,
+                              ),
+                            ),
+                          ),
                   ),
-                ],
+                ),
               ),
             ),
           ),

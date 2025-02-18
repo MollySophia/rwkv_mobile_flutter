@@ -38,18 +38,20 @@ enum FileKey {
         return weights.firstWhereOrNull((e) => e.fileName == 'rwkv7-world-0.4B-Q8_0.gguf');
       case v7_world_1_5b_prefab:
         return weights.firstWhereOrNull((e) => e.fileName == 'RWKV-x070-World-1.5B-v3-NF4-20250127-ctx4096.prefab');
+      case v7_world_3b_prefab:
+        return weights.firstWhereOrNull((e) => e.fileName == 'RWKV-x070-World-2.9B-v3-NF4-20250211-ctx4096.prefab');
       case v7_world_1_5b_gguf:
         return weights.firstWhereOrNull((e) => e.fileName == 'rwkv7-world-1.5B-Q5_K_M.gguf');
       case v7_world_3b_gguf:
         return weights.firstWhereOrNull((e) => e.fileName == 'rwkv7-world-2.9B-Q4_K_M.gguf');
       case download_test:
         return weights.firstWhereOrNull((e) => e.fileName == 'test');
+      case v7_world_0_4b_st:
+        return weights.firstWhereOrNull((e) => e.fileName == 'RWKV-x070-World-0.4B-v2.9-20250107-ctx4096.st');
       case v7_world_0_1_ncnn:
       case v7_world_0_4b_ncnn:
-      case v7_world_0_4b_st:
       case v7_world_1_5b_ncnn:
       case v7_world_3b_ncnn:
-      case v7_world_3b_prefab:
         return null;
     }
   }

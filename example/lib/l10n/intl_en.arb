@@ -14,5 +14,6 @@
   "start_to_chat": "Start to chat",
   "chat_model_name": "Model name",
   "foo_bar": "foo bar",
-  "chatting": "Chatting"
+  "chatting": "Chatting",
+  "welcome_to_use_rwkv": "Welcome to use RWKV"
 }

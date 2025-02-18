@@ -54,6 +54,8 @@ class _Chat {
   late final currentModel = _gsn<FileKey>();
   late final showingModelSelector = _gs(false);
   late final showingCharacterSelector = _gs(false);
+  late final showingRoleSelector = _gs(false);
+  late final roles = _gs<List<Role>>([]);
 }
 
 /// Public methods
@@ -183,6 +185,17 @@ extension _$Chat on _Chat {
       if (demoType != DemoType.chat) return;
       _onStreamError(error: error, stackTrace: stackTrace);
     });
+
+    _loadRoles();
+  }
+
+  FV _loadRoles() async {
+    final currentLocale = Intl.getCurrentLocale();
+    final useEn = currentLocale.startsWith("en");
+    final jsonString = await rootBundle.loadString(useEn ? Assets.config.promptsEnUS : Assets.config.promptsZhHans);
+    final json = HF.listJSON(jsonDecode(jsonString));
+    final roles = json.map((e) => Role.fromJson(e)).toList();
+    this.roles.u(roles);
   }
 
   FV _send(String message) async {

@@ -54,6 +54,9 @@ flutter:
   assets:
     - assets/model/
     - assets/config/weights.json
+    - assets/config/prompts.en-US.json
+    - assets/config/prompts.zh-hans.json
+    - assets/img/
 
 flutter_intl:
   enabled: true # Required. Must be set to true to activate the package. Default: false

@@ -189,6 +189,16 @@ class S {
   String get chatting {
     return Intl.message('Chatting', name: 'chatting', desc: '', args: []);
   }
+
+  /// `Welcome to use RWKV`
+  String get welcome_to_use_rwkv {
+    return Intl.message(
+      'Welcome to use RWKV',
+      name: 'welcome_to_use_rwkv',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
