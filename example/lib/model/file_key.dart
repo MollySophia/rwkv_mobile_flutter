@@ -55,28 +55,15 @@ enum FileKey {
   }
 
   bool get available {
-    if (fileName.isEmpty) return false;
-
-    switch (this) {
-      case v7_world_0_1b_st:
-      case v7_world_0_4b_st:
-      case v7_world_1_5b_prefab:
-      case v7_world_3b_prefab:
-        if (Platform.isIOS || Platform.isMacOS) return true;
-        return false;
-      case v7_world_0_1_ncnn:
-      case v7_world_0_4b_ncnn:
-      case v7_world_1_5b_ncnn:
-      case v7_world_3b_ncnn:
-        return false;
-      case v7_world_0_4b_gguf:
-      case v7_world_1_5b_gguf:
-      case v7_world_3b_gguf:
-        if (!Platform.isIOS) return true;
-        return false;
-      case download_test:
-        return kDebugMode;
-    }
+    final platforms = weights?.platforms;
+    if (platforms == null) return false;
+    if (Platform.isIOS) return platforms.contains('ios');
+    if (Platform.isMacOS) return platforms.contains('macos');
+    if (Platform.isWindows) return platforms.contains('windows');
+    if (Platform.isLinux) return platforms.contains('linux');
+    if (Platform.isAndroid) return platforms.contains('android');
+    if (Platform.isFuchsia) return platforms.contains('fuchsia');
+    return false;
   }
 
   static List<FileKey> get availableModels {
