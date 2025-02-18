@@ -31,7 +31,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "chat_title": MessageLookupByLibrary.simpleMessage("RWKV Chat v7"),
     "chat_title_placeholder": MessageLookupByLibrary.simpleMessage("输入你的消息..."),
     "chat_welcome_to_use": MessageLookupByLibrary.simpleMessage(
-      "欢迎使用 RWKV Chat v7",
+      "欢迎体验 RWKV Chat v7",
     ),
     "chat_you_need_download_model_if_you_want_to_use_it":
         MessageLookupByLibrary.simpleMessage("你需要先下载模型, 才能使用它们"),

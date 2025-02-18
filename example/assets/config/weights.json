@@ -1,0 +1,74 @@
+[
+  {
+    "name": "RWKV v7 World (v2.8 20241210 ctx4096)",
+    "type": "st",
+    "modelSize": 0.1,
+    "fileName": "RWKV-x070-World-0.1B-v2.8-20241210-ctx4096.st",
+    "fileSize": 1,
+    "fileSizeString": "1 MB",
+    "url": "https://github.com/HaloWang/RWKV-Demos/releases/download/1.0.0_weights/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096.st",
+    "quantization": "",
+    "platforms": ["ios", "macos", "web"],
+    "backends": ["webRwkv"]
+  },
+  {
+    "name": "RWKV v7 World (v3 20250127 ctx4096)",
+    "type": "prefab",
+    "modelSize": 1.5,
+    "fileName": "RWKV-x070-World-1.5B-v3-NF4-20250127-ctx4096.prefab",
+    "fileSize": 1260000000,
+    "fileSizeString": "1.26GB",
+    "url": "https://github.com/HaloWang/RWKV-Demos/releases/download/1.0.0_weights/RWKV-x070-World-1.5B-v3-NF4-20250127-ctx4096.prefab",
+    "quantization": "NF4",
+    "platforms": ["ios", "macos", "web"],
+    "backends": ["webRwkv"]
+  },
+  {
+    "name": "RWKV-v7-World-0.4B",
+    "type": "gguf",
+    "modelSize": 0.4,
+    "fileName": "rwkv7-world-0.4B-Q8_0.gguf",
+    "fileSize": 491113248,
+    "fileSizeString": "468MB",
+    "url": "https://github.com/HaloWang/RWKV-Demos/releases/download/1.0.0_weights/rwkv7-world-0.4B-Q8_0.gguf",
+    "quantization": "Q8_0",
+    "platforms": ["macos", "windows", "linux", "android"],
+    "backends": ["llamacpp"]
+  },
+  {
+    "name": "RWKV-v7-World-1.5B",
+    "type": "gguf",
+    "modelSize": 1.5,
+    "fileName": "rwkv7-world-1.5B-Q5_K_M.gguf",
+    "fileSize": 1355373866,
+    "fileSizeString": "1.08GB",
+    "url": "https://github.com/HaloWang/RWKV-Demos/releases/download/1.0.0_weights/rwkv7-world-1.5B-Q5_K_M.gguf",
+    "quantization": "Q5_K_M",
+    "platforms": ["macos", "windows", "linux", "android"],
+    "backends": ["llamacpp"]
+  },
+  {
+    "name": "RWKV-v7-World-3B",
+    "type": "gguf",
+    "modelSize": 2.9,
+    "fileName": "rwkv7-world-2.9B-Q4_K_M.gguf",
+    "fileSize": 1875792416,
+    "fileSizeString": "1.75GB",
+    "url": "https://github.com/HaloWang/RWKV-Demos/releases/download/1.0.0_weights/rwkv7-world-2.9B-Q4_K_M.gguf",
+    "quantization": "Q4_K_M",
+    "platforms": ["macos", "windows", "linux", "android"],
+    "backends": ["llamacpp"]
+  },
+  {
+    "name": "Test",
+    "type": "gguf",
+    "modelSize": 0.1,
+    "fileName": "test",
+    "fileSize": 19532901,
+    "fileSizeString": "18.63MB",
+    "url": "https://github.com/HaloWang/RWKV-Demos/releases/download/1.0.0_weights/test",
+    "quantization": "",
+    "platforms": ["macos", "windows", "linux", "android", "ios", "web"],
+    "backends": ["llamacpp", "webRwkv"]
+  }
+]

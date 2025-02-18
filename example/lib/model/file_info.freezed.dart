@@ -17,8 +17,6 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$FileInfo {
   FileKey get key => throw _privateConstructorUsedError;
-  @Deprecated("")
-  String? get taskId => throw _privateConstructorUsedError;
 
   /// 是否已下载
   bool get hasFile => throw _privateConstructorUsedError;
@@ -41,7 +39,6 @@ abstract class $FileInfoCopyWith<$Res> {
   @useResult
   $Res call(
       {FileKey key,
-      @Deprecated("") String? taskId,
       bool hasFile,
       double progress,
       double networkSpeed,
@@ -65,7 +62,6 @@ class _$FileInfoCopyWithImpl<$Res, $Val extends FileInfo>
   @override
   $Res call({
     Object? key = null,
-    Object? taskId = freezed,
     Object? hasFile = null,
     Object? progress = null,
     Object? networkSpeed = null,
@@ -77,10 +73,6 @@ class _$FileInfoCopyWithImpl<$Res, $Val extends FileInfo>
           ? _value.key
           : key // ignore: cast_nullable_to_non_nullable
               as FileKey,
-      taskId: freezed == taskId
-          ? _value.taskId
-          : taskId // ignore: cast_nullable_to_non_nullable
-              as String?,
       hasFile: null == hasFile
           ? _value.hasFile
           : hasFile // ignore: cast_nullable_to_non_nullable
@@ -115,7 +107,6 @@ abstract class _$$FileInfoImplCopyWith<$Res>
   @useResult
   $Res call(
       {FileKey key,
-      @Deprecated("") String? taskId,
       bool hasFile,
       double progress,
       double networkSpeed,
@@ -137,7 +128,6 @@ class __$$FileInfoImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? key = null,
-    Object? taskId = freezed,
     Object? hasFile = null,
     Object? progress = null,
     Object? networkSpeed = null,
@@ -149,10 +139,6 @@ class __$$FileInfoImplCopyWithImpl<$Res>
           ? _value.key
           : key // ignore: cast_nullable_to_non_nullable
               as FileKey,
-      taskId: freezed == taskId
-          ? _value.taskId
-          : taskId // ignore: cast_nullable_to_non_nullable
-              as String?,
       hasFile: null == hasFile
           ? _value.hasFile
           : hasFile // ignore: cast_nullable_to_non_nullable
@@ -182,7 +168,6 @@ class __$$FileInfoImplCopyWithImpl<$Res>
 class _$FileInfoImpl extends _FileInfo {
   const _$FileInfoImpl(
       {required this.key,
-      @Deprecated("") this.taskId,
       this.hasFile = false,
       this.progress = 0,
       this.networkSpeed = 0,
@@ -192,9 +177,6 @@ class _$FileInfoImpl extends _FileInfo {
 
   @override
   final FileKey key;
-  @override
-  @Deprecated("")
-  final String? taskId;
 
   /// 是否已下载
   @override
@@ -215,7 +197,7 @@ class _$FileInfoImpl extends _FileInfo {
 
   @override
   String toString() {
-    return 'FileInfo(key: $key, taskId: $taskId, hasFile: $hasFile, progress: $progress, networkSpeed: $networkSpeed, timeRemaining: $timeRemaining, downloading: $downloading)';
+    return 'FileInfo(key: $key, hasFile: $hasFile, progress: $progress, networkSpeed: $networkSpeed, timeRemaining: $timeRemaining, downloading: $downloading)';
   }
 
   @override
@@ -224,7 +206,6 @@ class _$FileInfoImpl extends _FileInfo {
         (other.runtimeType == runtimeType &&
             other is _$FileInfoImpl &&
             (identical(other.key, key) || other.key == key) &&
-            (identical(other.taskId, taskId) || other.taskId == taskId) &&
             (identical(other.hasFile, hasFile) || other.hasFile == hasFile) &&
             (identical(other.progress, progress) ||
                 other.progress == progress) &&
@@ -237,7 +218,7 @@ class _$FileInfoImpl extends _FileInfo {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, key, taskId, hasFile, progress,
+  int get hashCode => Object.hash(runtimeType, key, hasFile, progress,
       networkSpeed, timeRemaining, downloading);
 
   /// Create a copy of FileInfo
@@ -252,7 +233,6 @@ class _$FileInfoImpl extends _FileInfo {
 abstract class _FileInfo extends FileInfo {
   const factory _FileInfo(
       {required final FileKey key,
-      @Deprecated("") final String? taskId,
       final bool hasFile,
       final double progress,
       final double networkSpeed,
@@ -262,9 +242,6 @@ abstract class _FileInfo extends FileInfo {
 
   @override
   FileKey get key;
-  @override
-  @Deprecated("")
-  String? get taskId;
 
   /// 是否已下载
   @override

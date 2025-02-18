@@ -36,21 +36,24 @@ dependencies:
   path_provider: # https://pub.dev/packages/path_provider/
   shared_preferences: # https://pub.dev/packages/shared_preferences/
   vclibs: # https://pub.dev/packages/vclibs/
+  json_annotation: # https://pub.dev/packages/json_annotation/
 
 dev_dependencies:
-  flutter_lints: # https://pub.dev/packages/flutter_lints/
-  icons_launcher: # https://pub.dev/packages/icons_launcher/
-  flutter_gen_runner: # https://pub.dev/packages/flutter_gen_runner:/
+  build_runner: # https://pub.dev/packages/build_runner/
   custom_lint: # https://pub.dev/packages/custom_lint/
+  flutter_gen_runner: # https://pub.dev/packages/flutter_gen_runner:/
+  flutter_lints: # https://pub.dev/packages/flutter_lints/
+  freezed: # https://pub.dev/packages/freezed/
+  icons_launcher: # https://pub.dev/packages/icons_launcher/
+  json_serializable: # https://pub.dev/packages/json_serializable/
   riverpod_lint: # https://pub.dev/packages/riverpod_lint/
-  build_runner: ^2.4.15
-  freezed: ^2.5.8
 
 flutter:
   uses-material-design: true
 
   assets:
     - assets/model/
+    - assets/config/weights.json
 
 flutter_intl:
   enabled: true # Required. Must be set to true to activate the package. Default: false

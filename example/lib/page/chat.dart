@@ -31,6 +31,7 @@ class _PageChatState extends State<PageChat> {
   void _onShowingModelSelectorChanged(bool showing) async {
     if (!showing) return;
     P.remoteFile.checkLocalFile();
+    P.remoteFile.loadWeights();
     await showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -183,7 +184,7 @@ class _ModelItem extends ConsumerWidget {
     final hasFile = file.hasFile;
     final downloading = file.downloading;
     final modelSizeB = fileKey.modelSizeB;
-    final q = fileKey.q;
+    final q = fileKey.quantization;
     final networkSpeed = file.networkSpeed;
     final timeRemaining = file.timeRemaining;
     final currentModel = ref.watch(P.chat.currentModel);

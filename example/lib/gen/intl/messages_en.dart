@@ -37,7 +37,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Enter your message...",
     ),
     "chat_welcome_to_use": MessageLookupByLibrary.simpleMessage(
-      "Welcome to use RWKV World v7",
+      "Welcome to explore RWKV World v7",
     ),
     "chat_you_need_download_model_if_you_want_to_use_it":
         MessageLookupByLibrary.simpleMessage(

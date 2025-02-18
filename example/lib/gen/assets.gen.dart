@@ -7,6 +7,16 @@
 // ignore_for_file: type=lint
 // ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal,deprecated_member_use
 
+class $AssetsConfigGen {
+  const $AssetsConfigGen();
+
+  /// File path: assets/config/weights.json
+  String get weights => 'assets/config/weights.json';
+
+  /// List of all assets
+  List<String> get values => [weights];
+}
+
 class $AssetsModelGen {
   const $AssetsModelGen();
 
@@ -56,5 +66,6 @@ class $AssetsModelGen {
 class Assets {
   const Assets._();
 
+  static const $AssetsConfigGen config = $AssetsConfigGen();
   static const $AssetsModelGen model = $AssetsModelGen();
 }

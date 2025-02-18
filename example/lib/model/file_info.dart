@@ -11,7 +11,6 @@ class FileInfo with _$FileInfo {
 
   const factory FileInfo({
     required FileKey key,
-    @Deprecated("") String? taskId,
 
     /// 是否已下载
     @Default(false) bool hasFile,

@@ -105,10 +105,10 @@ class S {
     );
   }
 
-  /// `Welcome to use RWKV World v7`
+  /// `Welcome to explore RWKV World v7`
   String get chat_welcome_to_use {
     return Intl.message(
-      'Welcome to use RWKV World v7',
+      'Welcome to explore RWKV World v7',
       name: 'chat_welcome_to_use',
       desc: '',
       args: [],

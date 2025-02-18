@@ -8,10 +8,16 @@ class _RemoteFile {
   });
 
   late final downloadingFiles = _gs<Map<String, FileKey>>({});
+
+  late final weights = _gs<List<Weights>>([]);
 }
 
 /// Public methods
 extension $RemoteFile on _RemoteFile {
+  FV test() async {
+    await getFile(fileKey: FileKey.download_test);
+  }
+
   FV getFile({required FileKey fileKey}) async {
     // 1. check file
     // 2. check zip file
@@ -42,7 +48,7 @@ extension $RemoteFile on _RemoteFile {
     }
 
     final modelFile = files(fileKey).v;
-    files(fileKey).u(modelFile.copyWith(taskId: task.taskId, downloading: true));
+    files(fileKey).u(modelFile.copyWith(downloading: true));
   }
 
   FV checkLocalFile() async {
@@ -54,6 +60,13 @@ extension $RemoteFile on _RemoteFile {
       final modelFile = files(key).v;
       files(key).u(modelFile.copyWith(hasFile: pathExists));
     }
+  }
+
+  FV loadWeights() async {
+    final jsonString = await rootBundle.loadString(Assets.config.weights);
+    final json = HF.listJSON(jsonDecode(jsonString));
+    final weights = json.map((e) => Weights.fromJson(e)).toList();
+    this.weights.u(weights);
   }
 }
 
