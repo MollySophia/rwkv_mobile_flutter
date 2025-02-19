@@ -5,6 +5,17 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "debug",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "flutterMode": "debug",
+      "args": [
+        // "--dart-define=enableChatDebugger=true",
+        "--dart-define=hide_debug_banner=true",
+      ]
+    },
+    {
       "name": "iPhone16simulator",
       "request": "launch",
       "type": "dart",
@@ -12,7 +23,7 @@
       "flutterMode": "debug",
       "deviceId": "9DAF9CC5-FC15-4AC5-8B3D-546F4597DA79",
       "args": [
-        "--dart-define=enableChatDebugger=true",
+        // "--dart-define=enableChatDebugger=true",
         "--dart-define=hide_debug_banner=true",
       ]
     },
@@ -24,7 +35,7 @@
       "flutterMode": "debug",
       "deviceId": "90313e34",
       "args": [
-        "--dart-define=enableChatDebugger=true",
+        // "--dart-define=enableChatDebugger=true",
         "--dart-define=hide_debug_banner=true",
       ]
     },
@@ -36,7 +47,7 @@
       "flutterMode": "debug",
       "deviceId": "macos",
       "args": [
-        "--dart-define=enableChatDebugger=true",
+        // "--dart-define=enableChatDebugger=true",
         "--dart-define=hide_debug_banner=true",
       ]
     },

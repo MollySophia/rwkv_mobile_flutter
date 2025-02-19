@@ -156,6 +156,11 @@ extension $Chat on _Chat {
       scrollController.jumpTo(offset);
     }
   }
+
+  FV startNewChat() async {
+    P.rwkv.clearStates();
+    messages.u([]);
+  }
 }
 
 /// Private methods

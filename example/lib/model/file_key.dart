@@ -3,7 +3,6 @@
 import 'dart:io';
 
 import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
 import 'package:rwkv_mobile_flutter/rwkv_mobile_flutter.dart';
 import 'package:zone/model/weights.dart';
 import 'package:zone/state/p.dart';

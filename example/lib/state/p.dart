@@ -8,9 +8,11 @@ import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:system_info2/system_info2.dart';
 import 'package:zone/func/get_model_path.dart';
 import 'package:zone/gen/assets.gen.dart';
 import 'package:zone/gen/l10n.dart';
+import 'package:zone/io.dart';
 import 'package:zone/launch_arguments.dart';
 import 'package:zone/model/cell_type.dart';
 import 'package:zone/model/file_info.dart';
@@ -35,6 +37,8 @@ part "chat.dart";
 part "rwkv.dart";
 part "othello.dart";
 part "remote_file.dart";
+part "device.dart";
+part "adapter.dart";
 
 abstract class P {
   static final app = _App();
@@ -42,7 +46,8 @@ abstract class P {
   static final rwkv = _RWKV();
   static final othello = _Othello();
   static final remoteFile = _RemoteFile();
-
+  static final device = _Device();
+  static final adapter = _Adapter();
   static FV init() async {
     WidgetsFlutterBinding.ensureInitialized();
     await app._init();
@@ -56,6 +61,8 @@ abstract class P {
       chat._init(),
       othello._init(),
       remoteFile._init(),
+      device._init(),
+      adapter._init(),
     ]);
   }
 }

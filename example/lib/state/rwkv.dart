@@ -58,6 +58,15 @@ extension $RWKV on _RWKV {
     sendPort.send(("message", messages));
   }
 
+  void clearStates() {
+    final sendPort = _sendPort;
+    if (sendPort == null) {
+      if (kDebugMode) print("😡 sendPort is null");
+      return;
+    }
+    sendPort.send(("clearStates", null));
+  }
+
   void generate(String prompt) {
     final sendPort = _sendPort;
     if (sendPort == null) {

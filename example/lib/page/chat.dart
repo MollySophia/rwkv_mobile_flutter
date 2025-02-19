@@ -7,6 +7,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:zone/gen/assets.gen.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/file_key.dart';
+import 'package:zone/model/role.dart';
 import 'package:zone/route/router.dart';
 import 'package:zone/widgets/alert.dart';
 import 'package:flutter/foundation.dart';
@@ -52,6 +53,7 @@ class _PageChatState extends State<PageChat> {
     if (!showing) return;
     P.remoteFile.checkLocalFile();
     P.remoteFile.loadWeights();
+    P.device.sync();
     await showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -160,7 +162,7 @@ class _Welcome extends ConsumerWidget {
             right: 12,
             // width: 100,
             child: T(
-              "Click here to select a new chat",
+              "Click here to select a new model.",
               textAlign: TextAlign.end,
               s: TS(
                 c: kB.wo(0.8),
@@ -210,6 +212,9 @@ class _ModelSelector extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final memUsed = ref.watch(P.device.memUsed);
+    final memFree = ref.watch(P.device.memFree);
+    final memUsedByCurrentModel = ref.watch(P.device.memUsedByCurrentModel);
     return ClipRRect(
       borderRadius: 16.r,
       child: C(
@@ -218,14 +223,16 @@ class _ModelSelector extends ConsumerWidget {
           padding: EI.o(t: 24, l: 12, r: 12),
           controller: scrollController,
           children: [
-            T(
-              S.current.chat_welcome_to_use,
-              s: TS(s: 16, w: FW.w600),
-            ),
+            T(S.current.chat_welcome_to_use, s: TS(s: 16, w: FW.w600)),
             4.h,
             T(S.current.chat_please_select_a_model),
             4.h,
             T(S.current.chat_you_need_download_model_if_you_want_to_use_it),
+            4.h,
+            T("Please ensure you have enough memory to load the model, otherwise the application may crash."),
+            4.h,
+            T("Memory used: ${(memUsed / 1024 / 1024).toStringAsFixed(0)}MB, Memory free: ${(memFree / 1024 / 1024).toStringAsFixed(0)}MB, Memory used by current model: ${(memUsedByCurrentModel / 1024 / 1024).toStringAsFixed(0)}MB"),
+            4.h,
             for (final fileKey in FileKey.availableModels) _ModelItem(fileKey),
             16.h,
           ],
@@ -240,9 +247,17 @@ class _RoleSelector extends ConsumerWidget {
 
   const _RoleSelector({required this.scrollController});
 
+  void _onStartChatTap() async {
+    await P.chat.startNewChat();
+    Navigator.pop(getContext()!);
+  }
+
+  void _onRoleTap(Role role) async {}
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final roles = ref.watch(P.chat.roles);
+    final paddingBottom = ref.watch(P.app.paddingBottom);
     return ClipRRect(
       borderRadius: 16.r,
       child: C(
@@ -276,7 +291,7 @@ class _RoleSelector extends ConsumerWidget {
                         12.w,
                         GD(
                           onTap: () {
-                            // TODO: @wangce
+                            _onRoleTap(roles[index]);
                           },
                           child: C(
                             decoration: BD(
@@ -295,13 +310,21 @@ class _RoleSelector extends ConsumerWidget {
               ),
             ),
             12.h,
-            TextButton(
-              onPressed: () {
-                // TODO: @wangce
-              },
-              child: T("Start a new chat", s: TS(c: kB, s: 20)),
+            Ro(
+              children: [
+                12.w,
+                Exp(child: T("Or you can start a new empty chat", s: TS(c: kB, s: 16))),
+                TextButton(
+                  onPressed: _onStartChatTap,
+                  child: C(
+                    padding: EI.s(h: 12, v: 4),
+                    child: T("Start a new chat", s: TS(c: kB, s: 20)),
+                  ),
+                ),
+                12.w,
+              ],
             ),
-            12.h,
+            paddingBottom.h,
           ],
         ),
       ),
