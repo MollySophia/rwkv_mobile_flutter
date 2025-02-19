@@ -6,6 +6,7 @@ import 'dart:ffi' as ffi;
 import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:rwkv_mobile_flutter/rwkv_mobile_ffi.dart';
 
 /// Runtime backend of RWKV flutter
@@ -24,7 +25,9 @@ enum Backend {
   /// Currently only support iOS and macOS
   ///
   /// https://github.com/cryscan/web-rwkv
-  webRwkv;
+  webRwkv,
+
+  qnn;
 
   String get asArgument {
     switch (this) {
@@ -34,6 +37,8 @@ enum Backend {
         return 'web-rwkv';
       case Backend.llamacpp:
         return 'llama.cpp';
+      case Backend.qnn:
+        return 'qnn';
     }
   }
 }
@@ -128,6 +133,11 @@ class RWKVMobile {
     BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
 
     final rwkvMobile = rwkv_mobile(getDynamicLibrary());
+
+    // TODO @Molly better solution for this
+    final tempDir = await getTemporaryDirectory();
+    if (kDebugMode) print("💬 tempDir: ${tempDir.path}");
+    rwkvMobile.rwkvmobile_runtime_add_adsp_library_path((tempDir.path + '/assets/model/').toNativeUtf8().cast<ffi.Char>());
 
     // definitions
     int maxLength = 2000;

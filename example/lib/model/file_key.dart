@@ -25,6 +25,9 @@ enum FileKey {
   v7_world_3b_ncnn,
   v7_world_3b_gguf,
 
+  v7_world_1_5b_chunk1_qnn,
+  v7_world_1_5b_chunk2_qnn,
+
   download_test,
   ;
 
@@ -47,6 +50,10 @@ enum FileKey {
         return weights.firstWhereOrNull((e) => e.fileName == 'test');
       case v7_world_0_4b_st:
         return weights.firstWhereOrNull((e) => e.fileName == 'RWKV-x070-World-0.4B-v2.9-20250107-ctx4096.st');
+      case v7_world_1_5b_chunk1_qnn:
+        return weights.firstWhereOrNull((e) => e.fileName == 'v7_1b5_a16w8_sm8650_chunk1of2.bin');
+      case v7_world_1_5b_chunk2_qnn:
+        return weights.firstWhereOrNull((e) => e.fileName == 'v7_1b5_a16w8_sm8650_chunk2of2.bin');
       case v7_world_0_1_ncnn:
       case v7_world_0_4b_ncnn:
       case v7_world_1_5b_ncnn:

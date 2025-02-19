@@ -1,6 +1,30 @@
 [
   {
     "name": "RWKV v7 World (v2.8 20241210 ctx4096)",
+    "type": "qnn",
+    "modelSize": 1.5,
+    "fileName": "v7_1b5_a16w8_sm8650_chunk1of2.bin",
+    "fileSize": 958398464,
+    "fileSizeString": "914MB",
+    "url": "https://aifasthub.com/mollysama/rwkv-mobile-models/resolve/main/qnn-test/v7_1b5_a16w8_sm8650_chunk1of2.bin?download=true",
+    "quantization": "a16w8",
+    "platforms": ["android"],
+    "backends": ["qnn"]
+  },
+  {
+    "name": "RWKV v7 World (v2.8 20241210 ctx4096)",
+    "type": "qnn",
+    "modelSize": 1.5,
+    "fileName": "v7_1b5_a16w8_sm8650_chunk2of2.bin",
+    "fileSize": 814743552,
+    "fileSizeString": "777MB",
+    "url": "https://aifasthub.com/mollysama/rwkv-mobile-models/resolve/main/qnn-test/v7_1b5_a16w8_sm8650_chunk2of2.bin?download=true",
+    "quantization": "a16w8",
+    "platforms": ["android"],
+    "backends": ["qnn"]
+  },
+  {
+    "name": "RWKV v7 World (v2.8 20241210 ctx4096)",
     "type": "st",
     "modelSize": 0.1,
     "fileName": "RWKV-x070-World-0.1B-v2.8-20241210-ctx4096.st",

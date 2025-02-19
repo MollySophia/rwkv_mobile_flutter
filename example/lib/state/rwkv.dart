@@ -103,6 +103,27 @@ extension $RWKV on _RWKV {
   }) async {
     final tokenizerPath = await getModelPath("assets/model/b_rwkv_vocab_v20230424.txt");
 
+    // TODO @Molly better solution here
+    final qnnLibList = [
+      "libQnnHtp.so",
+      "libQnnHtpV68Stub.so",
+      "libQnnHtpV69Stub.so",
+      "libQnnHtpV73Stub.so",
+      "libQnnHtpV75Stub.so",
+      "libQnnHtpV79Stub.so",
+      "libQnnHtpV68Skel.so",
+      "libQnnHtpV69Skel.so",
+      "libQnnHtpV73Skel.so",
+      "libQnnHtpV75Skel.so",
+      "libQnnHtpV79Skel.so",
+      "libQnnSystem.so",
+      "libQnnRwkvWkvOpPackage.so",
+    ];
+    for (final lib in qnnLibList) {
+      final path = await getModelPath("assets/model/$lib");
+      if (kDebugMode) print("💬 path: $path");
+    }
+
     final rootIsolateToken = RootIsolateToken.instance;
     final rwkvMobile = RWKVMobile();
     final availableBackendNames = rwkvMobile.getAvailableBackendNames();
