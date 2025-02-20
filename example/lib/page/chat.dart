@@ -170,9 +170,7 @@ class _Welcome extends ConsumerWidget {
                   child: T(
                     "Click here to start a new chat",
                     s: TS(
-                      // s: 20,
-                      // w: FW.w600,
-                      c: kB.wo(0.8),
+                      c: loaded ? kB.wo(0.8) : kC,
                     ),
                   ),
                 ),
@@ -182,7 +180,7 @@ class _Welcome extends ConsumerWidget {
                     "Click here to select a new model.",
                     textAlign: TextAlign.end,
                     s: TS(
-                      c: kB.wo(0.8),
+                      c: !loaded ? kB.wo(0.8) : kC,
                     ),
                   ),
                 ),
@@ -579,6 +577,7 @@ class _AppBar extends ConsumerWidget {
           child: AppBar(
             backgroundColor: kW.wo(0.6),
             elevation: 0,
+            centerTitle: true,
             title: AutoSizeText(
               S.current.chat_title,
               style: const TextStyle(fontSize: 20),
@@ -586,20 +585,20 @@ class _AppBar extends ConsumerWidget {
               maxLines: 2,
             ),
             leading: IconButton(
-              onPressed: () {
-                P.chat.showingCharacterSelector.u(false);
-                P.chat.showingCharacterSelector.u(true);
-              },
+              onPressed: loaded
+                  ? () {
+                      P.chat.showingCharacterSelector.u(false);
+                      P.chat.showingCharacterSelector.u(true);
+                    }
+                  : null,
               icon: const Icon(Icons.add_comment_outlined),
             ),
             actions: [
               IconButton(
-                onPressed: loaded
-                    ? () {
-                        P.chat.showingModelSelector.u(false);
-                        P.chat.showingModelSelector.u(true);
-                      }
-                    : null,
+                onPressed: () {
+                  P.chat.showingModelSelector.u(false);
+                  P.chat.showingModelSelector.u(true);
+                },
                 icon: const Icon(Icons.settings),
               ),
             ],
