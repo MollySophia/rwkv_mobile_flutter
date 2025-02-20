@@ -293,6 +293,7 @@ class RWKVMobile {
         if (retVal != 0) {
           throw Exception('Failed to load model, model path: $modelPath');
         }
+        sendPort.send({'initRuntimeDone': true});
       } else {
         if (kDebugMode) print("😡 unknown command: $command");
       }
