@@ -104,9 +104,9 @@ class _Title extends ConsumerWidget {
       children: [
         12.w,
         T("$version.$buildNumber", s: TS(c: kB.wo(0.0), s: 10)),
-        Spacer(),
-        T("RWKV Othello", s: TS(c: kB, s: 20, w: FW.w700)),
-        Spacer(),
+        const Spacer(),
+        const T("RWKV Othello", s: TS(c: kB, s: 20, w: FW.w700)),
+        const Spacer(),
         T("$version.$buildNumber", s: TS(c: kB.wo(0.5), s: 10)),
         12.w,
       ],
@@ -442,7 +442,7 @@ class _Score extends ConsumerWidget {
           : () {
               P.othello.start();
             },
-      child: T("New Game", s: TS(c: kB, s: 10, w: FW.w500)),
+      child: const T("New Game", s: TS(c: kB, s: 10, w: FW.w500)),
     );
 
     return Ro(

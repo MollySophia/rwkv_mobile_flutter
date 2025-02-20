@@ -90,9 +90,9 @@ class _PageChatState extends State<PageChat> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Stack(
-        children: const [
+        children: [
           _List(),
           _Welcome(),
           //
@@ -134,14 +134,19 @@ class _Welcome extends ConsumerWidget {
             child: Co(
               c: CAA.center,
               children: [
-                Spacer(),
+                const Spacer(),
                 Assets.img.logoSquare.image(width: 140),
                 12.h,
-                T(S.current.chat_welcome_to_use, s: TS(s: 18, w: FW.w600)),
+                T(S.current.chat_welcome_to_use, s: const TS(s: 18, w: FW.w600)),
                 12.h,
-                T("Get ready to experience RWKV-x070-World, series of compact language models with 0.1, 0.4, 1.5, 3.0 billion parameters, optimized for seamless mobile devices inference. Once loaded, it functions offline without requiring any server communication."),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 500),
+                  child: const T(
+                    "Get ready to experience RWKV-x070-World, series of compact language models with 0.1, 0.4, 1.5, 3.0 billion parameters, optimized for seamless mobile devices inference. Once loaded, it functions offline without requiring any server communication.",
+                  ),
+                ),
                 12.h,
-                if (!loaded) T("You can start a new chat by clicking the button below."),
+                if (!loaded) const T("You can start a new chat by clicking the button below."),
                 if (!loaded) 12.h,
                 if (!loaded)
                   TextButton(
@@ -149,11 +154,11 @@ class _Welcome extends ConsumerWidget {
                       P.chat.showingModelSelector.u(false);
                       P.chat.showingModelSelector.u(true);
                     },
-                    child: T("Select a model", s: TS(s: 16, w: FW.w600)),
+                    child: const T("Select a model", s: TS(s: 16, w: FW.w600)),
                   ),
                 if (!loaded) 12.h,
                 if (loaded) T("You are now using ${currentModel?.weights?.name}"),
-                Spacer(),
+                const Spacer(),
               ],
             ),
           ),
@@ -174,7 +179,7 @@ class _Welcome extends ConsumerWidget {
                     ),
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 Exp(
                   child: T(
                     "Click here to select a new model.",
@@ -207,18 +212,18 @@ class _ModelSelector extends ConsumerWidget {
     return ClipRRect(
       borderRadius: 16.r,
       child: C(
-        margin: EI.o(t: 16),
+        margin: const EI.o(t: 16),
         child: ListView(
-          padding: EI.o(t: 24, l: 12, r: 12),
+          padding: const EI.o(t: 24, l: 12, r: 12),
           controller: scrollController,
           children: [
-            T(S.current.chat_welcome_to_use, s: TS(s: 16, w: FW.w600)),
+            T(S.current.chat_welcome_to_use, s: const TS(s: 16, w: FW.w600)),
             4.h,
             T(S.current.chat_please_select_a_model),
             4.h,
             T(S.current.chat_you_need_download_model_if_you_want_to_use_it),
             4.h,
-            T("Please ensure you have enough memory to load the model, otherwise the application may crash."),
+            const T("Please ensure you have enough memory to load the model, otherwise the application may crash."),
             4.h,
             T("Memory used: ${(memUsed / 1024 / 1024).toStringAsFixed(0)}MB, Memory free: ${(memFree / 1024 / 1024).toStringAsFixed(0)}MB, Memory used by current model: ${(memUsedByCurrentModel / 1024 / 1024).toStringAsFixed(0)}MB"),
             4.h,
@@ -256,20 +261,20 @@ class _RoleSelector extends ConsumerWidget {
     return ClipRRect(
       borderRadius: 16.r,
       child: C(
-        margin: EI.o(t: 16),
+        margin: const EI.o(t: 16),
         child: Co(
           children: [
-            T("New chat", s: TS(s: 16, w: FW.w600)),
+            const T("New chat", s: TS(s: 16, w: FW.w600)),
             12.h,
-            T("You can select a role to chat"),
+            const T("You can select a role to chat"),
             12.h,
             Exp(
               child: ListView.builder(
-                padding: EI.o(t: 24, l: 12, r: 12),
+                padding: const EI.o(t: 24, l: 12, r: 12),
                 controller: scrollController,
                 itemBuilder: (context, index) {
                   return C(
-                    margin: EI.o(b: 12),
+                    margin: const EI.o(b: 12),
                     child: Row(
                       children: [
                         Exp(
@@ -277,8 +282,8 @@ class _RoleSelector extends ConsumerWidget {
                             child: Co(
                               c: CAA.start,
                               children: [
-                                T(roles[index].key, s: TS(s: 14, w: FW.w600)),
-                                T(roles[index].value, s: TS(s: 12)),
+                                T(roles[index].key, s: const TS(s: 14, w: FW.w600)),
+                                T(roles[index].value, s: const TS(s: 12)),
                               ],
                             ),
                           ),
@@ -293,8 +298,8 @@ class _RoleSelector extends ConsumerWidget {
                               color: kCG,
                               borderRadius: 8.r,
                             ),
-                            padding: EI.a(8),
-                            child: T(S.current.start_to_chat, s: TS(c: kW)),
+                            padding: const EI.a(8),
+                            child: T(S.current.start_to_chat, s: const TS(c: kW)),
                           ),
                         ),
                       ],
@@ -308,12 +313,12 @@ class _RoleSelector extends ConsumerWidget {
             Ro(
               children: [
                 12.w,
-                Exp(child: T("Or you can start a new empty chat", s: TS(c: kB, s: 16))),
+                const Exp(child: T("Or you can start a new empty chat", s: TS(c: kB, s: 16))),
                 TextButton(
                   onPressed: _onStartChatTap,
                   child: C(
-                    padding: EI.s(h: 12, v: 4),
-                    child: T("Start a new chat", s: TS(c: kB, s: 20)),
+                    padding: const EI.s(h: 12, v: 4),
+                    child: const T("Start a new chat", s: TS(c: kB, s: 20)),
                   ),
                 ),
                 12.w,
@@ -380,8 +385,8 @@ class _ModelItem extends ConsumerWidget {
       borderRadius: 8.r,
       child: C(
         decoration: BD(color: kW, borderRadius: 8.r),
-        margin: EI.o(t: 8),
-        padding: EI.a(8),
+        margin: const EI.o(t: 8),
+        padding: const EI.a(8),
         child: SB(
           child: Wrap(
             spacing: 8,
@@ -398,7 +403,7 @@ class _ModelItem extends ConsumerWidget {
                     children: [
                       T(
                         fileKey.name,
-                        s: TS(c: kB, w: FW.w600),
+                        s: const TS(c: kB, w: FW.w600),
                       ),
                       if (shouldShowGB) T("$fileSizeGBString GB"),
                       if (!shouldShowGB) T("$fileSizeString MB"),
@@ -411,19 +416,19 @@ class _ModelItem extends ConsumerWidget {
                     children: [
                       C(
                         decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
-                        padding: EI.s(h: 4),
+                        padding: const EI.s(h: 4),
                         child: T(fileKey.backend.asArgument),
                       ),
                       if (modelSizeB > 0)
                         C(
                           decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
-                          padding: EI.s(h: 4),
+                          padding: const EI.s(h: 4),
                           child: T("${modelSizeB}B"),
                         ),
                       if (q.isNotEmpty)
                         C(
                           decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
-                          padding: EI.s(h: 4),
+                          padding: const EI.s(h: 4),
                           child: T(q),
                         ),
                     ],
@@ -466,10 +471,10 @@ class _ModelItem extends ConsumerWidget {
                   if (downloading)
                     Wrap(
                       children: [
-                        T("Speed: "),
+                        const T("Speed: "),
                         T("${networkSpeed.toStringAsFixed(1)}mb/s"),
                         12.w,
-                        T("Remaining: "),
+                        const T("Remaining: "),
                         if (timeRemaining.inMinutes > 0) T("${timeRemaining.inMinutes}m"),
                         if (timeRemaining.inMinutes == 0) T("${timeRemaining.inSeconds}s"),
                       ],
@@ -480,12 +485,12 @@ class _ModelItem extends ConsumerWidget {
               if (!hasFile && !downloading)
                 IconButton(
                   onPressed: _onDownloadTap,
-                  icon: Icon(Icons.download),
+                  icon: const Icon(Icons.download),
                 ),
               if (downloading)
                 C(
-                  margin: EI.o(r: 8),
-                  child: SB(
+                  margin: const EI.o(r: 8),
+                  child: const SB(
                     height: 24,
                     width: 24,
                     child: CircularProgressIndicator(),
@@ -499,8 +504,8 @@ class _ModelItem extends ConsumerWidget {
                       color: kCG,
                       borderRadius: 8.r,
                     ),
-                    padding: EI.a(8),
-                    child: T(S.current.start_to_chat, s: TS(c: kW)),
+                    padding: const EI.a(8),
+                    child: T(S.current.start_to_chat, s: const TS(c: kW)),
                   ),
                 ),
               if (isCurrentModel)
@@ -511,8 +516,8 @@ class _ModelItem extends ConsumerWidget {
                       color: kG.wo(0.5),
                       borderRadius: 8.r,
                     ),
-                    padding: EI.a(8),
-                    child: T(S.current.chatting, s: TS(c: kW)),
+                    padding: const EI.a(8),
+                    child: T(S.current.chatting, s: const TS(c: kW)),
                   ),
                 ),
             ],
@@ -891,7 +896,7 @@ class _Input extends ConsumerWidget {
         P.chat.textEditingController.value = TextEditingValue(text: P.chat.textEditingController.value.text);
       } else {
         Alert.warning(S.current.chat_empty_message);
-        P.chat.textEditingController.value = TextEditingValue(text: "");
+        P.chat.textEditingController.value = const TextEditingValue(text: "");
       }
     } else {
       P.chat.onInputRightButtonPressed();

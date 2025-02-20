@@ -33,7 +33,7 @@ class PageHome extends ConsumerWidget {
             onPressed: () {
               push(PageKey.file);
             },
-            child: T("💬 测试"),
+            child: const T("💬 测试"),
           ),
         ],
       ),

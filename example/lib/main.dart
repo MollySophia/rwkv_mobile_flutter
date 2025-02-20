@@ -1,3 +1,4 @@
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:zone/launch_arguments.dart';
 import 'package:zone/widgets/chat_debugger.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,10 @@ import 'package:zone/widgets/alert.dart';
 import 'package:zone/widgets/othello_debugger.dart';
 
 void main() async {
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await P.init();
+  FlutterNativeSplash.remove();
   runApp(const _App());
 }
 

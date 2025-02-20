@@ -15,7 +15,7 @@ class PageFile extends ConsumerWidget {
     final list = FileKey.values.where((e) => e.available).toList();
     return Scaffold(
       appBar: AppBar(
-        title: Text("File"),
+        title: const Text("File"),
       ),
       body: ListView.builder(
         itemCount: list.length,
@@ -48,8 +48,8 @@ class _Cell extends ConsumerWidget {
         borderRadius: 8.r,
         border: Border.all(color: kB.wo(0.5)),
       ),
-      margin: EI.a(8),
-      padding: EI.a(8),
+      margin: const EI.a(8),
+      padding: const EI.a(8),
       child: SelectableRegion(
         focusNode: FocusNode(),
         selectionControls: MaterialTextSelectionControls(),
@@ -74,8 +74,8 @@ class _Cell extends ConsumerWidget {
                   ),
                 if (file.downloading)
                   C(
-                    padding: EI.a(12),
-                    child: SB(
+                    padding: const EI.a(12),
+                    child: const SB(
                       height: 22,
                       width: 22,
                       child: CircularProgressIndicator(),
@@ -84,8 +84,8 @@ class _Cell extends ConsumerWidget {
                 if (file.hasFile)
                   C(
                     decoration: BD(color: kCG.wo(0.2)),
-                    padding: EI.a(8),
-                    child: T("file found"),
+                    padding: const EI.a(8),
+                    child: const T("file found"),
                   ),
               ],
             ),
