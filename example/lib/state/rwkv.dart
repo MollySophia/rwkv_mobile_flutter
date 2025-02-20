@@ -45,6 +45,8 @@ class _RWKV {
     _broadcastStream ??= _messagesController.stream.asBroadcastStream();
     return _broadcastStream!;
   }
+
+  late Completer<void> _initRuntimeCompleter = Completer<void>();
 }
 
 /// Public methods
@@ -76,6 +78,25 @@ extension $RWKV on _RWKV {
     sendPort.send(("generate", prompt));
   }
 
+  FV initRuntime({
+    required String modelPath,
+    required Backend backend,
+    required String tokenizerPath,
+  }) {
+    _initRuntimeCompleter = Completer<void>();
+
+    _sendPort!.send((
+      "initRuntime",
+      {
+        "modelPath": modelPath,
+        "backend": backend,
+        "tokenizerPath": tokenizerPath,
+      },
+    ));
+
+    return _initRuntimeCompleter.future;
+  }
+
   FV loadChat({
     required String modelPath,
     required Backend backend,
@@ -88,13 +109,16 @@ extension $RWKV on _RWKV {
     if (kDebugMode) print("💬 availableBackendNames: $availableBackendNames");
 
     if (_sendPort != null) {
-      // @Molly: 我通过 send port 不为空来判断当前在 cpp side 是否已经存在 model
-      // 如果存在，则调用 initRuntime 方法, 期望可以 “重置” 已经在内存中的权重
-      // 🚧 但是, 调用该方法后发现, 依然崩溃, 且崩溃位置和昨天的相同
-      _sendPort!.send((
-        "initRuntime",
-        {"modelPath": modelPath, "backend": backend, "tokenizerPath": tokenizerPath},
-      ));
+      try {
+        final startMS = DateTime.now().millisecondsSinceEpoch;
+        await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
+        final endMS = DateTime.now().millisecondsSinceEpoch;
+        if (kDebugMode) print("✅ initRuntime done in ${endMS - startMS}ms");
+      } catch (e) {
+        if (kDebugMode) print("😡 initRuntime failed: $e");
+        Alert.error("Failed to load model: $e");
+        return;
+      }
     } else {
       await rwkvMobile.runIsolate(
         modelPath,
@@ -281,6 +305,18 @@ extension _$RWKV on _RWKV {
         "content": "",
         "type": RWKVMessageType.generateStop.name,
       });
+      return;
+    }
+
+    if (message["initRuntimeDone"] != null) {
+      final result = message["initRuntimeDone"];
+      if (result == true) {
+        _initRuntimeCompleter.complete();
+      } else {
+        final error = message["error"];
+        if (kDebugMode) print("😡 initRuntime failed: $error");
+        _initRuntimeCompleter.completeError(error);
+      }
       return;
     }
 

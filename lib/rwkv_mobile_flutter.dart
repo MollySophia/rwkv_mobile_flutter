@@ -281,28 +281,20 @@ class RWKVMobile {
 
         runtime = rwkvMobile.rwkvmobile_runtime_init_with_name(modelBackend.toNativeUtf8().cast<ffi.Char>());
         if (runtime.address == 0) {
-          if (kDebugMode) print('Failed to initialize runtime');
-          sendPort.send({'initRuntimeDone': false});
+          sendPort.send({'initRuntimeDone': false, 'error': 'Failed to initialize runtime'});
         } else {
           retVal = rwkvMobile.rwkvmobile_runtime_load_tokenizer(runtime, tokenizerPath.toNativeUtf8().cast<ffi.Char>());
           if (retVal != 0) {
-            if (kDebugMode) print('Failed to load tokenizer, tokenizer path: $tokenizerPath');
-            sendPort.send({'initRuntimeDone': false});
+            sendPort.send({'initRuntimeDone': false, 'error': 'Failed to load tokenizer, tokenizer path: $tokenizerPath'});
           } else {
             retVal = rwkvMobile.rwkvmobile_runtime_load_model(runtime, modelPath.toNativeUtf8().cast<ffi.Char>());
             if (retVal != 0) {
-              if (kDebugMode) print('Failed to load model, model path: $modelPath');
-              sendPort.send({'initRuntimeDone': false});
+              sendPort.send({'initRuntimeDone': false, 'error': 'Failed to load model, model path: $modelPath'});
             } else {
               sendPort.send({'initRuntimeDone': true});
             }
           }
         }
-
-        
-
-        
-        
       } else {
         if (kDebugMode) print("😡 unknown command: $command");
       }
