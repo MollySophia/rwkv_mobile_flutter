@@ -715,8 +715,6 @@ class _Message extends ConsumerWidget {
       opacity = 1;
     }
 
-    // debugger();
-
     return LayoutBuilder(builder: (context, constraints) {
       final width = constraints.maxWidth;
       return Align(
