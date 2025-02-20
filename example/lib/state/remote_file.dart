@@ -63,6 +63,7 @@ extension $RemoteFile on _RemoteFile {
   }
 
   FV loadWeights() async {
+    if (this.weights.v.isNotEmpty) return;
     final jsonString = await rootBundle.loadString(Assets.config.weights);
     final json = HF.listJSON(jsonDecode(jsonString));
     final weights = json.map((e) => Weights.fromJson(e)).toList();

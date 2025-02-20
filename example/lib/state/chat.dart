@@ -51,6 +51,7 @@ class _Chat {
     final currentModel = ref.watch(this.currentModel);
     return currentModel != null;
   });
+
   late final currentModel = _gsn<FileKey>();
   late final showingModelSelector = _gs(false);
   late final showingCharacterSelector = _gs(false);
@@ -82,7 +83,7 @@ extension $Chat on _Chat {
       return;
     }
 
-    await _send(textToSend);
+    await send(textToSend);
   }
 
   FV onEditingComplete() async {
@@ -95,7 +96,7 @@ extension $Chat on _Chat {
     if (textToSend.isEmpty) return;
     text.uc();
     focusNode.unfocus();
-    await _send(textToSend);
+    await send(textToSend);
   }
 
   FV onTapMessageList() async {
@@ -129,7 +130,7 @@ extension $Chat on _Chat {
     editingIndex.u(index - 1);
     text.uc();
     focusNode.unfocus();
-    await _send(messages.v[index - 1].content);
+    await send(messages.v[index - 1].content);
   }
 
   FV scrollToBottom({Duration? duration, bool? animate = true}) async {
@@ -160,6 +161,47 @@ extension $Chat on _Chat {
   FV startNewChat() async {
     P.rwkv.clearStates();
     messages.u([]);
+  }
+
+  FV send(String message) async {
+    // debugger();
+    if (kDebugMode) print("💬 $runtimeType.send: $message");
+
+    final _editingIndex = editingIndex.v;
+    if (_editingIndex != null) {
+      assert(_editingIndex >= 0 && _editingIndex < messages.v.length);
+      final messagesWithoutEditing = messages.v.sublist(0, _editingIndex);
+      // debugger();
+      messages.u(messagesWithoutEditing);
+    }
+
+    final id = DateTime.now().microsecondsSinceEpoch;
+    final msg = Message(
+      id: id,
+      content: message,
+      isMine: true,
+    );
+    messages.ua(msg);
+    Future.delayed(34.ms).then((_) {
+      scrollToBottom();
+    });
+
+    P.rwkv.send(messages.v.m((e) => e.content));
+    editingIndex.u(null);
+
+    received.uc();
+    receiving.u(true);
+
+    final receiveId = DateTime.now().microsecondsSinceEpoch;
+    this.receiveId.u(receiveId);
+    final receiveMsg = Message(
+      id: receiveId,
+      content: "",
+      isMine: false,
+      changing: true,
+    );
+
+    messages.ua(receiveMsg);
   }
 }
 
@@ -201,47 +243,6 @@ extension _$Chat on _Chat {
     final json = HF.listJSON(jsonDecode(jsonString));
     final roles = json.map((e) => Role.fromJson(e)).toList();
     this.roles.u(roles);
-  }
-
-  FV _send(String message) async {
-    // debugger();
-    if (kDebugMode) print("💬 $runtimeType.send: $message");
-
-    final _editingIndex = editingIndex.v;
-    if (_editingIndex != null) {
-      assert(_editingIndex >= 0 && _editingIndex < messages.v.length);
-      final messagesWithoutEditing = messages.v.sublist(0, _editingIndex);
-      // debugger();
-      messages.u(messagesWithoutEditing);
-    }
-
-    final id = DateTime.now().microsecondsSinceEpoch;
-    final msg = Message(
-      id: id,
-      content: message,
-      isMine: true,
-    );
-    messages.ua(msg);
-    Future.delayed(34.ms).then((_) {
-      scrollToBottom();
-    });
-
-    P.rwkv.send(messages.v.m((e) => e.content));
-    editingIndex.u(null);
-
-    received.uc();
-    receiving.u(true);
-
-    final receiveId = DateTime.now().microsecondsSinceEpoch;
-    this.receiveId.u(receiveId);
-    final receiveMsg = Message(
-      id: receiveId,
-      content: "",
-      isMine: false,
-      changing: true,
-    );
-
-    messages.ua(receiveMsg);
   }
 
   void _onPageKeyChanged(PageKey pageKey) {

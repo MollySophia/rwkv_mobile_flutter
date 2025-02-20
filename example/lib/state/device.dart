@@ -21,9 +21,18 @@ extension $Device on _Device {
       if (kDebugMode) print("💬 total: $total");
       if (kDebugMode) print("💬 memUsed (MB): ${memUsed / 1024 / 1024}, memFree (MB): ${memFree / 1024 / 1024}");
     } else {
-      final free = SysInfo.getFreePhysicalMemory();
-      final total = SysInfo.getTotalPhysicalMemory();
-      if (kDebugMode) print("💬 free: $free, total: $total");
+      await HF.wait(200);
+      final result = await compute((message) async {
+        final free = SysInfo.getFreePhysicalMemory();
+        final total = SysInfo.getTotalPhysicalMemory();
+        if (kDebugMode) print("💬 free: $free, total: $total");
+        return [free, total];
+      }, []);
+      if (kDebugMode) print("💬 result: $result");
+      final memFree = result[0];
+      final memTotal = result[1];
+      memUsed.u(memTotal - memFree);
+      this.memFree.u(memFree);
     }
   }
 }

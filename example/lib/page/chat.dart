@@ -103,8 +103,6 @@ class _PageChatState extends State<PageChat> {
           //
           _InputTopLine(),
           _Input(),
-          //
-          _SelectModelButton(),
         ],
       ),
     );
@@ -117,6 +115,10 @@ class _Welcome extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final paddingTop = ref.watch(P.app.paddingTop);
+    final messages = ref.watch(P.chat.messages);
+    if (messages.isNotEmpty) return Positioned.fill(child: IgnorePointer(child: Container()));
+    final loaded = ref.watch(P.chat.loaded);
+    final currentModel = ref.watch(P.chat.currentModel);
     return AnimatedPositioned(
       duration: 350.ms,
       curve: Curves.easeInOutBack,
@@ -127,6 +129,8 @@ class _Welcome extends ConsumerWidget {
       child: Stack(
         children: [
           Positioned.fill(
+            left: 32,
+            right: 32,
             child: Co(
               c: CAA.center,
               children: [
@@ -135,71 +139,58 @@ class _Welcome extends ConsumerWidget {
                 12.h,
                 T(S.current.chat_welcome_to_use, s: TS(s: 18, w: FW.w600)),
                 12.h,
-                T(S.current.chat_please_select_a_model),
+                T("Get ready to experience RWKV-x070-World, series of compact language models with 0.1, 0.4, 1.5, 3.0 billion parameters, optimized for seamless mobile devices inference. Once loaded, it functions offline without requiring any server communication."),
                 12.h,
-                T("You are now using RWKV World v7 3B"),
+                if (!loaded) T("You can start a new chat by clicking the button below."),
+                if (!loaded) 12.h,
+                if (!loaded)
+                  TextButton(
+                    onPressed: () async {
+                      P.chat.showingModelSelector.u(false);
+                      P.chat.showingModelSelector.u(true);
+                    },
+                    child: T("Select a model", s: TS(s: 16, w: FW.w600)),
+                  ),
+                if (!loaded) 12.h,
+                if (loaded) T("You are now using ${currentModel?.weights?.name}"),
                 Spacer(),
               ],
             ),
           ),
           Positioned(
             top: paddingTop + kToolbarHeight + 12,
-            left: 12,
-            right: 0,
-            height: 100,
-            child: T(
-              "Click here to start a new chat",
-              s: TS(
-                // s: 20,
-                // w: FW.w600,
-                c: kB.wo(0.8),
-              ),
-            ),
-          ),
-          Positioned(
-            top: paddingTop + kToolbarHeight + 12,
             left: 0,
-            right: 12,
-            // width: 100,
-            child: T(
-              "Click here to select a new model.",
-              textAlign: TextAlign.end,
-              s: TS(
-                c: kB.wo(0.8),
-              ),
+            right: 0,
+            height: 200,
+            child: Ro(
+              c: CAA.start,
+              children: [
+                12.w,
+                Exp(
+                  child: T(
+                    "Click here to start a new chat",
+                    s: TS(
+                      // s: 20,
+                      // w: FW.w600,
+                      c: kB.wo(0.8),
+                    ),
+                  ),
+                ),
+                Spacer(),
+                Exp(
+                  child: T(
+                    "Click here to select a new model.",
+                    textAlign: TextAlign.end,
+                    s: TS(
+                      c: kB.wo(0.8),
+                    ),
+                  ),
+                ),
+                12.w,
+              ],
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _SelectModelButton extends ConsumerWidget {
-  const _SelectModelButton();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final loaded = ref.watch(P.chat.loaded);
-    if (loaded) return Positioned.fill(child: IgnorePointer(child: Container()));
-    return Positioned.fill(
-      child: Center(
-        child: IconButton(
-          onPressed: () {
-            P.chat.showingModelSelector.u(false);
-            P.chat.showingModelSelector.u(true);
-          },
-          icon: Co(
-            mainAxisSize: MainAxisSize.min,
-            m: MAA.center,
-            children: [
-              50.h,
-              Icon(Icons.message),
-              T("Please click here to select a model"),
-              50.h,
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -252,7 +243,13 @@ class _RoleSelector extends ConsumerWidget {
     Navigator.pop(getContext()!);
   }
 
-  void _onRoleTap(Role role) async {}
+  void _onRoleTap(Role role) async {
+    await P.chat.startNewChat();
+    await HF.wait(100);
+    Navigator.pop(getContext()!);
+    await HF.wait(100);
+    P.chat.send(role.value);
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -324,6 +321,7 @@ class _RoleSelector extends ConsumerWidget {
                 12.w,
               ],
             ),
+            4.h,
             paddingBottom.h,
           ],
         ),
@@ -343,6 +341,7 @@ class _ModelItem extends ConsumerWidget {
     final backend = fileKey.backend;
 
     try {
+      P.rwkv.clearStates();
       await P.rwkv.loadChat(modelPath: modelPath, backend: backend);
     } catch (e) {
       Alert.error(e.toString());
