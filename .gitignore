@@ -28,3 +28,4 @@ migrate_working_dir/
 .dart_tool/
 build/
 example/fastlane/report.xml
+example/android/app/.cxx/
