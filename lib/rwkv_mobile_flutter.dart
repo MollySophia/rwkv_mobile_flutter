@@ -154,7 +154,12 @@ class RWKVMobile {
     var tokenizerPath = options.tokenizerPath;
 
     // runtime initializations
-    var runtime = rwkvMobile.rwkvmobile_runtime_init_with_name(modelBackend.toNativeUtf8().cast<ffi.Char>());
+    var runtime;
+    if (modelBackend == "qnn") {
+      runtime = rwkvMobile.rwkvmobile_runtime_init_with_name_extra(modelBackend.toNativeUtf8().cast<ffi.Char>(), (tempDir.path + '/assets/model/libQnnHtp.so').toNativeUtf8().cast<ffi.Void>());
+    } else {
+      runtime = rwkvMobile.rwkvmobile_runtime_init_with_name(modelBackend.toNativeUtf8().cast<ffi.Char>());
+    }
     if (runtime.address == 0) {
       throw Exception('Failed to initialize runtime');
     }
@@ -289,7 +294,11 @@ class RWKVMobile {
           rwkvMobile.rwkvmobile_runtime_release(runtime);
         }
 
-        runtime = rwkvMobile.rwkvmobile_runtime_init_with_name(modelBackend.toNativeUtf8().cast<ffi.Char>());
+        if (modelBackend == "qnn") {
+          runtime = rwkvMobile.rwkvmobile_runtime_init_with_name_extra(modelBackend.toNativeUtf8().cast<ffi.Char>(), (tempDir.path + '/assets/model/libQnnHtp.so').toNativeUtf8().cast<ffi.Void>());
+        } else {
+          runtime = rwkvMobile.rwkvmobile_runtime_init_with_name(modelBackend.toNativeUtf8().cast<ffi.Char>());
+        }
         if (runtime.address == 0) {
           sendPort.send({'initRuntimeDone': false, 'error': 'Failed to initialize runtime'});
         } else {
