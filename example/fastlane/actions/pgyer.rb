@@ -5,11 +5,10 @@ module Fastlane
   module Actions
     class PgyerAction < Action
       def self.run(params)
-        
         UI.message("The pgyer plugin is working.")
-        
+
         api_key = params[:api_key]
-        
+
         build_file = params[:apk]
 
         if build_file.nil?
@@ -110,8 +109,6 @@ module Fastlane
 
         UI.message "Upload request_params: #{request_params}"
 
-
-
         response = pgyer_client.post endpoint, request_params
 
         if response.status != 204
@@ -195,11 +192,11 @@ module Fastlane
                                        type: String),
 
           FastlaneCore::ConfigItem.new(key: :save_uploaded_info_json,
-                                        env_name: "PGYER_SAVE_UPLOADED_INFO_JSON",
-                                        description: "Save uploaded info json to file named pgyer-fastlane-uploaded-app-info.json",
-                                        optional: true,
-                                        default_value: false,
-                                        type: Boolean),
+                                       env_name: "PGYER_SAVE_UPLOADED_INFO_JSON",
+                                       description: "Save uploaded info json to file named pgyer-fastlane-uploaded-app-info.json",
+                                       optional: true,
+                                       default_value: false,
+                                       type: Boolean),
 
           FastlaneCore::ConfigItem.new(key: :install_type,
                                        env_name: "PGYER_INSTALL_TYPE",
@@ -247,7 +244,7 @@ module Fastlane
       private
 
       def self.checkPublishStatus(client, api_host, api_key, buildKey)
-        url ="#{api_host}/buildInfo"
+        url = "#{api_host}/buildInfo"
         UI.message "checkPublishStatus url: #{url}"
         response = client.post "#{api_host}/buildInfo", { :_api_key => api_key, :buildKey => buildKey }
         info = response.body

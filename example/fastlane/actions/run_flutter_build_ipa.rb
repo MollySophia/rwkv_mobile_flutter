@@ -7,7 +7,7 @@ module Fastlane
         sh "flutter build ios --config-only"
         sh "flutter build ipa"
       end
-      
+
       def self.is_supported?(platform)
         platform == :ios
       end

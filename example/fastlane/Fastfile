@@ -31,6 +31,18 @@ lane :git_reset do
   sh "git add .;git reset --hard;git clean -fd"
 end
 
+lane :change_app_name do
+  # TODO: @halo
+end
+
+lane :change_app_icon do
+  # TODO: @halo
+end
+
+lane :change_app_id do
+  # TODO: @halo
+end
+
 lane :change_analysis_options do
   raw_change_analysis_options()
 end
@@ -40,7 +52,7 @@ lane :increase_build_number do
   git_add(path: ".")
   git_commit(
     path: ".",
-    message: "_"
+    message: "_",
   )
   # 这个一定要调用吗?
   # 可能在远端触发 CI/CD 是更好的选择
@@ -66,7 +78,7 @@ lane :ios_beta_external do
       "zh-Hans": {
         whats_new: "修复已知问题，提升用户体验",
       },
-    }
+    },
   )
 end
 

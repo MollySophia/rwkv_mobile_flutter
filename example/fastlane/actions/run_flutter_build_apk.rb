@@ -7,7 +7,7 @@ module Fastlane
         sh "flutter build apk --config-only"
         sh "flutter build apk"
       end
-      
+
       def self.is_supported?(platform)
         platform == :android
       end

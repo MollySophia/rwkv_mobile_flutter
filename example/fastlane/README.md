@@ -29,6 +29,30 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 
 
+### generate_icon
+
+```sh
+[bundle exec] fastlane generate_icon
+```
+
+
+
+### generate_splash
+
+```sh
+[bundle exec] fastlane generate_splash
+```
+
+
+
+### git_reset
+
+```sh
+[bundle exec] fastlane git_reset
+```
+
+
+
 ### change_analysis_options
 
 ```sh
