@@ -1,6 +1,6 @@
 [
   {
-    "name": "RWKV v7 World (v2.8 20241210 ctx4096)",
+    "name": "RWKV v7 World 0.1B (v2.8 20241210 ctx4096)",
     "type": "st",
     "modelSize": 0.1,
     "fileName": "RWKV-x070-World-0.1B-v2.8-20241210-ctx4096.st",
@@ -12,7 +12,7 @@
     "backends": ["webRwkv"]
   },
   {
-    "name": "RWKV v7 World (v2.8 20241210 ctx4096)",
+    "name": "RWKV v7 World 0.4B (v2.9 20250107 ctx4096)",
     "type": "st",
     "modelSize": 0.4,
     "fileName": "RWKV-x070-World-0.4B-v2.9-20250107-ctx4096.st",
@@ -24,7 +24,7 @@
     "backends": ["webRwkv"]
   },
   {
-    "name": "RWKV v7 World (v3 20250127 ctx4096)",
+    "name": "RWKV v7 World 1.5B (v3 20250127 ctx4096)",
     "type": "prefab",
     "modelSize": 1.5,
     "fileName": "RWKV-x070-World-1.5B-v3-NF4-20250127-ctx4096.prefab",
@@ -36,7 +36,7 @@
     "backends": ["webRwkv"]
   },
   {
-    "name": "RWKV v7 World (v3 20250127 ctx4096)",
+    "name": "RWKV v7 World 2.9B (v3 20250211 ctx4096)",
     "type": "prefab",
     "modelSize": 2.9,
     "fileName": "RWKV-x070-World-2.9B-v3-NF4-20250211-ctx4096.prefab",
@@ -48,7 +48,7 @@
     "backends": ["webRwkv"]
   },
   {
-    "name": "RWKV-v7-World-0.4B",
+    "name": "RWKV v7 World 0.4B",
     "type": "gguf",
     "modelSize": 0.4,
     "fileName": "rwkv7-world-0.4B-Q8_0.gguf",
@@ -60,7 +60,7 @@
     "backends": ["llamacpp"]
   },
   {
-    "name": "RWKV-v7-World-1.5B",
+    "name": "RWKV v7 World 1.5B",
     "type": "gguf",
     "modelSize": 1.5,
     "fileName": "rwkv7-world-1.5B-Q5_K_M.gguf",
@@ -72,7 +72,7 @@
     "backends": ["llamacpp"]
   },
   {
-    "name": "RWKV-v7-World-3B",
+    "name": "RWKV v7 World 3B",
     "type": "gguf",
     "modelSize": 2.9,
     "fileName": "rwkv7-world-2.9B-Q4_K_M.gguf",

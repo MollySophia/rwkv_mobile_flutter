@@ -7,7 +7,7 @@ abstract class LaunchArgs {
   static const othelloTestCase = int.fromEnvironment("othello_test_case", defaultValue: -1);
 
   static const firstPageIsHome = bool.fromEnvironment("first_page_is_home", defaultValue: false);
-  static const firstPageIsChat = bool.fromEnvironment("first_page_is_chat", defaultValue: true);
-  static const firstPageIsOthello = bool.fromEnvironment("first_page_is_othello", defaultValue: false);
+  static const firstPageIsChat = bool.fromEnvironment("first_page_is_chat", defaultValue: false);
+  static const firstPageIsOthello = bool.fromEnvironment("first_page_is_othello", defaultValue: true);
   static const firstPageIsFile = bool.fromEnvironment("first_page_is_file", defaultValue: false);
 }

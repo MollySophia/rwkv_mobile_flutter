@@ -52,7 +52,7 @@ class PageOthello extends ConsumerWidget {
               children: [
                 const Exp(child: _Console()),
                 Co(
-                  // c: CAA.center,
+                  c: CAA.center,
                   children: [
                     const _Title(),
                     4.h,
@@ -83,7 +83,7 @@ class PageOthello extends ConsumerWidget {
                           ),
                       ],
                     )
-                  ]
+                  ],
                 ),
                 paddingRight.w,
               ],
@@ -99,15 +99,18 @@ class _Title extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final version = ref.watch(P.app.version);
     final buildNumber = ref.watch(P.app.buildNumber);
+    final usePortrait = ref.watch(P.othello.usePortrait);
     return Ro(
       m: MAA.center,
       children: [
         12.w,
-        T("$version.$buildNumber", s: TS(c: kB.wo(0.0), s: 10)),
-        const Spacer(),
+        T("$version($buildNumber)", s: TS(c: kB.wo(0.0), s: 10)),
+        if (usePortrait) const Spacer(),
         const T("RWKV Othello", s: TS(c: kB, s: 20, w: FW.w700)),
-        const Spacer(),
-        T("$version.$buildNumber", s: TS(c: kB.wo(0.5), s: 10)),
+        if (usePortrait) const Spacer(),
+        if (!usePortrait) 32.w,
+        T("$version($buildNumber)", s: TS(c: kB.wo(0.5), s: 10)),
+        if (!usePortrait) 32.w,
         12.w,
       ],
     );
