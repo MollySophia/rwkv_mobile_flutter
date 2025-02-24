@@ -53,6 +53,30 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 
 
+### change_app_name
+
+```sh
+[bundle exec] fastlane change_app_name
+```
+
+
+
+### change_app_icon
+
+```sh
+[bundle exec] fastlane change_app_icon
+```
+
+
+
+### change_app_id
+
+```sh
+[bundle exec] fastlane change_app_id
+```
+
+
+
 ### change_analysis_options
 
 ```sh
