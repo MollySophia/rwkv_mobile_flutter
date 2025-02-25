@@ -13,6 +13,7 @@
       "args": [
         // "--dart-define=enableChatDebugger=true",
         "--dart-define=hide_debug_banner=true",
+        "--dart-define=firstPage=othello",
       ]
     },
     {

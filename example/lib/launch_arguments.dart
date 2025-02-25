@@ -5,9 +5,5 @@ abstract class LaunchArgs {
   static const enableOthelloDebugger = bool.fromEnvironment("enable_othello_debugger");
   static const hideDebugBanner = bool.fromEnvironment("hide_debug_banner", defaultValue: true);
   static const othelloTestCase = int.fromEnvironment("othello_test_case", defaultValue: -1);
-
-  static const firstPageIsHome = bool.fromEnvironment("first_page_is_home", defaultValue: false);
-  static const firstPageIsChat = bool.fromEnvironment("first_page_is_chat", defaultValue: false);
-  static const firstPageIsOthello = bool.fromEnvironment("first_page_is_othello", defaultValue: true);
-  static const firstPageIsFile = bool.fromEnvironment("first_page_is_file", defaultValue: false);
+  static const firstPage = String.fromEnvironment("first_page");
 }

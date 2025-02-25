@@ -1,3 +1,4 @@
+import 'package:zone/config.dart';
 import 'package:zone/launch_arguments.dart';
 import 'package:zone/page/chat.dart';
 import 'package:zone/page/empty.dart';
@@ -45,10 +46,7 @@ enum PageKey {
   }
 
   static PageKey get first {
-    if (LaunchArgs.firstPageIsHome) return PageKey.home;
-    if (LaunchArgs.firstPageIsChat) return PageKey.chat;
-    if (LaunchArgs.firstPageIsOthello) return PageKey.othello;
-    if (LaunchArgs.firstPageIsFile) return PageKey.file;
-    return PageKey.home;
+    final pageKey = PageKey.values.byName(Config.firstPage);
+    return pageKey;
   }
 }
