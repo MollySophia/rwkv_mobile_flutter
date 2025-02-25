@@ -85,5 +85,5 @@ lane :switch_env do |params|
 end
 
 lane :test do |params|
-  raw_switch_android_files(env: params[:env])
+  android_pgyer()
 end
