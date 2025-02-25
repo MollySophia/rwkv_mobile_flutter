@@ -14,6 +14,9 @@ class $AssetsConfigGen {
 
   /// Directory path: assets/config/chat
   $AssetsConfigChatGen get chat => const $AssetsConfigChatGen();
+
+  /// Directory path: assets/config/othello
+  $AssetsConfigOthelloGen get othello => const $AssetsConfigOthelloGen();
 }
 
 class $AssetsImgGen {
@@ -21,6 +24,9 @@ class $AssetsImgGen {
 
   /// Directory path: assets/img/chat
   $AssetsImgChatGen get chat => const $AssetsImgChatGen();
+
+  /// Directory path: assets/img/othello
+  $AssetsImgOthelloGen get othello => const $AssetsImgOthelloGen();
 }
 
 class $AssetsModelGen {
@@ -28,6 +34,9 @@ class $AssetsModelGen {
 
   /// Directory path: assets/model/chat
   $AssetsModelChatGen get chat => const $AssetsModelChatGen();
+
+  /// Directory path: assets/model/othello
+  $AssetsModelOthelloGen get othello => const $AssetsModelOthelloGen();
 }
 
 class $AssetsConfigChatGen {
@@ -51,11 +60,18 @@ class $AssetsConfigChatGen {
       [bRwkvVocabV20230424, promptsEnUS, promptsZhHans, weights];
 }
 
+class $AssetsConfigOthelloGen {
+  const $AssetsConfigOthelloGen();
+
+  /// File path: assets/config/othello/b_othello_vocab.txt
+  String get bOthelloVocab => 'assets/config/othello/b_othello_vocab.txt';
+
+  /// List of all assets
+  List<String> get values => [bOthelloVocab];
+}
+
 class $AssetsImgChatGen {
   const $AssetsImgChatGen();
-
-  /// File path: assets/img/chat/.gitkeep
-  String get aGitkeep => 'assets/img/chat/.gitkeep';
 
   /// File path: assets/img/chat/logo.png
   AssetGenImage get logo => const AssetGenImage('assets/img/chat/logo.png');
@@ -65,17 +81,69 @@ class $AssetsImgChatGen {
       const AssetGenImage('assets/img/chat/logo.square.png');
 
   /// List of all assets
-  List<dynamic> get values => [aGitkeep, logo, logoSquare];
+  List<AssetGenImage> get values => [logo, logoSquare];
+}
+
+class $AssetsImgOthelloGen {
+  const $AssetsImgOthelloGen();
+
+  /// File path: assets/img/othello/logo.png
+  AssetGenImage get logo => const AssetGenImage('assets/img/othello/logo.png');
+
+  /// File path: assets/img/othello/logo.square.png
+  AssetGenImage get logoSquare =>
+      const AssetGenImage('assets/img/othello/logo.square.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [logo, logoSquare];
 }
 
 class $AssetsModelChatGen {
   const $AssetsModelChatGen();
 
-  /// File path: assets/model/chat/.gitkeep
-  String get aGitkeep => 'assets/model/chat/.gitkeep';
+  /// File path: assets/model/chat/q
+  String get q => 'assets/model/chat/q';
 
   /// List of all assets
-  List<String> get values => [aGitkeep];
+  List<String> get values => [q];
+}
+
+class $AssetsModelOthelloGen {
+  const $AssetsModelOthelloGen();
+
+  /// File path: assets/model/othello/rwkv7_othello_26m_L10_D448_extended-ncnn.bin
+  String get rwkv7Othello26mL10D448ExtendedNcnnBin =>
+      'assets/model/othello/rwkv7_othello_26m_L10_D448_extended-ncnn.bin';
+
+  /// File path: assets/model/othello/rwkv7_othello_26m_L10_D448_extended-ncnn.param
+  String get rwkv7Othello26mL10D448ExtendedNcnnParam =>
+      'assets/model/othello/rwkv7_othello_26m_L10_D448_extended-ncnn.param';
+
+  /// File path: assets/model/othello/rwkv7_othello_26m_L10_D448_extended.st
+  String get rwkv7Othello26mL10D448Extended =>
+      'assets/model/othello/rwkv7_othello_26m_L10_D448_extended.st';
+
+  /// File path: assets/model/othello/rwkv7_othello_9m_L10_D256_extended-ncnn.bin
+  String get rwkv7Othello9mL10D256ExtendedNcnnBin =>
+      'assets/model/othello/rwkv7_othello_9m_L10_D256_extended-ncnn.bin';
+
+  /// File path: assets/model/othello/rwkv7_othello_9m_L10_D256_extended-ncnn.param
+  String get rwkv7Othello9mL10D256ExtendedNcnnParam =>
+      'assets/model/othello/rwkv7_othello_9m_L10_D256_extended-ncnn.param';
+
+  /// File path: assets/model/othello/rwkv7_othello_9m_L10_D256_extended.st
+  String get rwkv7Othello9mL10D256Extended =>
+      'assets/model/othello/rwkv7_othello_9m_L10_D256_extended.st';
+
+  /// List of all assets
+  List<String> get values => [
+        rwkv7Othello26mL10D448ExtendedNcnnBin,
+        rwkv7Othello26mL10D448ExtendedNcnnParam,
+        rwkv7Othello26mL10D448Extended,
+        rwkv7Othello9mL10D256ExtendedNcnnBin,
+        rwkv7Othello9mL10D256ExtendedNcnnParam,
+        rwkv7Othello9mL10D256Extended
+      ];
 }
 
 class Assets {

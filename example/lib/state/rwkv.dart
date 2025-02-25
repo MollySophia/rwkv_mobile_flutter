@@ -101,7 +101,7 @@ extension $RWKV on _RWKV {
     required String modelPath,
     required Backend backend,
   }) async {
-    final tokenizerPath = await getModelPath("assets/model/b_rwkv_vocab_v20230424.txt");
+    final tokenizerPath = await getModelPath(Assets.config.chat.bRwkvVocabV20230424);
 
     final rootIsolateToken = RootIsolateToken.instance;
     final rwkvMobile = RWKVMobile();
@@ -160,14 +160,14 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
     late final String modelPath;
     late final Backend backend;
 
-    final tokenizerPath = await getModelPath("assets/model/b_othello_vocab.txt");
+    final tokenizerPath = await getModelPath(Assets.config.othello.bOthelloVocab);
 
     if (Platform.isIOS || Platform.isMacOS) {
-      modelPath = await getModelPath("assets/model/rwkv7_othello_26m_L10_D448_extended.st");
+      modelPath = await getModelPath(Assets.model.othello.rwkv7Othello26mL10D448Extended);
       backend = Backend.webRwkv;
     } else {
-      modelPath = await getModelPath("assets/model/rwkv7_othello_26m_L10_D448_extended-ncnn.bin");
-      await getModelPath("assets/model/rwkv7_othello_26m_L10_D448_extended-ncnn.param");
+      modelPath = await getModelPath(Assets.model.othello.rwkv7Othello26mL10D448ExtendedNcnnBin);
+      await getModelPath(Assets.model.othello.rwkv7Othello26mL10D448ExtendedNcnnParam);
       backend = Backend.ncnn;
     }
 
