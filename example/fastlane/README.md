@@ -125,6 +125,22 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 
 
+### test
+
+```sh
+[bundle exec] fastlane test
+```
+
+
+
+### build_assets
+
+```sh
+[bundle exec] fastlane build_assets
+```
+
+
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.

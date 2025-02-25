@@ -95,6 +95,16 @@ lane :global_replace do |params|
 end
 
 lane :switch_env do |params|
+  raw_switch_android_files(env: params[:env])
   global_replace(env: params[:env])
   build_assets()
+end
+
+lane :test do |params|
+  raw_switch_android_files(env: params[:env])
+end
+
+lane :build_assets do
+  sh "cd ..;dart run flutter_native_splash:create;cd fastlane"
+  sh "cd ..;dart run icons_launcher:create;cd fastlane"
 end

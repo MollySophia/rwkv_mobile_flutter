@@ -1,5 +1,4 @@
 import 'package:zone/config.dart';
-import 'package:zone/launch_arguments.dart';
 import 'package:zone/page/chat.dart';
 import 'package:zone/page/empty.dart';
 import 'package:zone/page/file.dart';
