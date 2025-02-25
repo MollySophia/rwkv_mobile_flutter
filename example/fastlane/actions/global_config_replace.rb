@@ -61,6 +61,8 @@ module Fastlane
           "**/node_modules/**",
           "fastlane/actions/**",  # 排除action文件自身
           "fastlane/environments.yml",
+          "**/gen/**",
+          "**/l10n/**",
         ]
 
         # 遍历 key 值
