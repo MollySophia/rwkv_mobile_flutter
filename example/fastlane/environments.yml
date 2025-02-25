@@ -12,5 +12,5 @@ chat:
 
 app_icon: [assets/icon/icon.othello.png, assets/icon/icon.chat.png]
 bundle_id_ios: [com.rwkv.othello.v7.ios, com.rwkv.chat.v7.ios]
-bundle_id_android: com.rwkv.zone, com.rwkvzone.chat]
+bundle_id_android: [com.rwkv.zone, com.rwkvzone.chat]
 app_name: [RWKV Othello, RWKV Chat]
