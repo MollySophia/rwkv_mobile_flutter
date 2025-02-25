@@ -89,3 +89,12 @@ lane :android_pgyer do
     apk: "./build/app/outputs/flutter-apk/app-release.apk",
   )
 end
+
+lane :global_replace do |params|
+  global_config_replace(env: params[:env])
+end
+
+lane :switch_env do |params|
+  global_replace(env: params[:env])
+  build_assets()
+end
