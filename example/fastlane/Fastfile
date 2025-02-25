@@ -1,15 +1,14 @@
 lane :all do
+  envString = params[:env] || "chat"
   change_analysis_options()
   dart_fix()
   change_analysis_options()
-  increase_build_number()
-  generate_icon()
-  generate_splash()
-  # 🔥 iOS
-  # puts "🔥🔥🔥 Start building iOS app for TestFlight External 🔥🔥🔥"
-  # ios_beta_external()
-  # 🔥 Android APK, pgyer
-  puts "🔥🔥🔥 Start building Android APK for pgyer 🔥🔥🔥"
+  build_number = increase_build_number()
+  # git_add(path: ".")
+  # git_commit(path: ".", message: "_")
+  # push_to_git_remote()
+  global_replace(env: envString) # 替换环境变量
+  build_assets() # 构建 assets
   android_pgyer()
 
   git_reset()
@@ -19,28 +18,13 @@ lane :dart_fix do
   sh "cd ..;dart fix --apply;cd fastlane"
 end
 
-lane :generate_icon do
-  sh "cd ..;flutter pub run flutter_launcher_icons:main;cd fastlane"
-end
-
-lane :generate_splash do
-  sh "cd ..;flutter pub run flutter_native_splash:create;cd fastlane"
-end
-
 lane :git_reset do
-  sh "git add .;git reset --hard;git clean -fd"
+  sh "cd ..;git add .;git add .;git reset --hard;cd #{Dir.pwd}"
 end
 
-lane :change_app_name do
-  # TODO: @halo
-end
-
-lane :change_app_icon do
-  # TODO: @halo
-end
-
-lane :change_app_id do
-  # TODO: @halo
+lane :build_assets do
+  sh "cd ..;dart run flutter_native_splash:create;cd fastlane"
+  sh "cd ..;dart run icons_launcher:create;cd fastlane"
 end
 
 lane :change_analysis_options do
@@ -102,9 +86,4 @@ end
 
 lane :test do |params|
   raw_switch_android_files(env: params[:env])
-end
-
-lane :build_assets do
-  sh "cd ..;dart run flutter_native_splash:create;cd fastlane"
-  sh "cd ..;dart run icons_launcher:create;cd fastlane"
 end

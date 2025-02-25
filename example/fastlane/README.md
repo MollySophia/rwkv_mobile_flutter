@@ -29,22 +29,6 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 
 
-### generate_icon
-
-```sh
-[bundle exec] fastlane generate_icon
-```
-
-
-
-### generate_splash
-
-```sh
-[bundle exec] fastlane generate_splash
-```
-
-
-
 ### git_reset
 
 ```sh
@@ -53,26 +37,10 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 
 
-### change_app_name
+### build_assets
 
 ```sh
-[bundle exec] fastlane change_app_name
-```
-
-
-
-### change_app_icon
-
-```sh
-[bundle exec] fastlane change_app_icon
-```
-
-
-
-### change_app_id
-
-```sh
-[bundle exec] fastlane change_app_id
+[bundle exec] fastlane build_assets
 ```
 
 
@@ -129,14 +97,6 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ```sh
 [bundle exec] fastlane test
-```
-
-
-
-### build_assets
-
-```sh
-[bundle exec] fastlane build_assets
 ```
 
 

@@ -34,8 +34,7 @@ class _PageChatState extends State<PageChat> {
       builder: (context) {
         return DraggableScrollableSheet(
           initialChildSize: 0.8,
-          minChildSize: 0.6,
-          maxChildSize: 0.85,
+          maxChildSize: 0.9,
           expand: false,
           snap: false,
           builder: (BuildContext context, ScrollController scrollController) {
@@ -60,8 +59,7 @@ class _PageChatState extends State<PageChat> {
       builder: (context) {
         return DraggableScrollableSheet(
           initialChildSize: 0.8,
-          minChildSize: 0.6,
-          maxChildSize: 0.85,
+          maxChildSize: 0.9,
           expand: false,
           snap: false,
           builder: (BuildContext context, ScrollController scrollController) {
