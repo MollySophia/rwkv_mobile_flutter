@@ -1,4 +1,4 @@
-lane :all do
+lane :all do |params|
   envString = params[:env] || "chat"
   change_analysis_options()
   dart_fix()
