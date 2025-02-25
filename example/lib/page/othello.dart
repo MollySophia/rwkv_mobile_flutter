@@ -106,7 +106,7 @@ class _Title extends ConsumerWidget {
         12.w,
         T("$version($buildNumber)", s: TS(c: kB.wo(0.0), s: 10)),
         if (usePortrait) const Spacer(),
-        const T("RWKV Othello", s: TS(c: kB, s: 20, w: FW.w700)),
+        const T("RWKV Chat", s: TS(c: kB, s: 20, w: FW.w700)),
         if (usePortrait) const Spacer(),
         if (!usePortrait) 32.w,
         T("$version($buildNumber)", s: TS(c: kB.wo(0.5), s: 10)),
