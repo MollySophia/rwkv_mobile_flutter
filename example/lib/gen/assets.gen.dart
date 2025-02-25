@@ -12,81 +12,74 @@ import 'package:flutter/widgets.dart';
 class $AssetsConfigGen {
   const $AssetsConfigGen();
 
-  /// File path: assets/config/prompts.en-US.json
-  String get promptsEnUS => 'assets/config/prompts.en-US.json';
-
-  /// File path: assets/config/prompts.zh-hans.json
-  String get promptsZhHans => 'assets/config/prompts.zh-hans.json';
-
-  /// File path: assets/config/weights.json
-  String get weights => 'assets/config/weights.json';
-
-  /// List of all assets
-  List<String> get values => [promptsEnUS, promptsZhHans, weights];
+  /// Directory path: assets/config/chat
+  $AssetsConfigChatGen get chat => const $AssetsConfigChatGen();
 }
 
 class $AssetsImgGen {
   const $AssetsImgGen();
 
-  /// File path: assets/img/logo.png
-  AssetGenImage get logo => const AssetGenImage('assets/img/logo.png');
-
-  /// File path: assets/img/logo.square.png
-  AssetGenImage get logoSquare =>
-      const AssetGenImage('assets/img/logo.square.png');
-
-  /// List of all assets
-  List<AssetGenImage> get values => [logo, logoSquare];
+  /// Directory path: assets/img/chat
+  $AssetsImgChatGen get chat => const $AssetsImgChatGen();
 }
 
 class $AssetsModelGen {
   const $AssetsModelGen();
 
-  /// File path: assets/model/b_othello_vocab.txt
-  String get bOthelloVocab => 'assets/model/b_othello_vocab.txt';
+  /// Directory path: assets/model/chat
+  $AssetsModelChatGen get chat => const $AssetsModelChatGen();
+}
 
-  /// File path: assets/model/b_rwkv_vocab_v20230424.txt
-  String get bRwkvVocabV20230424 => 'assets/model/b_rwkv_vocab_v20230424.txt';
+class $AssetsConfigChatGen {
+  const $AssetsConfigChatGen();
 
-  /// File path: assets/model/rwkv7_othello_26m_L10_D448_extended-ncnn.bin
-  String get rwkv7Othello26mL10D448ExtendedNcnnBin =>
-      'assets/model/rwkv7_othello_26m_L10_D448_extended-ncnn.bin';
+  /// File path: assets/config/chat/b_rwkv_vocab_v20230424.txt
+  String get bRwkvVocabV20230424 =>
+      'assets/config/chat/b_rwkv_vocab_v20230424.txt';
 
-  /// File path: assets/model/rwkv7_othello_26m_L10_D448_extended-ncnn.param
-  String get rwkv7Othello26mL10D448ExtendedNcnnParam =>
-      'assets/model/rwkv7_othello_26m_L10_D448_extended-ncnn.param';
+  /// File path: assets/config/chat/prompts.en-US.json
+  String get promptsEnUS => 'assets/config/chat/prompts.en-US.json';
 
-  /// File path: assets/model/rwkv7_othello_26m_L10_D448_extended.st
-  String get rwkv7Othello26mL10D448Extended =>
-      'assets/model/rwkv7_othello_26m_L10_D448_extended.st';
+  /// File path: assets/config/chat/prompts.zh-hans.json
+  String get promptsZhHans => 'assets/config/chat/prompts.zh-hans.json';
 
-  /// File path: assets/model/rwkv7_othello_9m_L10_D256_extended-ncnn.bin
-  String get rwkv7Othello9mL10D256ExtendedNcnnBin =>
-      'assets/model/rwkv7_othello_9m_L10_D256_extended-ncnn.bin';
-
-  /// File path: assets/model/rwkv7_othello_9m_L10_D256_extended-ncnn.param
-  String get rwkv7Othello9mL10D256ExtendedNcnnParam =>
-      'assets/model/rwkv7_othello_9m_L10_D256_extended-ncnn.param';
-
-  /// File path: assets/model/rwkv7_othello_9m_L10_D256_extended.st
-  String get rwkv7Othello9mL10D256Extended =>
-      'assets/model/rwkv7_othello_9m_L10_D256_extended.st';
+  /// File path: assets/config/chat/weights.json
+  String get weights => 'assets/config/chat/weights.json';
 
   /// List of all assets
-  List<String> get values => [
-    bOthelloVocab,
-    bRwkvVocabV20230424,
-    rwkv7Othello26mL10D448ExtendedNcnnBin,
-    rwkv7Othello26mL10D448ExtendedNcnnParam,
-    rwkv7Othello26mL10D448Extended,
-    rwkv7Othello9mL10D256ExtendedNcnnBin,
-    rwkv7Othello9mL10D256ExtendedNcnnParam,
-    rwkv7Othello9mL10D256Extended,
-  ];
+  List<String> get values =>
+      [bRwkvVocabV20230424, promptsEnUS, promptsZhHans, weights];
+}
+
+class $AssetsImgChatGen {
+  const $AssetsImgChatGen();
+
+  /// File path: assets/img/chat/.gitkeep
+  String get aGitkeep => 'assets/img/chat/.gitkeep';
+
+  /// File path: assets/img/chat/logo.png
+  AssetGenImage get logo => const AssetGenImage('assets/img/chat/logo.png');
+
+  /// File path: assets/img/chat/logo.square.png
+  AssetGenImage get logoSquare =>
+      const AssetGenImage('assets/img/chat/logo.square.png');
+
+  /// List of all assets
+  List<dynamic> get values => [aGitkeep, logo, logoSquare];
+}
+
+class $AssetsModelChatGen {
+  const $AssetsModelChatGen();
+
+  /// File path: assets/model/chat/.gitkeep
+  String get aGitkeep => 'assets/model/chat/.gitkeep';
+
+  /// List of all assets
+  List<String> get values => [aGitkeep];
 }
 
 class Assets {
-  const Assets._();
+  Assets._();
 
   static const $AssetsConfigGen config = $AssetsConfigGen();
   static const $AssetsImgGen img = $AssetsImgGen();
@@ -94,7 +87,11 @@ class Assets {
 }
 
 class AssetGenImage {
-  const AssetGenImage(this._assetName, {this.size, this.flavors = const {}});
+  const AssetGenImage(
+    this._assetName, {
+    this.size,
+    this.flavors = const {},
+  });
 
   final String _assetName;
 
@@ -122,7 +119,7 @@ class AssetGenImage {
     bool gaplessPlayback = true,
     bool isAntiAlias = false,
     String? package,
-    FilterQuality filterQuality = FilterQuality.medium,
+    FilterQuality filterQuality = FilterQuality.low,
     int? cacheWidth,
     int? cacheHeight,
   }) {
@@ -154,8 +151,15 @@ class AssetGenImage {
     );
   }
 
-  ImageProvider provider({AssetBundle? bundle, String? package}) {
-    return AssetImage(_assetName, bundle: bundle, package: package);
+  ImageProvider provider({
+    AssetBundle? bundle,
+    String? package,
+  }) {
+    return AssetImage(
+      _assetName,
+      bundle: bundle,
+      package: package,
+    );
   }
 
   String get path => _assetName;

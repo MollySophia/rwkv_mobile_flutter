@@ -239,7 +239,7 @@ extension _$Chat on _Chat {
   FV _loadRoles() async {
     final currentLocale = Intl.getCurrentLocale();
     final useEn = currentLocale.startsWith("en");
-    final jsonString = await rootBundle.loadString(useEn ? Assets.config.promptsEnUS : Assets.config.promptsZhHans);
+    final jsonString = await rootBundle.loadString(useEn ? Assets.config.chat.promptsEnUS : Assets.config.chat.promptsZhHans);
     final json = HF.listJSON(jsonDecode(jsonString));
     final roles = json.map((e) => Role.fromJson(e)).toList();
     this.roles.u(roles);

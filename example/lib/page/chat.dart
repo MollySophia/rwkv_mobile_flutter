@@ -133,7 +133,7 @@ class _Welcome extends ConsumerWidget {
               c: CAA.center,
               children: [
                 const Spacer(),
-                Assets.img.logoSquare.image(width: 140),
+                Assets.img.chat.logoSquare.image(width: 140),
                 12.h,
                 T(S.current.chat_welcome_to_use, s: const TS(s: 18, w: FW.w600)),
                 12.h,
