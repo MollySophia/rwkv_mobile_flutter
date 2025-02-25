@@ -199,6 +199,16 @@ class S {
       args: [],
     );
   }
+
+  /// `RWKV Othello`
+  String get rwkv_othello {
+    return Intl.message(
+      'RWKV Othello',
+      name: 'rwkv_othello',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

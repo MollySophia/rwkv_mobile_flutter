@@ -38,6 +38,7 @@ module Fastlane
           "**/*.yml",
           "**/*.json",
           "**/*.plist",
+          "**/*.xml",
           "**/*.pbxproj",
           "**/*.xcconfig",
 
@@ -63,6 +64,7 @@ module Fastlane
           "fastlane/environments.yml",
           "**/gen/**",
           "**/l10n/**",
+          "assets/config/**",
         ]
 
         # 遍历 key 值

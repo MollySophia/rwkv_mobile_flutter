@@ -50,6 +50,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "download_model": MessageLookupByLibrary.simpleMessage("Download model"),
     "foo_bar": MessageLookupByLibrary.simpleMessage("foo bar"),
     "othello_title": MessageLookupByLibrary.simpleMessage("RWKV Othello"),
+    "rwkv_othello": MessageLookupByLibrary.simpleMessage("RWKV Othello"),
     "start_to_chat": MessageLookupByLibrary.simpleMessage("Start to chat"),
     "use_it_now": MessageLookupByLibrary.simpleMessage("Use it now"),
     "welcome_to_use_rwkv": MessageLookupByLibrary.simpleMessage(

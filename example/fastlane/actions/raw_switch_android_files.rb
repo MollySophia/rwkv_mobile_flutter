@@ -32,7 +32,7 @@ module Fastlane
               puts fromFilePath
               # 如果源路径和目标路径相同，跳过当前文件
               if fromFilePath == toFilePath
-                puts "⏩ 源路径和目标路径相同，跳过: #{fromFilePath}"
+                puts "👍 源路径和目标路径相同，跳过: #{fromFilePath}"
                 next
               end
 
@@ -45,14 +45,13 @@ module Fastlane
 
                 # 源文件不存在的情况
                 unless File.exist?(fromFilePath)
-                  puts "⚠️ 源文件不存在: #{fromFilePath}"
-                  File.open(toFilePath, "w") { }
+                  puts "🚧 源文件不存在: #{fromFilePath}"
                   next
                 end
 
                 # 目标文件已存在的情况
                 if File.exist?(toFilePath)
-                  File.delete(toFilePath)
+                  next
                 end
 
                 # 复制文件
@@ -61,7 +60,7 @@ module Fastlane
                 # 删除源文件
                 File.delete(fromFilePath)
               rescue => e
-                puts "❌ 错误: #{e.message}"
+                puts "😡 错误: #{e.message}"
                 puts e.backtrace
               end
             end

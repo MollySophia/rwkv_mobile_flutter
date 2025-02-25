@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
+import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/cell_type.dart';
 import 'package:zone/state/p.dart';
 
@@ -106,7 +107,7 @@ class _Title extends ConsumerWidget {
         12.w,
         T("$version($buildNumber)", s: TS(c: kB.wo(0.0), s: 10)),
         if (usePortrait) const Spacer(),
-        const T("RWKV Chat", s: TS(c: kB, s: 20, w: FW.w700)),
+        T(S.current.rwkv_othello, s: TS(c: kB, s: 20, w: FW.w700)),
         if (usePortrait) const Spacer(),
         if (!usePortrait) 32.w,
         T("$version($buildNumber)", s: TS(c: kB.wo(0.5), s: 10)),

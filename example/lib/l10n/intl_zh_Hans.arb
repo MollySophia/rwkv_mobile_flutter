@@ -12,5 +12,7 @@
   "use_it_now": "立即使用",
   "choose_prebuilt_character": "选择预设角色",
   "start_to_chat": "开始聊天",
-  "chat_model_name": "模型名称"
+  "chat_model_name": "模型名称",
+  "rwkv_othello": "RWKV 黑白棋",
+  "rwkv_chat": "RWKV 聊天",
 }
