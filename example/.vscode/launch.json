@@ -17,6 +17,20 @@
       ]
     },
     {
+      "name": "profile",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "flutterMode": "profile",
+    },
+    {
+      "name": "release",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "flutterMode": "release",
+    },
+    {
       "name": "iPhone16simulator",
       "request": "launch",
       "type": "dart",
