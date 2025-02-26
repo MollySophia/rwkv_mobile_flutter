@@ -24,14 +24,14 @@ extension $RemoteFile on _RemoteFile {
     // 3. if zip file, unzip it, return the path
     // 4. download zip file
     // 5. unzip it, return the path
-    final task = DownloadTask(
+    final task = bd.DownloadTask(
       url: fileKey.url,
       headers: {
         'x-api-key': '4s5aWqs2f4PzKfgLjuRZgXKvvmal5Z5iq0OzkTPwaA2axgNgSbayfQEX5FgOpTxyyeUM4gsFHHDZroaFDIE3NtSJD6evdz3lAVctyN026keeXMoJ7tmUy5zriMJHJ9aM',
       },
-      baseDirectory: BaseDirectory.applicationDocuments,
+      baseDirectory: bd.BaseDirectory.applicationDocuments,
       filename: fileKey.url.split('/').last.split('?')[0],
-      updates: Updates.statusAndProgress, // request status and progress updates
+      updates: bd.Updates.statusAndProgress, // request status and progress updates
       requiresWiFi: false,
       retries: 5,
       allowPause: false,
@@ -40,7 +40,7 @@ extension $RemoteFile on _RemoteFile {
 
     downloadingFiles.uv({task.taskId: fileKey});
 
-    final success = await FileDownloader().enqueue(task);
+    final success = await bd.FileDownloader().enqueue(task);
 
     if (!success) {
       if (kDebugMode) print("😡 enqueue failed");
@@ -76,12 +76,12 @@ extension _$RemoteFile on _RemoteFile {
   FV _init() async {
     // 1. check file
     // 2. check zip file
-    await FileDownloader().ready;
-    FileDownloader().updates.listen(_onTaskUpdate);
+    await bd.FileDownloader().ready;
+    bd.FileDownloader().updates.listen(_onTaskUpdate);
     checkLocalFile();
   }
 
-  void _onTaskUpdate(TaskUpdate _taskUpdate) {
+  void _onTaskUpdate(bd.TaskUpdate _taskUpdate) {
     final task = _taskUpdate.task;
     final taskId = task.taskId;
 
@@ -91,14 +91,14 @@ extension _$RemoteFile on _RemoteFile {
     if (fileKey == null) {
       if (kDebugMode) print("😡 _onTaskUpdate:");
       if (kDebugMode) print("😡 taskId: $taskId not found");
-      FileDownloader().cancelTaskWithId(taskId);
+      bd.FileDownloader().cancelTaskWithId(taskId);
       return;
     }
 
     final modelFile = files(fileKey).v;
 
     switch (_taskUpdate) {
-      case TaskProgressUpdate progressUpdate:
+      case bd.TaskProgressUpdate progressUpdate:
         final progress = progressUpdate.progress;
         final networkSpeed = progressUpdate.networkSpeed;
         final timeRemaining = progressUpdate.timeRemaining;
@@ -111,13 +111,13 @@ extension _$RemoteFile on _RemoteFile {
           timeRemaining: done ? modelFile.timeRemaining : timeRemaining,
         ));
         return;
-      case TaskStatusUpdate statusUpdate:
+      case bd.TaskStatusUpdate statusUpdate:
         _onStatusUpdate(statusUpdate);
         return;
     }
   }
 
-  void _onStatusUpdate(TaskStatusUpdate statusUpdate) {
+  void _onStatusUpdate(bd.TaskStatusUpdate statusUpdate) {
     final task = statusUpdate.task;
     final taskId = task.taskId;
 
@@ -144,21 +144,21 @@ extension _$RemoteFile on _RemoteFile {
     bool downloading = false;
     if (kDebugMode) print("🔥 $status");
     switch (status) {
-      case TaskStatus.enqueued:
+      case bd.TaskStatus.enqueued:
         downloading = true;
-      case TaskStatus.running:
+      case bd.TaskStatus.running:
         downloading = true;
-      case TaskStatus.complete:
+      case bd.TaskStatus.complete:
         downloading = false;
-      case TaskStatus.notFound:
+      case bd.TaskStatus.notFound:
         downloading = false;
-      case TaskStatus.failed:
+      case bd.TaskStatus.failed:
         downloading = false;
-      case TaskStatus.canceled:
+      case bd.TaskStatus.canceled:
         downloading = false;
-      case TaskStatus.waitingToRetry:
+      case bd.TaskStatus.waitingToRetry:
         downloading = true;
-      case TaskStatus.paused:
+      case bd.TaskStatus.paused:
         downloading = false;
     }
 

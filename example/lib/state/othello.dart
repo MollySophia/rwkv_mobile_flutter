@@ -140,9 +140,11 @@ extension _$ on _Othello {
     P.app.paddingLeft.lv(_syncLayout, fireImmediately: true);
     P.app.paddingRight.lv(_syncLayout, fireImmediately: true);
 
-    HF.wait(1000).then((_) {
-      P.rwkv.loadOthello();
-    });
+    if (Config.firstPage == PageKey.othello.name) {
+      HF.wait(1000).then((_) {
+        P.rwkv.loadOthello();
+      });
+    }
   }
 
   void _onPlacingEventReceived((int row, int col) event) async {
