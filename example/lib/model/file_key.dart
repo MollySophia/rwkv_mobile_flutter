@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:rwkv_mobile_flutter/rwkv_mobile_flutter.dart';
 import 'package:zone/model/weights.dart';
 import 'package:zone/state/p.dart';
@@ -56,6 +57,7 @@ enum FileKey {
   }
 
   bool get available {
+    if (this == download_test) return kDebugMode;
     final platforms = weights?.platforms;
     if (platforms == null) return false;
     if (Platform.isIOS) return platforms.contains('ios');
