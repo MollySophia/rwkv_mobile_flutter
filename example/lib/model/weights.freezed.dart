@@ -29,6 +29,7 @@ mixin _$Weights {
   String get quantization => throw _privateConstructorUsedError;
   List<String> get platforms => throw _privateConstructorUsedError;
   List<String> get backends => throw _privateConstructorUsedError;
+  String? get sha256 => throw _privateConstructorUsedError;
 
   /// Serializes this Weights to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -53,7 +54,8 @@ abstract class $WeightsCopyWith<$Res> {
       String url,
       String quantization,
       List<String> platforms,
-      List<String> backends});
+      List<String> backends,
+      String? sha256});
 }
 
 /// @nodoc
@@ -80,6 +82,7 @@ class _$WeightsCopyWithImpl<$Res, $Val extends Weights>
     Object? quantization = null,
     Object? platforms = null,
     Object? backends = null,
+    Object? sha256 = freezed,
   }) {
     return _then(_value.copyWith(
       name: null == name
@@ -118,6 +121,10 @@ class _$WeightsCopyWithImpl<$Res, $Val extends Weights>
           ? _value.backends
           : backends // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      sha256: freezed == sha256
+          ? _value.sha256
+          : sha256 // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -138,7 +145,8 @@ abstract class _$$WeightsImplCopyWith<$Res> implements $WeightsCopyWith<$Res> {
       String url,
       String quantization,
       List<String> platforms,
-      List<String> backends});
+      List<String> backends,
+      String? sha256});
 }
 
 /// @nodoc
@@ -163,6 +171,7 @@ class __$$WeightsImplCopyWithImpl<$Res>
     Object? quantization = null,
     Object? platforms = null,
     Object? backends = null,
+    Object? sha256 = freezed,
   }) {
     return _then(_$WeightsImpl(
       name: null == name
@@ -201,6 +210,10 @@ class __$$WeightsImplCopyWithImpl<$Res>
           ? _value._backends
           : backends // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      sha256: freezed == sha256
+          ? _value.sha256
+          : sha256 // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -217,7 +230,8 @@ class _$WeightsImpl extends _Weights {
       required this.url,
       required this.quantization,
       required final List<String> platforms,
-      required final List<String> backends})
+      required final List<String> backends,
+      required this.sha256})
       : _platforms = platforms,
         _backends = backends,
         super._();
@@ -256,8 +270,11 @@ class _$WeightsImpl extends _Weights {
   }
 
   @override
+  final String? sha256;
+
+  @override
   String toString() {
-    return 'Weights(name: $name, type: $type, modelSize: $modelSize, fileName: $fileName, fileSize: $fileSize, url: $url, quantization: $quantization, platforms: $platforms, backends: $backends)';
+    return 'Weights(name: $name, type: $type, modelSize: $modelSize, fileName: $fileName, fileSize: $fileSize, url: $url, quantization: $quantization, platforms: $platforms, backends: $backends, sha256: $sha256)';
   }
 
   @override
@@ -278,7 +295,8 @@ class _$WeightsImpl extends _Weights {
                 other.quantization == quantization) &&
             const DeepCollectionEquality()
                 .equals(other._platforms, _platforms) &&
-            const DeepCollectionEquality().equals(other._backends, _backends));
+            const DeepCollectionEquality().equals(other._backends, _backends) &&
+            (identical(other.sha256, sha256) || other.sha256 == sha256));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -293,7 +311,8 @@ class _$WeightsImpl extends _Weights {
       url,
       quantization,
       const DeepCollectionEquality().hash(_platforms),
-      const DeepCollectionEquality().hash(_backends));
+      const DeepCollectionEquality().hash(_backends),
+      sha256);
 
   /// Create a copy of Weights
   /// with the given fields replaced by the non-null parameter values.
@@ -321,7 +340,8 @@ abstract class _Weights extends Weights {
       required final String url,
       required final String quantization,
       required final List<String> platforms,
-      required final List<String> backends}) = _$WeightsImpl;
+      required final List<String> backends,
+      required final String? sha256}) = _$WeightsImpl;
   const _Weights._() : super._();
 
   factory _Weights.fromJson(Map<String, dynamic> json) = _$WeightsImpl.fromJson;
@@ -344,6 +364,8 @@ abstract class _Weights extends Weights {
   List<String> get platforms;
   @override
   List<String> get backends;
+  @override
+  String? get sha256;
 
   /// Create a copy of Weights
   /// with the given fields replaced by the non-null parameter values.

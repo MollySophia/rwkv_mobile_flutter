@@ -18,12 +18,15 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$FileInfo {
   FileKey get key => throw _privateConstructorUsedError;
 
-  /// 是否已下载
+  /// 是否存在本地文件
   bool get hasFile => throw _privateConstructorUsedError;
+  String? get sha256 => throw _privateConstructorUsedError;
   double get progress => throw _privateConstructorUsedError;
   double get networkSpeed => throw _privateConstructorUsedError;
   Duration get timeRemaining => throw _privateConstructorUsedError;
   bool get downloading => throw _privateConstructorUsedError;
+  bool get checkingSHA256 => throw _privateConstructorUsedError;
+  bool get sha256Verified => throw _privateConstructorUsedError;
 
   /// Create a copy of FileInfo
   /// with the given fields replaced by the non-null parameter values.
@@ -40,10 +43,13 @@ abstract class $FileInfoCopyWith<$Res> {
   $Res call(
       {FileKey key,
       bool hasFile,
+      String? sha256,
       double progress,
       double networkSpeed,
       Duration timeRemaining,
-      bool downloading});
+      bool downloading,
+      bool checkingSHA256,
+      bool sha256Verified});
 }
 
 /// @nodoc
@@ -63,10 +69,13 @@ class _$FileInfoCopyWithImpl<$Res, $Val extends FileInfo>
   $Res call({
     Object? key = null,
     Object? hasFile = null,
+    Object? sha256 = freezed,
     Object? progress = null,
     Object? networkSpeed = null,
     Object? timeRemaining = null,
     Object? downloading = null,
+    Object? checkingSHA256 = null,
+    Object? sha256Verified = null,
   }) {
     return _then(_value.copyWith(
       key: null == key
@@ -77,6 +86,10 @@ class _$FileInfoCopyWithImpl<$Res, $Val extends FileInfo>
           ? _value.hasFile
           : hasFile // ignore: cast_nullable_to_non_nullable
               as bool,
+      sha256: freezed == sha256
+          ? _value.sha256
+          : sha256 // ignore: cast_nullable_to_non_nullable
+              as String?,
       progress: null == progress
           ? _value.progress
           : progress // ignore: cast_nullable_to_non_nullable
@@ -93,6 +106,14 @@ class _$FileInfoCopyWithImpl<$Res, $Val extends FileInfo>
           ? _value.downloading
           : downloading // ignore: cast_nullable_to_non_nullable
               as bool,
+      checkingSHA256: null == checkingSHA256
+          ? _value.checkingSHA256
+          : checkingSHA256 // ignore: cast_nullable_to_non_nullable
+              as bool,
+      sha256Verified: null == sha256Verified
+          ? _value.sha256Verified
+          : sha256Verified // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -108,10 +129,13 @@ abstract class _$$FileInfoImplCopyWith<$Res>
   $Res call(
       {FileKey key,
       bool hasFile,
+      String? sha256,
       double progress,
       double networkSpeed,
       Duration timeRemaining,
-      bool downloading});
+      bool downloading,
+      bool checkingSHA256,
+      bool sha256Verified});
 }
 
 /// @nodoc
@@ -129,10 +153,13 @@ class __$$FileInfoImplCopyWithImpl<$Res>
   $Res call({
     Object? key = null,
     Object? hasFile = null,
+    Object? sha256 = freezed,
     Object? progress = null,
     Object? networkSpeed = null,
     Object? timeRemaining = null,
     Object? downloading = null,
+    Object? checkingSHA256 = null,
+    Object? sha256Verified = null,
   }) {
     return _then(_$FileInfoImpl(
       key: null == key
@@ -143,6 +170,10 @@ class __$$FileInfoImplCopyWithImpl<$Res>
           ? _value.hasFile
           : hasFile // ignore: cast_nullable_to_non_nullable
               as bool,
+      sha256: freezed == sha256
+          ? _value.sha256
+          : sha256 // ignore: cast_nullable_to_non_nullable
+              as String?,
       progress: null == progress
           ? _value.progress
           : progress // ignore: cast_nullable_to_non_nullable
@@ -159,6 +190,14 @@ class __$$FileInfoImplCopyWithImpl<$Res>
           ? _value.downloading
           : downloading // ignore: cast_nullable_to_non_nullable
               as bool,
+      checkingSHA256: null == checkingSHA256
+          ? _value.checkingSHA256
+          : checkingSHA256 // ignore: cast_nullable_to_non_nullable
+              as bool,
+      sha256Verified: null == sha256Verified
+          ? _value.sha256Verified
+          : sha256Verified // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -169,19 +208,25 @@ class _$FileInfoImpl extends _FileInfo {
   const _$FileInfoImpl(
       {required this.key,
       this.hasFile = false,
+      this.sha256 = null,
       this.progress = 0,
       this.networkSpeed = 0,
       this.timeRemaining = Duration.zero,
-      this.downloading = false})
+      this.downloading = false,
+      this.checkingSHA256 = false,
+      this.sha256Verified = false})
       : super._();
 
   @override
   final FileKey key;
 
-  /// 是否已下载
+  /// 是否存在本地文件
   @override
   @JsonKey()
   final bool hasFile;
+  @override
+  @JsonKey()
+  final String? sha256;
   @override
   @JsonKey()
   final double progress;
@@ -194,10 +239,16 @@ class _$FileInfoImpl extends _FileInfo {
   @override
   @JsonKey()
   final bool downloading;
+  @override
+  @JsonKey()
+  final bool checkingSHA256;
+  @override
+  @JsonKey()
+  final bool sha256Verified;
 
   @override
   String toString() {
-    return 'FileInfo(key: $key, hasFile: $hasFile, progress: $progress, networkSpeed: $networkSpeed, timeRemaining: $timeRemaining, downloading: $downloading)';
+    return 'FileInfo(key: $key, hasFile: $hasFile, sha256: $sha256, progress: $progress, networkSpeed: $networkSpeed, timeRemaining: $timeRemaining, downloading: $downloading, checkingSHA256: $checkingSHA256, sha256Verified: $sha256Verified)';
   }
 
   @override
@@ -207,6 +258,7 @@ class _$FileInfoImpl extends _FileInfo {
             other is _$FileInfoImpl &&
             (identical(other.key, key) || other.key == key) &&
             (identical(other.hasFile, hasFile) || other.hasFile == hasFile) &&
+            (identical(other.sha256, sha256) || other.sha256 == sha256) &&
             (identical(other.progress, progress) ||
                 other.progress == progress) &&
             (identical(other.networkSpeed, networkSpeed) ||
@@ -214,12 +266,16 @@ class _$FileInfoImpl extends _FileInfo {
             (identical(other.timeRemaining, timeRemaining) ||
                 other.timeRemaining == timeRemaining) &&
             (identical(other.downloading, downloading) ||
-                other.downloading == downloading));
+                other.downloading == downloading) &&
+            (identical(other.checkingSHA256, checkingSHA256) ||
+                other.checkingSHA256 == checkingSHA256) &&
+            (identical(other.sha256Verified, sha256Verified) ||
+                other.sha256Verified == sha256Verified));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, key, hasFile, progress,
-      networkSpeed, timeRemaining, downloading);
+  int get hashCode => Object.hash(runtimeType, key, hasFile, sha256, progress,
+      networkSpeed, timeRemaining, downloading, checkingSHA256, sha256Verified);
 
   /// Create a copy of FileInfo
   /// with the given fields replaced by the non-null parameter values.
@@ -234,18 +290,23 @@ abstract class _FileInfo extends FileInfo {
   const factory _FileInfo(
       {required final FileKey key,
       final bool hasFile,
+      final String? sha256,
       final double progress,
       final double networkSpeed,
       final Duration timeRemaining,
-      final bool downloading}) = _$FileInfoImpl;
+      final bool downloading,
+      final bool checkingSHA256,
+      final bool sha256Verified}) = _$FileInfoImpl;
   const _FileInfo._() : super._();
 
   @override
   FileKey get key;
 
-  /// 是否已下载
+  /// 是否存在本地文件
   @override
   bool get hasFile;
+  @override
+  String? get sha256;
   @override
   double get progress;
   @override
@@ -254,6 +315,10 @@ abstract class _FileInfo extends FileInfo {
   Duration get timeRemaining;
   @override
   bool get downloading;
+  @override
+  bool get checkingSHA256;
+  @override
+  bool get sha256Verified;
 
   /// Create a copy of FileInfo
   /// with the given fields replaced by the non-null parameter values.

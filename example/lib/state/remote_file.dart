@@ -57,19 +57,13 @@ extension $RemoteFile on _RemoteFile {
     for (final key in fileKeys) {
       final path = key.path;
       final pathExists = await File(path).exists();
-      bool hasFile = false;
+      bool fileSizeVerified = false;
       if (pathExists) {
-        final pathSize = await File(path).length();
-        if (kDebugMode) print("💬 $path $pathExists $pathSize");
-        final expectedSize = key.fileSize;
-        if ((pathSize - expectedSize).abs() < 1024 * 1024 * 10) {
-          hasFile = true;
-        } else {
-          if (kDebugMode) print("😡 $path size mismatch: $pathSize < $expectedSize");
-        }
+        final expectFileSize = key.weights?.fileSize;
+        final fileSize = await File(path).length();
+        fileSizeVerified = expectFileSize == fileSize;
       }
-      final modelFile = files(key).v;
-      files(key).u(modelFile.copyWith(hasFile: hasFile));
+      files(key).u(files(key).v.copyWith(hasFile: fileSizeVerified));
     }
   }
 

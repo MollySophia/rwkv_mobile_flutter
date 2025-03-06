@@ -19,6 +19,7 @@ _$WeightsImpl _$$WeightsImplFromJson(Map<String, dynamic> json) =>
           (json['platforms'] as List<dynamic>).map((e) => e as String).toList(),
       backends:
           (json['backends'] as List<dynamic>).map((e) => e as String).toList(),
+      sha256: json['sha256'] as String?,
     );
 
 Map<String, dynamic> _$$WeightsImplToJson(_$WeightsImpl instance) =>
@@ -32,4 +33,5 @@ Map<String, dynamic> _$$WeightsImplToJson(_$WeightsImpl instance) =>
       'quantization': instance.quantization,
       'platforms': instance.platforms,
       'backends': instance.backends,
+      'sha256': instance.sha256,
     };

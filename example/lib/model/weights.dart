@@ -19,6 +19,7 @@ class Weights with _$Weights {
     required String quantization,
     required List<String> platforms,
     required List<String> backends,
+    required String? sha256,
   }) = _Weights;
 
   factory Weights.fromJson(Map<String, dynamic> json) => _$WeightsFromJson(json);
