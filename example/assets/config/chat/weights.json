@@ -72,7 +72,7 @@
     "type": "gguf",
     "modelSize": 2.9,
     "fileName": "rwkv7-world-2.9B-Q4_K_M.gguf",
-    "fileSize": 1875792416,
+    "fileSize": 1875792672,
     "url": "https://aifasthub.com/mollysama/rwkv-mobile-models/resolve/main/gguf/rwkv7-world-2.9B-Q4_K_M.gguf?download=true",
     "quantization": "Q4_K_M",
     "sha256": "739562e53e646aa793dce8a6e2f25527648678b8a6d0bc4a1a21be34d08ec805",
