@@ -4,9 +4,9 @@ lane :all do |params|
   dart_fix()
   change_analysis_options()
   build_number = increase_build_number()
-  # git_add(path: ".")
-  # git_commit(path: ".", message: "_")
-  # push_to_git_remote()
+  git_add(path: ".")
+  git_commit(path: ".", message: "_")
+  push_to_git_remote()
   global_replace(env: envString) # 替换环境变量
   build_assets() # 构建 assets
   android_pgyer()
