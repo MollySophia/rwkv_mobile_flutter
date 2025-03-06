@@ -254,7 +254,7 @@ class _RoleSelector extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final roles = ref.watch(P.chat.roles);
+    final roles = ref.watch(P.chat.roles).shuffled;
     final paddingBottom = ref.watch(P.app.paddingBottom);
     final loading = ref.watch(P.chat.loading);
 
