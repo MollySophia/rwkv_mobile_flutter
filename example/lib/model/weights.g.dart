@@ -13,7 +13,6 @@ _$WeightsImpl _$$WeightsImplFromJson(Map<String, dynamic> json) =>
       modelSize: (json['modelSize'] as num).toDouble(),
       fileName: json['fileName'] as String,
       fileSize: (json['fileSize'] as num).toInt(),
-      fileSizeString: json['fileSizeString'] as String,
       url: json['url'] as String,
       quantization: json['quantization'] as String,
       platforms:
@@ -29,7 +28,6 @@ Map<String, dynamic> _$$WeightsImplToJson(_$WeightsImpl instance) =>
       'modelSize': instance.modelSize,
       'fileName': instance.fileName,
       'fileSize': instance.fileSize,
-      'fileSizeString': instance.fileSizeString,
       'url': instance.url,
       'quantization': instance.quantization,
       'platforms': instance.platforms,

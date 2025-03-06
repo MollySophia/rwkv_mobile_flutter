@@ -47,6 +47,8 @@ class _Chat {
     return messages.v[editingIndex].isMine == false;
   });
 
+  late final loading = _gs(false);
+
   late final loaded = _gp((ref) {
     final currentModel = ref.watch(this.currentModel);
     return currentModel != null;

@@ -15,7 +15,6 @@ class Weights with _$Weights {
     required double modelSize,
     required String fileName,
     required int fileSize,
-    required String fileSizeString,
     required String url,
     required String quantization,
     required List<String> platforms,

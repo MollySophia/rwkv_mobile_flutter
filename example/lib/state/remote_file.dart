@@ -62,7 +62,7 @@ extension $RemoteFile on _RemoteFile {
         final pathSize = await File(path).length();
         if (kDebugMode) print("💬 $path $pathExists $pathSize");
         final expectedSize = key.fileSize;
-        if (pathSize >= expectedSize) {
+        if ((pathSize - expectedSize).abs() < 1024 * 1024 * 10) {
           hasFile = true;
         } else {
           if (kDebugMode) print("😡 $path size mismatch: $pathSize < $expectedSize");

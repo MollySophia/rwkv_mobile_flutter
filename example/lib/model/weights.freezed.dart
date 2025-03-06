@@ -25,7 +25,6 @@ mixin _$Weights {
   double get modelSize => throw _privateConstructorUsedError;
   String get fileName => throw _privateConstructorUsedError;
   int get fileSize => throw _privateConstructorUsedError;
-  String get fileSizeString => throw _privateConstructorUsedError;
   String get url => throw _privateConstructorUsedError;
   String get quantization => throw _privateConstructorUsedError;
   List<String> get platforms => throw _privateConstructorUsedError;
@@ -51,7 +50,6 @@ abstract class $WeightsCopyWith<$Res> {
       double modelSize,
       String fileName,
       int fileSize,
-      String fileSizeString,
       String url,
       String quantization,
       List<String> platforms,
@@ -78,7 +76,6 @@ class _$WeightsCopyWithImpl<$Res, $Val extends Weights>
     Object? modelSize = null,
     Object? fileName = null,
     Object? fileSize = null,
-    Object? fileSizeString = null,
     Object? url = null,
     Object? quantization = null,
     Object? platforms = null,
@@ -105,10 +102,6 @@ class _$WeightsCopyWithImpl<$Res, $Val extends Weights>
           ? _value.fileSize
           : fileSize // ignore: cast_nullable_to_non_nullable
               as int,
-      fileSizeString: null == fileSizeString
-          ? _value.fileSizeString
-          : fileSizeString // ignore: cast_nullable_to_non_nullable
-              as String,
       url: null == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
@@ -142,7 +135,6 @@ abstract class _$$WeightsImplCopyWith<$Res> implements $WeightsCopyWith<$Res> {
       double modelSize,
       String fileName,
       int fileSize,
-      String fileSizeString,
       String url,
       String quantization,
       List<String> platforms,
@@ -167,7 +159,6 @@ class __$$WeightsImplCopyWithImpl<$Res>
     Object? modelSize = null,
     Object? fileName = null,
     Object? fileSize = null,
-    Object? fileSizeString = null,
     Object? url = null,
     Object? quantization = null,
     Object? platforms = null,
@@ -194,10 +185,6 @@ class __$$WeightsImplCopyWithImpl<$Res>
           ? _value.fileSize
           : fileSize // ignore: cast_nullable_to_non_nullable
               as int,
-      fileSizeString: null == fileSizeString
-          ? _value.fileSizeString
-          : fileSizeString // ignore: cast_nullable_to_non_nullable
-              as String,
       url: null == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
@@ -227,7 +214,6 @@ class _$WeightsImpl extends _Weights {
       required this.modelSize,
       required this.fileName,
       required this.fileSize,
-      required this.fileSizeString,
       required this.url,
       required this.quantization,
       required final List<String> platforms,
@@ -250,8 +236,6 @@ class _$WeightsImpl extends _Weights {
   @override
   final int fileSize;
   @override
-  final String fileSizeString;
-  @override
   final String url;
   @override
   final String quantization;
@@ -273,7 +257,7 @@ class _$WeightsImpl extends _Weights {
 
   @override
   String toString() {
-    return 'Weights(name: $name, type: $type, modelSize: $modelSize, fileName: $fileName, fileSize: $fileSize, fileSizeString: $fileSizeString, url: $url, quantization: $quantization, platforms: $platforms, backends: $backends)';
+    return 'Weights(name: $name, type: $type, modelSize: $modelSize, fileName: $fileName, fileSize: $fileSize, url: $url, quantization: $quantization, platforms: $platforms, backends: $backends)';
   }
 
   @override
@@ -289,8 +273,6 @@ class _$WeightsImpl extends _Weights {
                 other.fileName == fileName) &&
             (identical(other.fileSize, fileSize) ||
                 other.fileSize == fileSize) &&
-            (identical(other.fileSizeString, fileSizeString) ||
-                other.fileSizeString == fileSizeString) &&
             (identical(other.url, url) || other.url == url) &&
             (identical(other.quantization, quantization) ||
                 other.quantization == quantization) &&
@@ -308,7 +290,6 @@ class _$WeightsImpl extends _Weights {
       modelSize,
       fileName,
       fileSize,
-      fileSizeString,
       url,
       quantization,
       const DeepCollectionEquality().hash(_platforms),
@@ -337,7 +318,6 @@ abstract class _Weights extends Weights {
       required final double modelSize,
       required final String fileName,
       required final int fileSize,
-      required final String fileSizeString,
       required final String url,
       required final String quantization,
       required final List<String> platforms,
@@ -356,8 +336,6 @@ abstract class _Weights extends Weights {
   String get fileName;
   @override
   int get fileSize;
-  @override
-  String get fileSizeString;
   @override
   String get url;
   @override

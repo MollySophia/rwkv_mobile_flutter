@@ -59,7 +59,7 @@ class _Cell extends ConsumerWidget {
             T(file.key.name),
             T(file.key.url),
             T("${"path".codeToName}: " + file.key.path.replaceAll("/Users/wangce/Library/Containers/", "")),
-            T("${"fileSize".codeToName} (bytes): " + file.fileSize.toString()),
+            T("${"fileSize".codeToName} (bytes): " + file.expectedFileSize.toString()),
             T("${"progress".codeToName}: " + file.progress.toString()),
             T("${"networkSpeed".codeToName} (mb/s): " + file.networkSpeed.toString()),
             T("${"timeRemaining".codeToName}: " + file.timeRemaining.toString()),

@@ -20,7 +20,7 @@ class FileInfo with _$FileInfo {
     @Default(false) bool downloading,
   }) = _FileInfo;
 
-  int get fileSize {
+  int get expectedFileSize {
     return key.fileSize;
   }
 }

@@ -256,6 +256,8 @@ class _RoleSelector extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final roles = ref.watch(P.chat.roles);
     final paddingBottom = ref.watch(P.app.paddingBottom);
+    final loading = ref.watch(P.chat.loading);
+
     return ClipRRect(
       borderRadius: 16.r,
       child: C(
@@ -289,15 +291,16 @@ class _RoleSelector extends ConsumerWidget {
                         12.w,
                         GD(
                           onTap: () {
+                            if (loading) return;
                             _onRoleTap(roles[index]);
                           },
                           child: C(
                             decoration: BD(
-                              color: kCG,
+                              color: loading ? kCG.wo(0.5) : kCG,
                               borderRadius: 8.r,
                             ),
                             padding: const EI.a(8),
-                            child: T(S.current.start_to_chat, s: const TS(c: kW)),
+                            child: T(loading ? "Loading..." : S.current.start_to_chat, s: const TS(c: kW)),
                           ),
                         ),
                       ],
@@ -337,22 +340,25 @@ class _ModelItem extends ConsumerWidget {
   const _ModelItem(this.fileKey);
 
   void _onLoadTap() async {
+    if (P.chat.loading.v) return;
     if (kDebugMode) print("💬 _onLoadTap");
     final modelPath = fileKey.path;
     final backend = fileKey.backend;
+    P.chat.loading.u(true);
 
     try {
       P.rwkv.clearStates();
+      P.chat.messages.u([]);
       await P.rwkv.loadChat(modelPath: modelPath, backend: backend);
     } catch (e) {
       Alert.error(e.toString());
       return;
+    } finally {
+      P.chat.loading.u(false);
     }
 
     P.chat.currentModel.u(fileKey);
-
     Alert.success("You can now start to chat with RWKV");
-
     Navigator.pop(getContext()!);
   }
 
@@ -363,7 +369,7 @@ class _ModelItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final file = ref.watch(P.remoteFile.files(fileKey));
-    final fileSize = file.fileSize;
+    final fileSize = file.expectedFileSize;
     final fileSizeMB = fileSize / 1024 / 1024;
     final fileSizeString = fileSizeMB.toStringAsFixed(2);
     final fileSizeGB = fileSizeMB / 1024;
@@ -378,6 +384,7 @@ class _ModelItem extends ConsumerWidget {
     final timeRemaining = file.timeRemaining;
     final currentModel = ref.watch(P.chat.currentModel);
     final isCurrentModel = currentModel == fileKey;
+    final loading = ref.watch(P.chat.loading);
 
     return ClipRRect(
       borderRadius: 8.r,
@@ -499,11 +506,11 @@ class _ModelItem extends ConsumerWidget {
                   onTap: _onLoadTap,
                   child: C(
                     decoration: BD(
-                      color: kCG,
+                      color: loading ? kCG.wo(0.5) : kCG,
                       borderRadius: 8.r,
                     ),
                     padding: const EI.a(8),
-                    child: T(S.current.start_to_chat, s: const TS(c: kW)),
+                    child: T(loading ? "Loading..." : S.current.start_to_chat, s: const TS(c: kW)),
                   ),
                 ),
               if (isCurrentModel)
