@@ -50,14 +50,17 @@ class _App extends StatelessWidget {
         debugShowCheckedModeBanner: !LaunchArgs.hideDebugBanner,
         routerConfig: kRouter,
         builder: (context, child) {
-          return Stack(
-            children: [
-              C(color: Theme.of(context).scaffoldBackgroundColor),
-              if (child != null) child,
-              Alert.deploy(),
-              if (LaunchArgs.enableChatDebugger) const ChatDebugger(),
-              if (LaunchArgs.enableOthelloDebugger) const OthelloDebugger(),
-            ],
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1)),
+            child: Stack(
+              children: [
+                C(color: Theme.of(context).scaffoldBackgroundColor),
+                if (child != null) child,
+                Alert.deploy(),
+                if (LaunchArgs.enableChatDebugger) const ChatDebugger(),
+                if (LaunchArgs.enableOthelloDebugger) const OthelloDebugger(),
+              ],
+            ),
           );
         },
       ),
