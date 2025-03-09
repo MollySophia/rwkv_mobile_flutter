@@ -38,6 +38,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "choose_prebuilt_character": MessageLookupByLibrary.simpleMessage("选择预设角色"),
     "download_model": MessageLookupByLibrary.simpleMessage("下载模型"),
     "othello_title": MessageLookupByLibrary.simpleMessage("RWKV 黑白棋"),
+    "rwkv_chat": MessageLookupByLibrary.simpleMessage("RWKV 聊天"),
+    "rwkv_othello": MessageLookupByLibrary.simpleMessage("RWKV 黑白棋"),
     "start_to_chat": MessageLookupByLibrary.simpleMessage("开始聊天"),
     "use_it_now": MessageLookupByLibrary.simpleMessage("立即使用"),
   };

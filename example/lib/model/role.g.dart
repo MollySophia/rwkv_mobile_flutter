@@ -6,13 +6,12 @@ part of 'role.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$RoleImpl _$$RoleImplFromJson(Map<String, dynamic> json) => _$RoleImpl(
+_Role _$RoleFromJson(Map<String, dynamic> json) => _Role(
       key: json['key'] as String,
       value: json['value'] as String,
     );
 
-Map<String, dynamic> _$$RoleImplToJson(_$RoleImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$RoleToJson(_Role instance) => <String, dynamic>{
       'key': instance.key,
       'value': instance.value,
     };

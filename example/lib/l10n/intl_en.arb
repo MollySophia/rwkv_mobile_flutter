@@ -18,4 +18,18 @@
   "welcome_to_use_rwkv": "Welcome to use RWKV",
   "rwkv_othello": "RWKV Othello",
   "rwkv_chat": "RWKV Chat",
+  "start_a_new_chat_by_clicking_the_button_below": "You can start a new chat by clicking the button below.",
+  "intro": "Get ready to experience RWKV-x070-World, series of compact language models with 0.1, 0.4, 1.5, 3.0 billion parameters, optimized for seamless mobile devices inference. Once loaded, it functions offline without requiring any server communication.",
+  "select_a_model": "Select a model",
+  "you_are_now_using": "You are now using {modelName}",
+  "click_here_to_start_a_new_chat": "Click here to start a new chat",
+  "click_here_to_select_a_new_model": "Click here to select a new model.",
+  "ensure_you_have_enough_memory_to_load_the_model": "Please ensure you have enough memory to load the model, otherwise the application may crash.",
+  "memory_used": "Memory used: {memUsed}, Memory free: {memFree}, Memory used by current model: {memUsedByCurrentModel}",
+  "you_can_select_a_role_to_chat": "You can select a role to chat",
+  "new_chat": "New chat",
+  "or_you_can_start_a_new_empty_chat": "Or you can start a new empty chat",
+  "start_a_new_chat": "Start a new chat",
+  "you_can_now_start_to_chat_with_rwkv": "You can now start to chat with RWKV",
+  "bot_message_edited": "Bot message edited, you can now send new message"
 }

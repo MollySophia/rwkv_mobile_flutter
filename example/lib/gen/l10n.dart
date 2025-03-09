@@ -209,6 +209,150 @@ class S {
       args: [],
     );
   }
+
+  /// `RWKV Chat`
+  String get rwkv_chat {
+    return Intl.message('RWKV Chat', name: 'rwkv_chat', desc: '', args: []);
+  }
+
+  /// `You can start a new chat by clicking the button below.`
+  String get start_a_new_chat_by_clicking_the_button_below {
+    return Intl.message(
+      'You can start a new chat by clicking the button below.',
+      name: 'start_a_new_chat_by_clicking_the_button_below',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Get ready to experience RWKV-x070-World, series of compact language models with 0.1, 0.4, 1.5, 3.0 billion parameters, optimized for seamless mobile devices inference. Once loaded, it functions offline without requiring any server communication.`
+  String get intro {
+    return Intl.message(
+      'Get ready to experience RWKV-x070-World, series of compact language models with 0.1, 0.4, 1.5, 3.0 billion parameters, optimized for seamless mobile devices inference. Once loaded, it functions offline without requiring any server communication.',
+      name: 'intro',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select a model`
+  String get select_a_model {
+    return Intl.message(
+      'Select a model',
+      name: 'select_a_model',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You are now using {modelName}`
+  String you_are_now_using(Object modelName) {
+    return Intl.message(
+      'You are now using $modelName',
+      name: 'you_are_now_using',
+      desc: '',
+      args: [modelName],
+    );
+  }
+
+  /// `Click here to start a new chat`
+  String get click_here_to_start_a_new_chat {
+    return Intl.message(
+      'Click here to start a new chat',
+      name: 'click_here_to_start_a_new_chat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Click here to select a new model.`
+  String get click_here_to_select_a_new_model {
+    return Intl.message(
+      'Click here to select a new model.',
+      name: 'click_here_to_select_a_new_model',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please ensure you have enough memory to load the model, otherwise the application may crash.`
+  String get ensure_you_have_enough_memory_to_load_the_model {
+    return Intl.message(
+      'Please ensure you have enough memory to load the model, otherwise the application may crash.',
+      name: 'ensure_you_have_enough_memory_to_load_the_model',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Memory used: {memUsed}, Memory free: {memFree}, Memory used by current model: {memUsedByCurrentModel}`
+  String memory_used(
+    Object memUsed,
+    Object memFree,
+    Object memUsedByCurrentModel,
+  ) {
+    return Intl.message(
+      'Memory used: $memUsed, Memory free: $memFree, Memory used by current model: $memUsedByCurrentModel',
+      name: 'memory_used',
+      desc: '',
+      args: [memUsed, memFree, memUsedByCurrentModel],
+    );
+  }
+
+  /// `You can select a role to chat`
+  String get you_can_select_a_role_to_chat {
+    return Intl.message(
+      'You can select a role to chat',
+      name: 'you_can_select_a_role_to_chat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New chat`
+  String get new_chat {
+    return Intl.message('New chat', name: 'new_chat', desc: '', args: []);
+  }
+
+  /// `Or you can start a new empty chat`
+  String get or_you_can_start_a_new_empty_chat {
+    return Intl.message(
+      'Or you can start a new empty chat',
+      name: 'or_you_can_start_a_new_empty_chat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start a new chat`
+  String get start_a_new_chat {
+    return Intl.message(
+      'Start a new chat',
+      name: 'start_a_new_chat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You can now start to chat with RWKV`
+  String get you_can_now_start_to_chat_with_rwkv {
+    return Intl.message(
+      'You can now start to chat with RWKV',
+      name: 'you_can_now_start_to_chat_with_rwkv',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bot message edited, you can now send new message`
+  String get bot_message_edited {
+    return Intl.message(
+      'Bot message edited, you can now send new message',
+      name: 'bot_message_edited',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

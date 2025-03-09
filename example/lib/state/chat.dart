@@ -81,7 +81,7 @@ extension $Chat on _Chat {
       ];
       messages.u(newMessages);
       editingIndex.u(null);
-      Alert.success("Bot message edited, you can now send new message");
+      Alert.success(S.current.bot_message_edited);
       return;
     }
 

@@ -6,7 +6,7 @@ part 'weights.freezed.dart';
 part 'weights.g.dart';
 
 @freezed
-class Weights with _$Weights {
+abstract class Weights with _$Weights {
   const Weights._();
 
   const factory Weights({
@@ -20,6 +20,7 @@ class Weights with _$Weights {
     required List<String> platforms,
     required List<String> backends,
     required String? sha256,
+    required List<String> tags,
   }) = _Weights;
 
   factory Weights.fromJson(Map<String, dynamic> json) => _$WeightsFromJson(json);

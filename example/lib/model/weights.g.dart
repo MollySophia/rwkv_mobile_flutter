@@ -6,8 +6,7 @@ part of 'weights.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$WeightsImpl _$$WeightsImplFromJson(Map<String, dynamic> json) =>
-    _$WeightsImpl(
+_Weights _$WeightsFromJson(Map<String, dynamic> json) => _Weights(
       name: json['name'] as String,
       type: json['type'] as String,
       modelSize: (json['modelSize'] as num).toDouble(),
@@ -20,10 +19,10 @@ _$WeightsImpl _$$WeightsImplFromJson(Map<String, dynamic> json) =>
       backends:
           (json['backends'] as List<dynamic>).map((e) => e as String).toList(),
       sha256: json['sha256'] as String?,
+      tags: (json['tags'] as List<dynamic>).map((e) => e as String).toList(),
     );
 
-Map<String, dynamic> _$$WeightsImplToJson(_$WeightsImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$WeightsToJson(_Weights instance) => <String, dynamic>{
       'name': instance.name,
       'type': instance.type,
       'modelSize': instance.modelSize,
@@ -34,4 +33,5 @@ Map<String, dynamic> _$$WeightsImplToJson(_$WeightsImpl instance) =>
       'platforms': instance.platforms,
       'backends': instance.backends,
       'sha256': instance.sha256,
+      'tags': instance.tags,
     };

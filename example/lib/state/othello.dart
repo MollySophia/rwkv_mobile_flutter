@@ -204,7 +204,7 @@ extension _$ on _Othello {
     blackTurn.u(_Othello._blackFirst);
     this.state.u([...state]);
 
-    switch (LaunchArgs.othelloTestCase) {
+    switch (Args.othelloTestCase) {
       case 0:
         _testCase0();
         break;

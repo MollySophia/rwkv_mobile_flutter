@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,122 +10,66 @@ part of 'file_info.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$FileInfo {
-  FileKey get key => throw _privateConstructorUsedError;
+  FileKey get key;
 
   /// 是否存在本地文件
-  bool get hasFile => throw _privateConstructorUsedError;
-  String? get sha256 => throw _privateConstructorUsedError;
-  double get progress => throw _privateConstructorUsedError;
-  double get networkSpeed => throw _privateConstructorUsedError;
-  Duration get timeRemaining => throw _privateConstructorUsedError;
-  bool get downloading => throw _privateConstructorUsedError;
-  bool get checkingSHA256 => throw _privateConstructorUsedError;
-  bool get sha256Verified => throw _privateConstructorUsedError;
+  bool get hasFile;
+  String? get sha256;
+  double get progress;
+  double get networkSpeed;
+  Duration get timeRemaining;
+  bool get downloading;
+  bool get checkingSHA256;
+  bool get sha256Verified;
 
   /// Create a copy of FileInfo
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $FileInfoCopyWith<FileInfo> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $FileInfoCopyWith<$Res> {
-  factory $FileInfoCopyWith(FileInfo value, $Res Function(FileInfo) then) =
-      _$FileInfoCopyWithImpl<$Res, FileInfo>;
-  @useResult
-  $Res call(
-      {FileKey key,
-      bool hasFile,
-      String? sha256,
-      double progress,
-      double networkSpeed,
-      Duration timeRemaining,
-      bool downloading,
-      bool checkingSHA256,
-      bool sha256Verified});
-}
-
-/// @nodoc
-class _$FileInfoCopyWithImpl<$Res, $Val extends FileInfo>
-    implements $FileInfoCopyWith<$Res> {
-  _$FileInfoCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of FileInfo
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
+  $FileInfoCopyWith<FileInfo> get copyWith =>
+      _$FileInfoCopyWithImpl<FileInfo>(this as FileInfo, _$identity);
+
   @override
-  $Res call({
-    Object? key = null,
-    Object? hasFile = null,
-    Object? sha256 = freezed,
-    Object? progress = null,
-    Object? networkSpeed = null,
-    Object? timeRemaining = null,
-    Object? downloading = null,
-    Object? checkingSHA256 = null,
-    Object? sha256Verified = null,
-  }) {
-    return _then(_value.copyWith(
-      key: null == key
-          ? _value.key
-          : key // ignore: cast_nullable_to_non_nullable
-              as FileKey,
-      hasFile: null == hasFile
-          ? _value.hasFile
-          : hasFile // ignore: cast_nullable_to_non_nullable
-              as bool,
-      sha256: freezed == sha256
-          ? _value.sha256
-          : sha256 // ignore: cast_nullable_to_non_nullable
-              as String?,
-      progress: null == progress
-          ? _value.progress
-          : progress // ignore: cast_nullable_to_non_nullable
-              as double,
-      networkSpeed: null == networkSpeed
-          ? _value.networkSpeed
-          : networkSpeed // ignore: cast_nullable_to_non_nullable
-              as double,
-      timeRemaining: null == timeRemaining
-          ? _value.timeRemaining
-          : timeRemaining // ignore: cast_nullable_to_non_nullable
-              as Duration,
-      downloading: null == downloading
-          ? _value.downloading
-          : downloading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      checkingSHA256: null == checkingSHA256
-          ? _value.checkingSHA256
-          : checkingSHA256 // ignore: cast_nullable_to_non_nullable
-              as bool,
-      sha256Verified: null == sha256Verified
-          ? _value.sha256Verified
-          : sha256Verified // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is FileInfo &&
+            (identical(other.key, key) || other.key == key) &&
+            (identical(other.hasFile, hasFile) || other.hasFile == hasFile) &&
+            (identical(other.sha256, sha256) || other.sha256 == sha256) &&
+            (identical(other.progress, progress) ||
+                other.progress == progress) &&
+            (identical(other.networkSpeed, networkSpeed) ||
+                other.networkSpeed == networkSpeed) &&
+            (identical(other.timeRemaining, timeRemaining) ||
+                other.timeRemaining == timeRemaining) &&
+            (identical(other.downloading, downloading) ||
+                other.downloading == downloading) &&
+            (identical(other.checkingSHA256, checkingSHA256) ||
+                other.checkingSHA256 == checkingSHA256) &&
+            (identical(other.sha256Verified, sha256Verified) ||
+                other.sha256Verified == sha256Verified));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, key, hasFile, sha256, progress,
+      networkSpeed, timeRemaining, downloading, checkingSHA256, sha256Verified);
+
+  @override
+  String toString() {
+    return 'FileInfo(key: $key, hasFile: $hasFile, sha256: $sha256, progress: $progress, networkSpeed: $networkSpeed, timeRemaining: $timeRemaining, downloading: $downloading, checkingSHA256: $checkingSHA256, sha256Verified: $sha256Verified)';
   }
 }
 
 /// @nodoc
-abstract class _$$FileInfoImplCopyWith<$Res>
-    implements $FileInfoCopyWith<$Res> {
-  factory _$$FileInfoImplCopyWith(
-          _$FileInfoImpl value, $Res Function(_$FileInfoImpl) then) =
-      __$$FileInfoImplCopyWithImpl<$Res>;
-  @override
+abstract mixin class $FileInfoCopyWith<$Res> {
+  factory $FileInfoCopyWith(FileInfo value, $Res Function(FileInfo) _then) =
+      _$FileInfoCopyWithImpl;
   @useResult
   $Res call(
       {FileKey key,
@@ -139,12 +84,11 @@ abstract class _$$FileInfoImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$FileInfoImplCopyWithImpl<$Res>
-    extends _$FileInfoCopyWithImpl<$Res, _$FileInfoImpl>
-    implements _$$FileInfoImplCopyWith<$Res> {
-  __$$FileInfoImplCopyWithImpl(
-      _$FileInfoImpl _value, $Res Function(_$FileInfoImpl) _then)
-      : super(_value, _then);
+class _$FileInfoCopyWithImpl<$Res> implements $FileInfoCopyWith<$Res> {
+  _$FileInfoCopyWithImpl(this._self, this._then);
+
+  final FileInfo _self;
+  final $Res Function(FileInfo) _then;
 
   /// Create a copy of FileInfo
   /// with the given fields replaced by the non-null parameter values.
@@ -161,41 +105,41 @@ class __$$FileInfoImplCopyWithImpl<$Res>
     Object? checkingSHA256 = null,
     Object? sha256Verified = null,
   }) {
-    return _then(_$FileInfoImpl(
+    return _then(_self.copyWith(
       key: null == key
-          ? _value.key
+          ? _self.key
           : key // ignore: cast_nullable_to_non_nullable
               as FileKey,
       hasFile: null == hasFile
-          ? _value.hasFile
+          ? _self.hasFile
           : hasFile // ignore: cast_nullable_to_non_nullable
               as bool,
       sha256: freezed == sha256
-          ? _value.sha256
+          ? _self.sha256
           : sha256 // ignore: cast_nullable_to_non_nullable
               as String?,
       progress: null == progress
-          ? _value.progress
+          ? _self.progress
           : progress // ignore: cast_nullable_to_non_nullable
               as double,
       networkSpeed: null == networkSpeed
-          ? _value.networkSpeed
+          ? _self.networkSpeed
           : networkSpeed // ignore: cast_nullable_to_non_nullable
               as double,
       timeRemaining: null == timeRemaining
-          ? _value.timeRemaining
+          ? _self.timeRemaining
           : timeRemaining // ignore: cast_nullable_to_non_nullable
               as Duration,
       downloading: null == downloading
-          ? _value.downloading
+          ? _self.downloading
           : downloading // ignore: cast_nullable_to_non_nullable
               as bool,
       checkingSHA256: null == checkingSHA256
-          ? _value.checkingSHA256
+          ? _self.checkingSHA256
           : checkingSHA256 // ignore: cast_nullable_to_non_nullable
               as bool,
       sha256Verified: null == sha256Verified
-          ? _value.sha256Verified
+          ? _self.sha256Verified
           : sha256Verified // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
@@ -204,8 +148,8 @@ class __$$FileInfoImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$FileInfoImpl extends _FileInfo {
-  const _$FileInfoImpl(
+class _FileInfo extends FileInfo {
+  const _FileInfo(
       {required this.key,
       this.hasFile = false,
       this.sha256 = null,
@@ -246,16 +190,19 @@ class _$FileInfoImpl extends _FileInfo {
   @JsonKey()
   final bool sha256Verified;
 
+  /// Create a copy of FileInfo
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'FileInfo(key: $key, hasFile: $hasFile, sha256: $sha256, progress: $progress, networkSpeed: $networkSpeed, timeRemaining: $timeRemaining, downloading: $downloading, checkingSHA256: $checkingSHA256, sha256Verified: $sha256Verified)';
-  }
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$FileInfoCopyWith<_FileInfo> get copyWith =>
+      __$FileInfoCopyWithImpl<_FileInfo>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$FileInfoImpl &&
+            other is _FileInfo &&
             (identical(other.key, key) || other.key == key) &&
             (identical(other.hasFile, hasFile) || other.hasFile == hasFile) &&
             (identical(other.sha256, sha256) || other.sha256 == sha256) &&
@@ -277,53 +224,92 @@ class _$FileInfoImpl extends _FileInfo {
   int get hashCode => Object.hash(runtimeType, key, hasFile, sha256, progress,
       networkSpeed, timeRemaining, downloading, checkingSHA256, sha256Verified);
 
+  @override
+  String toString() {
+    return 'FileInfo(key: $key, hasFile: $hasFile, sha256: $sha256, progress: $progress, networkSpeed: $networkSpeed, timeRemaining: $timeRemaining, downloading: $downloading, checkingSHA256: $checkingSHA256, sha256Verified: $sha256Verified)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$FileInfoCopyWith<$Res>
+    implements $FileInfoCopyWith<$Res> {
+  factory _$FileInfoCopyWith(_FileInfo value, $Res Function(_FileInfo) _then) =
+      __$FileInfoCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {FileKey key,
+      bool hasFile,
+      String? sha256,
+      double progress,
+      double networkSpeed,
+      Duration timeRemaining,
+      bool downloading,
+      bool checkingSHA256,
+      bool sha256Verified});
+}
+
+/// @nodoc
+class __$FileInfoCopyWithImpl<$Res> implements _$FileInfoCopyWith<$Res> {
+  __$FileInfoCopyWithImpl(this._self, this._then);
+
+  final _FileInfo _self;
+  final $Res Function(_FileInfo) _then;
+
   /// Create a copy of FileInfo
   /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$FileInfoImplCopyWith<_$FileInfoImpl> get copyWith =>
-      __$$FileInfoImplCopyWithImpl<_$FileInfoImpl>(this, _$identity);
+  $Res call({
+    Object? key = null,
+    Object? hasFile = null,
+    Object? sha256 = freezed,
+    Object? progress = null,
+    Object? networkSpeed = null,
+    Object? timeRemaining = null,
+    Object? downloading = null,
+    Object? checkingSHA256 = null,
+    Object? sha256Verified = null,
+  }) {
+    return _then(_FileInfo(
+      key: null == key
+          ? _self.key
+          : key // ignore: cast_nullable_to_non_nullable
+              as FileKey,
+      hasFile: null == hasFile
+          ? _self.hasFile
+          : hasFile // ignore: cast_nullable_to_non_nullable
+              as bool,
+      sha256: freezed == sha256
+          ? _self.sha256
+          : sha256 // ignore: cast_nullable_to_non_nullable
+              as String?,
+      progress: null == progress
+          ? _self.progress
+          : progress // ignore: cast_nullable_to_non_nullable
+              as double,
+      networkSpeed: null == networkSpeed
+          ? _self.networkSpeed
+          : networkSpeed // ignore: cast_nullable_to_non_nullable
+              as double,
+      timeRemaining: null == timeRemaining
+          ? _self.timeRemaining
+          : timeRemaining // ignore: cast_nullable_to_non_nullable
+              as Duration,
+      downloading: null == downloading
+          ? _self.downloading
+          : downloading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      checkingSHA256: null == checkingSHA256
+          ? _self.checkingSHA256
+          : checkingSHA256 // ignore: cast_nullable_to_non_nullable
+              as bool,
+      sha256Verified: null == sha256Verified
+          ? _self.sha256Verified
+          : sha256Verified // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
 }
 
-abstract class _FileInfo extends FileInfo {
-  const factory _FileInfo(
-      {required final FileKey key,
-      final bool hasFile,
-      final String? sha256,
-      final double progress,
-      final double networkSpeed,
-      final Duration timeRemaining,
-      final bool downloading,
-      final bool checkingSHA256,
-      final bool sha256Verified}) = _$FileInfoImpl;
-  const _FileInfo._() : super._();
-
-  @override
-  FileKey get key;
-
-  /// 是否存在本地文件
-  @override
-  bool get hasFile;
-  @override
-  String? get sha256;
-  @override
-  double get progress;
-  @override
-  double get networkSpeed;
-  @override
-  Duration get timeRemaining;
-  @override
-  bool get downloading;
-  @override
-  bool get checkingSHA256;
-  @override
-  bool get sha256Verified;
-
-  /// Create a copy of FileInfo
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$FileInfoImplCopyWith<_$FileInfoImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
+// dart format on

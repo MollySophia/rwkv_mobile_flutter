@@ -1,4 +1,4 @@
-abstract class LaunchArgs {
+abstract class Args {
   static const localeString = String.fromEnvironment("locale");
   static const useFakeMessages = bool.fromEnvironment("use_fake_messages");
   static const enableChatDebugger = bool.fromEnvironment("enableChatDebugger");

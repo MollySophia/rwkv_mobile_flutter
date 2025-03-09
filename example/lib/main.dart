@@ -1,5 +1,5 @@
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:zone/launch_arguments.dart';
+import 'package:zone/args.dart';
 import 'package:zone/widgets/chat_debugger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -24,8 +24,8 @@ class _App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     P.app.firstContextGot(context);
-    final split = LaunchArgs.localeString.split("_");
-    final defaultLocale = LaunchArgs.localeString.isNotEmpty ? Locale(split.first, split.last) : null;
+    final split = Args.localeString.split("_");
+    final defaultLocale = Args.localeString.isNotEmpty ? Locale(split.first, split.last) : null;
     return StateWrapper(
       child: MaterialApp.router(
         locale: defaultLocale,
@@ -47,7 +47,7 @@ class _App extends StatelessWidget {
         darkTheme: ThemeData(
           brightness: Brightness.light,
         ),
-        debugShowCheckedModeBanner: !LaunchArgs.hideDebugBanner,
+        debugShowCheckedModeBanner: !Args.hideDebugBanner,
         routerConfig: kRouter,
         builder: (context, child) {
           return MediaQuery(
@@ -57,8 +57,8 @@ class _App extends StatelessWidget {
                 C(color: Theme.of(context).scaffoldBackgroundColor),
                 if (child != null) child,
                 Alert.deploy(),
-                if (LaunchArgs.enableChatDebugger) const ChatDebugger(),
-                if (LaunchArgs.enableOthelloDebugger) const OthelloDebugger(),
+                if (Args.enableChatDebugger) const ChatDebugger(),
+                if (Args.enableOthelloDebugger) const OthelloDebugger(),
               ],
             ),
           );

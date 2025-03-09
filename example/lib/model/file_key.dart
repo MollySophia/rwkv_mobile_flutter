@@ -8,11 +8,9 @@ import 'package:rwkv_mobile_flutter/rwkv_mobile_flutter.dart';
 import 'package:zone/model/weights.dart';
 import 'package:zone/state/p.dart';
 
-class FileKey2 {}
-
 enum FileKey {
-  v7_world_0_1b_st,
   v7_g1_0_1b_st,
+  v7_world_0_1b_st,
   v7_world_0_1_ncnn,
 
   v7_world_0_4b_st,

@@ -31,3 +31,5 @@ flutter:
         ffiPlugin: true
       linux:
         ffiPlugin: true
+flutter_intl:
+  enabled: false

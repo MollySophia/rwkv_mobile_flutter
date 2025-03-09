@@ -6,7 +6,7 @@ import 'package:zone/model/file_key.dart';
 part 'file_info.freezed.dart';
 
 @freezed
-class FileInfo with _$FileInfo {
+abstract class FileInfo with _$FileInfo {
   const FileInfo._();
 
   const factory FileInfo({

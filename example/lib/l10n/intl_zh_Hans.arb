@@ -14,5 +14,5 @@
   "start_to_chat": "开始聊天",
   "chat_model_name": "模型名称",
   "rwkv_othello": "RWKV 黑白棋",
-  "rwkv_chat": "RWKV 聊天",
+  "rwkv_chat": "RWKV 聊天"
 }

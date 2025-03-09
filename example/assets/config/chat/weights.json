@@ -1,6 +1,6 @@
 [
   {
-    "name": "RWKV v7 G1 0.1B (Reasoning 20250307 ctx4096)",
+    "name": "RWKV v7 G1 0.1B",
     "type": "st",
     "modelSize": 0.1,
     "fileName": "RWKV-x070-G1-0.1b-20250307-ctx4096.st",
@@ -8,10 +8,11 @@
     "url": "https://aifasthub.com/mollysama/rwkv-mobile-models/resolve/main/WebRWKV/RWKV-x070-G1-0.1b-20250307-ctx4096.st?download=true",
     "quantization": "fp16",
     "platforms": ["ios", "macos", "web"],
-    "backends": ["webRwkv"]
+    "backends": ["webRwkv"],
+    "tags": ["reasoning"]
   },
   {
-    "name": "RWKV v7 World 0.1B (v2.8 20241210 ctx4096)",
+    "name": "RWKV v7 World 0.1B",
     "type": "st",
     "modelSize": 0.1,
     "fileName": "RWKV-x070-World-0.1B-v2.8-20241210-ctx4096.st",
@@ -19,10 +20,11 @@
     "url": "https://aifasthub.com/mollysama/rwkv-mobile-models/resolve/main/WebRWKV/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096.st?download=true",
     "quantization": "fp16",
     "platforms": ["ios", "macos", "web"],
-    "backends": ["webRwkv"]
+    "backends": ["webRwkv"],
+    "tags": []
   },
   {
-    "name": "RWKV v7 World 0.4B (v2.9 20250107 ctx4096)",
+    "name": "RWKV v7 World 0.4B",
     "type": "st",
     "modelSize": 0.4,
     "fileName": "RWKV-x070-World-0.4B-v2.9-20250107-ctx4096.st",
@@ -30,10 +32,11 @@
     "url": "https://aifasthub.com/mollysama/rwkv-mobile-models/resolve/main/WebRWKV/RWKV-x070-World-0.4B-v2.9-20250107-ctx4096.st?download=true",
     "quantization": "fp16",
     "platforms": ["ios", "macos", "web"],
-    "backends": ["webRwkv"]
+    "backends": ["webRwkv"],
+    "tags": []
   },
   {
-    "name": "RWKV v7 World 1.5B (v3 20250127 ctx4096)",
+    "name": "RWKV v7 World 1.5B",
     "type": "prefab",
     "modelSize": 1.5,
     "fileName": "RWKV-x070-World-1.5B-v3-NF4-20250127-ctx4096.prefab",
@@ -41,10 +44,11 @@
     "url": "https://aifasthub.com/mollysama/rwkv-mobile-models/resolve/main/WebRWKV/RWKV-x070-World-1.5B-v3-NF4-20250127-ctx4096.prefab?download=true",
     "quantization": "NF4",
     "platforms": ["ios", "macos", "web"],
-    "backends": ["webRwkv"]
+    "backends": ["webRwkv"],
+    "tags": []
   },
   {
-    "name": "RWKV v7 World 2.9B (v3 20250211 ctx4096)",
+    "name": "RWKV v7 World 2.9B",
     "type": "prefab",
     "modelSize": 2.9,
     "fileName": "RWKV-x070-World-2.9B-v3-NF4-20250211-ctx4096.prefab",
@@ -52,7 +56,8 @@
     "url": "https://aifasthub.com/mollysama/rwkv-mobile-models/resolve/main/WebRWKV/RWKV-x070-World-2.9B-v3-NF4-20250211-ctx4096.prefab?download=true",
     "quantization": "NF4",
     "platforms": ["ios", "macos", "web"],
-    "backends": ["webRwkv"]
+    "backends": ["webRwkv"],
+    "tags": []
   },
   {
     "name": "RWKV v7 World 0.4B",
@@ -64,7 +69,8 @@
     "quantization": "Q8_0",
     "sha256": "3ce9f69263a234d21527c5c258a99b9cd952ab286256ee74c313ab7add19e849",
     "platforms": ["macos", "windows", "linux", "android"],
-    "backends": ["llamacpp"]
+    "backends": ["llamacpp"],
+    "tags": []
   },
   {
     "name": "RWKV v7 World 1.5B",
@@ -76,7 +82,8 @@
     "quantization": "Q5_K_M",
     "sha256": "bc688f0f80d80568ef5f0db539ee8a94621f413d29d9a5308fae87b4531018e7",
     "platforms": ["macos", "windows", "linux", "android"],
-    "backends": ["llamacpp"]
+    "backends": ["llamacpp"],
+    "tags": []
   },
   {
     "name": "RWKV v7 World 3B",
@@ -88,7 +95,8 @@
     "quantization": "Q4_K_M",
     "sha256": "739562e53e646aa793dce8a6e2f25527648678b8a6d0bc4a1a21be34d08ec805",
     "platforms": ["macos", "windows", "linux", "android"],
-    "backends": ["llamacpp"]
+    "backends": ["llamacpp"],
+    "tags": []
   },
   {
     "name": "Test",
@@ -99,6 +107,7 @@
     "url": "https://github.com/HaloWang/RWKV-Demos/releases/download/1.0.0_weights/test",
     "quantization": "",
     "platforms": ["macos", "windows", "linux", "android", "ios", "web"],
-    "backends": ["llamacpp", "webRwkv"]
+    "backends": ["llamacpp", "webRwkv"],
+    "tags": []
   }
 ]
