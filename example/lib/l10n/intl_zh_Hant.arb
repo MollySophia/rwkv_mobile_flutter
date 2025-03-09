@@ -2,7 +2,7 @@
   "@@locale": "zh_Hant",
   "chat_title": "RWKV 世界 v7",
   "othello_title": "RWKV 黑白棋",
-  "chat_title_placeholder": "輸入你的訊息...",
+  "send_message_to_rwkv": "輸入你的訊息...",
   "chat_copied_to_clipboard": "已複製到剪貼簿",
   "chat_empty_message": "請輸入訊息"
 }

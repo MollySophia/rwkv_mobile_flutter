@@ -41,9 +41,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Please select a model",
     ),
     "chat_title": MessageLookupByLibrary.simpleMessage("RWKV World v7"),
-    "chat_title_placeholder": MessageLookupByLibrary.simpleMessage(
-      "Enter your message...",
-    ),
     "chat_welcome_to_use": MessageLookupByLibrary.simpleMessage(
       "Welcome to explore RWKV World v7",
     ),
@@ -79,6 +76,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "rwkv_chat": MessageLookupByLibrary.simpleMessage("RWKV Chat"),
     "rwkv_othello": MessageLookupByLibrary.simpleMessage("RWKV Othello"),
     "select_a_model": MessageLookupByLibrary.simpleMessage("Select a model"),
+    "send_message_to_rwkv": MessageLookupByLibrary.simpleMessage(
+      "Message RWKV",
+    ),
     "start_a_new_chat": MessageLookupByLibrary.simpleMessage(
       "Start a new chat",
     ),

@@ -2,6 +2,7 @@
 import 'dart:developer';
 import 'dart:math';
 
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/widgets/alert.dart';
 import 'package:flutter/material.dart';
@@ -46,10 +47,24 @@ class Message extends ConsumerWidget {
     final content = msg.content;
     final changing = msg.changing;
 
-    // Do not rebuild if message is not changing.
     final received = ref.watch(P.chat.received.select((v) => msg.changing ? v : ""));
 
     final finalContent = changing ? received : content;
+
+    String cotContent = "";
+    String cotResult = "";
+
+    // TODO: @halowang 应该使用当前的模型来判断, 不应该使用内容
+    final isCot = finalContent.startsWith("<think>");
+    if (isCot) {
+      if (finalContent.contains("</think>")) {
+        cotContent = finalContent.substring(7, finalContent.indexOf("</think>"));
+        cotResult = finalContent.substring(finalContent.indexOf("</think>") + 9);
+      } else {
+        cotContent = finalContent.substring(7);
+        cotResult = "";
+      }
+    }
 
     final color = Colors.deepPurple;
 
@@ -104,7 +119,32 @@ class Message extends ConsumerWidget {
                     child: Co(
                       c: isMine ? CAA.end : CAA.start,
                       children: [
-                        T(finalContent, s: TS(c: isMine ? kW : kB)),
+                        if (isMine) T(finalContent, s: TS(c: kW)),
+                        if (!isMine) T("Thought for 19 seconds", s: TS(c: kB.wo(0.5), w: FW.w600)),
+                        if (!isMine) 4.h,
+                        if (!isMine)
+                          C(
+                            decoration: BD(
+                              color: kW.wo(0.1),
+                              border: Border(
+                                left: BorderSide(color: kB.wo(0.25), width: 2),
+                              ),
+                            ),
+                            padding: EI.o(l: 8),
+                            child: MarkdownBody(
+                              data: cotContent,
+                              selectable: false,
+                              shrinkWrap: true,
+                              styleSheet: MarkdownStyleSheet(p: TS(c: kB.wo(0.5))),
+                            ),
+                          ),
+                        if (!isMine) 4.h,
+                        if (!isMine)
+                          MarkdownBody(
+                            data: cotResult,
+                            selectable: false,
+                            shrinkWrap: true,
+                          ),
                         if (isMine) 12.h,
                         if (isMine)
                           Ro(

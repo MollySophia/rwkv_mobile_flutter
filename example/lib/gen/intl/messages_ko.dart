@@ -27,9 +27,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "chat_empty_message": MessageLookupByLibrary.simpleMessage("메시지를 입력하세요"),
     "chat_title": MessageLookupByLibrary.simpleMessage("RWKV World v7"),
-    "chat_title_placeholder": MessageLookupByLibrary.simpleMessage(
+    "othello_title": MessageLookupByLibrary.simpleMessage("RWKV 흑백 체스"),
+    "send_message_to_rwkv": MessageLookupByLibrary.simpleMessage(
       "메시지를 입력하세요...",
     ),
-    "othello_title": MessageLookupByLibrary.simpleMessage("RWKV 흑백 체스"),
   };
 }

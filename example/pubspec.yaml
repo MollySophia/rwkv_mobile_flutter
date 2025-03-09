@@ -23,6 +23,7 @@ dependencies:
   crypto: # https://pub.dev/packages/crypto/
   device_info_plus: # https://pub.dev/packages/device_info_plus/
   flutter_cache_manager: # https://pub.dev/packages/flutter_cache_manager/
+  flutter_markdown: # https://pub.dev/packages/flutter_markdown/
   flutter_native_splash: # https://pub.dev/packages/flutter_native_splash/
   flutter_riverpod: # https://pub.dev/packages/flutter_riverpod/
   flutter_svg: # https://pub.dev/packages/flutter_svg/

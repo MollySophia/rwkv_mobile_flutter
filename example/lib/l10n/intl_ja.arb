@@ -2,7 +2,7 @@
   "@@locale": "ja",
   "chat_title": "RWKV World v7",
   "othello_title": "RWKV 黒と白のチェス",
-  "chat_title_placeholder": "メッセージを入力してください...",
+  "send_message_to_rwkv": "メッセージを入力してください...",
   "chat_copied_to_clipboard": "クリップボードにコピーしました",
   "chat_empty_message": "メッセージを入力してください",
   "chat_welcome_to_use": "RWKV World v7をご利用いただきありがとうございます",

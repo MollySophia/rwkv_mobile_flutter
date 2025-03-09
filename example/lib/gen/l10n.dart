@@ -75,11 +75,11 @@ class S {
     );
   }
 
-  /// `Enter your message...`
-  String get chat_title_placeholder {
+  /// `Message RWKV`
+  String get send_message_to_rwkv {
     return Intl.message(
-      'Enter your message...',
-      name: 'chat_title_placeholder',
+      'Message RWKV',
+      name: 'send_message_to_rwkv',
       desc: '',
       args: [],
     );

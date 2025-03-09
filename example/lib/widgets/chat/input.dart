@@ -80,71 +80,102 @@ class Input extends ConsumerWidget {
             child: C(
               decoration: BD(color: kW.wo(0.8)),
               padding: EI.o(l: 12, r: 12, b: paddingBottom + 12, t: 12),
-              child: KeyboardListener(
-                onKeyEvent: _onKeyEvent,
-                focusNode: P.chat.focusNode,
-                child: TextField(
-                  enabled: loaded,
-                  controller: P.chat.textEditingController,
-                  onSubmitted: P.chat.onSubmitted,
-                  onChanged: _onChanged,
-                  onEditingComplete: P.chat.onEditingComplete,
-                  onAppPrivateCommand: _onAppPrivateCommand,
-                  onTap: _onTap,
-                  onTapOutside: _onTapOutside,
-                  keyboardType: TextInputType.multiline,
-                  enableSuggestions: true,
-                  textInputAction: TextInputAction.newline,
-                  maxLines: 10,
-                  minLines: 1,
-                  decoration: InputDecoration(
-                    fillColor: kW,
-                    focusColor: kW,
-                    hoverColor: kW,
-                    iconColor: kW,
-                    border: OutlineInputBorder(
-                      borderRadius: 28.r,
-                      borderSide: BorderSide(color: color),
+              child: Co(
+                children: [
+                  KeyboardListener(
+                    onKeyEvent: _onKeyEvent,
+                    focusNode: P.chat.focusNode,
+                    child: TextField(
+                      enabled: loaded,
+                      controller: P.chat.textEditingController,
+                      onSubmitted: P.chat.onSubmitted,
+                      onChanged: _onChanged,
+                      onEditingComplete: P.chat.onEditingComplete,
+                      onAppPrivateCommand: _onAppPrivateCommand,
+                      onTap: _onTap,
+                      onTapOutside: _onTapOutside,
+                      keyboardType: TextInputType.multiline,
+                      enableSuggestions: true,
+                      textInputAction: TextInputAction.send,
+                      maxLines: 10,
+                      minLines: 1,
+                      decoration: InputDecoration(
+                        contentPadding: const EI.o(
+                          l: 12,
+                          r: 12,
+                          t: 4,
+                          b: 4,
+                        ),
+                        fillColor: kW,
+                        focusColor: kW,
+                        hoverColor: kW,
+                        iconColor: kW,
+                        border: OutlineInputBorder(
+                          borderRadius: 12.r,
+                          borderSide: BorderSide(color: color.wo(0.33)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: 12.r,
+                          borderSide: BorderSide(color: color.wo(0.33)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: 12.r,
+                          borderSide: BorderSide(color: color.wo(0.33)),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: 12.r,
+                          borderSide: BorderSide(color: color.wo(0.33)),
+                        ),
+                        hintText: S.current.send_message_to_rwkv,
+                      ),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: 28.r,
-                      borderSide: BorderSide(color: color),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: 28.r,
-                      borderSide: BorderSide(color: color),
-                    ),
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderRadius: 28.r,
-                      borderSide: BorderSide(color: color),
-                    ),
-                    hintText: S.current.chat_title_placeholder,
-                    suffixIcon: receiving
-                        ? SB(
-                            width: 46,
-                            child: Center(
-                              child: SB(
-                                width: 24,
-                                height: 24,
-                                child: CircularProgressIndicator(
-                                  color: color.wo(0.5),
-                                ),
-                              ),
-                            ),
-                          )
-                        : AnimatedOpacity(
-                            opacity: canSend ? 1 : 0.333,
-                            duration: 250.ms,
-                            child: IconButton(
-                              onPressed: canSend ? _onRightButtonPressed : null,
-                              icon: Icon(
-                                editingBotMessage ? Icons.edit : Icons.send,
-                                color: color,
+                  ),
+                  8.h,
+                  Row(
+                    children: [
+                      GD(
+                        onTap: () {},
+                        child: C(
+                          decoration: BD(color: kC, border: Border.all(color: color.wo(0.5)), borderRadius: 12.r),
+                          padding: EI.o(l: 4, r: 8, t: 4, b: 4),
+                          child: Ro(
+                            c: CAA.center,
+                            children: [
+                              Icon(Icons.emoji_objects_outlined, color: color),
+                              T("Reason", s: TS(c: color)),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+                      if (receiving)
+                        SB(
+                          width: 46,
+                          child: Center(
+                            child: SB(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                color: color.wo(0.5),
                               ),
                             ),
                           ),
+                        ),
+                      if (!receiving)
+                        AnimatedOpacity(
+                          opacity: canSend ? 1 : 0.333,
+                          duration: 250.ms,
+                          child: GD(
+                            onTap: canSend ? _onRightButtonPressed : null,
+                            child: Icon(
+                              editingBotMessage ? Icons.edit : Icons.send,
+                              color: color,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
-                ),
+                ],
               ),
             ),
           ),

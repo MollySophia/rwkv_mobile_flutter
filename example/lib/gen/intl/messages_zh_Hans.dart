@@ -29,7 +29,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "请选择一个模型",
     ),
     "chat_title": MessageLookupByLibrary.simpleMessage("RWKV Chat v7"),
-    "chat_title_placeholder": MessageLookupByLibrary.simpleMessage("输入你的消息..."),
     "chat_welcome_to_use": MessageLookupByLibrary.simpleMessage(
       "欢迎体验 RWKV Chat v7",
     ),
@@ -40,6 +39,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "othello_title": MessageLookupByLibrary.simpleMessage("RWKV 黑白棋"),
     "rwkv_chat": MessageLookupByLibrary.simpleMessage("RWKV 聊天"),
     "rwkv_othello": MessageLookupByLibrary.simpleMessage("RWKV 黑白棋"),
+    "send_message_to_rwkv": MessageLookupByLibrary.simpleMessage("输入你的消息..."),
     "start_to_chat": MessageLookupByLibrary.simpleMessage("开始聊天"),
     "use_it_now": MessageLookupByLibrary.simpleMessage("立即使用"),
   };
