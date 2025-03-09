@@ -38,8 +38,19 @@ enum Backend {
   }
 }
 
-/// TODO: Use command enum instead of string
-enum Command { setMaxLength, clearStates, setGenerationStopToken, setPrompt, getPrompt, setSamplerParams, getSamplerParams, message, generate, releaseModel, initRuntime }
+enum Command {
+  setMaxLength,
+  clearStates,
+  setGenerationStopToken,
+  setPrompt,
+  getPrompt,
+  setSamplerParams,
+  getSamplerParams,
+  message,
+  generate,
+  releaseModel,
+  initRuntime,
+}
 
 class StartOptions {
   final String modelPath;
