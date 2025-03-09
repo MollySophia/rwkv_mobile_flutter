@@ -1,5 +1,3 @@
-// @see: io.swift
-
 enum FromNative {
   none,
 }

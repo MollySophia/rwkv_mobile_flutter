@@ -154,7 +154,7 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
 
     // _sendPort!.send(("setPrompt", prompt));
 
-    // TODO @HaloWang: reasoning开关
+    // TODO: @HaloWang: reasoning开关
     _sendPort!.send(("setPrompt", promptReasoning));
     _sendPort!.send(("setEnableReasoning", true));
     _sendPort!.send(("getPrompt", null));
