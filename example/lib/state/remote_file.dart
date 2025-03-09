@@ -62,6 +62,7 @@ extension $RemoteFile on _RemoteFile {
         final expectFileSize = key.weights?.fileSize;
         final fileSize = await File(path).length();
         fileSizeVerified = expectFileSize == fileSize;
+        if (kDebugMode) print("💬 file: $key expectFileSize: $expectFileSize actualFileSize: $fileSize");
       }
       files(key).u(files(key).v.copyWith(hasFile: fileSizeVerified));
     }

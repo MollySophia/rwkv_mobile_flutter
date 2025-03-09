@@ -1,5 +1,16 @@
 [
   {
+    "name": "RWKV v7 G1 0.1B (Reasoning 20250307 ctx4096)",
+    "type": "st",
+    "modelSize": 0.1,
+    "fileName": "RWKV-x070-G1-0.1b-20250307-ctx4096.st",
+    "fileSize": 382140880,
+    "url": "https://aifasthub.com/mollysama/rwkv-mobile-models/resolve/main/WebRWKV/RWKV-x070-G1-0.1b-20250307-ctx4096.st?download=true",
+    "quantization": "fp16",
+    "platforms": ["ios", "macos", "web"],
+    "backends": ["webRwkv"]
+  },
+  {
     "name": "RWKV v7 World 0.1B (v2.8 20241210 ctx4096)",
     "type": "st",
     "modelSize": 0.1,

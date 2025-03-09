@@ -12,6 +12,7 @@ class FileKey2 {}
 
 enum FileKey {
   v7_world_0_1b_st,
+  v7_g1_0_1b_st,
   v7_world_0_1_ncnn,
 
   v7_world_0_4b_st,
@@ -34,6 +35,8 @@ enum FileKey {
     switch (this) {
       case v7_world_0_1b_st:
         return weights.firstWhereOrNull((e) => e.fileName == 'RWKV-x070-World-0.1B-v2.8-20241210-ctx4096.st');
+      case v7_g1_0_1b_st:
+        return weights.firstWhereOrNull((e) => e.fileName == 'RWKV-x070-G1-0.1b-20250307-ctx4096.st');
       case v7_world_0_4b_gguf:
         return weights.firstWhereOrNull((e) => e.fileName == 'rwkv7-world-0.4B-Q8_0.gguf');
       case v7_world_1_5b_prefab:

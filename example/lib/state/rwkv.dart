@@ -148,11 +148,19 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
 
 """;
 
+    const promptReasoning = "";
+
     demoType.u(DemoType.chat);
 
-    _sendPort!.send(("setPrompt", prompt));
+    // _sendPort!.send(("setPrompt", prompt));
+
+    // TODO @HaloWang: reasoning开关
+    _sendPort!.send(("setPrompt", promptReasoning));
+    _sendPort!.send(("setEnableReasoning", true));
     _sendPort!.send(("getPrompt", null));
-    _sendPort!.send(("setSamplerParams", {"temperature": 2.0, "top_k": 128, "top_p": 0.5, "presence_penalty": 0.5, "frequency_penalty": 0.5, "penalty_decay": 0.996}));
+    // _sendPort!.send(("setSamplerParams", {"temperature": 2.0, "top_k": 128, "top_p": 0.5, "presence_penalty": 0.5, "frequency_penalty": 0.5, "penalty_decay": 0.996}));
+    // TODO @HaloWang: 采样参数设置界面
+    _sendPort!.send(("setSamplerParams", {"temperature": 1.0, "top_k": 128, "top_p": 0.3, "presence_penalty": 0.5, "frequency_penalty": 0.5, "penalty_decay": 0.996}));
     _sendPort!.send(("getSamplerParams", null));
   }
 

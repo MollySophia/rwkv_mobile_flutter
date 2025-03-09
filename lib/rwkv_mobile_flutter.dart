@@ -39,19 +39,7 @@ enum Backend {
 }
 
 /// TODO: Use command enum instead of string
-enum Command {
-  setMaxLength,
-  clearStates,
-  setGenerationStopToken,
-  setPrompt,
-  getPrompt,
-  setSamplerParams,
-  getSamplerParams,
-  message,
-  generate,
-  releaseModel,
-  initRuntime,
-}
+enum Command { setMaxLength, clearStates, setGenerationStopToken, setPrompt, getPrompt, setSamplerParams, getSamplerParams, message, generate, releaseModel, initRuntime }
 
 class StartOptions {
   final String modelPath;
@@ -60,13 +48,7 @@ class StartOptions {
   final SendPort sendPort;
   final RootIsolateToken rootIsolateToken;
 
-  const StartOptions(
-    this.modelPath,
-    this.tokenizerPath,
-    this.backend,
-    this.sendPort,
-    this.rootIsolateToken,
-  );
+  const StartOptions(this.modelPath, this.tokenizerPath, this.backend, this.sendPort, this.rootIsolateToken);
 }
 
 class RWKVMobile {
@@ -74,26 +56,12 @@ class RWKVMobile {
 
   bool get isRunning => _isolate != null;
 
-  Future<void> runIsolate(
-    String modelPath,
-    String tokenizerPath,
-    Backend backend,
-    SendPort sendPort,
-    RootIsolateToken rootIsolateToken,
-  ) async {
+  Future<void> runIsolate(String modelPath, String tokenizerPath, Backend backend, SendPort sendPort, RootIsolateToken rootIsolateToken) async {
     if (_isolate != null) {
       throw Exception('Isolate already running');
     }
 
-    _isolate = await Isolate.spawn(
-        isolateMain,
-        StartOptions(
-          modelPath,
-          tokenizerPath,
-          backend,
-          sendPort,
-          rootIsolateToken,
-        ));
+    _isolate = await Isolate.spawn(isolateMain, StartOptions(modelPath, tokenizerPath, backend, sendPort, rootIsolateToken));
   }
 
   ffi.DynamicLibrary getDynamicLibrary() {
@@ -134,6 +102,7 @@ class RWKVMobile {
     int maxMessages = 1000;
     int generationStopToken = 0; // Takes effect in 'generation' mode; not used in 'chat' mode
     int retVal = 0;
+    int enableReasoning = 0;
     // bool isGenerating = false;
 
     ffi.Pointer<ffi.Char> responseBuffer = calloc.allocate<ffi.Char>(maxLength);
@@ -206,15 +175,18 @@ class RWKVMobile {
         final samplerParams = rwkvMobile.rwkvmobile_runtime_get_sampler_params(runtime);
         final penaltyParams = rwkvMobile.rwkvmobile_runtime_get_penalty_params(runtime);
         sendPort.send({
-          'samplerParams': {
-            'temperature': samplerParams.temperature,
-            'top_k': samplerParams.top_k,
-            'top_p': samplerParams.top_p,
-            'presence_penalty': penaltyParams.presence_penalty,
-            'frequency_penalty': penaltyParams.frequency_penalty,
-            'penalty_decay': penaltyParams.penalty_decay,
-          }
+          'samplerParams': {'temperature': samplerParams.temperature, 'top_k': samplerParams.top_k, 'top_p': samplerParams.top_p, 'presence_penalty': penaltyParams.presence_penalty, 'frequency_penalty': penaltyParams.frequency_penalty, 'penalty_decay': penaltyParams.penalty_decay},
         });
+      } else if (command == 'setEnableReasoning') {
+        final arg = message.$2 as bool;
+        if (arg) {
+          enableReasoning = 1;
+        } else {
+          enableReasoning = 0;
+        }
+      } else if (command == 'getEnableReasoning') {
+        bool enableReasoningBool = (enableReasoning != 0);
+        sendPort.send({'enableReasoning': enableReasoningBool});
       } else if (command == 'message') {
         final messages = message.$2 as List<String>;
         for (var i = 0; i < messages.length; i++) {
@@ -232,7 +204,7 @@ class RWKVMobile {
 
         sendPort.send({'generateStart': true});
         if (kDebugMode) print("💬 Start to call LLM (chat mode)");
-        retVal = rwkvMobile.rwkvmobile_runtime_eval_chat_with_history(runtime, inputsPtr, numInputs, responseBuffer, maxLength, nativeCallable.nativeFunction);
+        retVal = rwkvMobile.rwkvmobile_runtime_eval_chat_with_history(runtime, inputsPtr, numInputs, responseBuffer, maxLength, nativeCallable.nativeFunction, enableReasoning);
         if (kDebugMode) print("💬 Call LLM done (chat mode)");
         if (retVal != 0) {
           throw Exception('Failed to evaluate chat');
