@@ -14,29 +14,28 @@ class _RemoteFile {
 
 /// Public methods
 extension $RemoteFile on _RemoteFile {
-  FV test() async {
-    await getFile(fileKey: FileKey.download_test);
-  }
-
   FV getFile({required FileKey fileKey}) async {
     // 1. check file
     // 2. check zip file
     // 3. if zip file, unzip it, return the path
     // 4. download zip file
     // 5. unzip it, return the path
+    final fileName = fileKey.url.split('/').last.split('?')[0];
     final task = bd.DownloadTask(
       url: fileKey.url,
       headers: {
         'x-api-key': '4s5aWqs2f4PzKfgLjuRZgXKvvmal5Z5iq0OzkTPwaA2axgNgSbayfQEX5FgOpTxyyeUM4gsFHHDZroaFDIE3NtSJD6evdz3lAVctyN026keeXMoJ7tmUy5zriMJHJ9aM',
       },
       baseDirectory: bd.BaseDirectory.applicationDocuments,
-      filename: fileKey.url.split('/').last.split('?')[0],
+      filename: fileName,
       updates: bd.Updates.statusAndProgress, // request status and progress updates
       requiresWiFi: false,
       retries: 5,
       allowPause: false,
       httpRequestMethod: "GET",
     );
+
+    logTrace("💬 fileKey: $fileKey\nfileName: $fileName\nurl: ${fileKey.url}");
 
     downloadingFiles.uv({task.taskId: fileKey});
 
@@ -57,12 +56,15 @@ extension $RemoteFile on _RemoteFile {
     for (final key in fileKeys) {
       final path = key.path;
       final pathExists = await File(path).exists();
+      logTrace("💬 key: $key pathExists: $pathExists");
       bool fileSizeVerified = false;
       if (pathExists) {
         final expectFileSize = key.weights?.fileSize;
         final fileSize = await File(path).length();
         fileSizeVerified = expectFileSize == fileSize;
-        if (kDebugMode) print("💬 file: $key expectFileSize: $expectFileSize actualFileSize: $fileSize");
+        // if (kDebugMode) print("💬 file: $key expectFileSize: $expectFileSize actualFileSize: $fileSize");
+        logTrace("💬 file: $key expectFileSize: $expectFileSize fileSize: $fileSize");
+        if (expectFileSize != fileSize) await File(path).delete();
       }
       files(key).u(files(key).v.copyWith(hasFile: fileSizeVerified));
     }

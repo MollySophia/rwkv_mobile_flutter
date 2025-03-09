@@ -43,9 +43,13 @@ class _App extends StatelessWidget {
         ],
         theme: ThemeData(
           brightness: Brightness.light,
+          appBarTheme: const AppBarTheme(scrolledUnderElevation: 0, backgroundColor: Color(0xFFF4F8FF)),
+          scaffoldBackgroundColor: const Color(0xFFF4F8FF),
         ),
         darkTheme: ThemeData(
           brightness: Brightness.light,
+          appBarTheme: const AppBarTheme(scrolledUnderElevation: 0, backgroundColor: Color(0xFFF4F8FF)),
+          scaffoldBackgroundColor: const Color(0xFFF4F8FF),
         ),
         debugShowCheckedModeBanner: !Args.hideDebugBanner,
         routerConfig: kRouter,

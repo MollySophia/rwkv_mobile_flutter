@@ -25,7 +25,8 @@ enum FileKey {
   v7_world_3b_ncnn,
   v7_world_3b_gguf,
 
-  download_test,
+  download_test_github_releases,
+  download_test_5mb,
   ;
 
   Weights? get weights {
@@ -45,8 +46,10 @@ enum FileKey {
         return weights.firstWhereOrNull((e) => e.fileName == 'rwkv7-world-1.5B-Q5_K_M.gguf');
       case v7_world_3b_gguf:
         return weights.firstWhereOrNull((e) => e.fileName == 'rwkv7-world-2.9B-Q4_K_M.gguf');
-      case download_test:
-        return weights.firstWhereOrNull((e) => e.fileName == 'test');
+      case download_test_github_releases:
+        return weights.firstWhereOrNull((e) => e.name == 'test: github-releases');
+      case download_test_5mb:
+        return weights.firstWhereOrNull((e) => e.name == 'test: 5MB');
       case v7_world_0_4b_st:
         return weights.firstWhereOrNull((e) => e.fileName == 'RWKV-x070-World-0.4B-v2.9-20250107-ctx4096.st');
       case v7_world_0_1_ncnn:
@@ -58,7 +61,7 @@ enum FileKey {
   }
 
   bool get available {
-    if (this == download_test) return kDebugMode;
+    if (this == download_test_github_releases || this == download_test_5mb) return kDebugMode;
     final platforms = weights?.platforms;
     if (platforms == null) return false;
     if (Platform.isIOS) return platforms.contains('ios');
@@ -79,7 +82,7 @@ enum FileKey {
   String get quantization => weights?.quantization ?? '';
 
   Backend get backend {
-    final q = weights?.backends.firstOrNull;
+    final q = weights?.backends?.firstOrNull;
     if (q != null) {
       return Backend.values.byName(q);
     }

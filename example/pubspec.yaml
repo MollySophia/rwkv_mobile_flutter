@@ -37,6 +37,7 @@ dependencies:
   path: # https://pub.dev/packages/path/
   path_provider: # https://pub.dev/packages/path_provider/
   shared_preferences: # https://pub.dev/packages/shared_preferences/
+  stack_trace: # https://pub.dev/packages/stack_trace/
   system_info2: # https://pub.dev/packages/system_info2/
   vclibs: # https://pub.dev/packages/vclibs/
 

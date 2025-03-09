@@ -17,15 +17,16 @@ T _$identity<T>(T value) => value;
 mixin _$Weights {
   String get name;
   String get type;
-  double get modelSize;
+  double? get modelSize;
   String get fileName;
   int get fileSize;
   String get url;
-  String get quantization;
+  String? get quantization;
   List<String> get platforms;
-  List<String> get backends;
+  List<String>? get backends;
   String? get sha256;
-  List<String> get tags;
+  List<String>? get tags;
+  String? get source;
 
   /// Create a copy of Weights
   /// with the given fields replaced by the non-null parameter values.
@@ -56,7 +57,8 @@ mixin _$Weights {
             const DeepCollectionEquality().equals(other.platforms, platforms) &&
             const DeepCollectionEquality().equals(other.backends, backends) &&
             (identical(other.sha256, sha256) || other.sha256 == sha256) &&
-            const DeepCollectionEquality().equals(other.tags, tags));
+            const DeepCollectionEquality().equals(other.tags, tags) &&
+            (identical(other.source, source) || other.source == source));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -73,11 +75,12 @@ mixin _$Weights {
       const DeepCollectionEquality().hash(platforms),
       const DeepCollectionEquality().hash(backends),
       sha256,
-      const DeepCollectionEquality().hash(tags));
+      const DeepCollectionEquality().hash(tags),
+      source);
 
   @override
   String toString() {
-    return 'Weights(name: $name, type: $type, modelSize: $modelSize, fileName: $fileName, fileSize: $fileSize, url: $url, quantization: $quantization, platforms: $platforms, backends: $backends, sha256: $sha256, tags: $tags)';
+    return 'Weights(name: $name, type: $type, modelSize: $modelSize, fileName: $fileName, fileSize: $fileSize, url: $url, quantization: $quantization, platforms: $platforms, backends: $backends, sha256: $sha256, tags: $tags, source: $source)';
   }
 }
 
@@ -89,15 +92,16 @@ abstract mixin class $WeightsCopyWith<$Res> {
   $Res call(
       {String name,
       String type,
-      double modelSize,
+      double? modelSize,
       String fileName,
       int fileSize,
       String url,
-      String quantization,
+      String? quantization,
       List<String> platforms,
-      List<String> backends,
+      List<String>? backends,
       String? sha256,
-      List<String> tags});
+      List<String>? tags,
+      String? source});
 }
 
 /// @nodoc
@@ -114,15 +118,16 @@ class _$WeightsCopyWithImpl<$Res> implements $WeightsCopyWith<$Res> {
   $Res call({
     Object? name = null,
     Object? type = null,
-    Object? modelSize = null,
+    Object? modelSize = freezed,
     Object? fileName = null,
     Object? fileSize = null,
     Object? url = null,
-    Object? quantization = null,
+    Object? quantization = freezed,
     Object? platforms = null,
-    Object? backends = null,
+    Object? backends = freezed,
     Object? sha256 = freezed,
-    Object? tags = null,
+    Object? tags = freezed,
+    Object? source = freezed,
   }) {
     return _then(_self.copyWith(
       name: null == name
@@ -133,10 +138,10 @@ class _$WeightsCopyWithImpl<$Res> implements $WeightsCopyWith<$Res> {
           ? _self.type
           : type // ignore: cast_nullable_to_non_nullable
               as String,
-      modelSize: null == modelSize
+      modelSize: freezed == modelSize
           ? _self.modelSize
           : modelSize // ignore: cast_nullable_to_non_nullable
-              as double,
+              as double?,
       fileName: null == fileName
           ? _self.fileName
           : fileName // ignore: cast_nullable_to_non_nullable
@@ -149,26 +154,30 @@ class _$WeightsCopyWithImpl<$Res> implements $WeightsCopyWith<$Res> {
           ? _self.url
           : url // ignore: cast_nullable_to_non_nullable
               as String,
-      quantization: null == quantization
+      quantization: freezed == quantization
           ? _self.quantization
           : quantization // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       platforms: null == platforms
           ? _self.platforms
           : platforms // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      backends: null == backends
+      backends: freezed == backends
           ? _self.backends
           : backends // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<String>?,
       sha256: freezed == sha256
           ? _self.sha256
           : sha256 // ignore: cast_nullable_to_non_nullable
               as String?,
-      tags: null == tags
+      tags: freezed == tags
           ? _self.tags
           : tags // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<String>?,
+      source: freezed == source
+          ? _self.source
+          : source // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -185,9 +194,10 @@ class _Weights extends Weights {
       required this.url,
       required this.quantization,
       required final List<String> platforms,
-      required final List<String> backends,
+      required final List<String>? backends,
       required this.sha256,
-      required final List<String> tags})
+      required final List<String>? tags,
+      required this.source})
       : _platforms = platforms,
         _backends = backends,
         _tags = tags,
@@ -200,7 +210,7 @@ class _Weights extends Weights {
   @override
   final String type;
   @override
-  final double modelSize;
+  final double? modelSize;
   @override
   final String fileName;
   @override
@@ -208,7 +218,7 @@ class _Weights extends Weights {
   @override
   final String url;
   @override
-  final String quantization;
+  final String? quantization;
   final List<String> _platforms;
   @override
   List<String> get platforms {
@@ -217,23 +227,30 @@ class _Weights extends Weights {
     return EqualUnmodifiableListView(_platforms);
   }
 
-  final List<String> _backends;
+  final List<String>? _backends;
   @override
-  List<String> get backends {
+  List<String>? get backends {
+    final value = _backends;
+    if (value == null) return null;
     if (_backends is EqualUnmodifiableListView) return _backends;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_backends);
+    return EqualUnmodifiableListView(value);
   }
 
   @override
   final String? sha256;
-  final List<String> _tags;
+  final List<String>? _tags;
   @override
-  List<String> get tags {
+  List<String>? get tags {
+    final value = _tags;
+    if (value == null) return null;
     if (_tags is EqualUnmodifiableListView) return _tags;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_tags);
+    return EqualUnmodifiableListView(value);
   }
+
+  @override
+  final String? source;
 
   /// Create a copy of Weights
   /// with the given fields replaced by the non-null parameter values.
@@ -270,7 +287,8 @@ class _Weights extends Weights {
                 .equals(other._platforms, _platforms) &&
             const DeepCollectionEquality().equals(other._backends, _backends) &&
             (identical(other.sha256, sha256) || other.sha256 == sha256) &&
-            const DeepCollectionEquality().equals(other._tags, _tags));
+            const DeepCollectionEquality().equals(other._tags, _tags) &&
+            (identical(other.source, source) || other.source == source));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -287,11 +305,12 @@ class _Weights extends Weights {
       const DeepCollectionEquality().hash(_platforms),
       const DeepCollectionEquality().hash(_backends),
       sha256,
-      const DeepCollectionEquality().hash(_tags));
+      const DeepCollectionEquality().hash(_tags),
+      source);
 
   @override
   String toString() {
-    return 'Weights(name: $name, type: $type, modelSize: $modelSize, fileName: $fileName, fileSize: $fileSize, url: $url, quantization: $quantization, platforms: $platforms, backends: $backends, sha256: $sha256, tags: $tags)';
+    return 'Weights(name: $name, type: $type, modelSize: $modelSize, fileName: $fileName, fileSize: $fileSize, url: $url, quantization: $quantization, platforms: $platforms, backends: $backends, sha256: $sha256, tags: $tags, source: $source)';
   }
 }
 
@@ -304,15 +323,16 @@ abstract mixin class _$WeightsCopyWith<$Res> implements $WeightsCopyWith<$Res> {
   $Res call(
       {String name,
       String type,
-      double modelSize,
+      double? modelSize,
       String fileName,
       int fileSize,
       String url,
-      String quantization,
+      String? quantization,
       List<String> platforms,
-      List<String> backends,
+      List<String>? backends,
       String? sha256,
-      List<String> tags});
+      List<String>? tags,
+      String? source});
 }
 
 /// @nodoc
@@ -329,15 +349,16 @@ class __$WeightsCopyWithImpl<$Res> implements _$WeightsCopyWith<$Res> {
   $Res call({
     Object? name = null,
     Object? type = null,
-    Object? modelSize = null,
+    Object? modelSize = freezed,
     Object? fileName = null,
     Object? fileSize = null,
     Object? url = null,
-    Object? quantization = null,
+    Object? quantization = freezed,
     Object? platforms = null,
-    Object? backends = null,
+    Object? backends = freezed,
     Object? sha256 = freezed,
-    Object? tags = null,
+    Object? tags = freezed,
+    Object? source = freezed,
   }) {
     return _then(_Weights(
       name: null == name
@@ -348,10 +369,10 @@ class __$WeightsCopyWithImpl<$Res> implements _$WeightsCopyWith<$Res> {
           ? _self.type
           : type // ignore: cast_nullable_to_non_nullable
               as String,
-      modelSize: null == modelSize
+      modelSize: freezed == modelSize
           ? _self.modelSize
           : modelSize // ignore: cast_nullable_to_non_nullable
-              as double,
+              as double?,
       fileName: null == fileName
           ? _self.fileName
           : fileName // ignore: cast_nullable_to_non_nullable
@@ -364,26 +385,30 @@ class __$WeightsCopyWithImpl<$Res> implements _$WeightsCopyWith<$Res> {
           ? _self.url
           : url // ignore: cast_nullable_to_non_nullable
               as String,
-      quantization: null == quantization
+      quantization: freezed == quantization
           ? _self.quantization
           : quantization // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       platforms: null == platforms
           ? _self._platforms
           : platforms // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      backends: null == backends
+      backends: freezed == backends
           ? _self._backends
           : backends // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<String>?,
       sha256: freezed == sha256
           ? _self.sha256
           : sha256 // ignore: cast_nullable_to_non_nullable
               as String?,
-      tags: null == tags
+      tags: freezed == tags
           ? _self._tags
           : tags // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<String>?,
+      source: freezed == source
+          ? _self.source
+          : source // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
