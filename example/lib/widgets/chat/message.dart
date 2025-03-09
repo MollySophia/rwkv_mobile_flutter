@@ -58,8 +58,13 @@ class Message extends ConsumerWidget {
     final isCot = finalContent.startsWith("<think>");
     if (isCot) {
       if (finalContent.contains("</think>")) {
-        cotContent = finalContent.substring(7, finalContent.indexOf("</think>"));
-        cotResult = finalContent.substring(finalContent.indexOf("</think>") + 9);
+        final endIndex = finalContent.indexOf("</think>");
+        cotContent = finalContent.substring(7, endIndex);
+        if (endIndex + 9 < finalContent.length) {
+          cotResult = finalContent.substring(endIndex + 9);
+        } else {
+          cotResult = "";
+        }
       } else {
         cotContent = finalContent.substring(7);
         cotResult = "";
@@ -135,7 +140,18 @@ class Message extends ConsumerWidget {
                               data: cotContent,
                               selectable: false,
                               shrinkWrap: true,
-                              styleSheet: MarkdownStyleSheet(p: TS(c: kB.wo(0.5))),
+                              styleSheet: MarkdownStyleSheet(
+                                p: TS(c: kB.wo(0.5)),
+                                h1: TS(c: kB.wo(0.5)),
+                                h2: TS(c: kB.wo(0.5)),
+                                h3: TS(c: kB.wo(0.5)),
+                                h4: TS(c: kB.wo(0.5)),
+                                h5: TS(c: kB.wo(0.5)),
+                                h6: TS(c: kB.wo(0.5)),
+                                listBullet: TS(c: kB.wo(0.5)),
+                                listBulletPadding: EI.o(l: 0),
+                                listIndent: 20,
+                              ),
                             ),
                           ),
                         if (!isMine) 4.h,
