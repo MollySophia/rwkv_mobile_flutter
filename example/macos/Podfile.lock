@@ -23,6 +23,8 @@ PODS:
   - sqflite_darwin (0.0.4):
     - Flutter
     - FlutterMacOS
+  - url_launcher_macos (0.0.1):
+    - FlutterMacOS
 
 DEPENDENCIES:
   - appkit_ui_element_colors (from `Flutter/ephemeral/.symlinks/plugins/appkit_ui_element_colors/macos`)
@@ -36,6 +38,7 @@ DEPENDENCIES:
   - rwkv_mobile_flutter (from `Flutter/ephemeral/.symlinks/plugins/rwkv_mobile_flutter/macos`)
   - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqflite_darwin (from `Flutter/ephemeral/.symlinks/plugins/sqflite_darwin/darwin`)
+  - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
 
 EXTERNAL SOURCES:
   appkit_ui_element_colors:
@@ -60,6 +63,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin
   sqflite_darwin:
     :path: Flutter/ephemeral/.symlinks/plugins/sqflite_darwin/darwin
+  url_launcher_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos
 
 SPEC CHECKSUMS:
   appkit_ui_element_colors: 711e7a2aa027790964e6fd90c78a666efe631432
@@ -73,6 +78,7 @@ SPEC CHECKSUMS:
   rwkv_mobile_flutter: e5bb3bf88238edc6a3b13ebfce7dd110c3685cae
   shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
   sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
+  url_launcher_macos: 0fba8ddabfc33ce0a9afe7c5fef5aab3d8d2d673
 
 PODFILE CHECKSUM: e3f7ec771c803fb339077afc5403deea4344b0be
 
