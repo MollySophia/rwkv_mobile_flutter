@@ -14,26 +14,9 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
-		E54FAE342D66DCB400D05ACA /* librwkv_mobile.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = E54FAE332D66DCB400D05ACA /* librwkv_mobile.xcframework */; };
-		E54FAE352D66DCB400D05ACA /* librwkv_mobile.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E54FAE332D66DCB400D05ACA /* librwkv_mobile.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E54FAE372D66DCB800D05ACA /* libweb_rwkv_ffi.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = E54FAE362D66DCB800D05ACA /* libweb_rwkv_ffi.xcframework */; };
-		E54FAE382D66DCB800D05ACA /* libweb_rwkv_ffi.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E54FAE362D66DCB800D05ACA /* libweb_rwkv_ffi.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E52486C92D7ED23900A6886C /* librwkv_mobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E52486C82D7ED23100A6886C /* librwkv_mobile.a */; };
+		E52486CB2D7ED24B00A6886C /* libweb_rwkv_ffi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E52486CA2D7ED24200A6886C /* libweb_rwkv_ffi.a */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		9705A1C41CF9048500538489 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				E54FAE382D66DCB800D05ACA /* libweb_rwkv_ffi.xcframework in Embed Frameworks */,
-				E54FAE352D66DCB400D05ACA /* librwkv_mobile.xcframework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
@@ -53,6 +36,8 @@
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D843C3B90DA3FC3FCC3D1C03 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
+		E52486C82D7ED23100A6886C /* librwkv_mobile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = librwkv_mobile.a; path = ../../ios/librwkv_mobile.a; sourceTree = "<group>"; };
+		E52486CA2D7ED24200A6886C /* libweb_rwkv_ffi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libweb_rwkv_ffi.a; path = ../../ios/libweb_rwkv_ffi.a; sourceTree = "<group>"; };
 		E54FAE332D66DCB400D05ACA /* librwkv_mobile.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = librwkv_mobile.xcframework; path = .symlinks/plugins/rwkv_mobile_flutter/ios/../../../../../../ios/librwkv_mobile.xcframework; sourceTree = "<group>"; };
 		E54FAE362D66DCB800D05ACA /* libweb_rwkv_ffi.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libweb_rwkv_ffi.xcframework; path = .symlinks/plugins/rwkv_mobile_flutter/ios/../../../../../../ios/libweb_rwkv_ffi.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -62,9 +47,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E54FAE372D66DCB800D05ACA /* libweb_rwkv_ffi.xcframework in Frameworks */,
+				E52486CB2D7ED24B00A6886C /* libweb_rwkv_ffi.a in Frameworks */,
 				52998698FAD83D758B9654AD /* Pods_Runner.framework in Frameworks */,
-				E54FAE342D66DCB400D05ACA /* librwkv_mobile.xcframework in Frameworks */,
+				E52486C92D7ED23900A6886C /* librwkv_mobile.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,6 +59,8 @@
 		400C796688EFFFFF5517B2B9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E52486CA2D7ED24200A6886C /* libweb_rwkv_ffi.a */,
+				E52486C82D7ED23100A6886C /* librwkv_mobile.a */,
 				E54FAE362D66DCB800D05ACA /* libweb_rwkv_ffi.xcframework */,
 				E54FAE332D66DCB400D05ACA /* librwkv_mobile.xcframework */,
 				4AC33A1B470A37AF3A8AAC33 /* Pods_Runner.framework */,
@@ -148,7 +135,6 @@
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
-				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				0A8B3C68545976DD54E651AD /* [CP] Embed Pods Frameworks */,
 			);

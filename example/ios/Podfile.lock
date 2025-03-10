@@ -69,7 +69,7 @@ SPEC CHECKSUMS:
   gaimon: ce0b5c042363ed957bb92ee755c361903d3ce0ef
   package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
   path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
-  rwkv_mobile_flutter: 0687a67bcbe7f40b1cc9a284de59d58e0f1840fa
+  rwkv_mobile_flutter: 2136e62257355c5d60d4fa0274244560e589bce4
   shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
   sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
   url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
