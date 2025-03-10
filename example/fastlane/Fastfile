@@ -7,9 +7,19 @@ lane :all do |params|
   push_to_git_remote()
   global_replace(env: envString) # 替换环境变量
   build_assets() # 构建 assets
+
+  # 🔥 上传到 TestFlight
+  message_to_slack(message: "🚧 Start building iOS app for TestFlight External")
+  ios_upload(groups: ["External"])
+  message_to_slack(message: "✅ iOS app for TestFlight External built successfully" + " build number: #{build_number}")
+
+  # 🔥 上传到蒲公英
+  message_to_slack(message: "🚧 Start building Android APK for pgyer")
   android_pgyer()
+  message_to_slack(message: "✅ Android APK for pgyer deployed successfully" + " build number: #{build_number}")
 
   git_reset()
+  git_pull()
 end
 
 lane :dart_fix do
@@ -41,7 +51,7 @@ lane :increase_build_number do
   # push_to_git_remote()
 end
 
-lane :ios_beta_external do
+lane :ios_upload do |params|
   run_flutter_build_ipa()
   build_app(
     project: "./ios/Runner.xcodeproj",
@@ -49,10 +59,10 @@ lane :ios_beta_external do
     archive_path: "./build/ios/archive/Runner.xcarchive",
   )
   upload_to_testflight(
-    skip_submission: true,
-    distribute_external: true,
+    skip_submission: false,
+    distribute_external: params[:groups].include?("External"),
     changelog: "Bug fixes and UI improvements",
-    groups: "External",
+    groups: params[:groups],
     localized_build_info: {
       "default": {
         whats_new: "Bug fixes and UI improvements",
@@ -84,4 +94,12 @@ end
 
 lane :test do |params|
   android_pgyer()
+end
+
+lane :message_to_slack do |params|
+  slack(
+    message: params[:message],
+    slack_url: "https://hooks.slack.com/services/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",
+    default_payloads: [],
+  )
 end
