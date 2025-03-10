@@ -59,19 +59,21 @@ class Message extends ConsumerWidget {
     String cotResult = "";
 
     // TODO: @halowang 应该使用当前的模型来判断, 不应该使用内容
-    final isCot = finalContent.startsWith("<think>");
-    if (isCot) {
-      if (finalContent.contains("</think>")) {
-        final endIndex = finalContent.indexOf("</think>");
-        cotContent = finalContent.substring(7, endIndex);
-        if (endIndex + 9 < finalContent.length) {
-          cotResult = finalContent.substring(endIndex + 9);
+    if (usingReasoningModel) {
+      final isCot = finalContent.startsWith("<think>");
+      if (isCot) {
+        if (finalContent.contains("</think>")) {
+          final endIndex = finalContent.indexOf("</think>");
+          cotContent = finalContent.substring(7, endIndex);
+          if (endIndex + 9 < finalContent.length) {
+            cotResult = finalContent.substring(endIndex + 9);
+          } else {
+            cotResult = "";
+          }
         } else {
+          cotContent = finalContent.substring(7);
           cotResult = "";
         }
-      } else {
-        cotContent = finalContent.substring(7);
-        cotResult = "";
       }
     }
 
@@ -96,6 +98,28 @@ class Message extends ConsumerWidget {
     } else {
       opacity = 1;
     }
+
+    final receiveId = ref.watch(P.chat.receiveId);
+    final receiving = ref.watch(P.chat.receiving);
+    final thisMessageIsReceiving = receiveId == msg.id && receiving;
+
+    final markdownStyleSheetForCotContent = MarkdownStyleSheet(
+      p: TS(c: kB.wo(0.5)),
+      h1: TS(c: kB.wo(0.5)),
+      h2: TS(c: kB.wo(0.5)),
+      h3: TS(c: kB.wo(0.5)),
+      h4: TS(c: kB.wo(0.5)),
+      h5: TS(c: kB.wo(0.5)),
+      h6: TS(c: kB.wo(0.5)),
+      listBullet: TS(c: kB.wo(0.5)),
+      listBulletPadding: EI.o(l: 0),
+      listIndent: 20,
+    );
+
+    final markdownStyleSheet = MarkdownStyleSheet(
+      listBulletPadding: EI.o(l: 0),
+      listIndent: 20,
+    );
 
     return Align(
       alignment: alignment,
@@ -134,18 +158,7 @@ class Message extends ConsumerWidget {
                             data: finalContent,
                             selectable: false,
                             shrinkWrap: true,
-                            styleSheet: MarkdownStyleSheet(
-                              p: TS(c: kB.wo(0.5)),
-                              h1: TS(c: kB.wo(0.5)),
-                              h2: TS(c: kB.wo(0.5)),
-                              h3: TS(c: kB.wo(0.5)),
-                              h4: TS(c: kB.wo(0.5)),
-                              h5: TS(c: kB.wo(0.5)),
-                              h6: TS(c: kB.wo(0.5)),
-                              listBullet: TS(c: kB.wo(0.5)),
-                              listBulletPadding: EI.o(l: 0),
-                              listIndent: 20,
-                            ),
+                            styleSheet: markdownStyleSheet,
                           ),
                         // 🔥 Bot message cot header
                         if (!isMine && usingReasoningModel)
@@ -157,7 +170,7 @@ class Message extends ConsumerWidget {
                               decoration: BD(color: kC),
                               child: Ro(
                                 children: [
-                                  T("Thought for 19 seconds", s: TS(c: kB.wo(0.5), w: FW.w600)),
+                                  T(thisMessageIsReceiving ? "Thinking..." : "Thought result", s: TS(c: kB.wo(0.5), w: FW.w600)),
                                   isExpanded ? Icon(Icons.expand_more, color: kB.wo(0.5)) : Icon(Icons.expand_less, color: kB.wo(0.5)),
                                 ],
                               ),
@@ -173,7 +186,7 @@ class Message extends ConsumerWidget {
                               decoration: BD(
                                 color: kW.wo(0.1),
                                 border: Border(
-                                  left: BorderSide(color: kB.wo(0.25), width: 2),
+                                  left: BorderSide(color: kB.wo(0.15), width: 2),
                                 ),
                               ),
                               padding: EI.o(l: 8),
@@ -181,18 +194,7 @@ class Message extends ConsumerWidget {
                                 data: cotContent,
                                 selectable: false,
                                 shrinkWrap: true,
-                                styleSheet: MarkdownStyleSheet(
-                                  p: TS(c: kB.wo(0.5)),
-                                  h1: TS(c: kB.wo(0.5)),
-                                  h2: TS(c: kB.wo(0.5)),
-                                  h3: TS(c: kB.wo(0.5)),
-                                  h4: TS(c: kB.wo(0.5)),
-                                  h5: TS(c: kB.wo(0.5)),
-                                  h6: TS(c: kB.wo(0.5)),
-                                  listBullet: TS(c: kB.wo(0.5)),
-                                  listBulletPadding: EI.o(l: 0),
-                                  listIndent: 20,
-                                ),
+                                styleSheet: markdownStyleSheetForCotContent,
                               ),
                             ),
                           ),
@@ -203,6 +205,7 @@ class Message extends ConsumerWidget {
                             data: cotResult,
                             selectable: false,
                             shrinkWrap: true,
+                            styleSheet: markdownStyleSheet,
                           ),
                         // 🔥 User message bottom row
                         if (isMine) 12.h,
