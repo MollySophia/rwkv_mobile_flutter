@@ -40,9 +40,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "chat_please_select_a_model": MessageLookupByLibrary.simpleMessage(
       "Please select a model",
     ),
-    "chat_title": MessageLookupByLibrary.simpleMessage("RWKV World v7"),
+    "chat_title": MessageLookupByLibrary.simpleMessage("RWKV Chat"),
     "chat_welcome_to_use": MessageLookupByLibrary.simpleMessage(
-      "Welcome to explore RWKV World v7",
+      "Welcome to explore RWKV Chat",
     ),
     "chat_you_need_download_model_if_you_want_to_use_it":
         MessageLookupByLibrary.simpleMessage(

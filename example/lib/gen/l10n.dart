@@ -55,14 +55,9 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `RWKV World v7`
+  /// `RWKV Chat`
   String get chat_title {
-    return Intl.message(
-      'RWKV World v7',
-      name: 'chat_title',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('RWKV Chat', name: 'chat_title', desc: '', args: []);
   }
 
   /// `RWKV Othello`
@@ -105,10 +100,10 @@ class S {
     );
   }
 
-  /// `Welcome to explore RWKV World v7`
+  /// `Welcome to explore RWKV Chat`
   String get chat_welcome_to_use {
     return Intl.message(
-      'Welcome to explore RWKV World v7',
+      'Welcome to explore RWKV Chat',
       name: 'chat_welcome_to_use',
       desc: '',
       args: [],

@@ -1,11 +1,11 @@
 {
   "@@locale": "zh-Hans",
-  "chat_title": "RWKV World v7",
+  "chat_title": "RWKV Chat",
   "othello_title": "RWKV 黑白棋",
   "send_message_to_rwkv": "发送消息给 RWKV",
   "chat_copied_to_clipboard": "已复制到剪贴板",
   "chat_empty_message": "请输入消息内容",
-  "chat_welcome_to_use": "欢迎探索 RWKV World v7",
+  "chat_welcome_to_use": "欢迎探索 RWKV Chat",
   "chat_please_select_a_model": "请选择一个模型",
   "chat_you_need_download_model_if_you_want_to_use_it": "您需要先下载模型才能使用",
   "download_model": "下载模型",
