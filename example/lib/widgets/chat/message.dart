@@ -51,7 +51,7 @@ class Message extends ConsumerWidget {
 
     final finalContent = changing ? received : content;
 
-    final isExpanded = ref.watch(P.chat.messageExpanded(msg.id));
+    final cotDisplayState = ref.watch(P.chat.cotDisplayState(msg.id));
 
     final usingReasoningModel = ref.watch(P.chat.usingReasoningModel);
 
@@ -121,6 +121,23 @@ class Message extends ConsumerWidget {
       listIndent: 20,
     );
 
+    double? cotContentHeight;
+
+    switch (cotDisplayState) {
+      case CoTDisplayState.showCotHeaderIfCotResultIsEmpty:
+        if (cotResult.isEmpty) {
+          cotContentHeight = null;
+        } else {
+          cotContentHeight = 0;
+        }
+      case CoTDisplayState.showCotHeaderAndCotContent:
+        cotContentHeight = null;
+      case CoTDisplayState.hideCotHeader:
+        cotContentHeight = 0;
+    }
+
+    final showingCotContent = cotContentHeight != 0;
+
     return Align(
       alignment: alignment,
       child: Stack(
@@ -164,14 +181,18 @@ class Message extends ConsumerWidget {
                         if (!isMine && usingReasoningModel)
                           GD(
                             onTap: () {
-                              ref.read(P.chat.messageExpanded(msg.id).notifier).state = !isExpanded;
+                              if (showingCotContent) {
+                                ref.read(P.chat.cotDisplayState(msg.id).notifier).state = CoTDisplayState.hideCotHeader;
+                              } else {
+                                ref.read(P.chat.cotDisplayState(msg.id).notifier).state = CoTDisplayState.showCotHeaderAndCotContent;
+                              }
                             },
                             child: C(
                               decoration: BD(color: kC),
                               child: Ro(
                                 children: [
                                   T(thisMessageIsReceiving ? "Thinking..." : "Thought result", s: TS(c: kB.wo(0.5), w: FW.w600)),
-                                  isExpanded ? Icon(Icons.expand_more, color: kB.wo(0.5)) : Icon(Icons.expand_less, color: kB.wo(0.5)),
+                                  showingCotContent ? Icon(Icons.expand_more, color: kB.wo(0.5)) : Icon(Icons.expand_less, color: kB.wo(0.5)),
                                 ],
                               ),
                             ),
@@ -181,7 +202,7 @@ class Message extends ConsumerWidget {
                         if (!isMine && usingReasoningModel)
                           AnimatedContainer(
                             duration: 250.ms,
-                            height: isExpanded ? null : 0,
+                            height: cotContentHeight,
                             child: C(
                               decoration: BD(
                                 color: kW.wo(0.1),

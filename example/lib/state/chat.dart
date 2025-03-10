@@ -60,8 +60,8 @@ class _Chat {
   late final showingRoleSelector = _gs(false);
   late final roles = _gs<List<Role>>([]);
 
-  late final messageExpanded = StateProvider.family<bool, int>((ref, index) {
-    return false;
+  late final cotDisplayState = StateProvider.family<CoTDisplayState, int>((ref, index) {
+    return CoTDisplayState.showCotHeaderIfCotResultIsEmpty;
   });
 
   late final usingReasoningModel = _gs(false);
@@ -344,4 +344,10 @@ extension _$Chat on _Chat {
     if (kDebugMode) print("😡 error: $error");
     receiving.u(false);
   }
+}
+
+enum CoTDisplayState {
+  showCotHeaderIfCotResultIsEmpty,
+  hideCotHeader,
+  showCotHeaderAndCotContent,
 }
