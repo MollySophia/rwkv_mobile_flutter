@@ -29,3 +29,9 @@ migrate_working_dir/
 build/
 example/fastlane/report.xml
 example/android/app/.cxx/
+*.zip
+*.ipa
+lib/generated/intl/messages_all.dart
+lib/generated/intl/messages_en.dart
+lib/generated/l10n.dart
+lib/l10n/intl_en.arb

@@ -20,10 +20,18 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ja';
 
+  static String m0(memUsed, memFree, memUsedByCurrentModel) =>
+      "使用メモリ: ${memUsed}、空きメモリ: ${memFree}、現在のモデル使用量: ${memUsedByCurrentModel}";
+
+  static String m1(modelName) => "現在 ${modelName} を使用中です";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "bot_message_edited": MessageLookupByLibrary.simpleMessage(
+      "ボットメッセージが編集されました。新しいメッセージを送信できます",
+    ),
     "chat_copied_to_clipboard": MessageLookupByLibrary.simpleMessage(
-      "クリップボードにコピーしました",
+      "クリップボードにコピーされました",
     ),
     "chat_empty_message": MessageLookupByLibrary.simpleMessage(
       "メッセージを入力してください",
@@ -34,20 +42,53 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "chat_title": MessageLookupByLibrary.simpleMessage("RWKV World v7"),
     "chat_welcome_to_use": MessageLookupByLibrary.simpleMessage(
-      "RWKV World v7をご利用いただきありがとうございます",
+      "RWKV ワールド v7へようこそ",
     ),
     "chat_you_need_download_model_if_you_want_to_use_it":
-        MessageLookupByLibrary.simpleMessage("使用する前にモデルをダウンロードする必要があります"),
+        MessageLookupByLibrary.simpleMessage("使用するにはモデルのダウンロードが必要です"),
+    "chatting": MessageLookupByLibrary.simpleMessage("チャット中"),
     "choose_prebuilt_character": MessageLookupByLibrary.simpleMessage(
-      "プリビルトキャラクターを選択",
+      "プリセットキャラクターを選択",
+    ),
+    "click_here_to_select_a_new_model": MessageLookupByLibrary.simpleMessage(
+      "ここをクリックして新規モデルを選択",
+    ),
+    "click_here_to_start_a_new_chat": MessageLookupByLibrary.simpleMessage(
+      "ここをクリックして新規チャットを開始",
     ),
     "download_model": MessageLookupByLibrary.simpleMessage("モデルをダウンロード"),
-    "foo_bar": MessageLookupByLibrary.simpleMessage("ふーばー"),
-    "othello_title": MessageLookupByLibrary.simpleMessage("RWKV 黒と白のチェス"),
-    "send_message_to_rwkv": MessageLookupByLibrary.simpleMessage(
-      "メッセージを入力してください...",
+    "ensure_you_have_enough_memory_to_load_the_model":
+        MessageLookupByLibrary.simpleMessage("メモリが不足するとアプリがクラッシュする可能性があります"),
+    "foo_bar": MessageLookupByLibrary.simpleMessage("foo bar"),
+    "intro": MessageLookupByLibrary.simpleMessage(
+      "RWKV-x070-Worldシリーズの軽量言語モデルを体験。0.1B/0.4B/1.5B/3.0Bパラメータ版をモバイル最適化。オフラインでサーバー通信不要",
     ),
+    "memory_used": m0,
+    "new_chat": MessageLookupByLibrary.simpleMessage("新規チャット"),
+    "or_you_can_start_a_new_empty_chat": MessageLookupByLibrary.simpleMessage(
+      "または空白のチャットを開始",
+    ),
+    "othello_title": MessageLookupByLibrary.simpleMessage("RWKV オセロ"),
+    "rwkv_chat": MessageLookupByLibrary.simpleMessage("RWKV チャット"),
+    "rwkv_othello": MessageLookupByLibrary.simpleMessage("RWKV オセロ"),
+    "select_a_model": MessageLookupByLibrary.simpleMessage("モデルを選択"),
+    "send_message_to_rwkv": MessageLookupByLibrary.simpleMessage(
+      "RWKVへメッセージを送信",
+    ),
+    "start_a_new_chat": MessageLookupByLibrary.simpleMessage("新規チャットを開始"),
+    "start_a_new_chat_by_clicking_the_button_below":
+        MessageLookupByLibrary.simpleMessage("下のボタンをクリックして新規チャットを開始"),
     "start_to_chat": MessageLookupByLibrary.simpleMessage("チャットを開始"),
     "use_it_now": MessageLookupByLibrary.simpleMessage("今すぐ使用"),
+    "welcome_to_use_rwkv": MessageLookupByLibrary.simpleMessage(
+      "RWKVをご利用いただきありがとうございます",
+    ),
+    "you_are_now_using": m1,
+    "you_can_now_start_to_chat_with_rwkv": MessageLookupByLibrary.simpleMessage(
+      "RWKVとのチャットを開始できます",
+    ),
+    "you_can_select_a_role_to_chat": MessageLookupByLibrary.simpleMessage(
+      "チャットするロールを選択できます",
+    ),
   };
 }
