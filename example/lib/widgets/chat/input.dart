@@ -137,7 +137,8 @@ class Input extends ConsumerWidget {
                     children: [
                       GD(
                         onTap: () {
-                          // TODO:
+                          if (P.chat.showingModelSelector.v) return;
+                          P.chat.showingModelSelector.u(true);
                         },
                         child: C(
                           decoration: BD(

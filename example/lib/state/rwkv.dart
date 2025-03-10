@@ -168,7 +168,9 @@ extension $RWKV on _RWKV {
 // 你是一只温柔伶俐的猫娘，有着银白色的柔顺的头发，猫耳朵和猫尾巴
 // \n\nAssistant: 喵~好的我的主人喵！\n\nUser: 介绍一下你自己\n\nAssistant: 我是一个可爱猫娘，喜欢和你聊天，陪伴你喵！如果有什么问题或者需要陪伴，尽管告诉我哦喵~\n\n""";
 
-    const prompt = """
+    final usingReasoningModel = P.chat.usingReasoningModel.v;
+
+    const promptForNormalChat = """
 
 User: hi
 
@@ -176,19 +178,19 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
 
 """;
 
-    const promptReasoning = "";
+    const promptForReasoning = "";
 
     demoType.u(DemoType.chat);
 
-    // _sendPort!.send(("setPrompt", prompt));
-
-    // TODO: @HaloWang: reasoning开关
-    _sendPort!.send(("setPrompt", promptReasoning));
-    _sendPort!.send(("setEnableReasoning", true));
+    _sendPort!.send(("setPrompt", usingReasoningModel ? promptForReasoning : promptForNormalChat));
+    _sendPort!.send(("setEnableReasoning", usingReasoningModel));
     _sendPort!.send(("getPrompt", null));
-    // _sendPort!.send(("setSamplerParams", {"temperature": 2.0, "top_k": 128, "top_p": 0.5, "presence_penalty": 0.5, "frequency_penalty": 0.5, "penalty_decay": 0.996}));
     // TODO @HaloWang: 采样参数设置界面
-    _sendPort!.send(("setSamplerParams", {"temperature": 1.0, "top_k": 128, "top_p": 0.3, "presence_penalty": 0.5, "frequency_penalty": 0.5, "penalty_decay": 0.996}));
+    if (usingReasoningModel) {
+      _sendPort!.send(("setSamplerParams", {"temperature": 1.0, "top_k": 128, "top_p": 0.3, "presence_penalty": 0.5, "frequency_penalty": 0.5, "penalty_decay": 0.996}));
+    } else {
+      _sendPort!.send(("setSamplerParams", {"temperature": 2.0, "top_k": 128, "top_p": 0.5, "presence_penalty": 0.5, "frequency_penalty": 0.5, "penalty_decay": 0.996}));
+    }
     _sendPort!.send(("getSamplerParams", null));
   }
 

@@ -53,6 +53,8 @@ class Message extends ConsumerWidget {
 
     final isExpanded = ref.watch(P.chat.messageExpanded(msg.id));
 
+    final usingReasoningModel = ref.watch(P.chat.usingReasoningModel);
+
     String cotContent = "";
     String cotResult = "";
 
@@ -127,8 +129,26 @@ class Message extends ConsumerWidget {
                       c: isMine ? CAA.end : CAA.start,
                       children: [
                         if (isMine) T(finalContent, s: TS(c: kW)),
+                        if (!isMine && !usingReasoningModel)
+                          MarkdownBody(
+                            data: finalContent,
+                            selectable: false,
+                            shrinkWrap: true,
+                            styleSheet: MarkdownStyleSheet(
+                              p: TS(c: kB.wo(0.5)),
+                              h1: TS(c: kB.wo(0.5)),
+                              h2: TS(c: kB.wo(0.5)),
+                              h3: TS(c: kB.wo(0.5)),
+                              h4: TS(c: kB.wo(0.5)),
+                              h5: TS(c: kB.wo(0.5)),
+                              h6: TS(c: kB.wo(0.5)),
+                              listBullet: TS(c: kB.wo(0.5)),
+                              listBulletPadding: EI.o(l: 0),
+                              listIndent: 20,
+                            ),
+                          ),
                         // 🔥 Bot message cot header
-                        if (!isMine)
+                        if (!isMine && usingReasoningModel)
                           GD(
                             onTap: () {
                               ref.read(P.chat.messageExpanded(msg.id).notifier).state = !isExpanded;
@@ -143,9 +163,9 @@ class Message extends ConsumerWidget {
                               ),
                             ),
                           ),
-                        if (!isMine) 4.h,
                         // 🔥 Bot message cot content
-                        if (!isMine)
+                        if (!isMine && usingReasoningModel) 4.h,
+                        if (!isMine && usingReasoningModel)
                           AnimatedContainer(
                             duration: 250.ms,
                             height: isExpanded ? null : 0,
@@ -176,16 +196,16 @@ class Message extends ConsumerWidget {
                               ),
                             ),
                           ),
-                        if (!isMine) 4.h,
                         // 🔥 Bot message cot result
-                        if (!isMine && cotResult.isNotEmpty)
+                        if (!isMine && cotResult.isNotEmpty && usingReasoningModel) 4.h,
+                        if (!isMine && cotResult.isNotEmpty && usingReasoningModel)
                           MarkdownBody(
                             data: cotResult,
                             selectable: false,
                             shrinkWrap: true,
                           ),
-                        if (isMine) 12.h,
                         // 🔥 User message bottom row
+                        if (isMine) 12.h,
                         if (isMine)
                           Ro(
                             m: MAA.end,
@@ -210,8 +230,8 @@ class Message extends ConsumerWidget {
                               ),
                             ],
                           ),
-                        if (!isMine) 12.h,
                         // 🔥 Bot message bottom row
+                        if (!isMine) 12.h,
                         if (!isMine)
                           Ro(
                             m: MAA.start,
