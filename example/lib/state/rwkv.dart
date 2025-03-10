@@ -1,11 +1,17 @@
 part of 'p.dart';
 
 enum RWKVMessageType {
+  /// 模型吐完 token 了会被调用, 调用内容该次 generate 吐出的总文本
+  response,
+
+  /// 模型每吐一个token，调用一次, 调用内容为该次 generate 已经吐出的文本
+  streamResponse,
+
   currentPrompt,
   samplerParams,
-  response,
+
   generateStart,
-  streamResponse,
+
   generateStop;
 
   static RWKVMessageType fromString(String str) {

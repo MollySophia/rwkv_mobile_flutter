@@ -51,6 +51,8 @@ class Message extends ConsumerWidget {
 
     final finalContent = changing ? received : content;
 
+    final isExpanded = ref.watch(P.chat.messageExpanded(msg.id));
+
     String cotContent = "";
     String cotResult = "";
 
@@ -125,43 +127,65 @@ class Message extends ConsumerWidget {
                       c: isMine ? CAA.end : CAA.start,
                       children: [
                         if (isMine) T(finalContent, s: TS(c: kW)),
-                        if (!isMine) T("Thought for 19 seconds", s: TS(c: kB.wo(0.5), w: FW.w600)),
-                        if (!isMine) 4.h,
+                        // 🔥 Bot message cot header
                         if (!isMine)
-                          C(
-                            decoration: BD(
-                              color: kW.wo(0.1),
-                              border: Border(
-                                left: BorderSide(color: kB.wo(0.25), width: 2),
-                              ),
-                            ),
-                            padding: EI.o(l: 8),
-                            child: MarkdownBody(
-                              data: cotContent,
-                              selectable: false,
-                              shrinkWrap: true,
-                              styleSheet: MarkdownStyleSheet(
-                                p: TS(c: kB.wo(0.5)),
-                                h1: TS(c: kB.wo(0.5)),
-                                h2: TS(c: kB.wo(0.5)),
-                                h3: TS(c: kB.wo(0.5)),
-                                h4: TS(c: kB.wo(0.5)),
-                                h5: TS(c: kB.wo(0.5)),
-                                h6: TS(c: kB.wo(0.5)),
-                                listBullet: TS(c: kB.wo(0.5)),
-                                listBulletPadding: EI.o(l: 0),
-                                listIndent: 20,
+                          GD(
+                            onTap: () {
+                              ref.read(P.chat.messageExpanded(msg.id).notifier).state = !isExpanded;
+                            },
+                            child: C(
+                              decoration: BD(color: kC),
+                              child: Ro(
+                                children: [
+                                  T("Thought for 19 seconds", s: TS(c: kB.wo(0.5), w: FW.w600)),
+                                  isExpanded ? Icon(Icons.expand_more, color: kB.wo(0.5)) : Icon(Icons.expand_less, color: kB.wo(0.5)),
+                                ],
                               ),
                             ),
                           ),
                         if (!isMine) 4.h,
+                        // 🔥 Bot message cot content
                         if (!isMine)
+                          AnimatedContainer(
+                            duration: 250.ms,
+                            height: isExpanded ? null : 0,
+                            child: C(
+                              decoration: BD(
+                                color: kW.wo(0.1),
+                                border: Border(
+                                  left: BorderSide(color: kB.wo(0.25), width: 2),
+                                ),
+                              ),
+                              padding: EI.o(l: 8),
+                              child: MarkdownBody(
+                                data: cotContent,
+                                selectable: false,
+                                shrinkWrap: true,
+                                styleSheet: MarkdownStyleSheet(
+                                  p: TS(c: kB.wo(0.5)),
+                                  h1: TS(c: kB.wo(0.5)),
+                                  h2: TS(c: kB.wo(0.5)),
+                                  h3: TS(c: kB.wo(0.5)),
+                                  h4: TS(c: kB.wo(0.5)),
+                                  h5: TS(c: kB.wo(0.5)),
+                                  h6: TS(c: kB.wo(0.5)),
+                                  listBullet: TS(c: kB.wo(0.5)),
+                                  listBulletPadding: EI.o(l: 0),
+                                  listIndent: 20,
+                                ),
+                              ),
+                            ),
+                          ),
+                        if (!isMine) 4.h,
+                        // 🔥 Bot message cot result
+                        if (!isMine && cotResult.isNotEmpty)
                           MarkdownBody(
                             data: cotResult,
                             selectable: false,
                             shrinkWrap: true,
                           ),
                         if (isMine) 12.h,
+                        // 🔥 User message bottom row
                         if (isMine)
                           Ro(
                             m: MAA.end,
@@ -187,6 +211,7 @@ class Message extends ConsumerWidget {
                             ],
                           ),
                         if (!isMine) 12.h,
+                        // 🔥 Bot message bottom row
                         if (!isMine)
                           Ro(
                             m: MAA.start,

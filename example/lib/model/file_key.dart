@@ -8,6 +8,7 @@ import 'package:rwkv_mobile_flutter/rwkv_mobile_flutter.dart';
 import 'package:zone/model/weights.dart';
 import 'package:zone/state/p.dart';
 
+// TODO: 在未来应该改为权重, 现在这个东西的职责和权重重合了
 enum FileKey {
   v7_g1_0_1b_st,
   v7_g1_0_1b_gguf,
@@ -33,6 +34,8 @@ enum FileKey {
   Weights? get weights {
     final weights = P.remoteFile.weights.v;
     switch (this) {
+      case v7_g1_0_1b_gguf:
+        return weights.firstWhereOrNull((e) => e.fileName == 'rwkv7-g1-0.1B-F16.gguf');
       case v7_world_0_1b_st:
         return weights.firstWhereOrNull((e) => e.fileName == 'RWKV-x070-World-0.1B-v2.8-20241210-ctx4096.st');
       case v7_g1_0_1b_gguf:
@@ -99,4 +102,8 @@ enum FileKey {
   String get url => weights?.url ?? '';
 
   String get path => '${P.app.documentsDir.v!.path}/$fileName';
+
+  bool get isReasoning {
+    return weights?.tags?.contains('reasoning') ?? false;
+  }
 }

@@ -59,6 +59,12 @@ class _Chat {
   late final showingCharacterSelector = _gs(false);
   late final showingRoleSelector = _gs(false);
   late final roles = _gs<List<Role>>([]);
+
+  late final messageExpanded = StateProvider.family<bool, int>((ref, index) {
+    return false;
+  });
+
+  late final usingReasoningModel = _gs(false);
 }
 
 /// Public methods
@@ -296,22 +302,28 @@ extension _$Chat on _Chat {
     final type = RWKVMessageType.fromString(event["type"]);
     switch (type) {
       case RWKVMessageType.response:
-        received.u(event["content"]);
+        final content = event["content"];
+        logTrace("content: $content");
+        received.u(content);
+        receiving.u(false);
+        _fullyReceived();
         break;
       case RWKVMessageType.generateStart:
         receiving.u(true);
         received.u("");
         break;
       case RWKVMessageType.streamResponse:
-        received.u(event["content"]);
-        receiving.u(false);
-        _fullyReceived();
+        final content = event["content"];
+        received.u(content);
+        receiving.u(true);
         break;
       case RWKVMessageType.currentPrompt:
-        received.u(event["content"]);
+        final content = event["content"];
+        received.u(content);
         break;
       case RWKVMessageType.samplerParams:
-        received.u(event["content"]);
+        final content = event["content"];
+        received.u(content);
         break;
       case RWKVMessageType.generateStop:
         received.u("");
