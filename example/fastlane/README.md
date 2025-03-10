@@ -61,10 +61,10 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 
 
-### ios_beta_external
+### ios_upload
 
 ```sh
-[bundle exec] fastlane ios_beta_external
+[bundle exec] fastlane ios_upload
 ```
 
 
@@ -97,6 +97,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ```sh
 [bundle exec] fastlane test
+```
+
+
+
+### message_to_slack
+
+```sh
+[bundle exec] fastlane message_to_slack
 ```
 
 
