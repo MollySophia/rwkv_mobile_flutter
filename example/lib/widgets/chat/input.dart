@@ -148,7 +148,7 @@ class Input extends ConsumerWidget {
                             ),
                             borderRadius: 12.r,
                           ),
-                          padding: EI.o(l: 4, r: 8, t: 4, b: 4),
+                          padding: const EI.o(l: 4, r: 8, t: 4, b: 4),
                           child: Ro(
                             c: CAA.center,
                             children: [

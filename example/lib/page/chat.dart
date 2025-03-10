@@ -87,7 +87,7 @@ class _PageChatState extends State<PageChat> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Stack(
         children: [
           _List(),
@@ -153,7 +153,7 @@ class _Welcome extends ConsumerWidget {
                         P.chat.showingModelSelector.u(false);
                         P.chat.showingModelSelector.u(true);
                       },
-                      child: T(S.current.select_a_model, s: TS(s: 16, w: FW.w600)),
+                      child: T(S.current.select_a_model, s: const TS(s: 16, w: FW.w600)),
                     ),
                   if (!loaded) 12.h,
                   if (loaded) T(S.current.you_are_now_using(currentModel?.weights?.name ?? "")),
@@ -221,7 +221,7 @@ class _ModelSelector extends ConsumerWidget {
           children: [
             T(S.current.chat_welcome_to_use, s: const TS(s: 18, w: FW.w600)),
             4.h,
-            T(S.current.chat_please_select_a_model, s: TS(s: 16, w: FW.w500)),
+            T(S.current.chat_please_select_a_model, s: const TS(s: 16, w: FW.w500)),
             4.h,
             T(S.current.chat_you_need_download_model_if_you_want_to_use_it),
             4.h,
@@ -229,7 +229,7 @@ class _ModelSelector extends ConsumerWidget {
             4.h,
             T(S.current.memory_used(memUsed, memFree, memUsedByCurrentModel), s: TS(c: kB.wo(0.7), s: 12)),
             4.h,
-            T("Download source:"),
+            const T("Download source:"),
             4.h,
             Wrap(
               runSpacing: 4,
@@ -297,7 +297,7 @@ class _RoleSelector extends ConsumerWidget {
         margin: const EI.o(t: 16),
         child: Co(
           children: [
-            T(S.current.new_chat, s: TS(s: 16, w: FW.w600)),
+            T(S.current.new_chat, s: const TS(s: 16, w: FW.w600)),
             12.h,
             T(S.current.you_can_select_a_role_to_chat),
             12.h,
@@ -347,12 +347,12 @@ class _RoleSelector extends ConsumerWidget {
             Ro(
               children: [
                 12.w,
-                Exp(child: T(S.current.or_you_can_start_a_new_empty_chat, s: TS(c: kB, s: 16))),
+                Exp(child: T(S.current.or_you_can_start_a_new_empty_chat, s: const TS(c: kB, s: 16))),
                 TextButton(
                   onPressed: _onStartChatTap,
                   child: C(
                     padding: const EI.s(h: 12, v: 4),
-                    child: T(S.current.start_a_new_chat, s: TS(c: kB, s: 20)),
+                    child: T(S.current.start_a_new_chat, s: const TS(c: kB, s: 20)),
                   ),
                 ),
                 12.w,

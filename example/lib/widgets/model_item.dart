@@ -6,7 +6,6 @@ import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/file_key.dart';
 import 'package:zone/route/router.dart';
 import 'package:zone/widgets/alert.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';

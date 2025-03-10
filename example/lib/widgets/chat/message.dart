@@ -119,12 +119,12 @@ class Message extends ConsumerWidget {
       h5: TS(c: kB.wo(0.5)),
       h6: TS(c: kB.wo(0.5)),
       listBullet: TS(c: kB.wo(0.5)),
-      listBulletPadding: EI.o(l: 0),
+      listBulletPadding: const EI.o(l: 0),
       listIndent: 20,
     );
 
     final markdownStyleSheet = MarkdownStyleSheet(
-      listBulletPadding: EI.o(l: 0),
+      listBulletPadding: const EI.o(l: 0),
       listIndent: 20,
     );
 
@@ -176,7 +176,7 @@ class Message extends ConsumerWidget {
                     child: Co(
                       c: isMine ? CAA.end : CAA.start,
                       children: [
-                        if (isMine) T(finalContent, s: TS(c: kW)),
+                        if (isMine) T(finalContent, s: const TS(c: kW)),
                         if (!isMine && !usingReasoningModel)
                           MarkdownBody(
                             data: finalContent,
@@ -196,7 +196,7 @@ class Message extends ConsumerWidget {
                               }
                             },
                             child: C(
-                              decoration: BD(color: kC),
+                              decoration: const BD(color: kC),
                               child: Ro(
                                 children: [
                                   T(thisMessageIsReceiving ? "Thinking..." : "Thought result", s: TS(c: kB.wo(0.5), w: FW.w600)),
@@ -218,7 +218,7 @@ class Message extends ConsumerWidget {
                                   left: BorderSide(color: kB.wo(0.15), width: 2),
                                 ),
                               ),
-                              padding: EI.o(l: 8),
+                              padding: const EI.o(l: 8),
                               child: MarkdownBody(
                                 data: cotContent,
                                 selectable: false,
