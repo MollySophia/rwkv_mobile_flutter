@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/foundation.dart';
 import 'package:zone/gen/assets.gen.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/file_key.dart';
@@ -209,6 +210,7 @@ class _ModelSelector extends ConsumerWidget {
     final memFree = ref.watch(P.device.memFree);
     final memUsedByCurrentModel = ref.watch(P.device.memUsedByCurrentModel);
     final paddingBottom = ref.watch(P.app.paddingBottom);
+    final source = ref.watch(P.remoteFile.source);
     return ClipRRect(
       borderRadius: 16.r,
       child: C(
@@ -217,15 +219,43 @@ class _ModelSelector extends ConsumerWidget {
           padding: const EI.o(t: 24, l: 12, r: 12),
           controller: scrollController,
           children: [
-            T(S.current.chat_welcome_to_use, s: const TS(s: 16, w: FW.w600)),
+            T(S.current.chat_welcome_to_use, s: const TS(s: 18, w: FW.w600)),
             4.h,
-            T(S.current.chat_please_select_a_model),
+            T(S.current.chat_please_select_a_model, s: TS(s: 16, w: FW.w500)),
             4.h,
             T(S.current.chat_you_need_download_model_if_you_want_to_use_it),
             4.h,
-            T(S.current.ensure_you_have_enough_memory_to_load_the_model),
+            T(S.current.ensure_you_have_enough_memory_to_load_the_model, s: TS(c: kB.wo(0.7), s: 12)),
             4.h,
-            T(S.current.memory_used(memUsed, memFree, memUsedByCurrentModel)),
+            T(S.current.memory_used(memUsed, memFree, memUsedByCurrentModel), s: TS(c: kB.wo(0.7), s: 12)),
+            4.h,
+            T("Download source:"),
+            4.h,
+            Wrap(
+              runSpacing: 4,
+              spacing: 4,
+              children: RemoteFileSource.values.where((e) => kDebugMode ? true : !e.isDebug).map((e) {
+                return GD(
+                  onTap: () {
+                    P.remoteFile.source.u(e);
+                  },
+                  child: C(
+                    decoration: BD(
+                      color: e == source ? kCB : kC,
+                      borderRadius: 8.r,
+                      border: Border.all(
+                        color: kCB,
+                      ),
+                    ),
+                    padding: const EI.a(4),
+                    child: T(
+                      e.name,
+                      s: TS(c: e == source ? kW : kB.wo(0.7), s: 12),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
             4.h,
             for (final fileKey in FileKey.availableModels) ModelItem(fileKey),
             16.h,

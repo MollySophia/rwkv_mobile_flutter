@@ -123,12 +123,6 @@ class ModelItem extends ConsumerWidget {
                           padding: const EI.s(h: 4),
                           child: T(q),
                         ),
-                      if (source != null)
-                        C(
-                          decoration: BD(color: kCB[400], borderRadius: 4.r),
-                          padding: const EI.s(h: 4),
-                          child: T(source, s: const TS(c: kW)),
-                        ),
                     ],
                   ),
                   if (downloading) 8.h,

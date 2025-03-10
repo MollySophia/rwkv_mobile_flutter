@@ -66,6 +66,8 @@ class Input extends ConsumerWidget {
 
     final loaded = ref.watch(P.chat.loaded);
 
+    final usingReasoningModel = ref.watch(P.chat.usingReasoningModel);
+
     return Positioned(
       bottom: 0,
       left: 0,
@@ -134,15 +136,29 @@ class Input extends ConsumerWidget {
                   Row(
                     children: [
                       GD(
-                        onTap: () {},
+                        onTap: () {
+                          // TODO:
+                        },
                         child: C(
-                          decoration: BD(color: kC, border: Border.all(color: color.wo(0.5)), borderRadius: 12.r),
+                          decoration: BD(
+                            color: usingReasoningModel ? color : kC,
+                            border: Border.all(
+                              color: color.wo(0.5),
+                            ),
+                            borderRadius: 12.r,
+                          ),
                           padding: EI.o(l: 4, r: 8, t: 4, b: 4),
                           child: Ro(
                             c: CAA.center,
                             children: [
-                              Icon(Icons.emoji_objects_outlined, color: color),
-                              T("Reason", s: TS(c: color)),
+                              Icon(
+                                Icons.emoji_objects_outlined,
+                                color: usingReasoningModel ? kW : color,
+                              ),
+                              T(usingReasoningModel ? "Reason on" : "Reason off",
+                                  s: TS(
+                                    c: usingReasoningModel ? kW : color,
+                                  )),
                             ],
                           ),
                         ),

@@ -38,8 +38,6 @@ enum FileKey {
         return weights.firstWhereOrNull((e) => e.fileName == 'rwkv7-g1-0.1B-F16.gguf');
       case v7_world_0_1b_st:
         return weights.firstWhereOrNull((e) => e.fileName == 'RWKV-x070-World-0.1B-v2.8-20241210-ctx4096.st');
-      case v7_g1_0_1b_gguf:
-        return weights.firstWhereOrNull((e) => e.fileName == 'rwkv7-g1-0.1B-F16.gguf');
       case v7_g1_0_1b_st:
         return weights.firstWhereOrNull((e) => e.fileName == 'RWKV-x070-G1-0.1b-20250307-ctx4096.st');
       case v7_world_0_4b_gguf:
@@ -66,8 +64,12 @@ enum FileKey {
     }
   }
 
+  bool get isTest {
+    return this == download_test_github_releases || this == download_test_5mb;
+  }
+
   bool get available {
-    if (this == download_test_github_releases || this == download_test_5mb) return kDebugMode;
+    if (isTest) return kDebugMode;
     final platforms = weights?.platforms;
     if (platforms == null) return false;
     if (Platform.isIOS) return platforms.contains('ios');
@@ -99,7 +101,21 @@ enum FileKey {
 
   double get modelSizeB => weights?.modelSize ?? 0;
 
-  String get url => weights?.url ?? '';
+  String get url {
+    if (isTest) return weights?.url ?? '';
+    final source = P.remoteFile.source.v;
+    final raw = weights?.url ?? '';
+    switch (source) {
+      case RemoteFileSource.huggingface:
+        return "https://huggingface.co/" + raw;
+      case RemoteFileSource.aifasthub:
+        return "https://aifasthub.com/" + raw + "?download=true";
+      case RemoteFileSource.github:
+        return raw;
+      case RemoteFileSource.googleapis:
+        return raw;
+    }
+  }
 
   String get path => '${P.app.documentsDir.v!.path}/$fileName';
 

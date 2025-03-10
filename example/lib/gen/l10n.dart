@@ -125,10 +125,10 @@ class S {
     );
   }
 
-  /// `You need to download the model first, before you can use it`
+  /// `You need to download the model first, before you can use it.`
   String get chat_you_need_download_model_if_you_want_to_use_it {
     return Intl.message(
-      'You need to download the model first, before you can use it',
+      'You need to download the model first, before you can use it.',
       name: 'chat_you_need_download_model_if_you_want_to_use_it',
       desc: '',
       args: [],

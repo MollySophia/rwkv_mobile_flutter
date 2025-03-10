@@ -5,12 +5,11 @@
     "modelSize": 0.1,
     "fileName": "rwkv7-g1-0.1B-F16.gguf",
     "fileSize": 386369824,
-    "url": "https://huggingface.co/mollysama/rwkv-mobile-models/resolve/main/gguf/rwkv7-g1-0.1B-F16.gguf",
+    "url": "mollysama/rwkv-mobile-models/resolve/main/gguf/rwkv7-g1-0.1B-F16.gguf",
     "quantization": "fp16",
     "platforms": ["macos", "windows", "linux", "android"],
     "backends": ["llamacpp"],
-    "tags": ["reasoning"],
-    "source": "huggingface"
+    "tags": ["reasoning"]
   },
   {
     "name": "RWKV v7 G1 0.1B",
@@ -18,12 +17,11 @@
     "modelSize": 0.1,
     "fileName": "RWKV-x070-G1-0.1b-20250307-ctx4096.st",
     "fileSize": 382140880,
-    "url": "https://aifasthub.com/mollysama/rwkv-mobile-models/resolve/main/WebRWKV/RWKV-x070-G1-0.1b-20250307-ctx4096.st?download=true",
+    "url": "mollysama/rwkv-mobile-models/resolve/main/WebRWKV/RWKV-x070-G1-0.1b-20250307-ctx4096.st",
     "quantization": "fp16",
     "platforms": ["ios", "macos", "web"],
     "backends": ["webRwkv"],
-    "tags": ["reasoning"],
-    "source": "aifasthub"
+    "tags": ["reasoning"]
   },
   {
     "name": "RWKV v7 World 0.1B",
@@ -31,11 +29,10 @@
     "modelSize": 0.1,
     "fileName": "RWKV-x070-World-0.1B-v2.8-20241210-ctx4096.st",
     "fileSize": 382105168,
-    "url": "https://aifasthub.com/mollysama/rwkv-mobile-models/resolve/main/WebRWKV/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096.st?download=true",
+    "url": "mollysama/rwkv-mobile-models/resolve/main/WebRWKV/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096.st",
     "quantization": "fp16",
     "platforms": ["ios", "macos", "web"],
-    "backends": ["webRwkv"],
-    "source": "aifasthub"
+    "backends": ["webRwkv"]
   },
   {
     "name": "RWKV v7 World 0.4B",
@@ -43,11 +40,10 @@
     "modelSize": 0.4,
     "fileName": "RWKV-x070-World-0.4B-v2.9-20250107-ctx4096.st",
     "fileSize": 901609200,
-    "url": "https://aifasthub.com/mollysama/rwkv-mobile-models/resolve/main/WebRWKV/RWKV-x070-World-0.4B-v2.9-20250107-ctx4096.st?download=true",
+    "url": "mollysama/rwkv-mobile-models/resolve/main/WebRWKV/RWKV-x070-World-0.4B-v2.9-20250107-ctx4096.st",
     "quantization": "fp16",
     "platforms": ["ios", "macos", "web"],
-    "backends": ["webRwkv"],
-    "source": "aifasthub"
+    "backends": ["webRwkv"]
   },
   {
     "name": "RWKV v7 World 1.5B",
@@ -55,11 +51,10 @@
     "modelSize": 1.5,
     "fileName": "RWKV-x070-World-1.5B-v3-NF4-20250127-ctx4096.prefab",
     "fileSize": 1260000000,
-    "url": "https://aifasthub.com/mollysama/rwkv-mobile-models/resolve/main/WebRWKV/RWKV-x070-World-1.5B-v3-NF4-20250127-ctx4096.prefab?download=true",
+    "url": "mollysama/rwkv-mobile-models/resolve/main/WebRWKV/RWKV-x070-World-1.5B-v3-NF4-20250127-ctx4096.prefab",
     "quantization": "NF4",
     "platforms": ["ios", "macos", "web"],
-    "backends": ["webRwkv"],
-    "source": "aifasthub"
+    "backends": ["webRwkv"]
   },
   {
     "name": "RWKV v7 World 2.9B",
@@ -67,24 +62,10 @@
     "modelSize": 2.9,
     "fileName": "RWKV-x070-World-2.9B-v3-NF4-20250211-ctx4096.prefab",
     "fileSize": 2430000000,
-    "url": "https://aifasthub.com/mollysama/rwkv-mobile-models/resolve/main/WebRWKV/RWKV-x070-World-2.9B-v3-NF4-20250211-ctx4096.prefab?download=true",
+    "url": "mollysama/rwkv-mobile-models/resolve/main/WebRWKV/RWKV-x070-World-2.9B-v3-NF4-20250211-ctx4096.prefab",
     "quantization": "NF4",
     "platforms": ["ios", "macos", "web"],
-    "backends": ["webRwkv"],
-    "source": "aifasthub"
-  },
-  {
-    "name": "RWKV v7 G1 0.1B",
-    "type": "gguf",
-    "modelSize": 0.1,
-    "fileName": "rwkv7-g1-0.1B-F16.gguf",
-    "fileSize": 386369824,
-    "url": "https://aifasthub.com/mollysama/rwkv-mobile-models/resolve/main/gguf/rwkv7-g1-0.1B-F16.gguf?download=true",
-    "quantization": "fp16",
-    "platforms": ["macos", "windows", "linux", "android"],
-    "backends": ["llamacpp"],
-    "tags": ["reasoning"],
-    "source": "aifasthub"
+    "backends": ["webRwkv"]
   },
   {
     "name": "RWKV v7 World 0.4B",
@@ -92,12 +73,11 @@
     "modelSize": 0.4,
     "fileName": "rwkv7-world-0.4B-Q8_0.gguf",
     "fileSize": 501496800,
-    "url": "https://aifasthub.com/mollysama/rwkv-mobile-models/resolve/main/gguf/rwkv7-world-0.4B-Q8_0.gguf?download=true",
+    "url": "mollysama/rwkv-mobile-models/resolve/main/gguf/rwkv7-world-0.4B-Q8_0.gguf",
     "quantization": "Q8_0",
     "sha256": "3ce9f69263a234d21527c5c258a99b9cd952ab286256ee74c313ab7add19e849",
     "platforms": ["macos", "windows", "linux", "android"],
-    "backends": ["llamacpp"],
-    "source": "aifasthub"
+    "backends": ["llamacpp"]
   },
   {
     "name": "RWKV v7 World 1.5B",
@@ -105,12 +85,11 @@
     "modelSize": 1.5,
     "fileName": "rwkv7-world-1.5B-Q5_K_M.gguf",
     "fileSize": 1157823456,
-    "url": "https://aifasthub.com/mollysama/rwkv-mobile-models/resolve/main/gguf/rwkv7-world-1.5B-Q5_K_M.gguf?download=true",
+    "url": "mollysama/rwkv-mobile-models/resolve/main/gguf/rwkv7-world-1.5B-Q5_K_M.gguf",
     "quantization": "Q5_K_M",
     "sha256": "bc688f0f80d80568ef5f0db539ee8a94621f413d29d9a5308fae87b4531018e7",
     "platforms": ["macos", "windows", "linux", "android"],
-    "backends": ["llamacpp"],
-    "source": "aifasthub"
+    "backends": ["llamacpp"]
   },
   {
     "name": "RWKV v7 World 3B",
@@ -118,12 +97,11 @@
     "modelSize": 2.9,
     "fileName": "rwkv7-world-2.9B-Q4_K_M.gguf",
     "fileSize": 1875792672,
-    "url": "https://aifasthub.com/mollysama/rwkv-mobile-models/resolve/main/gguf/rwkv7-world-2.9B-Q4_K_M.gguf?download=true",
+    "url": "mollysama/rwkv-mobile-models/resolve/main/gguf/rwkv7-world-2.9B-Q4_K_M.gguf",
     "quantization": "Q4_K_M",
     "sha256": "739562e53e646aa793dce8a6e2f25527648678b8a6d0bc4a1a21be34d08ec805",
     "platforms": ["macos", "windows", "linux", "android"],
-    "backends": ["llamacpp"],
-    "source": "aifasthub"
+    "backends": ["llamacpp"]
   },
   {
     "name": "test: github-releases",
@@ -131,8 +109,7 @@
     "fileName": "test",
     "fileSize": 19532901,
     "url": "https://github.com/HaloWang/RWKV-Demos/releases/download/1.0.0_weights/test",
-    "platforms": ["macos", "windows", "linux", "android", "ios", "web"],
-    "source": "github"
+    "platforms": ["macos", "windows", "linux", "android", "ios", "web"]
   },
   {
     "name": "test: 5MB",
@@ -140,7 +117,6 @@
     "fileName": "5MB-test.ZIP",
     "fileSize": 6207471,
     "url": "https://storage.googleapis.com/approachcharts/test/5MB-test.ZIP",
-    "platforms": ["macos", "windows", "linux", "android", "ios", "web"],
-    "source": "googleapis"
+    "platforms": ["macos", "windows", "linux", "android", "ios", "web"]
   }
 ]

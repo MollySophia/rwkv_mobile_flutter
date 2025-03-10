@@ -2,6 +2,27 @@
 
 part of 'p.dart';
 
+enum RemoteFileSource {
+  huggingface,
+  aifasthub,
+  github,
+  googleapis,
+  ;
+
+  bool get isDebug {
+    switch (this) {
+      case huggingface:
+        return false;
+      case aifasthub:
+        return false;
+      case github:
+        return true;
+      case googleapis:
+        return true;
+    }
+  }
+}
+
 class _RemoteFile {
   late final files = StateProvider.family<FileInfo, FileKey>((ref, key) {
     return FileInfo(key: key);
@@ -10,6 +31,8 @@ class _RemoteFile {
   late final downloadingFiles = _gs<Map<String, FileKey>>({});
 
   late final weights = _gs<List<Weights>>([]);
+
+  late final source = _gs(RemoteFileSource.huggingface);
 }
 
 /// Public methods
