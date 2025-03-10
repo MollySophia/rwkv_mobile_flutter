@@ -34,6 +34,10 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <uses-native-library android:name="libneuronusdk_adapter.mtk.so" android:required="false" />
+ 		<uses-native-library android:name="libapuwareutils.mtk.so" android:required="false" />
+ 		<uses-native-library android:name="libapuwareutils_v2.mtk.so" android:required="false" />
+ 		<uses-native-library android:name="libcdsprpc.so" android:required="false" />
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

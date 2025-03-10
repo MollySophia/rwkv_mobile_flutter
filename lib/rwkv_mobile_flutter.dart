@@ -6,6 +6,7 @@ import 'dart:ffi' as ffi;
 import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:rwkv_mobile_flutter/rwkv_mobile_ffi.dart';
 
 /// Runtime backend of RWKV flutter
@@ -24,7 +25,9 @@ enum Backend {
   /// Currently only support iOS and macOS
   ///
   /// https://github.com/cryscan/web-rwkv
-  webRwkv;
+  webRwkv,
+
+  qnn;
 
   String get asArgument {
     switch (this) {
@@ -34,6 +37,8 @@ enum Backend {
         return 'web-rwkv';
       case Backend.llamacpp:
         return 'llama.cpp';
+      case Backend.qnn:
+        return 'qnn';
     }
   }
 }
@@ -123,8 +128,20 @@ class RWKVMobile {
     var modelBackend = options.backend.asArgument;
     var tokenizerPath = options.tokenizerPath;
 
+    var runtime;
+
     // runtime initializations
-    var runtime = rwkvMobile.rwkvmobile_runtime_init_with_name(modelBackend.toNativeUtf8().cast<ffi.Char>());
+    if (modelBackend == 'qnn') {
+      // TODO: better solution for this
+      final tempDir = await getTemporaryDirectory();
+      if (kDebugMode) print("💬 tempDir: ${tempDir.path}");
+      rwkvMobile.rwkvmobile_runtime_add_adsp_library_path((tempDir.path + '/assets/lib/').toNativeUtf8().cast<ffi.Char>());
+
+      runtime = rwkvMobile.rwkvmobile_runtime_init_with_name_extra(modelBackend.toNativeUtf8().cast<ffi.Char>(), (tempDir.path + '/assets/lib/libQnnHtp.so').toNativeUtf8().cast<ffi.Void>());
+    } else {
+      runtime = rwkvMobile.rwkvmobile_runtime_init_with_name(modelBackend.toNativeUtf8().cast<ffi.Char>());
+    }
+
     if (runtime.address == 0) {
       throw Exception('Failed to initialize runtime');
     }
@@ -262,7 +279,16 @@ class RWKVMobile {
           rwkvMobile.rwkvmobile_runtime_release(runtime);
         }
 
-        runtime = rwkvMobile.rwkvmobile_runtime_init_with_name(modelBackend.toNativeUtf8().cast<ffi.Char>());
+        if (modelBackend == 'qnn') {
+          // TODO: better solution for this
+          final tempDir = await getTemporaryDirectory();
+          if (kDebugMode) print("💬 tempDir: ${tempDir.path}");
+          rwkvMobile.rwkvmobile_runtime_add_adsp_library_path((tempDir.path + '/assets/lib/').toNativeUtf8().cast<ffi.Char>());
+
+          runtime = rwkvMobile.rwkvmobile_runtime_init_with_name_extra(modelBackend.toNativeUtf8().cast<ffi.Char>(), (tempDir.path + '/assets/lib/libQnnHtp.so').toNativeUtf8().cast<ffi.Void>());
+        } else {
+          runtime = rwkvMobile.rwkvmobile_runtime_init_with_name(modelBackend.toNativeUtf8().cast<ffi.Char>());
+        }
         if (runtime.address == 0) {
           sendPort.send({'initRuntimeDone': false, 'error': 'Failed to initialize runtime'});
         } else {
