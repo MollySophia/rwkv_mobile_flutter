@@ -41,6 +41,7 @@ dependencies:
   stack_trace: # https://pub.dev/packages/stack_trace/
   system_info2: # https://pub.dev/packages/system_info2/
   vclibs: # https://pub.dev/packages/vclibs/
+  url_launcher: # https://pub.dev/packages/url_launcher/
 
 dev_dependencies:
   build_runner: # https://pub.dev/packages/build_runner/

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:math';
 
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/widgets/alert.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,12 @@ class Message extends ConsumerWidget {
   void _onCopyPressed() {
     Alert.success(S.current.chat_copied_to_clipboard);
     Clipboard.setData(ClipboardData(text: msg.content));
+  }
+
+  void _onTapLink(String text, String? href, String title) async {
+    if (href != null) {
+      await launchUrl(Uri.parse(href));
+    }
   }
 
   @override
@@ -176,6 +183,7 @@ class Message extends ConsumerWidget {
                             selectable: false,
                             shrinkWrap: true,
                             styleSheet: markdownStyleSheet,
+                            onTapLink: _onTapLink,
                           ),
                         // 🔥 Bot message cot header
                         if (!isMine && usingReasoningModel)
@@ -216,6 +224,7 @@ class Message extends ConsumerWidget {
                                 selectable: false,
                                 shrinkWrap: true,
                                 styleSheet: markdownStyleSheetForCotContent,
+                                onTapLink: _onTapLink,
                               ),
                             ),
                           ),
@@ -227,6 +236,7 @@ class Message extends ConsumerWidget {
                             selectable: false,
                             shrinkWrap: true,
                             styleSheet: markdownStyleSheet,
+                            onTapLink: _onTapLink,
                           ),
                         // 🔥 User message bottom row
                         if (isMine) 12.h,
