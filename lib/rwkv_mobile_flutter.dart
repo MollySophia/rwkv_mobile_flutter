@@ -142,7 +142,6 @@ class RWKVMobile {
         prefillSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime);
         decodeSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime);
         sendPort.send({'prefillSpeed': prefillSpeed, 'decodeSpeed': decodeSpeed});
-        if (kDebugMode) print("💬 prefillSpeed: $prefillSpeed, decodeSpeed: $decodeSpeed");
       }
       speedReportCounter++;
       return (prefillSpeed, decodeSpeed);

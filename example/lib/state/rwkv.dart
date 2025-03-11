@@ -122,27 +122,25 @@ extension $RWKV on _RWKV {
     final tokenizerPath = await getModelPath(Assets.config.chat.bRwkvVocabV20230424);
 
     // TODO: better solution here
-    if (Platform.isAndroid) {
-      final qnnLibList = [
-        "libQnnHtp.so",
-        "libQnnHtpV68Stub.so",
-        "libQnnHtpV69Stub.so",
-        "libQnnHtpV73Stub.so",
-        "libQnnHtpV75Stub.so",
-        "libQnnHtpV79Stub.so",
-        "libQnnHtpV68Skel.so",
-        "libQnnHtpV69Skel.so",
-        "libQnnHtpV73Skel.so",
-        "libQnnHtpV75Skel.so",
-        "libQnnHtpV79Skel.so",
-        "libQnnHtpPrepare.so",
-        "libQnnSystem.so",
-        "libQnnRwkvWkvOpPackage.so",
-      ];
-      for (final lib in qnnLibList) {
-        final path = await getModelPath("assets/lib/$lib");
-        if (kDebugMode) print("💬 copied QNN library, path: $path");
-      }
+    final qnnLibList = [
+      "libQnnHtp.so",
+      "libQnnHtpV68Stub.so",
+      "libQnnHtpV69Stub.so",
+      "libQnnHtpV73Stub.so",
+      "libQnnHtpV75Stub.so",
+      "libQnnHtpV79Stub.so",
+      "libQnnHtpV68Skel.so",
+      "libQnnHtpV69Skel.so",
+      "libQnnHtpV73Skel.so",
+      "libQnnHtpV75Skel.so",
+      "libQnnHtpV79Skel.so",
+      "libQnnHtpPrepare.so",
+      "libQnnSystem.so",
+      "libQnnRwkvWkvOpPackage.so",
+    ];
+    for (final lib in qnnLibList) {
+      final path = await getModelPath("assets/lib/$lib");
+      if (kDebugMode) print("💬 copied QNN library, path: $path");
     }
 
     final rootIsolateToken = RootIsolateToken.instance;
@@ -386,6 +384,8 @@ extension _$RWKV on _RWKV {
       decodeSpeed.u(message["decodeSpeed"]);
       return;
     }
+
+    // TODO: 需要更健壮的代码: method: "", data: ""
 
     if (kDebugMode) print("😡 unknown message: $message");
   }
