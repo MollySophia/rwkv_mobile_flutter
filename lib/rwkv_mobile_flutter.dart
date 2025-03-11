@@ -224,6 +224,7 @@ class RWKVMobile {
         }
         final numInputs = messages.length;
 
+        int speedReportCounter = 0;
         callbackFunction(ffi.Pointer<ffi.Char> s) {
           try {
             final response = s.cast<Utf8>().toDartString();
@@ -233,7 +234,14 @@ class RWKVMobile {
             if (kDebugMode) print("😡 Error: $e");
             sendPort.send({'streamResponse': responseBuffer});
           }
-          // TODO: @Molly send stop signal back to native code
+
+          if (speedReportCounter % 10 == 0) {
+            final prefillSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime);
+            final decodeSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime);
+            sendPort.send({'prefillSpeed': prefillSpeed, 'decodeSpeed': decodeSpeed});
+            if (kDebugMode) print("💬 prefillSpeed: $prefillSpeed, decodeSpeed: $decodeSpeed");
+          }
+          speedReportCounter++;
         }
 
         final nativeCallable = ffi.NativeCallable<ffi.Void Function(ffi.Pointer<ffi.Char>)>.isolateLocal(callbackFunction);
@@ -253,9 +261,18 @@ class RWKVMobile {
         final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
         String responseStr = prompt;
 
+        int speedReportCounter = 0;
         callbackFunction(ffi.Pointer<ffi.Char> stream, int idx) {
           responseStr += stream.cast<Utf8>().toDartString();
           sendPort.send({'streamResponse': stream.cast<Utf8>().toDartString(), 'streamResponseToken': idx});
+
+          if (speedReportCounter % 10 == 0) {
+            final prefillSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime);
+            final decodeSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime);
+            sendPort.send({'prefillSpeed': prefillSpeed, 'decodeSpeed': decodeSpeed});
+            if (kDebugMode) print("💬 prefillSpeed: $prefillSpeed, decodeSpeed: $decodeSpeed");
+          }
+          speedReportCounter++;
         }
 
         final nativeCallable = ffi.NativeCallable<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int)>.isolateLocal(callbackFunction);

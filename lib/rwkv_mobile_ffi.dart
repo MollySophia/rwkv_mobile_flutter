@@ -112,7 +112,7 @@ class rwkv_mobile {
     rwkvmobile_runtime_t runtime,
     ffi.Pointer<ffi.Char> input,
     ffi.Pointer<ffi.Char> response,
-    int max_length,
+    int max_tokens,
     ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>)>> callback,
     int enable_reasoning,
   ) {
@@ -120,7 +120,7 @@ class rwkv_mobile {
       runtime,
       input,
       response,
-      max_length,
+      max_tokens,
       callback,
       enable_reasoning,
     );
@@ -134,7 +134,7 @@ class rwkv_mobile {
     ffi.Pointer<ffi.Pointer<ffi.Char>> inputs,
     int num_inputs,
     ffi.Pointer<ffi.Char> response,
-    int max_length,
+    int max_tokens,
     ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>)>> callback,
     int enable_reasoning,
   ) {
@@ -143,7 +143,7 @@ class rwkv_mobile {
       inputs,
       num_inputs,
       response,
-      max_length,
+      max_tokens,
       callback,
       enable_reasoning,
     );
@@ -184,7 +184,7 @@ class rwkv_mobile {
     rwkvmobile_runtime_t runtime,
     ffi.Pointer<ffi.Char> prompt,
     ffi.Pointer<ffi.Char> completion,
-    int max_length,
+    int max_tokens,
     int stop_code,
     ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int)>> callback,
   ) {
@@ -192,7 +192,7 @@ class rwkv_mobile {
       runtime,
       prompt,
       completion,
-      max_length,
+      max_tokens,
       stop_code,
       callback,
     );
@@ -270,6 +270,28 @@ class rwkv_mobile {
 
   late final _rwkvmobile_runtime_add_adsp_library_pathPtr = _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>)>>('rwkvmobile_runtime_add_adsp_library_path');
   late final _rwkvmobile_runtime_add_adsp_library_path = _rwkvmobile_runtime_add_adsp_library_pathPtr.asFunction<void Function(ffi.Pointer<ffi.Char>)>();
+
+  double rwkvmobile_runtime_get_avg_decode_speed(
+    rwkvmobile_runtime_t runtime,
+  ) {
+    return _rwkvmobile_runtime_get_avg_decode_speed(
+      runtime,
+    );
+  }
+
+  late final _rwkvmobile_runtime_get_avg_decode_speedPtr = _lookup<ffi.NativeFunction<ffi.Double Function(rwkvmobile_runtime_t)>>('rwkvmobile_runtime_get_avg_decode_speed');
+  late final _rwkvmobile_runtime_get_avg_decode_speed = _rwkvmobile_runtime_get_avg_decode_speedPtr.asFunction<double Function(rwkvmobile_runtime_t)>();
+
+  double rwkvmobile_runtime_get_avg_prefill_speed(
+    rwkvmobile_runtime_t runtime,
+  ) {
+    return _rwkvmobile_runtime_get_avg_prefill_speed(
+      runtime,
+    );
+  }
+
+  late final _rwkvmobile_runtime_get_avg_prefill_speedPtr = _lookup<ffi.NativeFunction<ffi.Double Function(rwkvmobile_runtime_t)>>('rwkvmobile_runtime_get_avg_prefill_speed');
+  late final _rwkvmobile_runtime_get_avg_prefill_speed = _rwkvmobile_runtime_get_avg_prefill_speedPtr.asFunction<double Function(rwkvmobile_runtime_t)>();
 }
 
 final class sampler_params extends ffi.Struct {
