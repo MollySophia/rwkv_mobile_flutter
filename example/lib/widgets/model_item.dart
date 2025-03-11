@@ -2,6 +2,7 @@
 import 'dart:developer';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:zone/func/gb_display.dart';
 import 'package:zone/func/log_trace.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/file_key.dart';
@@ -81,7 +82,7 @@ class ModelItem extends ConsumerWidget {
                         fileKey.weights?.name ?? "",
                         s: const TS(c: kB, w: FW.w600),
                       ),
-                      T(mbGbDisplay(fileSize), s: TS(c: kB.wo(0.7), w: FW.w500)),
+                      T(gbDisplay(fileSize), s: TS(c: kB.wo(0.7), w: FW.w500)),
                     ],
                   ),
                   4.h,
