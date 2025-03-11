@@ -17,9 +17,6 @@ extension $Device on _Device {
       final memFree = result[1];
       this.memUsed.u(memUsed);
       this.memFree.u(memFree);
-      final total = memUsed + memFree;
-      if (kDebugMode) print("💬 total: $total");
-      if (kDebugMode) print("💬 memUsed (MB): ${memUsed / 1024 / 1024}, memFree (MB): ${memFree / 1024 / 1024}");
     } else {
       await HF.wait(200);
       final result = await compute((message) async {

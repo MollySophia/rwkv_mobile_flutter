@@ -81,7 +81,7 @@ extension $RemoteFile on _RemoteFile {
       if (kDebugMode) print("😡 cancelDownload: taskId not found");
       return;
     }
-    bd.FileDownloader().cancelTaskWithId(taskId);
+    await bd.FileDownloader().cancelTaskWithId(taskId);
     this.downloadingFiles.ur(taskId);
     files(fileKey).u(files(fileKey).v.copyWith(downloading: false));
   }

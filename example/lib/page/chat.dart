@@ -4,7 +4,7 @@ import 'dart:ui';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
-import 'package:zone/func/mb_gb_display.dart';
+import 'package:zone/func/gb_display.dart';
 import 'package:zone/gen/assets.gen.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/file_key.dart';
@@ -215,8 +215,8 @@ class _ModelSelector extends ConsumerWidget {
     final memFree = ref.watch(P.device.memFree);
     final paddingBottom = ref.watch(P.app.paddingBottom);
     final source = ref.watch(P.remoteFile.source);
-    final memUsedString = mbGbDisplay(memUsed);
-    final memFreeString = mbGbDisplay(memFree);
+    final memUsedString = gbDisplay(memUsed);
+    final memFreeString = gbDisplay(memFree);
 
     return ClipRRect(
       borderRadius: 16.r,

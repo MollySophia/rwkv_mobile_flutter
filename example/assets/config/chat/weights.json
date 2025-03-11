@@ -36,17 +36,6 @@
     "tags": ["reasoning"]
   },
   {
-    "name": "RWKV v7 World 0.1B",
-    "type": "st",
-    "modelSize": 0.1,
-    "fileName": "RWKV-x070-World-0.1B-v2.8-20241210-ctx4096.st",
-    "fileSize": 382105168,
-    "url": "mollysama/rwkv-mobile-models/resolve/main/WebRWKV/RWKV-x070-World-0.1B-v2.8-20241210-ctx4096.st",
-    "quantization": "fp16",
-    "platforms": ["ios", "macos", "web"],
-    "backends": ["webRwkv"]
-  },
-  {
     "name": "RWKV v7 World 0.4B",
     "type": "st",
     "modelSize": 0.4,
