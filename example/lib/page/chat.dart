@@ -39,6 +39,7 @@ class _PageChatState extends State<PageChat> {
           expand: false,
           snap: false,
           builder: (BuildContext context, ScrollController scrollController) {
+            P.chat.roles.u(P.chat.roles.v.shuffled);
             return _RoleSelector(
               scrollController: scrollController,
             );
@@ -220,7 +221,7 @@ class _ModelSelector extends ConsumerWidget {
       child: C(
         margin: const EI.o(t: 16),
         child: ListView(
-          padding: const EI.o(t: 24, l: 12, r: 12),
+          padding: const EI.o(t: 24, l: 8, r: 8),
           controller: scrollController,
           children: [
             Ro(
@@ -301,7 +302,7 @@ class _RoleSelector extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final roles = ref.watch(P.chat.roles).shuffled;
+    final roles = ref.watch(P.chat.roles);
     final paddingBottom = ref.watch(P.app.paddingBottom);
     final loading = ref.watch(P.chat.loading);
 

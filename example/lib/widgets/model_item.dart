@@ -2,7 +2,6 @@
 import 'dart:developer';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
-import 'package:flutter/foundation.dart';
 import 'package:zone/func/log_trace.dart';
 import 'package:zone/func/mb_gb_display.dart';
 import 'package:zone/gen/l10n.dart';
@@ -72,104 +71,101 @@ class ModelItem extends ConsumerWidget {
         child: Ro(
           children: [
             Exp(
-              child: C(
-                decoration: BD(color: kDebugMode ? kG.wo(0.2) : kC),
-                child: Co(
-                  c: CAA.start,
-                  children: [
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 0,
-                      children: [
-                        T(
-                          fileKey.weights?.name ?? "",
-                          s: const TS(c: kB, w: FW.w600),
-                        ),
-                        T(mbGbDisplay(fileSize), s: TS(c: kB.wo(0.7), w: FW.w500)),
-                      ],
-                    ),
-                    4.h,
-                    Wrap(
-                      spacing: 4,
-                      runSpacing: 8,
-                      children: [
-                        ...tags.map((tag) {
-                          return C(
-                            decoration: BD(
-                              borderRadius: 4.r,
-                              color: kCG,
-                            ),
-                            padding: const EI.s(h: 4),
-                            child: T(tag, s: const TS(c: kW, w: FW.w500)),
-                          );
-                        }),
+              child: Co(
+                c: CAA.start,
+                children: [
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 0,
+                    children: [
+                      T(
+                        fileKey.weights?.name ?? "",
+                        s: const TS(c: kB, w: FW.w600),
+                      ),
+                      T(mbGbDisplay(fileSize), s: TS(c: kB.wo(0.7), w: FW.w500)),
+                    ],
+                  ),
+                  4.h,
+                  Wrap(
+                    spacing: 4,
+                    runSpacing: 8,
+                    children: [
+                      ...tags.map((tag) {
+                        return C(
+                          decoration: BD(
+                            borderRadius: 4.r,
+                            color: kCG,
+                          ),
+                          padding: const EI.s(h: 4),
+                          child: T(tag, s: const TS(c: kW, w: FW.w500)),
+                        );
+                      }),
+                      C(
+                        decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
+                        padding: const EI.s(h: 4),
+                        child: T(fileKey.backend.asArgument),
+                      ),
+                      if (modelSizeB > 0)
                         C(
                           decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
                           padding: const EI.s(h: 4),
-                          child: T(fileKey.backend.asArgument),
+                          child: T("${modelSizeB}B"),
                         ),
-                        if (modelSizeB > 0)
-                          C(
-                            decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
-                            padding: const EI.s(h: 4),
-                            child: T("${modelSizeB}B"),
+                      if (q.isNotEmpty)
+                        C(
+                          decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
+                          padding: const EI.s(h: 4),
+                          child: T(q),
+                        ),
+                    ],
+                  ),
+                  if (downloading) 8.h,
+                  if (downloading)
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        final width = constraints.maxWidth;
+                        return SB(
+                          width: width - 100,
+                          child: Ro(
+                            children: [
+                              Exp(
+                                flex: (100 * progress).toInt(),
+                                child: C(
+                                  decoration: BD(
+                                    borderRadius: BorderRadius.only(topLeft: 8.rr, bottomLeft: 8.rr),
+                                    color: kCG,
+                                  ),
+                                  height: 4,
+                                ),
+                              ),
+                              Exp(
+                                flex: 100 - (100 * progress).toInt(),
+                                child: C(
+                                  decoration: BD(
+                                    borderRadius: BorderRadius.only(topRight: 8.rr, bottomRight: 8.rr),
+                                    color: kG.wo(0.5),
+                                  ),
+                                  height: 4,
+                                ),
+                              ),
+                            ],
                           ),
-                        if (q.isNotEmpty)
-                          C(
-                            decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
-                            padding: const EI.s(h: 4),
-                            child: T(q),
-                          ),
+                        );
+                      },
+                    ),
+                  if (downloading) 4.h,
+                  if (downloading)
+                    Wrap(
+                      children: [
+                        const T("Speed: "),
+                        T("${networkSpeed.toStringAsFixed(1)}MB/s"),
+                        12.w,
+                        const T("Remaining: "),
+                        if (timeRemaining.inMinutes > 0) T("${timeRemaining.inMinutes}m"),
+                        if (timeRemaining.inMinutes == 0) T("${timeRemaining.inSeconds}s"),
                       ],
                     ),
-                    if (downloading) 8.h,
-                    if (downloading)
-                      LayoutBuilder(
-                        builder: (context, constraints) {
-                          final width = constraints.maxWidth;
-                          return SB(
-                            width: width - 100,
-                            child: Ro(
-                              children: [
-                                Exp(
-                                  flex: (100 * progress).toInt(),
-                                  child: C(
-                                    decoration: BD(
-                                      borderRadius: BorderRadius.only(topLeft: 8.rr, bottomLeft: 8.rr),
-                                      color: kCG,
-                                    ),
-                                    height: 4,
-                                  ),
-                                ),
-                                Exp(
-                                  flex: 100 - (100 * progress).toInt(),
-                                  child: C(
-                                    decoration: BD(
-                                      borderRadius: BorderRadius.only(topRight: 8.rr, bottomRight: 8.rr),
-                                      color: kG.wo(0.5),
-                                    ),
-                                    height: 4,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    if (downloading) 4.h,
-                    if (downloading)
-                      Wrap(
-                        children: [
-                          const T("Speed: "),
-                          T("${networkSpeed.toStringAsFixed(1)}MB/s"),
-                          12.w,
-                          const T("Remaining: "),
-                          if (timeRemaining.inMinutes > 0) T("${timeRemaining.inMinutes}m"),
-                          if (timeRemaining.inMinutes == 0) T("${timeRemaining.inSeconds}s"),
-                        ],
-                      ),
-                  ],
-                ),
+                ],
               ),
             ),
             8.w,

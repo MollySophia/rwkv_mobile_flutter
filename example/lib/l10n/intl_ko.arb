@@ -19,7 +19,7 @@
   "rwkv_othello": "RWKV 오델로",
   "rwkv_chat": "RWKV 채팅",
   "start_a_new_chat_by_clicking_the_button_below": "아래 버튼을 클릭하여 새 채팅 시작",
-  "intro": "RWKV-x070-World 시리즈 경량 언어 모델을 경험해 보세요. 0.1B/0.4B/1.5B/3.0B 파라미터 버전으로 모바일 최적화되어 오프라인에서도 서버 연결 없이 작동합니다",
+  "intro": "RWKV v7 시리즈 경량 언어 모델을 경험해 보세요. 0.1B/0.4B/1.5B/3.0B 파라미터 버전으로 모바일 최적화되어 오프라인에서도 서버 연결 없이 작동합니다",
   "select_a_model": "모델 선택",
   "you_are_now_using": "현재 {modelName}을(를) 사용 중입니다",
   "click_here_to_start_a_new_chat": "여기를 클릭하여 새 채팅 시작",

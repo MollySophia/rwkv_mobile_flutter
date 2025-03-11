@@ -56,7 +56,8 @@ class Message extends ConsumerWidget {
 
     final received = ref.watch(P.chat.received.select((v) => msg.changing ? v : ""));
 
-    final finalContent = changing ? received : content;
+    String finalContent = changing ? received : content;
+    finalContent = finalContent.replaceAll("\n", "\n\n");
 
     final cotDisplayState = ref.watch(P.chat.cotDisplayState(msg.id));
 

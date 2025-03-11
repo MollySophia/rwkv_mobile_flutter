@@ -19,7 +19,7 @@
   "rwkv_othello": "RWKV オセロ",
   "rwkv_chat": "RWKV チャット",
   "start_a_new_chat_by_clicking_the_button_below": "下のボタンをクリックして新規チャットを開始",
-  "intro": "RWKV-x070-Worldシリーズの軽量言語モデルを体験。0.1B/0.4B/1.5B/3.0Bパラメータ版をモバイル最適化。オフラインでサーバー通信不要",
+  "intro": "RWKV v7シリーズの軽量言語モデルを体験。0.1B/0.4B/1.5B/3.0Bパラメータ版をモバイル最適化。オフラインでサーバー通信不要",
   "select_a_model": "モデルを選択",
   "you_are_now_using": "現在 {modelName} を使用中です",
   "click_here_to_start_a_new_chat": "ここをクリックして新規チャットを開始",
