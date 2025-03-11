@@ -87,6 +87,12 @@ extension $RemoteFile on _RemoteFile {
   }
 
   FV deleteFile({required FileKey fileKey}) async {
+    try {
+      await cancelDownload(fileKey: fileKey);
+    } catch (e) {
+      logTrace("😡 $e");
+      if (kDebugMode) print("😡 $e");
+    }
     final path = fileKey.path;
     await File(path).delete();
     files(fileKey).u(files(fileKey).v.copyWith(hasFile: false));
