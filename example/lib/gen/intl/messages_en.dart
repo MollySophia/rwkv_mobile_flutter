@@ -20,8 +20,8 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(memUsed, memFree, memUsedByCurrentModel) =>
-      "Memory used: ${memUsed}, Memory free: ${memFree}, Memory used by current model: ${memUsedByCurrentModel}";
+  static String m0(memUsed, memFree) =>
+      "Memory used: ${memUsed}, Memory free: ${memFree}";
 
   static String m1(modelName) => "You are now using ${modelName}";
 
@@ -59,6 +59,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Click here to start a new chat",
     ),
     "download_model": MessageLookupByLibrary.simpleMessage("Download model"),
+    "download_source": MessageLookupByLibrary.simpleMessage("Download source"),
     "ensure_you_have_enough_memory_to_load_the_model":
         MessageLookupByLibrary.simpleMessage(
           "Please ensure you have enough memory to load the model, otherwise the application may crash.",

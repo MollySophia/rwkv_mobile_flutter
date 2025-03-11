@@ -3,8 +3,8 @@
 part of 'p.dart';
 
 enum RemoteFileSource {
-  huggingface,
   aifasthub,
+  huggingface,
   github,
   googleapis,
   ;
@@ -28,11 +28,12 @@ class _RemoteFile {
     return FileInfo(key: key);
   });
 
+  /// downloading files
   late final downloadingFiles = _gs<Map<String, FileKey>>({});
 
   late final weights = _gs<List<Weights>>([]);
 
-  late final source = _gs(RemoteFileSource.huggingface);
+  late final source = _gs(RemoteFileSource.aifasthub);
 }
 
 /// Public methods
@@ -71,6 +72,24 @@ extension $RemoteFile on _RemoteFile {
 
     final modelFile = files(fileKey).v;
     files(fileKey).u(modelFile.copyWith(downloading: true));
+  }
+
+  FV cancelDownload({required FileKey fileKey}) async {
+    final downloadingFiles = this.downloadingFiles.v;
+    final taskId = downloadingFiles.entries.firstWhereOrNull((e) => e.value == fileKey)?.key;
+    if (taskId == null) {
+      if (kDebugMode) print("😡 cancelDownload: taskId not found");
+      return;
+    }
+    bd.FileDownloader().cancelTaskWithId(taskId);
+    this.downloadingFiles.ur(taskId);
+    files(fileKey).u(files(fileKey).v.copyWith(downloading: false));
+  }
+
+  FV deleteFile({required FileKey fileKey}) async {
+    final path = fileKey.path;
+    await File(path).delete();
+    files(fileKey).u(files(fileKey).v.copyWith(hasFile: false));
   }
 
   FV checkLocalFile() async {

@@ -25,7 +25,7 @@
   "click_here_to_start_a_new_chat": "ここをクリックして新規チャットを開始",
   "click_here_to_select_a_new_model": "ここをクリックして新規モデルを選択",
   "ensure_you_have_enough_memory_to_load_the_model": "メモリが不足するとアプリがクラッシュする可能性があります",
-  "memory_used": "使用メモリ: {memUsed}、空きメモリ: {memFree}、現在のモデル使用量: {memUsedByCurrentModel}",
+  "memory_used": "使用メモリ: {memUsed}、空きメモリ: {memFree}",
   "you_can_select_a_role_to_chat": "チャットするロールを選択できます",
   "new_chat": "新規チャット",
   "or_you_can_start_a_new_empty_chat": "または空白のチャットを開始",

@@ -1,7 +1,10 @@
 // ignore: unused_import
 import 'dart:developer';
 
+import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:flutter/foundation.dart';
 import 'package:zone/func/log_trace.dart';
+import 'package:zone/func/mb_gb_display.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/file_key.dart';
 import 'package:zone/route/router.dart';
@@ -48,11 +51,6 @@ class ModelItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final file = ref.watch(P.remoteFile.files(fileKey));
     final fileSize = file.expectedFileSize;
-    final fileSizeMB = fileSize / 1024 / 1024;
-    final fileSizeString = fileSizeMB.toStringAsFixed(2);
-    final fileSizeGB = fileSizeMB / 1024;
-    final fileSizeGBString = fileSizeGB.toStringAsFixed(2);
-    final shouldShowGB = fileSizeGB > 1;
     final progress = file.progress;
     final hasFile = file.hasFile;
     final downloading = file.downloading;
@@ -64,7 +62,6 @@ class ModelItem extends ConsumerWidget {
     final isCurrentModel = currentModel == fileKey;
     final loading = ref.watch(P.chat.loading);
     final tags = fileKey.weights?.tags ?? [];
-    final source = fileKey.weights?.source;
 
     return ClipRRect(
       borderRadius: 8.r,
@@ -75,102 +72,104 @@ class ModelItem extends ConsumerWidget {
         child: Ro(
           children: [
             Exp(
-              child: Co(
-                c: CAA.start,
-                children: [
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      T(
-                        fileKey.weights?.name ?? "",
-                        s: const TS(c: kB, w: FW.w600),
-                      ),
-                      if (shouldShowGB) T("$fileSizeGBString GB"),
-                      if (!shouldShowGB) T("$fileSizeString MB"),
-                    ],
-                  ),
-                  4.h,
-                  Wrap(
-                    spacing: 4,
-                    runSpacing: 8,
-                    children: [
-                      ...tags.map((tag) {
-                        return C(
-                          decoration: BD(
-                            borderRadius: 4.r,
-                            color: kCG,
-                          ),
-                          padding: const EI.s(h: 4),
-                          child: T(tag, s: const TS(c: kW, w: FW.w500)),
-                        );
-                      }),
-                      C(
-                        decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
-                        padding: const EI.s(h: 4),
-                        child: T(fileKey.backend.asArgument),
-                      ),
-                      if (modelSizeB > 0)
-                        C(
-                          decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
-                          padding: const EI.s(h: 4),
-                          child: T("${modelSizeB}B"),
-                        ),
-                      if (q.isNotEmpty)
-                        C(
-                          decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
-                          padding: const EI.s(h: 4),
-                          child: T(q),
-                        ),
-                    ],
-                  ),
-                  if (downloading) 8.h,
-                  if (downloading)
-                    LayoutBuilder(
-                      builder: (context, constraints) {
-                        final width = constraints.maxWidth;
-                        return SB(
-                          width: width - 100,
-                          child: Ro(
-                            children: [
-                              Exp(
-                                flex: (100 * progress).toInt(),
-                                child: C(
-                                  decoration: BD(
-                                    borderRadius: BorderRadius.only(topLeft: 8.rr, bottomLeft: 8.rr),
-                                    color: kCG,
-                                  ),
-                                  height: 4,
-                                ),
-                              ),
-                              Exp(
-                                flex: 100 - (100 * progress).toInt(),
-                                child: C(
-                                  decoration: BD(
-                                    borderRadius: BorderRadius.only(topRight: 8.rr, bottomRight: 8.rr),
-                                    color: kG.wo(0.5),
-                                  ),
-                                  height: 4,
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  if (downloading) 4.h,
-                  if (downloading)
+              child: C(
+                decoration: BD(color: kDebugMode ? kG.wo(0.2) : kC),
+                child: Co(
+                  c: CAA.start,
+                  children: [
                     Wrap(
+                      spacing: 8,
+                      runSpacing: 0,
                       children: [
-                        const T("Speed: "),
-                        T("${networkSpeed.toStringAsFixed(1)}mb/s"),
-                        12.w,
-                        const T("Remaining: "),
-                        if (timeRemaining.inMinutes > 0) T("${timeRemaining.inMinutes}m"),
-                        if (timeRemaining.inMinutes == 0) T("${timeRemaining.inSeconds}s"),
+                        T(
+                          fileKey.weights?.name ?? "",
+                          s: const TS(c: kB, w: FW.w600),
+                        ),
+                        T(mbGbDisplay(fileSize), s: TS(c: kB.wo(0.7), w: FW.w500)),
                       ],
                     ),
-                ],
+                    4.h,
+                    Wrap(
+                      spacing: 4,
+                      runSpacing: 8,
+                      children: [
+                        ...tags.map((tag) {
+                          return C(
+                            decoration: BD(
+                              borderRadius: 4.r,
+                              color: kCG,
+                            ),
+                            padding: const EI.s(h: 4),
+                            child: T(tag, s: const TS(c: kW, w: FW.w500)),
+                          );
+                        }),
+                        C(
+                          decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
+                          padding: const EI.s(h: 4),
+                          child: T(fileKey.backend.asArgument),
+                        ),
+                        if (modelSizeB > 0)
+                          C(
+                            decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
+                            padding: const EI.s(h: 4),
+                            child: T("${modelSizeB}B"),
+                          ),
+                        if (q.isNotEmpty)
+                          C(
+                            decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
+                            padding: const EI.s(h: 4),
+                            child: T(q),
+                          ),
+                      ],
+                    ),
+                    if (downloading) 8.h,
+                    if (downloading)
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          final width = constraints.maxWidth;
+                          return SB(
+                            width: width - 100,
+                            child: Ro(
+                              children: [
+                                Exp(
+                                  flex: (100 * progress).toInt(),
+                                  child: C(
+                                    decoration: BD(
+                                      borderRadius: BorderRadius.only(topLeft: 8.rr, bottomLeft: 8.rr),
+                                      color: kCG,
+                                    ),
+                                    height: 4,
+                                  ),
+                                ),
+                                Exp(
+                                  flex: 100 - (100 * progress).toInt(),
+                                  child: C(
+                                    decoration: BD(
+                                      borderRadius: BorderRadius.only(topRight: 8.rr, bottomRight: 8.rr),
+                                      color: kG.wo(0.5),
+                                    ),
+                                    height: 4,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    if (downloading) 4.h,
+                    if (downloading)
+                      Wrap(
+                        children: [
+                          const T("Speed: "),
+                          T("${networkSpeed.toStringAsFixed(1)}MB/s"),
+                          12.w,
+                          const T("Remaining: "),
+                          if (timeRemaining.inMinutes > 0) T("${timeRemaining.inMinutes}m"),
+                          if (timeRemaining.inMinutes == 0) T("${timeRemaining.inSeconds}s"),
+                        ],
+                      ),
+                  ],
+                ),
               ),
             ),
             8.w,
@@ -179,41 +178,121 @@ class ModelItem extends ConsumerWidget {
                 onPressed: _onDownloadTap,
                 icon: const Icon(Icons.download),
               ),
-            if (downloading)
-              C(
-                margin: const EI.o(r: 8),
-                child: const SB(
-                  height: 24,
-                  width: 24,
-                  child: CircularProgressIndicator(),
-                ),
-              ),
-            if (hasFile && !isCurrentModel)
-              GD(
-                onTap: _onStartTap,
-                child: C(
-                  decoration: BD(
-                    color: loading ? kCG.wo(0.5) : kCG,
-                    borderRadius: 8.r,
+            if (downloading) _DownloadIndicator(fileKey),
+            if (hasFile) ...[
+              if (!isCurrentModel)
+                GD(
+                  onTap: _onStartTap,
+                  child: C(
+                    decoration: BD(
+                      color: loading ? kCG.wo(0.5) : kCG,
+                      borderRadius: 8.r,
+                    ),
+                    padding: const EI.a(8),
+                    child: T(loading ? "Loading..." : S.current.start_to_chat, s: const TS(c: kW)),
                   ),
-                  padding: const EI.a(8),
-                  child: T(loading ? "Loading..." : S.current.start_to_chat, s: const TS(c: kW)),
                 ),
-              ),
-            if (isCurrentModel)
-              GD(
-                onTap: null,
-                child: C(
-                  decoration: BD(
-                    color: kG.wo(0.5),
-                    borderRadius: 8.r,
+              if (isCurrentModel)
+                GD(
+                  onTap: null,
+                  child: C(
+                    decoration: BD(
+                      color: kG.wo(0.5),
+                      borderRadius: 8.r,
+                    ),
+                    padding: const EI.a(8),
+                    child: T(S.current.chatting, s: const TS(c: kW)),
                   ),
-                  padding: const EI.a(8),
-                  child: T(S.current.chatting, s: const TS(c: kW)),
                 ),
-              ),
+              if (!isCurrentModel) 8.w,
+              if (!isCurrentModel) _Delete(fileKey),
+            ]
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _DownloadIndicator extends ConsumerWidget {
+  final FileKey fileKey;
+
+  const _DownloadIndicator(this.fileKey);
+
+  void _onTap() async {
+    logTrace();
+    final result = await showOkCancelAlertDialog(
+      context: getContext()!,
+      title: "Cancel Download?",
+      okLabel: "Cancel",
+      isDestructiveAction: true,
+      cancelLabel: "Continue download",
+    );
+    if (result == OkCancelResult.ok) {
+      await P.remoteFile.cancelDownload(fileKey: fileKey);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return GD(
+      onTap: _onTap,
+      child: C(
+        margin: const EI.o(r: 8),
+        child: Stack(
+          children: [
+            const SB(
+              height: 24,
+              width: 24,
+              child: CircularProgressIndicator(
+                strokeWidth: 3,
+              ),
+            ),
+            Positioned(
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0,
+              child: Icon(
+                Icons.stop,
+                size: 16,
+                color: kB.wo(0.7),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Delete extends ConsumerWidget {
+  final FileKey fileKey;
+
+  const _Delete(this.fileKey);
+
+  void _onTap() async {
+    logTrace();
+    final result = await showOkCancelAlertDialog(
+      context: getContext()!,
+      title: "Are you sure you want to delete this model?",
+      okLabel: "Delete",
+      isDestructiveAction: true,
+      cancelLabel: "Cancel",
+    );
+    if (result == OkCancelResult.ok) {
+      await P.remoteFile.deleteFile(fileKey: fileKey);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return GD(
+      onTap: _onTap,
+      child: C(
+        decoration: BD(color: kCR.wo(0.8), borderRadius: 8.r, border: Border.all(color: kC)),
+        padding: const EI.a(5),
+        child: const Icon(Icons.delete_forever_outlined, color: kW),
       ),
     );
   }

@@ -27,7 +27,11 @@ enum Backend {
   /// https://github.com/cryscan/web-rwkv
   webRwkv,
 
-  qnn;
+  /// Qualcomm Neural Network
+  ///
+  /// Currently only support Android
+  qnn,
+  ;
 
   String get asArgument {
     switch (this) {

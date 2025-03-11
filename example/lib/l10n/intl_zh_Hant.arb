@@ -25,7 +25,7 @@
   "click_here_to_start_a_new_chat": "點擊此處開始新聊天",
   "click_here_to_select_a_new_model": "點擊此處選擇新模型",
   "ensure_you_have_enough_memory_to_load_the_model": "請確保裝置記憶體充足，否則可能導致應用程式崩潰",
-  "memory_used": "已用記憶體：{memUsed}，剩餘記憶體：{memFree}，當前模型佔用：{memUsedByCurrentModel}",
+  "memory_used": "已用記憶體：{memUsed}，剩餘記憶體：{memFree}",
   "you_can_select_a_role_to_chat": "您可以選擇角色進行聊天",
   "new_chat": "新聊天",
   "or_you_can_start_a_new_empty_chat": "或開始一個空白聊天",

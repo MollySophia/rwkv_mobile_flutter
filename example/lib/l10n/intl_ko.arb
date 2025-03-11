@@ -25,7 +25,7 @@
   "click_here_to_start_a_new_chat": "여기를 클릭하여 새 채팅 시작",
   "click_here_to_select_a_new_model": "여기를 클릭하여 새 모델 선택",
   "ensure_you_have_enough_memory_to_load_the_model": "메모리가 충분한지 확인하세요. 그렇지 않으면 앱이 충돌할 수 있습니다",
-  "memory_used": "사용 중 메모리: {memUsed}, 여유 메모리: {memFree}, 현재 모델 사용량: {memUsedByCurrentModel}",
+  "memory_used": "사용 중 메모리: {memUsed}, 여유 메모리: {memFree}",
   "you_can_select_a_role_to_chat": "채팅할 역할을 선택할 수 있습니다",
   "new_chat": "새 채팅",
   "or_you_can_start_a_new_empty_chat": "또는 빈 채팅을 시작할 수 있습니다",

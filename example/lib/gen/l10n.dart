@@ -280,17 +280,13 @@ class S {
     );
   }
 
-  /// `Memory used: {memUsed}, Memory free: {memFree}, Memory used by current model: {memUsedByCurrentModel}`
-  String memory_used(
-    Object memUsed,
-    Object memFree,
-    Object memUsedByCurrentModel,
-  ) {
+  /// `Memory used: {memUsed}, Memory free: {memFree}`
+  String memory_used(Object memUsed, Object memFree) {
     return Intl.message(
-      'Memory used: $memUsed, Memory free: $memFree, Memory used by current model: $memUsedByCurrentModel',
+      'Memory used: $memUsed, Memory free: $memFree',
       name: 'memory_used',
       desc: '',
-      args: [memUsed, memFree, memUsedByCurrentModel],
+      args: [memUsed, memFree],
     );
   }
 
@@ -344,6 +340,16 @@ class S {
     return Intl.message(
       'Bot message edited, you can now send new message',
       name: 'bot_message_edited',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Download source`
+  String get download_source {
+    return Intl.message(
+      'Download source',
+      name: 'download_source',
       desc: '',
       args: [],
     );

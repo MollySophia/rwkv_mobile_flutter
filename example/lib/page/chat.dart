@@ -4,10 +4,12 @@ import 'dart:ui';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
+import 'package:zone/func/mb_gb_display.dart';
 import 'package:zone/gen/assets.gen.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/file_key.dart';
 import 'package:zone/model/role.dart';
+import 'package:zone/route/method.dart';
 import 'package:zone/route/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -208,9 +210,11 @@ class _ModelSelector extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final memUsed = ref.watch(P.device.memUsed);
     final memFree = ref.watch(P.device.memFree);
-    final memUsedByCurrentModel = ref.watch(P.device.memUsedByCurrentModel);
     final paddingBottom = ref.watch(P.app.paddingBottom);
     final source = ref.watch(P.remoteFile.source);
+    final memUsedString = mbGbDisplay(memUsed);
+    final memFreeString = mbGbDisplay(memFree);
+
     return ClipRRect(
       borderRadius: 16.r,
       child: C(
@@ -219,7 +223,17 @@ class _ModelSelector extends ConsumerWidget {
           padding: const EI.o(t: 24, l: 12, r: 12),
           controller: scrollController,
           children: [
-            T(S.current.chat_welcome_to_use, s: const TS(s: 18, w: FW.w600)),
+            Ro(
+              children: [
+                Exp(child: T(S.current.chat_welcome_to_use, s: const TS(s: 18, w: FW.w600))),
+                IconButton(
+                  onPressed: () {
+                    pop();
+                  },
+                  icon: const Icon(Icons.close),
+                ),
+              ],
+            ),
             4.h,
             T(S.current.chat_please_select_a_model, s: const TS(s: 16, w: FW.w500)),
             4.h,
@@ -227,9 +241,9 @@ class _ModelSelector extends ConsumerWidget {
             4.h,
             T(S.current.ensure_you_have_enough_memory_to_load_the_model, s: TS(c: kB.wo(0.7), s: 12)),
             4.h,
-            T(S.current.memory_used(memUsed, memFree, memUsedByCurrentModel), s: TS(c: kB.wo(0.7), s: 12)),
+            T(S.current.memory_used(memUsedString, memFreeString), s: TS(c: kB.wo(0.7), s: 12)),
             4.h,
-            const T("Download source:"),
+            T(S.current.download_source, s: TS(c: kB.wo(0.7), s: 14, w: FW.w600)),
             4.h,
             Wrap(
               runSpacing: 4,

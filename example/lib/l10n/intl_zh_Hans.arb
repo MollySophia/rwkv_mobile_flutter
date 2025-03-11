@@ -25,7 +25,7 @@
   "click_here_to_start_a_new_chat": "点击此处开始新聊天",
   "click_here_to_select_a_new_model": "点击此处选择新模型",
   "ensure_you_have_enough_memory_to_load_the_model": "请确保设备内存充足，否则可能导致应用崩溃",
-  "memory_used": "已用内存：{memUsed}，剩余内存：{memFree}，当前模型占用：{memUsedByCurrentModel}",
+  "memory_used": "已用内存：{memUsed}，剩余内存：{memFree}",
   "you_can_select_a_role_to_chat": "您可以选择角色进行聊天",
   "new_chat": "新聊天",
   "or_you_can_start_a_new_empty_chat": "或开始一个空白聊天",

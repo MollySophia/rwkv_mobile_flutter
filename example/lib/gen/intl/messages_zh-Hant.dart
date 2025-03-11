@@ -20,8 +20,7 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'zh_Hant';
 
-  static String m0(memUsed, memFree, memUsedByCurrentModel) =>
-      "已用記憶體：${memUsed}，剩餘記憶體：${memFree}，當前模型佔用：${memUsedByCurrentModel}";
+  static String m0(memUsed, memFree) => "已用記憶體：${memUsed}，剩餘記憶體：${memFree}";
 
   static String m1(modelName) => "您當前正在使用 ${modelName}";
 

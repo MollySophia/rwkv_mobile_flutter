@@ -25,11 +25,12 @@
   "click_here_to_start_a_new_chat": "Click here to start a new chat",
   "click_here_to_select_a_new_model": "Click here to select a new model.",
   "ensure_you_have_enough_memory_to_load_the_model": "Please ensure you have enough memory to load the model, otherwise the application may crash.",
-  "memory_used": "Memory used: {memUsed}, Memory free: {memFree}, Memory used by current model: {memUsedByCurrentModel}",
+  "memory_used": "Memory used: {memUsed}, Memory free: {memFree}",
   "you_can_select_a_role_to_chat": "You can select a role to chat",
   "new_chat": "New chat",
   "or_you_can_start_a_new_empty_chat": "Or you can start a new empty chat",
   "start_a_new_chat": "Start a new chat",
   "you_can_now_start_to_chat_with_rwkv": "You can now start to chat with RWKV",
-  "bot_message_edited": "Bot message edited, you can now send new message"
+  "bot_message_edited": "Bot message edited, you can now send new message",
+  "download_source": "Download source"
 }

@@ -65,7 +65,6 @@ class Message extends ConsumerWidget {
     String cotContent = "";
     String cotResult = "";
 
-    // TODO: @halowang 应该使用当前的模型来判断, 不应该使用内容
     if (usingReasoningModel) {
       final isCot = finalContent.startsWith("<think>");
       if (isCot) {
@@ -176,7 +175,9 @@ class Message extends ConsumerWidget {
                     child: Co(
                       c: isMine ? CAA.end : CAA.start,
                       children: [
+                        // 🔥 User message
                         if (isMine) T(finalContent, s: const TS(c: kW)),
+                        // 🔥 Bot message
                         if (!isMine && !usingReasoningModel)
                           MarkdownBody(
                             data: finalContent,

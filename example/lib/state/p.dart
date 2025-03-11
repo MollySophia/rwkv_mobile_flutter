@@ -5,6 +5,7 @@ import 'dart:isolate';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:background_downloader/background_downloader.dart' as bd;
+import 'package:collection/collection.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:system_info2/system_info2.dart';
@@ -40,6 +41,7 @@ part "othello.dart";
 part "remote_file.dart";
 part "device.dart";
 part "adapter.dart";
+part "debugger.dart";
 
 abstract class P {
   static final app = _App();
@@ -49,6 +51,7 @@ abstract class P {
   static final remoteFile = _RemoteFile();
   static final device = _Device();
   static final adapter = _Adapter();
+  static final debugger = _Debugger();
   static FV init() async {
     WidgetsFlutterBinding.ensureInitialized();
     await app._init();
@@ -64,6 +67,7 @@ abstract class P {
       remoteFile._init(),
       device._init(),
       adapter._init(),
+      debugger._init(),
     ]);
   }
 }

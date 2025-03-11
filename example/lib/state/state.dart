@@ -113,6 +113,14 @@ extension HaloStateProviderMap<K, V> on StateProvider<Map<K, V>> {
     u(newV);
   }
 
+  /// remove value
+  void ur(K key) {
+    final v = this.v;
+    final newValue = {...v};
+    newValue.remove(key);
+    u(newValue);
+  }
+
   V? get(K key) {
     return v[key];
   }
