@@ -32,11 +32,6 @@ class Input extends ConsumerWidget {
     logTrace();
   }
 
-  void _onRightButtonPressed() async {
-    logTrace();
-    await P.chat.onInputRightButtonPressed();
-  }
-
   void _onKeyEvent(KeyEvent event) {
     final character = event.character;
     final isShiftPressed = HardwareKeyboard.instance.isShiftPressed;
@@ -58,15 +53,8 @@ class Input extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final paddingBottom = ref.watch(P.app.paddingBottom);
-    final receiving = ref.watch(P.chat.receiving);
-    final canSend = ref.watch(P.chat.canSend);
-    final editingBotMessage = ref.watch(P.chat.editingBotMessage);
-
-    final color = Colors.deepPurple;
-
+    final color = Theme.of(context).colorScheme.primary;
     final loaded = ref.watch(P.chat.loaded);
-
-    final usingReasoningModel = ref.watch(P.chat.usingReasoningModel);
 
     return Positioned(
       bottom: 0,
@@ -133,71 +121,101 @@ class Input extends ConsumerWidget {
                     ),
                   ),
                   8.h,
-                  Row(
-                    children: [
-                      GD(
-                        onTap: () {
-                          if (P.chat.showingModelSelector.v) return;
-                          P.chat.showingModelSelector.u(true);
-                        },
-                        child: C(
-                          decoration: BD(
-                            color: usingReasoningModel ? color : kC,
-                            border: Border.all(
-                              color: color.wo(0.5),
-                            ),
-                            borderRadius: 12.r,
-                          ),
-                          padding: const EI.o(l: 4, r: 8, t: 4, b: 4),
-                          child: Ro(
-                            c: CAA.center,
-                            children: [
-                              Icon(
-                                Icons.emoji_objects_outlined,
-                                color: usingReasoningModel ? kW : color,
-                              ),
-                              T(usingReasoningModel ? "Reason on" : "Reason off",
-                                  s: TS(
-                                    c: usingReasoningModel ? kW : color,
-                                  )),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const Spacer(),
-                      if (receiving)
-                        SB(
-                          width: 46,
-                          child: Center(
-                            child: SB(
-                              width: 24,
-                              height: 24,
-                              child: CircularProgressIndicator(
-                                color: color.wo(0.5),
-                              ),
-                            ),
-                          ),
-                        ),
-                      if (!receiving)
-                        AnimatedOpacity(
-                          opacity: canSend ? 1 : 0.333,
-                          duration: 250.ms,
-                          child: GD(
-                            onTap: canSend ? _onRightButtonPressed : null,
-                            child: Icon(
-                              editingBotMessage ? Icons.edit : Icons.send,
-                              color: color,
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
+                  const _BottomBar(),
                 ],
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _BottomBar extends ConsumerWidget {
+  const _BottomBar();
+
+  void _onRightButtonPressed() async {
+    logTrace();
+    await P.chat.onInputRightButtonPressed();
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final receiving = ref.watch(P.chat.receiving);
+    final canSend = ref.watch(P.chat.canSend);
+    final editingBotMessage = ref.watch(P.chat.editingBotMessage);
+    final color = Theme.of(context).colorScheme.primary;
+    final usingReasoningModel = ref.watch(P.chat.usingReasoningModel);
+    final prefillSpeed = ref.watch(P.rwkv.prefillSpeed);
+    final decodeSpeed = ref.watch(P.rwkv.decodeSpeed);
+
+    return Row(
+      children: [
+        GD(
+          onTap: () {
+            if (P.chat.showingModelSelector.v) return;
+            P.chat.showingModelSelector.u(true);
+          },
+          child: C(
+            decoration: BD(
+              color: usingReasoningModel ? color : kC,
+              border: Border.all(
+                color: color.wo(0.5),
+              ),
+              borderRadius: 12.r,
+            ),
+            padding: const EI.o(l: 4, r: 8, t: 4, b: 4),
+            child: Ro(
+              c: CAA.center,
+              children: [
+                Icon(
+                  Icons.emoji_objects_outlined,
+                  color: usingReasoningModel ? kW : color,
+                ),
+                T(usingReasoningModel ? "Reason on" : "Reason off",
+                    s: TS(
+                      c: usingReasoningModel ? kW : color,
+                    )),
+              ],
+            ),
+          ),
+        ),
+        8.w,
+        Co(
+          c: CAA.start,
+          children: [
+            T("Prefill: ${prefillSpeed.toStringAsFixed(2)} t/s", s: TS(c: kB.wo(0.6), s: 10)),
+            T("Decode: ${decodeSpeed.toStringAsFixed(2)} t/s", s: TS(c: kB.wo(0.6), s: 10)),
+          ],
+        ),
+        const Spacer(),
+        if (receiving)
+          SB(
+            width: 46,
+            child: Center(
+              child: SB(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(
+                  color: color.wo(0.5),
+                ),
+              ),
+            ),
+          ),
+        if (!receiving)
+          AnimatedOpacity(
+            opacity: canSend ? 1 : 0.333,
+            duration: 250.ms,
+            child: GD(
+              onTap: canSend ? _onRightButtonPressed : null,
+              child: Icon(
+                editingBotMessage ? Icons.edit : Icons.send,
+                color: color,
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

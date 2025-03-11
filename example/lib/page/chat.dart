@@ -39,7 +39,9 @@ class _PageChatState extends State<PageChat> {
           expand: false,
           snap: false,
           builder: (BuildContext context, ScrollController scrollController) {
-            P.chat.roles.u(P.chat.roles.v.shuffled);
+            HF.wait(1).then((_) {
+              P.chat.roles.u(P.chat.roles.v.shuffled);
+            });
             return _RoleSelector(
               scrollController: scrollController,
             );

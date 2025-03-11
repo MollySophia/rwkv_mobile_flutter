@@ -134,6 +134,20 @@ class RWKVMobile {
 
     var runtime;
 
+    var speedReportCounter = 0;
+    (double?, double?) getPrefillAndDecodeSpeed() {
+      double? prefillSpeed;
+      double? decodeSpeed;
+      if (speedReportCounter % 10 == 0) {
+        prefillSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime);
+        decodeSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime);
+        sendPort.send({'prefillSpeed': prefillSpeed, 'decodeSpeed': decodeSpeed});
+        if (kDebugMode) print("💬 prefillSpeed: $prefillSpeed, decodeSpeed: $decodeSpeed");
+      }
+      speedReportCounter++;
+      return (prefillSpeed, decodeSpeed);
+    }
+
     // runtime initializations
     if (modelBackend == 'qnn') {
       // TODO: better solution for this
@@ -224,24 +238,27 @@ class RWKVMobile {
         }
         final numInputs = messages.length;
 
-        int speedReportCounter = 0;
         callbackFunction(ffi.Pointer<ffi.Char> s) {
+          final (prefillSpeed, decodeSpeed) = getPrefillAndDecodeSpeed();
+          final responseObject = {
+            'streamResponse': s.cast<Utf8>().toDartString(),
+            'prefillSpeed': prefillSpeed,
+            'decodeSpeed': decodeSpeed,
+          };
           try {
             final response = s.cast<Utf8>().toDartString();
             responseBuffer = response;
-            sendPort.send({'streamResponse': response});
+            sendPort.send({
+              'streamResponse': response,
+              ...responseObject,
+            });
           } catch (e) {
             if (kDebugMode) print("😡 Error: $e");
-            sendPort.send({'streamResponse': responseBuffer});
+            sendPort.send({
+              'streamResponse': responseBuffer,
+              ...responseObject,
+            });
           }
-
-          if (speedReportCounter % 10 == 0) {
-            final prefillSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime);
-            final decodeSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime);
-            sendPort.send({'prefillSpeed': prefillSpeed, 'decodeSpeed': decodeSpeed});
-            if (kDebugMode) print("💬 prefillSpeed: $prefillSpeed, decodeSpeed: $decodeSpeed");
-          }
-          speedReportCounter++;
         }
 
         final nativeCallable = ffi.NativeCallable<ffi.Void Function(ffi.Pointer<ffi.Char>)>.isolateLocal(callbackFunction);
@@ -261,18 +278,15 @@ class RWKVMobile {
         final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
         String responseStr = prompt;
 
-        int speedReportCounter = 0;
         callbackFunction(ffi.Pointer<ffi.Char> stream, int idx) {
+          final (prefillSpeed, decodeSpeed) = getPrefillAndDecodeSpeed();
           responseStr += stream.cast<Utf8>().toDartString();
-          sendPort.send({'streamResponse': stream.cast<Utf8>().toDartString(), 'streamResponseToken': idx});
-
-          if (speedReportCounter % 10 == 0) {
-            final prefillSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime);
-            final decodeSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime);
-            sendPort.send({'prefillSpeed': prefillSpeed, 'decodeSpeed': decodeSpeed});
-            if (kDebugMode) print("💬 prefillSpeed: $prefillSpeed, decodeSpeed: $decodeSpeed");
-          }
-          speedReportCounter++;
+          sendPort.send({
+            'streamResponse': stream.cast<Utf8>().toDartString(),
+            'streamResponseToken': idx,
+            'prefillSpeed': prefillSpeed,
+            'decodeSpeed': decodeSpeed,
+          });
         }
 
         final nativeCallable = ffi.NativeCallable<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int)>.isolateLocal(callbackFunction);

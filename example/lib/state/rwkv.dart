@@ -53,11 +53,16 @@ class _RWKV {
   }
 
   late Completer<void> _initRuntimeCompleter = Completer<void>();
+
+  late final prefillSpeed = _gs<double>(0.0);
+  late final decodeSpeed = _gs<double>(0.0);
 }
 
 /// Public methods
 extension $RWKV on _RWKV {
   void send(List<String> messages) {
+    prefillSpeed.u(0);
+    decodeSpeed.u(0);
     final sendPort = _sendPort;
     if (sendPort == null) {
       if (kDebugMode) print("😡 sendPort is null");
@@ -67,6 +72,8 @@ extension $RWKV on _RWKV {
   }
 
   void clearStates() {
+    prefillSpeed.u(0);
+    decodeSpeed.u(0);
     final sendPort = _sendPort;
     if (sendPort == null) {
       if (kDebugMode) print("😡 sendPort is null");
@@ -76,6 +83,8 @@ extension $RWKV on _RWKV {
   }
 
   void generate(String prompt) {
+    prefillSpeed.u(0);
+    decodeSpeed.u(0);
     final sendPort = _sendPort;
     if (sendPort == null) {
       if (kDebugMode) print("😡 sendPort is null");
@@ -89,8 +98,9 @@ extension $RWKV on _RWKV {
     required Backend backend,
     required String tokenizerPath,
   }) {
+    prefillSpeed.u(0);
+    decodeSpeed.u(0);
     _initRuntimeCompleter = Completer<void>();
-
     _sendPort!.send((
       "initRuntime",
       {
@@ -107,28 +117,32 @@ extension $RWKV on _RWKV {
     required String modelPath,
     required Backend backend,
   }) async {
+    prefillSpeed.u(0);
+    decodeSpeed.u(0);
     final tokenizerPath = await getModelPath(Assets.config.chat.bRwkvVocabV20230424);
 
     // TODO: better solution here
-    final qnnLibList = [
-      "libQnnHtp.so",
-      "libQnnHtpV68Stub.so",
-      "libQnnHtpV69Stub.so",
-      "libQnnHtpV73Stub.so",
-      "libQnnHtpV75Stub.so",
-      "libQnnHtpV79Stub.so",
-      "libQnnHtpV68Skel.so",
-      "libQnnHtpV69Skel.so",
-      "libQnnHtpV73Skel.so",
-      "libQnnHtpV75Skel.so",
-      "libQnnHtpV79Skel.so",
-      "libQnnHtpPrepare.so",
-      "libQnnSystem.so",
-      "libQnnRwkvWkvOpPackage.so",
-    ];
-    for (final lib in qnnLibList) {
-      final path = await getModelPath("assets/lib/$lib");
-      if (kDebugMode) print("💬 copied QNN library, path: $path");
+    if (Platform.isAndroid) {
+      final qnnLibList = [
+        "libQnnHtp.so",
+        "libQnnHtpV68Stub.so",
+        "libQnnHtpV69Stub.so",
+        "libQnnHtpV73Stub.so",
+        "libQnnHtpV75Stub.so",
+        "libQnnHtpV79Stub.so",
+        "libQnnHtpV68Skel.so",
+        "libQnnHtpV69Skel.so",
+        "libQnnHtpV73Skel.so",
+        "libQnnHtpV75Skel.so",
+        "libQnnHtpV79Skel.so",
+        "libQnnHtpPrepare.so",
+        "libQnnSystem.so",
+        "libQnnRwkvWkvOpPackage.so",
+      ];
+      for (final lib in qnnLibList) {
+        final path = await getModelPath("assets/lib/$lib");
+        if (kDebugMode) print("💬 copied QNN library, path: $path");
+      }
     }
 
     final rootIsolateToken = RootIsolateToken.instance;
@@ -195,6 +209,9 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
   }
 
   FV loadOthello() async {
+    prefillSpeed.u(0);
+    decodeSpeed.u(0);
+
     late final String modelPath;
     late final Backend backend;
 
@@ -335,6 +352,12 @@ extension _$RWKV on _RWKV {
         "token": message["streamResponseToken"],
         "type": RWKVMessageType.streamResponse.name,
       });
+      if (message["prefillSpeed"] != null) {
+        prefillSpeed.u(message["prefillSpeed"]);
+      }
+      if (message["decodeSpeed"] != null) {
+        decodeSpeed.u(message["decodeSpeed"]);
+      }
       return;
     }
 
@@ -355,6 +378,12 @@ extension _$RWKV on _RWKV {
         if (kDebugMode) print("😡 initRuntime failed: $error");
         _initRuntimeCompleter.completeError(error);
       }
+      return;
+    }
+
+    if (message["prefillSpeed"] != null && message["decodeSpeed"] != null) {
+      prefillSpeed.u(message["prefillSpeed"]);
+      decodeSpeed.u(message["decodeSpeed"]);
       return;
     }
 
