@@ -208,6 +208,11 @@ extension $Chat on _Chat {
 
     messages.ua(receiveMsg);
   }
+
+  FV onStopButtonPressed() async {
+    logTrace();
+    P.rwkv.stop();
+  }
 }
 
 /// Private methods

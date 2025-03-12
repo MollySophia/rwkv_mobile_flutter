@@ -82,6 +82,15 @@ extension $RWKV on _RWKV {
     sendPort.send(("generate", prompt));
   }
 
+  FV stop() async {
+    final sendPort = _sendPort;
+    if (sendPort == null) {
+      if (kDebugMode) print("😡 sendPort is null");
+      return;
+    }
+    sendPort.send(("stop", null));
+  }
+
   FV initRuntime({
     required String modelPath,
     required Backend backend,

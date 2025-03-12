@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:zone/func/log_trace.dart';
+import 'package:zone/func/widget_debugger.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/widgets/alert.dart';
 import 'package:flutter/material.dart';
@@ -193,15 +194,41 @@ class _BottomBar extends ConsumerWidget {
         ),
         const Spacer(),
         if (receiving)
-          SB(
-            width: 46,
-            child: Center(
-              child: SB(
-                width: 24,
-                height: 24,
-                child: CircularProgressIndicator(
-                  color: color.wo(0.5),
-                ),
+          GD(
+            onTap: () {
+              P.chat.onStopButtonPressed();
+            },
+            child: C(
+              decoration: BD(color: kC),
+              child: Stack(
+                children: [
+                  SizedBox(
+                    width: 46,
+                    height: 34,
+                    child: Center(
+                      child: C(
+                        decoration: BD(color: color, borderRadius: 2.r),
+                        width: 12,
+                        height: 12,
+                      ),
+                    ),
+                  ),
+                  SB(
+                    width: 46,
+                    height: 34,
+                    child: Center(
+                      child: SB(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          color: color.wo(0.5),
+                          strokeWidth: 3,
+                          strokeCap: StrokeCap.round,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
