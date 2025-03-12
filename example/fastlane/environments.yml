@@ -18,15 +18,33 @@ chat:
   assets_config_1: assets/config/chat
   assets_config_2: assets/img/chat
 
-app_icon: [assets/icon/icon.othello.png, assets/icon/icon.chat.png]
-bundle_id_ios: [com.rwkv.othello.v7.ios, com.rwkv.chat.v7.100m]
-bundle_id_android: [com.rwkv.zone, com.rwkvzone.chat]
-app_name: [RWKV Othello, RWKV Chat]
+world:
+  app_icon: assets/icon/icon.world.png
+  bundle_id_android: com.worldrwkv.android
+  bundle_id_ios: com.world.rwkv.ios
+  file_android_path: android/app/src/main/kotlin/com/worldrwkv/android/MainActivity.kt
+  app_name: World RWKV
+  assets_config_0: assets/model/world
+  assets_config_1: assets/config/world
+  assets_config_2: assets/img/world
+
+app_icon:
+  [
+    assets/icon/icon.othello.png,
+    assets/icon/icon.chat.png,
+    assets/icon/icon.world.png,
+  ]
+bundle_id_ios:
+  [com.rwkv.othello.v7.ios, com.rwkv.chat.v7.100m, com.world.rwkv.ios]
+bundle_id_android: [com.rwkv.zone, com.rwkvzone.chat, com.worldrwkv.android]
+app_name: [RWKV Othello, RWKV Chat, RWKV World]
 file_android_path:
   [
     android/app/src/main/kotlin/com/rwkv/zone/MainActivity.kt,
     android/app/src/main/kotlin/com/rwkvzone/chat/MainActivity.kt,
+    android/app/src/main/kotlin/com/worldrwkv/android/MainActivity.kt,
   ]
-assets_config_0: [assets/model/othello, assets/model/chat]
-assets_config_1: [assets/config/othello, assets/config/chat]
-assets_config_2: [assets/img/othello, assets/img/chat]
+assets_config_0: [assets/model/othello, assets/model/chat, assets/model/world]
+assets_config_1:
+  [assets/config/othello, assets/config/chat, assets/config/world]
+assets_config_2: [assets/img/othello, assets/img/chat, assets/img/world]
