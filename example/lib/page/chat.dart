@@ -472,7 +472,7 @@ class _AppBar extends ConsumerWidget {
                   }
                   await ArgumentsPanel.show(context);
                 },
-                icon: Icon(Icons.tune),
+                icon: const Icon(Icons.tune),
               ),
             ],
           ),

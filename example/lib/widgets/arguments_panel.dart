@@ -1,12 +1,9 @@
 // ignore: unused_import
 import 'dart:developer';
-import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
-import 'package:zone/func/widget_debugger.dart';
 import 'package:zone/model/argument.dart';
 import 'package:zone/route/method.dart';
 import 'package:zone/state/p.dart';
@@ -58,16 +55,16 @@ class ArgumentsPanel extends ConsumerWidget {
                   onPressed: () {
                     pop();
                   },
-                  child: T("Cancel"),
+                  child: const T("Cancel"),
                 ),
                 Exp(
                   child: Ro(
                     c: CAA.center,
                     m: MAA.center,
                     children: [
-                      Icon(Icons.tune),
+                      const Icon(Icons.tune),
                       12.w,
-                      T(
+                      const T(
                         "Session Configuration",
                         s: TS(s: 16, w: FW.w500),
                       ),
@@ -82,7 +79,7 @@ class ArgumentsPanel extends ConsumerWidget {
                   onPressed: () {
                     pop();
                   },
-                  child: T("Apply"),
+                  child: const T("Apply"),
                 ),
                 4.w,
               ],
@@ -92,7 +89,7 @@ class ArgumentsPanel extends ConsumerWidget {
               child: ListView(
                 controller: scrollController,
                 padding: EI.o(b: paddingBottom),
-                children: [
+                children: const [
                   _SamplerOptions(),
                   _Value(Argument.temperature),
                   _Value(Argument.topK),
@@ -119,7 +116,7 @@ class _SamplerOptions extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
     return C(
-      margin: EI.s(h: 12),
+      margin: const EI.s(h: 12),
       decoration: BD(color: kB.wo(0.1), borderRadius: 8.r),
       child: Ro(
         children: [
@@ -133,7 +130,7 @@ class _SamplerOptions extends ConsumerWidget {
             onPressed: () {
               P.rwkv.resetSamplerParams(usingReasoningModel: usingReasoningModel);
             },
-            child: T("Reset"),
+            child: const T("Reset"),
           ),
         ],
       ),
@@ -148,7 +145,7 @@ class _CompletionOptions extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
     return C(
-      margin: EI.s(h: 12),
+      margin: const EI.s(h: 12),
       decoration: BD(color: kB.wo(0.1), borderRadius: 8.r),
       child: Ro(
         children: [
@@ -162,7 +159,7 @@ class _CompletionOptions extends ConsumerWidget {
             onPressed: () {
               P.rwkv.resetMaxLength(usingReasoningModel: usingReasoningModel);
             },
-            child: T("Reset"),
+            child: const T("Reset"),
           ),
         ],
       ),
@@ -202,13 +199,13 @@ class _Value extends ConsumerWidget {
             Exp(
               child: T(
                 argument.name.codeToName,
-                s: TS(
+                s: const TS(
                   s: 14,
                   w: FW.w500,
                 ),
               ),
             ),
-            T(value.toStringAsFixed(argument.fixedDecimals), s: TS(s: 14, w: FW.w600)),
+            T(value.toStringAsFixed(argument.fixedDecimals), s: const TS(s: 14, w: FW.w600)),
             12.w,
           ],
         ),

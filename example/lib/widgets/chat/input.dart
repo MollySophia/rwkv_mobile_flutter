@@ -212,7 +212,7 @@ class _BottomBar extends ConsumerWidget {
             child: GD(
               onTap: _onRightButtonPressed,
               child: C(
-                padding: EI.s(h: 10, v: 5),
+                padding: const EI.s(h: 10, v: 5),
                 child: Icon(
                   (Platform.isIOS || Platform.isMacOS)
                       ? editingBotMessage
