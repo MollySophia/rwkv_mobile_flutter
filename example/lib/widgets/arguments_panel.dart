@@ -100,6 +100,8 @@ class ArgumentsPanel extends ConsumerWidget {
                   _Value(Argument.presencePenalty),
                   _Value(Argument.frequencyPenalty),
                   _Value(Argument.penaltyDecay),
+                  _CompletionOptions(),
+                  _Value(Argument.maxLength),
                 ],
               ),
             ),
@@ -139,6 +141,35 @@ class _SamplerOptions extends ConsumerWidget {
   }
 }
 
+class _CompletionOptions extends ConsumerWidget {
+  const _CompletionOptions();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
+    return C(
+      margin: EI.s(h: 12),
+      decoration: BD(color: kB.wo(0.1), borderRadius: 8.r),
+      child: Ro(
+        children: [
+          12.w,
+          Exp(child: T("Completion Options" + (usingReasoningModel ? " (Reason)" : ""))),
+          TextButton(
+            style: TextButton.styleFrom(
+              padding: EI.zero,
+              iconSize: 16,
+            ),
+            onPressed: () {
+              P.rwkv.resetMaxLength(usingReasoningModel: usingReasoningModel);
+            },
+            child: T("Reset"),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _Value extends ConsumerWidget {
   final Argument argument;
 
@@ -147,9 +178,15 @@ class _Value extends ConsumerWidget {
   void _onChanged(double value) {
     final newValue = double.parse(value.toStringAsFixed(argument.fixedDecimals));
     P.rwkv.arguments(argument).u(newValue);
-    P.rwkv.debouncer.call(() {
-      P.rwkv.setSamplerParams();
-    });
+    if (argument == Argument.maxLength) {
+      P.rwkv.debouncer.call(() {
+        P.rwkv.syncMaxLength();
+      });
+    } else {
+      P.rwkv.debouncer.call(() {
+        P.rwkv.syncSamplerParams();
+      });
+    }
   }
 
   @override

@@ -29,23 +29,23 @@ enum Argument {
       };
 
   double get min => switch (this) {
-        temperature => 0.0,
+        temperature => 0.2,
         topK => 1,
         topP => 0.0,
         presencePenalty => 0.0,
         frequencyPenalty => 0.0,
         penaltyDecay => 0.0,
-        maxLength => 1024,
+        maxLength => 10,
       };
 
   double get max => switch (this) {
-        temperature => 5.0,
-        topK => 256,
+        temperature => 2.0,
+        topK => 1024,
         topP => 1.0,
-        presencePenalty => 5.0,
-        frequencyPenalty => 5.0,
+        presencePenalty => 1.0,
+        frequencyPenalty => 1.0,
         penaltyDecay => 1.0,
-        maxLength => 128000,
+        maxLength => 64000,
       };
 
   double get reasonDefaults => switch (this) {
@@ -55,7 +55,7 @@ enum Argument {
         presencePenalty => 0.5,
         frequencyPenalty => 0.5,
         penaltyDecay => 0.996,
-        maxLength => 64000,
+        maxLength => 4000,
       };
 
   double get chatDefaults => switch (this) {
@@ -65,6 +65,6 @@ enum Argument {
         presencePenalty => 0.5,
         frequencyPenalty => 0.5,
         penaltyDecay => 0.996,
-        maxLength => 64000,
+        maxLength => 2000,
       };
 }

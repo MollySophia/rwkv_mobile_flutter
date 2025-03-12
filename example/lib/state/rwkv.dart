@@ -193,7 +193,7 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
   }
 
   FV resetSamplerParams({required bool usingReasoningModel}) async {
-    await setSamplerParams(
+    await syncSamplerParams(
       temperature: usingReasoningModel ? Argument.temperature.reasonDefaults : Argument.temperature.chatDefaults,
       topK: usingReasoningModel ? Argument.topK.reasonDefaults : Argument.topK.chatDefaults,
       topP: usingReasoningModel ? Argument.topP.reasonDefaults : Argument.topP.chatDefaults,
@@ -203,7 +203,7 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
     );
   }
 
-  FV setSamplerParams({
+  FV syncSamplerParams({
     double? temperature,
     double? topK,
     double? topP,
@@ -231,6 +231,17 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
     ));
 
     if (kDebugMode) _sendPort!.send(("getSamplerParams", null));
+  }
+
+  FV resetMaxLength({required bool usingReasoningModel}) async {
+    await syncMaxLength(
+      maxLength: usingReasoningModel ? Argument.maxLength.reasonDefaults : Argument.maxLength.chatDefaults,
+    );
+  }
+
+  FV syncMaxLength({num? maxLength}) async {
+    if (maxLength != null) arguments(Argument.maxLength).u(maxLength.toDouble());
+    _sendPort!.send(("setMaxLength", _intIfFixedDecimalsIsZero(Argument.maxLength)));
   }
 
   FV loadOthello() async {
