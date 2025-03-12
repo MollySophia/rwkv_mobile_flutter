@@ -229,6 +229,8 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
         "penalty_decay": _intIfFixedDecimalsIsZero(Argument.penaltyDecay),
       },
     ));
+
+    if (kDebugMode) _sendPort!.send(("getSamplerParams", null));
   }
 
   FV loadOthello() async {
