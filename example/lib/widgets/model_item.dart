@@ -20,11 +20,11 @@ class ModelItem extends ConsumerWidget {
 
   void _onStartTap() async {
     logTrace();
-    if (P.chat.loading.v) return;
+    if (P.rwkv.loading.v) return;
     final modelPath = fileKey.path;
     final backend = fileKey.backend;
-    P.chat.loading.u(true);
-    P.chat.usingReasoningModel.u(fileKey.isReasoning);
+    P.rwkv.loading.u(true);
+    P.rwkv.usingReasoningModel.u(fileKey.isReasoning);
 
     try {
       P.rwkv.clearStates();
@@ -34,10 +34,10 @@ class ModelItem extends ConsumerWidget {
       Alert.error(e.toString());
       return;
     } finally {
-      P.chat.loading.u(false);
+      P.rwkv.loading.u(false);
     }
 
-    P.chat.currentModel.u(fileKey);
+    P.rwkv.currentModel.u(fileKey);
     Alert.success(S.current.you_can_now_start_to_chat_with_rwkv);
     Navigator.pop(getContext()!);
   }
@@ -57,9 +57,9 @@ class ModelItem extends ConsumerWidget {
     final q = fileKey.quantization;
     final networkSpeed = file.networkSpeed;
     final timeRemaining = file.timeRemaining;
-    final currentModel = ref.watch(P.chat.currentModel);
+    final currentModel = ref.watch(P.rwkv.currentModel);
     final isCurrentModel = currentModel == fileKey;
-    final loading = ref.watch(P.chat.loading);
+    final loading = ref.watch(P.rwkv.loading);
     final tags = fileKey.weights?.tags ?? [];
 
     return ClipRRect(

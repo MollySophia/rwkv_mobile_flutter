@@ -1,8 +1,10 @@
 // ignore: unused_import
 import 'dart:developer';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:zone/func/gb_display.dart';
 import 'package:zone/gen/assets.gen.dart';
@@ -15,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:zone/state/p.dart';
+import 'package:zone/widgets/arguments_panel.dart';
 import 'package:zone/widgets/chat/input.dart';
 import 'package:zone/widgets/chat/message.dart';
 import 'package:zone/widgets/model_item.dart';
@@ -27,8 +30,24 @@ class PageChat extends StatefulWidget {
 }
 
 class _PageChatState extends State<PageChat> {
+  @override
+  void initState() {
+    super.initState();
+    P.chat.showingModelSelector.l(_onShowingModelSelectorChanged);
+    P.chat.showingCharacterSelector.l(_onShowingCharacterSelectorChanged);
+    HF.wait(1000).then((_) {
+      final loaded = P.rwkv.loaded.v;
+      if (!loaded) {
+        P.chat.showingModelSelector.u(true);
+      }
+    });
+  }
+
   void _onShowingCharacterSelectorChanged(bool showing) async {
     if (!showing) return;
+    HF.wait(1).then((_) {
+      P.chat.roles.u(P.chat.roles.v.shuffled);
+    });
     await showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -39,12 +58,7 @@ class _PageChatState extends State<PageChat> {
           expand: false,
           snap: false,
           builder: (BuildContext context, ScrollController scrollController) {
-            HF.wait(1).then((_) {
-              P.chat.roles.u(P.chat.roles.v.shuffled);
-            });
-            return _RoleSelector(
-              scrollController: scrollController,
-            );
+            return _RoleSelector(scrollController: scrollController);
           },
         );
       },
@@ -78,19 +92,6 @@ class _PageChatState extends State<PageChat> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    P.chat.showingModelSelector.l(_onShowingModelSelectorChanged);
-    P.chat.showingCharacterSelector.l(_onShowingCharacterSelectorChanged);
-    HF.wait(1000).then((_) {
-      final loaded = P.chat.loaded.v;
-      if (!loaded) {
-        P.chat.showingModelSelector.u(true);
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Stack(
@@ -119,8 +120,8 @@ class _Welcome extends ConsumerWidget {
     final paddingTop = ref.watch(P.app.paddingTop);
     final messages = ref.watch(P.chat.messages);
     if (messages.isNotEmpty) return Positioned.fill(child: IgnorePointer(child: Container()));
-    final loaded = ref.watch(P.chat.loaded);
-    final currentModel = ref.watch(P.chat.currentModel);
+    final loaded = ref.watch(P.rwkv.loaded);
+    final currentModel = ref.watch(P.rwkv.currentModel);
     return AnimatedPositioned(
       duration: 350.ms,
       curve: Curves.easeInOutBack,
@@ -306,7 +307,7 @@ class _RoleSelector extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final roles = ref.watch(P.chat.roles);
     final paddingBottom = ref.watch(P.app.paddingBottom);
-    final loading = ref.watch(P.chat.loading);
+    final loading = ref.watch(P.rwkv.loading);
 
     return ClipRRect(
       borderRadius: 16.r,
@@ -427,7 +428,7 @@ class _AppBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final loaded = ref.watch(P.chat.loaded);
+    final loaded = ref.watch(P.rwkv.loaded);
     return Positioned(
       top: 0,
       left: 0,
@@ -452,7 +453,7 @@ class _AppBar extends ConsumerWidget {
                       P.chat.showingCharacterSelector.u(true);
                     }
                   : null,
-              icon: const Icon(Icons.add_comment_outlined),
+              icon: (Platform.isIOS || Platform.isMacOS) ? const Icon(CupertinoIcons.bubble_left_bubble_right) : const Icon(Icons.message_outlined),
             ),
             actions: [
               IconButton(
@@ -460,7 +461,18 @@ class _AppBar extends ConsumerWidget {
                   P.chat.showingModelSelector.u(false);
                   P.chat.showingModelSelector.u(true);
                 },
-                icon: const Icon(Icons.settings),
+                icon: const Icon(CupertinoIcons.cube_box),
+              ),
+              IconButton(
+                onPressed: () async {
+                  if (!loaded) {
+                    P.chat.showingModelSelector.u(false);
+                    P.chat.showingModelSelector.u(true);
+                    return;
+                  }
+                  await ArgumentsPanel.show(context);
+                },
+                icon: Icon(Icons.tune),
               ),
             ],
           ),
@@ -480,7 +492,7 @@ class _List extends ConsumerWidget {
     final paddingTop = ref.watch(P.app.paddingTop);
     final inputHeight = ref.watch(P.chat.inputHeight);
     final useReverse = ref.watch(P.chat.useReverse);
-    final loaded = ref.watch(P.chat.loaded);
+    final loaded = ref.watch(P.rwkv.loaded);
 
     return Positioned.fill(
       child: GD(
@@ -524,7 +536,7 @@ class _ScrollToBottomButton extends ConsumerWidget {
     final inputHeight = ref.watch(P.chat.inputHeight);
     final atBottom = ref.watch(P.chat.atBottom);
     final screenWidth = ref.watch(P.app.screenWidth);
-    final loaded = ref.watch(P.chat.loaded);
+    final loaded = ref.watch(P.rwkv.loaded);
     final buttonSize = 36.0;
     if (!loaded) return Positioned.fill(child: IgnorePointer(child: Container()));
     return AnimatedPositioned(

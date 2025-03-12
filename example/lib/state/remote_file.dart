@@ -33,7 +33,7 @@ class _RemoteFile {
 
   late final weights = _gs<List<Weights>>([]);
 
-  late final source = _gs(RemoteFileSource.aifasthub);
+  late final source = _gs(kDebugMode ? RemoteFileSource.huggingface : RemoteFileSource.aifasthub);
 }
 
 /// Public methods

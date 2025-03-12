@@ -1,37 +1,5 @@
 part of 'p.dart';
 
-enum RWKVMessageType {
-  /// 模型吐完 token 了会被调用, 调用内容该次 generate 吐出的总文本
-  response,
-
-  /// 模型每吐一个token，调用一次, 调用内容为该次 generate 已经吐出的文本
-  streamResponse,
-
-  currentPrompt,
-  samplerParams,
-
-  generateStart,
-
-  generateStop;
-
-  static RWKVMessageType fromString(String str) {
-    return values.firstWhere((e) => e.name == str);
-  }
-}
-
-enum DemoType {
-  othello,
-  chat,
-  fifthteenPuzzle,
-  sudoku,
-}
-
-enum ModelLoadingState {
-  loading,
-  ready,
-  failed,
-}
-
 class _RWKV {
   SendPort? _sendPort;
   late final _receivePort = ReceivePort();
@@ -39,9 +7,9 @@ class _RWKV {
   late final _messagesController = StreamController<JSON>();
 
   /// 当前正在运行的任务
-  late final demoType = _gsn<DemoType>();
+  late final demoType = _gsn<_DemoType>();
 
-  late final modelLoadingState = _gsn<ModelLoadingState>();
+  late final modelLoadingState = _gsn<_ModelLoadingState>();
 
   late final generating = _gs(false);
 
@@ -56,6 +24,27 @@ class _RWKV {
 
   late final prefillSpeed = _gs<double>(0.0);
   late final decodeSpeed = _gs<double>(0.0);
+  late final argumentsPanelShown = _gs(false);
+
+  // TODO: @wangce 或许, 默认参数应该和 weights 绑定
+  late final arguments = StateProvider.family<double, Argument>((ref, argument) {
+    return argument.chatDefaults;
+  });
+
+  // TODO: @wangce 或许, 默认参数应该和 weights 绑定
+  late final usingReasoningModel = _gs(false);
+
+  /// 模型是否已加载
+  late final loaded = _gp((ref) {
+    final currentModel = ref.watch(this.currentModel);
+    return currentModel != null;
+  });
+
+  late final currentModel = _gsn<FileKey>();
+
+  late final loading = _gs(false);
+
+  late final debouncer = Debouncer(milliseconds: 300);
 }
 
 /// Public methods
@@ -121,26 +110,28 @@ extension $RWKV on _RWKV {
     decodeSpeed.u(0);
     final tokenizerPath = await getModelPath(Assets.config.chat.bRwkvVocabV20230424);
 
-    // TODO: better solution here
-    final qnnLibList = [
-      "libQnnHtp.so",
-      "libQnnHtpV68Stub.so",
-      "libQnnHtpV69Stub.so",
-      "libQnnHtpV73Stub.so",
-      "libQnnHtpV75Stub.so",
-      "libQnnHtpV79Stub.so",
-      "libQnnHtpV68Skel.so",
-      "libQnnHtpV69Skel.so",
-      "libQnnHtpV73Skel.so",
-      "libQnnHtpV75Skel.so",
-      "libQnnHtpV79Skel.so",
-      "libQnnHtpPrepare.so",
-      "libQnnSystem.so",
-      "libQnnRwkvWkvOpPackage.so",
-    ];
-    for (final lib in qnnLibList) {
-      final path = await getModelPath("assets/lib/$lib");
-      if (kDebugMode) print("💬 copied QNN library, path: $path");
+    if (Platform.isAndroid) {
+      // TODO: better solution here
+      final qnnLibList = {
+        "libQnnHtp.so",
+        "libQnnHtpV68Stub.so",
+        "libQnnHtpV69Stub.so",
+        "libQnnHtpV73Stub.so",
+        "libQnnHtpV75Stub.so",
+        "libQnnHtpV79Stub.so",
+        "libQnnHtpV68Skel.so",
+        "libQnnHtpV69Skel.so",
+        "libQnnHtpV73Skel.so",
+        "libQnnHtpV75Skel.so",
+        "libQnnHtpV79Skel.so",
+        "libQnnHtpPrepare.so",
+        "libQnnSystem.so",
+        "libQnnRwkvWkvOpPackage.so",
+      };
+      for (final lib in qnnLibList) {
+        final path = await getModelPath("assets/lib/$lib");
+        if (kDebugMode) print("💬 copied QNN library, path: $path");
+      }
     }
 
     final rootIsolateToken = RootIsolateToken.instance;
@@ -180,7 +171,7 @@ extension $RWKV on _RWKV {
 // 你是一只温柔伶俐的猫娘，有着银白色的柔顺的头发，猫耳朵和猫尾巴
 // \n\nAssistant: 喵~好的我的主人喵！\n\nUser: 介绍一下你自己\n\nAssistant: 我是一个可爱猫娘，喜欢和你聊天，陪伴你喵！如果有什么问题或者需要陪伴，尽管告诉我哦喵~\n\n""";
 
-    final usingReasoningModel = P.chat.usingReasoningModel.v;
+    final usingReasoningModel = P.rwkv.usingReasoningModel.v;
 
     const promptForNormalChat = """
 
@@ -192,18 +183,52 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
 
     const promptForReasoning = "";
 
-    demoType.u(DemoType.chat);
+    demoType.u(_DemoType.chat);
 
     _sendPort!.send(("setPrompt", usingReasoningModel ? promptForReasoning : promptForNormalChat));
     _sendPort!.send(("setEnableReasoning", usingReasoningModel));
     _sendPort!.send(("getPrompt", null));
-    // TODO @HaloWang: 采样参数设置界面
-    if (usingReasoningModel) {
-      _sendPort!.send(("setSamplerParams", {"temperature": 1.0, "top_k": 128, "top_p": 0.3, "presence_penalty": 0.5, "frequency_penalty": 0.5, "penalty_decay": 0.996}));
-    } else {
-      _sendPort!.send(("setSamplerParams", {"temperature": 2.0, "top_k": 128, "top_p": 0.5, "presence_penalty": 0.5, "frequency_penalty": 0.5, "penalty_decay": 0.996}));
-    }
+    await resetSamplerParams(usingReasoningModel: usingReasoningModel);
     _sendPort!.send(("getSamplerParams", null));
+  }
+
+  FV resetSamplerParams({required bool usingReasoningModel}) async {
+    await setSamplerParams(
+      temperature: usingReasoningModel ? Argument.temperature.reasonDefaults : Argument.temperature.chatDefaults,
+      topK: usingReasoningModel ? Argument.topK.reasonDefaults : Argument.topK.chatDefaults,
+      topP: usingReasoningModel ? Argument.topP.reasonDefaults : Argument.topP.chatDefaults,
+      presencePenalty: usingReasoningModel ? Argument.presencePenalty.reasonDefaults : Argument.presencePenalty.chatDefaults,
+      frequencyPenalty: usingReasoningModel ? Argument.frequencyPenalty.reasonDefaults : Argument.frequencyPenalty.chatDefaults,
+      penaltyDecay: usingReasoningModel ? Argument.penaltyDecay.reasonDefaults : Argument.penaltyDecay.chatDefaults,
+    );
+  }
+
+  FV setSamplerParams({
+    double? temperature,
+    double? topK,
+    double? topP,
+    double? presencePenalty,
+    double? frequencyPenalty,
+    double? penaltyDecay,
+  }) async {
+    if (temperature != null) arguments(Argument.temperature).u(temperature);
+    if (topK != null) arguments(Argument.topK).u(topK);
+    if (topP != null) arguments(Argument.topP).u(topP);
+    if (presencePenalty != null) arguments(Argument.presencePenalty).u(presencePenalty);
+    if (frequencyPenalty != null) arguments(Argument.frequencyPenalty).u(frequencyPenalty);
+    if (penaltyDecay != null) arguments(Argument.penaltyDecay).u(penaltyDecay);
+
+    _sendPort!.send((
+      "setSamplerParams",
+      {
+        "temperature": _intIfFixedDecimalsIsZero(Argument.temperature),
+        "top_k": _intIfFixedDecimalsIsZero(Argument.topK),
+        "top_p": _intIfFixedDecimalsIsZero(Argument.topP),
+        "presence_penalty": _intIfFixedDecimalsIsZero(Argument.presencePenalty),
+        "frequency_penalty": _intIfFixedDecimalsIsZero(Argument.frequencyPenalty),
+        "penalty_decay": _intIfFixedDecimalsIsZero(Argument.penaltyDecay),
+      },
+    ));
   }
 
   FV loadOthello() async {
@@ -249,7 +274,7 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
       await Future.delayed(const Duration(milliseconds: 50));
     }
 
-    demoType.u(DemoType.othello);
+    demoType.u(_DemoType.othello);
 
     _sendPort!.send(("setMaxLength", 64000));
     _sendPort!.send(("setSamplerParams", {"temperature": 1.0, "top_k": 1, "top_p": 1.0, "presence_penalty": 0.0, "frequency_penalty": 0.0, "penalty_decay": 0.0}));
@@ -264,6 +289,14 @@ extension _$RWKV on _RWKV {
   FV _init() async {
     P.app.pageKey.lv(_onPageKeyChanged);
     _receivePort.listen(_onMessage);
+  }
+
+  num _intIfFixedDecimalsIsZero(Argument argument) {
+    if (argument.fixedDecimals == 0) {
+      return arguments(argument).v.toInt();
+    } else {
+      return double.parse(arguments(argument).v.toStringAsFixed(argument.fixedDecimals));
+    }
   }
 
   FV _onPageKeyChanged() async {
@@ -310,7 +343,7 @@ extension _$RWKV on _RWKV {
       if (kDebugMode) print("💬 Got samplerParams: ${message["samplerParams"]}");
       _messagesController.add({
         "content": message["samplerParams"].toString(),
-        "type": RWKVMessageType.samplerParams.name,
+        "type": _RWKVMessageType.samplerParams.name,
       });
       return;
     }
@@ -319,7 +352,7 @@ extension _$RWKV on _RWKV {
       if (kDebugMode) print("💬 Got currentPrompt: \"${message["currentPrompt"]}\"");
       _messagesController.add({
         "content": message["currentPrompt"].toString(),
-        "type": RWKVMessageType.currentPrompt.name,
+        "type": _RWKVMessageType.currentPrompt.name,
       });
       return;
     }
@@ -328,7 +361,7 @@ extension _$RWKV on _RWKV {
       generating.u(true);
       _messagesController.add({
         "content": "",
-        "type": RWKVMessageType.generateStart.name,
+        "type": _RWKVMessageType.generateStart.name,
       });
       return;
     }
@@ -337,7 +370,7 @@ extension _$RWKV on _RWKV {
       final responseText = message["response"].toString();
       _messagesController.add({
         "content": responseText,
-        "type": RWKVMessageType.response.name,
+        "type": _RWKVMessageType.response.name,
       });
       generating.u(false);
       return;
@@ -348,7 +381,7 @@ extension _$RWKV on _RWKV {
       _messagesController.add({
         "content": responseText,
         "token": message["streamResponseToken"],
-        "type": RWKVMessageType.streamResponse.name,
+        "type": _RWKVMessageType.streamResponse.name,
       });
       if (message["prefillSpeed"] != null) {
         prefillSpeed.u(message["prefillSpeed"]);
@@ -362,7 +395,7 @@ extension _$RWKV on _RWKV {
     if (message["generateStop"] != null) {
       _messagesController.add({
         "content": "",
-        "type": RWKVMessageType.generateStop.name,
+        "type": _RWKVMessageType.generateStop.name,
       });
       return;
     }
@@ -389,4 +422,36 @@ extension _$RWKV on _RWKV {
 
     if (kDebugMode) print("😡 unknown message: $message");
   }
+}
+
+enum _RWKVMessageType {
+  /// 模型吐完 token 了会被调用, 调用内容该次 generate 吐出的总文本
+  response,
+
+  /// 模型每吐一个token，调用一次, 调用内容为该次 generate 已经吐出的文本
+  streamResponse,
+
+  currentPrompt,
+  samplerParams,
+
+  generateStart,
+
+  generateStop;
+
+  static _RWKVMessageType fromString(String str) {
+    return values.firstWhere((e) => e.name == str);
+  }
+}
+
+enum _DemoType {
+  othello,
+  chat,
+  fifthteenPuzzle,
+  sudoku,
+}
+
+enum _ModelLoadingState {
+  loading,
+  ready,
+  failed,
 }

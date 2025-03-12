@@ -116,15 +116,15 @@ extension _$ on _Othello {
 
     P.rwkv.broadcastStream.listen((event) {
       final demoType = P.rwkv.demoType.v;
-      if (demoType != DemoType.othello) return;
+      if (demoType != _DemoType.othello) return;
       _onStreamEvent(event: event);
     }, onDone: () {
       final demoType = P.rwkv.demoType.v;
-      if (demoType != DemoType.othello) return;
+      if (demoType != _DemoType.othello) return;
       _onStreamDone();
     }, onError: (error, stackTrace) {
       final demoType = P.rwkv.demoType.v;
-      if (demoType != DemoType.othello) return;
+      if (demoType != _DemoType.othello) return;
       _onStreamError(error: error, stackTrace: stackTrace);
     });
 
@@ -228,30 +228,30 @@ extension _$ on _Othello {
     final pageKey = P.app.pageKey.v;
     if (pageKey != PageKey.othello) return;
 
-    final type = RWKVMessageType.fromString(event["type"]);
+    final type = _RWKVMessageType.fromString(event["type"]);
     final content = event["content"] as String? ?? "";
 
     switch (type) {
-      case RWKVMessageType.response:
+      case _RWKVMessageType.response:
         received.u(content);
         break;
-      case RWKVMessageType.generateStart:
+      case _RWKVMessageType.generateStart:
         thinking.u(true);
         received.u("");
         break;
-      case RWKVMessageType.streamResponse:
+      case _RWKVMessageType.streamResponse:
         received.ua(content);
         final token = event["token"] as int?;
         _onStreamingToken(token);
         break;
-      case RWKVMessageType.currentPrompt:
+      case _RWKVMessageType.currentPrompt:
         received.u(content);
         thinking.u(false);
         break;
-      case RWKVMessageType.samplerParams:
+      case _RWKVMessageType.samplerParams:
         received.u(content);
         break;
-      case RWKVMessageType.generateStop:
+      case _RWKVMessageType.generateStop:
         thinking.u(false);
         break;
     }

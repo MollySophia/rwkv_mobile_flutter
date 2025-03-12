@@ -1,7 +1,9 @@
 // ignore: unused_import
 import 'dart:developer';
+import 'dart:io';
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:zone/func/log_trace.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/widgets/alert.dart';
@@ -54,7 +56,7 @@ class Input extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final paddingBottom = ref.watch(P.app.paddingBottom);
     final color = Theme.of(context).colorScheme.primary;
-    final loaded = ref.watch(P.chat.loaded);
+    final loaded = ref.watch(P.rwkv.loaded);
 
     return Positioned(
       bottom: 0,
@@ -146,7 +148,7 @@ class _BottomBar extends ConsumerWidget {
     final canSend = ref.watch(P.chat.canSend);
     final editingBotMessage = ref.watch(P.chat.editingBotMessage);
     final color = Theme.of(context).colorScheme.primary;
-    final usingReasoningModel = ref.watch(P.chat.usingReasoningModel);
+    final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
     final prefillSpeed = ref.watch(P.rwkv.prefillSpeed);
     final decodeSpeed = ref.watch(P.rwkv.decodeSpeed);
 
@@ -208,10 +210,19 @@ class _BottomBar extends ConsumerWidget {
             opacity: canSend ? 1 : 0.333,
             duration: 250.ms,
             child: GD(
-              onTap: canSend ? _onRightButtonPressed : null,
-              child: Icon(
-                editingBotMessage ? Icons.edit : Icons.send,
-                color: color,
+              onTap: _onRightButtonPressed,
+              child: C(
+                padding: EI.s(h: 10, v: 5),
+                child: Icon(
+                  (Platform.isIOS || Platform.isMacOS)
+                      ? editingBotMessage
+                          ? CupertinoIcons.pencil_circle_fill
+                          : CupertinoIcons.arrow_up_circle_fill
+                      : editingBotMessage
+                          ? Icons.edit
+                          : Icons.send,
+                  color: color,
+                ),
               ),
             ),
           ),

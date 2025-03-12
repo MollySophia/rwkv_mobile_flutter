@@ -47,14 +47,6 @@ class _Chat {
     return messages.v[editingIndex].isMine == false;
   });
 
-  late final loading = _gs(false);
-
-  late final loaded = _gp((ref) {
-    final currentModel = ref.watch(this.currentModel);
-    return currentModel != null;
-  });
-
-  late final currentModel = _gsn<FileKey>();
   late final showingModelSelector = _gs(false);
   late final showingCharacterSelector = _gs(false);
   late final showingRoleSelector = _gs(false);
@@ -63,13 +55,18 @@ class _Chat {
   late final cotDisplayState = StateProvider.family<CoTDisplayState, int>((ref, index) {
     return CoTDisplayState.showCotHeaderIfCotResultIsEmpty;
   });
-
-  late final usingReasoningModel = _gs(false);
 }
 
 /// Public methods
 extension $Chat on _Chat {
   FV onInputRightButtonPressed() async {
+    if (P.rwkv.currentModel.v == null) {
+      showingModelSelector.u(true);
+      return;
+    }
+
+    if (!canSend.v) return;
+
     focusNode.unfocus();
     final textToSend = text.v.trim();
     text.uc();
@@ -229,15 +226,15 @@ extension _$Chat on _Chat {
 
     P.rwkv.broadcastStream.listen((event) {
       final demoType = P.rwkv.demoType.v;
-      if (demoType != DemoType.chat) return;
+      if (demoType != _DemoType.chat) return;
       _onStreamEvent(event: event);
     }, onDone: () {
       final demoType = P.rwkv.demoType.v;
-      if (demoType != DemoType.chat) return;
+      if (demoType != _DemoType.chat) return;
       _onStreamDone();
     }, onError: (error, stackTrace) {
       final demoType = P.rwkv.demoType.v;
-      if (demoType != DemoType.chat) return;
+      if (demoType != _DemoType.chat) return;
       _onStreamError(error: error, stackTrace: stackTrace);
     });
 
@@ -259,7 +256,7 @@ extension _$Chat on _Chat {
       messages.u([]);
     });
 
-    if (!loaded.v) {
+    if (!P.rwkv.loaded.v) {
       showingModelSelector.u(true);
     }
   }
@@ -299,33 +296,33 @@ extension _$Chat on _Chat {
   }
 
   FV _onStreamEvent({required JSON event}) async {
-    final type = RWKVMessageType.fromString(event["type"]);
+    final type = _RWKVMessageType.fromString(event["type"]);
     switch (type) {
-      case RWKVMessageType.response:
+      case _RWKVMessageType.response:
         final content = event["content"];
         logTrace("content: $content");
         received.u(content);
         receiving.u(false);
         _fullyReceived();
         break;
-      case RWKVMessageType.generateStart:
+      case _RWKVMessageType.generateStart:
         receiving.u(true);
         received.u("");
         break;
-      case RWKVMessageType.streamResponse:
+      case _RWKVMessageType.streamResponse:
         final content = event["content"];
         received.u(content);
         receiving.u(true);
         break;
-      case RWKVMessageType.currentPrompt:
+      case _RWKVMessageType.currentPrompt:
         final content = event["content"];
         received.u(content);
         break;
-      case RWKVMessageType.samplerParams:
+      case _RWKVMessageType.samplerParams:
         final content = event["content"];
         received.u(content);
         break;
-      case RWKVMessageType.generateStop:
+      case _RWKVMessageType.generateStop:
         received.u("");
         break;
     }

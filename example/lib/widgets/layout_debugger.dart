@@ -54,15 +54,6 @@ class LayoutDebugger extends ConsumerWidget {
             ),
           ),
         ),
-        if (name.isNotEmpty)
-          Positioned(
-            child: IgnorePointer(
-              child: T(
-                name,
-                s: TS(s: 4, c: frameColor),
-              ),
-            ),
-          ),
         if (debugWidget != null)
           Positioned(
             bottom: 0,

@@ -65,7 +65,7 @@ class Message extends ConsumerWidget {
 
     final cotDisplayState = ref.watch(P.chat.cotDisplayState(msg.id));
 
-    final usingReasoningModel = ref.watch(P.chat.usingReasoningModel);
+    final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
 
     String cotContent = "";
     String cotResult = "";
@@ -88,7 +88,7 @@ class Message extends ConsumerWidget {
       }
     }
 
-    final color = Colors.deepPurple;
+    final primaryColor = Theme.of(context).colorScheme.primary;
 
     final editingIndex = ref.watch(P.chat.editingIndex);
 
@@ -168,8 +168,8 @@ class Message extends ConsumerWidget {
                   child: C(
                     padding: const EI.a(12),
                     decoration: BD(
-                      color: isMine ? const Color.fromARGB(255, 58, 79, 154) : kW,
-                      border: Border.all(color: color.wo(0.2)),
+                      color: isMine ? primaryColor.wo(0.9) : kW,
+                      border: Border.all(color: primaryColor.wo(0.2)),
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(isMine ? 20 : 0),
                         topRight: const Radius.circular(20),
@@ -288,7 +288,7 @@ class Message extends ConsumerWidget {
                                     ),
                                     child: Icon(
                                       Icons.hourglass_top,
-                                      color: color,
+                                      color: primaryColor,
                                       size: 20,
                                     ),
                                   ),
@@ -298,7 +298,7 @@ class Message extends ConsumerWidget {
                                 onTap: _onRegeneratePressed,
                                 child: Icon(
                                   Icons.refresh,
-                                  color: color.wo(0.8),
+                                  color: primaryColor.wo(0.8),
                                   size: 20,
                                 ),
                               ),
@@ -307,7 +307,7 @@ class Message extends ConsumerWidget {
                                 onTap: _onBotEditPressed,
                                 child: Icon(
                                   Icons.edit,
-                                  color: color.wo(0.8),
+                                  color: primaryColor.wo(0.8),
                                   size: 20,
                                 ),
                               ),
@@ -316,7 +316,7 @@ class Message extends ConsumerWidget {
                                 onTap: _onCopyPressed,
                                 child: Icon(
                                   Icons.copy,
-                                  color: color.wo(0.8),
+                                  color: primaryColor.wo(0.8),
                                   size: 20,
                                 ),
                               ),
