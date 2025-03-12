@@ -5,7 +5,6 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:zone/func/log_trace.dart';
-import 'package:zone/func/widget_debugger.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/widgets/alert.dart';
 import 'package:flutter/material.dart';
@@ -199,7 +198,7 @@ class _BottomBar extends ConsumerWidget {
               P.chat.onStopButtonPressed();
             },
             child: C(
-              decoration: BD(color: kC),
+              decoration: const BD(color: kC),
               child: Stack(
                 children: [
                   if (false)
