@@ -14,7 +14,7 @@ class ChatDebugger extends ConsumerWidget {
     final pageKey = ref.watch(P.app.pageKey);
     if (pageKey != PageKey.chat) return const SizedBox.shrink();
 
-    final demoType = ref.watch(P.rwkv.demoType);
+    final demoType = ref.watch(P.app.demoType);
 
     return Positioned(
       left: 0,

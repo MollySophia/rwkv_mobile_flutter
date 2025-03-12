@@ -6,9 +6,6 @@ class _RWKV {
 
   late final _messagesController = StreamController<JSON>();
 
-  /// 当前正在运行的任务
-  late final demoType = _gsn<_DemoType>();
-
   late final modelLoadingState = _gsn<_ModelLoadingState>();
 
   late final generating = _gs(false);
@@ -120,7 +117,8 @@ extension $RWKV on _RWKV {
     final tokenizerPath = await getModelPath(Assets.config.chat.bRwkvVocabV20230424);
 
     if (Platform.isAndroid) {
-      // TODO: better solution here
+      // TODO: @Molly better solution here
+      // TODO: @wangce Ask Molly why there are "better" solution here
       final qnnLibList = {
         "libQnnHtp.so",
         "libQnnHtpV68Stub.so",
@@ -181,7 +179,7 @@ extension $RWKV on _RWKV {
 // \n\nAssistant: 喵~好的我的主人喵！\n\nUser: 介绍一下你自己\n\nAssistant: 我是一个可爱猫娘，喜欢和你聊天，陪伴你喵！如果有什么问题或者需要陪伴，尽管告诉我哦喵~\n\n""";
 
     final usingReasoningModel = P.rwkv.usingReasoningModel.v;
-    demoType.u(_DemoType.chat);
+    P.app.demoType.u(_DemoType.chat);
 
     const promptForNormalChat = """
 
@@ -197,6 +195,7 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
     _sendPort!.send(("setEnableReasoning", usingReasoningModel));
     _sendPort!.send(("getPrompt", null));
     await resetSamplerParams(usingReasoningModel: usingReasoningModel);
+    await resetMaxLength(usingReasoningModel: usingReasoningModel);
     _sendPort!.send(("getSamplerParams", null));
   }
 
@@ -295,7 +294,7 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
       await Future.delayed(const Duration(milliseconds: 50));
     }
 
-    demoType.u(_DemoType.othello);
+    P.app.demoType.u(_DemoType.othello);
 
     _sendPort!.send(("setMaxLength", 64000));
     _sendPort!.send(("setSamplerParams", {"temperature": 1.0, "top_k": 1, "top_p": 1.0, "presence_penalty": 0.0, "frequency_penalty": 0.0, "penalty_decay": 0.0}));
@@ -464,9 +463,11 @@ enum _RWKVMessageType {
   }
 }
 
+
 enum _DemoType {
   othello,
   chat,
+  world,
   fifthteenPuzzle,
   sudoku,
 }

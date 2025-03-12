@@ -44,6 +44,9 @@ class _App with WidgetsBindingObserver {
   late final downloadsDir = _gsn<Directory>();
   late final documentsDir = _gsn<Directory>();
 
+  /// 当前正在运行的任务
+  late final demoType = _gsn<_DemoType>();
+
   @override
   void didChangeMetrics() {
     final context = getContext();

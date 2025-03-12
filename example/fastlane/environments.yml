@@ -37,7 +37,7 @@ app_icon:
 bundle_id_ios:
   [com.rwkv.othello.v7.ios, com.rwkv.chat.v7.100m, com.world.rwkv.ios]
 bundle_id_android: [com.rwkv.zone, com.rwkvzone.chat, com.worldrwkv.android]
-app_name: [RWKV Othello, RWKV Chat, RWKV World]
+app_name: [RWKV Othello, RWKV Chat, World RWKV]
 file_android_path:
   [
     android/app/src/main/kotlin/com/rwkv/zone/MainActivity.kt,

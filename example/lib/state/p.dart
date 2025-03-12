@@ -32,7 +32,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:rwkv_mobile_flutter/rwkv_mobile_flutter.dart';
+import 'package:rwkv_mobile_flutter/rwkv.dart';
 
 part "state.dart";
 part "app.dart";
@@ -43,6 +43,7 @@ part "remote_file.dart";
 part "device.dart";
 part "adapter.dart";
 part "debugger.dart";
+part "world.dart";
 
 abstract class P {
   static final app = _App();
@@ -53,6 +54,8 @@ abstract class P {
   static final device = _Device();
   static final adapter = _Adapter();
   static final debugger = _Debugger();
+  static final world = _World();
+
   static FV init() async {
     WidgetsFlutterBinding.ensureInitialized();
     await app._init();
@@ -69,6 +72,7 @@ abstract class P {
       device._init(),
       adapter._init(),
       debugger._init(),
+      world._init(),
     ]);
   }
 }

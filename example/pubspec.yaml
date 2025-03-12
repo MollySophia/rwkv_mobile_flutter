@@ -58,6 +58,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    # TODO: @wangce 需要在编译脚本中决定是否打包这些为 Chat 准备的高通加速库
     - assets/lib/
     - assets/model/chat/
     - assets/config/chat/

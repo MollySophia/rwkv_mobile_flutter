@@ -120,7 +120,6 @@ extension $Chat on _Chat {
   }
 
   FV onTapEditInBotMessageBubble({required int index}) async {
-    // TODO: @wangce
     final content = messages.v[index].content;
     textEditingController.value = TextEditingValue(text: content);
     focusNode.requestFocus();
@@ -230,15 +229,15 @@ extension _$Chat on _Chat {
     P.app.pageKey.l(_onPageKeyChanged);
 
     P.rwkv.broadcastStream.listen((event) {
-      final demoType = P.rwkv.demoType.v;
+      final demoType = P.app.demoType.v;
       if (demoType != _DemoType.chat) return;
       _onStreamEvent(event: event);
     }, onDone: () {
-      final demoType = P.rwkv.demoType.v;
+      final demoType = P.app.demoType.v;
       if (demoType != _DemoType.chat) return;
       _onStreamDone();
     }, onError: (error, stackTrace) {
-      final demoType = P.rwkv.demoType.v;
+      final demoType = P.app.demoType.v;
       if (demoType != _DemoType.chat) return;
       _onStreamError(error: error, stackTrace: stackTrace);
     });
@@ -290,7 +289,6 @@ extension _$Chat on _Chat {
           isMine: msg.isMine,
           changing: false,
         );
-        // TODO: @wangce replace!
         currentMessages.replaceRange(i, i + 1, [newMsg]);
         found = true;
         break;

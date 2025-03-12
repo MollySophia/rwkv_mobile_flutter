@@ -1,5 +1,3 @@
-library rwkv_mobile_flutter;
-
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ffi' as ffi;
@@ -7,69 +5,8 @@ import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:rwkv_mobile_flutter/types.dart';
 import 'package:rwkv_mobile_flutter/rwkv_mobile_ffi.dart';
-
-/// Runtime backend of RWKV flutter
-enum Backend {
-  /// Currently we use it on Android, Windows and Linux
-  ///
-  /// https://github.com/Tencent/ncnn
-  ///
-  /// This is suitable for running small puzzle models on various platforms
-  /// Not really optimal for larger chat models
-  ncnn,
-
-  /// Supports Android, Windows, Linux and macOS (iOS maybe in the future. not used for now)
-  llamacpp,
-
-  /// Currently only support iOS and macOS
-  ///
-  /// https://github.com/cryscan/web-rwkv
-  webRwkv,
-
-  /// Qualcomm Neural Network
-  ///
-  /// Currently only support Android
-  qnn,
-  ;
-
-  String get asArgument {
-    switch (this) {
-      case Backend.ncnn:
-        return 'ncnn';
-      case Backend.webRwkv:
-        return 'web-rwkv';
-      case Backend.llamacpp:
-        return 'llama.cpp';
-      case Backend.qnn:
-        return 'qnn';
-    }
-  }
-}
-
-enum Command {
-  setMaxLength,
-  clearStates,
-  setGenerationStopToken,
-  setPrompt,
-  getPrompt,
-  setSamplerParams,
-  getSamplerParams,
-  message,
-  generate,
-  releaseModel,
-  initRuntime,
-}
-
-class StartOptions {
-  final String modelPath;
-  final String tokenizerPath;
-  final Backend backend;
-  final SendPort sendPort;
-  final RootIsolateToken rootIsolateToken;
-
-  const StartOptions(this.modelPath, this.tokenizerPath, this.backend, this.sendPort, this.rootIsolateToken);
-}
 
 class RWKVMobile {
   Isolate? _isolate;

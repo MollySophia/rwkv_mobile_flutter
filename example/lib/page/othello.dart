@@ -609,11 +609,6 @@ class _Grid extends ConsumerWidget {
   }
 }
 
-String _indexToChar(int index) {
-  if (index == 0) return " ";
-  return String.fromCharCode(index + 64);
-}
-
 class _Cell extends StatelessWidget {
   const _Cell({
     required this.row,

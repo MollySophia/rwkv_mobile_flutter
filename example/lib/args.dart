@@ -5,5 +5,5 @@ abstract class Args {
   static const enableOthelloDebugger = bool.fromEnvironment("enable_othello_debugger");
   static const hideDebugBanner = bool.fromEnvironment("hide_debug_banner", defaultValue: true);
   static const othelloTestCase = int.fromEnvironment("othello_test_case", defaultValue: -1);
-  static const firstPage = String.fromEnvironment("first_page");
+  static const demoType = String.fromEnvironment("demoType");
 }
