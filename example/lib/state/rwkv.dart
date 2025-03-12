@@ -26,12 +26,12 @@ class _RWKV {
   late final decodeSpeed = _gs<double>(0.0);
   late final argumentsPanelShown = _gs(false);
 
-  // TODO: @wangce 或许, 默认参数应该和 weights 绑定
+  // TODO: @wangce 或许, 默认参数应该和 weights 绑定, 比如, Othello model 的 topK 应该始终是 1
   late final arguments = StateProvider.family<double, Argument>((ref, argument) {
     return argument.chatDefaults;
   });
 
-  // TODO: @wangce 或许, 默认参数应该和 weights 绑定
+  // TODO: @wangce 或许, 默认参数应该和 weights 绑定, 比如, G1 系列模型默认使用 reasoning
   late final usingReasoningModel = _gs(false);
 
   /// 模型是否已加载
@@ -181,6 +181,7 @@ extension $RWKV on _RWKV {
 // \n\nAssistant: 喵~好的我的主人喵！\n\nUser: 介绍一下你自己\n\nAssistant: 我是一个可爱猫娘，喜欢和你聊天，陪伴你喵！如果有什么问题或者需要陪伴，尽管告诉我哦喵~\n\n""";
 
     final usingReasoningModel = P.rwkv.usingReasoningModel.v;
+    demoType.u(_DemoType.chat);
 
     const promptForNormalChat = """
 
@@ -191,8 +192,6 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
 """;
 
     const promptForReasoning = "";
-
-    demoType.u(_DemoType.chat);
 
     _sendPort!.send(("setPrompt", usingReasoningModel ? promptForReasoning : promptForNormalChat));
     _sendPort!.send(("setEnableReasoning", usingReasoningModel));
