@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:zone/args.dart';
 import 'package:zone/widgets/chat_debugger.dart';
@@ -8,6 +9,7 @@ import 'package:zone/gen/l10n.dart';
 import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
 import 'package:zone/widgets/alert.dart';
+import 'package:zone/widgets/debugger.dart';
 import 'package:zone/widgets/othello_debugger.dart';
 
 void main() async {
@@ -51,7 +53,7 @@ class _App extends StatelessWidget {
           appBarTheme: const AppBarTheme(scrolledUnderElevation: 0, backgroundColor: Color(0xFFF4F8FF)),
           scaffoldBackgroundColor: const Color(0xFFF4F8FF),
         ),
-        debugShowCheckedModeBanner: !Args.hideDebugBanner,
+        debugShowCheckedModeBanner: true,
         routerConfig: kRouter,
         builder: (context, child) {
           return MediaQuery(
@@ -63,6 +65,7 @@ class _App extends StatelessWidget {
                 Alert.deploy(),
                 if (Args.enableChatDebugger) const ChatDebugger(),
                 if (Args.enableOthelloDebugger) const OthelloDebugger(),
+                if (kDebugMode) const Debugger(),
               ],
             ),
           );

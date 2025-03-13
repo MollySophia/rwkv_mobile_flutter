@@ -1,9 +1,6 @@
 import 'package:zone/route/page_key.dart';
 
 abstract class Config {
-  static final debuggingChannelRects = false;
-  static final offlineChat = false;
-
   // TODO: 根据 args 决定
   static final firstPage = PageKey.chat.name;
 

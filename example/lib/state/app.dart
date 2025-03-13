@@ -70,6 +70,14 @@ extension _$App on _App {
   FV _init() async {
     if (kDebugMode) print("💬 $runtimeType._init");
 
+    late final String name;
+    if (kDebugMode) {
+      name = (Args.demoType).replaceAll("__", "");
+    } else {
+      name = "__chat__".replaceAll("__", "");
+    }
+    demoType.u(_DemoType.values.byName(name));
+
     try {
       final packageInfo = await PackageInfo.fromPlatform();
       final version = packageInfo.version;

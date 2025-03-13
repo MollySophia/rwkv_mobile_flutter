@@ -59,7 +59,6 @@ abstract class P {
   static FV init() async {
     WidgetsFlutterBinding.ensureInitialized();
     await app._init();
-
     await _unorderedInit();
   }
 

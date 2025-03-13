@@ -11,7 +11,7 @@
       "program": "example/lib/main.dart",
       "flutterMode": "debug",
       "args": [
-        // "--dart-define=locale=zh_Hans",
+        "--dart-define=demoType=__world__",
       ]
     },
     {
@@ -21,7 +21,7 @@
       "program": "example/lib/main.dart",
       "flutterMode": "release",
       "args": [
-        // "--dart-define=locale=zh_Hans",
+        "--dart-define=demoType=__world__",
       ]
     },
   ]
