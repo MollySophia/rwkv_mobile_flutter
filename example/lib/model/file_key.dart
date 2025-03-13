@@ -10,6 +10,8 @@ import 'package:zone/state/p.dart';
 
 // TODO: 在未来应该改为权重, 现在这个东西的职责和权重重合了
 enum FileKey {
+  // 🔥 Chat demo
+
   v7_g1_0_1b_st,
   v7_g1_0_1b_gguf,
   v7_g1_0_1b_qnn,
@@ -28,11 +30,20 @@ enum FileKey {
 
   download_test_github_releases,
   download_test_5mb,
+
+  // 🔥 World demo
+
+  rwkv7_0_4b_siglip_vision_encoder_gguf,
+  rwkv7_0_4b_vision_siglip_gguf,
   ;
 
   Weights? get weights {
     final weights = P.remoteFile.weights.v;
     switch (this) {
+      case rwkv7_0_4b_siglip_vision_encoder_gguf:
+        return weights.firstWhereOrNull((e) => e.fileName == 'rwkv7_0.4B_siglip_vision_encoder-f16.gguf');
+      case rwkv7_0_4b_vision_siglip_gguf:
+        return weights.firstWhereOrNull((e) => e.fileName == 'rwkv7_0.4B_vision_siglip-Q8_0.gguf');
       case v7_g1_0_1b_gguf:
         return weights.firstWhereOrNull((e) => e.fileName == 'rwkv7-g1-0.1B-F16.gguf');
       case v7_g1_0_1b_st:

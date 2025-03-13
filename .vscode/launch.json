@@ -10,9 +10,7 @@
       "type": "dart",
       "program": "example/lib/main.dart",
       "flutterMode": "debug",
-      "args": [
-        "--dart-define=demoType=__world__",
-      ]
+      "args": []
     },
     {
       "name": "release",
@@ -20,9 +18,7 @@
       "type": "dart",
       "program": "example/lib/main.dart",
       "flutterMode": "release",
-      "args": [
-        "--dart-define=demoType=__world__",
-      ]
+      "args": []
     },
   ]
 }

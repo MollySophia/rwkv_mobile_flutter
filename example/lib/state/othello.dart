@@ -116,15 +116,15 @@ extension _$ on _Othello {
 
     P.rwkv.broadcastStream.listen((event) {
       final demoType = P.app.demoType.v;
-      if (demoType != _DemoType.othello) return;
+      if (demoType != DemoType.othello) return;
       _onStreamEvent(event: event);
     }, onDone: () {
       final demoType = P.app.demoType.v;
-      if (demoType != _DemoType.othello) return;
+      if (demoType != DemoType.othello) return;
       _onStreamDone();
     }, onError: (error, stackTrace) {
       final demoType = P.app.demoType.v;
-      if (demoType != _DemoType.othello) return;
+      if (demoType != DemoType.othello) return;
       _onStreamError(error: error, stackTrace: stackTrace);
     });
 

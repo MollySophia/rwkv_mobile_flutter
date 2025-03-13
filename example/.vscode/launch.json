@@ -10,11 +10,7 @@
       "type": "dart",
       "program": "lib/main.dart",
       "flutterMode": "debug",
-      "args": [
-        // "--dart-define=enableChatDebugger=true",
-        "--dart-define=hide_debug_banner=true",
-        "--dart-define=demoType=__world__",
-      ]
+      "args": []
     },
     {
       "name": "profile",
@@ -37,10 +33,7 @@
       "program": "lib/main.dart",
       "flutterMode": "debug",
       "deviceId": "9DAF9CC5-FC15-4AC5-8B3D-546F4597DA79",
-      "args": [
-        // "--dart-define=enableChatDebugger=true",
-        "--dart-define=hide_debug_banner=true",
-      ]
+      "args": []
     },
     {
       "name": "xiaomi14",
@@ -49,10 +42,7 @@
       "program": "lib/main.dart",
       "flutterMode": "debug",
       "deviceId": "90313e34",
-      "args": [
-        // "--dart-define=enableChatDebugger=true",
-        "--dart-define=hide_debug_banner=true",
-      ]
+      "args": []
     },
     {
       "name": "macos",
@@ -61,10 +51,7 @@
       "program": "lib/main.dart",
       "flutterMode": "debug",
       "deviceId": "macos",
-      "args": [
-        // "--dart-define=enableChatDebugger=true",
-        "--dart-define=hide_debug_banner=true",
-      ]
+      "args": []
     },
   ],
   "compounds": [

@@ -122,6 +122,10 @@ class _Welcome extends ConsumerWidget {
     if (messages.isNotEmpty) return Positioned.fill(child: IgnorePointer(child: Container()));
     final loaded = ref.watch(P.rwkv.loaded);
     final currentModel = ref.watch(P.rwkv.currentModel);
+
+    final demoType = ref.watch(P.app.demoType);
+    String logoPath = "assets/img/${demoType!.name}/logo.square.png";
+
     return AnimatedPositioned(
       duration: 350.ms,
       curve: Curves.easeInOutBack,
@@ -142,7 +146,7 @@ class _Welcome extends ConsumerWidget {
                 c: CAA.center,
                 children: [
                   const Spacer(),
-                  Assets.img.chat.logoSquare.image(width: 140),
+                  Image.asset(logoPath, width: 140),
                   12.h,
                   T(S.current.chat_welcome_to_use, s: const TS(s: 18, w: FW.w600)),
                   12.h,

@@ -11,8 +11,6 @@ class Debugger extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (!kDebugMode) return const SizedBox.shrink();
-    final editingIndex = ref.watch(P.chat.editingIndex);
-    final messages = ref.watch(P.chat.messages);
     final demoType = ref.watch(P.app.demoType);
 
     return Positioned(
@@ -36,8 +34,6 @@ class Debugger extends ConsumerWidget {
                 c: CAA.start,
                 children: [
                   const T("Debugger"),
-                  T("${"editingIndex".codeToName}\n" + editingIndex.toString()),
-                  T("${"messages".codeToName}\n\n" + messages.map((e) => e.toString()).join("\n\n")),
                   T("${"demoType".codeToName}\n" + demoType.toString()),
                 ].m((e) {
                   return C(

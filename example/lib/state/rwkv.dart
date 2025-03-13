@@ -181,7 +181,7 @@ extension $RWKV on _RWKV {
 // \n\nAssistant: 喵~好的我的主人喵！\n\nUser: 介绍一下你自己\n\nAssistant: 我是一个可爱猫娘，喜欢和你聊天，陪伴你喵！如果有什么问题或者需要陪伴，尽管告诉我哦喵~\n\n""";
 
     final usingReasoningModel = P.rwkv.usingReasoningModel.v;
-    P.app.demoType.u(_DemoType.chat);
+    P.app.demoType.u(DemoType.chat);
 
     const promptForNormalChat = """
 
@@ -297,7 +297,7 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
       await Future.delayed(const Duration(milliseconds: 50));
     }
 
-    P.app.demoType.u(_DemoType.othello);
+    P.app.demoType.u(DemoType.othello);
 
     _sendPort!.send(("setMaxLength", 64000));
     _sendPort!.send(("setSamplerParams", {"temperature": 1.0, "top_k": 1, "top_p": 1.0, "presence_penalty": 0.0, "frequency_penalty": 0.0, "penalty_decay": 0.0}));
@@ -466,7 +466,7 @@ enum _RWKVMessageType {
   }
 }
 
-enum _DemoType {
+enum DemoType {
   othello,
   chat,
   world,

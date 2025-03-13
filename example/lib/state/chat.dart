@@ -230,15 +230,15 @@ extension _$Chat on _Chat {
 
     P.rwkv.broadcastStream.listen((event) {
       final demoType = P.app.demoType.v;
-      if (demoType != _DemoType.chat) return;
+      if (demoType != DemoType.chat) return;
       _onStreamEvent(event: event);
     }, onDone: () {
       final demoType = P.app.demoType.v;
-      if (demoType != _DemoType.chat) return;
+      if (demoType != DemoType.chat) return;
       _onStreamDone();
     }, onError: (error, stackTrace) {
       final demoType = P.app.demoType.v;
-      if (demoType != _DemoType.chat) return;
+      if (demoType != DemoType.chat) return;
       _onStreamError(error: error, stackTrace: stackTrace);
     });
 
@@ -246,6 +246,8 @@ extension _$Chat on _Chat {
   }
 
   FV _loadRoles() async {
+    final demoType = P.app.demoType.v;
+    if (demoType != DemoType.chat) return;
     final currentLocale = Intl.getCurrentLocale();
     final useEn = currentLocale.startsWith("en");
     final jsonString = await rootBundle.loadString(useEn ? Assets.config.chat.promptsEnUS : Assets.config.chat.promptsZhHans);

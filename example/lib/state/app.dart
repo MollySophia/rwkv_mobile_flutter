@@ -45,7 +45,7 @@ class _App with WidgetsBindingObserver {
   late final documentsDir = _gsn<Directory>();
 
   /// 当前正在运行的任务
-  late final demoType = _gsn<_DemoType>();
+  late final demoType = _gs(DemoType.chat);
 
   @override
   void didChangeMetrics() {
@@ -76,7 +76,7 @@ extension _$App on _App {
     } else {
       name = "__chat__".replaceAll("__", "");
     }
-    demoType.u(_DemoType.values.byName(name));
+    demoType.u(DemoType.values.byName(name));
 
     try {
       final packageInfo = await PackageInfo.fromPlatform();
