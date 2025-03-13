@@ -12,6 +12,8 @@ class Debugger extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     if (!kDebugMode) return const SizedBox.shrink();
     final demoType = ref.watch(P.app.demoType);
+    final currentWorldType = ref.watch(P.rwkv.currentWorldType);
+    final currentModel = ref.watch(P.rwkv.currentModel);
 
     return Positioned(
       left: 0,
@@ -35,6 +37,8 @@ class Debugger extends ConsumerWidget {
                 children: [
                   const T("Debugger"),
                   T("${"demoType".codeToName}\n" + demoType.toString()),
+                  T("${"currentWorldType".codeToName}\n" + currentWorldType.toString()),
+                  T("${"currentModel".codeToName}\n" + currentModel.toString()),
                 ].m((e) {
                   return C(
                     decoration: BD(color: kB.wo(0.67)),

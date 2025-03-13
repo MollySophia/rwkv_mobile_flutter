@@ -72,6 +72,7 @@ class RWKVMobile {
     var runtime;
 
     var speedReportCounter = 0;
+
     (double?, double?) getPrefillAndDecodeSpeed() {
       double? prefillSpeed;
       double? decodeSpeed;
@@ -266,9 +267,9 @@ class RWKVMobile {
 
         final nativeCallable = ffi.NativeCallable<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int)>.isolateLocal(callbackFunction);
         sendPort.send({'generateStart': true});
-        if (kDebugMode) print("💬 Start to call LLM (gen mode), maxlength = $maxLength");
+        if (kDebugMode) print("🔥 Start to call LLM (gen mode), maxlength = $maxLength");
         retVal = rwkvMobile.rwkvmobile_runtime_gen_completion(runtime, promptPtr, ffi.nullptr, maxLength, generationStopToken, nativeCallable.nativeFunction);
-        if (kDebugMode) print("💬 Call LLM done (gen mode)");
+        if (kDebugMode) print("🔥 Call LLM done (gen mode)");
         if (retVal != 0) {
           throw Exception('Failed to evaluate generation');
         }

@@ -230,15 +230,15 @@ extension _$Chat on _Chat {
 
     P.rwkv.broadcastStream.listen((event) {
       final demoType = P.app.demoType.v;
-      if (demoType != DemoType.chat) return;
+      if (demoType != DemoType.chat && demoType != DemoType.world) return;
       _onStreamEvent(event: event);
     }, onDone: () {
       final demoType = P.app.demoType.v;
-      if (demoType != DemoType.chat) return;
+      if (demoType != DemoType.chat && demoType != DemoType.world) return;
       _onStreamDone();
     }, onError: (error, stackTrace) {
       final demoType = P.app.demoType.v;
-      if (demoType != DemoType.chat) return;
+      if (demoType != DemoType.chat && demoType != DemoType.world) return;
       _onStreamError(error: error, stackTrace: stackTrace);
     });
 

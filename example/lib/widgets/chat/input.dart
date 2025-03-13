@@ -151,38 +151,41 @@ class _BottomBar extends ConsumerWidget {
     final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
     final prefillSpeed = ref.watch(P.rwkv.prefillSpeed);
     final decodeSpeed = ref.watch(P.rwkv.decodeSpeed);
+    final currentWorldType = ref.watch(P.rwkv.currentWorldType);
+    final demoType = ref.watch(P.app.demoType);
 
     return Row(
       children: [
-        GD(
-          onTap: () {
-            if (P.chat.showingModelSelector.v) return;
-            P.chat.showingModelSelector.u(true);
-          },
-          child: C(
-            decoration: BD(
-              color: usingReasoningModel ? color : kC,
-              border: Border.all(
-                color: color.wo(0.5),
-              ),
-              borderRadius: 12.r,
-            ),
-            padding: const EI.o(l: 4, r: 8, t: 4, b: 4),
-            child: Ro(
-              c: CAA.center,
-              children: [
-                Icon(
-                  Icons.emoji_objects_outlined,
-                  color: usingReasoningModel ? kW : color,
+        if (demoType == DemoType.chat)
+          GD(
+            onTap: () {
+              if (P.chat.showingModelSelector.v) return;
+              P.chat.showingModelSelector.u(true);
+            },
+            child: C(
+              decoration: BD(
+                color: usingReasoningModel ? color : kC,
+                border: Border.all(
+                  color: color.wo(0.5),
                 ),
-                T(usingReasoningModel ? "Reason on" : "Reason off",
-                    s: TS(
-                      c: usingReasoningModel ? kW : color,
-                    )),
-              ],
+                borderRadius: 12.r,
+              ),
+              padding: const EI.o(l: 4, r: 8, t: 4, b: 4),
+              child: Ro(
+                c: CAA.center,
+                children: [
+                  Icon(
+                    Icons.emoji_objects_outlined,
+                    color: usingReasoningModel ? kW : color,
+                  ),
+                  T(usingReasoningModel ? "Reason on" : "Reason off",
+                      s: TS(
+                        c: usingReasoningModel ? kW : color,
+                      )),
+                ],
+              ),
             ),
           ),
-        ),
         8.w,
         Co(
           c: CAA.start,

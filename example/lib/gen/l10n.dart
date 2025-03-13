@@ -100,13 +100,13 @@ class S {
     );
   }
 
-  /// `Welcome to explore RWKV Chat`
-  String get chat_welcome_to_use {
+  /// `Welcome to explore {demoName}`
+  String chat_welcome_to_use(Object demoName) {
     return Intl.message(
-      'Welcome to explore RWKV Chat',
+      'Welcome to explore $demoName',
       name: 'chat_welcome_to_use',
       desc: '',
-      args: [],
+      args: [demoName],
     );
   }
 
@@ -350,6 +350,26 @@ class S {
     return Intl.message(
       'Download source',
       name: 'download_source',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select a world type`
+  String get select_a_world_type {
+    return Intl.message(
+      'Select a world type',
+      name: 'select_a_world_type',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select a world type`
+  String get please_select_a_world_type {
+    return Intl.message(
+      'Please select a world type',
+      name: 'please_select_a_world_type',
       desc: '',
       args: [],
     );

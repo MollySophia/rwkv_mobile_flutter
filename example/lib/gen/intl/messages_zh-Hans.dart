@@ -20,9 +20,11 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'zh_Hans';
 
-  static String m0(memUsed, memFree) => "已用内存：${memUsed}，剩余内存：${memFree}";
+  static String m0(demoName) => "欢迎探索 RWKV Chat";
 
-  static String m1(modelName) => "您当前正在使用 ${modelName}";
+  static String m1(memUsed, memFree) => "已用内存：${memUsed}，剩余内存：${memFree}";
+
+  static String m2(modelName) => "您当前正在使用 ${modelName}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -36,9 +38,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "请选择一个模型",
     ),
     "chat_title": MessageLookupByLibrary.simpleMessage("RWKV Chat"),
-    "chat_welcome_to_use": MessageLookupByLibrary.simpleMessage(
-      "欢迎探索 RWKV Chat",
-    ),
+    "chat_welcome_to_use": m0,
     "chat_you_need_download_model_if_you_want_to_use_it":
         MessageLookupByLibrary.simpleMessage("您需要先下载模型才能使用"),
     "chatting": MessageLookupByLibrary.simpleMessage("聊天中"),
@@ -56,7 +56,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "intro": MessageLookupByLibrary.simpleMessage(
       "欢迎探索 RWKV v7 系列大语言模型，包含 0.1B/0.4B/1.5B/3.0B 参数版本，专为移动设备优化，加载后可完全离线运行，无需服务器通信",
     ),
-    "memory_used": m0,
+    "memory_used": m1,
     "new_chat": MessageLookupByLibrary.simpleMessage("新聊天"),
     "or_you_can_start_a_new_empty_chat": MessageLookupByLibrary.simpleMessage(
       "或开始一个空白聊天",
@@ -72,7 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "start_to_chat": MessageLookupByLibrary.simpleMessage("开始聊天"),
     "use_it_now": MessageLookupByLibrary.simpleMessage("立即使用"),
     "welcome_to_use_rwkv": MessageLookupByLibrary.simpleMessage("欢迎使用 RWKV"),
-    "you_are_now_using": m1,
+    "you_are_now_using": m2,
     "you_can_now_start_to_chat_with_rwkv": MessageLookupByLibrary.simpleMessage(
       "现在可以开始与 RWKV 聊天了",
     ),

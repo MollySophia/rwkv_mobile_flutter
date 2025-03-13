@@ -20,10 +20,12 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(memUsed, memFree) =>
+  static String m0(demoName) => "Welcome to explore ${demoName}";
+
+  static String m1(memUsed, memFree) =>
       "Memory used: ${memUsed}, Memory free: ${memFree}";
 
-  static String m1(modelName) => "You are now using ${modelName}";
+  static String m2(modelName) => "You are now using ${modelName}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -41,9 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Please select a model",
     ),
     "chat_title": MessageLookupByLibrary.simpleMessage("RWKV Chat"),
-    "chat_welcome_to_use": MessageLookupByLibrary.simpleMessage(
-      "Welcome to explore RWKV Chat",
-    ),
+    "chat_welcome_to_use": m0,
     "chat_you_need_download_model_if_you_want_to_use_it":
         MessageLookupByLibrary.simpleMessage(
           "You need to download the model first, before you can use it.",
@@ -68,15 +68,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "intro": MessageLookupByLibrary.simpleMessage(
       "Get ready to experience RWKV v7, series of compact language models with 0.1, 0.4, 1.5, 3.0 billion parameters, optimized for seamless mobile devices inference. Once loaded, it functions offline without requiring any server communication.",
     ),
-    "memory_used": m0,
+    "memory_used": m1,
     "new_chat": MessageLookupByLibrary.simpleMessage("New chat"),
     "or_you_can_start_a_new_empty_chat": MessageLookupByLibrary.simpleMessage(
       "Or you can start a new empty chat",
     ),
     "othello_title": MessageLookupByLibrary.simpleMessage("RWKV Othello"),
+    "please_select_a_world_type": MessageLookupByLibrary.simpleMessage(
+      "Please select a world type",
+    ),
     "rwkv_chat": MessageLookupByLibrary.simpleMessage("RWKV Chat"),
     "rwkv_othello": MessageLookupByLibrary.simpleMessage("RWKV Othello"),
     "select_a_model": MessageLookupByLibrary.simpleMessage("Select a model"),
+    "select_a_world_type": MessageLookupByLibrary.simpleMessage(
+      "Select a world type",
+    ),
     "send_message_to_rwkv": MessageLookupByLibrary.simpleMessage(
       "Message RWKV",
     ),
@@ -92,7 +98,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "welcome_to_use_rwkv": MessageLookupByLibrary.simpleMessage(
       "Welcome to use RWKV",
     ),
-    "you_are_now_using": m1,
+    "you_are_now_using": m2,
     "you_can_now_start_to_chat_with_rwkv": MessageLookupByLibrary.simpleMessage(
       "You can now start to chat with RWKV",
     ),

@@ -113,7 +113,7 @@ enum FileKey {
 
   String get url {
     if (isTest) return weights?.url ?? '';
-    final source = P.remoteFile.source.v;
+    final source = P.remoteFile.currentSource.v;
     final raw = weights?.url ?? '';
     switch (source) {
       case RemoteFileSource.huggingface:
@@ -131,5 +131,46 @@ enum FileKey {
 
   bool get isReasoning {
     return weights?.tags?.contains('reasoning') ?? false;
+  }
+
+  bool get isEncoder {
+    return weights?.tags?.contains('encoder') ?? false;
+  }
+
+  WorldType? get worldType {
+    switch (this) {
+      case v7_world_0_4b_st:
+        return null;
+      case v7_world_0_4b_ncnn:
+        return null;
+      case v7_world_0_4b_gguf:
+        return null;
+      case v7_g1_0_1b_st:
+        return null;
+      case v7_g1_0_1b_gguf:
+        return null;
+      case v7_g1_0_1b_qnn:
+        return null;
+      case v7_world_1_5b_prefab:
+        return null;
+      case v7_world_1_5b_ncnn:
+        return null;
+      case v7_world_1_5b_gguf:
+        return null;
+      case v7_world_3b_prefab:
+        return null;
+      case v7_world_3b_ncnn:
+        return null;
+      case v7_world_3b_gguf:
+        return null;
+      case rwkv7_0_4b_siglip_vision_encoder_gguf:
+        return WorldType.engVisualQA;
+      case rwkv7_0_4b_vision_siglip_gguf:
+        return WorldType.engVisualQA;
+      case download_test_github_releases:
+        return null;
+      case download_test_5mb:
+        return null;
+    }
   }
 }
