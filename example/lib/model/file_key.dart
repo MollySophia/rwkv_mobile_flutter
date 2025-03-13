@@ -28,13 +28,14 @@ enum FileKey {
   v7_world_3b_ncnn,
   v7_world_3b_gguf,
 
-  download_test_github_releases,
-  download_test_5mb,
-
   // 🔥 World demo
 
   rwkv7_0_4b_siglip_vision_encoder_gguf,
   rwkv7_0_4b_vision_siglip_gguf,
+
+  // 🔥 Download test
+  download_test_github_releases,
+  download_test_5mb,
   ;
 
   Weights? get weights {
