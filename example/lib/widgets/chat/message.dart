@@ -89,6 +89,7 @@ class Message extends ConsumerWidget {
     }
 
     final primaryColor = Theme.of(context).colorScheme.primary;
+    final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
 
     final editingIndex = ref.watch(P.chat.editingIndex);
 
@@ -168,7 +169,7 @@ class Message extends ConsumerWidget {
                   child: C(
                     padding: const EI.a(12),
                     decoration: BD(
-                      color: isMine ? primaryColor.wo(0.9) : kW,
+                      color: isMine ? primaryContainer : kW,
                       border: Border.all(color: primaryColor.wo(0.2)),
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(isMine ? 20 : 0),
@@ -181,7 +182,7 @@ class Message extends ConsumerWidget {
                       c: isMine ? CAA.end : CAA.start,
                       children: [
                         // 🔥 User message
-                        if (isMine) T(finalContent, s: const TS(c: kW)),
+                        if (isMine) T(finalContent, s: const TS(c: kB)),
                         // 🔥 Bot message
                         if (!isMine && !usingReasoningModel)
                           MarkdownBody(
@@ -255,7 +256,7 @@ class Message extends ConsumerWidget {
                                 onTap: _onUserEditPressed,
                                 child: Icon(
                                   Icons.edit,
-                                  color: kW.wo(0.8),
+                                  color: primaryColor.wo(0.8),
                                   size: 20,
                                 ),
                               ),
@@ -264,7 +265,7 @@ class Message extends ConsumerWidget {
                                 onTap: _onCopyPressed,
                                 child: Icon(
                                   Icons.copy,
-                                  color: kW.wo(0.8),
+                                  color: primaryColor.wo(0.8),
                                   size: 20,
                                 ),
                               ),
