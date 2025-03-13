@@ -24,12 +24,15 @@ class ModelItem extends ConsumerWidget {
     final modelPath = fileKey.path;
     final backend = fileKey.backend;
     P.rwkv.loading.u(true);
-    P.rwkv.usingReasoningModel.u(fileKey.isReasoning);
 
     try {
       P.rwkv.clearStates();
       P.chat.messages.u([]);
-      await P.rwkv.loadChat(modelPath: modelPath, backend: backend);
+      await P.rwkv.loadChat(
+        modelPath: modelPath,
+        backend: backend,
+        preferReasoning: fileKey.preferReasoning,
+      );
     } catch (e) {
       Alert.error(e.toString());
       return;

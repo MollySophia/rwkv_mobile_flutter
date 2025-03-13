@@ -73,10 +73,16 @@ extension $Chat on _Chat {
 
     final _editingBotMessage = editingBotMessage.v;
     if (_editingBotMessage) {
-      // final currentMessages = [...messages.v];
+      final isReasoning = messages.v[editingIndex.v!].isReasoning;
       final _editingIndex = editingIndex.v!;
       final id = DateTime.now().microsecondsSinceEpoch;
-      final newBotMessage = Message(id: id, content: textToSend, isMine: false, changing: false);
+      final newBotMessage = Message(
+        id: id,
+        content: textToSend,
+        isMine: false,
+        changing: false,
+        isReasoning: isReasoning,
+      );
       // currentMessages.replaceRange(_editingIndex, _editingIndex + 1, [newBotMessage]);
       final newMessages = [
         ...messages.v.sublist(0, _editingIndex),
@@ -184,6 +190,7 @@ extension $Chat on _Chat {
       id: id,
       content: message,
       isMine: true,
+      isReasoning: false,
     );
     messages.ua(msg);
     Future.delayed(34.ms).then((_) {
@@ -198,11 +205,13 @@ extension $Chat on _Chat {
 
     final receiveId = DateTime.now().microsecondsSinceEpoch;
     this.receiveId.u(receiveId);
+    final isReasoning = P.rwkv.usingReasoningModel.v;
     final receiveMsg = Message(
       id: receiveId,
       content: "",
       isMine: false,
       changing: true,
+      isReasoning: isReasoning,
     );
 
     messages.ua(receiveMsg);
@@ -288,6 +297,7 @@ extension _$Chat on _Chat {
           content: received.v,
           isMine: msg.isMine,
           changing: false,
+          isReasoning: msg.isReasoning,
         );
         currentMessages.replaceRange(i, i + 1, [newMsg]);
         found = true;
@@ -327,6 +337,7 @@ extension _$Chat on _Chat {
         break;
       case _RWKVMessageType.generateStop:
         received.u("");
+        receiving.u(false);
         break;
     }
   }

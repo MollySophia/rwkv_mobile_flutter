@@ -65,12 +65,12 @@ class Message extends ConsumerWidget {
 
     final cotDisplayState = ref.watch(P.chat.cotDisplayState(msg.id));
 
-    final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
+    final isReasoning = msg.isReasoning;
 
     String cotContent = "";
     String cotResult = "";
 
-    if (usingReasoningModel) {
+    if (isReasoning) {
       final isCot = finalContent.startsWith("<think>");
       if (isCot) {
         if (finalContent.contains("</think>")) {
@@ -183,7 +183,7 @@ class Message extends ConsumerWidget {
                         // 🔥 User message
                         if (isMine) T(finalContent, s: const TS(c: kW)),
                         // 🔥 Bot message
-                        if (!isMine && !usingReasoningModel)
+                        if (!isMine && !isReasoning)
                           MarkdownBody(
                             data: finalContent,
                             selectable: false,
@@ -192,7 +192,7 @@ class Message extends ConsumerWidget {
                             onTapLink: _onTapLink,
                           ),
                         // 🔥 Bot message cot header
-                        if (!isMine && usingReasoningModel)
+                        if (!isMine && isReasoning)
                           GD(
                             onTap: () {
                               if (showingCotContent) {
@@ -212,8 +212,8 @@ class Message extends ConsumerWidget {
                             ),
                           ),
                         // 🔥 Bot message cot content
-                        if (!isMine && usingReasoningModel) 4.h,
-                        if (!isMine && usingReasoningModel)
+                        if (!isMine && isReasoning) 4.h,
+                        if (!isMine && isReasoning)
                           AnimatedContainer(
                             duration: 250.ms,
                             height: cotContentHeight,
@@ -235,8 +235,8 @@ class Message extends ConsumerWidget {
                             ),
                           ),
                         // 🔥 Bot message cot result
-                        if (!isMine && cotResult.isNotEmpty && usingReasoningModel) 4.h,
-                        if (!isMine && cotResult.isNotEmpty && usingReasoningModel)
+                        if (!isMine && cotResult.isNotEmpty && isReasoning) 4.h,
+                        if (!isMine && cotResult.isNotEmpty && isReasoning)
                           MarkdownBody(
                             data: cotResult,
                             selectable: false,

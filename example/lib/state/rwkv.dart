@@ -29,8 +29,12 @@ class _RWKV {
     return argument.chatDefaults;
   });
 
+  late final usingReasoningModel = _gp((ref) {
+    return ref.watch(_usingReasoningModel);
+  });
+
   // TODO: @wangce 或许, 默认参数应该和 weights 绑定, 比如, G1 系列模型默认使用 reasoning
-  late final usingReasoningModel = _gs(false);
+  late final _usingReasoningModel = _gs(false);
 
   /// 模型是否已加载
   late final loaded = _gp((ref) {
@@ -112,6 +116,7 @@ extension $RWKV on _RWKV {
   FV loadChat({
     required String modelPath,
     required Backend backend,
+    required bool preferReasoning,
   }) async {
     prefillSpeed.u(0);
     decodeSpeed.u(0);
@@ -180,24 +185,12 @@ extension $RWKV on _RWKV {
 // 你是一只温柔伶俐的猫娘，有着银白色的柔顺的头发，猫耳朵和猫尾巴
 // \n\nAssistant: 喵~好的我的主人喵！\n\nUser: 介绍一下你自己\n\nAssistant: 我是一个可爱猫娘，喜欢和你聊天，陪伴你喵！如果有什么问题或者需要陪伴，尽管告诉我哦喵~\n\n""";
 
-    final usingReasoningModel = P.rwkv.usingReasoningModel.v;
     P.app.demoType.u(_DemoType.chat);
 
-    const promptForNormalChat = """
-
-User: hi
-
-Assistant: Hi. I am your assistant and I will provide expert full response in full details. Please feel free to ask any question and I will always answer it.
-
-""";
-
-    const promptForReasoning = "";
-
-    _sendPort!.send(("setPrompt", usingReasoningModel ? promptForReasoning : promptForNormalChat));
-    _sendPort!.send(("setEnableReasoning", usingReasoningModel));
+    setReasoningEnabled(enabled: preferReasoning);
     _sendPort!.send(("getPrompt", null));
-    await resetSamplerParams(usingReasoningModel: usingReasoningModel);
-    await resetMaxLength(usingReasoningModel: usingReasoningModel);
+    await resetSamplerParams(usingReasoningModel: preferReasoning);
+    await resetMaxLength(usingReasoningModel: preferReasoning);
     _sendPort!.send(("getSamplerParams", null));
   }
 
@@ -251,6 +244,22 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
   FV syncMaxLength({num? maxLength}) async {
     if (maxLength != null) arguments(Argument.maxLength).u(maxLength.toDouble());
     _sendPort!.send(("setMaxLength", _intIfFixedDecimalsIsZero(Argument.maxLength)));
+  }
+
+  FV setReasoningEnabled({required bool enabled}) async {
+    _usingReasoningModel.u(enabled);
+    const promptForNormalChat = """
+
+User: hi
+
+Assistant: Hi. I am your assistant and I will provide expert full response in full details. Please feel free to ask any question and I will always answer it.
+
+""";
+
+    const promptForReasoning = "";
+
+    _sendPort!.send(("setPrompt", enabled ? promptForReasoning : promptForNormalChat));
+    _sendPort!.send(("setEnableReasoning", enabled));
   }
 
   FV loadOthello() async {

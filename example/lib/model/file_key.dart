@@ -117,7 +117,7 @@ enum FileKey {
 
   String get path => '${P.app.documentsDir.v!.path}/$fileName';
 
-  bool get isReasoning {
+  bool get preferReasoning {
     return weights?.tags?.contains('reasoning') ?? false;
   }
 }

@@ -205,7 +205,7 @@ class RWKVMobile {
         if (kDebugMode) print("💬 Call LLM done (chat mode)");
         if (retVal != 0) {
           sendPort.send({'generateStop': true});
-          throw Exception('Failed to evaluate chat');
+          throw Exception('😡 Failed to evaluate chat:\nretVal $retVal');
         }
         sendPort.send({'response': responseBuffer});
         sendPort.send({'generateStop': true});

@@ -155,9 +155,10 @@ class _BottomBar extends ConsumerWidget {
     return Row(
       children: [
         GD(
-          onTap: () {
-            if (P.chat.showingModelSelector.v) return;
-            P.chat.showingModelSelector.u(true);
+          onTap: () async {
+            if (!P.rwkv.loaded.v) P.chat.showingModelSelector.u(true);
+            if (!P.rwkv.loaded.v) return;
+            await P.rwkv.setReasoningEnabled(enabled: !usingReasoningModel);
           },
           child: C(
             decoration: BD(
