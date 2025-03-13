@@ -292,6 +292,73 @@ class rwkv_mobile {
 
   late final _rwkvmobile_runtime_get_avg_prefill_speedPtr = _lookup<ffi.NativeFunction<ffi.Double Function(rwkvmobile_runtime_t)>>('rwkvmobile_runtime_get_avg_prefill_speed');
   late final _rwkvmobile_runtime_get_avg_prefill_speed = _rwkvmobile_runtime_get_avg_prefill_speedPtr.asFunction<double Function(rwkvmobile_runtime_t)>();
+
+  int rwkvmobile_runtime_load_vision_encoder(
+    rwkvmobile_runtime_t runtime,
+    ffi.Pointer<ffi.Char> encoder_path,
+  ) {
+    return _rwkvmobile_runtime_load_vision_encoder(
+      runtime,
+      encoder_path,
+    );
+  }
+
+  late final _rwkvmobile_runtime_load_vision_encoderPtr = _lookup<ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>)>>('rwkvmobile_runtime_load_vision_encoder');
+  late final _rwkvmobile_runtime_load_vision_encoder = _rwkvmobile_runtime_load_vision_encoderPtr.asFunction<int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>)>();
+
+  int rwkvmobile_runtime_set_image_prompt(
+    rwkvmobile_runtime_t runtime,
+    ffi.Pointer<ffi.Char> image_path,
+  ) {
+    return _rwkvmobile_runtime_set_image_prompt(
+      runtime,
+      image_path,
+    );
+  }
+
+  late final _rwkvmobile_runtime_set_image_promptPtr = _lookup<ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>)>>('rwkvmobile_runtime_set_image_prompt');
+  late final _rwkvmobile_runtime_set_image_prompt = _rwkvmobile_runtime_set_image_promptPtr.asFunction<int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>)>();
+
+  int rwkvmobile_runtime_set_token_banned(
+    rwkvmobile_runtime_t runtime,
+    ffi.Pointer<ffi.Int> token_banned,
+    int token_banned_len,
+  ) {
+    return _rwkvmobile_runtime_set_token_banned(
+      runtime,
+      token_banned,
+      token_banned_len,
+    );
+  }
+
+  late final _rwkvmobile_runtime_set_token_bannedPtr = _lookup<ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Int>, ffi.Int)>>('rwkvmobile_runtime_set_token_banned');
+  late final _rwkvmobile_runtime_set_token_banned = _rwkvmobile_runtime_set_token_bannedPtr.asFunction<int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Int>, int)>();
+
+  int rwkvmobile_runtime_set_eos_token(
+    rwkvmobile_runtime_t runtime,
+    ffi.Pointer<ffi.Char> eos_token,
+  ) {
+    return _rwkvmobile_runtime_set_eos_token(
+      runtime,
+      eos_token,
+    );
+  }
+
+  late final _rwkvmobile_runtime_set_eos_tokenPtr = _lookup<ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>)>>('rwkvmobile_runtime_set_eos_token');
+  late final _rwkvmobile_runtime_set_eos_token = _rwkvmobile_runtime_set_eos_tokenPtr.asFunction<int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>)>();
+
+  int rwkvmobile_runtime_set_bos_token(
+    rwkvmobile_runtime_t runtime,
+    ffi.Pointer<ffi.Char> bos_token,
+  ) {
+    return _rwkvmobile_runtime_set_bos_token(
+      runtime,
+      bos_token,
+    );
+  }
+
+  late final _rwkvmobile_runtime_set_bos_tokenPtr = _lookup<ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>)>>('rwkvmobile_runtime_set_bos_token');
+  late final _rwkvmobile_runtime_set_bos_token = _rwkvmobile_runtime_set_bos_tokenPtr.asFunction<int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>)>();
 }
 
 final class sampler_params extends ffi.Struct {

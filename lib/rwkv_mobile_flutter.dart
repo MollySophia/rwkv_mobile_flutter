@@ -167,6 +167,45 @@ class RWKVMobile {
       } else if (command == 'getEnableReasoning') {
         bool enableReasoningBool = (enableReasoning != 0);
         sendPort.send({'enableReasoning': enableReasoningBool});
+      } else if (command == 'setEosToken') {
+        final arg = message.$2 as String;
+        final eosTokenPtr = arg.toNativeUtf8().cast<ffi.Char>();
+        retVal = rwkvMobile.rwkvmobile_runtime_set_eos_token(runtime, eosTokenPtr);
+        if (retVal != 0) {
+          throw Exception('Failed to set eos token');
+        }
+      } else if (command == 'setBosToken') {
+        final arg = message.$2 as String;
+        final bosTokenPtr = arg.toNativeUtf8().cast<ffi.Char>();
+        retVal = rwkvMobile.rwkvmobile_runtime_set_bos_token(runtime, bosTokenPtr);
+        if (retVal != 0) {
+          throw Exception('Failed to set bos token');
+        }
+      } else if (command == 'setTokenBanned') {
+        final arg = message.$2 as List<int>;
+        final tokenBannedPtr = calloc.allocate<ffi.Int>(arg.length);
+        for (var i = 0; i < arg.length; i++) {
+          tokenBannedPtr[i] = arg[i];
+        }
+        retVal = rwkvMobile.rwkvmobile_runtime_set_token_banned(runtime, tokenBannedPtr, arg.length);
+        calloc.free(tokenBannedPtr);
+        if (retVal != 0) {
+          throw Exception('Failed to set token banned');
+        }
+      } else if (command == 'loadVisionEncoder') {
+        final arg = message.$2 as String;
+        final encoderPathPtr = arg.toNativeUtf8().cast<ffi.Char>();
+        retVal = rwkvMobile.rwkvmobile_runtime_load_vision_encoder(runtime, encoderPathPtr);
+        if (retVal != 0) {
+          throw Exception('Failed to load vision encoder');
+        }
+      } else if (command == 'setVisionPrompt') {
+        final arg = message.$2 as String;
+        final imagePathPtr = arg.toNativeUtf8().cast<ffi.Char>();
+        retVal = rwkvMobile.rwkvmobile_runtime_set_image_prompt(runtime, imagePathPtr);
+        if (retVal != 0) {
+          throw Exception('Failed to set image prompt');
+        }
       } else if (command == 'message') {
         final messages = message.$2 as List<String>;
         for (var i = 0; i < messages.length; i++) {
