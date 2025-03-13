@@ -20,10 +20,12 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ko';
 
-  static String m0(memUsed, memFree) =>
+  static String m0(demoName) => "RWKV 월드 v7을 탐색해 보세요";
+
+  static String m1(memUsed, memFree) =>
       "사용 중 메모리: ${memUsed}, 여유 메모리: ${memFree}";
 
-  static String m1(modelName) => "현재 ${modelName}을(를) 사용 중입니다";
+  static String m2(modelName) => "현재 ${modelName}을(를) 사용 중입니다";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -39,9 +41,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "모델을 선택해 주세요",
     ),
     "chat_title": MessageLookupByLibrary.simpleMessage("RWKV World v7"),
-    "chat_welcome_to_use": MessageLookupByLibrary.simpleMessage(
-      "RWKV 월드 v7을 탐색해 보세요",
-    ),
+    "chat_welcome_to_use": m0,
     "chat_you_need_download_model_if_you_want_to_use_it":
         MessageLookupByLibrary.simpleMessage("사용하려면 먼저 모델을 다운로드해야 합니다"),
     "chatting": MessageLookupByLibrary.simpleMessage("채팅 중"),
@@ -63,7 +63,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "intro": MessageLookupByLibrary.simpleMessage(
       "RWKV v7 시리즈 경량 언어 모델을 경험해 보세요. 0.1B/0.4B/1.5B/3.0B 파라미터 버전으로 모바일 최적화되어 오프라인에서도 서버 연결 없이 작동합니다",
     ),
-    "memory_used": m0,
+    "memory_used": m1,
     "new_chat": MessageLookupByLibrary.simpleMessage("새 채팅"),
     "or_you_can_start_a_new_empty_chat": MessageLookupByLibrary.simpleMessage(
       "또는 빈 채팅을 시작할 수 있습니다",
@@ -83,7 +83,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "welcome_to_use_rwkv": MessageLookupByLibrary.simpleMessage(
       "RWKV를 사용해 주셔서 환영합니다",
     ),
-    "you_are_now_using": m1,
+    "you_are_now_using": m2,
     "you_can_now_start_to_chat_with_rwkv": MessageLookupByLibrary.simpleMessage(
       "이제 RWKV와 채팅을 시작할 수 있습니다",
     ),

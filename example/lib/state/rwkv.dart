@@ -39,6 +39,7 @@ class _RWKV {
   });
 
   late final currentModel = _gsn<FileKey>();
+  late final currentWorldType = _gsn<WorldType>();
 
   late final loading = _gs(false);
 
@@ -56,6 +57,10 @@ extension $RWKV on _RWKV {
       return;
     }
     sendPort.send(("message", messages));
+  }
+
+  void setImagePath({required String path}) {
+    _sendPort!.send(("setVisionPrompt", path));
   }
 
   void clearStates() {
@@ -199,6 +204,55 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
     await resetSamplerParams(usingReasoningModel: usingReasoningModel);
     await resetMaxLength(usingReasoningModel: usingReasoningModel);
     _sendPort!.send(("getSamplerParams", null));
+  }
+
+  FV loadWorldVision({
+    required String modelPath,
+    required String visionEncoderPath,
+    required Backend backend,
+  }) async {
+    logTrace();
+    prefillSpeed.u(0);
+    decodeSpeed.u(0);
+
+    final tokenizerPath = await getModelPath("assets/config/world/b_rwkv_vocab_v20230424.txt");
+
+    final rootIsolateToken = RootIsolateToken.instance;
+    final rwkvMobile = RWKVMobile();
+
+    if (_sendPort != null) {
+      try {
+        final startMS = DateTime.now().millisecondsSinceEpoch;
+        await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
+        final endMS = DateTime.now().millisecondsSinceEpoch;
+        if (kDebugMode) print("✅ initRuntime done in ${endMS - startMS}ms");
+      } catch (e) {
+        if (kDebugMode) print("😡 initRuntime failed: $e");
+        Alert.error("Failed to load model: $e");
+        return;
+      }
+    } else {
+      final options = StartOptions(
+        modelPath,
+        tokenizerPath,
+        backend,
+        _receivePort.sendPort,
+        rootIsolateToken!,
+      );
+      await rwkvMobile.runIsolate(options);
+    }
+
+    while (_sendPort == null) {
+      if (kDebugMode) print("💬 waiting for sendPort...");
+      await Future.delayed(const Duration(milliseconds: 50));
+    }
+
+    _sendPort!.send(("loadVisionEncoder", visionEncoderPath));
+    await resetSamplerParams(usingReasoningModel: false);
+    await resetMaxLength(usingReasoningModel: false);
+    _sendPort!.send(("setEosToken", "\x17"));
+    _sendPort!.send(("setBosToken", "\x16"));
+    _sendPort!.send(("setTokenBanned", [0]));
   }
 
   FV resetSamplerParams({required bool usingReasoningModel}) async {

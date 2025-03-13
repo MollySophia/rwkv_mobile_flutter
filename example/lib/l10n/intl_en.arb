@@ -5,7 +5,7 @@
   "send_message_to_rwkv": "Message RWKV",
   "chat_copied_to_clipboard": "Copied to clipboard",
   "chat_empty_message": "Please enter a message",
-  "chat_welcome_to_use": "Welcome to explore RWKV Chat",
+  "chat_welcome_to_use": "Welcome to explore {demoName}",
   "chat_please_select_a_model": "Please select a model",
   "chat_you_need_download_model_if_you_want_to_use_it": "You need to download the model first, before you can use it.",
   "download_model": "Download model",
@@ -32,5 +32,7 @@
   "start_a_new_chat": "Start a new chat",
   "you_can_now_start_to_chat_with_rwkv": "You can now start to chat with RWKV",
   "bot_message_edited": "Bot message edited, you can now send new message",
-  "download_source": "Download source"
+  "download_source": "Download source",
+  "select_a_world_type": "Select a world type",
+  "please_select_a_world_type": "Please select a world type"
 }

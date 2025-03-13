@@ -1,26 +1,19 @@
 // ignore: unused_import
 import 'dart:developer';
-import 'dart:io';
 import 'dart:ui';
 
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:zone/func/gb_display.dart';
-import 'package:zone/gen/assets.gen.dart';
 import 'package:zone/gen/l10n.dart';
-import 'package:zone/model/file_key.dart';
 import 'package:zone/model/role.dart';
-import 'package:zone/route/method.dart';
 import 'package:zone/route/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:zone/state/p.dart';
-import 'package:zone/widgets/arguments_panel.dart';
+import 'package:zone/widgets/chat/app_bar.dart';
+import 'package:zone/widgets/chat/empty.dart';
 import 'package:zone/widgets/chat/input.dart';
 import 'package:zone/widgets/chat/message.dart';
-import 'package:zone/widgets/model_item.dart';
+import 'package:zone/widgets/model_selector.dart';
 
 class PageChat extends StatefulWidget {
   const PageChat({super.key});
@@ -81,7 +74,7 @@ class _PageChatState extends State<PageChat> {
           expand: false,
           snap: false,
           builder: (BuildContext context, ScrollController scrollController) {
-            return _ModelSelector(
+            return ModelSelector(
               scrollController: scrollController,
             );
           },
@@ -97,9 +90,9 @@ class _PageChatState extends State<PageChat> {
       body: Stack(
         children: [
           _List(),
-          _Welcome(),
+          Empty(),
           //
-          _AppBar(),
+          ChatAppBar(),
           _NavigationBarBottomLine(),
           //
           _ScrollToBottomButton(),
@@ -107,183 +100,6 @@ class _PageChatState extends State<PageChat> {
           _InputTopLine(),
           Input(),
         ],
-      ),
-    );
-  }
-}
-
-class _Welcome extends ConsumerWidget {
-  const _Welcome();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final paddingTop = ref.watch(P.app.paddingTop);
-    final messages = ref.watch(P.chat.messages);
-    if (messages.isNotEmpty) return Positioned.fill(child: IgnorePointer(child: Container()));
-    final loaded = ref.watch(P.rwkv.loaded);
-    final currentModel = ref.watch(P.rwkv.currentModel);
-
-    final demoType = ref.watch(P.app.demoType);
-    String logoPath = "assets/img/${demoType!.name}/logo.square.png";
-
-    return AnimatedPositioned(
-      duration: 350.ms,
-      curve: Curves.easeInOutBack,
-      bottom: 0,
-      left: 0,
-      right: 0,
-      top: 0,
-      child: GD(
-        onTap: () {
-          P.chat.focusNode.unfocus();
-        },
-        child: Stack(
-          children: [
-            Positioned.fill(
-              left: 32,
-              right: 32,
-              child: Co(
-                c: CAA.center,
-                children: [
-                  const Spacer(),
-                  Image.asset(logoPath, width: 140),
-                  12.h,
-                  T(S.current.chat_welcome_to_use, s: const TS(s: 18, w: FW.w600)),
-                  12.h,
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 500),
-                    child: T(S.current.intro),
-                  ),
-                  12.h,
-                  if (!loaded) T(S.current.start_a_new_chat_by_clicking_the_button_below),
-                  if (!loaded) 12.h,
-                  if (!loaded)
-                    TextButton(
-                      onPressed: () async {
-                        P.chat.showingModelSelector.u(false);
-                        P.chat.showingModelSelector.u(true);
-                      },
-                      child: T(S.current.select_a_model, s: const TS(s: 16, w: FW.w600)),
-                    ),
-                  if (!loaded) 12.h,
-                  if (loaded) T(S.current.you_are_now_using(currentModel?.weights?.name ?? "")),
-                  const Spacer(),
-                ],
-              ),
-            ),
-            Positioned(
-              top: paddingTop + kToolbarHeight + 12,
-              left: 0,
-              right: 0,
-              height: 200,
-              child: Ro(
-                c: CAA.start,
-                children: [
-                  12.w,
-                  Exp(
-                    child: T(
-                      S.current.click_here_to_start_a_new_chat,
-                      s: TS(
-                        c: loaded ? kB.wo(0.8) : kC,
-                      ),
-                    ),
-                  ),
-                  const Spacer(),
-                  Exp(
-                    child: T(
-                      S.current.click_here_to_select_a_new_model,
-                      textAlign: TextAlign.end,
-                      s: TS(
-                        c: !loaded ? kB.wo(0.8) : kC,
-                      ),
-                    ),
-                  ),
-                  12.w,
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ModelSelector extends ConsumerWidget {
-  final ScrollController scrollController;
-
-  const _ModelSelector({required this.scrollController});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final memUsed = ref.watch(P.device.memUsed);
-    final memFree = ref.watch(P.device.memFree);
-    final paddingBottom = ref.watch(P.app.paddingBottom);
-    final source = ref.watch(P.remoteFile.source);
-    final memUsedString = gbDisplay(memUsed);
-    final memFreeString = gbDisplay(memFree);
-
-    return ClipRRect(
-      borderRadius: 16.r,
-      child: C(
-        margin: const EI.o(t: 16),
-        child: ListView(
-          padding: const EI.o(t: 24, l: 8, r: 8),
-          controller: scrollController,
-          children: [
-            Ro(
-              children: [
-                Exp(child: T(S.current.chat_welcome_to_use, s: const TS(s: 18, w: FW.w600))),
-                IconButton(
-                  onPressed: () {
-                    pop();
-                  },
-                  icon: const Icon(Icons.close),
-                ),
-              ],
-            ),
-            4.h,
-            T(S.current.chat_please_select_a_model, s: const TS(s: 16, w: FW.w500)),
-            4.h,
-            T(S.current.chat_you_need_download_model_if_you_want_to_use_it),
-            4.h,
-            T(S.current.ensure_you_have_enough_memory_to_load_the_model, s: TS(c: kB.wo(0.7), s: 12)),
-            4.h,
-            T(S.current.memory_used(memUsedString, memFreeString), s: TS(c: kB.wo(0.7), s: 12)),
-            4.h,
-            T(S.current.download_source, s: TS(c: kB.wo(0.7), s: 14, w: FW.w600)),
-            4.h,
-            Wrap(
-              runSpacing: 4,
-              spacing: 4,
-              children: RemoteFileSource.values.where((e) => kDebugMode ? true : !e.isDebug).map((e) {
-                return GD(
-                  onTap: () {
-                    P.remoteFile.source.u(e);
-                  },
-                  child: C(
-                    decoration: BD(
-                      color: e == source ? kCB : kC,
-                      borderRadius: 8.r,
-                      border: Border.all(
-                        color: kCB,
-                      ),
-                    ),
-                    padding: const EI.a(4),
-                    child: T(
-                      e.name,
-                      s: TS(c: e == source ? kW : kB.wo(0.7), s: 12),
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-            4.h,
-            for (final fileKey in FileKey.availableModels) ModelItem(fileKey),
-            16.h,
-            paddingBottom.h,
-          ],
-        ),
       ),
     );
   }
@@ -422,65 +238,6 @@ class _NavigationBarBottomLine extends ConsumerWidget {
       child: C(
         height: kToolbarHeight,
         color: kB.wo(0.1),
-      ),
-    );
-  }
-}
-
-class _AppBar extends ConsumerWidget {
-  const _AppBar();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final loaded = ref.watch(P.rwkv.loaded);
-    return Positioned(
-      top: 0,
-      left: 0,
-      right: 0,
-      child: ClipRRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-          child: AppBar(
-            backgroundColor: kW.wo(0.6),
-            elevation: 0,
-            centerTitle: true,
-            title: AutoSizeText(
-              S.current.chat_title,
-              style: const TextStyle(fontSize: 20),
-              minFontSize: 0,
-              maxLines: 2,
-            ),
-            leading: IconButton(
-              onPressed: loaded
-                  ? () {
-                      P.chat.showingCharacterSelector.u(false);
-                      P.chat.showingCharacterSelector.u(true);
-                    }
-                  : null,
-              icon: (Platform.isIOS || Platform.isMacOS) ? const Icon(CupertinoIcons.bubble_left_bubble_right) : const Icon(Icons.message_outlined),
-            ),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  P.chat.showingModelSelector.u(false);
-                  P.chat.showingModelSelector.u(true);
-                },
-                icon: const Icon(CupertinoIcons.cube_box),
-              ),
-              IconButton(
-                onPressed: () async {
-                  if (!loaded) {
-                    P.chat.showingModelSelector.u(false);
-                    P.chat.showingModelSelector.u(true);
-                    return;
-                  }
-                  await ArgumentsPanel.show(context);
-                },
-                icon: const Icon(Icons.tune),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

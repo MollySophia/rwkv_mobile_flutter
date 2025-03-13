@@ -53,7 +53,7 @@ class _App extends StatelessWidget {
           appBarTheme: const AppBarTheme(scrolledUnderElevation: 0, backgroundColor: Color(0xFFF4F8FF)),
           scaffoldBackgroundColor: const Color(0xFFF4F8FF),
         ),
-        debugShowCheckedModeBanner: true,
+        debugShowCheckedModeBanner: kDebugMode,
         routerConfig: kRouter,
         builder: (context, child) {
           return MediaQuery(

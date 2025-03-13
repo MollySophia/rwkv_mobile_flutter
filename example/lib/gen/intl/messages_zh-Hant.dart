@@ -20,9 +20,11 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'zh_Hant';
 
-  static String m0(memUsed, memFree) => "已用記憶體：${memUsed}，剩餘記憶體：${memFree}";
+  static String m0(demoName) => "歡迎探索 RWKV World v7";
 
-  static String m1(modelName) => "您當前正在使用 ${modelName}";
+  static String m1(memUsed, memFree) => "已用記憶體：${memUsed}，剩餘記憶體：${memFree}";
+
+  static String m2(modelName) => "您當前正在使用 ${modelName}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -36,9 +38,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "請選擇一個模型",
     ),
     "chat_title": MessageLookupByLibrary.simpleMessage("RWKV World v7"),
-    "chat_welcome_to_use": MessageLookupByLibrary.simpleMessage(
-      "歡迎探索 RWKV World v7",
-    ),
+    "chat_welcome_to_use": m0,
     "chat_you_need_download_model_if_you_want_to_use_it":
         MessageLookupByLibrary.simpleMessage("您需要先下載模型才能使用"),
     "chatting": MessageLookupByLibrary.simpleMessage("聊天中"),
@@ -56,7 +56,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "intro": MessageLookupByLibrary.simpleMessage(
       "即將體驗 RWKV v7 系列緊湊型語言模型，包含 0.1B/0.4B/1.5B/3.0B 參數版本，專為行動裝置優化，載入後可完全離線運行，無需伺服器通訊",
     ),
-    "memory_used": m0,
+    "memory_used": m1,
     "new_chat": MessageLookupByLibrary.simpleMessage("新聊天"),
     "or_you_can_start_a_new_empty_chat": MessageLookupByLibrary.simpleMessage(
       "或開始一個空白聊天",
@@ -72,7 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "start_to_chat": MessageLookupByLibrary.simpleMessage("開始聊天"),
     "use_it_now": MessageLookupByLibrary.simpleMessage("立即使用"),
     "welcome_to_use_rwkv": MessageLookupByLibrary.simpleMessage("歡迎使用 RWKV"),
-    "you_are_now_using": m1,
+    "you_are_now_using": m2,
     "you_can_now_start_to_chat_with_rwkv": MessageLookupByLibrary.simpleMessage(
       "現在可以開始與 RWKV 聊天了",
     ),
