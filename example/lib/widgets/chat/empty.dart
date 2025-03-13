@@ -56,7 +56,7 @@ class Empty extends ConsumerWidget {
                   const Spacer(),
                   Image.asset(logoPath, width: 140),
                   12.h,
-                  T(S.current.chat_welcome_to_use("World RWKV"), s: const TS(s: 18, w: FW.w600)),
+                  T(S.current.chat_welcome_to_use("RWKV Chat"), s: const TS(s: 18, w: FW.w600)),
                   12.h,
                   ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 500),

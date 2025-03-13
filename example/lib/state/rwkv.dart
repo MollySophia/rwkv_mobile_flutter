@@ -215,7 +215,7 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
     prefillSpeed.u(0);
     decodeSpeed.u(0);
 
-    final tokenizerPath = await getModelPath("assets/config/world/b_rwkv_vocab_v20230424.txt");
+    final tokenizerPath = await getModelPath("assets/config/chat/b_rwkv_vocab_v20230424.txt");
 
     final rootIsolateToken = RootIsolateToken.instance;
     final rwkvMobile = RWKVMobile();

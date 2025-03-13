@@ -74,7 +74,7 @@ extension _$App on _App {
     if (kDebugMode) {
       name = (Args.demoType).replaceAll("__", "");
     } else {
-      name = "__world__".replaceAll("__", "");
+      name = "__chat__".replaceAll("__", "");
     }
     demoType.u(DemoType.values.byName(name));
 
