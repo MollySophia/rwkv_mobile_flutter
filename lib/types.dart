@@ -60,5 +60,11 @@ class StartOptions {
   final SendPort sendPort;
   final RootIsolateToken rootIsolateToken;
 
-  const StartOptions(this.modelPath, this.tokenizerPath, this.backend, this.sendPort, this.rootIsolateToken);
+  const StartOptions(
+    this.modelPath,
+    this.tokenizerPath,
+    this.backend,
+    this.sendPort,
+    this.rootIsolateToken,
+  );
 }

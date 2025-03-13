@@ -176,11 +176,11 @@ class _Value extends ConsumerWidget {
     final newValue = double.parse(value.toStringAsFixed(argument.fixedDecimals));
     P.rwkv.arguments(argument).u(newValue);
     if (argument == Argument.maxLength) {
-      P.rwkv.debouncer.call(() {
+      P.rwkv.argumentUpdatingDebouncer.call(() {
         P.rwkv.syncMaxLength();
       });
     } else {
-      P.rwkv.debouncer.call(() {
+      P.rwkv.argumentUpdatingDebouncer.call(() {
         P.rwkv.syncSamplerParams();
       });
     }

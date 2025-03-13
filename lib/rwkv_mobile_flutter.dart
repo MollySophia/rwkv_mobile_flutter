@@ -13,15 +13,14 @@ class RWKVMobile {
 
   bool get isRunning => _isolate != null;
 
-  Future<void> runIsolate(String modelPath, String tokenizerPath, Backend backend, SendPort sendPort, RootIsolateToken rootIsolateToken) async {
+  Future<void> runIsolate(StartOptions options) async {
     if (_isolate != null) {
       throw Exception('Isolate already running');
     }
-
-    _isolate = await Isolate.spawn(isolateMain, StartOptions(modelPath, tokenizerPath, backend, sendPort, rootIsolateToken));
+    _isolate = await Isolate.spawn(_isolateMain, options);
   }
 
-  ffi.DynamicLibrary getDynamicLibrary() {
+  ffi.DynamicLibrary _getDynamicLibrary() {
     if (Platform.isAndroid) {
       return ffi.DynamicLibrary.open('librwkv_mobile.so');
     } else if (Platform.isIOS) {
@@ -31,12 +30,13 @@ class RWKVMobile {
     } else if (Platform.isWindows) {
       return ffi.DynamicLibrary.open('librwkv_mobile.dll');
     } else {
+      // TODO: @Molly: Do we need to support other Linux?
       throw Exception('Unsupported platform');
     }
   }
 
   String getAvailableBackendNames() {
-    final rwkvMobile = rwkv_mobile(getDynamicLibrary());
+    final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
     const backendNamesLength = 64; // should be enough
     ffi.Pointer<ffi.Char> responseBuffer = calloc.allocate<ffi.Char>(backendNamesLength);
     rwkvMobile.rwkvmobile_runtime_get_available_backend_names(responseBuffer, backendNamesLength);
@@ -44,7 +44,7 @@ class RWKVMobile {
     return response;
   }
 
-  void isolateMain(StartOptions options) async {
+  void _isolateMain(StartOptions options) async {
     final sendPort = options.sendPort;
     final rootIsolateToken = options.rootIsolateToken;
     final receivePort = ReceivePort();
@@ -52,7 +52,7 @@ class RWKVMobile {
 
     BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
 
-    final rwkvMobile = rwkv_mobile(getDynamicLibrary());
+    final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
 
     // definitions
     int maxLength = 2000;

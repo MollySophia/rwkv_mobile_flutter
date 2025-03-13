@@ -2,6 +2,7 @@ part of 'p.dart';
 
 class _RWKV {
   SendPort? _sendPort;
+
   late final _receivePort = ReceivePort();
 
   late final _messagesController = StreamController<JSON>();
@@ -41,7 +42,7 @@ class _RWKV {
 
   late final loading = _gs(false);
 
-  late final debouncer = Debouncer(milliseconds: 300);
+  late final argumentUpdatingDebouncer = Debouncer(milliseconds: 300);
 }
 
 /// Public methods
@@ -158,13 +159,14 @@ extension $RWKV on _RWKV {
         return;
       }
     } else {
-      await rwkvMobile.runIsolate(
+      final options = StartOptions(
         modelPath,
         tokenizerPath,
         backend,
         _receivePort.sendPort,
         rootIsolateToken!,
       );
+      await rwkvMobile.runIsolate(options);
     }
 
     while (_sendPort == null) {
@@ -280,13 +282,14 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
         {"modelPath": modelPath, "backend": backend, "tokenizerPath": tokenizerPath},
       ));
     } else {
-      await rwkvMobile.runIsolate(
+      final options = StartOptions(
         modelPath,
         tokenizerPath,
         backend,
         _receivePort.sendPort,
         rootIsolateToken!,
       );
+      await rwkvMobile.runIsolate(options);
     }
 
     while (_sendPort == null) {
@@ -462,7 +465,6 @@ enum _RWKVMessageType {
     return values.firstWhere((e) => e.name == str);
   }
 }
-
 
 enum _DemoType {
   othello,
