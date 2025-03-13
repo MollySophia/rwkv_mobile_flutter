@@ -229,16 +229,10 @@ extension _$Chat on _Chat {
     P.app.pageKey.l(_onPageKeyChanged);
 
     P.rwkv.broadcastStream.listen((event) {
-      final demoType = P.app.demoType.v;
-      if (demoType != DemoType.chat) return;
       _onStreamEvent(event: event);
     }, onDone: () {
-      final demoType = P.app.demoType.v;
-      if (demoType != DemoType.chat) return;
       _onStreamDone();
     }, onError: (error, stackTrace) {
-      final demoType = P.app.demoType.v;
-      if (demoType != DemoType.chat) return;
       _onStreamError(error: error, stackTrace: stackTrace);
     });
 
