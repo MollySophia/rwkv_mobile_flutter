@@ -28,12 +28,12 @@ class VisualEmpty extends ConsumerWidget {
       message: "Please select an image from the following options",
       cancelLabel: "Cancel",
       actions: [
-        SheetAction(
+        const SheetAction(
           label: "Take photo",
           icon: Icons.camera,
           key: "take_photo",
         ),
-        SheetAction(
+        const SheetAction(
           label: "Select from library",
           icon: Icons.photo,
           key: "select_from_library",
@@ -97,7 +97,7 @@ class VisualEmpty extends ConsumerWidget {
                   width: math.min(maxW, maxH) - 16,
                   height: math.min(maxW, maxH) * 0.75,
                   child: imagePath == null
-                      ? Co(
+                      ? const Co(
                           c: CAA.center,
                           m: MAA.center,
                           children: [

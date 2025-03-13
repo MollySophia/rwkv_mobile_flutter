@@ -89,8 +89,8 @@ class ModelGroupItem extends ConsumerWidget {
                     border: Border.all(color: primaryColor),
                     borderRadius: 6.r,
                   ),
-                  padding: EI.s(v: 4, h: 4),
-                  margin: EI.o(t: 8),
+                  padding: const EI.s(v: 4, h: 4),
+                  margin: const EI.o(t: 8),
                   child: FileKeyItem(e),
                 )),
             Ro(
@@ -98,9 +98,9 @@ class ModelGroupItem extends ConsumerWidget {
                 if (!allDownloaded && !downloading)
                   TextButton(
                     onPressed: _onDownloadAllTap,
-                    child: T(
+                    child: const T(
                       "Download All",
-                      s: const TS(
+                      s: TS(
                         w: FW.w600,
                       ),
                     ),
@@ -108,20 +108,20 @@ class ModelGroupItem extends ConsumerWidget {
                 if (allDownloaded)
                   TextButton(
                     onPressed: _onDeleteAllTap,
-                    child: T(
+                    child: const T(
                       "Delete All",
-                      s: const TS(
+                      s: TS(
                         w: FW.w600,
                       ),
                     ),
                   ),
-                Spacer(),
+                const Spacer(),
                 if (allDownloaded)
                   TextButton(
                     onPressed: _onStartToChatTap,
-                    child: T(
+                    child: const T(
                       "Start to Chat",
-                      s: const TS(
+                      s: TS(
                         w: FW.w600,
                       ),
                     ),

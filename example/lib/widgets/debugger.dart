@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:zone/route/page_key.dart';
 import 'package:zone/state/p.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,7 +29,7 @@ class Debugger extends ConsumerWidget {
           color: kC,
           child: SB(
             child: C(
-              decoration: BD(color: kC),
+              decoration: const BD(color: kC),
               child: Co(
                 m: MAA.center,
                 c: CAA.start,

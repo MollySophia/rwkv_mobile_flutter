@@ -5,7 +5,6 @@ import 'dart:ui';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:zone/gen/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
@@ -46,9 +45,9 @@ class ChatAppBar extends ConsumerWidget {
             backgroundColor: kW.wo(0.6),
             elevation: 0,
             centerTitle: true,
-            title: AutoSizeText(
+            title: const AutoSizeText(
               "RWKV Chat",
-              style: const TextStyle(fontSize: 20),
+              style: TextStyle(fontSize: 20),
               minFontSize: 0,
               maxLines: 2,
             ),

@@ -58,7 +58,7 @@ class ModelSelector extends ConsumerWidget {
             4.h,
             T(S.current.download_source, s: TS(c: kB.wo(0.7), s: 14, w: FW.w600)),
             4.h,
-            _DownloadSource(),
+            const _DownloadSource(),
             4.h,
             if (demoType == DemoType.world)
               for (final worldType in WorldType.values) ModelGroupItem(worldType),
