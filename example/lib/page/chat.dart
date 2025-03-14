@@ -13,6 +13,7 @@ import 'package:zone/widgets/chat/app_bar.dart';
 import 'package:zone/widgets/chat/empty.dart';
 import 'package:zone/widgets/chat/input.dart';
 import 'package:zone/widgets/chat/message.dart';
+import 'package:zone/widgets/chat/visual_float.dart';
 import 'package:zone/widgets/model_selector.dart';
 
 class PageChat extends StatefulWidget {
@@ -91,6 +92,7 @@ class _PageChatState extends State<PageChat> {
         children: [
           _List(),
           Empty(),
+          VisualFloat(),
           //
           ChatAppBar(),
           _NavigationBarBottomLine(),
@@ -255,6 +257,16 @@ class _List extends ConsumerWidget {
     final useReverse = ref.watch(P.chat.useReverse);
     final loaded = ref.watch(P.rwkv.loaded);
 
+    double top = paddingTop + kToolbarHeight + 4;
+
+    final currentWorldType = ref.watch(P.rwkv.currentWorldType);
+    if (currentWorldType == WorldType.engVisualQA) {
+      final visualFloatHeight = ref.watch(P.world.visualFloatHeight);
+      if (visualFloatHeight != null) {
+        top = paddingTop + kToolbarHeight + 4 + visualFloatHeight;
+      }
+    }
+
     return Positioned.fill(
       child: GD(
         onTap: P.chat.onTapMessageList,
@@ -262,13 +274,13 @@ class _List extends ConsumerWidget {
           radius: 100.rr,
           thickness: 4,
           thumbColor: kB.wo(0.4),
-          padding: EI.o(r: 4, b: inputHeight + 4, t: paddingTop + kToolbarHeight + 4),
+          padding: EI.o(r: 4, b: inputHeight + 4, t: top),
           controller: P.chat.scrollController,
           child: ListView.separated(
             reverse: useReverse,
             physics: loaded ? const AlwaysScrollableScrollPhysics() : const NeverScrollableScrollPhysics(),
             padding: EI.o(
-              t: paddingTop + kToolbarHeight + 12,
+              t: top,
               b: inputHeight + 12,
             ),
             controller: P.chat.scrollController,
@@ -299,6 +311,8 @@ class _ScrollToBottomButton extends ConsumerWidget {
     final screenWidth = ref.watch(P.app.screenWidth);
     final loaded = ref.watch(P.rwkv.loaded);
     final buttonSize = 36.0;
+    final demoType = ref.watch(P.app.demoType);
+    if (demoType != DemoType.chat) return Positioned.fill(child: IgnorePointer(child: Container()));
     if (!loaded) return Positioned.fill(child: IgnorePointer(child: Container()));
     return AnimatedPositioned(
       duration: 350.ms,

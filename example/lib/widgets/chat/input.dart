@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:zone/func/log_trace.dart';
+import 'package:zone/func/show_image_selector.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/widgets/alert.dart';
 import 'package:flutter/material.dart';
@@ -58,6 +59,24 @@ class Input extends ConsumerWidget {
     final color = Theme.of(context).colorScheme.primary;
     final loaded = ref.watch(P.rwkv.loaded);
 
+    // final hintText = ref.watch(P.rwkv.currentWorldType) == WorldType.engVisualQA ? "Describe the image" : S.current.send_message_to_rwkv;
+
+    String hintText = S.current.send_message_to_rwkv;
+    final currentWorldType = ref.watch(P.rwkv.currentWorldType);
+    final imagePath = ref.watch(P.world.imagePath);
+    if (currentWorldType == WorldType.engVisualQA) {
+      if (imagePath != null && imagePath.isNotEmpty) {
+        hintText = "Ask me anything about the image";
+      } else {
+        hintText = "Please select an image or take a photo";
+      }
+    }
+
+    bool enabled = loaded;
+    if (currentWorldType == WorldType.engVisualQA) {
+      enabled = imagePath != null && imagePath.isNotEmpty;
+    }
+
     return Positioned(
       bottom: 0,
       left: 0,
@@ -78,7 +97,7 @@ class Input extends ConsumerWidget {
                     onKeyEvent: _onKeyEvent,
                     focusNode: P.chat.focusNode,
                     child: TextField(
-                      enabled: loaded,
+                      enabled: enabled,
                       controller: P.chat.textEditingController,
                       onSubmitted: P.chat.onSubmitted,
                       onChanged: _onChanged,
@@ -118,7 +137,7 @@ class Input extends ConsumerWidget {
                           borderRadius: 12.r,
                           borderSide: BorderSide(color: color.wo(0.33)),
                         ),
-                        hintText: S.current.send_message_to_rwkv,
+                        hintText: hintText,
                       ),
                     ),
                   ),
@@ -139,6 +158,15 @@ class _BottomBar extends ConsumerWidget {
 
   void _onRightButtonPressed() async {
     logTrace();
+
+    final currentWorldType = P.rwkv.currentWorldType.v;
+    final imagePath = P.world.imagePath.v;
+
+    if (currentWorldType != null && imagePath == null) {
+      await showImageSelector();
+      return;
+    }
+
     await P.chat.onInputRightButtonPressed();
   }
 
@@ -153,9 +181,30 @@ class _BottomBar extends ConsumerWidget {
     final decodeSpeed = ref.watch(P.rwkv.decodeSpeed);
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
     final demoType = ref.watch(P.app.demoType);
+    final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
 
     return Row(
       children: [
+        if (currentWorldType == WorldType.engVisualQA)
+          GD(
+            onTap: () async {
+              await showImageSelector();
+            },
+            child: C(
+              decoration: BD(
+                color: primaryContainer,
+                border: Border.all(
+                  color: color.wo(0.5),
+                ),
+                borderRadius: 12.r,
+              ),
+              padding: const EI.o(l: 8, r: 8, t: 8, b: 8),
+              child: T(
+                "Select new image",
+                s: TS(c: color),
+              ),
+            ),
+          ),
         if (demoType == DemoType.chat)
           GD(
             onTap: () {

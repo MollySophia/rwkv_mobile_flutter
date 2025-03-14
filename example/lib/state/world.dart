@@ -9,6 +9,8 @@ enum WorldType {
 class _World {
   late final type = _gs(WorldType.engVisualQA);
   late final imagePath = _gsn<String>();
+  late final imageHeight = _gsn<double>();
+  late final visualFloatHeight = _gsn<double>();
 }
 
 /// Public methods
