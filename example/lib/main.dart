@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:zone/args.dart';
+import 'package:zone/config.dart';
 import 'package:zone/widgets/chat_debugger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -45,13 +46,13 @@ class _App extends StatelessWidget {
         ],
         theme: ThemeData(
           brightness: Brightness.light,
-          appBarTheme: const AppBarTheme(scrolledUnderElevation: 0, backgroundColor: Color(0xFFF4F8FF)),
-          scaffoldBackgroundColor: const Color(0xFFF4F8FF),
+          appBarTheme: const AppBarTheme(scrolledUnderElevation: 0, backgroundColor: kBG),
+          scaffoldBackgroundColor: kBG,
         ),
         darkTheme: ThemeData(
           brightness: Brightness.light,
-          appBarTheme: const AppBarTheme(scrolledUnderElevation: 0, backgroundColor: Color(0xFFF4F8FF)),
-          scaffoldBackgroundColor: const Color(0xFFF4F8FF),
+          appBarTheme: const AppBarTheme(scrolledUnderElevation: 0, backgroundColor: kBG),
+          scaffoldBackgroundColor: kBG,
         ),
         debugShowCheckedModeBanner: kDebugMode,
         routerConfig: kRouter,

@@ -167,7 +167,7 @@ extension $Chat on _Chat {
     messages.u([]);
   }
 
-  FV send(String message) async {
+  FV send(String message, {MessageType type = MessageType.text, String? imageUrl, String? audioUrl}) async {
     // debugger();
     if (kDebugMode) print("💬 $runtimeType.send: $message");
 
@@ -184,6 +184,9 @@ extension $Chat on _Chat {
       id: id,
       content: message,
       isMine: true,
+      type: type,
+      imageUrl: imageUrl,
+      audioUrl: audioUrl,
     );
     messages.ua(msg);
     Future.delayed(34.ms).then((_) {
@@ -243,6 +246,23 @@ extension _$Chat on _Chat {
     });
 
     _loadRoles();
+
+    P.world.audioFileStreamController.stream.listen((event) {
+      final demoType = P.app.demoType.v;
+      if (demoType != DemoType.world) return;
+
+      final file = event.file;
+      final length = event.length;
+      final path = file.path;
+      final duration = Duration(milliseconds: length);
+      final durationString = Duration(milliseconds: length).toString();
+
+      send(
+        "What in this image?",
+        type: MessageType.audio,
+        audioUrl: path,
+      );
+    });
   }
 
   FV _loadRoles() async {

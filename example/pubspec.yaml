@@ -17,11 +17,11 @@ dependencies:
     path: ../
 
   adaptive_dialog: ^2.4.0 # https://pub.dev/packages/adaptive_dialog/
+  audioplayers: # https://pub.dev/packages/audioplayers/
   auto_size_text: # https://pub.dev/packages/auto_size_text/
   background_downloader: # https://pub.dev/packages/background_downloader/
   collection: # https://pub.dev/packages/collection/
   crypto: # https://pub.dev/packages/crypto/
-  image_picker: # https://pub.dev/packages/image_picker/
   cupertino_icons: # https://pub.dev/packages/cupertino_icons/
   device_info_plus: # https://pub.dev/packages/device_info_plus/
   flutter_cache_manager: # https://pub.dev/packages/flutter_cache_manager/
@@ -34,11 +34,13 @@ dependencies:
   go_router: # https://pub.dev/packages/go_router/
   halo: # https://pub.dev/packages/halo/
   http: # https://pub.dev/packages/http/
+  image_picker: # https://pub.dev/packages/image_picker/
   intl: # https://pub.dev/packages/intl/
   json_annotation: # https://pub.dev/packages/json_annotation/
   package_info_plus: # https://pub.dev/packages/package_info_plus/
   path: # https://pub.dev/packages/path/
   path_provider: # https://pub.dev/packages/path_provider/
+  record: # https://pub.dev/packages/record/
   shared_preferences: # https://pub.dev/packages/shared_preferences/
   stack_trace: # https://pub.dev/packages/stack_trace/
   system_info2: # https://pub.dev/packages/system_info2/

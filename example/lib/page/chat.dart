@@ -2,6 +2,7 @@
 import 'dart:developer';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/role.dart';
 import 'package:zone/route/router.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:zone/state/p.dart';
 import 'package:zone/widgets/chat/app_bar.dart';
+import 'package:zone/widgets/chat/audio_input.dart';
 import 'package:zone/widgets/chat/empty.dart';
 import 'package:zone/widgets/chat/input.dart';
 import 'package:zone/widgets/chat/message.dart';
@@ -99,8 +101,8 @@ class _PageChatState extends State<PageChat> {
           //
           _ScrollToBottomButton(),
           //
-          _InputTopLine(),
           Input(),
+          AudioInput(),
         ],
       ),
     );
@@ -202,25 +204,6 @@ class _RoleSelector extends ConsumerWidget {
             paddingBottom.h,
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _InputTopLine extends ConsumerWidget {
-  const _InputTopLine();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final inputHeight = ref.watch(P.chat.inputHeight);
-    return Positioned(
-      bottom: inputHeight,
-      left: 0,
-      right: 0,
-      height: 0.5,
-      child: C(
-        height: kToolbarHeight,
-        color: kB.wo(0.1),
       ),
     );
   }

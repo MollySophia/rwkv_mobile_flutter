@@ -56,9 +56,9 @@ class Input extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final paddingBottom = ref.watch(P.app.paddingBottom);
-    final color = Theme.of(context).colorScheme.primary;
+    final primary = Theme.of(context).colorScheme.primary;
     final loaded = ref.watch(P.rwkv.loaded);
-
+    final screenWidth = ref.watch(P.app.screenWidth);
     // final hintText = ref.watch(P.rwkv.currentWorldType) == WorldType.engVisualQA ? "Describe the image" : S.current.send_message_to_rwkv;
 
     String hintText = S.current.send_message_to_rwkv;
@@ -89,7 +89,15 @@ class Input extends ConsumerWidget {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
             child: C(
-              decoration: BD(color: kW.wo(0.8)),
+              decoration: BD(
+                color: kW.wo(0.8),
+                border: Border(
+                  top: BorderSide(
+                    color: primary.wo(0.33),
+                    width: 0.5,
+                  ),
+                ),
+              ),
               padding: EI.o(l: 12, r: 12, b: paddingBottom + 12, t: 12),
               child: Co(
                 children: [
@@ -123,19 +131,19 @@ class Input extends ConsumerWidget {
                         iconColor: kW,
                         border: OutlineInputBorder(
                           borderRadius: 12.r,
-                          borderSide: BorderSide(color: color.wo(0.33)),
+                          borderSide: BorderSide(color: primary.wo(0.33)),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: 12.r,
-                          borderSide: BorderSide(color: color.wo(0.33)),
+                          borderSide: BorderSide(color: primary.wo(0.33)),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: 12.r,
-                          borderSide: BorderSide(color: color.wo(0.33)),
+                          borderSide: BorderSide(color: primary.wo(0.33)),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
                           borderRadius: 12.r,
-                          borderSide: BorderSide(color: color.wo(0.33)),
+                          borderSide: BorderSide(color: primary.wo(0.33)),
                         ),
                         hintText: hintText,
                       ),

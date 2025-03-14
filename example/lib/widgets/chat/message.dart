@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:zone/func/log_trace.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/widgets/alert.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,13 @@ class Message extends ConsumerWidget {
     if (href != null) {
       await launchUrl(Uri.parse(href));
     }
+  }
+
+  void _onTapAudio() {
+    final audioUrl = msg.audioUrl;
+    logTrace("audioUrl: $audioUrl");
+    if (audioUrl == null) return;
+    P.world.play(path: audioUrl);
   }
 
   @override
@@ -150,6 +158,9 @@ class Message extends ConsumerWidget {
 
     final showingCotContent = cotContentHeight != 0;
 
+    final isImage = msg.type == model.MessageType.image;
+    final isAudio = msg.type == model.MessageType.audio;
+
     return Align(
       alignment: alignment,
       child: Stack(
@@ -182,7 +193,15 @@ class Message extends ConsumerWidget {
                       c: isMine ? CAA.end : CAA.start,
                       children: [
                         // 🔥 User message
-                        if (isMine) T(finalContent, s: const TS(c: kB)),
+                        if (isMine && !isImage && !isAudio) T(finalContent, s: const TS(c: kB)),
+                        // 🔥 User message image
+                        if (isMine && isImage) Image.network(msg.imageUrl!),
+                        // 🔥 User message audio
+                        if (isMine && isAudio)
+                          GD(
+                            onTap: _onTapAudio,
+                            child: Icon(Icons.voice_chat, color: primaryColor),
+                          ),
                         // 🔥 Bot message
                         if (!isMine && !usingReasoningModel)
                           MarkdownBody(
@@ -246,8 +265,8 @@ class Message extends ConsumerWidget {
                             onTapLink: _onTapLink,
                           ),
                         // 🔥 User message bottom row
-                        if (isMine) 12.h,
-                        if (isMine)
+                        if (isMine && !isImage && !isAudio) 12.h,
+                        if (isMine && !isImage && !isAudio)
                           Ro(
                             m: MAA.end,
                             mainAxisSize: MainAxisSize.min,
