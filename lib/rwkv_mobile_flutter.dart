@@ -193,6 +193,13 @@ class RWKVMobile {
         if (retVal != 0) {
           throw Exception('Failed to set token banned');
         }
+      } else if (command == 'setUserRole') {
+        final arg = message.$2 as String;
+        final userRolePtr = arg.toNativeUtf8().cast<ffi.Char>();
+        retVal = rwkvMobile.rwkvmobile_runtime_set_user_role(runtime, userRolePtr);
+        if (retVal != 0) {
+          throw Exception('Failed to set user role');
+        }
       } else if (command == 'loadVisionEncoder') {
         final arg = message.$2 as String;
         final encoderPathPtr = arg.toNativeUtf8().cast<ffi.Char>();
@@ -200,12 +207,36 @@ class RWKVMobile {
         if (retVal != 0) {
           throw Exception('Failed to load vision encoder');
         }
+      } else if (command == 'releaseVisionEncoder') {
+        retVal = rwkvMobile.rwkvmobile_runtime_release_vision_encoder(runtime);
+        if (retVal != 0) {
+          throw Exception('Failed to release vision encoder');
+        }
       } else if (command == 'setVisionPrompt') {
         final arg = message.$2 as String;
         final imagePathPtr = arg.toNativeUtf8().cast<ffi.Char>();
         retVal = rwkvMobile.rwkvmobile_runtime_set_image_prompt(runtime, imagePathPtr);
         if (retVal != 0) {
           throw Exception('Failed to set image prompt');
+        }
+      } else if (command == 'loadWhisperEncoder') {
+        final arg = message.$2 as String;
+        final encoderPathPtr = arg.toNativeUtf8().cast<ffi.Char>();
+        retVal = rwkvMobile.rwkvmobile_runtime_load_whisper_encoder(runtime, encoderPathPtr);
+        if (retVal != 0) {
+          throw Exception('Failed to load whisper encoder');
+        }
+      } else if (command == 'releaseWhisperEncoder') {
+        retVal = rwkvMobile.rwkvmobile_runtime_release_whisper_encoder(runtime);
+        if (retVal != 0) {
+          throw Exception('Failed to release whisper encoder');
+        }
+      } else if (command == 'setAudioPrompt') {
+        final arg = message.$2 as String;
+        final audioPathPtr = arg.toNativeUtf8().cast<ffi.Char>();
+        retVal = rwkvMobile.rwkvmobile_runtime_set_audio_prompt(runtime, audioPathPtr);
+        if (retVal != 0) {
+          throw Exception('Failed to set audio prompt');
         }
       } else if (command == 'message') {
         final messages = message.$2 as List<String>;
@@ -216,24 +247,14 @@ class RWKVMobile {
 
         callbackFunction(ffi.Pointer<ffi.Char> s) {
           final (prefillSpeed, decodeSpeed) = getPrefillAndDecodeSpeed();
-          final responseObject = {
-            'streamResponse': s.cast<Utf8>().toDartString(),
-            'prefillSpeed': prefillSpeed,
-            'decodeSpeed': decodeSpeed,
-          };
+          final responseObject = {'streamResponse': s.cast<Utf8>().toDartString(), 'prefillSpeed': prefillSpeed, 'decodeSpeed': decodeSpeed};
           try {
             final response = s.cast<Utf8>().toDartString();
             responseBuffer = response;
-            sendPort.send({
-              'streamResponse': response,
-              ...responseObject,
-            });
+            sendPort.send({'streamResponse': response, ...responseObject});
           } catch (e) {
             if (kDebugMode) print("😡 Error: $e");
-            sendPort.send({
-              'streamResponse': responseBuffer,
-              ...responseObject,
-            });
+            sendPort.send({'streamResponse': responseBuffer, ...responseObject});
           }
         }
 
@@ -257,12 +278,7 @@ class RWKVMobile {
         callbackFunction(ffi.Pointer<ffi.Char> stream, int idx) {
           final (prefillSpeed, decodeSpeed) = getPrefillAndDecodeSpeed();
           responseStr += stream.cast<Utf8>().toDartString();
-          sendPort.send({
-            'streamResponse': stream.cast<Utf8>().toDartString(),
-            'streamResponseToken': idx,
-            'prefillSpeed': prefillSpeed,
-            'decodeSpeed': decodeSpeed,
-          });
+          sendPort.send({'streamResponse': stream.cast<Utf8>().toDartString(), 'streamResponseToken': idx, 'prefillSpeed': prefillSpeed, 'decodeSpeed': decodeSpeed});
         }
 
         final nativeCallable = ffi.NativeCallable<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int)>.isolateLocal(callbackFunction);
