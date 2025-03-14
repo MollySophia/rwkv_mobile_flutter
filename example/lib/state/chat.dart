@@ -3,38 +3,39 @@ part of 'p.dart';
 class _Chat {
   late final messages = _gs<List<Message>>([]);
 
+  /// The key of it is the id of the message
+  late final cotDisplayState = StateProvider.family<CoTDisplayState, int>((ref, index) {
+    return CoTDisplayState.showCotHeaderIfCotResultIsEmpty;
+  });
+
   late final scrollController = ScrollController();
 
   late final textEditingController = TextEditingController();
 
   late final focusNode = FocusNode();
 
-  late final text = _gs("");
+  late final _textInInput = _gs("");
 
   late final canSend = _gp((ref) {
-    final _text = ref.watch(text);
-    return _text.trim().isNotEmpty;
+    final textInInput = ref.watch(_textInInput);
+    return textInInput.trim().isNotEmpty;
   });
 
   /// Disable sender
-  late final receiving = _gs(false);
+  ///
+  /// TODO: Should be moved to state/rwkv.dart
+  late final receivingTokens = _gs(false);
 
-  late final received = _gs("");
-
-  late final parsedStream = StreamController<String>();
+  /// TODO: Should be moved to state/rwkv.dart
+  late final receivedTokens = _gs("");
 
   late final scrollOffset = _gs(0.0);
 
   late final inputHeight = _gs(77.0);
 
-  late final useReverse = _gs(true);
-
   late final atBottom = _gp((ref) {
-    final useReverse = ref.watch(this.useReverse);
     final scrollOffset = ref.watch(this.scrollOffset);
-    if (useReverse) return scrollOffset <= 0;
-    final maxScrollExtent = scrollController.position.maxScrollExtent;
-    return scrollOffset >= maxScrollExtent;
+    return scrollOffset <= 0;
   });
 
   late final receiveId = _gsn<int>();
@@ -47,14 +48,12 @@ class _Chat {
     return messages.v[editingIndex].isMine == false;
   });
 
+  /// TODO: Should be moved to state/remote_file.dart
   late final showingModelSelector = _gs(false);
-  late final showingCharacterSelector = _gs(false);
-  late final showingRoleSelector = _gs(false);
-  late final roles = _gs<List<Role>>([]);
 
-  late final cotDisplayState = StateProvider.family<CoTDisplayState, int>((ref, index) {
-    return CoTDisplayState.showCotHeaderIfCotResultIsEmpty;
-  });
+  late final showingCharacterSelector = _gs(false);
+
+  late final roles = _gs<List<Role>>([]);
 }
 
 /// Public methods
@@ -68,8 +67,8 @@ extension $Chat on _Chat {
     if (!canSend.v) return;
 
     focusNode.unfocus();
-    final textToSend = text.v.trim();
-    text.uc();
+    final textToSend = _textInInput.v.trim();
+    _textInInput.uc();
 
     final _editingBotMessage = editingBotMessage.v;
     if (_editingBotMessage) {
@@ -97,9 +96,9 @@ extension $Chat on _Chat {
 
   FV onSubmitted(String aString) async {
     if (kDebugMode) print("💬 $runtimeType.onSubmitted: $aString");
-    final textToSend = text.v.trim();
+    final textToSend = _textInInput.v.trim();
     if (textToSend.isEmpty) return;
-    text.uc();
+    _textInInput.uc();
     focusNode.unfocus();
     await send(textToSend);
   }
@@ -132,20 +131,13 @@ extension $Chat on _Chat {
     // editingIndex.u(index - 1);
     // onSendPressed();
     editingIndex.u(index - 1);
-    text.uc();
+    _textInInput.uc();
     focusNode.unfocus();
     await send(messages.v[index - 1].content);
   }
 
   FV scrollToBottom({Duration? duration, bool? animate = true}) async {
-    final useReverse = P.chat.useReverse.v;
-
-    if (useReverse) {
-      await scrollTo(offset: 0, duration: duration, animate: animate);
-      return;
-    }
-
-    await scrollTo(offset: scrollController.position.maxScrollExtent, duration: duration, animate: animate);
+    await scrollTo(offset: 0, duration: duration, animate: animate);
   }
 
   FV scrollTo({required double offset, Duration? duration, bool? animate = true}) async {
@@ -202,8 +194,8 @@ extension $Chat on _Chat {
     P.rwkv.send(withHistory ? messages.v.m((e) => e.content) : [message]);
     editingIndex.u(null);
 
-    received.uc();
-    receiving.u(true);
+    receivedTokens.uc();
+    receivingTokens.u(true);
 
     final receiveId = DateTime.now().microsecondsSinceEpoch;
     this.receiveId.u(receiveId);
@@ -229,7 +221,7 @@ extension _$Chat on _Chat {
     if (kDebugMode) print("💬 $runtimeType._init");
 
     textEditingController.addListener(_onTextEditingControllerValueChanged);
-    text.l(_onTextChanged);
+    _textInInput.l(_onTextChanged);
 
     scrollController.addListener(() {
       scrollOffset.u(scrollController.offset);
@@ -237,40 +229,33 @@ extension _$Chat on _Chat {
 
     P.app.pageKey.l(_onPageKeyChanged);
 
-    P.rwkv.broadcastStream.listen((event) {
-      final demoType = P.app.demoType.v;
-      if (demoType != DemoType.chat && demoType != DemoType.world) return;
-      _onStreamEvent(event: event);
-    }, onDone: () {
-      final demoType = P.app.demoType.v;
-      if (demoType != DemoType.chat && demoType != DemoType.world) return;
-      _onStreamDone();
-    }, onError: (error, stackTrace) {
-      final demoType = P.app.demoType.v;
-      if (demoType != DemoType.chat && demoType != DemoType.world) return;
-      _onStreamError(error: error, stackTrace: stackTrace);
-    });
+    P.rwkv.broadcastStream.listen(
+      _onStreamEvent,
+      onDone: _onStreamDone,
+      onError: _onStreamError,
+    );
 
     _loadRoles();
 
-    P.world.audioFileStreamController.stream.listen((event) async {
-      final demoType = P.app.demoType.v;
-      if (demoType != DemoType.world) return;
+    P.world.audioFileStreamController.stream.listen(_onNewFileReceived);
+  }
 
-      final file = event.file;
-      final length = event.length;
-      final path = file.path;
-      final duration = Duration(milliseconds: length);
-      final durationString = Duration(milliseconds: length).toString();
+  FV _onNewFileReceived((File, int) event) async {
+    final demoType = P.app.demoType.v;
+    if (demoType != DemoType.world) return;
 
-      final t0 = DateTime.now().millisecondsSinceEpoch;
-      P.rwkv.setAudioPrompt(path: path);
-      final t1 = DateTime.now().millisecondsSinceEpoch;
-      if (kDebugMode) print("💬 setAudioPrompt done in ${t1 - t0}ms");
-      send("", type: MessageType.audio, audioUrl: path, withHistory: false);
-      final t2 = DateTime.now().millisecondsSinceEpoch;
-      if (kDebugMode) print("💬 send done in ${t2 - t1}ms");
-    });
+    final (file, length) = event;
+    final path = file.path;
+    final duration = Duration(milliseconds: length);
+    final durationString = Duration(milliseconds: length).toString();
+
+    final t0 = DateTime.now().millisecondsSinceEpoch;
+    P.rwkv.setAudioPrompt(path: path);
+    final t1 = DateTime.now().millisecondsSinceEpoch;
+    if (kDebugMode) print("💬 setAudioPrompt done in ${t1 - t0}ms");
+    send("", type: MessageType.audio, audioUrl: path, withHistory: false);
+    final t2 = DateTime.now().millisecondsSinceEpoch;
+    if (kDebugMode) print("💬 send done in ${t2 - t1}ms");
   }
 
   FV _loadRoles() async {
@@ -298,7 +283,7 @@ extension _$Chat on _Chat {
   void _onTextEditingControllerValueChanged() {
     // if (kDebugMode) print("💬 _onTextEditingControllerValueChanged");
     final textInController = textEditingController.text;
-    if (text.v != textInController) text.u(textInController);
+    if (_textInInput.v != textInController) _textInInput.u(textInController);
   }
 
   void _onTextChanged(String next) {
@@ -315,7 +300,7 @@ extension _$Chat on _Chat {
       if (msg.id == receiveId.v) {
         final newMsg = Message(
           id: msg.id,
-          content: received.v,
+          content: receivedTokens.v,
           isMine: msg.isMine,
           changing: false,
         );
@@ -328,51 +313,54 @@ extension _$Chat on _Chat {
     messages.u(currentMessages);
   }
 
-  FV _onStreamEvent({required JSON event}) async {
+  FV _onStreamEvent(JSON event) async {
+    final demoType = P.app.demoType.v;
+    if (demoType != DemoType.chat && demoType != DemoType.world) return;
     final type = _RWKVMessageType.fromString(event["type"]);
     switch (type) {
       case _RWKVMessageType.response:
         final content = event["content"];
         logTrace("content: $content");
-        received.u(content);
-        receiving.u(false);
+        receivedTokens.u(content);
+        receivingTokens.u(false);
         _fullyReceived();
         break;
       case _RWKVMessageType.generateStart:
-        receiving.u(true);
-        received.u("");
+        receivedTokens.u("");
+        receivingTokens.u(true);
         break;
       case _RWKVMessageType.streamResponse:
         final content = event["content"];
-        received.u(content);
-        receiving.u(true);
+        receivedTokens.u(content);
+        receivingTokens.u(true);
         break;
       case _RWKVMessageType.currentPrompt:
         final content = event["content"];
-        received.u(content);
+        receivedTokens.u(content);
         break;
       case _RWKVMessageType.samplerParams:
         final content = event["content"];
-        received.u(content);
+        receivedTokens.u(content);
         break;
       case _RWKVMessageType.generateStop:
-        received.u("");
+        receivedTokens.u("");
         break;
     }
   }
 
   FV _onStreamDone() async {
-    if (kDebugMode) print("💬 _onStreamDone");
-    receiving.u(false);
+    logTrace();
+    final demoType = P.app.demoType.v;
+    if (demoType != DemoType.chat && demoType != DemoType.world) return;
+    receivingTokens.u(false);
   }
 
-  FV _onStreamError({
-    required Object error,
-    required StackTrace stackTrace,
-  }) async {
+  FV _onStreamError(Object error, StackTrace stackTrace) async {
+    final demoType = P.app.demoType.v;
+    if (demoType != DemoType.chat && demoType != DemoType.world) return;
     if (kDebugMode) print("💬 _onStreamError");
     if (kDebugMode) print("😡 error: $error");
-    receiving.u(false);
+    receivingTokens.u(false);
   }
 }
 

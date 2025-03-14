@@ -180,7 +180,7 @@ class _BottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final receiving = ref.watch(P.chat.receiving);
+    final receiving = ref.watch(P.chat.receivingTokens);
     final canSend = ref.watch(P.chat.canSend);
     final editingBotMessage = ref.watch(P.chat.editingBotMessage);
     final color = Theme.of(context).colorScheme.primary;

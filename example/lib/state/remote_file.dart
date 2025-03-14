@@ -2,27 +2,6 @@
 
 part of 'p.dart';
 
-enum RemoteFileSource {
-  aifasthub,
-  huggingface,
-  github,
-  googleapis,
-  ;
-
-  bool get isDebug {
-    switch (this) {
-      case huggingface:
-        return false;
-      case aifasthub:
-        return false;
-      case github:
-        return true;
-      case googleapis:
-        return true;
-    }
-  }
-}
-
 class _RemoteFile {
   late final files = StateProvider.family<FileInfo, FileKey>((ref, key) {
     return FileInfo(key: key);
@@ -223,5 +202,26 @@ extension _$RemoteFile on _RemoteFile {
 
     files(fileKey).u(modelFile.copyWith(downloading: downloading));
     checkLocalFile();
+  }
+}
+
+enum RemoteFileSource {
+  aifasthub,
+  huggingface,
+  github,
+  googleapis,
+  ;
+
+  bool get isDebug {
+    switch (this) {
+      case huggingface:
+        return false;
+      case aifasthub:
+        return false;
+      case github:
+        return true;
+      case googleapis:
+        return true;
+    }
   }
 }

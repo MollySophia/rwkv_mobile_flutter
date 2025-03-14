@@ -7,9 +7,13 @@ enum WorldType {
 }
 
 class _World {
+  // 🔥 Vision
+
   late final imagePath = _gsn<String>();
   late final imageHeight = _gsn<double>();
   late final visualFloatHeight = _gsn<double>();
+
+  // 🔥 Audio
 
   /// in milliseconds
   late final startTime = _gs(0);
@@ -22,8 +26,10 @@ class _World {
   late final playing = _gs(false);
   late final _recorder = ar.AudioRecorder();
   late final _audioPlayer = ap.AudioPlayer();
+
+  /// TODO: Use it!
   late final streaming = _gs(false);
-  late final audioFileStreamController = StreamController<_AudioFile>.broadcast();
+  late final audioFileStreamController = StreamController<(File file, int length)>.broadcast();
   final List<Uint8List> _audioData = [];
   Stream<Uint8List>? _currentRecorderStream;
   StreamController<Uint8List>? _currentStreamController;
@@ -94,7 +100,7 @@ extension $World on _World {
     }
     _audioData.clear();
 
-    audioFileStreamController.add(_AudioFile(file: file, length: audioLengthInMilliseconds));
+    audioFileStreamController.add((file, audioLengthInMilliseconds));
 
     _audioData.clear();
   }
@@ -195,13 +201,4 @@ extension _$World on _World {
     }
     return bytes;
   }
-}
-
-class _AudioFile {
-  final File file;
-
-  /// in milliseconds
-  final int length;
-
-  _AudioFile({required this.file, required this.length});
 }

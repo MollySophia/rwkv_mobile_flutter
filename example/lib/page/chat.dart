@@ -2,7 +2,6 @@
 import 'dart:developer';
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/role.dart';
 import 'package:zone/route/router.dart';
@@ -237,7 +236,6 @@ class _List extends ConsumerWidget {
     final messages = ref.watch(P.chat.messages);
     final paddingTop = ref.watch(P.app.paddingTop);
     final inputHeight = ref.watch(P.chat.inputHeight);
-    final useReverse = ref.watch(P.chat.useReverse);
     final loaded = ref.watch(P.rwkv.loaded);
 
     double top = paddingTop + kToolbarHeight + 4;
@@ -260,7 +258,7 @@ class _List extends ConsumerWidget {
           padding: EI.o(r: 4, b: inputHeight + 4, t: top),
           controller: P.chat.scrollController,
           child: ListView.separated(
-            reverse: useReverse,
+            reverse: true,
             physics: loaded ? const AlwaysScrollableScrollPhysics() : const NeverScrollableScrollPhysics(),
             padding: EI.o(
               t: top,
@@ -270,7 +268,7 @@ class _List extends ConsumerWidget {
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
             itemCount: messages.length,
             itemBuilder: (context, index) {
-              final finalIndex = useReverse ? messages.length - 1 - index : index;
+              final finalIndex = messages.length - 1 - index;
               final msg = messages[finalIndex];
               return Message(msg, finalIndex);
             },

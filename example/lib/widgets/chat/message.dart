@@ -62,7 +62,7 @@ class Message extends ConsumerWidget {
     final content = msg.content;
     final changing = msg.changing;
 
-    final received = ref.watch(P.chat.received.select((v) => msg.changing ? v : ""));
+    final received = ref.watch(P.chat.receivedTokens.select((v) => msg.changing ? v : ""));
 
     String finalContent = changing ? received : content;
 
@@ -120,7 +120,7 @@ class Message extends ConsumerWidget {
     }
 
     final receiveId = ref.watch(P.chat.receiveId);
-    final receiving = ref.watch(P.chat.receiving);
+    final receiving = ref.watch(P.chat.receivingTokens);
     final thisMessageIsReceiving = receiveId == msg.id && receiving;
 
     final markdownStyleSheetForCotContent = MarkdownStyleSheet(

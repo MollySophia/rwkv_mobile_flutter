@@ -29,7 +29,6 @@ enum FileKey {
   v7_world_3b_gguf,
 
   // 🔥 World demo
-
   rwkv7_0_4b_siglip_vision_encoder_gguf,
   rwkv7_0_4b_vision_siglip_gguf,
   rwkv7_0_4b_whisper_small_enqa_adapter_gguf,

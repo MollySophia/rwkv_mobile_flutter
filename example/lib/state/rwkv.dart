@@ -7,10 +7,6 @@ class _RWKV {
 
   late final _messagesController = StreamController<JSON>();
 
-  late final modelLoadingState = _gsn<_ModelLoadingState>();
-
-  late final generating = _gs(false);
-
   static Stream<JSON>? _broadcastStream;
 
   Stream<JSON> get broadcastStream {
@@ -487,7 +483,6 @@ extension _$RWKV on _RWKV {
     }
 
     if (message["generateStart"] == true) {
-      generating.u(true);
       _messagesController.add({
         "content": "",
         "type": _RWKVMessageType.generateStart.name,
@@ -501,7 +496,6 @@ extension _$RWKV on _RWKV {
         "content": responseText,
         "type": _RWKVMessageType.response.name,
       });
-      generating.u(false);
       return;
     }
 
@@ -578,10 +572,4 @@ enum DemoType {
   world,
   fifthteenPuzzle,
   sudoku,
-}
-
-enum _ModelLoadingState {
-  loading,
-  ready,
-  failed,
 }
