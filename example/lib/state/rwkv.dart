@@ -48,6 +48,10 @@ class _RWKV {
 
 /// Public methods
 extension $RWKV on _RWKV {
+  void setAudioPrompt({required String path}) {
+    _sendPort!.send(("setAudioPrompt", path));
+  }
+
   void send(List<String> messages) {
     prefillSpeed.u(0);
     decodeSpeed.u(0);
@@ -208,14 +212,14 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
 
   FV loadWorldVision({
     required String modelPath,
-    required String visionEncoderPath,
+    required String encoderPath,
     required Backend backend,
   }) async {
     logTrace();
     prefillSpeed.u(0);
     decodeSpeed.u(0);
 
-    final tokenizerPath = await getModelPath("assets/config/chat/b_rwkv_vocab_v20230424.txt");
+    final tokenizerPath = await getModelPath("assets/config/world/b_rwkv_vocab_v20230424.txt");
 
     final rootIsolateToken = RootIsolateToken.instance;
     final rwkvMobile = RWKVMobile();
@@ -231,6 +235,8 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
         Alert.error("Failed to load model: $e");
         return;
       }
+      _sendPort!.send(("releaseModel", null));
+      _sendPort!.send(("releaseWhisperEncoder", null));
     } else {
       final options = StartOptions(
         modelPath,
@@ -247,12 +253,58 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
       await Future.delayed(const Duration(milliseconds: 50));
     }
 
-    _sendPort!.send(("loadVisionEncoder", visionEncoderPath));
+    _sendPort!.send(("loadVisionEncoder", encoderPath));
     await resetSamplerParams(usingReasoningModel: false);
     await resetMaxLength(usingReasoningModel: false);
     _sendPort!.send(("setEosToken", "\x17"));
     _sendPort!.send(("setBosToken", "\x16"));
     _sendPort!.send(("setTokenBanned", [0]));
+  }
+
+  FV loadWorldEngAudioQA({
+    required String modelPath,
+    required String encoderPath,
+    required Backend backend,
+  }) async {
+    logTrace();
+    prefillSpeed.u(0);
+    decodeSpeed.u(0);
+
+    final tokenizerPath = await getModelPath("assets/config/world/b_rwkv_vocab_v20230424.txt");
+
+    final rootIsolateToken = RootIsolateToken.instance;
+    final rwkvMobile = RWKVMobile();
+
+    if (_sendPort != null) {
+      _sendPort!.send((
+        "initRuntime",
+        {"modelPath": modelPath, "backend": backend, "tokenizerPath": tokenizerPath},
+      ));
+      _sendPort!.send(("releaseModel", null));
+      _sendPort!.send(("releaseVisionEncoder", null));
+    } else {
+      final options = StartOptions(
+        modelPath,
+        tokenizerPath,
+        backend,
+        _receivePort.sendPort,
+        rootIsolateToken!,
+      );
+      await rwkvMobile.runIsolate(options);
+    }
+
+    while (_sendPort == null) {
+      if (kDebugMode) print("💬 waiting for sendPort...");
+      await Future.delayed(const Duration(milliseconds: 50));
+    }
+
+    _sendPort!.send(("loadWhisperEncoder", encoderPath));
+    await resetSamplerParams(usingReasoningModel: false);
+    await resetMaxLength(usingReasoningModel: false);
+    _sendPort!.send(("setEosToken", "\x17"));
+    _sendPort!.send(("setBosToken", "\x16"));
+    _sendPort!.send(("setTokenBanned", [0]));
+    _sendPort!.send(("setUserRole", ""));
   }
 
   FV resetSamplerParams({required bool usingReasoningModel}) async {

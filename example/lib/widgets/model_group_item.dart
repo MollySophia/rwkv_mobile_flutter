@@ -40,11 +40,22 @@ class ModelGroupItem extends ConsumerWidget {
     try {
       P.rwkv.clearStates();
       P.chat.messages.u([]);
-      await P.rwkv.loadWorldVision(
-        modelPath: modelFileKey.path,
-        visionEncoderPath: encoderFileKey.path,
-        backend: modelFileKey.backend,
-      );
+      switch (worldType) {
+        case WorldType.engAudioQA:
+          await P.rwkv.loadWorldEngAudioQA(
+            modelPath: modelFileKey.path,
+            encoderPath: encoderFileKey.path,
+            backend: modelFileKey.backend,
+          );
+        case WorldType.engVisualQA:
+          await P.rwkv.loadWorldVision(
+            modelPath: modelFileKey.path,
+            encoderPath: encoderFileKey.path,
+            backend: modelFileKey.backend,
+          );
+        case WorldType.chineseASR:
+          throw "Not implemented";
+      }
       Navigator.pop(getContext()!);
     } catch (e) {
       Alert.error(e.toString());

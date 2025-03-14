@@ -167,7 +167,13 @@ extension $Chat on _Chat {
     messages.u([]);
   }
 
-  FV send(String message, {MessageType type = MessageType.text, String? imageUrl, String? audioUrl}) async {
+  FV send(
+    String message, {
+    MessageType type = MessageType.text,
+    String? imageUrl,
+    String? audioUrl,
+    bool withHistory = true,
+  }) async {
     // debugger();
     if (kDebugMode) print("💬 $runtimeType.send: $message");
 
@@ -193,7 +199,7 @@ extension $Chat on _Chat {
       scrollToBottom();
     });
 
-    P.rwkv.send(messages.v.m((e) => e.content));
+    P.rwkv.send(withHistory ? messages.v.m((e) => e.content) : [message]);
     editingIndex.u(null);
 
     received.uc();
@@ -247,7 +253,7 @@ extension _$Chat on _Chat {
 
     _loadRoles();
 
-    P.world.audioFileStreamController.stream.listen((event) {
+    P.world.audioFileStreamController.stream.listen((event) async {
       final demoType = P.app.demoType.v;
       if (demoType != DemoType.world) return;
 
@@ -257,11 +263,13 @@ extension _$Chat on _Chat {
       final duration = Duration(milliseconds: length);
       final durationString = Duration(milliseconds: length).toString();
 
-      send(
-        "What in this image?",
-        type: MessageType.audio,
-        audioUrl: path,
-      );
+      final t0 = DateTime.now().millisecondsSinceEpoch;
+      P.rwkv.setAudioPrompt(path: path);
+      final t1 = DateTime.now().millisecondsSinceEpoch;
+      if (kDebugMode) print("💬 setAudioPrompt done in ${t1 - t0}ms");
+      send("", type: MessageType.audio, audioUrl: path, withHistory: false);
+      final t2 = DateTime.now().millisecondsSinceEpoch;
+      if (kDebugMode) print("💬 send done in ${t2 - t1}ms");
     });
   }
 

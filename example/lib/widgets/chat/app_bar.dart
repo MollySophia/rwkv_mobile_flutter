@@ -46,7 +46,7 @@ class ChatAppBar extends ConsumerWidget {
             elevation: 0,
             centerTitle: true,
             title: const AutoSizeText(
-              "RWKV Chat",
+              "World RWKV",
               style: TextStyle(fontSize: 20),
               minFontSize: 0,
               maxLines: 2,

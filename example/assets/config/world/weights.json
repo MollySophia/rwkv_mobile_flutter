@@ -1,6 +1,6 @@
 [
   {
-    "name": "RWKV7 Siglip Vision Encoder 0.4B",
+    "name": "RWKV7 Siglip Vision Encoder",
     "type": "gguf",
     "modelSize": 0.4,
     "fileName": "rwkv7_0.4B_siglip_vision_encoder-f16.gguf",
@@ -18,6 +18,29 @@
     "fileName": "rwkv7_0.4B_vision_siglip-Q8_0.gguf",
     "fileSize": 501496768,
     "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/model/gguf/rwkv7_0.4B_vision_siglip-Q8_0.gguf",
+    "quantization": "Q8_0",
+    "platforms": ["macos", "windows", "linux", "android"],
+    "backends": ["llamacpp"]
+  },
+  {
+    "name": "RWKV7 Whisper Small adapter",
+    "type": "gguf",
+    "modelSize": 0.4,
+    "fileName": "whisper-small-rwkv-0b4-enqa-adapter.gguf",
+    "fileSize": 201461832,
+    "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/whisper_encoder/whisper-small-rwkv-0b4-enqa-adapter.gguf",
+    "quantization": "Q8_0",
+    "platforms": ["macos", "windows", "linux", "android"],
+    "backends": ["llamacpp"],
+    "tags": ["encoder"]
+  },
+  {
+    "name": "RWKV7 WhisperS ENQA 0.4B",
+    "type": "gguf",
+    "modelSize": 0.4,
+    "fileName": "RWKV7-0.4B-WhisperS-ENQA-DEMO-Q8_0.gguf",
+    "fileSize": 501496864,
+    "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/model/gguf/RWKV7-0.4B-WhisperS-ENQA-DEMO-Q8_0.gguf",
     "quantization": "Q8_0",
     "platforms": ["macos", "windows", "linux", "android"],
     "backends": ["llamacpp"]
