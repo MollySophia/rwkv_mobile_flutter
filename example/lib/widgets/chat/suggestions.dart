@@ -13,7 +13,6 @@ class Suggestions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentWorldType = ref.watch(P.rwkv.currentWorldType);
     final imagePath = ref.watch(P.world.imagePath);
     final demoType = ref.watch(P.app.demoType);
     final messages = ref.watch(P.chat.messages);
@@ -30,6 +29,8 @@ class Suggestions extends ConsumerWidget {
         "Why is the sky blue? ",
       ];
     }
+
+    final currentWorldType = ref.watch(P.rwkv.currentWorldType);
 
     if (demoType == DemoType.world) {
       switch (currentWorldType) {

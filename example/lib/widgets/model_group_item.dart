@@ -21,7 +21,8 @@ class ModelGroupItem extends ConsumerWidget {
 
   void _onDownloadAllTap() async {
     final fileKeys = FileKey.availableModels.where((e) => e.worldType == worldType).toList();
-    fileKeys.forEach((e) => P.remoteFile.getFile(fileKey: e));
+    final missingFileKeys = fileKeys.where((e) => P.remoteFile.files(e).v.hasFile == false).toList();
+    missingFileKeys.forEach((e) => P.remoteFile.getFile(fileKey: e));
   }
 
   void _onDeleteAllTap() async {
@@ -95,6 +96,7 @@ class ModelGroupItem extends ConsumerWidget {
     });
 
     final allDownloaded = files.every((e) => e.hasFile);
+    final allMissing = files.every((e) => !e.hasFile);
     final downloading = files.any((e) => e.downloading);
 
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
@@ -119,15 +121,26 @@ class ModelGroupItem extends ConsumerWidget {
                   ),
                   padding: const EI.s(v: 4, h: 4),
                   margin: const EI.o(t: 8),
-                  child: FileKeyItem(e),
+                  child: FileKeyItem(e, showDownloaded: true),
                 )),
             Ro(
               children: [
-                if (!allDownloaded && !downloading)
+                if (downloading) 8.h,
+                if (allMissing && !downloading)
                   TextButton(
                     onPressed: _onDownloadAllTap,
                     child: const T(
                       "Download All",
+                      s: TS(
+                        w: FW.w600,
+                      ),
+                    ),
+                  ),
+                if (!allMissing && !allDownloaded && !downloading)
+                  TextButton(
+                    onPressed: _onDownloadAllTap,
+                    child: const T(
+                      "Download Missing",
                       s: TS(
                         w: FW.w600,
                       ),

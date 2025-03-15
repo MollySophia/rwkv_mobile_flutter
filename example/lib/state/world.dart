@@ -5,6 +5,31 @@ enum WorldType {
   engAudioQA,
   chineseASR,
   engASR,
+  ;
+
+  // TODO: Use it in the future @wangce
+  bool get isAudioDemo {
+    switch (this) {
+      case WorldType.engAudioQA:
+      case WorldType.chineseASR:
+      case WorldType.engASR:
+        return true;
+      case WorldType.engVisualQA:
+        return false;
+    }
+  }
+
+  // TODO: Use it in the future @wangce
+  bool get isVisualDemo {
+    switch (this) {
+      case WorldType.engVisualQA:
+        return true;
+      case WorldType.engAudioQA:
+      case WorldType.chineseASR:
+      case WorldType.engASR:
+        return false;
+    }
+  }
 }
 
 class _World {

@@ -195,8 +195,9 @@ class _Delete extends ConsumerWidget {
 
 class FileKeyItem extends ConsumerWidget {
   final FileKey fileKey;
+  final bool showDownloaded;
 
-  const FileKeyItem(this.fileKey, {super.key});
+  const FileKeyItem(this.fileKey, {super.key, this.showDownloaded = false});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -209,6 +210,7 @@ class FileKeyItem extends ConsumerWidget {
     final networkSpeed = file.networkSpeed;
     final timeRemaining = file.timeRemaining;
     final tags = fileKey.weights?.tags ?? [];
+    final primary = Theme.of(getContext()!).colorScheme.primary;
     return Co(
       c: CAA.start,
       children: [
@@ -221,6 +223,12 @@ class FileKeyItem extends ConsumerWidget {
               s: const TS(c: kB, w: FW.w600),
             ),
             T(gbDisplay(fileSize), s: TS(c: kB.wo(0.7), w: FW.w500)),
+            if (showDownloaded && file.hasFile)
+              Icon(
+                Icons.download_done,
+                color: primary,
+                size: 20,
+              ),
           ],
         ),
         4.h,

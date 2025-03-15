@@ -19,11 +19,22 @@ class VisualFloat extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final demoType = ref.watch(P.app.demoType);
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
+
+    switch (currentWorldType) {
+      case null:
+      case WorldType.engAudioQA:
+      case WorldType.chineseASR:
+      case WorldType.engASR:
+        return Positioned(child: IgnorePointer(child: C()));
+      case WorldType.engVisualQA:
+        break;
+    }
+
+    final demoType = ref.watch(P.app.demoType);
     final imagePath = ref.watch(P.world.imagePath);
 
-    if (demoType != DemoType.world || currentWorldType != WorldType.engVisualQA) return Positioned(child: IgnorePointer(child: C()));
+    if (demoType != DemoType.world) return Positioned(child: IgnorePointer(child: C()));
     if (imagePath == null) return Positioned(child: IgnorePointer(child: C()));
 
     final screenWidth = ref.watch(P.app.screenWidth);

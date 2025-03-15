@@ -23,8 +23,15 @@ class AudioEmpty extends ConsumerWidget {
     }
 
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
-    if (currentWorldType != WorldType.engAudioQA && currentWorldType != WorldType.chineseASR && currentWorldType != WorldType.engASR) {
-      return Positioned(child: IgnorePointer(child: C()));
+
+    switch (currentWorldType) {
+      case WorldType.chineseASR:
+      case WorldType.engASR:
+      case WorldType.engAudioQA:
+        break;
+      case WorldType.engVisualQA:
+      case null:
+        return Positioned(child: IgnorePointer(child: C()));
     }
 
     final messages = ref.watch(P.chat.messages);
@@ -32,6 +39,19 @@ class AudioEmpty extends ConsumerWidget {
     bool show = true;
     if (messages.isNotEmpty) {
       show = false;
+    }
+
+    String message = "";
+    switch (currentWorldType) {
+      case null:
+      case WorldType.engVisualQA:
+        message = "";
+      case WorldType.engAudioQA:
+        message = "Press and hold the microphone button below to start recording.\nRelease to send it to RWKV.";
+      case WorldType.chineseASR:
+        message = "请长按下方按钮开始录音\n松开即可让 RWKV 识别你的声音";
+      case WorldType.engASR:
+        message = "Please press and hold the microphone button below to start recording.\nRelease to let RWKV recognize your voice";
     }
 
     return AnimatedPositioned(
@@ -56,7 +76,7 @@ class AudioEmpty extends ConsumerWidget {
                 C(
                   padding: EI.s(h: 24),
                   child: T(
-                    "Please tap the microphone button below to chat to RWKV",
+                    message,
                     s: TS(s: 20, c: primary),
                     textAlign: TextAlign.center,
                   ),

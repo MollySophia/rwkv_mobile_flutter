@@ -29,7 +29,15 @@ class VisualEmpty extends ConsumerWidget {
     if (imagePath != null) return Positioned(child: IgnorePointer(child: C()));
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
 
-    if (currentWorldType != WorldType.engVisualQA) return Positioned(child: IgnorePointer(child: C()));
+    switch (currentWorldType) {
+      case WorldType.engVisualQA:
+        break;
+      case null:
+      case WorldType.engAudioQA:
+      case WorldType.chineseASR:
+      case WorldType.engASR:
+        return Positioned(child: IgnorePointer(child: C()));
+    }
 
     final messages = ref.watch(P.chat.messages);
 

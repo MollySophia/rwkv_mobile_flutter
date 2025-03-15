@@ -42,17 +42,52 @@ class AudioInput extends ConsumerWidget {
     final paddingBottom = ref.watch(P.app.paddingBottom);
     final primary = Theme.of(context).colorScheme.primary;
     final demoType = ref.watch(P.app.demoType);
-    final worldType = ref.watch(P.rwkv.currentWorldType);
-    final shouldShow = demoType == DemoType.world && (worldType == WorldType.engAudioQA || worldType == WorldType.chineseASR);
+    final currentWorldType = ref.watch(P.rwkv.currentWorldType);
     final screenWidth = ref.watch(P.app.screenWidth);
     final receiving = ref.watch(P.chat.receivingTokens);
+
+    bool shouldShow = false;
+
+    if (demoType == DemoType.world) {
+      switch (currentWorldType) {
+        case null:
+        case WorldType.engVisualQA:
+          shouldShow = false;
+        case WorldType.engAudioQA:
+        case WorldType.chineseASR:
+        case WorldType.engASR:
+          shouldShow = true;
+      }
+    }
+
+    String bottomMessage = "";
+
+    if (demoType == DemoType.world) {
+      switch (currentWorldType) {
+        case null:
+        case WorldType.engVisualQA:
+          bottomMessage = "";
+        case WorldType.engAudioQA:
+          bottomMessage = "Press and hold the microphone button above\nrelease to send";
+        case WorldType.chineseASR:
+          bottomMessage = "长按下方麦克风按钮开始录音\n松开即可发送";
+        case WorldType.engASR:
+          bottomMessage = "Press and hold the microphone button above\nrelease to send";
+      }
+    }
+
+    double bottomAdjust = 0;
+
+    if (currentWorldType?.isAudioDemo == true) {
+      bottomAdjust = 10;
+    }
 
     return AnimatedPositioned(
       duration: 250.ms,
       curve: Curves.easeInOutBack,
-      bottom: shouldShow ? (0 + paddingBottom) : -_kWidgetSize,
+      bottom: shouldShow ? (0 + paddingBottom + bottomAdjust) : -_kWidgetSize,
       left: 0,
-      height: _kWidgetSize,
+      height: _kWidgetSize + bottomAdjust,
       width: screenWidth,
       child: Stack(
         children: [
@@ -116,11 +151,12 @@ class AudioInput extends ConsumerWidget {
                 ),
                 12.h,
                 T(
-                  "Tap the microphone button above to chat to RWKV",
+                  bottomMessage,
                   s: TS(
                     s: 12,
                     c: primary.wo(0.5),
                   ),
+                  textAlign: TextAlign.center,
                 ),
               ],
             ),

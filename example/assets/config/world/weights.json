@@ -61,10 +61,10 @@
     "name": "RWKV7 WhisperS ENASR 0.1B",
     "type": "gguf",
     "modelSize": 0.1,
-    "fileName": "RWKV7-0.1B-WhisperS-ENASR-DEMO-Q8_0.gguf",
+    "fileName": "RWKV7-0.1B-WhisperS-ENASR-DEMO-F16.gguf",
     "fileSize": 386369888,
-    "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/model/gguf/RWKV7-0.4B-WhisperS-ENQA-DEMO-Q8_0.gguf",
-    "quantization": "Q8_0",
+    "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/model/RWKV7-0.1B-WhisperS-ENASR-DEMO-F16.gguf",
+    "quantization": "fp16",
     "platforms": ["macos", "windows", "linux", "android"],
     "backends": ["llamacpp"]
   },
