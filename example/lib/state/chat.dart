@@ -54,6 +54,8 @@ class _Chat {
   late final showingCharacterSelector = _gs(false);
 
   late final roles = _gs<List<Role>>([]);
+
+  late final latestClickedMessage = _gsn<Message>();
 }
 
 /// Public methods

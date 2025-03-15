@@ -112,7 +112,6 @@ extension $World on _World {
     ap.Source source = ap.DeviceFileSource(path);
     playing.u(true);
     await _audioPlayer.play(source);
-    playing.u(false);
   }
 
   FV stopPlaying() async {
@@ -127,6 +126,22 @@ extension _$World on _World {
     logTrace();
     P.rwkv.currentWorldType.lv(_onWorldTypeChanged);
     P.app.demoType.lv(_onWorldTypeChanged);
+    _audioPlayer.eventStream.listen(_onPlayerChanged);
+  }
+
+  void _onPlayerChanged(ap.AudioEvent event) {
+    logTrace("🔊 AudioPlayerEvent: $event");
+    final eventType = event.eventType;
+    switch (eventType) {
+      case ap.AudioEventType.complete:
+        playing.u(false);
+      case ap.AudioEventType.log:
+        break;
+      case ap.AudioEventType.prepared:
+      case ap.AudioEventType.duration:
+      case ap.AudioEventType.seekComplete:
+        break;
+    }
   }
 
   void _onWorldTypeChanged() async {

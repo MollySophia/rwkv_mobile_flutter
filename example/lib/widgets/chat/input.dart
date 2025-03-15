@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:zone/func/log_trace.dart';
 import 'package:zone/func/show_image_selector.dart';
 import 'package:zone/gen/l10n.dart';
-import 'package:zone/widgets/alert.dart';
+import 'package:halo_alert/halo_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

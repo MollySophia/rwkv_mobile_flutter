@@ -16,6 +16,8 @@ class Debugger extends ConsumerWidget {
     final visualFloatHeight = ref.watch(P.world.visualFloatHeight);
     final loading = ref.watch(P.rwkv.loading);
     final streaming = ref.watch(P.world.streaming);
+    final playing = ref.watch(P.world.playing);
+    final latestClickedMessage = ref.watch(P.chat.latestClickedMessage);
 
     return Positioned(
       left: 0,
@@ -44,6 +46,8 @@ class Debugger extends ConsumerWidget {
                   T("${"visualFloatHeight".codeToName}\n" + visualFloatHeight.toString()),
                   T("${"loading".codeToName}\n" + loading.toString()),
                   T("${"streaming".codeToName}\n" + streaming.toString()),
+                  T("${"playing".codeToName}\n" + playing.toString()),
+                  T("${"latestClickedMessage".codeToName}\n" + (latestClickedMessage?.id.toString() ?? "null")),
                 ].m((e) {
                   return C(
                     decoration: BD(color: kB.wo(0.67)),

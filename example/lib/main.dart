@@ -9,7 +9,7 @@ import 'package:halo/halo.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
-import 'package:zone/widgets/alert.dart';
+import 'package:halo_alert/halo_alert.dart';
 import 'package:zone/widgets/debugger.dart';
 import 'package:zone/widgets/othello_debugger.dart';
 

@@ -1,4 +1,5 @@
 // ignore: unused_import
+import 'dart:async';
 import 'dart:developer';
 import 'dart:math';
 
@@ -6,7 +7,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zone/func/log_trace.dart';
 import 'package:zone/gen/l10n.dart';
-import 'package:zone/widgets/alert.dart';
+import 'package:halo_alert/halo_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -44,8 +45,10 @@ class Message extends ConsumerWidget {
   }
 
   void _onTap() async {
+    P.chat.latestClickedMessage.u(msg);
     final isMine = msg.isMine;
     final isAudio = msg.type == model.MessageType.audio;
+
     if (isMine && isAudio) {
       final audioUrl = msg.audioUrl;
       logTrace("audioUrl: $audioUrl");
@@ -355,28 +358,78 @@ class Message extends ConsumerWidget {
   }
 }
 
-class _AudioBubble extends ConsumerWidget {
+class _AudioBubble extends ConsumerStatefulWidget {
   final model.Message msg;
 
   const _AudioBubble(this.msg);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_AudioBubble> createState() => _AudioBubbleState();
+}
+
+class _AudioBubbleState extends ConsumerState<_AudioBubble> {
+  Timer? _timer;
+  int _tick = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    ref.listenManual(P.chat.latestClickedMessage, (previous, next) {
+      if (next?.id == widget.msg.id) {
+        _timer?.cancel();
+        _timer = Timer.periodic(500.ms, (timer) {
+          _tick++;
+          setState(() {});
+        });
+      } else {
+        _timer?.cancel();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).colorScheme.primary;
-    final length = msg.audioLength ?? 2000;
+    final length = widget.msg.audioLength ?? 2000;
     final base = 4000;
     final width = 200 * (length / (length + base));
+    final isPlaying = ref.watch(P.world.playing);
+    final latestClickedMessage = ref.watch(P.chat.latestClickedMessage);
+    final isLatestClickedMessage = latestClickedMessage?.id == widget.msg.id;
     return C(
       decoration: BD(color: kC),
       width: width,
       child: Ro(
+        m: MAA.end,
         children: [
-          Icon(Icons.voice_chat, color: primaryColor),
-          8.w,
           T(
             (length / 1000).toStringAsFixed(0) + "s",
             s: TS(c: kB.wo(0.8), w: FW.w600),
           ),
+          8.w,
+          if (_tick % 3 == 0 || !isPlaying || !isLatestClickedMessage)
+            Icon(
+              Icons.volume_up,
+              color: primaryColor,
+            ),
+          if (_tick % 3 == 2 && isPlaying && isLatestClickedMessage)
+            Icon(
+              Icons.volume_down,
+              color: primaryColor,
+            ),
+          if (_tick % 3 == 1 && isPlaying && isLatestClickedMessage)
+            Icon(
+              Icons.volume_mute,
+              color: primaryColor,
+            ),
         ],
       ),
     );

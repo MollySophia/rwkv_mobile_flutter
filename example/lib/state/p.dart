@@ -28,7 +28,7 @@ import 'package:zone/model/role.dart';
 import 'package:zone/model/weights.dart';
 import 'package:zone/route/page_key.dart';
 import 'package:zone/route/router.dart';
-import 'package:zone/widgets/alert.dart';
+import 'package:halo_alert/halo_alert.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

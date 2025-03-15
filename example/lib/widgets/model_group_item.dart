@@ -11,7 +11,7 @@ import 'package:halo/halo.dart';
 import 'package:zone/route/method.dart';
 import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
-import 'package:zone/widgets/alert.dart';
+import 'package:halo_alert/halo_alert.dart';
 import 'package:zone/widgets/model_item.dart';
 
 class ModelGroupItem extends ConsumerWidget {
