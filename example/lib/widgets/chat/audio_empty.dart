@@ -1,11 +1,9 @@
 // ignore: unused_import
 import 'dart:developer';
-import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
-import 'package:zone/func/widget_debugger.dart';
 import 'package:zone/state/p.dart';
 
 class AudioEmpty extends ConsumerWidget {

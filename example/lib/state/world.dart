@@ -134,9 +134,21 @@ extension _$World on _World {
     final currentWorldType = P.rwkv.currentWorldType.v;
     final isAudioDemo = currentWorldType == WorldType.engAudioQA || currentWorldType == WorldType.chineseASR;
 
+    P.chat.messages.u([]);
+    imagePath.u(null);
+    imageHeight.uc();
+    visualFloatHeight.uc();
+    startTime.u(0);
+    endTime.u(0);
+    audioDuration.u(0);
+    recording.u(false);
+    playing.u(false);
+    audioPath.u("");
+
     if (!isAudioDemo || !isWorldDemo) {
-      _recorder.pause();
-      _recorder.stop();
+      await _recorder.pause();
+      await _recorder.stop();
+      await _audioPlayer.stop();
       _currentRecorderStream = null;
       streaming.u(false);
       return;
@@ -148,8 +160,9 @@ extension _$World on _World {
 
     if (!hasPermission) {
       Alert.warning("Please grant permission to use microphone.");
-      _recorder.pause();
-      _recorder.stop();
+      await _recorder.pause();
+      await _recorder.stop();
+      await _audioPlayer.stop();
       _currentRecorderStream = null;
       streaming.u(false);
       return;
@@ -160,7 +173,15 @@ extension _$World on _World {
       sampleRate: 16000,
       numChannels: 1,
     );
-    _currentRecorderStream = await _recorder.startStream(config);
+
+    streaming.u(true);
+    try {
+      _currentRecorderStream = await _recorder.startStream(config);
+    } catch (e) {
+      streaming.u(false);
+      logTrace("😡 Failed to start recording stream: $e");
+    }
+
     _currentRecorderStream!.listen((data) {
       final cc = _currentStreamController;
       if (cc == null) return;

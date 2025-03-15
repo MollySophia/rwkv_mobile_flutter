@@ -1,23 +1,12 @@
 // ignore: unused_import
 import 'dart:developer';
-import 'dart:ui';
 
-import 'package:zone/gen/l10n.dart';
-import 'package:zone/model/role.dart';
-import 'package:zone/route/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:zone/state/p.dart';
-import 'package:zone/widgets/chat/app_bar.dart';
-import 'package:zone/widgets/chat/audio_input.dart';
-import 'package:zone/widgets/chat/empty.dart';
-import 'package:zone/widgets/chat/input.dart';
-import 'package:zone/widgets/chat/message.dart';
-import 'package:zone/widgets/chat/visual_float.dart';
-import 'package:zone/widgets/model_selector.dart';
 
-const _height = 28.0;
+const _height = 46.0;
 
 class Suggestions extends ConsumerWidget {
   const Suggestions({super.key});
@@ -29,7 +18,6 @@ class Suggestions extends ConsumerWidget {
     final demoType = ref.watch(P.app.demoType);
     final messages = ref.watch(P.chat.messages);
     final primary = Theme.of(context).colorScheme.primary;
-    final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
 
     bool show = false;
 
@@ -62,35 +50,33 @@ class Suggestions extends ConsumerWidget {
     return AnimatedPositioned(
       duration: 200.ms,
       curve: Curves.easeInOutBack,
-      bottom: show ? P.chat.inputHeight.v + 8 : -P.chat.inputHeight.v - _height,
+      bottom: show ? P.chat.inputHeight.v : -P.chat.inputHeight.v - _height,
       left: 0,
       right: 0,
       height: _height,
       child: ListView(
         padding: const EI.o(l: 8),
         scrollDirection: Axis.horizontal,
-        children: suggestions
-            .map(
-              (e) => GD(
-                onTap: () {
-                  P.chat.send(e);
-                },
-                child: C(
-                  decoration: BD(
-                    color: kW.wo(0.8),
-                    borderRadius: 4.r,
-                    border: Border.all(
-                      color: primary,
-                      width: 0.5,
-                    ),
-                  ),
-                  margin: EI.o(r: 8),
-                  padding: EI.a(4),
-                  child: T(e, s: TS(c: kB)),
+        children: suggestions.map((e) {
+          return GD(
+            onTap: () {
+              P.chat.send(e);
+            },
+            child: C(
+              decoration: BD(
+                color: kW.wo(0.8),
+                borderRadius: 6.r,
+                border: Border.all(
+                  color: primary,
+                  width: 0.5,
                 ),
               ),
-            )
-            .toList(),
+              margin: EI.o(r: 8, t: 4, b: 8),
+              padding: EI.a(4),
+              child: T(e, s: TS(c: kB, s: 16)),
+            ),
+          );
+        }).toList(),
       ),
     );
   }

@@ -53,7 +53,7 @@ extension $RWKV on _RWKV {
     decodeSpeed.u(0);
     final sendPort = _sendPort;
     if (sendPort == null) {
-      if (kDebugMode) print("😡 sendPort is null");
+      if (kDebugMode) print("🚧 sendPort is null");
       return;
     }
     sendPort.send(("message", messages));
@@ -68,7 +68,7 @@ extension $RWKV on _RWKV {
     decodeSpeed.u(0);
     final sendPort = _sendPort;
     if (sendPort == null) {
-      if (kDebugMode) print("😡 sendPort is null");
+      if (kDebugMode) print("🚧 sendPort is null");
       return;
     }
     sendPort.send(("clearStates", null));
@@ -79,7 +79,7 @@ extension $RWKV on _RWKV {
     decodeSpeed.u(0);
     final sendPort = _sendPort;
     if (sendPort == null) {
-      if (kDebugMode) print("😡 sendPort is null");
+      if (kDebugMode) print("🚧 sendPort is null");
       return;
     }
     sendPort.send(("generate", prompt));
@@ -88,7 +88,7 @@ extension $RWKV on _RWKV {
   FV stop() async {
     final sendPort = _sendPort;
     if (sendPort == null) {
-      if (kDebugMode) print("😡 sendPort is null");
+      if (kDebugMode) print("🚧 sendPort is null");
       return;
     }
     sendPort.send(("stop", null));
@@ -222,6 +222,8 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
 
     if (_sendPort != null) {
       try {
+        _sendPort!.send(("releaseWhisperEncoder", null));
+        _sendPort!.send(("releaseModel", null));
         final startMS = DateTime.now().millisecondsSinceEpoch;
         await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
         final endMS = DateTime.now().millisecondsSinceEpoch;
@@ -231,8 +233,6 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
         Alert.error("Failed to load model: $e");
         return;
       }
-      _sendPort!.send(("releaseModel", null));
-      _sendPort!.send(("releaseWhisperEncoder", null));
     } else {
       final options = StartOptions(
         modelPath,
@@ -272,12 +272,12 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
     final rwkvMobile = RWKVMobile();
 
     if (_sendPort != null) {
-      _sendPort!.send((
-        "initRuntime",
-        {"modelPath": modelPath, "backend": backend, "tokenizerPath": tokenizerPath},
-      ));
-      _sendPort!.send(("releaseModel", null));
       _sendPort!.send(("releaseVisionEncoder", null));
+      _sendPort!.send(("releaseModel", null));
+      final startMS = DateTime.now().millisecondsSinceEpoch;
+      await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
+      final endMS = DateTime.now().millisecondsSinceEpoch;
+      if (kDebugMode) print("✅ initRuntime done in ${endMS - startMS}ms");
     } else {
       final options = StartOptions(
         modelPath,

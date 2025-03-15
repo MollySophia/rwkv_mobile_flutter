@@ -39,16 +39,12 @@ class ModelGroupItem extends ConsumerWidget {
     final modelFileKey = fileKeys.firstWhere((e) => !e.isEncoder);
 
     P.rwkv.loading.u(true);
-    P.rwkv.currentWorldType.uc();
-    await HF.wait(10);
     P.rwkv.currentWorldType.u(worldType);
 
     logTrace("worldType: $worldType");
 
     P.rwkv.clearStates();
     P.chat.messages.u([]);
-
-    // debugger();
 
     try {
       switch (worldType) {
@@ -169,9 +165,9 @@ class ModelGroupItem extends ConsumerWidget {
                   ),
                 if (alreadyStarted)
                   TextButton(
-                    onPressed: _onContinueTap,
-                    child: const T(
-                      "Back to Chat",
+                    onPressed: loading ? null : _onContinueTap,
+                    child: T(
+                      loading ? "Loading..." : "Back to Chat",
                       s: TS(
                         w: FW.w600,
                       ),

@@ -2,8 +2,6 @@
 import 'dart:developer';
 import 'dart:ui';
 
-import 'package:flutter/services.dart';
-import 'package:zone/config.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/role.dart';
 import 'package:zone/route/router.dart';
