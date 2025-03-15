@@ -15,7 +15,7 @@ project(${PROJECT_NAME} LANGUAGES CXX)
 # This list could contain prebuilt libraries, or libraries created by an
 # external build triggered from this build file.
 set(rwkv_mobile_flutter_bundled_libraries
-  "${CMAKE_CURRENT_SOURCE_DIR}/librwkv_mobile.so"
-  "${CMAKE_CURRENT_SOURCE_DIR}/librwkv_mobile_aarch64.so"
+  "${CMAKE_CURRENT_SOURCE_DIR}/librwkv_mobile-linux-x86_64.so"
+  "${CMAKE_CURRENT_SOURCE_DIR}/librwkv_mobile-linux-aarch64.so"
   PARENT_SCOPE
 )
