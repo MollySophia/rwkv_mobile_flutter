@@ -23,7 +23,7 @@ class AudioEmpty extends ConsumerWidget {
     }
 
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
-    if (currentWorldType != WorldType.engAudioQA && currentWorldType != WorldType.chineseASR) {
+    if (currentWorldType != WorldType.engAudioQA && currentWorldType != WorldType.chineseASR && currentWorldType != WorldType.engASR) {
       return Positioned(child: IgnorePointer(child: C()));
     }
 

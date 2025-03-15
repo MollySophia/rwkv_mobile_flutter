@@ -49,6 +49,8 @@ class ModelGroupItem extends ConsumerWidget {
     try {
       switch (worldType) {
         case WorldType.engAudioQA:
+        case WorldType.chineseASR:
+        case WorldType.engASR:
           await P.rwkv.loadWorldEngAudioQA(
             modelPath: modelFileKey.path,
             encoderPath: encoderFileKey.path,
@@ -60,8 +62,7 @@ class ModelGroupItem extends ConsumerWidget {
             encoderPath: encoderFileKey.path,
             backend: modelFileKey.backend,
           );
-        case WorldType.chineseASR:
-          throw "Not implemented";
+        // throw "Not implemented";
       }
       Navigator.pop(getContext()!);
     } catch (e) {

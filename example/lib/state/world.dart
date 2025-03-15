@@ -4,6 +4,7 @@ enum WorldType {
   engVisualQA,
   engAudioQA,
   chineseASR,
+  engASR,
 }
 
 class _World {
@@ -132,7 +133,7 @@ extension _$World on _World {
     final demoType = P.app.demoType.v;
     final isWorldDemo = demoType == DemoType.world;
     final currentWorldType = P.rwkv.currentWorldType.v;
-    final isAudioDemo = currentWorldType == WorldType.engAudioQA || currentWorldType == WorldType.chineseASR;
+    final isAudioDemo = currentWorldType == WorldType.engAudioQA || currentWorldType == WorldType.chineseASR || currentWorldType == WorldType.engASR;
 
     P.chat.messages.u([]);
     imagePath.u(null);

@@ -42,6 +42,7 @@ class Suggestions extends ConsumerWidget {
           ];
         case WorldType.engAudioQA:
         case WorldType.chineseASR:
+        case WorldType.engASR:
         case null:
           break;
       }

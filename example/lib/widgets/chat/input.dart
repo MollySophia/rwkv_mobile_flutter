@@ -76,6 +76,7 @@ class Input extends ConsumerWidget {
         textFieldEnabled = imagePath != null && imagePath.isNotEmpty;
       case WorldType.engAudioQA:
       case WorldType.chineseASR:
+      case WorldType.engASR:
         show = false;
       case null:
         break;

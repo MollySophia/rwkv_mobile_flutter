@@ -33,6 +33,8 @@ enum FileKey {
   rwkv7_0_4b_vision_siglip_gguf,
   rwkv7_0_4b_whisper_small_enqa_adapter_gguf,
   rwkv7_0_4b_whisper_small_enqa_gguf,
+  rwkv7_0_1b_whisper_small_enasr_adapter_gguf,
+  rwkv7_0_1b_whisper_small_enasr_gguf,
 
   // 🔥 Download test
   download_test_github_releases,
@@ -42,6 +44,10 @@ enum FileKey {
   Weights? get weights {
     final weights = P.remoteFile.weights.v;
     switch (this) {
+      case rwkv7_0_1b_whisper_small_enasr_adapter_gguf:
+        return weights.firstWhereOrNull((e) => e.fileName == 'whisper-small-rwkv-0b1-enasr-adapter.gguf');
+      case rwkv7_0_1b_whisper_small_enasr_gguf:
+        return weights.firstWhereOrNull((e) => e.fileName == 'RWKV7-0.1B-WhisperS-ENASR-DEMO-Q8_0.gguf');
       case rwkv7_0_4b_whisper_small_enqa_adapter_gguf:
         return weights.firstWhereOrNull((e) => e.fileName == 'whisper-small-rwkv-0b4-enqa-adapter.gguf');
       case rwkv7_0_4b_whisper_small_enqa_gguf:
@@ -176,6 +182,10 @@ enum FileKey {
         return WorldType.engAudioQA;
       case rwkv7_0_4b_whisper_small_enqa_gguf:
         return WorldType.engAudioQA;
+      case rwkv7_0_1b_whisper_small_enasr_adapter_gguf:
+        return WorldType.engASR;
+      case rwkv7_0_1b_whisper_small_enasr_gguf:
+        return WorldType.engASR;
       case download_test_github_releases:
         return null;
       case download_test_5mb:
