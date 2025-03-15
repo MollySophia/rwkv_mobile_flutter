@@ -31,8 +31,16 @@ class RWKVMobile {
       return ffi.DynamicLibrary.open('librwkv_mobile.dylib');
     } else if (Platform.isWindows) {
       return ffi.DynamicLibrary.open('librwkv_mobile.dll');
+    } else if (Platform.isLinux) {
+      final abi = ffi.Abi.current();
+      if (abi == ffi.Abi.linuxX64) {
+        return ffi.DynamicLibrary.open('librwkv_mobile-linux-x86_64.so');
+      } else if (abi == ffi.Abi.linuxArm64) {
+        return ffi.DynamicLibrary.open('librwkv_mobile-linux-aarch64.so');
+      } else {
+        throw Exception('😡 Unsupported platform');
+      }
     } else {
-      // TODO: @Molly: Do we need to support other Linux?
       throw Exception('😡 Unsupported platform');
     }
   }
