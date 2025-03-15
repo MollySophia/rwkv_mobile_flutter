@@ -124,24 +124,30 @@ extension $World on _World {
 extension _$World on _World {
   FV _init() async {
     logTrace();
-    P.rwkv.currentWorldType.lv(_c);
-    P.app.demoType.lv(_c);
+    P.rwkv.currentWorldType.lv(_onWorldTypeChanged);
+    P.app.demoType.lv(_onWorldTypeChanged);
   }
 
-  void _c() async {
+  void _onWorldTypeChanged() async {
     final demoType = P.app.demoType.v;
     final isWorldDemo = demoType == DemoType.world;
-    final isAudioDemo = true;
+    final currentWorldType = P.rwkv.currentWorldType.v;
+    final isAudioDemo = currentWorldType == WorldType.engAudioQA || currentWorldType == WorldType.chineseASR;
+
+    if (!isAudioDemo || !isWorldDemo) {
+      _recorder.pause();
+      _recorder.stop();
+      _currentRecorderStream = null;
+      streaming.u(false);
+      return;
+    }
+
     final hasPermission = await _recorder.hasPermission();
 
     logTrace("hasPermission: $hasPermission, isAudioDemo: $isAudioDemo, isWorldDemo: $isWorldDemo");
 
     if (!hasPermission) {
       Alert.warning("Please grant permission to use microphone.");
-      return;
-    }
-
-    if (!isAudioDemo || !isWorldDemo || !hasPermission) {
       _recorder.pause();
       _recorder.stop();
       _currentRecorderStream = null;

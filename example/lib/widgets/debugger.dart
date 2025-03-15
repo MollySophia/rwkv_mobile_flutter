@@ -14,6 +14,7 @@ class Debugger extends ConsumerWidget {
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
     final currentModel = ref.watch(P.rwkv.currentModel);
     final visualFloatHeight = ref.watch(P.world.visualFloatHeight);
+    final loading = ref.watch(P.rwkv.loading);
 
     return Positioned(
       left: 0,
@@ -40,6 +41,7 @@ class Debugger extends ConsumerWidget {
                   T("${"currentWorldType".codeToName}\n" + currentWorldType.toString()),
                   T("${"currentModel".codeToName}\n" + currentModel.toString()),
                   T("${"visualFloatHeight".codeToName}\n" + visualFloatHeight.toString()),
+                  T("${"loading".codeToName}\n" + loading.toString()),
                 ].m((e) {
                   return C(
                     decoration: BD(color: kB.wo(0.67)),

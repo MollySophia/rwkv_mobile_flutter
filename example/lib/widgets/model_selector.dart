@@ -31,9 +31,9 @@ class ModelSelector extends ConsumerWidget {
     return ClipRRect(
       borderRadius: 16.r,
       child: C(
-        margin: const EI.o(t: 16),
+        margin: const EI.o(t: 12),
         child: ListView(
-          padding: const EI.o(t: 24, l: 8, r: 8),
+          padding: const EI.o(l: 8, r: 8),
           controller: scrollController,
           children: [
             Ro(
@@ -79,6 +79,7 @@ class _DownloadSource extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentSource = ref.watch(P.remoteFile.currentSource);
+    final primary = Theme.of(context).colorScheme.primary;
     return Wrap(
       runSpacing: 4,
       spacing: 4,
@@ -89,16 +90,16 @@ class _DownloadSource extends ConsumerWidget {
           },
           child: C(
             decoration: BD(
-              color: e == currentSource ? kCB : kC,
-              borderRadius: 8.r,
+              color: e == currentSource ? primary : kC,
+              borderRadius: 4.r,
               border: Border.all(
-                color: kCB,
+                color: primary,
               ),
             ),
-            padding: const EI.a(4),
+            padding: const EI.s(h: 6, v: 4),
             child: T(
               e.name,
-              s: TS(c: e == currentSource ? kW : kB.wo(0.7), s: 12),
+              s: TS(c: e == currentSource ? kW : kB.wo(0.7), s: 14),
             ),
           ),
         );

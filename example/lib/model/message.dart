@@ -15,6 +15,7 @@ final class Message {
   final MessageType type;
   final String? imageUrl;
   final String? audioUrl;
+  final int? audioLength;
 
   const Message({
     required this.id,
@@ -24,6 +25,7 @@ final class Message {
     this.type = MessageType.text,
     this.imageUrl,
     this.audioUrl,
+    this.audioLength,
   });
 
   factory Message.fromJson(Map<String, dynamic> json) {
@@ -35,6 +37,7 @@ final class Message {
       type: json["type"] as MessageType,
       imageUrl: json["imageUrl"] as String?,
       audioUrl: json["audioUrl"] as String?,
+      audioLength: json["audioLength"] as int?,
     );
   }
 
@@ -46,6 +49,7 @@ final class Message {
     MessageType? type,
     String? imageUrl,
     String? audioUrl,
+    int? audioLength,
   }) {
     return Message(
       id: id ?? this.id,
@@ -55,11 +59,12 @@ final class Message {
       type: type ?? this.type,
       imageUrl: imageUrl ?? this.imageUrl,
       audioUrl: audioUrl ?? this.audioUrl,
+      audioLength: audioLength ?? this.audioLength,
     );
   }
 
   @override
   String toString() {
-    return "Message(\nid: $id\ncontent: $content\nisMine: $isMine\nchanging: $changing\ntype: $type\nimageUrl: $imageUrl\naudioUrl: $audioUrl)";
+    return "Message(\nid: $id\ncontent: $content\nisMine: $isMine\nchanging: $changing\ntype: $type\nimageUrl: $imageUrl\naudioUrl: $audioUrl\naudioLength: $audioLength)";
   }
 }

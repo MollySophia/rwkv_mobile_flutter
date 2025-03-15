@@ -126,14 +126,21 @@ extension $Chat on _Chat {
   }
 
   FV onRegeneratePressed({required int index}) async {
-    // final editingIndex = editingIndex.v;
-    // if (editingIndex != null && editingIndex > index) return;
-    // editingIndex.u(index - 1);
-    // onSendPressed();
+    final userMessage = messages.v[index - 1];
     editingIndex.u(index - 1);
     _textInInput.uc();
     focusNode.unfocus();
-    await send(messages.v[index - 1].content);
+    if (userMessage.type == MessageType.audio) {
+      await send(
+        "",
+        type: MessageType.audio,
+        audioUrl: userMessage.audioUrl,
+        withHistory: false,
+        audioLength: userMessage.audioLength,
+      );
+      return;
+    }
+    await send(userMessage.content);
   }
 
   FV scrollToBottom({Duration? duration, bool? animate = true}) async {
@@ -164,6 +171,7 @@ extension $Chat on _Chat {
     MessageType type = MessageType.text,
     String? imageUrl,
     String? audioUrl,
+    int? audioLength,
     bool withHistory = true,
   }) async {
     // debugger();
@@ -185,6 +193,7 @@ extension $Chat on _Chat {
       type: type,
       imageUrl: imageUrl,
       audioUrl: audioUrl,
+      audioLength: audioLength,
     );
     messages.ua(msg);
     Future.delayed(34.ms).then((_) {
@@ -253,7 +262,7 @@ extension _$Chat on _Chat {
     P.rwkv.setAudioPrompt(path: path);
     final t1 = DateTime.now().millisecondsSinceEpoch;
     if (kDebugMode) print("💬 setAudioPrompt done in ${t1 - t0}ms");
-    send("", type: MessageType.audio, audioUrl: path, withHistory: false);
+    send("", type: MessageType.audio, audioUrl: path, withHistory: false, audioLength: length);
     final t2 = DateTime.now().millisecondsSinceEpoch;
     if (kDebugMode) print("💬 send done in ${t2 - t1}ms");
   }

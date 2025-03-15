@@ -78,19 +78,17 @@ extension $RemoteFile on _RemoteFile {
   }
 
   FV checkLocalFile() async {
+    logTrace();
     await HF.wait(17);
     final fileKeys = FileKey.values.where((e) => e.available).toList();
     for (final key in fileKeys) {
       final path = key.path;
       final pathExists = await File(path).exists();
-      logTrace("💬 key: $key pathExists: $pathExists");
       bool fileSizeVerified = false;
       if (pathExists) {
         final expectFileSize = key.weights?.fileSize;
         final fileSize = await File(path).length();
         fileSizeVerified = expectFileSize == fileSize;
-        // if (kDebugMode) print("💬 file: $key expectFileSize: $expectFileSize actualFileSize: $fileSize");
-        logTrace("💬 file: $key expectFileSize: $expectFileSize fileSize: $fileSize");
         if (expectFileSize != fileSize) await File(path).delete();
       }
       files(key).u(files(key).v.copyWith(hasFile: fileSizeVerified));

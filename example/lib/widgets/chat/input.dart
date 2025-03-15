@@ -58,27 +58,31 @@ class Input extends ConsumerWidget {
     final paddingBottom = ref.watch(P.app.paddingBottom);
     final primary = Theme.of(context).colorScheme.primary;
     final loaded = ref.watch(P.rwkv.loaded);
-    final screenWidth = ref.watch(P.app.screenWidth);
-    // final hintText = ref.watch(P.rwkv.currentWorldType) == WorldType.engVisualQA ? "Describe the image" : S.current.send_message_to_rwkv;
 
     String hintText = S.current.send_message_to_rwkv;
+
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
     final imagePath = ref.watch(P.world.imagePath);
-    if (currentWorldType == WorldType.engVisualQA) {
-      if (imagePath != null && imagePath.isNotEmpty) {
-        hintText = "Ask me anything about the image";
-      } else {
-        hintText = "Please select an image or take a photo";
-      }
-    }
+    bool textFieldEnabled = loaded;
+    bool show = true;
 
-    bool enabled = loaded;
-    if (currentWorldType == WorldType.engVisualQA) {
-      enabled = imagePath != null && imagePath.isNotEmpty;
+    switch (currentWorldType) {
+      case WorldType.engVisualQA:
+        if (imagePath != null && imagePath.isNotEmpty) {
+          hintText = "Ask me anything about the image";
+        } else {
+          hintText = "Please select an image or take a photo";
+        }
+        textFieldEnabled = imagePath != null && imagePath.isNotEmpty;
+      case WorldType.engAudioQA:
+      case WorldType.chineseASR:
+        show = false;
+      case null:
+        break;
     }
 
     return Positioned(
-      bottom: 0,
+      bottom: show ? 0 : -P.chat.inputHeight.v,
       left: 0,
       right: 0,
       child: MeasureSize(
@@ -105,7 +109,7 @@ class Input extends ConsumerWidget {
                     onKeyEvent: _onKeyEvent,
                     focusNode: P.chat.focusNode,
                     child: TextField(
-                      enabled: enabled,
+                      enabled: textFieldEnabled,
                       controller: P.chat.textEditingController,
                       onSubmitted: P.chat.onSubmitted,
                       onChanged: _onChanged,

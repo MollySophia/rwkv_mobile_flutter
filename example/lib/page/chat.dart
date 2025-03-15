@@ -2,6 +2,8 @@
 import 'dart:developer';
 import 'dart:ui';
 
+import 'package:flutter/services.dart';
+import 'package:zone/config.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/role.dart';
 import 'package:zone/route/router.dart';
@@ -10,10 +12,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:zone/state/p.dart';
 import 'package:zone/widgets/chat/app_bar.dart';
+import 'package:zone/widgets/chat/audio_empty.dart';
 import 'package:zone/widgets/chat/audio_input.dart';
 import 'package:zone/widgets/chat/empty.dart';
 import 'package:zone/widgets/chat/input.dart';
 import 'package:zone/widgets/chat/message.dart';
+import 'package:zone/widgets/chat/suggestions.dart';
+import 'package:zone/widgets/chat/visual_empty.dart';
 import 'package:zone/widgets/chat/visual_float.dart';
 import 'package:zone/widgets/model_selector.dart';
 
@@ -93,6 +98,8 @@ class _PageChatState extends State<PageChat> {
         children: [
           _List(),
           Empty(),
+          VisualEmpty(),
+          AudioEmpty(),
           VisualFloat(),
           //
           ChatAppBar(),
@@ -100,6 +107,7 @@ class _PageChatState extends State<PageChat> {
           //
           _ScrollToBottomButton(),
           //
+          Suggestions(),
           Input(),
           AudioInput(),
         ],
@@ -296,7 +304,7 @@ class _ScrollToBottomButton extends ConsumerWidget {
     if (demoType != DemoType.chat) return Positioned.fill(child: IgnorePointer(child: Container()));
     if (!loaded) return Positioned.fill(child: IgnorePointer(child: Container()));
     return AnimatedPositioned(
-      duration: 350.ms,
+      duration: 200.ms,
       curve: Curves.easeInOutBack,
       left: (screenWidth - buttonSize) / 2,
       bottom: atBottom ? 0 : inputHeight + 12,

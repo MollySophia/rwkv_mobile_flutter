@@ -17,7 +17,7 @@ class RWKVMobile {
 
   Future<void> runIsolate(StartOptions options) async {
     if (_isolate != null) {
-      throw Exception('Isolate already running');
+      throw Exception('😡 Isolate already running');
     }
     _isolate = await Isolate.spawn(_isolateMain, options);
   }
@@ -33,7 +33,7 @@ class RWKVMobile {
       return ffi.DynamicLibrary.open('librwkv_mobile.dll');
     } else {
       // TODO: @Molly: Do we need to support other Linux?
-      throw Exception('Unsupported platform');
+      throw Exception('😡 Unsupported platform');
     }
   }
 
@@ -100,17 +100,17 @@ class RWKVMobile {
     }
 
     if (runtime.address == 0) {
-      throw Exception('Failed to initialize runtime');
+      throw Exception('😡 Failed to initialize runtime');
     }
 
     retVal = rwkvMobile.rwkvmobile_runtime_load_tokenizer(runtime, tokenizerPath.toNativeUtf8().cast<ffi.Char>());
     if (retVal != 0) {
-      throw Exception('Failed to load tokenizer, tokenizer path: $tokenizerPath');
+      throw Exception('😡 Failed to load tokenizer, tokenizer path: $tokenizerPath');
     }
 
     retVal = rwkvMobile.rwkvmobile_runtime_load_model(runtime, modelPath.toNativeUtf8().cast<ffi.Char>());
     if (retVal != 0) {
-      throw Exception('Failed to load model, model path: $modelPath');
+      throw Exception('😡 Failed to load model, model path: $modelPath');
     }
 
     await for (final (String, dynamic) message in receivePort) {
@@ -134,7 +134,7 @@ class RWKVMobile {
         final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
         retVal = rwkvMobile.rwkvmobile_runtime_set_prompt(runtime, promptPtr);
         if (retVal != 0) {
-          throw Exception('Failed to set prompt');
+          throw Exception('😡 Failed to set prompt');
         }
       } else if (command == 'getPrompt') {
         final stringBuffer = calloc.allocate<ffi.Char>(maxLength);
@@ -175,14 +175,14 @@ class RWKVMobile {
         final eosTokenPtr = arg.toNativeUtf8().cast<ffi.Char>();
         retVal = rwkvMobile.rwkvmobile_runtime_set_eos_token(runtime, eosTokenPtr);
         if (retVal != 0) {
-          throw Exception('Failed to set eos token');
+          throw Exception('😡 Failed to set eos token');
         }
       } else if (command == 'setBosToken') {
         final arg = message.$2 as String;
         final bosTokenPtr = arg.toNativeUtf8().cast<ffi.Char>();
         retVal = rwkvMobile.rwkvmobile_runtime_set_bos_token(runtime, bosTokenPtr);
         if (retVal != 0) {
-          throw Exception('Failed to set bos token');
+          throw Exception('😡 Failed to set bos token');
         }
       } else if (command == 'setTokenBanned') {
         final arg = message.$2 as List<int>;
@@ -193,52 +193,52 @@ class RWKVMobile {
         retVal = rwkvMobile.rwkvmobile_runtime_set_token_banned(runtime, tokenBannedPtr, arg.length);
         calloc.free(tokenBannedPtr);
         if (retVal != 0) {
-          throw Exception('Failed to set token banned');
+          throw Exception('😡 Failed to set token banned');
         }
       } else if (command == 'setUserRole') {
         final arg = message.$2 as String;
         final userRolePtr = arg.toNativeUtf8().cast<ffi.Char>();
         retVal = rwkvMobile.rwkvmobile_runtime_set_user_role(runtime, userRolePtr);
         if (retVal != 0) {
-          throw Exception('Failed to set user role');
+          throw Exception('😡 Failed to set user role');
         }
       } else if (command == 'loadVisionEncoder') {
         final arg = message.$2 as String;
         final encoderPathPtr = arg.toNativeUtf8().cast<ffi.Char>();
         retVal = rwkvMobile.rwkvmobile_runtime_load_vision_encoder(runtime, encoderPathPtr);
         if (retVal != 0) {
-          throw Exception('Failed to load vision encoder');
+          throw Exception('😡 Failed to load vision encoder');
         }
       } else if (command == 'releaseVisionEncoder') {
         retVal = rwkvMobile.rwkvmobile_runtime_release_vision_encoder(runtime);
         if (retVal != 0) {
-          throw Exception('Failed to release vision encoder');
+          throw Exception('😡 Failed to release vision encoder');
         }
       } else if (command == 'setVisionPrompt') {
         final arg = message.$2 as String;
         final imagePathPtr = arg.toNativeUtf8().cast<ffi.Char>();
         retVal = rwkvMobile.rwkvmobile_runtime_set_image_prompt(runtime, imagePathPtr);
         if (retVal != 0) {
-          throw Exception('Failed to set image prompt');
+          throw Exception('😡 Failed to set image prompt');
         }
       } else if (command == 'loadWhisperEncoder') {
         final arg = message.$2 as String;
         final encoderPathPtr = arg.toNativeUtf8().cast<ffi.Char>();
         retVal = rwkvMobile.rwkvmobile_runtime_load_whisper_encoder(runtime, encoderPathPtr);
         if (retVal != 0) {
-          throw Exception('Failed to load whisper encoder');
+          throw Exception('😡 Failed to load whisper encoder');
         }
       } else if (command == 'releaseWhisperEncoder') {
         retVal = rwkvMobile.rwkvmobile_runtime_release_whisper_encoder(runtime);
         if (retVal != 0) {
-          throw Exception('Failed to release whisper encoder');
+          throw Exception('😡 Failed to release whisper encoder');
         }
       } else if (command == 'setAudioPrompt') {
         final arg = message.$2 as String;
         final audioPathPtr = arg.toNativeUtf8().cast<ffi.Char>();
         retVal = rwkvMobile.rwkvmobile_runtime_set_audio_prompt(runtime, audioPathPtr);
         if (retVal != 0) {
-          throw Exception('Failed to set audio prompt');
+          throw Exception('😡 Failed to set audio prompt');
         }
       } else if (command == 'message') {
         final messages = message.$2 as List<String>;
@@ -268,7 +268,7 @@ class RWKVMobile {
         if (kDebugMode) print("💬 Call LLM done (chat mode)");
         if (retVal != 0) {
           sendPort.send({'generateStop': true});
-          throw Exception('Failed to evaluate chat');
+          throw Exception('😡 Failed to evaluate chat');
         }
         sendPort.send({'response': responseBuffer});
         sendPort.send({'generateStop': true});
@@ -289,7 +289,7 @@ class RWKVMobile {
         retVal = rwkvMobile.rwkvmobile_runtime_gen_completion(runtime, promptPtr, ffi.nullptr, maxLength, generationStopToken, nativeCallable.nativeFunction);
         if (kDebugMode) print("🔥 Call LLM done (gen mode)");
         if (retVal != 0) {
-          throw Exception('Failed to evaluate generation');
+          throw Exception('😡 Failed to evaluate generation');
         }
 
         sendPort.send({'response': responseStr});

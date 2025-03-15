@@ -1,6 +1,7 @@
 // ignore: unused_import
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:zone/func/log_trace.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/file_key.dart';
@@ -18,28 +19,38 @@ class ModelGroupItem extends ConsumerWidget {
 
   const ModelGroupItem(this.worldType, {super.key});
 
-  void _onDownloadAllTap() {
+  void _onDownloadAllTap() async {
     final fileKeys = FileKey.availableModels.where((e) => e.worldType == worldType).toList();
     fileKeys.forEach((e) => P.remoteFile.getFile(fileKey: e));
   }
 
-  void _onDeleteAllTap() {
+  void _onDeleteAllTap() async {
     final fileKeys = FileKey.availableModels.where((e) => e.worldType == worldType).toList();
     fileKeys.forEach((e) => P.remoteFile.deleteFile(fileKey: e));
   }
 
   void _onStartToChatTap() async {
-    logTrace();
-    if (P.rwkv.loading.v) return;
+    if (P.rwkv.loading.v) {
+      Alert.warning("Please wait for the model to load...");
+      return;
+    }
     final fileKeys = FileKey.availableModels.where((e) => e.worldType == worldType).toList();
     final encoderFileKey = fileKeys.firstWhere((e) => e.isEncoder);
     final modelFileKey = fileKeys.firstWhere((e) => !e.isEncoder);
 
     P.rwkv.loading.u(true);
+    P.rwkv.currentWorldType.uc();
+    await HF.wait(10);
     P.rwkv.currentWorldType.u(worldType);
+
+    logTrace("worldType: $worldType");
+
+    P.rwkv.clearStates();
+    P.chat.messages.u([]);
+
+    // debugger();
+
     try {
-      P.rwkv.clearStates();
-      P.chat.messages.u([]);
       switch (worldType) {
         case WorldType.engAudioQA:
           await P.rwkv.loadWorldEngAudioQA(
@@ -58,6 +69,7 @@ class ModelGroupItem extends ConsumerWidget {
       }
       Navigator.pop(getContext()!);
     } catch (e) {
+      if (kDebugMode) print("😡 $e");
       Alert.error(e.toString());
       P.rwkv.currentWorldType.u(null);
       return;
@@ -70,20 +82,28 @@ class ModelGroupItem extends ConsumerWidget {
     pop();
   }
 
+  void _onContinueTap() async {
+    logTrace();
+    pop();
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final fileKeys = FileKey.availableModels.where((e) => e.worldType == worldType).toList();
     if (fileKeys.isEmpty) return const SizedBox.shrink();
     final primaryColor = Theme.of(context).colorScheme.primaryContainer;
-    final files = [
-      ...fileKeys.m(
-        (e) => ref.watch(
-          P.remoteFile.files(e),
-        ),
-      ),
-    ];
+
+    final files = fileKeys.m((e) {
+      return ref.watch(P.remoteFile.files(e));
+    });
+
     final allDownloaded = files.every((e) => e.hasFile);
     final downloading = files.any((e) => e.downloading);
+
+    final currentWorldType = ref.watch(P.rwkv.currentWorldType);
+    final alreadyStarted = currentWorldType == worldType;
+    final loading = ref.watch(P.rwkv.loading);
+
     return ClipRRect(
       borderRadius: 8.r,
       child: C(
@@ -116,7 +136,7 @@ class ModelGroupItem extends ConsumerWidget {
                       ),
                     ),
                   ),
-                if (allDownloaded)
+                if (allDownloaded && !alreadyStarted)
                   TextButton(
                     onPressed: _onDeleteAllTap,
                     child: const T(
@@ -126,12 +146,32 @@ class ModelGroupItem extends ConsumerWidget {
                       ),
                     ),
                   ),
-                const Spacer(),
-                if (allDownloaded)
+                if (alreadyStarted)
                   TextButton(
-                    onPressed: _onStartToChatTap,
+                    onPressed: null,
                     child: const T(
-                      "Start to Chat",
+                      "Exploring...",
+                      s: TS(
+                        w: FW.w600,
+                      ),
+                    ),
+                  ),
+                const Spacer(),
+                if (allDownloaded && !alreadyStarted)
+                  TextButton(
+                    onPressed: loading ? null : _onStartToChatTap,
+                    child: T(
+                      loading ? "Loading..." : "Start to Chat",
+                      s: TS(
+                        w: FW.w600,
+                      ),
+                    ),
+                  ),
+                if (alreadyStarted)
+                  TextButton(
+                    onPressed: _onContinueTap,
+                    child: const T(
+                      "Back to Chat",
                       s: TS(
                         w: FW.w600,
                       ),

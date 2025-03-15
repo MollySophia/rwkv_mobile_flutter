@@ -1,6 +1,5 @@
 // ignore: unused_import
 import 'dart:developer';
-import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -28,11 +27,21 @@ class VisualEmpty extends ConsumerWidget {
     final primary = Theme.of(context).colorScheme.primary;
     final imagePath = ref.watch(P.world.imagePath);
     if (imagePath != null) return Positioned(child: IgnorePointer(child: C()));
+    final currentWorldType = ref.watch(P.rwkv.currentWorldType);
+
+    if (currentWorldType != WorldType.engVisualQA) return Positioned(child: IgnorePointer(child: C()));
+
+    final messages = ref.watch(P.chat.messages);
+
+    bool show = true;
+    if (messages.isNotEmpty) {
+      show = false;
+    }
 
     return AnimatedPositioned(
-      duration: 350.ms,
+      duration: 200.ms,
       curve: Curves.easeInOutBack,
-      bottom: inputHeight,
+      bottom: show ? inputHeight : -screenHeight,
       left: 0,
       width: screenWidth,
       top: paddingTop + kToolbarHeight,
