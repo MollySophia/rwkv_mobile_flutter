@@ -9,6 +9,7 @@ class Debugger extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // return const SizedBox.shrink();
     if (!kDebugMode) return const SizedBox.shrink();
     final demoType = ref.watch(P.app.demoType);
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
@@ -18,6 +19,7 @@ class Debugger extends ConsumerWidget {
     final streaming = ref.watch(P.world.streaming);
     final playing = ref.watch(P.world.playing);
     final latestClickedMessage = ref.watch(P.chat.latestClickedMessage);
+    final inputHeight = ref.watch(P.chat.inputHeight);
 
     return Positioned(
       left: 0,
@@ -48,6 +50,7 @@ class Debugger extends ConsumerWidget {
                   T("${"streaming".codeToName}\n" + streaming.toString()),
                   T("${"playing".codeToName}\n" + playing.toString()),
                   T("${"latestClickedMessage".codeToName}\n" + (latestClickedMessage?.id.toString() ?? "null")),
+                  T("${"inputHeight".codeToName}\n" + inputHeight.toString()),
                 ].m((e) {
                   return C(
                     decoration: BD(color: kB.wo(0.67)),

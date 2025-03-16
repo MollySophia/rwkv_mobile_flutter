@@ -169,6 +169,27 @@ class Message extends ConsumerWidget {
     final isImage = msg.type == model.MessageType.image;
     final isAudio = msg.type == model.MessageType.audio;
 
+    String worldDemoMessageHeader = "";
+    final worldType = ref.watch(P.rwkv.currentWorldType);
+    switch (worldType) {
+      case WorldType.chineseASR:
+        if (changing) {
+          worldDemoMessageHeader = "正在识别您的声音...";
+        } else {
+          worldDemoMessageHeader = "语音识别结果";
+        }
+      case WorldType.engASR:
+        if (changing) {
+          worldDemoMessageHeader = "Recognizing your voice...";
+        } else {
+          worldDemoMessageHeader = "Voice recognition result";
+        }
+      case null:
+      case WorldType.engVisualQA:
+      case WorldType.engAudioQA:
+        break;
+    }
+
     return Align(
       alignment: alignment,
       child: IgnorePointer(
@@ -206,6 +227,17 @@ class Message extends ConsumerWidget {
                       if (isMine && isImage) Image.network(msg.imageUrl!),
                       // 🔥 User message audio
                       if (isMine && isAudio) _AudioBubble(msg),
+                      // 🔥 Bot message audio recognition result
+                      if (!isMine && worldDemoMessageHeader.isNotEmpty)
+                        T(
+                          worldDemoMessageHeader,
+                          s: TS(
+                            c: kB.wo(0.5),
+                            w: FW.w700,
+                            s: 10,
+                          ),
+                        ),
+                      if (!isMine && worldDemoMessageHeader.isNotEmpty) 4.h,
                       // 🔥 Bot message
                       if (!isMine && !usingReasoningModel)
                         MarkdownBody(
@@ -301,7 +333,7 @@ class Message extends ConsumerWidget {
                           m: MAA.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            if (msg.changing)
+                            if (changing)
                               GD(
                                 child: TweenAnimationBuilder(
                                   tween: Tween(begin: 0.0, end: 1.0),

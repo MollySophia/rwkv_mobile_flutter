@@ -7,6 +7,32 @@ enum WorldType {
   engASR,
   ;
 
+  String get displayName {
+    switch (this) {
+      case WorldType.engVisualQA:
+        return "English Visual QA";
+      case WorldType.engAudioQA:
+        return "English Audio QA";
+      case WorldType.chineseASR:
+        return "Chinese ASR";
+      case WorldType.engASR:
+        return "English ASR";
+    }
+  }
+
+  String get taskDescription {
+    switch (this) {
+      case WorldType.engVisualQA:
+        return "Visual Question Answering";
+      case WorldType.engAudioQA:
+        return "Audio Question Answering";
+      case WorldType.chineseASR:
+        return "Automatic Speech Recognition";
+      case WorldType.engASR:
+        return "Automatic Speech Recognition";
+    }
+  }
+
   // TODO: Use it in the future @wangce
   bool get isAudioDemo {
     switch (this) {
@@ -63,7 +89,7 @@ class _World {
 
 /// Public methods
 extension $World on _World {
-  FV startStreaming() async {
+  FV startRecord() async {
     logTrace();
     recording.u(true);
     await stopPlaying();
@@ -94,13 +120,18 @@ extension $World on _World {
     );
   }
 
-  FV stopStreaming() async {
+  FV stopRecord({bool isCancel = false}) async {
     logTrace();
     recording.u(false);
 
     final cc = _currentStreamController;
     cc?.close();
     _currentStreamController = null;
+
+    if (isCancel) {
+      _audioData.clear();
+      return;
+    }
 
     final t = DateTime.now().millisecondsSinceEpoch;
     endTime.u(t);
@@ -124,7 +155,6 @@ extension $World on _World {
     for (var chunk in _audioData) {
       await file.writeAsBytes(chunk, mode: FileMode.append);
     }
-    _audioData.clear();
 
     audioFileStreamController.add((file, audioLengthInMilliseconds));
 

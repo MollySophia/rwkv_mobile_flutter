@@ -112,7 +112,15 @@ class ModelGroupItem extends ConsumerWidget {
         child: Co(
           c: CAA.stretch,
           children: [
-            T(worldType.name.codeToName, s: const TS(s: 18, w: FW.w600)),
+            Ro(
+              c: CAA.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                T(worldType.displayName, s: const TS(s: 18, w: FW.w600)),
+                Spacer(),
+                T(worldType.taskDescription, s: const TS(s: 12, w: FW.w400)),
+              ],
+            ),
             ...fileKeys.m((e) => C(
                   decoration: BD(
                     color: kC,
