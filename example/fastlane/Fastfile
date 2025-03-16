@@ -1,9 +1,9 @@
 lane :all do |params|
   envString = params[:env] || "chat"
-  change_analysis_options()
+  raw_change_analysis_options()
   dart_fix()
-  change_analysis_options()
-  build_number = increase_build_number()
+  raw_change_analysis_options()
+  build_number = raw_increase_build_number()
   push_to_git_remote()
   global_replace(env: envString) # 替换环境变量
   build_assets() # 构建 assets
@@ -29,22 +29,6 @@ end
 lane :build_assets do
   sh "cd ..;dart run flutter_native_splash:create;cd fastlane"
   sh "cd ..;dart run icons_launcher:create;cd fastlane"
-end
-
-lane :change_analysis_options do
-  raw_change_analysis_options()
-end
-
-lane :increase_build_number do
-  new_build_number = increase_build_version()
-  git_add(path: ".")
-  git_commit(
-    path: ".",
-    message: "_",
-  )
-  # 这个一定要调用吗?
-  # 可能在远端触发 CI/CD 是更好的选择
-  # push_to_git_remote()
 end
 
 lane :ios_upload do |params|
@@ -79,6 +63,7 @@ lane :android_pgyer do
 end
 
 lane :global_replace do |params|
+  raw_switch_android_files(env: params[:env])
   global_config_replace(env: params[:env])
 end
 
@@ -90,12 +75,4 @@ end
 
 lane :test do |params|
   android_pgyer()
-end
-
-lane :message_to_slack do |params|
-  slack(
-    message: params[:message],
-    slack_url: "https://hooks.slack.com/services/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",
-    default_payloads: [],
-  )
 end
