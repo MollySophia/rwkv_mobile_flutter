@@ -20,6 +20,7 @@ class Debugger extends ConsumerWidget {
     final playing = ref.watch(P.world.playing);
     final latestClickedMessage = ref.watch(P.chat.latestClickedMessage);
     final inputHeight = ref.watch(P.chat.inputHeight);
+    final hasFocus = ref.watch(P.chat.hasFocus);
 
     return Positioned(
       left: 0,
@@ -51,6 +52,7 @@ class Debugger extends ConsumerWidget {
                   T("${"playing".codeToName}\n" + playing.toString()),
                   T("${"latestClickedMessage".codeToName}\n" + (latestClickedMessage?.id.toString() ?? "null")),
                   T("${"inputHeight".codeToName}\n" + inputHeight.toString()),
+                  T("${"hasFocus".codeToName}\n" + hasFocus.toString()),
                 ].m((e) {
                   return C(
                     decoration: BD(color: kB.wo(0.67)),

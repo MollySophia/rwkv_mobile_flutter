@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 
 enum MessageType {
   text,
-  image,
-  audio,
+  userImage,
+  userAudio,
 }
 
 @immutable

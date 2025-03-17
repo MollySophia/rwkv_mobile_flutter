@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
+import 'package:zone/func/widget_debugger.dart';
 import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
 import 'package:zone/widgets/arguments_panel.dart';
@@ -33,6 +34,8 @@ class ChatAppBar extends ConsumerWidget {
     final loaded = ref.watch(P.rwkv.loaded);
 
     final demoType = ref.watch(P.app.demoType);
+    final currentWorldType = ref.watch(P.rwkv.currentWorldType);
+    final primary = Theme.of(context).colorScheme.primary;
 
     return Positioned(
       top: 0,
@@ -45,11 +48,48 @@ class ChatAppBar extends ConsumerWidget {
             backgroundColor: kW.wo(0.6),
             elevation: 0,
             centerTitle: true,
-            title: const AutoSizeText(
-              "World RWKV",
-              style: TextStyle(fontSize: 20),
-              minFontSize: 0,
-              maxLines: 2,
+            title: GD(
+              onTap: () {
+                P.chat.showingModelSelector.u(false);
+                P.chat.showingModelSelector.u(true);
+              },
+              child: Co(
+                c: CAA.center,
+                children: [
+                  T("World RWKV"),
+                  if (demoType == DemoType.world) 2.h,
+                  if (demoType == DemoType.world)
+                    C(
+                      padding: EI.o(l: 4, r: 4, t: 1, b: 1),
+                      decoration: BD(
+                        color: kB.wo(0.1),
+                        borderRadius: 10.r,
+                      ),
+                      child: Ro(
+                        mainAxisSize: MainAxisSize.min,
+                        c: CAA.center,
+                        m: MAA.center,
+                        children: [
+                          T(
+                            currentWorldType?.displayName ?? "Click to select a model",
+                            s: TS(s: 10, c: primary),
+                          ),
+                          4.w,
+                          Transform.rotate(
+                            angle: 0, // 90度
+                            child: SB(
+                              width: 10,
+                              height: 5,
+                              child: CustomPaint(
+                                painter: _TrianglePainter(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
             ),
             leading: Ro(
               children: [
@@ -93,4 +133,24 @@ class ChatAppBar extends ConsumerWidget {
       ),
     );
   }
+}
+
+class _TrianglePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.black.wo(0.667)
+      ..style = PaintingStyle.fill;
+
+    final path = Path()
+      ..moveTo(0, 0)
+      ..lineTo(size.width, 0)
+      ..lineTo(size.width / 2, size.height)
+      ..close();
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

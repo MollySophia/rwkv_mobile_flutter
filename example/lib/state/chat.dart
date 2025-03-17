@@ -56,6 +56,8 @@ class _Chat {
   late final roles = _gs<List<Role>>([]);
 
   late final latestClickedMessage = _gsn<Message>();
+
+  late final hasFocus = _gs(false);
 }
 
 /// Public methods
@@ -132,10 +134,10 @@ extension $Chat on _Chat {
     editingIndex.u(index - 1);
     _textInInput.uc();
     focusNode.unfocus();
-    if (userMessage.type == MessageType.audio) {
+    if (userMessage.type == MessageType.userAudio) {
       await send(
         "",
-        type: MessageType.audio,
+        type: MessageType.userAudio,
         audioUrl: userMessage.audioUrl,
         withHistory: false,
         audioLength: userMessage.audioLength,
@@ -202,6 +204,8 @@ extension $Chat on _Chat {
       scrollToBottom();
     });
 
+    if (type == MessageType.userImage) return;
+
     P.rwkv.send(withHistory ? messages.v.m((e) => e.content) : [message]);
     editingIndex.u(null);
 
@@ -249,6 +253,12 @@ extension _$Chat on _Chat {
     _loadRoles();
 
     P.world.audioFileStreamController.stream.listen(_onNewFileReceived);
+    focusNode.addListener(_onFocusNodeChanged);
+    hasFocus.u(focusNode.hasFocus);
+  }
+
+  FV _onFocusNodeChanged() async {
+    hasFocus.u(focusNode.hasFocus);
   }
 
   FV _onNewFileReceived((File, int) event) async {
@@ -264,7 +274,7 @@ extension _$Chat on _Chat {
     P.rwkv.setAudioPrompt(path: path);
     final t1 = DateTime.now().millisecondsSinceEpoch;
     if (kDebugMode) print("💬 setAudioPrompt done in ${t1 - t0}ms");
-    send("", type: MessageType.audio, audioUrl: path, withHistory: false, audioLength: length);
+    send("", type: MessageType.userAudio, audioUrl: path, withHistory: false, audioLength: length);
     final t2 = DateTime.now().millisecondsSinceEpoch;
     if (kDebugMode) print("💬 send done in ${t2 - t1}ms");
   }

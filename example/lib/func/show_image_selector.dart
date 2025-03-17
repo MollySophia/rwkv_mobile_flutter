@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:zone/func/log_trace.dart';
+import 'package:zone/model/message.dart';
 import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
 

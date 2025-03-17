@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:zone/args.dart';
 import 'package:zone/config.dart';
-import 'package:zone/widgets/chat_debugger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:halo/halo.dart';
@@ -11,7 +10,6 @@ import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
 import 'package:halo_alert/halo_alert.dart';
 import 'package:zone/widgets/debugger.dart';
-import 'package:zone/widgets/othello_debugger.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -64,8 +62,6 @@ class _App extends StatelessWidget {
                 C(color: Theme.of(context).scaffoldBackgroundColor),
                 if (child != null) child,
                 Alert.deploy(),
-                if (Args.enableChatDebugger) const ChatDebugger(),
-                if (Args.enableOthelloDebugger) const OthelloDebugger(),
                 if (kDebugMode) const Debugger(),
               ],
             ),

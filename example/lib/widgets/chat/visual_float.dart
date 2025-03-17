@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:zone/func/show_image_selector.dart';
-import 'package:zone/func/widget_debugger.dart';
 import 'package:zone/state/p.dart';
 
 class VisualFloat extends ConsumerWidget {
@@ -19,6 +18,7 @@ class VisualFloat extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // return Positioned(child: IgnorePointer(child: C()));
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
 
     switch (currentWorldType) {

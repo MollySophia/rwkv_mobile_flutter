@@ -1,6 +1,6 @@
 // ignore: unused_import
 import 'dart:async';
-import 'dart:developer';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -45,9 +45,12 @@ class Message extends ConsumerWidget {
   }
 
   void _onTap() async {
+    logTrace();
+
+    P.chat.focusNode.unfocus();
     P.chat.latestClickedMessage.u(msg);
     final isMine = msg.isMine;
-    final isAudio = msg.type == model.MessageType.audio;
+    final isAudio = msg.type == model.MessageType.userAudio;
 
     if (isMine && isAudio) {
       final audioUrl = msg.audioUrl;
@@ -166,11 +169,12 @@ class Message extends ConsumerWidget {
 
     final showingCotContent = cotContentHeight != 0;
 
-    final isImage = msg.type == model.MessageType.image;
-    final isAudio = msg.type == model.MessageType.audio;
+    final isUserImage = msg.type == model.MessageType.userImage;
+    final isUserAudio = msg.type == model.MessageType.userAudio;
 
     String worldDemoMessageHeader = "";
     final worldType = ref.watch(P.rwkv.currentWorldType);
+
     switch (worldType) {
       case WorldType.chineseASR:
         if (changing) {
@@ -190,6 +194,215 @@ class Message extends ConsumerWidget {
         break;
     }
 
+    bool showUserEditButton = true;
+    bool showBotEditButton = true;
+    bool showUserCopyButton = true;
+    bool showBotCopyButton = true;
+
+    switch (worldType) {
+      case null:
+        break;
+      default:
+        showUserEditButton = false;
+        showBotEditButton = false;
+        showUserCopyButton = false;
+        showBotCopyButton = false;
+    }
+
+    EI padding = EI.a(12);
+    Border border = Border.all(color: primaryColor.wo(0.2));
+
+    if (isUserImage) {
+      padding = EI.zero;
+      border = Border.all(width: 0);
+    }
+
+    final bubbleContent = ConstrainedBox(
+      constraints: BoxConstraints(
+        maxWidth: width - kBubbleMaxWidthAdjust,
+        minHeight: kBubbleMinHeight,
+      ),
+      child: C(
+        padding: padding,
+        decoration: BD(
+          color: isMine ? primaryContainer : kW,
+          border: border,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(isMine ? 24 : 0),
+            topRight: const Radius.circular(24),
+            bottomLeft: const Radius.circular(24),
+            bottomRight: Radius.circular(isMine ? 0 : 24),
+          ),
+        ),
+        child: Co(
+          c: isMine ? CAA.end : CAA.start,
+          children: [
+            // 🔥 User message
+            if (isMine && !isUserImage && !isUserAudio) T(finalContent, s: const TS(c: kB)),
+            // 🔥 User message image
+            if (isMine && isUserImage) Image.file(File(msg.imageUrl!)),
+            // 🔥 User message audio
+            if (isMine && isUserAudio) _AudioBubble(msg),
+            // 🔥 Bot message audio recognition result
+            if (!isMine && worldDemoMessageHeader.isNotEmpty)
+              T(
+                worldDemoMessageHeader,
+                s: TS(
+                  c: kB.wo(0.5),
+                  w: FW.w700,
+                  s: 10,
+                ),
+              ),
+            if (!isMine && worldDemoMessageHeader.isNotEmpty) 4.h,
+            // 🔥 Bot message
+            if (!isMine && !usingReasoningModel)
+              MarkdownBody(
+                data: finalContent,
+                selectable: false,
+                shrinkWrap: true,
+                styleSheet: markdownStyleSheet,
+                onTapLink: _onTapLink,
+              ),
+            // 🔥 Bot message cot header
+            if (!isMine && usingReasoningModel)
+              GD(
+                onTap: () {
+                  if (showingCotContent) {
+                    ref.read(P.chat.cotDisplayState(msg.id).notifier).state = CoTDisplayState.hideCotHeader;
+                  } else {
+                    ref.read(P.chat.cotDisplayState(msg.id).notifier).state = CoTDisplayState.showCotHeaderAndCotContent;
+                  }
+                },
+                child: C(
+                  decoration: const BD(color: kC),
+                  child: Ro(
+                    children: [
+                      T(thisMessageIsReceiving ? "Thinking..." : "Thought result", s: TS(c: kB.wo(0.5), w: FW.w600)),
+                      showingCotContent ? Icon(Icons.expand_more, color: kB.wo(0.5)) : Icon(Icons.expand_less, color: kB.wo(0.5)),
+                    ],
+                  ),
+                ),
+              ),
+            // 🔥 Bot message cot content
+            if (!isMine && usingReasoningModel) 4.h,
+            if (!isMine && usingReasoningModel)
+              AnimatedContainer(
+                duration: 250.ms,
+                height: cotContentHeight,
+                child: C(
+                  decoration: BD(
+                    color: kW.wo(0.1),
+                    border: Border(
+                      left: BorderSide(color: kB.wo(0.15), width: 2),
+                    ),
+                  ),
+                  padding: const EI.o(l: 8),
+                  child: MarkdownBody(
+                    data: cotContent,
+                    selectable: false,
+                    shrinkWrap: true,
+                    styleSheet: markdownStyleSheetForCotContent,
+                    onTapLink: _onTapLink,
+                  ),
+                ),
+              ),
+            // 🔥 Bot message cot result
+            if (!isMine && cotResult.isNotEmpty && usingReasoningModel) 4.h,
+            if (!isMine && cotResult.isNotEmpty && usingReasoningModel)
+              MarkdownBody(
+                data: cotResult,
+                selectable: false,
+                shrinkWrap: true,
+                styleSheet: markdownStyleSheet,
+                onTapLink: _onTapLink,
+              ),
+            // 🔥 User message bottom row
+            if (isMine && !isUserImage && !isUserAudio && (showUserEditButton || showUserCopyButton)) 12.h,
+            if (isMine && !isUserImage && !isUserAudio)
+              Ro(
+                m: MAA.end,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (showUserEditButton)
+                    GD(
+                      onTap: _onUserEditPressed,
+                      child: Icon(
+                        Icons.edit,
+                        color: primaryColor.wo(0.8),
+                        size: 20,
+                      ),
+                    ),
+                  if (showUserEditButton) 4.w,
+                  if (showUserCopyButton)
+                    GD(
+                      onTap: _onCopyPressed,
+                      child: Icon(
+                        Icons.copy,
+                        color: primaryColor.wo(0.8),
+                        size: 20,
+                      ),
+                    ),
+                ],
+              ),
+            // 🔥 Bot message bottom row
+            if (!isMine) 12.h,
+            if (!isMine)
+              Ro(
+                m: MAA.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (changing)
+                    GD(
+                      child: TweenAnimationBuilder(
+                        tween: Tween(begin: 0.0, end: 1.0),
+                        duration: const Duration(milliseconds: 1000000000),
+                        builder: (context, value, child) => Transform.rotate(
+                          angle: value * 2 * pi * 1000000,
+                          child: child,
+                        ),
+                        child: Icon(
+                          Icons.hourglass_top,
+                          color: primaryColor,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  4.w,
+                  GD(
+                    onTap: _onRegeneratePressed,
+                    child: Icon(
+                      Icons.refresh,
+                      color: primaryColor.wo(0.8),
+                      size: 20,
+                    ),
+                  ),
+                  if (showBotEditButton) 4.w,
+                  if (showBotEditButton)
+                    GD(
+                      onTap: _onBotEditPressed,
+                      child: Icon(
+                        Icons.edit,
+                        color: primaryColor.wo(0.8),
+                        size: 20,
+                      ),
+                    ),
+                  if (showBotCopyButton) 4.w,
+                  if (showBotCopyButton)
+                    GD(
+                      onTap: _onCopyPressed,
+                      child: Icon(
+                        Icons.copy,
+                        color: primaryColor.wo(0.8),
+                        size: 20,
+                      ),
+                    ),
+                ],
+              ),
+          ],
+        ),
+      ),
+    );
+
     return Align(
       alignment: alignment,
       child: IgnorePointer(
@@ -201,186 +414,8 @@ class Message extends ConsumerWidget {
             padding: const EI.s(h: marginHorizontal, v: marginVertical),
             child: GD(
               onTap: _onTap,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: width - kBubbleMaxWidthAdjust,
-                  minHeight: kBubbleMinHeight,
-                ),
-                child: C(
-                  padding: const EI.a(12),
-                  decoration: BD(
-                    color: isMine ? primaryContainer : kW,
-                    border: Border.all(color: primaryColor.wo(0.2)),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(isMine ? 20 : 0),
-                      topRight: const Radius.circular(20),
-                      bottomLeft: const Radius.circular(20),
-                      bottomRight: Radius.circular(isMine ? 0 : 20),
-                    ),
-                  ),
-                  child: Co(
-                    c: isMine ? CAA.end : CAA.start,
-                    children: [
-                      // 🔥 User message
-                      if (isMine && !isImage && !isAudio) T(finalContent, s: const TS(c: kB)),
-                      // 🔥 User message image
-                      if (isMine && isImage) Image.network(msg.imageUrl!),
-                      // 🔥 User message audio
-                      if (isMine && isAudio) _AudioBubble(msg),
-                      // 🔥 Bot message audio recognition result
-                      if (!isMine && worldDemoMessageHeader.isNotEmpty)
-                        T(
-                          worldDemoMessageHeader,
-                          s: TS(
-                            c: kB.wo(0.5),
-                            w: FW.w700,
-                            s: 10,
-                          ),
-                        ),
-                      if (!isMine && worldDemoMessageHeader.isNotEmpty) 4.h,
-                      // 🔥 Bot message
-                      if (!isMine && !usingReasoningModel)
-                        MarkdownBody(
-                          data: finalContent,
-                          selectable: false,
-                          shrinkWrap: true,
-                          styleSheet: markdownStyleSheet,
-                          onTapLink: _onTapLink,
-                        ),
-                      // 🔥 Bot message cot header
-                      if (!isMine && usingReasoningModel)
-                        GD(
-                          onTap: () {
-                            if (showingCotContent) {
-                              ref.read(P.chat.cotDisplayState(msg.id).notifier).state = CoTDisplayState.hideCotHeader;
-                            } else {
-                              ref.read(P.chat.cotDisplayState(msg.id).notifier).state = CoTDisplayState.showCotHeaderAndCotContent;
-                            }
-                          },
-                          child: C(
-                            decoration: const BD(color: kC),
-                            child: Ro(
-                              children: [
-                                T(thisMessageIsReceiving ? "Thinking..." : "Thought result", s: TS(c: kB.wo(0.5), w: FW.w600)),
-                                showingCotContent ? Icon(Icons.expand_more, color: kB.wo(0.5)) : Icon(Icons.expand_less, color: kB.wo(0.5)),
-                              ],
-                            ),
-                          ),
-                        ),
-                      // 🔥 Bot message cot content
-                      if (!isMine && usingReasoningModel) 4.h,
-                      if (!isMine && usingReasoningModel)
-                        AnimatedContainer(
-                          duration: 250.ms,
-                          height: cotContentHeight,
-                          child: C(
-                            decoration: BD(
-                              color: kW.wo(0.1),
-                              border: Border(
-                                left: BorderSide(color: kB.wo(0.15), width: 2),
-                              ),
-                            ),
-                            padding: const EI.o(l: 8),
-                            child: MarkdownBody(
-                              data: cotContent,
-                              selectable: false,
-                              shrinkWrap: true,
-                              styleSheet: markdownStyleSheetForCotContent,
-                              onTapLink: _onTapLink,
-                            ),
-                          ),
-                        ),
-                      // 🔥 Bot message cot result
-                      if (!isMine && cotResult.isNotEmpty && usingReasoningModel) 4.h,
-                      if (!isMine && cotResult.isNotEmpty && usingReasoningModel)
-                        MarkdownBody(
-                          data: cotResult,
-                          selectable: false,
-                          shrinkWrap: true,
-                          styleSheet: markdownStyleSheet,
-                          onTapLink: _onTapLink,
-                        ),
-                      // 🔥 User message bottom row
-                      if (isMine && !isImage && !isAudio) 12.h,
-                      if (isMine && !isImage && !isAudio)
-                        Ro(
-                          m: MAA.end,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            GD(
-                              onTap: _onUserEditPressed,
-                              child: Icon(
-                                Icons.edit,
-                                color: primaryColor.wo(0.8),
-                                size: 20,
-                              ),
-                            ),
-                            4.w,
-                            GD(
-                              onTap: _onCopyPressed,
-                              child: Icon(
-                                Icons.copy,
-                                color: primaryColor.wo(0.8),
-                                size: 20,
-                              ),
-                            ),
-                          ],
-                        ),
-                      // 🔥 Bot message bottom row
-                      if (!isMine) 12.h,
-                      if (!isMine)
-                        Ro(
-                          m: MAA.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (changing)
-                              GD(
-                                child: TweenAnimationBuilder(
-                                  tween: Tween(begin: 0.0, end: 1.0),
-                                  duration: const Duration(milliseconds: 1000000000),
-                                  builder: (context, value, child) => Transform.rotate(
-                                    angle: value * 2 * pi * 1000000,
-                                    child: child,
-                                  ),
-                                  child: Icon(
-                                    Icons.hourglass_top,
-                                    color: primaryColor,
-                                    size: 20,
-                                  ),
-                                ),
-                              ),
-                            4.w,
-                            GD(
-                              onTap: _onRegeneratePressed,
-                              child: Icon(
-                                Icons.refresh,
-                                color: primaryColor.wo(0.8),
-                                size: 20,
-                              ),
-                            ),
-                            4.w,
-                            GD(
-                              onTap: _onBotEditPressed,
-                              child: Icon(
-                                Icons.edit,
-                                color: primaryColor.wo(0.8),
-                                size: 20,
-                              ),
-                            ),
-                            4.w,
-                            GD(
-                              onTap: _onCopyPressed,
-                              child: Icon(
-                                Icons.copy,
-                                color: primaryColor.wo(0.8),
-                                size: 20,
-                              ),
-                            ),
-                          ],
-                        ),
-                    ],
-                  ),
-                ),
+              child: SelectionArea(
+                child: bubbleContent,
               ),
             ),
           ),

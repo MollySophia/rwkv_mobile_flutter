@@ -45,22 +45,6 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 
 
-### change_analysis_options
-
-```sh
-[bundle exec] fastlane change_analysis_options
-```
-
-
-
-### increase_build_number
-
-```sh
-[bundle exec] fastlane increase_build_number
-```
-
-
-
 ### ios_upload
 
 ```sh
@@ -97,14 +81,6 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ```sh
 [bundle exec] fastlane test
-```
-
-
-
-### message_to_slack
-
-```sh
-[bundle exec] fastlane message_to_slack
 ```
 
 
