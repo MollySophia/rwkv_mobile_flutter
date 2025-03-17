@@ -74,6 +74,10 @@ lane :switch_env do |params|
 end
 
 lane :test do |params|
+  raw_change_analysis_options()
+  dart_fix()
+  raw_change_analysis_options()
   raw_increase_build_number()
+  build_assets()
   android_pgyer()
 end
