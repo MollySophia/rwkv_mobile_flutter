@@ -19,4 +19,8 @@
 | Chinese ASR       |   🚧    |             |     |       |         |       |
 | Sudoku            |   🚧    |             |     |       |         |       |
 | 15Puzzle          |   🚧    |             |     |       |         |       |
-| 15Puzzle          |   🚧    |             |     |       |         |       |
+
+## TODO
+
+- Update readme
+- Add download links
