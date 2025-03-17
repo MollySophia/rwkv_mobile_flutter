@@ -73,9 +73,9 @@ class Suggestions extends ConsumerWidget {
                   width: 0.5,
                 ),
               ),
-              margin: EI.o(r: 8, t: 4, b: 8),
-              padding: EI.a(4),
-              child: T(e, s: TS(c: kB, s: 16)),
+              margin: const EI.o(r: 8, t: 4, b: 8),
+              padding: const EI.a(4),
+              child: T(e, s: const TS(c: kB, s: 16)),
             ),
           );
         }).toList(),

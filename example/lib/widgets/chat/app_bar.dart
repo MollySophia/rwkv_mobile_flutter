@@ -3,12 +3,10 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
-import 'package:zone/func/widget_debugger.dart';
 import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
 import 'package:zone/widgets/arguments_panel.dart';
@@ -56,11 +54,11 @@ class ChatAppBar extends ConsumerWidget {
               child: Co(
                 c: CAA.center,
                 children: [
-                  T("World RWKV"),
+                  const T("World RWKV"),
                   if (demoType == DemoType.world) 2.h,
                   if (demoType == DemoType.world)
                     C(
-                      padding: EI.o(l: 4, r: 4, t: 1, b: 1),
+                      padding: const EI.o(l: 4, r: 4, t: 1, b: 1),
                       decoration: BD(
                         color: kB.wo(0.1),
                         borderRadius: 10.r,

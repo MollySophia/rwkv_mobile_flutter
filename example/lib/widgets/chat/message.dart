@@ -265,7 +265,7 @@ class Message extends ConsumerWidget {
         showBotCopyButton = false;
     }
 
-    EI padding = EI.a(12);
+    EI padding = const EI.a(12);
     Border border = Border.all(color: primaryColor.wo(0.2));
 
     if (isUserImage) {
@@ -558,7 +558,7 @@ class _AudioBubbleState extends ConsumerState<_AudioBubble> {
     final latestClickedMessage = ref.watch(P.chat.latestClickedMessage);
     final isLatestClickedMessage = latestClickedMessage?.id == widget.msg.id;
     return C(
-      decoration: BD(color: kC),
+      decoration: const BD(color: kC),
       width: width,
       child: Ro(
         m: MAA.end,
@@ -607,7 +607,7 @@ class _PhotoViewerOverlay extends ConsumerWidget {
             onPressed: () {
               pop();
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.close,
               color: kW,
             ),

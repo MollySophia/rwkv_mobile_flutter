@@ -117,7 +117,7 @@ class ModelGroupItem extends ConsumerWidget {
               textBaseline: TextBaseline.alphabetic,
               children: [
                 T(worldType.displayName, s: const TS(s: 18, w: FW.w600)),
-                Spacer(),
+                const Spacer(),
                 T(worldType.taskDescription, s: const TS(s: 12, w: FW.w400)),
               ],
             ),
@@ -165,9 +165,9 @@ class ModelGroupItem extends ConsumerWidget {
                     ),
                   ),
                 if (alreadyStarted)
-                  TextButton(
+                  const TextButton(
                     onPressed: null,
-                    child: const T(
+                    child: T(
                       "Exploring...",
                       s: TS(
                         w: FW.w600,
@@ -180,7 +180,7 @@ class ModelGroupItem extends ConsumerWidget {
                     onPressed: loading ? null : _onStartToChatTap,
                     child: T(
                       loading ? "Loading..." : "Start to Chat",
-                      s: TS(
+                      s: const TS(
                         w: FW.w600,
                       ),
                     ),
@@ -190,7 +190,7 @@ class ModelGroupItem extends ConsumerWidget {
                     onPressed: loading ? null : _onContinueTap,
                     child: T(
                       loading ? "Loading..." : "Back to Chat",
-                      s: TS(
+                      s: const TS(
                         w: FW.w600,
                       ),
                     ),

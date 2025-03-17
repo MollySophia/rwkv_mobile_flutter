@@ -72,7 +72,7 @@ class VisualFloat extends ConsumerWidget {
               left: 0,
               width: screenWidth,
               child: C(
-                decoration: BD(color: Color(0xFFF4F8FF)),
+                decoration: const BD(color: Color(0xFFF4F8FF)),
               ),
             ),
             Positioned(
@@ -97,7 +97,7 @@ class VisualFloat extends ConsumerWidget {
               child: IconButton(
                 onPressed: _onTapImageSelector,
                 icon: C(
-                  padding: EI.a(4),
+                  padding: const EI.a(4),
                   decoration: BD(
                     color: kW,
                     border: Border.all(

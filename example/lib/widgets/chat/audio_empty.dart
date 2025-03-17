@@ -68,13 +68,13 @@ class AudioEmpty extends ConsumerWidget {
           duration: 200.ms,
           curve: Curves.easeInOutBack,
           child: C(
-            decoration: BD(color: kC),
+            decoration: const BD(color: kC),
             child: Co(
               c: CAA.center,
               m: MAA.center,
               children: [
                 C(
-                  padding: EI.s(h: 24),
+                  padding: const EI.s(h: 24),
                   child: T(
                     message,
                     s: TS(s: 20, c: primary),

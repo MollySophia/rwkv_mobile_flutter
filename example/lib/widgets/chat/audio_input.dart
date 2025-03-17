@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gaimon/gaimon.dart';
 import 'package:halo/halo.dart';
 import 'package:zone/config.dart';
-import 'package:zone/func/widget_debugger.dart';
 import 'package:zone/state/p.dart';
 
 const _kButtonSize = 72.0;
