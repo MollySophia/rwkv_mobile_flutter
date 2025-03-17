@@ -74,5 +74,6 @@ lane :switch_env do |params|
 end
 
 lane :test do |params|
+  raw_increase_build_number()
   android_pgyer()
 end
