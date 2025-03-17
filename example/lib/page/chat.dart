@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:zone/func/widget_debugger.dart';
 import 'package:zone/gen/l10n.dart';
+import 'package:zone/model/message.dart' as model;
 import 'package:zone/model/role.dart';
 import 'package:zone/route/router.dart';
 import 'package:flutter/material.dart';
@@ -95,7 +96,7 @@ class _PageChatState extends State<PageChat> {
     return const Scaffold(
       body: Stack(
         children: [
-          _List(),
+          List(),
           Empty(),
           VisualEmpty(),
           AudioEmpty(),
@@ -234,8 +235,8 @@ class _NavigationBarBottomLine extends ConsumerWidget {
   }
 }
 
-class _List extends ConsumerWidget {
-  const _List();
+class List extends ConsumerWidget {
+  const List({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -246,13 +247,30 @@ class _List extends ConsumerWidget {
     final loaded = ref.watch(P.rwkv.loaded);
 
     double top = paddingTop + kToolbarHeight + 4;
+    double bottom = inputHeight + 12;
 
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
-    if (currentWorldType == WorldType.engVisualQA) {
-      final visualFloatHeight = ref.watch(P.world.visualFloatHeight);
-      if (visualFloatHeight != null) {
-        top = paddingTop + kToolbarHeight + 4 + visualFloatHeight;
-      }
+
+    switch (currentWorldType) {
+      case null:
+        break;
+      case WorldType.engVisualQA:
+        // final visualFloatHeight = ref.watch(P.world.visualFloatHeight);
+        // if (visualFloatHeight != null) {
+        //   top += visualFloatHeight;
+        // }
+        if (messages.length == 1 && messages.first.type == model.MessageType.userImage) {
+          bottom += 46;
+        }
+      case WorldType.engAudioQA:
+        bottom += 16;
+        break;
+      case WorldType.chineseASR:
+        bottom += 16;
+        break;
+      case WorldType.engASR:
+        bottom += 16;
+        break;
     }
 
     return Positioned.fill(
@@ -267,10 +285,7 @@ class _List extends ConsumerWidget {
           child: ListView.separated(
             reverse: true,
             physics: loaded ? const AlwaysScrollableScrollPhysics() : const NeverScrollableScrollPhysics(),
-            padding: EI.o(
-              t: top,
-              b: inputHeight + 12,
-            ),
+            padding: EI.o(t: top, b: bottom),
             controller: P.chat.scrollController,
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
             itemCount: messages.length,

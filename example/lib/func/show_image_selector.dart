@@ -52,4 +52,5 @@ Future<void> showImageSelector() async {
   P.chat.messages.uc();
   P.rwkv.clearStates();
   P.rwkv.setImagePath(path: image.path);
+  P.chat.send("", type: MessageType.userImage, imageUrl: image.path);
 }

@@ -35,7 +35,7 @@ class Suggestions extends ConsumerWidget {
     if (demoType == DemoType.world) {
       switch (currentWorldType) {
         case WorldType.engVisualQA:
-          show = imagePath != null && imagePath.isNotEmpty && messages.isEmpty;
+          show = imagePath != null && imagePath.isNotEmpty && messages.length == 1;
           suggestions = [
             'What do you see in this picture?',
             "Are there any interesting details you notice?",

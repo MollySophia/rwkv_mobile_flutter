@@ -16,6 +16,11 @@ dependencies:
   rwkv_mobile_flutter:
     path: ../
 
+  photo_viewer:
+    git:
+      url: https://github.com/HaloWang/photo_viewer
+      ref: main
+
   adaptive_dialog: ^2.4.0 # https://pub.dev/packages/adaptive_dialog/
   audioplayers: # https://pub.dev/packages/audioplayers/
   auto_size_text: # https://pub.dev/packages/auto_size_text/

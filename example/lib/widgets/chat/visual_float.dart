@@ -18,7 +18,7 @@ class VisualFloat extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // return Positioned(child: IgnorePointer(child: C()));
+    return Positioned(child: IgnorePointer(child: C()));
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
 
     switch (currentWorldType) {

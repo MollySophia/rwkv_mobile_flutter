@@ -206,7 +206,9 @@ extension $Chat on _Chat {
 
     if (type == MessageType.userImage) return;
 
-    P.rwkv.send(withHistory ? messages.v.m((e) => e.content) : [message]);
+    final historyMessage = messages.v.where((e) => e.type != MessageType.userImage).m((e) => e.content);
+    final history = withHistory ? historyMessage : [message];
+    P.rwkv.send(history);
     editingIndex.u(null);
 
     receivedTokens.uc();
