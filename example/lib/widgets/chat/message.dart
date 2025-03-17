@@ -314,8 +314,8 @@ class Message extends ConsumerWidget {
               if (isMine && isUserImage)
                 ConstrainedBox(
                   constraints: BoxConstraints(
-                    maxWidth: rawMaxWidth * 0.6,
-                    maxHeight: rawMaxWidth * 0.6,
+                    maxWidth: rawMaxWidth * 0.8,
+                    maxHeight: rawMaxWidth * 0.8,
                   ),
                   child: PhotoViewerImage(
                     borderRadius: 24,
