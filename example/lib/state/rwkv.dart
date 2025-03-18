@@ -528,10 +528,12 @@ extension _$RWKV on _RWKV {
     if (message["initRuntimeDone"] != null) {
       final result = message["initRuntimeDone"];
       if (result == true) {
+        if (_initRuntimeCompleter.isCompleted) return;
         _initRuntimeCompleter.complete();
       } else {
         final error = message["error"];
         if (kDebugMode) print("😡 initRuntime failed: $error");
+        if (_initRuntimeCompleter.isCompleted) return;
         _initRuntimeCompleter.completeError(error);
       }
       return;
