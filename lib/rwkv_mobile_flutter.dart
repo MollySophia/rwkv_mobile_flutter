@@ -275,7 +275,7 @@ class RWKVMobile {
         }
         final numInputs = messages.length;
 
-        if (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) == 1) {
+        if (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) != 0) {
           throw Exception('😡 LLM is already generating');
         }
 
@@ -290,6 +290,10 @@ class RWKVMobile {
       } else if (command == 'generate') {
         final prompt = message.$2 as String;
         final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
+
+        if (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) != 0) {
+          throw Exception('😡 LLM is already generating');
+        }
 
         sendPort.send({'generateStart': true});
         if (kDebugMode) print("🔥 Starting LLM generation thread (gen mode), maxlength = $maxLength");
