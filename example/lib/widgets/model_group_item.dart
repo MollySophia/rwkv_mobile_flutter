@@ -39,7 +39,6 @@ class ModelGroupItem extends ConsumerWidget {
     final encoderFileKey = fileKeys.firstWhere((e) => e.isEncoder);
     final modelFileKey = fileKeys.firstWhere((e) => !e.isEncoder);
 
-    P.rwkv.loading.u(true);
     P.rwkv.currentWorldType.u(worldType);
 
     logTrace("worldType: $worldType");
@@ -71,8 +70,6 @@ class ModelGroupItem extends ConsumerWidget {
       Alert.error(e.toString());
       P.rwkv.currentWorldType.u(null);
       return;
-    } finally {
-      P.rwkv.loading.u(false);
     }
 
     P.rwkv.currentModel.u(modelFileKey);

@@ -1,9 +1,12 @@
 // ignore: unused_import
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
+import 'package:zone/config.dart';
+import 'package:zone/func/log_trace.dart';
 import 'package:zone/state/p.dart';
 
 const _height = 46.0;
@@ -17,6 +20,7 @@ class Suggestions extends ConsumerWidget {
     final demoType = ref.watch(P.app.demoType);
     final messages = ref.watch(P.chat.messages);
     final primary = Theme.of(context).colorScheme.primary;
+    final paddingBottom = ref.watch(P.app.paddingBottom);
 
     bool show = false;
 
@@ -25,7 +29,7 @@ class Suggestions extends ConsumerWidget {
     if (demoType == DemoType.chat) {
       show = messages.isEmpty;
       suggestions = [
-        'Please tell me about the Eiffel Tower.',
+        'Please tell me about the Eiffel Tower',
         "Why is the sky blue? ",
       ];
     }
@@ -49,10 +53,10 @@ class Suggestions extends ConsumerWidget {
       }
     }
 
-    return AnimatedPositioned(
-      duration: 200.ms,
-      curve: Curves.easeInOutBack,
-      bottom: show ? P.chat.inputHeight.v : -P.chat.inputHeight.v - _height,
+    final bottom = show ? paddingBottom + 114 : -paddingBottom - _height;
+
+    return Positioned(
+      bottom: bottom,
       left: 0,
       right: 0,
       height: _height,
@@ -66,15 +70,22 @@ class Suggestions extends ConsumerWidget {
             },
             child: C(
               decoration: BD(
-                color: kW.wo(0.8),
+                color: Platform.isIOS ? kW.wo(0.9) : kW,
                 borderRadius: 6.r,
                 border: Border.all(
                   color: primary,
                   width: 0.5,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: kBG,
+                    blurRadius: 10,
+                    offset: Offset(0, 0),
+                  ),
+                ],
               ),
               margin: const EI.o(r: 8, t: 4, b: 8),
-              padding: const EI.a(4),
+              padding: const EI.s(v: 4, h: 8),
               child: T(e, s: const TS(c: kB, s: 16)),
             ),
           );

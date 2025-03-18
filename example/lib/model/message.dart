@@ -16,11 +16,13 @@ final class Message {
   final String? imageUrl;
   final String? audioUrl;
   final int? audioLength;
+  final bool isReasoning;
 
   const Message({
     required this.id,
     required this.content,
     required this.isMine,
+    required this.isReasoning,
     this.changing = false,
     this.type = MessageType.text,
     this.imageUrl,
@@ -38,6 +40,7 @@ final class Message {
       imageUrl: json["imageUrl"] as String?,
       audioUrl: json["audioUrl"] as String?,
       audioLength: json["audioLength"] as int?,
+      isReasoning: json["isReasoning"] as bool,
     );
   }
 
@@ -50,6 +53,7 @@ final class Message {
     String? imageUrl,
     String? audioUrl,
     int? audioLength,
+    bool? isReasoning,
   }) {
     return Message(
       id: id ?? this.id,
@@ -60,11 +64,23 @@ final class Message {
       imageUrl: imageUrl ?? this.imageUrl,
       audioUrl: audioUrl ?? this.audioUrl,
       audioLength: audioLength ?? this.audioLength,
+      isReasoning: isReasoning ?? this.isReasoning,
     );
   }
 
   @override
   String toString() {
-    return "Message(\nid: $id\ncontent: $content\nisMine: $isMine\nchanging: $changing\ntype: $type\nimageUrl: $imageUrl\naudioUrl: $audioUrl\naudioLength: $audioLength)";
+    return """
+Message(
+  id: $id,
+  content: $content,
+  isMine: $isMine,
+  changing: $changing,
+  type: $type,
+  imageUrl: $imageUrl,
+  audioUrl: $audioUrl,
+  audioLength: $audioLength,
+  isReasoning: $isReasoning,
+)""";
   }
 }

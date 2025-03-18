@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
+import 'package:gaimon/gaimon.dart';
 import 'package:zone/func/log_trace.dart';
 import 'package:zone/func/show_image_selector.dart';
 import 'package:zone/gen/l10n.dart';
@@ -58,14 +59,13 @@ class Input extends ConsumerWidget {
     final paddingBottom = ref.watch(P.app.paddingBottom);
     final primary = Theme.of(context).colorScheme.primary;
     final loaded = ref.watch(P.rwkv.loaded);
-
-    logTrace("paddingBottom: $paddingBottom, primary: $primary, loaded: $loaded");
+    final loading = ref.watch(P.rwkv.loading);
 
     String hintText = S.current.send_message_to_rwkv;
 
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
     final imagePath = ref.watch(P.world.imagePath);
-    bool textFieldEnabled = loaded;
+    bool textFieldEnabled = loaded && !loading;
     bool show = true;
 
     switch (currentWorldType) {
@@ -197,6 +197,7 @@ class _BottomBar extends ConsumerWidget {
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
     final demoType = ref.watch(P.app.demoType);
     final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
+    final loading = ref.watch(P.rwkv.loading);
 
     return Row(
       children: [
@@ -222,9 +223,19 @@ class _BottomBar extends ConsumerWidget {
           ),
         if (demoType == DemoType.chat)
           GD(
-            onTap: () {
-              if (P.chat.showingModelSelector.v) return;
-              P.chat.showingModelSelector.u(true);
+            onTap: () async {
+              if (loading) {
+                Alert.info("Please wait for the model to load");
+                return;
+              }
+              final currentModel = P.rwkv.currentModel.v;
+              if (currentModel == null) {
+                if (P.chat.showingModelSelector.v) return;
+                P.chat.showingModelSelector.u(true);
+                return;
+              }
+              Gaimon.light();
+              await P.rwkv.setUsingReasoningModel(usingReasoningModel: !usingReasoningModel);
             },
             child: C(
               decoration: BD(
@@ -238,14 +249,31 @@ class _BottomBar extends ConsumerWidget {
               child: Ro(
                 c: CAA.center,
                 children: [
-                  Icon(
-                    Icons.emoji_objects_outlined,
-                    color: usingReasoningModel ? kW : color,
-                  ),
-                  T(usingReasoningModel ? "Reason on" : "Reason off",
-                      s: TS(
-                        c: usingReasoningModel ? kW : color,
-                      )),
+                  if (!loading)
+                    Icon(
+                      Icons.emoji_objects_outlined,
+                      color: usingReasoningModel ? kW : color,
+                    ),
+                  if (loading)
+                    C(
+                      margin: EI.o(l: 8, t: 6, b: 6, r: 10),
+                      height: 12,
+                      width: 12,
+                      child: CircularProgressIndicator(
+                        color: usingReasoningModel ? kW : color,
+                        strokeWidth: 2,
+                      ),
+                    ),
+                  if (!loading)
+                    T(usingReasoningModel ? "Reason on" : "Reason off",
+                        s: TS(
+                          c: usingReasoningModel ? kW : color,
+                        )),
+                  if (loading)
+                    T("Loading...",
+                        s: TS(
+                          c: usingReasoningModel ? kW : color,
+                        )),
                 ],
               ),
             ),

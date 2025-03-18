@@ -79,7 +79,13 @@ extension $Chat on _Chat {
       // final currentMessages = [...messages.v];
       final _editingIndex = editingIndex.v!;
       final id = DateTime.now().microsecondsSinceEpoch;
-      final newBotMessage = Message(id: id, content: textToSend, isMine: false, changing: false);
+      final newBotMessage = Message(
+        id: id,
+        content: textToSend,
+        isMine: false,
+        changing: false,
+        isReasoning: messages.v[_editingIndex].isReasoning,
+      );
       // currentMessages.replaceRange(_editingIndex, _editingIndex + 1, [newBotMessage]);
       final newMessages = [
         ...messages.v.sublist(0, _editingIndex),
@@ -198,6 +204,7 @@ extension $Chat on _Chat {
       imageUrl: imageUrl,
       audioUrl: audioUrl,
       audioLength: audioLength,
+      isReasoning: false,
     );
     messages.ua(msg);
     Future.delayed(34.ms).then((_) {
@@ -221,6 +228,7 @@ extension $Chat on _Chat {
       content: "",
       isMine: false,
       changing: true,
+      isReasoning: P.rwkv.usingReasoningModel.v,
     );
 
     messages.ua(receiveMsg);
@@ -326,6 +334,7 @@ extension _$Chat on _Chat {
           content: receivedTokens.v,
           isMine: msg.isMine,
           changing: false,
+          isReasoning: msg.isReasoning,
         );
         currentMessages.replaceRange(i, i + 1, [newMsg]);
         found = true;

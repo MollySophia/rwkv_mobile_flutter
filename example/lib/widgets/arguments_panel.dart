@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gaimon/gaimon.dart';
 import 'package:halo/halo.dart';
 import 'package:zone/model/argument.dart';
 import 'package:zone/route/method.dart';
@@ -167,6 +168,18 @@ class _CompletionOptions extends ConsumerWidget {
   }
 }
 
+extension _ArgumentGaimon on Argument {
+  bool get enableGaimon => switch (this) {
+        Argument.temperature => true,
+        Argument.topK => true,
+        Argument.topP => true,
+        Argument.presencePenalty => true,
+        Argument.frequencyPenalty => true,
+        Argument.penaltyDecay => true,
+        Argument.maxLength => false,
+      };
+}
+
 class _Value extends ConsumerWidget {
   final Argument argument;
 
@@ -177,6 +190,9 @@ class _Value extends ConsumerWidget {
     if (argument.step != null) {
       rawNewValue = (rawNewValue / argument.step!).round() * argument.step!;
     }
+    final currentValue = P.rwkv.arguments(argument).v;
+    if (currentValue == rawNewValue) return;
+    if (argument.enableGaimon) Gaimon.light();
     P.rwkv.arguments(argument).u(rawNewValue);
     if (argument == Argument.maxLength) {
       P.rwkv.argumentUpdatingDebouncer.call(() {

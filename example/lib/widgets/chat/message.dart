@@ -140,7 +140,7 @@ class Message extends ConsumerWidget {
 
     final cotDisplayState = ref.watch(P.chat.cotDisplayState(msg.id));
 
-    final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
+    final usingReasoningModel = msg.isReasoning;
 
     String cotContent = "";
     String cotResult = "";
