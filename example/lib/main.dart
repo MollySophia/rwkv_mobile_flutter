@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:zone/args.dart';
@@ -14,17 +15,18 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  await SentryFlutter.init(
-    (options) {
-      options.dsn = 'https://320015d75031601a48829d02f17a8394@o4506895545597952.ingest.us.sentry.io/4508996340482048';
-      options.tracesSampleRate = kDebugMode ? 1.0 : 0.05;
-      options.profilesSampleRate = kDebugMode ? 1.0 : 0.05;
-    },
-    appRunner: () => runApp(SentryWidget(child: const _App())),
-  );
+  await SentryFlutter.init(_configureSentry, appRunner: () async {
+    await P.init();
+    runApp(SentryWidget(child: const _App()));
+  });
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  await P.init();
   FlutterNativeSplash.remove();
+}
+
+FutureOr<void> _configureSentry(options) {
+  options.dsn = 'https://320015d75031601a48829d02f17a8394@o4506895545597952.ingest.us.sentry.io/4508996340482048';
+  options.tracesSampleRate = kDebugMode ? 1.0 : 0.05;
+  options.profilesSampleRate = kDebugMode ? 1.0 : 0.05;
 }
 
 class _App extends StatelessWidget {
