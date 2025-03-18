@@ -7,6 +7,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   dynamic_color
   file_selector_linux
   record_linux
+  sentry_flutter
   url_launcher_linux
 )
 

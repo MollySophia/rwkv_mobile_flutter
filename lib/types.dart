@@ -39,18 +39,38 @@ enum Backend {
   }
 }
 
-enum Command {
-  setMaxLength,
-  clearStates,
-  setGenerationStopToken,
+// TODO: Use it in the future
+enum FromRWKV {
+  currentPrompt,
+  enableReasoning,
+  generateStart,
+  generateStop,
+  initRuntimeDone,
+  prefillSpeed,
+  response,
+  samplerParams,
+  streamResponse,
+  ;
+}
+
+// TODO: Use it in the future
+enum ToRWKV {
   setPrompt,
+  setEnableReasoning,
   getPrompt,
-  setSamplerParams,
   getSamplerParams,
+  setEosToken,
+  setBosToken,
+  setTokenBanned,
+  setUserRole,
+  loadVisionEncoder,
+  releaseVisionEncoder,
+  setAudioPrompt,
   message,
   generate,
   releaseModel,
   initRuntime,
+  ;
 }
 
 class StartOptions {

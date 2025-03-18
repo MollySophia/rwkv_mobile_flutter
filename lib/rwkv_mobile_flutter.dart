@@ -38,7 +38,7 @@ class RWKVMobile {
       } else if (abi == ffi.Abi.linuxArm64) {
         return ffi.DynamicLibrary.open('librwkv_mobile-linux-aarch64.so');
       } else {
-        throw Exception('😡 Unsupported platform');
+        throw Exception('😡 Unsupported ABI: ${abi.toString()}');
       }
     } else {
       throw Exception('😡 Unsupported platform');
@@ -62,6 +62,8 @@ class RWKVMobile {
 
     BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
 
+    // TODO: We can call this when the app is launched, rather than when the model is selected
+    // TODO: We can load the runtime in the future. Only Apple cannot.
     final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
 
     // definitions
@@ -166,7 +168,14 @@ class RWKVMobile {
         final samplerParams = rwkvMobile.rwkvmobile_runtime_get_sampler_params(runtime);
         final penaltyParams = rwkvMobile.rwkvmobile_runtime_get_penalty_params(runtime);
         sendPort.send({
-          'samplerParams': {'temperature': samplerParams.temperature, 'top_k': samplerParams.top_k, 'top_p': samplerParams.top_p, 'presence_penalty': penaltyParams.presence_penalty, 'frequency_penalty': penaltyParams.frequency_penalty, 'penalty_decay': penaltyParams.penalty_decay},
+          'samplerParams': {
+            'temperature': samplerParams.temperature,
+            'top_k': samplerParams.top_k,
+            'top_p': samplerParams.top_p,
+            'presence_penalty': penaltyParams.presence_penalty,
+            'frequency_penalty': penaltyParams.frequency_penalty,
+            'penalty_decay': penaltyParams.penalty_decay,
+          }
         });
       } else if (command == 'setEnableReasoning') {
         final arg = message.$2 as bool;

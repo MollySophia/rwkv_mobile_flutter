@@ -36,3 +36,4 @@ lib/generated/intl/messages_en.dart
 lib/generated/l10n.dart
 lib/l10n/intl_en.arb
 android/.gradle/
+example/sentry-wizard

@@ -1,8 +1,10 @@
 part of 'p.dart';
 
 class _RWKV {
+  /// Send message to RWKV isolate
   SendPort? _sendPort;
 
+  /// Receive message from RWKV isolate
   late final _receivePort = ReceivePort();
 
   late final _messagesController = StreamController<JSON>();
