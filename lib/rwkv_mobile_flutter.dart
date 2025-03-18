@@ -349,6 +349,8 @@ class RWKVMobile {
             }
           }
         }
+      } else if (command == 'stop') {
+        // TODO: @mollysama, please test when LLM is generating
       } else {
         if (kDebugMode) print("😡 unknown command: $command");
       }

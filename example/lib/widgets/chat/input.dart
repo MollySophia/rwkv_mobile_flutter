@@ -268,18 +268,17 @@ class _BottomBar extends ConsumerWidget {
               decoration: const BD(color: kC),
               child: Stack(
                 children: [
-                  if (false)
-                    SizedBox(
-                      width: 46,
-                      height: 34,
-                      child: Center(
-                        child: C(
-                          decoration: BD(color: color, borderRadius: 2.r),
-                          width: 12,
-                          height: 12,
-                        ),
+                  SizedBox(
+                    width: 46,
+                    height: 34,
+                    child: Center(
+                      child: C(
+                        decoration: BD(color: color, borderRadius: 2.r),
+                        width: 12,
+                        height: 12,
                       ),
                     ),
+                  ),
                   SB(
                     width: 46,
                     height: 34,
