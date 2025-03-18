@@ -14,7 +14,7 @@ import 'package:zone/widgets/debugger.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 void main() async {
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   await SentryFlutter.init(_configureSentry, appRunner: () async {
     await P.init();
     runApp(SentryWidget(child: const _App()));
