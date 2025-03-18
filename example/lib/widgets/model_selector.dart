@@ -38,7 +38,7 @@ class ModelSelector extends ConsumerWidget {
           children: [
             Ro(
               children: [
-                Exp(child: T(S.current.chat_welcome_to_use("World RWKV"), s: const TS(s: 18, w: FW.w600))),
+                Exp(child: T(S.current.chat_welcome_to_use("RWKV Chat"), s: const TS(s: 18, w: FW.w600))),
                 IconButton(
                   onPressed: () {
                     pop();

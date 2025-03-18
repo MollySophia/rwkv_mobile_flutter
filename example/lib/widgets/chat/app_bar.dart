@@ -54,7 +54,7 @@ class ChatAppBar extends ConsumerWidget {
               child: Co(
                 c: CAA.center,
                 children: [
-                  const T("World RWKV"),
+                  const T("RWKV Chat"),
                   if (demoType == DemoType.world) 2.h,
                   if (demoType == DemoType.world)
                     C(

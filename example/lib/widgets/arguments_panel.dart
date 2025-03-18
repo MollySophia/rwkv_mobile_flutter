@@ -173,8 +173,11 @@ class _Value extends ConsumerWidget {
   const _Value(this.argument);
 
   void _onChanged(double value) {
-    final newValue = double.parse(value.toStringAsFixed(argument.fixedDecimals));
-    P.rwkv.arguments(argument).u(newValue);
+    double rawNewValue = double.parse(value.toStringAsFixed(argument.fixedDecimals));
+    if (argument.step != null) {
+      rawNewValue = (rawNewValue / argument.step!).round() * argument.step!;
+    }
+    P.rwkv.arguments(argument).u(rawNewValue);
     if (argument == Argument.maxLength) {
       P.rwkv.argumentUpdatingDebouncer.call(() {
         P.rwkv.syncMaxLength();
@@ -189,6 +192,7 @@ class _Value extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final value = ref.watch(P.rwkv.arguments(argument));
+    if (!argument.show) return const SizedBox.shrink();
     return Co(
       c: CAA.stretch,
       children: [

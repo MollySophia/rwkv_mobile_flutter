@@ -10,11 +10,21 @@ enum Argument {
 
   bool get configureable => switch (this) {
         temperature => true,
-        topK => true,
+        topK => false,
         topP => true,
         presencePenalty => true,
         frequencyPenalty => true,
-        penaltyDecay => false,
+        penaltyDecay => true,
+        maxLength => true,
+      };
+
+  bool get show => switch (this) {
+        temperature => true,
+        topK => false,
+        topP => true,
+        presencePenalty => true,
+        frequencyPenalty => true,
+        penaltyDecay => true,
         maxLength => true,
       };
 
@@ -28,29 +38,39 @@ enum Argument {
         maxLength => 0,
       };
 
+  double? get step => switch (this) {
+        temperature => 0.1,
+        topK => null,
+        topP => 0.05,
+        presencePenalty => null,
+        frequencyPenalty => null,
+        penaltyDecay => 0.001,
+        maxLength => 100,
+      };
+
   double get min => switch (this) {
         temperature => 0.2,
-        topK => 1,
+        topK => 0,
         topP => 0.0,
         presencePenalty => 0.0,
         frequencyPenalty => 0.0,
-        penaltyDecay => 0.0,
-        maxLength => 10,
+        penaltyDecay => 0.99,
+        maxLength => 100,
       };
 
   double get max => switch (this) {
         temperature => 2.0,
-        topK => 1024,
+        topK => 0,
         topP => 1.0,
         presencePenalty => 1.0,
         frequencyPenalty => 1.0,
-        penaltyDecay => 1.0,
-        maxLength => 64000,
+        penaltyDecay => 0.999,
+        maxLength => 10000,
       };
 
   double get reasonDefaults => switch (this) {
         temperature => 1.0,
-        topK => 128,
+        topK => 0,
         topP => 0.3,
         presencePenalty => 0.5,
         frequencyPenalty => 0.5,
@@ -59,9 +79,9 @@ enum Argument {
       };
 
   double get chatDefaults => switch (this) {
-        temperature => 2.0,
-        topK => 128,
-        topP => 0.5,
+        temperature => 1.0,
+        topK => 0,
+        topP => 0.3,
         presencePenalty => 0.5,
         frequencyPenalty => 0.5,
         penaltyDecay => 0.996,
