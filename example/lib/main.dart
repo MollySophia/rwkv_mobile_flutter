@@ -14,23 +14,17 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  await P.init();
-  FlutterNativeSplash.remove();
   await SentryFlutter.init(
     (options) {
       options.dsn = 'https://320015d75031601a48829d02f17a8394@o4506895545597952.ingest.us.sentry.io/4508996340482048';
-      // Set tracesSampleRate to 1.0 to capture 100% of transactions for tracing.
-      // We recommend adjusting this value in production.
-      options.tracesSampleRate = 1.0;
-      // The sampling rate for profiling is relative to tracesSampleRate
-      // Setting to 1.0 will profile 100% of sampled transactions:
-      options.profilesSampleRate = 1.0;
+      options.tracesSampleRate = kDebugMode ? 1.0 : 0.05;
+      options.profilesSampleRate = kDebugMode ? 1.0 : 0.05;
     },
     appRunner: () => runApp(SentryWidget(child: const _App())),
   );
-  // TODO: Remove this line after sending the first sample event to sentry.
-  await Sentry.captureException(Exception('This is a sample exception.'));
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  await P.init();
+  FlutterNativeSplash.remove();
 }
 
 class _App extends StatelessWidget {
