@@ -59,6 +59,8 @@ class Input extends ConsumerWidget {
     final primary = Theme.of(context).colorScheme.primary;
     final loaded = ref.watch(P.rwkv.loaded);
 
+    logTrace("paddingBottom: $paddingBottom, primary: $primary, loaded: $loaded");
+
     String hintText = S.current.send_message_to_rwkv;
 
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
