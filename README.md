@@ -24,3 +24,12 @@
 
 - Update readme
 - Add download links
+
+## prompt settings
+
+prompt
+
+|            | force-chinese on | force-chinese off |
+| ---------- | ---------------- | ----------------- |
+| reason on  | `<think>嗯`      | `<think`          |
+| reason off | ???              | ???               |

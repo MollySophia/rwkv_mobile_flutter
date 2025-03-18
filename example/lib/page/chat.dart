@@ -104,8 +104,6 @@ class _PageChatState extends State<PageChat> {
           ChatAppBar(),
           _NavigationBarBottomLine(),
           //
-          _ScrollToBottomButton(),
-          //
           Suggestions(),
           Input(),
           AudioInput(),
@@ -296,58 +294,6 @@ class List extends ConsumerWidget {
             separatorBuilder: (context, index) {
               return const SB(height: 15);
             },
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ScrollToBottomButton extends ConsumerWidget {
-  const _ScrollToBottomButton();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final inputHeight = ref.watch(P.chat.inputHeight);
-    final atBottom = ref.watch(P.chat.atBottom);
-    final screenWidth = ref.watch(P.app.screenWidth);
-    final loaded = ref.watch(P.rwkv.loaded);
-    final buttonSize = 36.0;
-    final demoType = ref.watch(P.app.demoType);
-    if (demoType != DemoType.chat) return Positioned.fill(child: IgnorePointer(child: Container()));
-    if (!loaded) return Positioned.fill(child: IgnorePointer(child: Container()));
-    return AnimatedPositioned(
-      duration: 200.ms,
-      curve: Curves.easeInOutBack,
-      left: (screenWidth - buttonSize) / 2,
-      bottom: atBottom ? 0 : inputHeight + 12,
-      child: AnimatedOpacity(
-        opacity: atBottom ? 0 : 1,
-        duration: 150.ms,
-        child: GD(
-          onTap: atBottom
-              ? null
-              : () {
-                  P.chat.scrollToBottom();
-                },
-          child: ClipRRect(
-            borderRadius: 8.r,
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-              child: C(
-                decoration: BD(
-                  border: Border.all(color: Theme.of(context).colorScheme.primary.wo(0.333)),
-                  color: Theme.of(context).colorScheme.primary.wo(0.333),
-                  borderRadius: 8.r,
-                ),
-                height: buttonSize,
-                width: buttonSize,
-                child: const Icon(
-                  Icons.arrow_downward,
-                  color: kW,
-                ),
-              ),
-            ),
           ),
         ),
       ),
