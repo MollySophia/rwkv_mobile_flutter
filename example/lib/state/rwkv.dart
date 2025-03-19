@@ -50,6 +50,8 @@ class _RWKV {
   late final _loading = _gs(false);
 
   late final argumentUpdatingDebouncer = Debouncer(milliseconds: 300);
+
+  Timer? _getTokensTimer;
 }
 
 /// Public methods
@@ -67,6 +69,15 @@ extension $RWKV on _RWKV {
       return;
     }
     sendPort.send(("message", messages));
+    if (_getTokensTimer != null) {
+      _getTokensTimer!.cancel();
+    }
+
+    _getTokensTimer = Timer.periodic(const Duration(milliseconds: 20), (timer) async {
+      if (HF.randomBool(truePercentage: 0.5)) sendPort.send(("getResponseBufferContent", null));
+      if (HF.randomBool(truePercentage: 0.5)) sendPort.send(("getIsGenerating", null));
+      if (HF.randomBool(truePercentage: 0.5)) sendPort.send(("getPrefillAndDecodeSpeed", null));
+    });
   }
 
   void setImagePath({required String path}) {
@@ -481,6 +492,28 @@ extension _$RWKV on _RWKV {
       return;
     }
 
+    if (message["responseBufferContent"] != null) {
+      final responseBufferContent = message["responseBufferContent"].toString();
+      _messagesController.add({
+        "content": responseBufferContent,
+        "type": _RWKVMessageType.responseBufferContent.name,
+      });
+      return;
+    }
+
+    if (message["isGenerating"] != null) {
+      final isGenerating = message["isGenerating"];
+      _messagesController.add({
+        "content": isGenerating.toString(),
+        "type": _RWKVMessageType.isGenerating.name,
+      });
+      if (!isGenerating) {
+        _getTokensTimer!.cancel();
+        _getTokensTimer = null;
+      }
+      return;
+    }
+
     // if (kDebugMode) print(message);
 
     if (message["samplerParams"] != null) {
@@ -569,6 +602,9 @@ extension _$RWKV on _RWKV {
 }
 
 enum _RWKVMessageType {
+  /// 模型每吐一个token，调用一次, 调用内容为该次 generate 已经吐出的文本
+  responseBufferContent,
+
   /// 模型吐完 token 了会被调用, 调用内容该次 generate 吐出的总文本
   response,
 
@@ -579,6 +615,9 @@ enum _RWKVMessageType {
   samplerParams,
 
   generateStart,
+
+  /// 模型是否正在生成
+  isGenerating,
 
   generateStop;
 

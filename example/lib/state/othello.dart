@@ -232,6 +232,13 @@ extension _$ on _Othello {
     final content = event["content"] as String? ?? "";
 
     switch (type) {
+      case _RWKVMessageType.isGenerating:
+        final isGenerating = content == "true";
+        thinking.u(isGenerating);
+        break;
+      case _RWKVMessageType.responseBufferContent:
+        received.u(content);
+        break;
       case _RWKVMessageType.response:
         received.u(content);
         break;

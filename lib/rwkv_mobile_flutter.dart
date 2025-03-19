@@ -74,7 +74,6 @@ class RWKVMobile {
     int enableReasoning = 0;
     // bool isGenerating = false;
 
-    String responseBuffer = '';
     final inputsPtr = calloc.allocate<ffi.Pointer<ffi.Char>>(maxMessages);
 
     var modelPath = options.modelPath;
@@ -82,20 +81,6 @@ class RWKVMobile {
     var tokenizerPath = options.tokenizerPath;
 
     rwkvmobile_runtime_t runtime;
-
-    var speedReportCounter = 0;
-
-    (double?, double?) getPrefillAndDecodeSpeed() {
-      double? prefillSpeed;
-      double? decodeSpeed;
-      if (speedReportCounter % 10 == 0) {
-        prefillSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime);
-        decodeSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime);
-        sendPort.send({'prefillSpeed': prefillSpeed, 'decodeSpeed': decodeSpeed});
-      }
-      speedReportCounter++;
-      return (prefillSpeed, decodeSpeed);
-    }
 
     // runtime initializations
     if (modelBackend == 'qnn') {
@@ -351,6 +336,10 @@ class RWKVMobile {
       } else if (command == 'getResponseBufferContent') {
         final responseBufferContent = rwkvMobile.rwkvmobile_runtime_get_response_buffer_content(runtime);
         sendPort.send({'responseBufferContent': responseBufferContent.cast<Utf8>().toDartString()});
+      } else if (command == 'getPrefillAndDecodeSpeed') {
+        final prefillSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime);
+        final decodeSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime);
+        sendPort.send({'prefillSpeed': prefillSpeed, 'decodeSpeed': decodeSpeed});
       } else {
         if (kDebugMode) print("😡 unknown command: $command");
       }

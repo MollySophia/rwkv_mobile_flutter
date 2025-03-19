@@ -350,6 +350,16 @@ extension _$Chat on _Chat {
     if (demoType != DemoType.chat && demoType != DemoType.world) return;
     final type = _RWKVMessageType.fromString(event["type"]);
     switch (type) {
+      case _RWKVMessageType.isGenerating:
+        final isGenerating = event["content"] == "true";
+        receivingTokens.u(isGenerating);
+        if (!isGenerating) _fullyReceived();
+        break;
+      case _RWKVMessageType.responseBufferContent:
+        final content = event["content"];
+        receivedTokens.u(content);
+        receivingTokens.u(true);
+        break;
       case _RWKVMessageType.response:
         final content = event["content"];
         logTrace("content: $content");
