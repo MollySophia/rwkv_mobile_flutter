@@ -8,6 +8,7 @@ othello:
   assets_config_1: assets/config/othello
   assets_config_2: assets/img/othello
   args: __othello__
+  fp: static final firstPage = PageKey.othello.name;
 
 chat:
   app_icon: assets/icon/icon.chat.png
@@ -19,6 +20,7 @@ chat:
   assets_config_1: assets/config/chat
   assets_config_2: assets/img/chat
   args: __chat__
+  fp: static final firstPage = PageKey.chat.name;
 
 world:
   app_icon: assets/icon/icon.world.png
@@ -30,6 +32,7 @@ world:
   assets_config_1: assets/config/world
   assets_config_2: assets/img/world
   args: __world__
+  fp: static final firstPage = PageKey.chat.name;
 
 app_icon:
   [
@@ -52,3 +55,8 @@ assets_config_1:
   [assets/config/othello, assets/config/chat, assets/config/world]
 assets_config_2: [assets/img/othello, assets/img/chat, assets/img/world]
 args: [__othello__, __chat__, __world__]
+fp:
+  [
+    static final firstPage = PageKey.chat.name;,
+    static final firstPage = PageKey.othello.name;,
+  ]

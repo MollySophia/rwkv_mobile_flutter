@@ -23,7 +23,7 @@ class _Othello {
   /// row, col
   late final eatCountMatrixForWhite = _gs<List<List<int>>>(List.generate(8, (_) => List.filled(8, 0)));
 
-  late final thinking = _gs(false);
+  late final receivingTokens = _gs(false);
 
   late final blackTurn = _gs(_blackFirst);
 
@@ -61,7 +61,7 @@ extension $Othello on _Othello {
   }
 
   void onCellTap({required int row, required int col}) {
-    final thinking = this.thinking.v;
+    final thinking = this.receivingTokens.v;
     if (thinking) return;
     final eatCountMatrixForBlack = this.eatCountMatrixForBlack.v;
     final eatCountMatrixForWhite = this.eatCountMatrixForWhite.v;
@@ -95,12 +95,12 @@ extension $Othello on _Othello {
     final whiteAuto = whiteIsAI.v && !(this.blackTurn.v);
 
     if (blackAuto || whiteAuto) {
-      this.thinking.u(true);
+      receivingTokens.u(true);
 
       final prompt = _generatePrompt();
 
       P.rwkv.generate(prompt);
-      this.thinking.u(false);
+      receivingTokens.u(false);
     }
   }
 }
@@ -164,11 +164,11 @@ extension _$ on _Othello {
 
     for (var i = 0; i < 1000; i++) {
       await HF.wait(10);
-      final thinking = this.thinking.v;
+      final thinking = this.receivingTokens.v;
       if (!thinking) break;
     }
 
-    if (kDebugMode) print("💬 Placing event received: $event, thinking: ${thinking.v}");
+    if (kDebugMode) print("💬 Placing event received: $event, thinking: ${receivingTokens.v}");
     onCellTap(row: event.$1, col: event.$2);
   }
 
@@ -217,7 +217,7 @@ extension _$ on _Othello {
 
     blackIsAI.u(false);
     whiteIsAI.u(true);
-    thinking.u(false);
+    receivingTokens.u(false);
     received.u("");
     searchDepth.u(1);
     searchBreadth.u(1);
@@ -234,7 +234,7 @@ extension _$ on _Othello {
     switch (type) {
       case _RWKVMessageType.isGenerating:
         final isGenerating = content == "true";
-        thinking.u(isGenerating);
+        receivingTokens.u(isGenerating);
         break;
       case _RWKVMessageType.responseBufferContent:
         received.u(content);
@@ -243,7 +243,7 @@ extension _$ on _Othello {
         received.u(content);
         break;
       case _RWKVMessageType.generateStart:
-        thinking.u(true);
+        receivingTokens.u(true);
         received.u("");
         break;
       case _RWKVMessageType.streamResponse:
@@ -253,13 +253,13 @@ extension _$ on _Othello {
         break;
       case _RWKVMessageType.currentPrompt:
         received.u(content);
-        thinking.u(false);
+        receivingTokens.u(false);
         break;
       case _RWKVMessageType.samplerParams:
         received.u(content);
         break;
       case _RWKVMessageType.generateStop:
-        thinking.u(false);
+        receivingTokens.u(false);
         break;
     }
 
@@ -325,7 +325,7 @@ extension _$ on _Othello {
     final pageKey = P.app.pageKey.v;
     if (pageKey != PageKey.othello) return;
     if (kDebugMode) print("💬 _onStreamDone");
-    thinking.u(false);
+    receivingTokens.u(false);
   }
 
   FV _onStreamError({
@@ -336,7 +336,7 @@ extension _$ on _Othello {
     if (pageKey != PageKey.othello) return;
     if (kDebugMode) print("💬 _onStreamError");
     if (kDebugMode) print("😡 error: $error");
-    thinking.u(false);
+    receivingTokens.u(false);
   }
 
   void _onBlackTurnChanged() {

@@ -426,7 +426,7 @@ class _Score extends ConsumerWidget {
     final blackScore = ref.watch(P.othello.blackScore);
     final whiteScore = ref.watch(P.othello.whiteScore);
     final blackTurn = ref.watch(P.othello.blackTurn);
-    final thinking = ref.watch(P.othello.thinking);
+    final thinking = ref.watch(P.othello.receivingTokens);
     final usePortrait = ref.watch(P.othello.usePortrait);
 
     final thinkingWidget = AnimatedOpacity(

@@ -21,6 +21,7 @@ class Debugger extends ConsumerWidget {
     final latestClickedMessage = ref.watch(P.chat.latestClickedMessage);
     final inputHeight = ref.watch(P.chat.inputHeight);
     final hasFocus = ref.watch(P.chat.hasFocus);
+    final isOthello = ref.watch(P.app.demoType) == DemoType.othello;
 
     return Positioned(
       left: 0,
@@ -44,15 +45,15 @@ class Debugger extends ConsumerWidget {
                 children: [
                   const T("Debugger"),
                   T("${"demoType".codeToName}\n" + demoType.toString()),
-                  T("${"currentWorldType".codeToName}\n" + currentWorldType.toString()),
-                  T("${"currentModel".codeToName}\n" + currentModel.toString()),
-                  T("${"visualFloatHeight".codeToName}\n" + visualFloatHeight.toString()),
+                  if (!isOthello) T("${"currentWorldType".codeToName}\n" + currentWorldType.toString()),
+                  if (!isOthello) T("${"currentModel".codeToName}\n" + currentModel.toString()),
+                  if (!isOthello) T("${"visualFloatHeight".codeToName}\n" + visualFloatHeight.toString()),
                   T("${"loading".codeToName}\n" + loading.toString()),
                   T("${"streaming".codeToName}\n" + streaming.toString()),
                   T("${"playing".codeToName}\n" + playing.toString()),
-                  T("${"latestClickedMessage".codeToName}\n" + (latestClickedMessage?.id.toString() ?? "null")),
-                  T("${"inputHeight".codeToName}\n" + inputHeight.toString()),
-                  T("${"hasFocus".codeToName}\n" + hasFocus.toString()),
+                  if (!isOthello) T("${"latestClickedMessage".codeToName}\n" + (latestClickedMessage?.id.toString() ?? "null")),
+                  if (!isOthello) T("${"inputHeight".codeToName}\n" + inputHeight.toString()),
+                  if (!isOthello) T("${"hasFocus".codeToName}\n" + hasFocus.toString()),
                 ].m((e) {
                   return C(
                     decoration: BD(color: kB.wo(0.67)),

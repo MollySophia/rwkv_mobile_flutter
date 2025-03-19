@@ -69,6 +69,7 @@ extension $RWKV on _RWKV {
       return;
     }
     sendPort.send(("message", messages));
+
     if (_getTokensTimer != null) {
       _getTokensTimer!.cancel();
     }
@@ -77,6 +78,27 @@ extension $RWKV on _RWKV {
       if (HF.randomBool(truePercentage: 0.5)) sendPort.send(("getResponseBufferContent", null));
       if (HF.randomBool(truePercentage: 0.5)) sendPort.send(("getIsGenerating", null));
       if (HF.randomBool(truePercentage: 0.5)) sendPort.send(("getPrefillAndDecodeSpeed", null));
+    });
+  }
+
+  void generate(String prompt) {
+    prefillSpeed.u(0);
+    decodeSpeed.u(0);
+    final sendPort = _sendPort;
+    if (sendPort == null) {
+      if (kDebugMode) print("🚧 sendPort is null");
+      return;
+    }
+    sendPort.send(("generate", prompt));
+
+    if (_getTokensTimer != null) {
+      _getTokensTimer!.cancel();
+    }
+
+    _getTokensTimer = Timer.periodic(const Duration(milliseconds: 20), (timer) async {
+      sendPort.send(("getResponseBufferContent", null));
+      sendPort.send(("getIsGenerating", null));
+      sendPort.send(("getPrefillAndDecodeSpeed", null));
     });
   }
 
@@ -93,17 +115,6 @@ extension $RWKV on _RWKV {
       return;
     }
     sendPort.send(("clearStates", null));
-  }
-
-  void generate(String prompt) {
-    prefillSpeed.u(0);
-    decodeSpeed.u(0);
-    final sendPort = _sendPort;
-    if (sendPort == null) {
-      if (kDebugMode) print("🚧 sendPort is null");
-      return;
-    }
-    sendPort.send(("generate", prompt));
   }
 
   FV stop() async {
@@ -242,7 +253,7 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
     prefillSpeed.u(0);
     decodeSpeed.u(0);
 
-    final tokenizerPath = await getModelPath("assets/config/chat/b_rwkv_vocab_v20230424.txt");
+    final tokenizerPath = await getModelPath("assets/config/othello/b_rwkv_vocab_v20230424.txt");
 
     final rootIsolateToken = RootIsolateToken.instance;
     final rwkvMobile = RWKVMobile();
@@ -295,7 +306,7 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
     prefillSpeed.u(0);
     decodeSpeed.u(0);
 
-    final tokenizerPath = await getModelPath("assets/config/chat/b_rwkv_vocab_v20230424.txt");
+    final tokenizerPath = await getModelPath("assets/config/othello/b_rwkv_vocab_v20230424.txt");
 
     final rootIsolateToken = RootIsolateToken.instance;
     final rwkvMobile = RWKVMobile();

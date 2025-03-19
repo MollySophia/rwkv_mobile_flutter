@@ -350,6 +350,7 @@ extension _$Chat on _Chat {
     final demoType = P.app.demoType.v;
     if (demoType != DemoType.chat && demoType != DemoType.world) return;
     final type = _RWKVMessageType.fromString(event["type"]);
+
     switch (type) {
       case _RWKVMessageType.isGenerating:
         final isGenerating = event["content"] == "true";
@@ -387,6 +388,7 @@ extension _$Chat on _Chat {
         break;
       case _RWKVMessageType.generateStop:
         receivedTokens.u("");
+        receivingTokens.u(false);
         break;
     }
   }

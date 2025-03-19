@@ -1,5 +1,5 @@
 icons_launcher:
-  image_path: 'assets/icon/icon.chat.png'
+  image_path: 'assets/icon/icon.othello.png'
   platforms:
     android:
       enable: true
@@ -10,4 +10,4 @@ icons_launcher:
     windows:
       enable: false
     linux:
-      enable: false
+      enable: true
