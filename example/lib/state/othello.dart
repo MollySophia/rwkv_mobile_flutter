@@ -224,49 +224,46 @@ extension _$ on _Othello {
     latestPlacing.u(null);
   }
 
-  FV _onStreamEvent({required JSON event}) async {
+  FV _onStreamEvent({required LLMEvent event}) async {
     final pageKey = P.app.pageKey.v;
     if (pageKey != PageKey.othello) return;
 
-    final type = _RWKVMessageType.fromString(event["type"]);
-
-    switch (type) {
+    switch (event.type) {
       case _RWKVMessageType.responseBufferIds:
-        // final responseBufferIds = event["content"];
-        // print(responseBufferIds);
-        // print(responseBufferIds.runtimeType);
+        final ids = event.responseBufferIds;
+        logTrace("\nids: $ids");
+        if (ids != null) {
+          for (var i = 0; i < ids.length; i++) {
+            final id = ids[i];
+            await _onStreamingToken(id);
+          }
+        }
         break;
       case _RWKVMessageType.isGenerating:
-        final content = event["content"] as String? ?? "";
-        final isGenerating = content == "true";
+        final isGenerating = event.content == "true";
         receivingTokens.u(isGenerating);
         break;
       case _RWKVMessageType.responseBufferContent:
-        final content = event["content"] as String? ?? "";
-        received.u(content);
+        received.u(event.content);
         break;
       case _RWKVMessageType.response:
-        final content = event["content"] as String? ?? "";
-        received.u(content);
+        received.u(event.content);
         break;
       case _RWKVMessageType.generateStart:
         receivingTokens.u(true);
         received.u("");
         break;
       case _RWKVMessageType.streamResponse:
-        final content = event["content"] as String? ?? "";
-        received.ua(content);
-        final token = event["token"] as int?;
+        received.u(event.content);
+        final token = event.token;
         _onStreamingToken(token);
         break;
       case _RWKVMessageType.currentPrompt:
-        final content = event["content"] as String? ?? "";
-        received.u(content);
+        received.u(event.content);
         receivingTokens.u(false);
         break;
       case _RWKVMessageType.samplerParams:
-        final content = event["content"] as String? ?? "";
-        received.u(content);
+        received.u(event.content);
         break;
       case _RWKVMessageType.generateStop:
         receivingTokens.u(false);

@@ -346,28 +346,24 @@ extension _$Chat on _Chat {
     messages.u(currentMessages);
   }
 
-  FV _onStreamEvent(JSON event) async {
+  FV _onStreamEvent(LLMEvent event) async {
     final demoType = P.app.demoType.v;
     if (demoType != DemoType.chat && demoType != DemoType.world) return;
-    final type = _RWKVMessageType.fromString(event["type"]);
 
-    switch (type) {
+    switch (event.type) {
       case _RWKVMessageType.responseBufferIds:
         break;
       case _RWKVMessageType.isGenerating:
-        final isGenerating = event["content"] == "true";
+        final isGenerating = event.content == "true";
         receivingTokens.u(isGenerating);
         if (!isGenerating) _fullyReceived();
         break;
       case _RWKVMessageType.responseBufferContent:
-        final content = event["content"];
-        receivedTokens.u(content);
+        receivedTokens.u(event.content);
         receivingTokens.u(true);
         break;
       case _RWKVMessageType.response:
-        final content = event["content"];
-        logTrace("content: $content");
-        receivedTokens.u(content);
+        receivedTokens.u(event.content);
         receivingTokens.u(false);
         _fullyReceived();
         break;
@@ -376,17 +372,14 @@ extension _$Chat on _Chat {
         receivingTokens.u(true);
         break;
       case _RWKVMessageType.streamResponse:
-        final content = event["content"];
-        receivedTokens.u(content);
+        receivedTokens.u(event.content);
         receivingTokens.u(true);
         break;
       case _RWKVMessageType.currentPrompt:
-        final content = event["content"];
-        receivedTokens.u(content);
+        receivedTokens.u(event.content);
         break;
       case _RWKVMessageType.samplerParams:
-        final content = event["content"];
-        receivedTokens.u(content);
+        receivedTokens.u(event.content);
         break;
       case _RWKVMessageType.generateStop:
         receivedTokens.u("");

@@ -7,11 +7,11 @@ class _RWKV {
   /// Receive message from RWKV isolate
   late final _receivePort = ReceivePort();
 
-  late final _messagesController = StreamController<JSON>();
+  late final _messagesController = StreamController<LLMEvent>();
 
-  static Stream<JSON>? _broadcastStream;
+  static Stream<LLMEvent>? _broadcastStream;
 
-  Stream<JSON> get broadcastStream {
+  Stream<LLMEvent> get broadcastStream {
     _broadcastStream ??= _messagesController.stream.asBroadcastStream();
     return _broadcastStream!;
   }
@@ -96,9 +96,10 @@ extension $RWKV on _RWKV {
     }
 
     _getTokensTimer = Timer.periodic(const Duration(milliseconds: 20), (timer) async {
-      // sendPort.send(("getResponseBufferIds", null));
+      sendPort.send(("getResponseBufferIds", null));
       sendPort.send(("getPrefillAndDecodeSpeed", null));
       sendPort.send(("getResponseBufferContent", null));
+      await Future.delayed(const Duration(milliseconds: 1000));
       sendPort.send(("getIsGenerating", null));
     });
   }
@@ -506,79 +507,77 @@ extension _$RWKV on _RWKV {
 
     if (message["responseBufferContent"] != null) {
       final responseBufferContent = message["responseBufferContent"];
-      _messagesController.add({
-        "responseBufferContent": responseBufferContent,
-        "type": _RWKVMessageType.responseBufferContent.name,
-      });
+      _messagesController.add(LLMEvent(
+        content: responseBufferContent,
+        type: _RWKVMessageType.responseBufferContent,
+      ));
       return;
     }
 
     if (message["responseBufferIds"] != null) {
       final responseBufferIdsList = message["responseBufferIds"];
-      _messagesController.add({
-        "content": responseBufferIdsList,
-        "type": _RWKVMessageType.responseBufferIds.name,
-      });
+      _messagesController.add(LLMEvent(
+        responseBufferIds: (responseBufferIdsList as List).map((e) => e as int).toList(),
+        type: _RWKVMessageType.responseBufferIds,
+      ));
       return;
     }
 
     if (message["isGenerating"] != null) {
       final isGenerating = message["isGenerating"];
-      _messagesController.add({
-        "content": isGenerating.toString(),
-        "type": _RWKVMessageType.isGenerating.name,
-      });
+      _messagesController.add(LLMEvent(
+        content: isGenerating.toString(),
+        type: _RWKVMessageType.isGenerating,
+      ));
       if (!isGenerating) {
-        _getTokensTimer!.cancel();
+        _getTokensTimer?.cancel();
         _getTokensTimer = null;
       }
       return;
     }
 
-    // if (kDebugMode) print(message);
-
     if (message["samplerParams"] != null) {
       if (kDebugMode) print("💬 Got samplerParams: ${message["samplerParams"]}");
-      _messagesController.add({
-        "content": message["samplerParams"].toString(),
-        "type": _RWKVMessageType.samplerParams.name,
-      });
+      _messagesController.add(LLMEvent(
+        content: message["samplerParams"].toString(),
+        type: _RWKVMessageType.samplerParams,
+      ));
       return;
     }
 
     if (message["currentPrompt"] != null) {
       if (kDebugMode) print("💬 Got currentPrompt: \"${message["currentPrompt"]}\"");
-      _messagesController.add({
-        "content": message["currentPrompt"].toString(),
-        "type": _RWKVMessageType.currentPrompt.name,
-      });
+      _messagesController.add(LLMEvent(
+        content: message["currentPrompt"].toString(),
+        type: _RWKVMessageType.currentPrompt,
+      ));
       return;
     }
 
     if (message["generateStart"] == true) {
-      _messagesController.add({
-        "content": "",
-        "type": _RWKVMessageType.generateStart.name,
-      });
+      _messagesController.add(LLMEvent(
+        content: "",
+        type: _RWKVMessageType.generateStart,
+      ));
       return;
     }
 
     if (message["response"] != null) {
       final responseText = message["response"].toString();
-      _messagesController.add({
-        "content": responseText,
-        "type": _RWKVMessageType.response.name,
-      });
+      _messagesController.add(LLMEvent(
+        content: responseText,
+        type: _RWKVMessageType.response,
+      ));
       return;
     }
 
     if (message["streamResponse"] != null) {
       final responseText = message["streamResponse"].toString();
-      _messagesController.add({
-        "content": responseText,
-        "token": message["streamResponseToken"],
-        "type": _RWKVMessageType.streamResponse.name,
-      });
+      _messagesController.add(LLMEvent(
+        content: responseText,
+        token: message["streamResponseToken"],
+        type: _RWKVMessageType.streamResponse,
+      ));
       if (message["prefillSpeed"] != null) {
         prefillSpeed.u(message["prefillSpeed"]);
       }
@@ -589,10 +588,10 @@ extension _$RWKV on _RWKV {
     }
 
     if (message["generateStop"] != null) {
-      _messagesController.add({
-        "content": "",
-        "type": _RWKVMessageType.generateStop.name,
-      });
+      _messagesController.add(LLMEvent(
+        content: "",
+        type: _RWKVMessageType.generateStop,
+      ));
       return;
     }
 
@@ -643,10 +642,6 @@ enum _RWKVMessageType {
   responseBufferIds,
 
   generateStop;
-
-  static _RWKVMessageType fromString(String str) {
-    return values.firstWhere((e) => e.name == str);
-  }
 }
 
 enum DemoType {
@@ -655,4 +650,19 @@ enum DemoType {
   world,
   fifthteenPuzzle,
   sudoku,
+}
+
+@immutable
+final class LLMEvent {
+  final _RWKVMessageType type;
+  final String content;
+  final List<int>? responseBufferIds;
+  final int? token;
+
+  const LLMEvent({
+    required this.type,
+    this.content = "",
+    this.responseBufferIds,
+    this.token,
+  });
 }
