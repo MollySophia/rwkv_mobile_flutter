@@ -428,16 +428,20 @@ class _Score extends ConsumerWidget {
     final blackTurn = ref.watch(P.othello.blackTurn);
     final thinking = ref.watch(P.othello.receivingTokens);
     final usePortrait = ref.watch(P.othello.usePortrait);
+    final prefillSpeed = ref.watch(P.rwkv.prefillSpeed);
+    final decodeSpeed = ref.watch(P.rwkv.decodeSpeed);
 
-    final thinkingWidget = AnimatedOpacity(
-      opacity: thinking ? 1.0 : 0.2,
-      duration: const Duration(milliseconds: 150),
-      child: Center(
-        child: T(
-          "Thinking",
-          s: TS(c: kB, s: 10, w: thinking ? FW.w500 : FW.w400),
+    final thinkingWidget = Co(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        AnimatedOpacity(
+          opacity: thinking ? 1.0 : 0.5,
+          duration: const Duration(milliseconds: 150),
+          child: T("Thinking", s: TS(c: kB, s: 10, w: thinking ? FW.w400 : FW.w400)),
         ),
-      ),
+        T("Prefill: ${prefillSpeed.toStringAsFixed(1)} t/s", s: TS(c: kB, s: 10, w: FW.w400)),
+        T("Decode: ${decodeSpeed.toStringAsFixed(1)} t/s", s: TS(c: kB, s: 10, w: FW.w400)),
+      ],
     );
 
     final newGameButton = TextButton(

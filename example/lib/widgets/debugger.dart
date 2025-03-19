@@ -22,6 +22,7 @@ class Debugger extends ConsumerWidget {
     final inputHeight = ref.watch(P.chat.inputHeight);
     final hasFocus = ref.watch(P.chat.hasFocus);
     final isOthello = ref.watch(P.app.demoType) == DemoType.othello;
+    final receivingTokens = ref.watch(P.othello.receivingTokens);
 
     return Positioned(
       left: 0,
@@ -53,6 +54,7 @@ class Debugger extends ConsumerWidget {
                   T("${"playing".codeToName}\n" + playing.toString()),
                   if (!isOthello) T("${"latestClickedMessage".codeToName}\n" + (latestClickedMessage?.id.toString() ?? "null")),
                   if (!isOthello) T("${"inputHeight".codeToName}\n" + inputHeight.toString()),
+                  if (!isOthello) T("${"hasFocus".codeToName}\n" + hasFocus.toString()),
                   if (!isOthello) T("${"hasFocus".codeToName}\n" + hasFocus.toString()),
                 ].m((e) {
                   return C(

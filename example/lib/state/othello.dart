@@ -61,14 +61,13 @@ extension $Othello on _Othello {
   }
 
   void onCellTap({required int row, required int col}) {
-    final thinking = this.receivingTokens.v;
+    final thinking = receivingTokens.v;
     if (thinking) return;
     final eatCountMatrixForBlack = this.eatCountMatrixForBlack.v;
     final eatCountMatrixForWhite = this.eatCountMatrixForWhite.v;
     bool blackTurn = this.blackTurn.v;
     final eatCount = blackTurn ? eatCountMatrixForBlack[row][col] : eatCountMatrixForWhite[row][col];
     if (eatCount == 0) {
-      if (kDebugMode) print("😡 No eat count, row: $row, col: $col, blackTurn: $blackTurn");
       return;
     }
 
@@ -164,7 +163,7 @@ extension _$ on _Othello {
 
     for (var i = 0; i < 1000; i++) {
       await HF.wait(10);
-      final thinking = this.receivingTokens.v;
+      final thinking = receivingTokens.v;
       if (!thinking) break;
     }
 

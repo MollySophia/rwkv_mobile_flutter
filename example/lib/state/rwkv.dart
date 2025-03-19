@@ -89,7 +89,7 @@ extension $RWKV on _RWKV {
       if (kDebugMode) print("🚧 sendPort is null");
       return;
     }
-    sendPort.send(("generate", prompt));
+    sendPort.send(("generateBlocking", prompt));
 
     if (_getTokensTimer != null) {
       _getTokensTimer!.cancel();
