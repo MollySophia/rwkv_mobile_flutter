@@ -230,7 +230,6 @@ extension _$ on _Othello {
     switch (event.type) {
       case _RWKVMessageType.responseBufferIds:
         final ids = event.responseBufferIds;
-        logTrace("\nids: $ids");
         if (ids != null) {
           for (var i = 0; i < ids.length; i++) {
             final id = ids[i];
