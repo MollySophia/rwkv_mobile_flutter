@@ -75,7 +75,7 @@ extension $RWKV on _RWKV {
     }
 
     _getTokensTimer = Timer.periodic(const Duration(milliseconds: 20), (timer) async {
-      if (HF.randomBool(truePercentage: 0.5)) sendPort.send(("getResponseBufferContent", null));
+      sendPort.send(("getResponseBufferContent", null));
       if (HF.randomBool(truePercentage: 0.5)) sendPort.send(("getIsGenerating", null));
       if (HF.randomBool(truePercentage: 0.5)) sendPort.send(("getPrefillAndDecodeSpeed", null));
     });
