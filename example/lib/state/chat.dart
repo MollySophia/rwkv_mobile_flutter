@@ -236,6 +236,7 @@ extension $Chat on _Chat {
 
   FV onStopButtonPressed() async {
     logTrace();
+    Gaimon.light();
     P.rwkv.stop();
   }
 }
