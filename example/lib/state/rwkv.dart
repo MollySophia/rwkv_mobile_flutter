@@ -96,9 +96,10 @@ extension $RWKV on _RWKV {
     }
 
     _getTokensTimer = Timer.periodic(const Duration(milliseconds: 20), (timer) async {
+      // sendPort.send(("getResponseBufferIds", null));
+      sendPort.send(("getPrefillAndDecodeSpeed", null));
       sendPort.send(("getResponseBufferContent", null));
       sendPort.send(("getIsGenerating", null));
-      sendPort.send(("getPrefillAndDecodeSpeed", null));
     });
   }
 
@@ -504,10 +505,19 @@ extension _$RWKV on _RWKV {
     }
 
     if (message["responseBufferContent"] != null) {
-      final responseBufferContent = message["responseBufferContent"].toString();
+      final responseBufferContent = message["responseBufferContent"];
       _messagesController.add({
-        "content": responseBufferContent,
+        "responseBufferContent": responseBufferContent,
         "type": _RWKVMessageType.responseBufferContent.name,
+      });
+      return;
+    }
+
+    if (message["responseBufferIds"] != null) {
+      final responseBufferIdsList = message["responseBufferIds"];
+      _messagesController.add({
+        "content": responseBufferIdsList,
+        "type": _RWKVMessageType.responseBufferIds.name,
       });
       return;
     }
@@ -629,6 +639,8 @@ enum _RWKVMessageType {
 
   /// 模型是否正在生成
   isGenerating,
+
+  responseBufferIds,
 
   generateStop;
 

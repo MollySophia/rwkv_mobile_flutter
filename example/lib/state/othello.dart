@@ -229,17 +229,24 @@ extension _$ on _Othello {
     if (pageKey != PageKey.othello) return;
 
     final type = _RWKVMessageType.fromString(event["type"]);
-    final content = event["content"] as String? ?? "";
 
     switch (type) {
+      case _RWKVMessageType.responseBufferIds:
+        // final responseBufferIds = event["content"];
+        // print(responseBufferIds);
+        // print(responseBufferIds.runtimeType);
+        break;
       case _RWKVMessageType.isGenerating:
+        final content = event["content"] as String? ?? "";
         final isGenerating = content == "true";
         receivingTokens.u(isGenerating);
         break;
       case _RWKVMessageType.responseBufferContent:
+        final content = event["content"] as String? ?? "";
         received.u(content);
         break;
       case _RWKVMessageType.response:
+        final content = event["content"] as String? ?? "";
         received.u(content);
         break;
       case _RWKVMessageType.generateStart:
@@ -247,15 +254,18 @@ extension _$ on _Othello {
         received.u("");
         break;
       case _RWKVMessageType.streamResponse:
+        final content = event["content"] as String? ?? "";
         received.ua(content);
         final token = event["token"] as int?;
         _onStreamingToken(token);
         break;
       case _RWKVMessageType.currentPrompt:
+        final content = event["content"] as String? ?? "";
         received.u(content);
         receivingTokens.u(false);
         break;
       case _RWKVMessageType.samplerParams:
+        final content = event["content"] as String? ?? "";
         received.u(content);
         break;
       case _RWKVMessageType.generateStop:

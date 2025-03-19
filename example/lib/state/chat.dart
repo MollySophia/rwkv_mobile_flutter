@@ -352,6 +352,8 @@ extension _$Chat on _Chat {
     final type = _RWKVMessageType.fromString(event["type"]);
 
     switch (type) {
+      case _RWKVMessageType.responseBufferIds:
+        break;
       case _RWKVMessageType.isGenerating:
         final isGenerating = event["content"] == "true";
         receivingTokens.u(isGenerating);
