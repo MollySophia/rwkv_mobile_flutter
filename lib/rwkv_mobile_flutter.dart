@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_interpolation_to_compose_strings
 
-import 'dart:collection';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ffi' as ffi;
@@ -82,7 +81,7 @@ class RWKVMobile {
     var modelBackend = options.backend.asArgument;
     var tokenizerPath = options.tokenizerPath;
 
-    var runtime;
+    rwkvmobile_runtime_t runtime;
 
     var speedReportCounter = 0;
 
