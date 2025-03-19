@@ -340,6 +340,13 @@ class RWKVMobile {
         final prefillSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime);
         final decodeSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime);
         sendPort.send({'prefillSpeed': prefillSpeed, 'decodeSpeed': decodeSpeed});
+      } else if (command == 'getResponseBufferIds') {
+        final responseBufferIds = rwkvMobile.rwkvmobile_runtime_get_response_buffer_ids(runtime);
+        final responseBufferIdsList = [];
+        for (var i = 0; i < responseBufferIds.len; i++) {
+          responseBufferIdsList.add(responseBufferIds.ids[i]);
+        }
+        sendPort.send({'responseBufferIds': responseBufferIdsList});
       } else {
         if (kDebugMode) print("😡 unknown command: $command");
       }
