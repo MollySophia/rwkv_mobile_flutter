@@ -256,7 +256,7 @@ class _BottomBar extends ConsumerWidget {
                     ),
                   if (loading)
                     C(
-                      margin: EI.o(l: 8, t: 6, b: 6, r: 10),
+                      margin: const EI.o(l: 8, t: 6, b: 6, r: 10),
                       height: 12,
                       width: 12,
                       child: CircularProgressIndicator(

@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:zone/config.dart';
-import 'package:zone/func/log_trace.dart';
 import 'package:zone/state/p.dart';
 
 const _height = 46.0;
@@ -76,7 +75,7 @@ class Suggestions extends ConsumerWidget {
                   color: primary,
                   width: 0.5,
                 ),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: kBG,
                     blurRadius: 10,
