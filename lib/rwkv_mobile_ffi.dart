@@ -484,6 +484,17 @@ class rwkv_mobile {
 
   late final _rwkvmobile_runtime_get_response_buffer_idsPtr = _lookup<ffi.NativeFunction<token_ids Function(rwkvmobile_runtime_t)>>('rwkvmobile_runtime_get_response_buffer_ids');
   late final _rwkvmobile_runtime_get_response_buffer_ids = _rwkvmobile_runtime_get_response_buffer_idsPtr.asFunction<token_ids Function(rwkvmobile_runtime_t)>();
+
+  void rwkvmobile_runtime_free_token_ids(
+    token_ids ids,
+  ) {
+    return _rwkvmobile_runtime_free_token_ids(
+      ids,
+    );
+  }
+
+  late final _rwkvmobile_runtime_free_token_idsPtr = _lookup<ffi.NativeFunction<ffi.Void Function(token_ids)>>('rwkvmobile_runtime_free_token_ids');
+  late final _rwkvmobile_runtime_free_token_ids = _rwkvmobile_runtime_free_token_idsPtr.asFunction<void Function(token_ids)>();
 }
 
 final class sampler_params extends ffi.Struct {
@@ -509,7 +520,7 @@ final class penalty_params extends ffi.Struct {
 }
 
 final class token_ids extends ffi.Struct {
-  external ffi.Pointer<ffi.Int> ids;
+  external ffi.Pointer<ffi.Int32> ids;
 
   @ffi.Int()
   external int len;

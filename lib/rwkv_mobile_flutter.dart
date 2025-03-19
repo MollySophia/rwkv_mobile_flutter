@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ffi' as ffi;
+import 'dart:developer';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -342,10 +343,8 @@ class RWKVMobile {
         sendPort.send({'prefillSpeed': prefillSpeed, 'decodeSpeed': decodeSpeed});
       } else if (command == 'getResponseBufferIds') {
         final responseBufferIds = rwkvMobile.rwkvmobile_runtime_get_response_buffer_ids(runtime);
-        final responseBufferIdsList = [];
-        for (var i = 0; i < responseBufferIds.len; i++) {
-          responseBufferIdsList.add(responseBufferIds.ids[i]);
-        }
+        final responseBufferIdsList = responseBufferIds.ids.asTypedList(responseBufferIds.len).toList();
+        rwkvMobile.rwkvmobile_runtime_free_token_ids(responseBufferIds);
         sendPort.send({'responseBufferIds': responseBufferIdsList});
       } else {
         if (kDebugMode) print("😡 unknown command: $command");
