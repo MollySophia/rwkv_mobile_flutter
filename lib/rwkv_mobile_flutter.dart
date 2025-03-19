@@ -288,6 +288,29 @@ class RWKVMobile {
           sendPort.send({'generateStop': true});
           throw Exception('😡 Failed to evaluate generation');
         }
+      } else if (command == 'generateBlocking') {
+        final prompt = message.$2 as String;
+        final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
+        String responseStr = prompt;
+
+        callbackFunction(ffi.Pointer<ffi.Char> stream, int idx) {
+          final prefillSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime);
+          final decodeSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime);
+          responseStr += stream.cast<Utf8>().toDartString();
+          sendPort.send({'streamResponse': stream.cast<Utf8>().toDartString(), 'streamResponseToken': idx, 'prefillSpeed': prefillSpeed, 'decodeSpeed': decodeSpeed});
+        }
+
+        final nativeCallable = ffi.NativeCallable<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int)>.isolateLocal(callbackFunction);
+        sendPort.send({'generateStart': true});
+        if (kDebugMode) print("🔥 Start to call LLM (gen mode), maxlength = $maxLength");
+        retVal = rwkvMobile.rwkvmobile_runtime_gen_completion_blocking(runtime, promptPtr, maxLength, generationStopToken, nativeCallable.nativeFunction);
+        if (kDebugMode) print("🔥 Call LLM done (gen mode)");
+        if (retVal != 0) {
+          throw Exception('😡 Failed to evaluate generation');
+        }
+
+        sendPort.send({'response': responseStr});
+        sendPort.send({'generateStop': true});
       } else if (command == 'releaseModel') {
         if (kDebugMode) print("💬 Releasing model");
         rwkvMobile.rwkvmobile_runtime_release(runtime);

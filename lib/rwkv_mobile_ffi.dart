@@ -217,6 +217,25 @@ class rwkv_mobile {
   late final _rwkvmobile_runtime_gen_completionPtr = _lookup<ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, ffi.Int, ffi.Int, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int)>>)>>('rwkvmobile_runtime_gen_completion');
   late final _rwkvmobile_runtime_gen_completion = _rwkvmobile_runtime_gen_completionPtr.asFunction<int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, int, int, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int)>>)>();
 
+  int rwkvmobile_runtime_gen_completion_blocking(
+    rwkvmobile_runtime_t runtime,
+    ffi.Pointer<ffi.Char> prompt,
+    int max_tokens,
+    int stop_code,
+    ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int)>> callback,
+  ) {
+    return _rwkvmobile_runtime_gen_completion_blocking(
+      runtime,
+      prompt,
+      max_tokens,
+      stop_code,
+      callback,
+    );
+  }
+
+  late final _rwkvmobile_runtime_gen_completion_blockingPtr = _lookup<ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, ffi.Int, ffi.Int, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int)>>)>>('rwkvmobile_runtime_gen_completion_blocking');
+  late final _rwkvmobile_runtime_gen_completion_blocking = _rwkvmobile_runtime_gen_completion_blockingPtr.asFunction<int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, int, int, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int)>>)>();
+
   int rwkvmobile_runtime_clear_state(
     rwkvmobile_runtime_t runtime,
   ) {
