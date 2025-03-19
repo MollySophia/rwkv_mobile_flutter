@@ -3,4 +3,6 @@
 - 需要 8s gen3 QNN 版本, @Molly
 - 强行中文推理, 等待后端支持, @Molly
 - 远程配置文件
+  - App version
+  - Weights
 - 为 iOS 设备移除高通加速库
