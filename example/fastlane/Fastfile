@@ -76,5 +76,5 @@ end
 
 lane :test do |params|
   build_number = raw_increase_build_number()
-  git_commit(message: "build: ${build_number}", path: "*")
+  git_commit(message: "build: " + build_number.to_s, path: "*")
 end
