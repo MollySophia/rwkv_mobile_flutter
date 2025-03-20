@@ -4,7 +4,7 @@ lane :all do |params|
   dart_fix()
   raw_change_analysis_options()
   build_number = raw_increase_build_number()
-  git_commit()
+  git_commit(message: "build: ${build_number}", path: "*")
   push_to_git_remote()
   global_replace(env: envString) # 替换环境变量
   build_assets() # 构建 assets
@@ -25,10 +25,6 @@ end
 
 lane :git_reset do
   sh "cd ..;git add .;git add .;git reset --hard;cd #{Dir.pwd}"
-end
-
-lane :git_commit do
-  sh "cd ..;git add .;git add .;git commit -m _;cd #{Dir.pwd}"
 end
 
 lane :build_assets do
@@ -79,10 +75,5 @@ lane :switch_env do |params|
 end
 
 lane :test do |params|
-  raw_change_analysis_options()
-  dart_fix()
-  raw_change_analysis_options()
-  raw_increase_build_number()
-  build_assets()
-  android_pgyer()
+  git_commit(message: "build: ${build_number}", path: "*")
 end
