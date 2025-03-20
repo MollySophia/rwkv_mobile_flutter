@@ -27,6 +27,7 @@ mixin _$Weights {
   String? get sha256;
   List<String>? get tags;
   String? get source;
+  List<String>? get socLimitations;
 
   /// Create a copy of Weights
   /// with the given fields replaced by the non-null parameter values.
@@ -58,7 +59,9 @@ mixin _$Weights {
             const DeepCollectionEquality().equals(other.backends, backends) &&
             (identical(other.sha256, sha256) || other.sha256 == sha256) &&
             const DeepCollectionEquality().equals(other.tags, tags) &&
-            (identical(other.source, source) || other.source == source));
+            (identical(other.source, source) || other.source == source) &&
+            const DeepCollectionEquality()
+                .equals(other.socLimitations, socLimitations));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -76,11 +79,12 @@ mixin _$Weights {
       const DeepCollectionEquality().hash(backends),
       sha256,
       const DeepCollectionEquality().hash(tags),
-      source);
+      source,
+      const DeepCollectionEquality().hash(socLimitations));
 
   @override
   String toString() {
-    return 'Weights(name: $name, type: $type, modelSize: $modelSize, fileName: $fileName, fileSize: $fileSize, url: $url, quantization: $quantization, platforms: $platforms, backends: $backends, sha256: $sha256, tags: $tags, source: $source)';
+    return 'Weights(name: $name, type: $type, modelSize: $modelSize, fileName: $fileName, fileSize: $fileSize, url: $url, quantization: $quantization, platforms: $platforms, backends: $backends, sha256: $sha256, tags: $tags, source: $source, socLimitations: $socLimitations)';
   }
 }
 
@@ -101,7 +105,8 @@ abstract mixin class $WeightsCopyWith<$Res> {
       List<String>? backends,
       String? sha256,
       List<String>? tags,
-      String? source});
+      String? source,
+      List<String>? socLimitations});
 }
 
 /// @nodoc
@@ -128,6 +133,7 @@ class _$WeightsCopyWithImpl<$Res> implements $WeightsCopyWith<$Res> {
     Object? sha256 = freezed,
     Object? tags = freezed,
     Object? source = freezed,
+    Object? socLimitations = freezed,
   }) {
     return _then(_self.copyWith(
       name: null == name
@@ -178,6 +184,10 @@ class _$WeightsCopyWithImpl<$Res> implements $WeightsCopyWith<$Res> {
           ? _self.source
           : source // ignore: cast_nullable_to_non_nullable
               as String?,
+      socLimitations: freezed == socLimitations
+          ? _self.socLimitations
+          : socLimitations // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ));
   }
 }
@@ -197,10 +207,12 @@ class _Weights extends Weights {
       required final List<String>? backends,
       required this.sha256,
       required final List<String>? tags,
-      required this.source})
+      required this.source,
+      required final List<String>? socLimitations})
       : _platforms = platforms,
         _backends = backends,
         _tags = tags,
+        _socLimitations = socLimitations,
         super._();
   factory _Weights.fromJson(Map<String, dynamic> json) =>
       _$WeightsFromJson(json);
@@ -251,6 +263,15 @@ class _Weights extends Weights {
 
   @override
   final String? source;
+  final List<String>? _socLimitations;
+  @override
+  List<String>? get socLimitations {
+    final value = _socLimitations;
+    if (value == null) return null;
+    if (_socLimitations is EqualUnmodifiableListView) return _socLimitations;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   /// Create a copy of Weights
   /// with the given fields replaced by the non-null parameter values.
@@ -288,7 +309,9 @@ class _Weights extends Weights {
             const DeepCollectionEquality().equals(other._backends, _backends) &&
             (identical(other.sha256, sha256) || other.sha256 == sha256) &&
             const DeepCollectionEquality().equals(other._tags, _tags) &&
-            (identical(other.source, source) || other.source == source));
+            (identical(other.source, source) || other.source == source) &&
+            const DeepCollectionEquality()
+                .equals(other._socLimitations, _socLimitations));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -306,11 +329,12 @@ class _Weights extends Weights {
       const DeepCollectionEquality().hash(_backends),
       sha256,
       const DeepCollectionEquality().hash(_tags),
-      source);
+      source,
+      const DeepCollectionEquality().hash(_socLimitations));
 
   @override
   String toString() {
-    return 'Weights(name: $name, type: $type, modelSize: $modelSize, fileName: $fileName, fileSize: $fileSize, url: $url, quantization: $quantization, platforms: $platforms, backends: $backends, sha256: $sha256, tags: $tags, source: $source)';
+    return 'Weights(name: $name, type: $type, modelSize: $modelSize, fileName: $fileName, fileSize: $fileSize, url: $url, quantization: $quantization, platforms: $platforms, backends: $backends, sha256: $sha256, tags: $tags, source: $source, socLimitations: $socLimitations)';
   }
 }
 
@@ -332,7 +356,8 @@ abstract mixin class _$WeightsCopyWith<$Res> implements $WeightsCopyWith<$Res> {
       List<String>? backends,
       String? sha256,
       List<String>? tags,
-      String? source});
+      String? source,
+      List<String>? socLimitations});
 }
 
 /// @nodoc
@@ -359,6 +384,7 @@ class __$WeightsCopyWithImpl<$Res> implements _$WeightsCopyWith<$Res> {
     Object? sha256 = freezed,
     Object? tags = freezed,
     Object? source = freezed,
+    Object? socLimitations = freezed,
   }) {
     return _then(_Weights(
       name: null == name
@@ -409,6 +435,10 @@ class __$WeightsCopyWithImpl<$Res> implements _$WeightsCopyWith<$Res> {
           ? _self.source
           : source // ignore: cast_nullable_to_non_nullable
               as String?,
+      socLimitations: freezed == socLimitations
+          ? _self._socLimitations
+          : socLimitations // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ));
   }
 }

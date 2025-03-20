@@ -35,7 +35,8 @@
     "quantization": "fp16",
     "platforms": ["android"],
     "backends": ["qnn"],
-    "tags": ["reasoning"]
+    "tags": ["reasoning"],
+    "socLimitations": ["8 Gen 3"]
   },
   {
     "name": "RWKV v7 World 0.4B",

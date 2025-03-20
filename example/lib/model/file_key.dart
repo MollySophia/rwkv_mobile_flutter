@@ -93,6 +93,12 @@ enum FileKey {
     if (isTest) return kDebugMode;
     final platforms = weights?.platforms;
     if (platforms == null) return false;
+    final socLimitations = weights?.socLimitations ?? [];
+    if (socLimitations.isNotEmpty) {
+      final soc = P.rwkv.soc.v;
+      if (soc.isEmpty) return false;
+      if (!socLimitations.contains(soc)) return false;
+    }
     if (Platform.isIOS) return platforms.contains('ios');
     if (Platform.isMacOS) return platforms.contains('macos');
     if (Platform.isWindows) return platforms.contains('windows');

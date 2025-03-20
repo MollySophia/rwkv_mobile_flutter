@@ -22,6 +22,7 @@ abstract class Weights with _$Weights {
     required String? sha256,
     required List<String>? tags,
     required String? source,
+    required List<String>? socLimitations,
   }) = _Weights;
 
   factory Weights.fromJson(Map<String, dynamic> json) => _$WeightsFromJson(json);

@@ -23,6 +23,7 @@ class Debugger extends ConsumerWidget {
     final hasFocus = ref.watch(P.chat.hasFocus);
     final isOthello = ref.watch(P.app.demoType) == DemoType.othello;
     final receivingTokens = ref.watch(P.othello.receivingTokens);
+    final soc = ref.watch(P.rwkv.soc);
 
     return Positioned(
       left: 0,
@@ -56,6 +57,7 @@ class Debugger extends ConsumerWidget {
                   if (!isOthello) T("${"inputHeight".codeToName}\n" + inputHeight.toString()),
                   if (!isOthello) T("${"hasFocus".codeToName}\n" + hasFocus.toString()),
                   if (!isOthello) T("${"hasFocus".codeToName}\n" + hasFocus.toString()),
+                  if (!isOthello) T("${"soc".codeToName}\n" + soc.toString()),
                 ].m((e) {
                   return C(
                     decoration: BD(color: kB.wo(0.67)),

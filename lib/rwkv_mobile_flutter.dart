@@ -23,7 +23,7 @@ class RWKVMobile {
     _isolate = await Isolate.spawn(_isolateMain, options);
   }
 
-  ffi.DynamicLibrary _getDynamicLibrary() {
+  static ffi.DynamicLibrary _getDynamicLibrary() {
     if (Platform.isAndroid) {
       return ffi.DynamicLibrary.open('librwkv_mobile.so');
     } else if (Platform.isIOS) {
@@ -46,7 +46,7 @@ class RWKVMobile {
     }
   }
 
-  String getAvailableBackendNames() {
+  static String getAvailableBackendNames() {
     final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
     const backendNamesLength = 64; // should be enough
     ffi.Pointer<ffi.Char> responseBuffer = calloc.allocate<ffi.Char>(backendNamesLength);
@@ -55,19 +55,19 @@ class RWKVMobile {
     return response;
   }
 
-  String getPlatformName() {
+  static String getPlatformName() {
     final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
     final platformName = rwkvMobile.rwkvmobile_get_platform_name();
     return platformName.cast<Utf8>().toDartString();
   }
 
-  String getSocName() {
+  static String getSocName() {
     final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
     final socName = rwkvMobile.rwkvmobile_get_soc_name();
     return socName.cast<Utf8>().toDartString();
   }
 
-  String getSocPartname() {
+  static String getSocPartname() {
     final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
     final socPartname = rwkvMobile.rwkvmobile_get_soc_partname();
     return socPartname.cast<Utf8>().toDartString();

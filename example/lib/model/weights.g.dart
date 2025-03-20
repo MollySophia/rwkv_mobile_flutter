@@ -22,6 +22,9 @@ _Weights _$WeightsFromJson(Map<String, dynamic> json) => _Weights(
       sha256: json['sha256'] as String?,
       tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList(),
       source: json['source'] as String?,
+      socLimitations: (json['socLimitations'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
     );
 
 Map<String, dynamic> _$WeightsToJson(_Weights instance) => <String, dynamic>{
@@ -37,4 +40,5 @@ Map<String, dynamic> _$WeightsToJson(_Weights instance) => <String, dynamic>{
       'sha256': instance.sha256,
       'tags': instance.tags,
       'source': instance.source,
+      'socLimitations': instance.socLimitations,
     };

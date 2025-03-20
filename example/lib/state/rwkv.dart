@@ -52,6 +52,8 @@ class _RWKV {
   late final argumentUpdatingDebouncer = Debouncer(milliseconds: 300);
 
   Timer? _getTokensTimer;
+
+  late final soc = _gs("");
 }
 
 /// Public methods
@@ -185,9 +187,6 @@ extension $RWKV on _RWKV {
     }
 
     final rootIsolateToken = RootIsolateToken.instance;
-    final rwkvMobile = RWKVMobile();
-    final availableBackendNames = rwkvMobile.getAvailableBackendNames();
-    if (kDebugMode) print("💬 availableBackendNames: $availableBackendNames");
 
     if (_sendPort != null) {
       try {
@@ -208,7 +207,7 @@ extension $RWKV on _RWKV {
         _receivePort.sendPort,
         rootIsolateToken!,
       );
-      await rwkvMobile.runIsolate(options);
+      await RWKVMobile().runIsolate(options);
     }
 
     while (_sendPort == null) {
@@ -258,7 +257,6 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
     final tokenizerPath = await getModelPath("assets/config/chat/b_rwkv_vocab_v20230424.txt");
 
     final rootIsolateToken = RootIsolateToken.instance;
-    final rwkvMobile = RWKVMobile();
 
     if (_sendPort != null) {
       try {
@@ -281,7 +279,7 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
         _receivePort.sendPort,
         rootIsolateToken!,
       );
-      await rwkvMobile.runIsolate(options);
+      await RWKVMobile().runIsolate(options);
     }
 
     while (_sendPort == null) {
@@ -311,7 +309,6 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
     final tokenizerPath = await getModelPath("assets/config/chat/b_rwkv_vocab_v20230424.txt");
 
     final rootIsolateToken = RootIsolateToken.instance;
-    final rwkvMobile = RWKVMobile();
 
     if (_sendPort != null) {
       _sendPort!.send(("releaseVisionEncoder", null));
@@ -328,7 +325,7 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
         _receivePort.sendPort,
         rootIsolateToken!,
       );
-      await rwkvMobile.runIsolate(options);
+      await RWKVMobile().runIsolate(options);
     }
 
     while (_sendPort == null) {
@@ -417,9 +414,6 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
     }
 
     final rootIsolateToken = RootIsolateToken.instance;
-    final rwkvMobile = RWKVMobile();
-    final availableBackendNames = rwkvMobile.getAvailableBackendNames();
-    if (kDebugMode) print("💬 availableBackendNames: $availableBackendNames");
 
     if (_sendPort != null) {
       _sendPort!.send((
@@ -434,7 +428,7 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
         _receivePort.sendPort,
         rootIsolateToken!,
       );
-      await rwkvMobile.runIsolate(options);
+      await RWKVMobile().runIsolate(options);
     }
 
     while (_sendPort == null) {
@@ -457,6 +451,10 @@ extension _$RWKV on _RWKV {
   FV _init() async {
     P.app.pageKey.lv(_onPageKeyChanged);
     _receivePort.listen(_onMessage);
+    final r = await compute((_) {
+      return RWKVMobile.getSocName();
+    }, []);
+    soc.u(r);
   }
 
   num _intIfFixedDecimalsIsZero(Argument argument) {
