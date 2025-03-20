@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
     <application
-        android:label="RWKV Othello"
+        android:label="RWKV Chat"
         android:name="${applicationName}"
         android:enableOnBackInvokedCallback="true"
         android:icon="@mipmap/ic_launcher">

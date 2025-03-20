@@ -27,7 +27,7 @@ class PageHome extends ConsumerWidget {
             onPressed: () {
               push(PageKey.chat);
             },
-            child: const T("RWKV Othello"),
+            child: const T("RWKV Chat"),
           ),
           TextButton(
             onPressed: () {
