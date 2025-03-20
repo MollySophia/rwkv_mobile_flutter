@@ -28,5 +28,11 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We need to use camera to take a photo</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need to use microphone to send your voice</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need to use phone library to select your avatar</string>
 </dict>
 </plist>
