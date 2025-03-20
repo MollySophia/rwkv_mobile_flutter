@@ -439,8 +439,8 @@ class _Score extends ConsumerWidget {
           duration: const Duration(milliseconds: 150),
           child: T("Thinking", s: TS(c: kB, s: 10, w: thinking ? FW.w400 : FW.w400)),
         ),
-        T("Prefill: ${prefillSpeed.toStringAsFixed(1)} t/s", s: TS(c: kB, s: 10, w: FW.w400)),
-        T("Decode: ${decodeSpeed.toStringAsFixed(1)} t/s", s: TS(c: kB, s: 10, w: FW.w400)),
+        T("Prefill: ${prefillSpeed.toStringAsFixed(1)} t/s", s: const TS(c: kB, s: 10, w: FW.w400)),
+        T("Decode: ${decodeSpeed.toStringAsFixed(1)} t/s", s: const TS(c: kB, s: 10, w: FW.w400)),
       ],
     );
 

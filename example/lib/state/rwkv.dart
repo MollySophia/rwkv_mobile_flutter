@@ -555,7 +555,7 @@ extension _$RWKV on _RWKV {
     }
 
     if (message["generateStart"] == true) {
-      _messagesController.add(LLMEvent(
+      _messagesController.add(const LLMEvent(
         content: "",
         type: _RWKVMessageType.generateStart,
       ));
@@ -588,7 +588,7 @@ extension _$RWKV on _RWKV {
     }
 
     if (message["generateStop"] != null) {
-      _messagesController.add(LLMEvent(
+      _messagesController.add(const LLMEvent(
         content: "",
         type: _RWKVMessageType.generateStop,
       ));
