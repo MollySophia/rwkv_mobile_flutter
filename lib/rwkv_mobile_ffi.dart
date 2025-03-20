@@ -514,6 +514,27 @@ class rwkv_mobile {
 
   late final _rwkvmobile_runtime_free_token_idsPtr = _lookup<ffi.NativeFunction<ffi.Void Function(token_ids)>>('rwkvmobile_runtime_free_token_ids');
   late final _rwkvmobile_runtime_free_token_ids = _rwkvmobile_runtime_free_token_idsPtr.asFunction<void Function(token_ids)>();
+
+  ffi.Pointer<ffi.Char> rwkvmobile_get_platform_name() {
+    return _rwkvmobile_get_platform_name();
+  }
+
+  late final _rwkvmobile_get_platform_namePtr = _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('rwkvmobile_get_platform_name');
+  late final _rwkvmobile_get_platform_name = _rwkvmobile_get_platform_namePtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  ffi.Pointer<ffi.Char> rwkvmobile_get_soc_name() {
+    return _rwkvmobile_get_soc_name();
+  }
+
+  late final _rwkvmobile_get_soc_namePtr = _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('rwkvmobile_get_soc_name');
+  late final _rwkvmobile_get_soc_name = _rwkvmobile_get_soc_namePtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  ffi.Pointer<ffi.Char> rwkvmobile_get_soc_partname() {
+    return _rwkvmobile_get_soc_partname();
+  }
+
+  late final _rwkvmobile_get_soc_partnamePtr = _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('rwkvmobile_get_soc_partname');
+  late final _rwkvmobile_get_soc_partname = _rwkvmobile_get_soc_partnamePtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 }
 
 final class sampler_params extends ffi.Struct {
@@ -539,7 +560,7 @@ final class penalty_params extends ffi.Struct {
 }
 
 final class token_ids extends ffi.Struct {
-  external ffi.Pointer<ffi.Int32> ids;
+  external ffi.Pointer<ffi.Int> ids;
 
   @ffi.Int()
   external int len;

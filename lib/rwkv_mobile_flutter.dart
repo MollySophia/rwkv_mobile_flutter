@@ -55,6 +55,24 @@ class RWKVMobile {
     return response;
   }
 
+  String getPlatformName() {
+    final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
+    final platformName = rwkvMobile.rwkvmobile_get_platform_name();
+    return platformName.cast<Utf8>().toDartString();
+  }
+
+  String getSocName() {
+    final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
+    final socName = rwkvMobile.rwkvmobile_get_soc_name();
+    return socName.cast<Utf8>().toDartString();
+  }
+
+  String getSocPartname() {
+    final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
+    final socPartname = rwkvMobile.rwkvmobile_get_soc_partname();
+    return socPartname.cast<Utf8>().toDartString();
+  }
+
   void _isolateMain(StartOptions options) async {
     final sendPort = options.sendPort;
     final rootIsolateToken = options.rootIsolateToken;
