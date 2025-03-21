@@ -14,8 +14,6 @@ import 'package:rwkv_mobile_flutter/rwkv_mobile_ffi.dart';
 class RWKVMobile {
   Isolate? _isolate;
 
-  bool get isRunning => _isolate != null;
-
   Future<void> runIsolate(StartOptions options) async {
     if (_isolate != null) {
       throw Exception('😡 Isolate already running');
