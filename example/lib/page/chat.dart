@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/message.dart' as model;
 import 'package:zone/model/role.dart';
+import 'package:zone/model/world_type.dart';
 import 'package:zone/route/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,7 +18,6 @@ import 'package:zone/widgets/chat/input.dart';
 import 'package:zone/widgets/chat/message.dart';
 import 'package:zone/widgets/chat/suggestions.dart';
 import 'package:zone/widgets/chat/visual_empty.dart';
-import 'package:zone/widgets/chat/visual_float.dart';
 import 'package:zone/widgets/model_selector.dart';
 
 class PageChat extends StatefulWidget {
@@ -98,7 +98,6 @@ class _PageChatState extends State<PageChat> {
           Empty(),
           VisualEmpty(),
           AudioEmpty(),
-          VisualFloat(),
           //
           ChatAppBar(),
           _NavigationBarBottomLine(),

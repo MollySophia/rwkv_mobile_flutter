@@ -6,6 +6,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:rwkv_mobile_flutter/rwkv.dart';
 import 'package:zone/model/weights.dart';
+import 'package:zone/model/world_type.dart';
 import 'package:zone/state/p.dart';
 
 // TODO: 在未来应该改为权重, 现在这个东西的职责和权重重合了

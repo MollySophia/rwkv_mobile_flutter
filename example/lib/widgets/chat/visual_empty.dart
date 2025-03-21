@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:zone/func/show_image_selector.dart';
+import 'package:zone/model/world_type.dart';
 import 'package:zone/state/p.dart';
 
 class VisualEmpty extends ConsumerWidget {
