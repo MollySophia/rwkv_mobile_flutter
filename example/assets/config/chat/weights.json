@@ -10,7 +10,7 @@
     "quantization": "fp16",
     "platforms": ["macos", "windows", "linux", "android"],
     "backends": ["llamacpp"],
-    "tags": ["reasoning"]
+    "tags": ["reasoning", "cpu"]
   },
   {
     "name": "RWKV7-G1 0.1B",
@@ -23,7 +23,7 @@
     "quantization": "fp16",
     "platforms": ["ios", "macos", "web"],
     "backends": ["webRwkv"],
-    "tags": ["reasoning"]
+    "tags": ["reasoning", "gpu"]
   },
   {
     "name": "RWKV7-G1 0.1B (8 Gen 3 only)",
@@ -35,7 +35,7 @@
     "quantization": "fp16",
     "platforms": ["android"],
     "backends": ["qnn"],
-    "tags": ["reasoning"],
+    "tags": ["reasoning", "npu"],
     "socLimitations": ["8 Gen 3"]
   },
   {
@@ -48,7 +48,8 @@
     "url": "mollysama/rwkv-mobile-models/resolve/main/WebRWKV/RWKV-x070-World-0.4B-v2.9-20250107-ctx4096.st",
     "quantization": "fp16",
     "platforms": ["ios", "macos", "web"],
-    "backends": ["webRwkv"]
+    "backends": ["webRwkv"],
+    "tags": ["gpu"]
   },
   {
     "name": "RWKV v7 World 1.5B",
@@ -60,7 +61,8 @@
     "url": "mollysama/rwkv-mobile-models/resolve/main/WebRWKV/RWKV-x070-World-1.5B-v3-NF4-20250127-ctx4096.prefab",
     "quantization": "NF4",
     "platforms": ["ios", "macos", "web"],
-    "backends": ["webRwkv"]
+    "backends": ["webRwkv"],
+    "tags": ["gpu"]
   },
   {
     "name": "RWKV v7 World 2.9B",
@@ -72,7 +74,8 @@
     "url": "mollysama/rwkv-mobile-models/resolve/main/WebRWKV/RWKV-x070-World-2.9B-v3-NF4-20250211-ctx4096.prefab",
     "quantization": "NF4",
     "platforms": ["ios", "macos", "web"],
-    "backends": ["webRwkv"]
+    "backends": ["webRwkv"],
+    "tags": ["gpu"]
   },
   {
     "name": "RWKV v7 World 0.4B",
@@ -84,7 +87,8 @@
     "url": "mollysama/rwkv-mobile-models/resolve/main/gguf/rwkv7-world-0.4B-Q8_0.gguf",
     "quantization": "Q8_0",
     "platforms": ["macos", "windows", "linux", "android"],
-    "backends": ["llamacpp"]
+    "backends": ["llamacpp"],
+    "tags": ["cpu"]
   },
   {
     "name": "RWKV v7 World 1.5B",
@@ -96,7 +100,8 @@
     "url": "mollysama/rwkv-mobile-models/resolve/main/gguf/rwkv7-world-1.5B-Q5_K_M.gguf",
     "quantization": "Q5_K_M",
     "platforms": ["macos", "windows", "linux", "android"],
-    "backends": ["llamacpp"]
+    "backends": ["llamacpp"],
+    "tags": ["cpu"]
   },
   {
     "name": "RWKV v7 World 3B",
@@ -108,7 +113,8 @@
     "url": "mollysama/rwkv-mobile-models/resolve/main/gguf/rwkv7-world-2.9B-Q4_K_M.gguf",
     "quantization": "Q4_K_M",
     "platforms": ["macos", "windows", "linux", "android"],
-    "backends": ["llamacpp"]
+    "backends": ["llamacpp"],
+    "tags": ["cpu"]
   },
   {
     "name": "test: github-releases",

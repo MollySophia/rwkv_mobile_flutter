@@ -237,13 +237,20 @@ class FileKeyItem extends ConsumerWidget {
           runSpacing: 8,
           children: [
             ...tags.map((tag) {
+              final isReasoningIsEncoder = tag == "reasoning" || tag == "encoder";
               return C(
                 decoration: BD(
                   borderRadius: 4.r,
-                  color: kCG,
+                  color: isReasoningIsEncoder ? kCG : kG.wo(0.2),
                 ),
                 padding: const EI.s(h: 4),
-                child: T(tag, s: const TS(c: kW, w: FW.w500)),
+                child: T(
+                  tag,
+                  s: TS(
+                    c: isReasoningIsEncoder ? kW : kB,
+                    w: isReasoningIsEncoder ? FW.w500 : FW.w400,
+                  ),
+                ),
               );
             }),
             C(
