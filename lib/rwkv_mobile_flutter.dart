@@ -3,7 +3,6 @@
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ffi' as ffi;
-import 'dart:developer';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
