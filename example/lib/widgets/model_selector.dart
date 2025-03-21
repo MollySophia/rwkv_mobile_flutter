@@ -79,15 +79,15 @@ class _DownloadSource extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentSource = ref.watch(P.remoteFile.currentSource);
+    final currentSource = ref.watch(P.fileManager.currentSource);
     final primary = Theme.of(context).colorScheme.primary;
     return Wrap(
       runSpacing: 4,
       spacing: 4,
-      children: RemoteFileSource.values.where((e) => kDebugMode ? true : !e.isDebug).map((e) {
+      children: FileDownloadSource.values.where((e) => kDebugMode ? true : !e.isDebug).map((e) {
         return GD(
           onTap: () {
-            P.remoteFile.currentSource.u(e);
+            P.fileManager.currentSource.u(e);
           },
           child: C(
             decoration: BD(

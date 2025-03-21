@@ -44,12 +44,12 @@ class ModelItem extends ConsumerWidget {
   }
 
   void _onDownloadTap() async {
-    P.remoteFile.getFile(fileKey: fileKey);
+    P.fileManager.getFile(fileKey: fileKey);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final file = ref.watch(P.remoteFile.files(fileKey));
+    final file = ref.watch(P.fileManager.files(fileKey));
     final hasFile = file.hasFile;
     final downloading = file.downloading;
     final currentModel = ref.watch(P.rwkv.currentModel);
@@ -124,7 +124,7 @@ class _DownloadIndicator extends ConsumerWidget {
       cancelLabel: "Continue download",
     );
     if (result == OkCancelResult.ok) {
-      await P.remoteFile.cancelDownload(fileKey: fileKey);
+      await P.fileManager.cancelDownload(fileKey: fileKey);
     }
   }
 
@@ -176,7 +176,7 @@ class _Delete extends ConsumerWidget {
       cancelLabel: "Cancel",
     );
     if (result == OkCancelResult.ok) {
-      await P.remoteFile.deleteFile(fileKey: fileKey);
+      await P.fileManager.deleteFile(fileKey: fileKey);
     }
   }
 
@@ -201,7 +201,7 @@ class FileKeyItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final file = ref.watch(P.remoteFile.files(fileKey));
+    final file = ref.watch(P.fileManager.files(fileKey));
     final fileSize = file.expectedFileSize;
     final progress = file.progress;
     final downloading = file.downloading;

@@ -22,13 +22,13 @@ class ModelGroupItem extends ConsumerWidget {
 
   void _onDownloadAllTap() async {
     final fileKeys = FileKey.availableModels.where((e) => e.worldType == worldType).toList();
-    final missingFileKeys = fileKeys.where((e) => P.remoteFile.files(e).v.hasFile == false).toList();
-    missingFileKeys.forEach((e) => P.remoteFile.getFile(fileKey: e));
+    final missingFileKeys = fileKeys.where((e) => P.fileManager.files(e).v.hasFile == false).toList();
+    missingFileKeys.forEach((e) => P.fileManager.getFile(fileKey: e));
   }
 
   void _onDeleteAllTap() async {
     final fileKeys = FileKey.availableModels.where((e) => e.worldType == worldType).toList();
-    fileKeys.forEach((e) => P.remoteFile.deleteFile(fileKey: e));
+    fileKeys.forEach((e) => P.fileManager.deleteFile(fileKey: e));
   }
 
   void _onStartToChatTap() async {
@@ -90,7 +90,7 @@ class ModelGroupItem extends ConsumerWidget {
     final primaryColor = Theme.of(context).colorScheme.primaryContainer;
 
     final files = fileKeys.m((e) {
-      return ref.watch(P.remoteFile.files(e));
+      return ref.watch(P.fileManager.files(e));
     });
 
     final allDownloaded = files.every((e) => e.hasFile);

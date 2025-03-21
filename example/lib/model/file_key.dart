@@ -43,7 +43,7 @@ enum FileKey {
   ;
 
   Weights? get weights {
-    final weights = P.remoteFile.weights.v;
+    final weights = P.fileManager.weights.v;
     switch (this) {
       case rwkv7_0_1b_whisper_small_enasr_adapter_gguf:
         return weights.firstWhereOrNull((e) => e.fileName == 'whisper-small-rwkv-0b1-enasr-adapter.gguf');
@@ -131,18 +131,9 @@ enum FileKey {
 
   String get url {
     if (isTest) return weights?.url ?? '';
-    final source = P.remoteFile.currentSource.v;
+    final source = P.fileManager.currentSource.v;
     final raw = weights?.url ?? '';
-    switch (source) {
-      case RemoteFileSource.huggingface:
-        return "https://huggingface.co/" + raw;
-      case RemoteFileSource.aifasthub:
-        return "https://aifasthub.com/" + raw + "?download=true";
-      case RemoteFileSource.github:
-        return raw;
-      case RemoteFileSource.googleapis:
-        return raw;
-    }
+    return source.prefix + raw + source.suffix;
   }
 
   String get path => '${P.app.documentsDir.v!.path}/$fileName';

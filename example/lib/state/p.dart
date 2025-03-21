@@ -43,7 +43,7 @@ part "app.dart";
 part "chat.dart";
 part "rwkv.dart";
 part "othello.dart";
-part "remote_file.dart";
+part "file_manager.dart";
 part "device.dart";
 part "adapter.dart";
 part "debugger.dart";
@@ -54,7 +54,7 @@ abstract class P {
   static final chat = _Chat();
   static final rwkv = _RWKV();
   static final othello = _Othello();
-  static final remoteFile = _RemoteFile();
+  static final fileManager = _FileManager();
   static final device = _Device();
   static final adapter = _Adapter();
   static final debugger = _Debugger();
@@ -71,7 +71,7 @@ abstract class P {
       rwkv._init(),
       chat._init(),
       othello._init(),
-      remoteFile._init(),
+      fileManager._init(),
       device._init(),
       adapter._init(),
       debugger._init(),

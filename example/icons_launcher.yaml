@@ -8,6 +8,8 @@ icons_launcher:
     macos:
       enable: true
     windows:
-      enable: false
+      enable: true
     linux:
       enable: true
+    web:
+      enable: false

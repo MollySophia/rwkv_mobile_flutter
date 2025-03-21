@@ -26,7 +26,7 @@ class PageFile extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          P.remoteFile.checkLocalFile();
+          P.fileManager.checkLocalFile();
         },
         child: const Icon(Icons.download),
       ),
@@ -41,7 +41,7 @@ class _Cell extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final file = ref.watch(P.remoteFile.files(fileKey));
+    final file = ref.watch(P.fileManager.files(fileKey));
     return C(
       decoration: BD(
         color: kC,
@@ -68,7 +68,7 @@ class _Cell extends ConsumerWidget {
                 if (!file.downloading)
                   IconButton(
                     onPressed: () {
-                      P.remoteFile.getFile(fileKey: file.key);
+                      P.fileManager.getFile(fileKey: file.key);
                     },
                     icon: const Icon(Icons.download),
                   ),

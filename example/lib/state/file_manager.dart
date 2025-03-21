@@ -2,7 +2,7 @@
 
 part of 'p.dart';
 
-class _RemoteFile {
+class _FileManager {
   late final files = StateProvider.family<FileInfo, FileKey>((ref, key) {
     return FileInfo(key: key);
   });
@@ -12,17 +12,12 @@ class _RemoteFile {
 
   late final weights = _gs<List<Weights>>([]);
 
-  late final currentSource = _gs(kDebugMode ? RemoteFileSource.huggingface : RemoteFileSource.aifasthub);
+  late final currentSource = _gs(kDebugMode ? FileDownloadSource.huggingface : FileDownloadSource.aifasthub);
 }
 
 /// Public methods
-extension $RemoteFile on _RemoteFile {
+extension $RemoteFile on _FileManager {
   FV getFile({required FileKey fileKey}) async {
-    // 1. check file
-    // 2. check zip file
-    // 3. if zip file, unzip it, return the path
-    // 4. download zip file
-    // 5. unzip it, return the path
     final fileName = fileKey.url.split('/').last.split('?')[0];
     final task = bd.DownloadTask(
       url: fileKey.url,
@@ -108,7 +103,7 @@ extension $RemoteFile on _RemoteFile {
 }
 
 /// Private methods
-extension _$RemoteFile on _RemoteFile {
+extension _$RemoteFile on _FileManager {
   FV _init() async {
     // 1. check file
     // 2. check zip file
@@ -203,12 +198,26 @@ extension _$RemoteFile on _RemoteFile {
   }
 }
 
-enum RemoteFileSource {
+enum FileDownloadSource {
   aifasthub,
   huggingface,
   github,
   googleapis,
   ;
+
+  String get prefix => switch (this) {
+        aifasthub => 'https://aifasthub.com/',
+        huggingface => 'https://huggingface.co/',
+        github => 'https://github.com/',
+        googleapis => 'https://googleapis.com/',
+      };
+
+  String get suffix => switch (this) {
+        aifasthub => '?download=true',
+        huggingface => '',
+        github => '',
+        googleapis => '',
+      };
 
   bool get isDebug {
     switch (this) {

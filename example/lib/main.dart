@@ -16,16 +16,26 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 void main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   if (kDebugMode) {
-    await P.init();
-    runApp(const _App());
+    await _debugAppRunner();
+    return;
   } else {
-    await SentryFlutter.init(_configureSentry, appRunner: () async {
-      await P.init();
-      runApp(SentryWidget(child: const _App()));
-    });
+    await SentryFlutter.init(
+      _configureSentry,
+      appRunner: _sentryAppRunner,
+    );
   }
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   FlutterNativeSplash.remove();
+}
+
+FV _sentryAppRunner() async {
+  await P.init();
+  runApp(SentryWidget(child: const _App()));
+}
+
+FV _debugAppRunner() async {
+  await P.init();
+  runApp(const _App());
 }
 
 FutureOr<void> _configureSentry(SentryFlutterOptions options) {
