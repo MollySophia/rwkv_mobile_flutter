@@ -72,5 +72,6 @@
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>We need to use phone library to select your avatar</string>
 		<key>UIApplicationSupportsIndirectInputEvents</key>
+		<true/>
 	</dict>
 </plist>
