@@ -24,7 +24,7 @@ class _RWKV {
 
   // TODO: @wangce 或许, 默认参数应该和 weights 绑定, 比如, Othello model 的 topK 应该始终是 1
   late final arguments = StateProvider.family<double, Argument>((ref, argument) {
-    return argument.chatDefaults;
+    return argument.defaults;
   });
 
   // TODO: @wangce 或许, 默认参数应该和 weights 绑定, 比如, G1 系列模型默认使用 reasoning
@@ -159,7 +159,7 @@ extension $RWKV on _RWKV {
     _loading.u(true);
     prefillSpeed.u(0);
     decodeSpeed.u(0);
-    final tokenizerPath = await getModelPath(Assets.config.chat.bRwkvVocabV20230424);
+    final tokenizerPath = await fromAssetsToTemp(Assets.config.chat.bRwkvVocabV20230424);
 
     if (Platform.isAndroid) {
       // TODO: @Molly better solution here
@@ -181,7 +181,7 @@ extension $RWKV on _RWKV {
         "libQnnRwkvWkvOpPackage.so",
       };
       for (final lib in qnnLibList) {
-        final path = await getModelPath("assets/lib/$lib");
+        final path = await fromAssetsToTemp("assets/lib/$lib");
         if (kDebugMode) print("💬 copied QNN library, path: $path");
       }
     }
@@ -214,6 +214,7 @@ extension $RWKV on _RWKV {
       if (kDebugMode) print("💬 waiting for sendPort...");
       await Future.delayed(const Duration(milliseconds: 50));
     }
+
     // TODO: pre-defined prompts for user to choose
 
 //     final prompt = """\n\nUser: 猫娘是一种拟人化的生物，其行为似猫但类人。
@@ -254,7 +255,7 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
     prefillSpeed.u(0);
     decodeSpeed.u(0);
 
-    final tokenizerPath = await getModelPath("assets/config/chat/b_rwkv_vocab_v20230424.txt");
+    final tokenizerPath = await fromAssetsToTemp("assets/config/chat/b_rwkv_vocab_v20230424.txt");
 
     final rootIsolateToken = RootIsolateToken.instance;
 
@@ -306,7 +307,7 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
     prefillSpeed.u(0);
     decodeSpeed.u(0);
 
-    final tokenizerPath = await getModelPath("assets/config/chat/b_rwkv_vocab_v20230424.txt");
+    final tokenizerPath = await fromAssetsToTemp("assets/config/chat/b_rwkv_vocab_v20230424.txt");
 
     final rootIsolateToken = RootIsolateToken.instance;
 
@@ -345,12 +346,12 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
 
   FV resetSamplerParams({required bool usingReasoningModel}) async {
     await syncSamplerParams(
-      temperature: usingReasoningModel ? Argument.temperature.reasonDefaults : Argument.temperature.chatDefaults,
-      topK: usingReasoningModel ? Argument.topK.reasonDefaults : Argument.topK.chatDefaults,
-      topP: usingReasoningModel ? Argument.topP.reasonDefaults : Argument.topP.chatDefaults,
-      presencePenalty: usingReasoningModel ? Argument.presencePenalty.reasonDefaults : Argument.presencePenalty.chatDefaults,
-      frequencyPenalty: usingReasoningModel ? Argument.frequencyPenalty.reasonDefaults : Argument.frequencyPenalty.chatDefaults,
-      penaltyDecay: usingReasoningModel ? Argument.penaltyDecay.reasonDefaults : Argument.penaltyDecay.chatDefaults,
+      temperature: usingReasoningModel ? Argument.temperature.reasonDefaults : Argument.temperature.defaults,
+      topK: usingReasoningModel ? Argument.topK.reasonDefaults : Argument.topK.defaults,
+      topP: usingReasoningModel ? Argument.topP.reasonDefaults : Argument.topP.defaults,
+      presencePenalty: usingReasoningModel ? Argument.presencePenalty.reasonDefaults : Argument.presencePenalty.defaults,
+      frequencyPenalty: usingReasoningModel ? Argument.frequencyPenalty.reasonDefaults : Argument.frequencyPenalty.defaults,
+      penaltyDecay: usingReasoningModel ? Argument.penaltyDecay.reasonDefaults : Argument.penaltyDecay.defaults,
     );
   }
 
@@ -386,7 +387,7 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
 
   FV resetMaxLength({required bool usingReasoningModel}) async {
     await syncMaxLength(
-      maxLength: usingReasoningModel ? Argument.maxLength.reasonDefaults : Argument.maxLength.chatDefaults,
+      maxLength: usingReasoningModel ? Argument.maxLength.reasonDefaults : Argument.maxLength.defaults,
     );
   }
 
@@ -402,14 +403,14 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
     late final String modelPath;
     late final Backend backend;
 
-    final tokenizerPath = await getModelPath(Assets.config.othello.bOthelloVocab);
+    final tokenizerPath = await fromAssetsToTemp(Assets.config.othello.bOthelloVocab);
 
     if (Platform.isIOS || Platform.isMacOS) {
-      modelPath = await getModelPath(Assets.model.othello.rwkv7Othello26mL10D448Extended);
+      modelPath = await fromAssetsToTemp(Assets.model.othello.rwkv7Othello26mL10D448Extended);
       backend = Backend.webRwkv;
     } else {
-      modelPath = await getModelPath(Assets.model.othello.rwkv7Othello26mL10D448ExtendedNcnnBin);
-      await getModelPath(Assets.model.othello.rwkv7Othello26mL10D448ExtendedNcnnParam);
+      modelPath = await fromAssetsToTemp(Assets.model.othello.rwkv7Othello26mL10D448ExtendedNcnnBin);
+      await fromAssetsToTemp(Assets.model.othello.rwkv7Othello26mL10D448ExtendedNcnnParam);
       backend = Backend.ncnn;
     }
 

@@ -21,9 +21,6 @@ extension $RemoteFile on _FileManager {
     final fileName = fileKey.url.split('/').last.split('?')[0];
     final task = bd.DownloadTask(
       url: fileKey.url,
-      headers: {
-        'x-api-key': '4s5aWqs2f4PzKfgLjuRZgXKvvmal5Z5iq0OzkTPwaA2axgNgSbayfQEX5FgOpTxyyeUM4gsFHHDZroaFDIE3NtSJD6evdz3lAVctyN026keeXMoJ7tmUy5zriMJHJ9aM',
-      },
       baseDirectory: bd.BaseDirectory.applicationDocuments,
       filename: fileName,
       updates: bd.Updates.statusAndProgress, // request status and progress updates

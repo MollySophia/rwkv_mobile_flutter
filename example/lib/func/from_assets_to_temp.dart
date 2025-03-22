@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 
-Future<String> getModelPath(String assetsPath) async {
+Future<String> fromAssetsToTemp(String assetsPath) async {
   try {
     final data = await rootBundle.load(assetsPath);
     final tempDir = await getTemporaryDirectory();

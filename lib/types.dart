@@ -25,16 +25,24 @@ enum Backend {
   qnn,
   ;
 
-  String get asArgument {
-    switch (this) {
-      case Backend.ncnn:
-        return 'ncnn';
-      case Backend.webRwkv:
-        return 'web-rwkv';
-      case Backend.llamacpp:
-        return 'llama.cpp';
-      case Backend.qnn:
-        return 'qnn';
+  String get asArgument => switch (this) {
+        Backend.ncnn => 'ncnn',
+        Backend.webRwkv => 'web-rwkv',
+        Backend.llamacpp => 'llama.cpp',
+        Backend.qnn => 'qnn',
+      };
+
+  static Backend fromString(String value) {
+    if (value.contains('ncnn')) {
+      return Backend.ncnn;
+    } else if (value.contains('web') && value.contains('rwkv')) {
+      return Backend.webRwkv;
+    } else if (value.contains('llama')) {
+      return Backend.llamacpp;
+    } else if (value.contains('qnn')) {
+      return Backend.qnn;
+    } else {
+      throw Exception('Unknown backend: $value');
     }
   }
 }

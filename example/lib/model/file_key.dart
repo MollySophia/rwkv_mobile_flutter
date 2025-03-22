@@ -120,7 +120,7 @@ enum FileKey {
   Backend get backend {
     final q = weights?.backends?.firstOrNull;
     if (q != null) {
-      return Backend.values.byName(q);
+      return Backend.fromString(q);
     }
     return Backend.webRwkv;
   }

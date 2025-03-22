@@ -37,11 +37,17 @@ class _App with WidgetsBindingObserver {
 
   late final locale = _gsn<Locale>();
 
+  // TODO: Check platform available
   late final tempDir = _gsn<Directory>();
+  // TODO: Check platform available
   late final cacheDir = _gsn<Directory>();
+  // TODO: Check platform available
   late final supportDir = _gsn<Directory>();
+  // TODO: Check platform available
   late final libraryDir = _gsn<Directory>();
+  // TODO: Check platform available
   late final downloadsDir = _gsn<Directory>();
+  // TODO: Check platform available
   late final documentsDir = _gsn<Directory>();
 
   /// 当前正在运行的任务
@@ -97,9 +103,8 @@ extension _$App on _App {
 
     kRouter.routerDelegate.addListener(_routerListener);
 
-    final context = getContext();
-
     if (kDebugMode) {
+      final context = getContext();
       Future.delayed(const Duration(seconds: 1), () {
         if (context != null && context.mounted) {
           FocusScope.of(context).unfocus();

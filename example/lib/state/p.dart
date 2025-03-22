@@ -13,7 +13,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart' as ar;
 import 'package:system_info2/system_info2.dart';
 import 'package:zone/config.dart';
-import 'package:zone/func/get_model_path.dart';
+import 'package:zone/func/from_assets_to_temp.dart';
 import 'package:zone/func/log_trace.dart';
 import 'package:zone/gen/assets.gen.dart';
 import 'package:zone/gen/l10n.dart';

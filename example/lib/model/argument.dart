@@ -78,7 +78,7 @@ enum Argument {
         maxLength => 4000,
       };
 
-  double get chatDefaults => switch (this) {
+  double get defaults => switch (this) {
         temperature => 1.0,
         topK => 0,
         topP => 0.3,
