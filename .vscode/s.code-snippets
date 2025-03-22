@@ -1,0 +1,50 @@
+{
+  "get screen height": {
+    "prefix": "xh",
+    "body": ["final screenHeight = ref.watch(P.app.screenHeight);"]
+  },
+  "get screen width": {
+    "prefix": "xw",
+    "body": ["final screenWidth = ref.watch(P.app.screenWidth);"]
+  },
+  "get screen padding": {
+    "prefix": "xp",
+    "body": [
+      "final paddingTop = ref.watch(P.app.paddingTop);",
+      "final paddingBottom = ref.watch(P.app.paddingBottom);",
+      "final paddingLeft = ref.watch(P.app.paddingLeft);",
+      "final paddingRight = ref.watch(P.app.paddingRight);"
+    ]
+  },
+  "ConsumerWidget": {
+    "prefix": "lkj",
+    "body": [
+      "class _$1 extends ConsumerWidget {",
+      "  const _$1();",
+      "",
+      "  @override",
+      "  Widget build(BuildContext context, WidgetRef ref) {",
+      "    ",
+      "    return SB();",
+      "  }",
+      "}"
+    ]
+  },
+  "StateLogic": {
+    "prefix": "poiu",
+    "body": [
+      "part of 'p.dart';",
+      "",
+      "class _$1 {}",
+      "",
+      "/// Public methods",
+      "extension $$1 on _$1 {",
+      "}",
+      "",
+      "/// Private methods",
+      "extension _$$1 on _$1 {",
+      "  FV _init() async {}",
+      "}"
+    ]
+  }
+}

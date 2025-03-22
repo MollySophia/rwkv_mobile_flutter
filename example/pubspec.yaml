@@ -1,0 +1,84 @@
+name: zone
+description: 'A new Flutter project.'
+publish_to: 'none'
+version: 1.2.0+246
+
+environment:
+  sdk: ^3.6.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  flutter_localizations:
+    sdk: flutter
+
+  rwkv_mobile_flutter:
+    path: ../
+
+  photo_viewer:
+    git:
+      url: https://github.com/HaloWang/photo_viewer
+      ref: main
+
+  adaptive_dialog: ^2.4.0 # https://pub.dev/packages/adaptive_dialog/
+  audioplayers: # https://pub.dev/packages/audioplayers/
+  background_downloader: # https://pub.dev/packages/background_downloader/
+  collection: # https://pub.dev/packages/collection/
+  crypto: # https://pub.dev/packages/crypto/
+  cupertino_icons: # https://pub.dev/packages/cupertino_icons/
+  flutter_markdown: # https://pub.dev/packages/flutter_markdown/
+  flutter_native_splash: # https://pub.dev/packages/flutter_native_splash/
+  flutter_riverpod: # https://pub.dev/packages/flutter_riverpod/
+  freezed_annotation: # https://pub.dev/packages/freezed_annotation/
+  gaimon: # https://pub.dev/packages/gaimon/
+  go_router: # https://pub.dev/packages/go_router/
+  halo: # https://pub.dev/packages/halo/
+  halo_alert: # https://pub.dev/packages/halo_alert/
+  image_picker: # https://pub.dev/packages/image_picker/
+  intl: # https://pub.dev/packages/intl/
+  json_annotation: # https://pub.dev/packages/json_annotation/
+  package_info_plus: # https://pub.dev/packages/package_info_plus/
+  path: # https://pub.dev/packages/path/
+  path_provider: # https://pub.dev/packages/path_provider/
+  record: # https://pub.dev/packages/record/
+  sentry_flutter: # https://pub.dev/packages/sentry_flutter/
+  stack_trace: # https://pub.dev/packages/stack_trace/
+  system_info2: # https://pub.dev/packages/system_info2/
+  url_launcher: # https://pub.dev/packages/url_launcher/
+  vclibs: # https://pub.dev/packages/vclibs/
+
+dev_dependencies:
+  sentry_dart_plugin: ^2.4.1
+  build_runner: # https://pub.dev/packages/build_runner/
+  custom_lint: # https://pub.dev/packages/custom_lint/
+  flutter_gen_runner: # https://pub.dev/packages/flutter_gen_runner:/
+  flutter_lints: # https://pub.dev/packages/flutter_lints/
+  freezed: # https://pub.dev/packages/freezed/
+  icons_launcher: # https://pub.dev/packages/icons_launcher/
+  json_serializable: # https://pub.dev/packages/json_serializable/
+  riverpod_lint: # https://pub.dev/packages/riverpod_lint/
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    # TODO: @wangce 需要在编译脚本中决定是否打包这些为 Chat 准备的高通加速库
+    - assets/lib/
+    - assets/model/chat/
+    - assets/config/chat/
+    - assets/img/chat/
+
+flutter_intl:
+  enabled: true # Required. Must be set to true to activate the package. Default: false
+  class_name: S # Optional. Sets the name for the generated localization class. Default: S
+  main_locale: en
+  arb_dir: lib/l10n # Optional. Sets the directory of your ARB resource files. Provided value should be a valid path on your system. Default: lib/l10n
+  output_dir: lib/gen # Optional. Sets the directory of generated localization files. Provided value should be a valid path on your system. Default: lib/generated
+  use_deferred_loading: false # Optional. Must be set to true to generate localization code that is loaded with deferred loading. Default: false
+
+sentry:
+  upload_debug_symbols: true
+  upload_source_maps: true
+  project: rwkv0
+  org: ce-wang
