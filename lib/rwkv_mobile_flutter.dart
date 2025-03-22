@@ -125,7 +125,6 @@ class RWKVMobile {
     }
 
     await for (final (String, dynamic) message in receivePort) {
-      // print("💬 message: ${message.runtimeType}");
       // message: (String command, Dynamic args)
       final command = message.$1;
       if (command == 'setMaxLength') {
@@ -285,7 +284,7 @@ class RWKVMobile {
         if (kDebugMode) print("💬 Started LLM generation thread (chat mode)");
         if (retVal != 0) {
           sendPort.send({'generateStop': true});
-          throw Exception('😡 Failed to start generation thread');
+          throw Exception('😡 Failed to start generation thread: retVal: $retVal');
         }
       } else if (command == 'generate') {
         final prompt = message.$2 as String;
