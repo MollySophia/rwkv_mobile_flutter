@@ -52,13 +52,13 @@ enum FileKey {
     final weights = P.fileManager.weights.v;
     switch (this) {
       case v7_g1_0_4b_st_75:
-        return weights.firstWhereOrNull((e) => e.fileName == 'RWKV7-G1-0.4B-75%trained-20250317-ctx4k.st');
+        return weights.firstWhereOrNull((e) => e.fileName == 'RWKV7-G1-0.4B-75%25trained-20250317-ctx4k.st');
       case v7_g1_0_4b_gguf_75:
-        return weights.firstWhereOrNull((e) => e.fileName == 'RWKV7-G1-0.4B-75%trained-20250317-ctx4k-Q8_0.gguf');
+        return weights.firstWhereOrNull((e) => e.fileName == 'RWKV7-G1-0.4B-75%25trained-20250317-ctx4k-Q8_0.gguf');
       case v7_g1_1_5b_st_32:
-        return weights.firstWhereOrNull((e) => e.fileName == 'RWKV7-G1-1.5B-32%trained-20250319-ctx4k.st');
+        return weights.firstWhereOrNull((e) => e.fileName == 'RWKV7-G1-1.5B-32%25trained-20250319-ctx4k-nf4.prefab');
       case v7_g1_1_5b_gguf_32:
-        return weights.firstWhereOrNull((e) => e.fileName == 'RWKV7-G1-1.5B-32%trained-20250319-ctx4k-Q4_K_M.gguf');
+        return weights.firstWhereOrNull((e) => e.fileName == 'RWKV7-G1-1.5B-32%25trained-20250319-ctx4k-Q4_K_M.gguf');
       case rwkv7_0_1b_whisper_small_enasr_adapter_gguf:
         return weights.firstWhereOrNull((e) => e.fileName == 'whisper-small-rwkv-0b1-enasr-adapter.gguf');
       case rwkv7_0_1b_whisper_small_enasr_gguf:

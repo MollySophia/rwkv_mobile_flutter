@@ -21,13 +21,14 @@ class Suggestions extends ConsumerWidget {
     final messages = ref.watch(P.chat.messages);
     final primary = Theme.of(context).colorScheme.primary;
     final paddingBottom = ref.watch(P.app.paddingBottom);
+    final currentModel = ref.watch(P.rwkv.currentModel);
 
     bool show = false;
 
     List<String> suggestions = [];
 
     if (demoType == DemoType.chat) {
-      show = messages.isEmpty;
+      show = messages.isEmpty && currentModel != null;
       suggestions = [
         'Please tell me about the Eiffel Tower',
         "Why is the sky blue? ",

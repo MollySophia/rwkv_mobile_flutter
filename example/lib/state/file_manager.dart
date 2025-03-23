@@ -16,7 +16,7 @@ class _FileManager {
 }
 
 /// Public methods
-extension $RemoteFile on _FileManager {
+extension $FileManager on _FileManager {
   FV getFile({required FileKey fileKey}) async {
     final fileName = fileKey.url.split('/').last.split('?')[0];
     final task = bd.DownloadTask(
@@ -100,7 +100,7 @@ extension $RemoteFile on _FileManager {
 }
 
 /// Private methods
-extension _$RemoteFile on _FileManager {
+extension _$FileManager on _FileManager {
   FV _init() async {
     // 1. check file
     // 2. check zip file

@@ -1,6 +1,7 @@
 // ignore: unused_import
 import 'dart:developer';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:zone/func/gb_display.dart';
 import 'package:zone/gen/l10n.dart';
@@ -64,7 +65,12 @@ class ModelSelector extends ConsumerWidget {
             if (demoType == DemoType.world)
               for (final worldType in WorldType.values) ModelGroupItem(worldType),
             if (demoType == DemoType.chat || kDebugMode)
-              for (final fileKey in FileKey.availableModels) ModelItem(fileKey),
+              for (final fileKey in FileKey.availableModels.sorted((a, b) {
+                return a.fileSize.compareTo(b.fileSize);
+              }).sorted((a, b) {
+                return (a.isTest ? 1 : 0).compareTo((b.isTest ? 1 : 0));
+              }))
+                ModelItem(fileKey),
             16.h,
             paddingBottom.h,
           ],
