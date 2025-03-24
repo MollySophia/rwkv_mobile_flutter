@@ -108,6 +108,7 @@ extension $World on _World {
     await stopPlaying();
     ap.Source source = ap.DeviceFileSource(path);
     playing.u(true);
+    Gaimon.light();
     await _audioPlayer.play(source);
   }
 
