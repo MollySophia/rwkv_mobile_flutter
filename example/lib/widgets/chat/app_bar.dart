@@ -15,7 +15,6 @@ class ChatAppBar extends ConsumerWidget {
   const ChatAppBar({super.key});
 
   void _onTunePressed() async {
-    final demoType = P.app.demoType.v;
     final loaded = P.rwkv.loaded.v;
 
     if (!loaded) {
@@ -52,44 +51,49 @@ class ChatAppBar extends ConsumerWidget {
                 P.chat.showingModelSelector.u(false);
                 P.chat.showingModelSelector.u(true);
               },
-              child: Co(
-                c: CAA.center,
-                children: [
-                  const T(
-                    "RWKV Chat",
-                    s: TS(s: 18),
-                  ),
-                  2.h,
-                  C(
-                    padding: const EI.o(l: 4, r: 4, t: 1, b: 1),
-                    decoration: BD(
-                      color: kB.wo(0.1),
-                      borderRadius: 10.r,
+              child: C(
+                decoration: BD(
+                  color: kC,
+                ),
+                child: Co(
+                  c: CAA.center,
+                  children: [
+                    const T(
+                      "RWKV Chat",
+                      s: TS(s: 18),
                     ),
-                    child: Ro(
-                      mainAxisSize: MainAxisSize.min,
-                      c: CAA.center,
-                      m: MAA.center,
-                      children: [
-                        T(
-                          currentModel?.weights?.name ?? currentWorldType?.displayName ?? "Click to select a model",
-                          s: TS(s: 10, c: primary),
-                        ),
-                        4.w,
-                        Transform.rotate(
-                          angle: 0, // 90度
-                          child: SB(
-                            width: 10,
-                            height: 5,
-                            child: CustomPaint(
-                              painter: _TrianglePainter(),
+                    2.h,
+                    C(
+                      padding: const EI.o(l: 4, r: 4, t: 1, b: 1),
+                      decoration: BD(
+                        color: kB.wo(0.1),
+                        borderRadius: 10.r,
+                      ),
+                      child: Ro(
+                        mainAxisSize: MainAxisSize.min,
+                        c: CAA.center,
+                        m: MAA.center,
+                        children: [
+                          T(
+                            currentModel?.weights?.name ?? currentWorldType?.displayName ?? "Click to select a model",
+                            s: TS(s: 10, c: primary),
+                          ),
+                          4.w,
+                          Transform.rotate(
+                            angle: 0, // 90度
+                            child: SB(
+                              width: 10,
+                              height: 5,
+                              child: CustomPaint(
+                                painter: _TrianglePainter(),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             leading: Ro(
