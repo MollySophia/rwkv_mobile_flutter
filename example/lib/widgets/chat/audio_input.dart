@@ -24,17 +24,17 @@ class AudioInput extends ConsumerWidget {
     await P.world.startRecord();
   }
 
-  FV _onPanCancel() async {
+  FV _onTapCancel() async {
     final receiving = P.chat.receivingTokens.v;
     if (receiving) return;
     Gaimon.light();
-    await P.world.stopRecord();
+    await P.world.stopRecord(isCancel: true);
   }
 
-  FV _onPanEnd(DragEndDetails details) async {
+  FV _onTapUp(TapUpDetails details) async {
     final receiving = P.chat.receivingTokens.v;
     if (receiving) return;
-    Gaimon.light();
+    Gaimon.medium();
     await P.world.stopRecord();
   }
 
@@ -126,8 +126,8 @@ class AudioInput extends ConsumerWidget {
                   children: [
                     GD(
                       onTapDown: _onTapDown,
-                      onPanCancel: _onPanCancel,
-                      onPanEnd: _onPanEnd,
+                      onTapUp: _onTapUp,
+                      onTapCancel: _onTapCancel,
                       child: ClipRRect(
                         borderRadius: 1000.r,
                         child: BackdropFilter(
