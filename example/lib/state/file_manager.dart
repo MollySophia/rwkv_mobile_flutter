@@ -84,7 +84,10 @@ extension $FileManager on _FileManager {
         final expectFileSize = key.weights?.fileSize;
         final fileSize = await File(path).length();
         fileSizeVerified = expectFileSize == fileSize;
-        if (expectFileSize != fileSize) await File(path).delete();
+        if (!fileSizeVerified) {
+          if (kDebugMode) print("😡 $path $expectFileSize $fileSize");
+          if (!kDebugMode) await File(path).delete();
+        }
       }
       if (fileSizeVerified) gotOne = true;
       files(key).u(files(key).v.copyWith(hasFile: fileSizeVerified));
