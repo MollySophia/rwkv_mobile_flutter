@@ -16,6 +16,7 @@ import 'package:halo/halo.dart';
 import 'package:zone/model/message.dart' as model;
 import 'package:zone/model/world_type.dart';
 import 'package:zone/route/method.dart';
+import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
 
 class Message extends ConsumerWidget {
@@ -48,6 +49,10 @@ class Message extends ConsumerWidget {
   }
 
   void _onTap() async {
+    if (P.rwkv.currentWorldType.v != null) {
+      Focus.of(getContext()!).unfocus();
+    }
+
     logTrace();
 
     P.chat.focusNode.unfocus();
@@ -499,9 +504,9 @@ class Message extends ConsumerWidget {
           duration: 250.ms,
           child: Padding(
             padding: const EI.s(h: marginHorizontal, v: marginVertical),
-            child: GD(
-              onTap: _onTap,
-              child: SelectionArea(
+            child: SelectionArea(
+              child: GD(
+                onTap: _onTap,
                 child: bubbleContent,
               ),
             ),
