@@ -33,13 +33,14 @@ enum Backend {
       };
 
   static Backend fromString(String value) {
-    if (value.contains('ncnn')) {
+    final toLower = value.toLowerCase();
+    if (toLower.contains('ncnn')) {
       return Backend.ncnn;
-    } else if (value.contains('web') && value.contains('rwkv')) {
+    } else if (toLower.contains('web') && toLower.contains('rwkv')) {
       return Backend.webRwkv;
-    } else if (value.contains('llama')) {
+    } else if (toLower.contains('llama')) {
       return Backend.llamacpp;
-    } else if (value.contains('qnn')) {
+    } else if (toLower.contains('qnn')) {
       return Backend.qnn;
     } else {
       throw Exception('Unknown backend: $value');
