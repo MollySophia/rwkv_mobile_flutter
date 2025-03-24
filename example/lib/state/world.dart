@@ -85,8 +85,11 @@ extension $World on _World {
       return;
     }
 
+    if (_audioData.isEmpty) throw Exception("😡 audioData is empty");
+
     final cacheDir = P.app.cacheDir.v;
-    if (cacheDir == null) return;
+    if (cacheDir == null) throw Exception("😡 cacheDir is null");
+
     final path = "${cacheDir.path}/${DateTime.now().millisecondsSinceEpoch}.wav";
     final file = File(path);
 
