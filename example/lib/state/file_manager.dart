@@ -13,6 +13,8 @@ class _FileManager {
   late final weights = _gs<List<Weights>>([]);
 
   late final currentSource = _gs(kDebugMode ? FileDownloadSource.huggingface : FileDownloadSource.aifasthub);
+
+  late final hasDownloadedModels = _gs(false);
 }
 
 /// Public methods
@@ -73,6 +75,7 @@ extension $FileManager on _FileManager {
     logTrace();
     await HF.wait(17);
     final fileKeys = FileKey.values.where((e) => e.available).toList();
+    bool gotOne = false;
     for (final key in fileKeys) {
       final path = key.path;
       final pathExists = await File(path).exists();
@@ -83,8 +86,10 @@ extension $FileManager on _FileManager {
         fileSizeVerified = expectFileSize == fileSize;
         if (expectFileSize != fileSize) await File(path).delete();
       }
+      if (fileSizeVerified) gotOne = true;
       files(key).u(files(key).v.copyWith(hasFile: fileSizeVerified));
     }
+    hasDownloadedModels.u(gotOne);
   }
 
   FV loadWeights() async {

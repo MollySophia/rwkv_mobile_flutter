@@ -29,6 +29,7 @@ class ModelSelector extends ConsumerWidget {
     final memUsedString = gbDisplay(memUsed);
     final memFreeString = gbDisplay(memFree);
     final demoType = ref.watch(P.app.demoType);
+    final hasDownloadedModels = ref.watch(P.fileManager.hasDownloadedModels);
 
     return ClipRRect(
       borderRadius: 16.r,
@@ -51,8 +52,8 @@ class ModelSelector extends ConsumerWidget {
             ),
             if (demoType == DemoType.chat) T(S.current.chat_please_select_a_model, s: const TS(s: 16, w: FW.w500)),
             if (demoType == DemoType.world) T(S.current.please_select_a_world_type, s: const TS(s: 16, w: FW.w500)),
-            4.h,
-            T(S.current.chat_you_need_download_model_if_you_want_to_use_it),
+            if (!hasDownloadedModels) 4.h,
+            if (!hasDownloadedModels) T(S.current.chat_you_need_download_model_if_you_want_to_use_it),
             4.h,
             T(S.current.ensure_you_have_enough_memory_to_load_the_model, s: TS(c: kB.wo(0.7), s: 12)),
             4.h,
