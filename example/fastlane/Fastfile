@@ -19,19 +19,6 @@ lane :all do |params|
   git_pull()
 end
 
-lane :dart_fix do
-  sh "cd ..;dart fix --apply;cd fastlane"
-end
-
-lane :git_reset do
-  sh "cd ..;git add .;git add .;git reset --hard;cd #{Dir.pwd}"
-end
-
-lane :build_assets do
-  sh "cd ..;dart run flutter_native_splash:create;cd fastlane"
-  sh "cd ..;dart run icons_launcher:create;cd fastlane"
-end
-
 lane :ios_upload do |params|
   run_flutter_build_ipa()
   build_app(
@@ -55,14 +42,6 @@ lane :ios_upload do |params|
   )
 end
 
-lane :android_pgyer do
-  run_flutter_build_apk()
-  pgyer(
-    api_key: "8d0497fc24901e6b22c8f272d04791bb",
-    apk: "./build/app/outputs/flutter-apk/app-release.apk",
-  )
-end
-
 lane :global_replace do |params|
   raw_switch_android_files(env: params[:env])
   global_config_replace(env: params[:env])
@@ -77,4 +56,40 @@ end
 lane :test do |params|
   build_number = raw_increase_build_number()
   git_commit(message: "build: " + build_number.to_s, path: "*")
+end
+
+# ✅ Shared
+
+lane :dart_fix do
+  sh "cd ..;dart fix --apply;cd fastlane"
+end
+
+lane :git_reset do
+  sh "cd ..;git add .;git add .;git reset --hard;cd #{Dir.pwd}"
+end
+
+lane :build_assets do
+  sh "cd ..;dart run flutter_native_splash:create;cd fastlane"
+  sh "cd ..;dart run icons_launcher:create;cd fastlane"
+end
+
+lane :android_pgyer do
+  run_flutter_build_apk()
+  pgyer(
+    api_key: "8d0497fc24901e6b22c8f272d04791bb",
+    apk: "./build/app/outputs/flutter-apk/app-release.apk",
+  )
+end
+
+lane :android_play_store do
+  run_flutter_build_aab()
+  upload_to_play_store(
+    aab: "./build/app/outputs/bundle/release/app-release.aab",
+    track: "internal",
+    skip_upload_apk: true,
+    skip_upload_metadata: true,
+    skip_upload_changelogs: true,
+    skip_upload_images: true,
+    skip_upload_screenshots: true,
+  )
 end

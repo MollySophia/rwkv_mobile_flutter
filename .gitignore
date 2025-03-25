@@ -37,3 +37,4 @@ lib/generated/l10n.dart
 lib/l10n/intl_en.arb
 android/.gradle/
 example/sentry-wizard
+example/fastlane/README.md
