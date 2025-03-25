@@ -91,19 +91,6 @@
     "socLimitations": ["8 Gen 3"]
   },
   {
-    "name": "RWKV v7 World 0.4B",
-    "type": "st",
-    "modelSize": 0.4,
-    "fileName": "RWKV-x070-World-0.4B-v2.9-20250107-ctx4096.st",
-    "fileSize": 901609208,
-    "sha256": "0a021a749c72fa0791ffc677aac27d264098969d9a6c650e4b61214e09f19c64",
-    "url": "mollysama/rwkv-mobile-models/resolve/main/WebRWKV/RWKV-x070-World-0.4B-v2.9-20250107-ctx4096.st",
-    "quantization": "fp16",
-    "platforms": ["ios", "macos", "web"],
-    "backends": ["webRwkv"],
-    "tags": ["gpu"]
-  },
-  {
     "name": "RWKV v7 World 1.5B",
     "type": "prefab",
     "modelSize": 1.5,
@@ -128,19 +115,6 @@
     "platforms": ["ios", "macos", "web"],
     "backends": ["webRwkv"],
     "tags": ["gpu"]
-  },
-  {
-    "name": "RWKV v7 World 0.4B",
-    "type": "gguf",
-    "modelSize": 0.4,
-    "fileName": "rwkv7-world-0.4B-Q8_0.gguf",
-    "fileSize": 501496800,
-    "sha256": "3ce9f69263a234d21527c5c258a99b9cd952ab286256ee74c313ab7add19e849",
-    "url": "mollysama/rwkv-mobile-models/resolve/main/gguf/rwkv7-world-0.4B-Q8_0.gguf",
-    "quantization": "Q8_0",
-    "platforms": ["macos", "windows", "linux", "android"],
-    "backends": ["llamacpp"],
-    "tags": ["cpu"]
   },
   {
     "name": "RWKV v7 World 1.5B",
