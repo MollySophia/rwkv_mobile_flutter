@@ -57,7 +57,7 @@ end
 lane :test do |params|
   version_number = raw_increase_version_number()
   build_number = raw_increase_build_number()
-  git_commit(message: version_number.to_s + " build: " + build_number.to_s, path: "*")
+  git_commit(message: version_number.to_s + "(" + build_number.to_s + ")", path: "*")
   # push_to_git_remote()
 end
 
