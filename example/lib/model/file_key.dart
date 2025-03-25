@@ -17,8 +17,8 @@ enum FileKey {
   v7_g1_0_1b_gguf,
   v7_g1_0_1b_qnn,
 
-  v7_g1_0_4b_st_75,
-  v7_g1_0_4b_gguf_75,
+  v7_g1_0_4b_st,
+  v7_g1_0_4b_gguf,
 
   v7_g1_1_5b_st_32,
   v7_g1_1_5b_gguf_32,
@@ -51,10 +51,10 @@ enum FileKey {
   Weights? get weights {
     final weights = P.fileManager.weights.v;
     switch (this) {
-      case v7_g1_0_4b_st_75:
-        return weights.firstWhereOrNull((e) => e.fileName == 'RWKV7-G1-0.4B-75%25trained-20250317-ctx4k.st');
-      case v7_g1_0_4b_gguf_75:
-        return weights.firstWhereOrNull((e) => e.fileName == 'RWKV7-G1-0.4B-75%25trained-20250317-ctx4k-Q8_0.gguf');
+      case v7_g1_0_4b_st:
+        return weights.firstWhereOrNull((e) => e.fileName == 'rwkv7-g1-0.4b-20250324-ctx4096.st');
+      case v7_g1_0_4b_gguf:
+        return weights.firstWhereOrNull((e) => e.fileName == 'rwkv7-g1-0.4b-20250324-ctx4096_Q8_0.gguf');
       case v7_g1_1_5b_st_32:
         return weights.firstWhereOrNull((e) => e.fileName == 'RWKV7-G1-1.5B-32%25trained-20250319-ctx4k-nf4.prefab');
       case v7_g1_1_5b_gguf_32:
@@ -202,9 +202,9 @@ enum FileKey {
         return null;
       case download_test_5mb:
         return null;
-      case FileKey.v7_g1_0_4b_st_75:
+      case FileKey.v7_g1_0_4b_st:
         return null;
-      case FileKey.v7_g1_0_4b_gguf_75:
+      case FileKey.v7_g1_0_4b_gguf:
         return null;
       case FileKey.v7_g1_1_5b_st_32:
         return null;
