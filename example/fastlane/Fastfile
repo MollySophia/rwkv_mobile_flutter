@@ -1,10 +1,12 @@
 lane :all do |params|
   envString = params[:env] || "chat"
+  build_number = raw_increase_build_number()
   raw_change_analysis_options()
   dart_fix()
   raw_change_analysis_options()
-  build_number = raw_increase_build_number()
-  git_commit(message: "build: " + build_number.to_s, path: "*")
+  version_number = raw_increase_version_number()
+  git_commit(message: version_number.to_s + " build: " + build_number.to_s, path: "*")
+  git_tag(name: version_number.to_s)
   push_to_git_remote()
   global_replace(env: envString) # 替换环境变量
   build_assets() # 构建 assets
@@ -54,8 +56,11 @@ lane :switch_env do |params|
 end
 
 lane :test do |params|
+  version_number = raw_increase_version_number()
   build_number = raw_increase_build_number()
-  git_commit(message: "build: " + build_number.to_s, path: "*")
+  git_commit(message: version_number.to_s + " build: " + build_number.to_s, path: "*")
+  git_tag(name: version_number.to_s)
+  # push_to_git_remote()
 end
 
 # ✅ Shared
