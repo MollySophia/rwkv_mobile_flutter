@@ -23,10 +23,6 @@ enum FileKey {
   v7_g1_1_5b_st_32,
   v7_g1_1_5b_gguf_32,
 
-  v7_world_0_4b_st,
-  v7_world_0_4b_ncnn,
-  v7_world_0_4b_gguf,
-
   v7_world_1_5b_prefab,
   v7_world_1_5b_ncnn,
   v7_world_1_5b_gguf,
@@ -77,8 +73,6 @@ enum FileKey {
         return weights.firstWhereOrNull((e) => e.fileName == 'RWKV-x070-G1-0.1b-20250307-ctx4096.st');
       case v7_g1_0_1b_qnn:
         return weights.firstWhereOrNull((e) => e.fileName == 'rwkv7-g1-0.1b-20250307-ctx4096-qnn-f16-8gen3.bin');
-      case v7_world_0_4b_gguf:
-        return weights.firstWhereOrNull((e) => e.fileName == 'rwkv7-world-0.4B-Q8_0.gguf');
       case v7_world_1_5b_prefab:
         return weights.firstWhereOrNull((e) => e.fileName == 'RWKV-x070-World-1.5B-v3-NF4-20250127-ctx4096.prefab');
       case v7_world_3b_prefab:
@@ -91,9 +85,6 @@ enum FileKey {
         return weights.firstWhereOrNull((e) => e.name == 'test: github-releases');
       case download_test_5mb:
         return weights.firstWhereOrNull((e) => e.name == 'test: 5MB');
-      case v7_world_0_4b_st:
-        return weights.firstWhereOrNull((e) => e.fileName == 'RWKV-x070-World-0.4B-v2.9-20250107-ctx4096.st');
-      case v7_world_0_4b_ncnn:
       case v7_world_1_5b_ncnn:
       case v7_world_3b_ncnn:
         return null;
@@ -162,12 +153,6 @@ enum FileKey {
 
   WorldType? get worldType {
     switch (this) {
-      case v7_world_0_4b_st:
-        return null;
-      case v7_world_0_4b_ncnn:
-        return null;
-      case v7_world_0_4b_gguf:
-        return null;
       case v7_g1_0_1b_st:
         return null;
       case v7_g1_0_1b_gguf:
