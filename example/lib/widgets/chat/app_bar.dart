@@ -52,7 +52,7 @@ class ChatAppBar extends ConsumerWidget {
                 P.chat.showingModelSelector.u(true);
               },
               child: C(
-                decoration: BD(
+                decoration: const BD(
                   color: kC,
                 ),
                 child: Co(
