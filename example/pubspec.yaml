@@ -35,6 +35,7 @@ dependencies:
   go_router: # https://pub.dev/packages/go_router/
   halo: # https://pub.dev/packages/halo/
   halo_alert: # https://pub.dev/packages/halo_alert/
+  http: # https://pub.dev/packages/http/
   image_picker: # https://pub.dev/packages/image_picker/
   intl: # https://pub.dev/packages/intl/
   json_annotation: # https://pub.dev/packages/json_annotation/
