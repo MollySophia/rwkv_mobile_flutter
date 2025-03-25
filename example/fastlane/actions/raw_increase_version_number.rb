@@ -24,7 +24,7 @@ module Fastlane
         yaml_content.gsub!(/(version:\s+)#{Regexp.escape(versionString)}/, "\\1#{new_version_with_build}")
         File.write(pubspec_path, yaml_content)
 
-        return [new_version_number, build_number]
+        return new_version_number
       end
 
       def self.is_supported?(platform)
