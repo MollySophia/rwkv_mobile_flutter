@@ -34,6 +34,12 @@ class _RWKV {
 
   late final _usingReasoningModel = _gs(false);
 
+  late final preferChinese = _gp((ref) {
+    return ref.watch(_preferChinese);
+  });
+
+  late final _preferChinese = _gs(false);
+
   /// 模型是否已加载
   late final loaded = _gp((ref) {
     final currentModel = ref.watch(this.currentModel);
@@ -243,6 +249,13 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
     const promptForReasoning = "";
     _sendPort!.send(("setPrompt", usingReasoningModel ? promptForReasoning : promptForNormalChat));
     _sendPort!.send(("setEnableReasoning", usingReasoningModel));
+  }
+
+  FV setPreferChinese({required bool preferChinese}) async {
+    // TODO: @wangce 需要重新设计 prompt
+    // _preferChinese.u(preferChinese);
+    // final prompt = usingReasoningModel ? promptForReasoning : promptForNormalChat;
+    // _sendPort!.send(("setPrompt", prompt));
   }
 
   FV loadWorldVision({
@@ -456,6 +469,13 @@ extension _$RWKV on _RWKV {
       return RWKVMobile.getSocName();
     }, []);
     soc.u(r);
+
+    final currentLocale = Intl.getCurrentLocale().toLowerCase();
+    _preferChinese.u(currentLocale.contains("zh") || currentLocale.contains("cn"));
+
+    if (kDebugMode) {
+      _preferChinese.u(true);
+    }
   }
 
   num _intIfFixedDecimalsIsZero(Argument argument) {

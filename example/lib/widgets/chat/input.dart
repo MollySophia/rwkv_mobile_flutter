@@ -106,7 +106,7 @@ class Input extends ConsumerWidget {
                   ),
                 ),
               ),
-              padding: EI.o(l: 12, r: 12, b: paddingBottom + 12, t: 12),
+              padding: EI.o(l: 10, r: 10, b: paddingBottom + 12, t: 12),
               child: Co(
                 children: [
                   KeyboardListener(
@@ -192,13 +192,11 @@ class _BottomBar extends ConsumerWidget {
     final canSend = ref.watch(P.chat.canSend);
     final editingBotMessage = ref.watch(P.chat.editingBotMessage);
     final color = Theme.of(context).colorScheme.primary;
-    final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
     final prefillSpeed = ref.watch(P.rwkv.prefillSpeed);
     final decodeSpeed = ref.watch(P.rwkv.decodeSpeed);
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
     final demoType = ref.watch(P.app.demoType);
     final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
-    final loading = ref.watch(P.rwkv.loading);
 
     return Row(
       children: [
@@ -222,63 +220,9 @@ class _BottomBar extends ConsumerWidget {
               ),
             ),
           ),
-        if (demoType == DemoType.chat)
-          GD(
-            onTap: () async {
-              if (loading) {
-                Alert.info("Please wait for the model to load");
-                return;
-              }
-              final currentModel = P.rwkv.currentModel.v;
-              if (currentModel == null) {
-                if (P.chat.showingModelSelector.v) return;
-                P.chat.showingModelSelector.u(true);
-                return;
-              }
-              Gaimon.light();
-              await P.rwkv.setUsingReasoningModel(usingReasoningModel: !usingReasoningModel);
-            },
-            child: C(
-              decoration: BD(
-                color: usingReasoningModel ? color : kC,
-                border: Border.all(
-                  color: color.wo(0.5),
-                ),
-                borderRadius: 12.r,
-              ),
-              padding: const EI.o(l: 4, r: 8, t: 4, b: 4),
-              child: Ro(
-                c: CAA.center,
-                children: [
-                  if (!loading)
-                    Icon(
-                      Icons.emoji_objects_outlined,
-                      color: usingReasoningModel ? kW : color,
-                    ),
-                  if (loading)
-                    C(
-                      margin: const EI.o(l: 8, t: 6, b: 6, r: 10),
-                      height: 12,
-                      width: 12,
-                      child: CircularProgressIndicator(
-                        color: usingReasoningModel ? kW : color,
-                        strokeWidth: 2,
-                      ),
-                    ),
-                  if (!loading)
-                    T(usingReasoningModel ? "Reason on" : "Reason off",
-                        s: TS(
-                          c: usingReasoningModel ? kW : color,
-                        )),
-                  if (loading)
-                    T("Loading...",
-                        s: TS(
-                          c: usingReasoningModel ? kW : color,
-                        )),
-                ],
-              ),
-            ),
-          ),
+        if (demoType == DemoType.chat) _ReasonButton(),
+        // 4.w,
+        // if (demoType == DemoType.chat) _LangugaeButton(),
         8.w,
         Co(
           c: CAA.start,
@@ -349,6 +293,147 @@ class _BottomBar extends ConsumerWidget {
             ),
           ),
       ],
+    );
+  }
+}
+
+class _ReasonButton extends ConsumerWidget {
+  const _ReasonButton();
+
+  void _onTap() async {
+    final loading = P.rwkv.loading.v;
+    if (loading) {
+      Alert.info("Please wait for the model to load");
+      return;
+    }
+    final currentModel = P.rwkv.currentModel.v;
+    if (currentModel == null) {
+      if (P.chat.showingModelSelector.v) return;
+      P.chat.showingModelSelector.u(true);
+      return;
+    }
+    final newValue = !P.rwkv.usingReasoningModel.v;
+    await P.rwkv.setUsingReasoningModel(usingReasoningModel: newValue);
+
+    if (newValue) Alert.success("Reasoning enabled");
+
+    Gaimon.light();
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final color = Theme.of(context).colorScheme.primary;
+    final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
+    final loading = ref.watch(P.rwkv.loading);
+    return GD(
+      onTap: _onTap,
+      child: AnimatedContainer(
+        duration: 150.ms,
+        decoration: BD(
+          color: usingReasoningModel ? color : kC,
+          border: Border.all(
+            color: color.wo(0.5),
+          ),
+          borderRadius: 12.r,
+        ),
+        padding: const EI.o(l: 4, r: 8, t: 4, b: 4),
+        child: Ro(
+          c: CAA.center,
+          children: [
+            if (!loading)
+              Icon(
+                Icons.emoji_objects_outlined,
+                color: usingReasoningModel ? kW : color,
+              ),
+            if (loading)
+              C(
+                margin: const EI.o(l: 8, t: 6, b: 6, r: 10),
+                height: 12,
+                width: 12,
+                child: CircularProgressIndicator(
+                  color: usingReasoningModel ? kW : color,
+                  strokeWidth: 2,
+                ),
+              ),
+            if (!loading)
+              T(
+                "Reason",
+                s: TS(c: usingReasoningModel ? kW : color),
+              ),
+            if (loading)
+              T(
+                "Loading...",
+                s: TS(c: usingReasoningModel ? kW : color),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _LangugaeButton extends ConsumerWidget {
+  const _LangugaeButton();
+
+  void _onTap() async {
+    final loading = P.rwkv.loading.v;
+    if (loading) {
+      Alert.info("Please wait for the model to load");
+      return;
+    }
+    final currentModel = P.rwkv.currentModel.v;
+    if (currentModel == null) {
+      if (P.chat.showingModelSelector.v) return;
+      P.chat.showingModelSelector.u(true);
+      return;
+    }
+    final newValue = !P.rwkv.preferChinese.v;
+    await P.rwkv.setPreferChinese(preferChinese: newValue);
+
+    if (newValue) Alert.success("Reasoning enabled");
+
+    Gaimon.light();
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final color = Theme.of(context).colorScheme.primary;
+    final preferChinese = ref.watch(P.rwkv.preferChinese);
+    final loading = ref.watch(P.rwkv.loading);
+    return AnimatedOpacity(
+      opacity: loading ? 0.33 : 1,
+      duration: 250.ms,
+      child: GD(
+        onTap: _onTap,
+        child: C(
+          decoration: BD(
+            color: preferChinese ? color : kC,
+            border: Border.all(
+              color: color.wo(0.5),
+            ),
+            borderRadius: 12.r,
+          ),
+          padding: const EI.o(l: 4, r: 8, t: 4, b: 4),
+          child: Ro(
+            c: CAA.center,
+            children: [
+              Icon(
+                Icons.translate,
+                color: preferChinese ? kW : color,
+              ),
+              2.w,
+              Co(
+                c: CAA.start,
+                m: MAA.center,
+                children: [
+                  T("Prefer", s: TS(c: preferChinese ? kW : color, s: 10, height: 1)),
+                  T(preferChinese ? "Chinese" : "English", s: TS(c: preferChinese ? kW : color, s: 10, height: 1)),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
