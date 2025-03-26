@@ -54,7 +54,7 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage("請確保裝置記憶體充足，否則可能導致應用程式崩潰"),
     "foo_bar": MessageLookupByLibrary.simpleMessage("foo bar"),
     "intro": MessageLookupByLibrary.simpleMessage(
-      "即將體驗 RWKV v7 系列緊湊型語言模型，包含 0.1B/0.4B/1.5B/3.0B 參數版本，專為行動裝置優化，載入後可完全離線運行，無需伺服器通訊",
+      "即將體驗 RWKV v7 系列緊湊型語言模型，包含 0.1B/0.4B/1.5B/2.9B 參數版本，專為行動裝置優化，載入後可完全離線運行，無需伺服器通訊",
     ),
     "memory_used": m1,
     "new_chat": MessageLookupByLibrary.simpleMessage("新聊天"),

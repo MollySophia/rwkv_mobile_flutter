@@ -60,7 +60,7 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage("メモリが不足するとアプリがクラッシュする可能性があります"),
     "foo_bar": MessageLookupByLibrary.simpleMessage("foo bar"),
     "intro": MessageLookupByLibrary.simpleMessage(
-      "RWKV v7シリーズの軽量言語モデルを体験。0.1B/0.4B/1.5B/3.0Bパラメータ版をモバイル最適化。オフラインでサーバー通信不要",
+      "RWKV v7シリーズの軽量言語モデルを体験。0.1B/0.4B/1.5B/2.9Bパラメータ版をモバイル最適化。オフラインでサーバー通信不要",
     ),
     "memory_used": m1,
     "new_chat": MessageLookupByLibrary.simpleMessage("新規チャット"),

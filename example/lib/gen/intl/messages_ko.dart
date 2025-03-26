@@ -61,7 +61,7 @@ class MessageLookup extends MessageLookupByLibrary {
         ),
     "foo_bar": MessageLookupByLibrary.simpleMessage("foo bar"),
     "intro": MessageLookupByLibrary.simpleMessage(
-      "RWKV v7 시리즈 경량 언어 모델을 경험해 보세요. 0.1B/0.4B/1.5B/3.0B 파라미터 버전으로 모바일 최적화되어 오프라인에서도 서버 연결 없이 작동합니다",
+      "RWKV v7 시리즈 경량 언어 모델을 경험해 보세요. 0.1B/0.4B/1.5B/2.9B 파라미터 버전으로 모바일 최적화되어 오프라인에서도 서버 연결 없이 작동합니다",
     ),
     "memory_used": m1,
     "new_chat": MessageLookupByLibrary.simpleMessage("새 채팅"),

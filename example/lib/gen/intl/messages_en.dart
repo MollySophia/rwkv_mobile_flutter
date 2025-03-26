@@ -66,7 +66,7 @@ class MessageLookup extends MessageLookupByLibrary {
         ),
     "foo_bar": MessageLookupByLibrary.simpleMessage("foo bar"),
     "intro": MessageLookupByLibrary.simpleMessage(
-      "Get ready to experience RWKV v7, series of compact language models with 0.1, 0.4, 1.5, 3.0 billion parameters, optimized for seamless mobile devices inference. Once loaded, it functions offline without requiring any server communication.",
+      "Get ready to experience RWKV v7, series of compact language models with 0.1, 0.4, 1.5, 2.9 billion parameters, optimized for seamless mobile devices inference. Once loaded, it functions offline without requiring any server communication.",
     ),
     "memory_used": m1,
     "new_chat": MessageLookupByLibrary.simpleMessage("New chat"),
