@@ -220,7 +220,7 @@ class _BottomBar extends ConsumerWidget {
               ),
             ),
           ),
-        if (demoType == DemoType.chat) _ReasonButton(),
+        if (demoType == DemoType.chat) const _ReasonButton(),
         // 4.w,
         // if (demoType == DemoType.chat) _LangugaeButton(),
         8.w,
