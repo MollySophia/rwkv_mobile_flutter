@@ -55,10 +55,12 @@ lane :switch_env do |params|
 end
 
 lane :test do |params|
-  version_number = raw_increase_version_number()
-  build_number = raw_increase_build_number()
-  git_commit(message: version_number.to_s + "(" + build_number.to_s + ")", path: "*")
+  run_flutter_build_apk()
+  # version_number = raw_increase_version_number()
+  # build_number = raw_increase_build_number()
+  # git_commit(message: version_number.to_s + "(" + build_number.to_s + ")", path: "*")
   # push_to_git_remote()
+  raw_firebase_app_distribution()
 end
 
 lane :raw_firebase_app_distribution do
