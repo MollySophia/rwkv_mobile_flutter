@@ -61,6 +61,14 @@ lane :test do |params|
   # push_to_git_remote()
 end
 
+lane :android do
+  desc "Firebase App Distribution"
+  firebase_app_distribution(
+    app: "1:100000000000:android:0000000000000000000000",
+    changelog: "Bug fixes and UI improvements",
+  )
+end
+
 # ✅ Shared
 
 lane :dart_fix do

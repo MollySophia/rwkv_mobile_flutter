@@ -48,6 +48,7 @@ dependencies:
   system_info2: # https://pub.dev/packages/system_info2/
   url_launcher: # https://pub.dev/packages/url_launcher/
   vclibs: # https://pub.dev/packages/vclibs/
+  firebase_core: # https://pub.dev/packages/firebase_core/
 
 dev_dependencies:
   sentry_dart_plugin: ^2.4.1
