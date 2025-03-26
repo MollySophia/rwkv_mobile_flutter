@@ -5,7 +5,7 @@ class _Chat {
 
   /// The key of it is the id of the message
   late final cotDisplayState = StateProvider.family<CoTDisplayState, int>((ref, index) {
-    return CoTDisplayState.showCotHeaderIfCotResultIsEmpty;
+    return CoTDisplayState.showCotHeaderAndCotContent;
   });
 
   late final scrollController = ScrollController();
