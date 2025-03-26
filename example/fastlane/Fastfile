@@ -63,15 +63,6 @@ lane :test do |params|
   raw_firebase_app_distribution()
 end
 
-lane :raw_firebase_app_distribution do
-  firebase_app_distribution(
-    app: "1:616393021882:android:eae8b1aeb9607077b76583",
-    release_notes: "Bug fixes and UI improvements",
-    android_artifact_type: "APK",
-    android_artifact_path: "./build/app/outputs/flutter-apk/app-release.apk",
-  )
-end
-
 # ✅ Shared
 
 lane :dart_fix do

@@ -130,7 +130,7 @@
     "tags": ["cpu"]
   },
   {
-    "name": "RWKV v7 World 3B",
+    "name": "RWKV v7 World 2.9B",
     "type": "gguf",
     "modelSize": 2.9,
     "fileName": "rwkv7-world-2.9B-Q4_K_M.gguf",

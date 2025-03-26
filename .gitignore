@@ -38,8 +38,3 @@ lib/l10n/intl_en.arb
 android/.gradle/
 example/sentry-wizard
 example/fastlane/README.md
-example/firebase.json
-example/android/app/google-services.json
-example/ios/Runner/GoogleService-Info.plist
-example/lib/firebase_options.dart
-example/macos/Runner/GoogleService-Info.plist

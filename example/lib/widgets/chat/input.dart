@@ -221,8 +221,8 @@ class _BottomBar extends ConsumerWidget {
             ),
           ),
         if (demoType == DemoType.chat) const _ReasonButton(),
-        // 4.w,
-        // if (demoType == DemoType.chat) _LangugaeButton(),
+        4.w,
+        if (demoType == DemoType.chat) _LangugaeButton(),
         8.w,
         Co(
           c: CAA.start,
@@ -306,6 +306,11 @@ class _ReasonButton extends ConsumerWidget {
       Alert.info("Please wait for the model to load");
       return;
     }
+    final receiving = P.chat.receivingTokens.v;
+    if (receiving) {
+      Alert.info("Please wait for the model to finish generating");
+      return;
+    }
     final currentModel = P.rwkv.currentModel.v;
     if (currentModel == null) {
       if (P.chat.showingModelSelector.v) return;
@@ -313,7 +318,7 @@ class _ReasonButton extends ConsumerWidget {
       return;
     }
     final newValue = !P.rwkv.usingReasoningModel.v;
-    await P.rwkv.setUsingReasoningModel(usingReasoningModel: newValue);
+    await P.rwkv.setModelConfig(usingReasoningModel: newValue);
 
     if (newValue) Alert.success("Reasoning enabled");
 
@@ -381,6 +386,11 @@ class _LangugaeButton extends ConsumerWidget {
       Alert.info("Please wait for the model to load");
       return;
     }
+    final receiving = P.chat.receivingTokens.v;
+    if (receiving) {
+      Alert.info("Please wait for the model to finish generating");
+      return;
+    }
     final currentModel = P.rwkv.currentModel.v;
     if (currentModel == null) {
       if (P.chat.showingModelSelector.v) return;
@@ -388,9 +398,9 @@ class _LangugaeButton extends ConsumerWidget {
       return;
     }
     final newValue = !P.rwkv.preferChinese.v;
-    await P.rwkv.setPreferChinese(preferChinese: newValue);
+    await P.rwkv.setModelConfig(preferChinese: newValue);
 
-    if (newValue) Alert.success("Reasoning enabled");
+    if (newValue) Alert.success("Prefer Chinese");
 
     Gaimon.light();
   }
@@ -426,8 +436,9 @@ class _LangugaeButton extends ConsumerWidget {
                 c: CAA.start,
                 m: MAA.center,
                 children: [
-                  T("Prefer", s: TS(c: preferChinese ? kW : color, s: 10, height: 1)),
-                  T(preferChinese ? "Chinese" : "English", s: TS(c: preferChinese ? kW : color, s: 10, height: 1)),
+                  if (preferChinese) T("Prefer", s: TS(c: kW, s: 10, height: 1)),
+                  if (preferChinese) T("Chinese", s: TS(c: kW, s: 10, height: 1)),
+                  if (!preferChinese) T("Auto", s: TS(c: color, s: 10, height: 1)),
                 ],
               ),
             ],

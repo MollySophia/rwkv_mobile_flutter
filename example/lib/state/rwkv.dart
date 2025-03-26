@@ -71,6 +71,8 @@ extension $RWKV on _RWKV {
   void send(List<String> messages) {
     prefillSpeed.u(0);
     decodeSpeed.u(0);
+    logTrace("💬 send: $messages");
+    debugger();
     final sendPort = _sendPort;
     if (sendPort == null) {
       if (kDebugMode) print("🚧 sendPort is null");
@@ -229,33 +231,33 @@ extension $RWKV on _RWKV {
 // \n\nAssistant: 喵~好的我的主人喵！\n\nUser: 介绍一下你自己\n\nAssistant: 我是一个可爱猫娘，喜欢和你聊天，陪伴你喵！如果有什么问题或者需要陪伴，尽管告诉我哦喵~\n\n""";
 
     P.app.demoType.u(DemoType.chat);
-    await setUsingReasoningModel(usingReasoningModel: usingReasoningModel);
+    await setModelConfig(usingReasoningModel: usingReasoningModel);
     await resetSamplerParams(usingReasoningModel: usingReasoningModel);
     await resetMaxLength(usingReasoningModel: usingReasoningModel);
     _sendPort!.send(("getSamplerParams", null));
     _loading.u(false);
   }
 
-  FV setUsingReasoningModel({required bool usingReasoningModel}) async {
-    _usingReasoningModel.u(usingReasoningModel);
-    const promptForNormalChat = """
+  FV setModelConfig({
+    bool? usingReasoningModel,
+    bool? preferChinese,
+  }) async {
+    if (usingReasoningModel != null) _usingReasoningModel.u(usingReasoningModel);
+    if (preferChinese != null) _preferChinese.u(preferChinese);
 
-User: hi
+    late final String finalPrompt;
 
-Assistant: Hi. I am your assistant and I will provide expert full response in full details. Please feel free to ask any question and I will always answer it.
+    if (_usingReasoningModel.v) {
+      finalPrompt = _preferChinese.v ? Config.promptForReasoningCN : Config.promptForReasoning;
+    } else {
+      finalPrompt = _preferChinese.v ? Config.promptCN : Config.prompt;
+    }
 
-""";
+    logTrace("💬 setPrompt: $finalPrompt");
 
-    const promptForReasoning = "";
-    _sendPort!.send(("setPrompt", usingReasoningModel ? promptForReasoning : promptForNormalChat));
-    _sendPort!.send(("setEnableReasoning", usingReasoningModel));
-  }
-
-  FV setPreferChinese({required bool preferChinese}) async {
-    // TODO: @wangce 需要重新设计 prompt
-    // _preferChinese.u(preferChinese);
-    // final prompt = usingReasoningModel ? promptForReasoning : promptForNormalChat;
-    // _sendPort!.send(("setPrompt", prompt));
+    _sendPort!.send(("setEnableReasoning", _usingReasoningModel.v));
+    // TODO: @Molly 我是通过这种方式来设置 prompt 的, 但是当我设置 prompt 为 “<think>嗯” 后, 模型依然会输出英文
+    _sendPort!.send(("setPrompt", finalPrompt));
   }
 
   FV loadWorldVision({
@@ -470,12 +472,10 @@ extension _$RWKV on _RWKV {
     }, []);
     soc.u(r);
 
-    final currentLocale = Intl.getCurrentLocale().toLowerCase();
-    _preferChinese.u(currentLocale.contains("zh") || currentLocale.contains("cn"));
-
-    if (kDebugMode) {
-      _preferChinese.u(true);
-    }
+    Future.delayed(const Duration(milliseconds: 1000)).then((_) {
+      final currentLocale = Intl.getCurrentLocale().toLowerCase();
+      _preferChinese.u(currentLocale.contains("zh") || currentLocale.contains("cn"));
+    });
   }
 
   num _intIfFixedDecimalsIsZero(Argument argument) {
