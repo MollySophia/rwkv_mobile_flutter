@@ -72,7 +72,6 @@ extension $RWKV on _RWKV {
     prefillSpeed.u(0);
     decodeSpeed.u(0);
     logTrace("💬 send: $messages");
-    debugger();
     final sendPort = _sendPort;
     if (sendPort == null) {
       if (kDebugMode) print("🚧 sendPort is null");
@@ -256,8 +255,8 @@ extension $RWKV on _RWKV {
     logTrace("💬 setPrompt: $finalPrompt");
 
     _sendPort!.send(("setEnableReasoning", _usingReasoningModel.v));
-    // TODO: @Molly 我是通过这种方式来设置 prompt 的, 但是当我设置 prompt 为 “<think>嗯” 后, 模型依然会输出英文
     _sendPort!.send(("setPrompt", finalPrompt));
+    _sendPort!.send(("setThinkingToken", _preferChinese.v ? "<think>嗯" : "<think"));
   }
 
   FV loadWorldVision({

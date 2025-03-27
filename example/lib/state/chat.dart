@@ -58,6 +58,8 @@ class _Chat {
   late final latestClickedMessage = _gsn<Message>();
 
   late final hasFocus = _gs(false);
+
+  late final suggestions = _gs<List<String>>([]);
 }
 
 /// Public methods
@@ -266,6 +268,25 @@ extension _$Chat on _Chat {
     P.world.audioFileStreamController.stream.listen(_onNewFileReceived);
     focusNode.addListener(_onFocusNodeChanged);
     hasFocus.u(focusNode.hasFocus);
+    _loadSuggestions();
+  }
+
+  FV _loadSuggestions() async {
+    final demoType = P.app.demoType.v;
+    if (demoType != DemoType.chat) return;
+    final currentLocale = Intl.getCurrentLocale();
+    bool useEn = currentLocale.startsWith("en");
+
+    final jsonString = await rootBundle.loadString(useEn ? "assets/config/chat/suggestions.en-US.json" : "assets/config/chat/suggestions.zh-hans.json");
+    final list = HF.list(jsonDecode(jsonString));
+    suggestions.u(list.map((e) => e.toString()).toList());
+
+    if (kDebugMode) {
+      final anotherJsonString = await rootBundle.loadString(!useEn ? "assets/config/chat/suggestions.en-US.json" : "assets/config/chat/suggestions.zh-hans.json");
+      final anotherList = HF.list(jsonDecode(anotherJsonString));
+      final anotherSuggestions = anotherList.map((e) => e.toString()).toList();
+      suggestions.ul(anotherSuggestions);
+    }
   }
 
   FV _onFocusNodeChanged() async {

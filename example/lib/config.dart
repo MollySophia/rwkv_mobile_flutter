@@ -10,7 +10,6 @@ abstract class Config {
 
   // TODO: @wangce 需要有一个统一的标识来决定当前的 App 正在运行什么逻辑
 
-  // TODO: @Molly Optimized prompt is needed
   static final prompt = """
 
 User: hi

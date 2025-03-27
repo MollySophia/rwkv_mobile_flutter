@@ -197,6 +197,7 @@ class _BottomBar extends ConsumerWidget {
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
     final demoType = ref.watch(P.app.demoType);
     final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
+    final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
 
     return Row(
       children: [
@@ -221,8 +222,9 @@ class _BottomBar extends ConsumerWidget {
             ),
           ),
         if (demoType == DemoType.chat) const _ReasonButton(),
-        4.w,
-        if (demoType == DemoType.chat) _LangugaeButton(),
+        if (usingReasoningModel) 4.w,
+        if (usingReasoningModel)
+          if (demoType == DemoType.chat) _LangugaeButton(),
         8.w,
         Co(
           c: CAA.start,

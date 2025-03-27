@@ -2,7 +2,6 @@
   - 感觉可以构建本地的 download server 测试这个问题
 - 下载模型需要支持断点续传
 - 需要 8s gen3 QNN 版本, @Molly
-- 强行中文推理, 等待后端支持, @Molly
 - 远程配置文件
   - App version
   - Weights

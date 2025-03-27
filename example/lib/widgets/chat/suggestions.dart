@@ -22,6 +22,7 @@ class Suggestions extends ConsumerWidget {
     final primary = Theme.of(context).colorScheme.primary;
     final paddingBottom = ref.watch(P.app.paddingBottom);
     final currentModel = ref.watch(P.rwkv.currentModel);
+    ref.watch(P.chat.showingModelSelector);
 
     bool show = false;
 
@@ -29,10 +30,9 @@ class Suggestions extends ConsumerWidget {
 
     if (demoType == DemoType.chat) {
       show = messages.isEmpty && currentModel != null;
-      suggestions = [
-        'Please tell me about the Eiffel Tower',
-        "Why is the sky blue? ",
-      ];
+      final allSuggestions = ref.watch(P.chat.suggestions);
+      final copy = allSuggestions.shuffled;
+      suggestions = copy.take(3).toList();
     }
 
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
