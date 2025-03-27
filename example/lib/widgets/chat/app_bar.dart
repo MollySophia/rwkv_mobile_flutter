@@ -103,7 +103,7 @@ class ChatAppBar extends ConsumerWidget {
               children: [
                 IconButton(
                   onPressed: () => AppInfo.show(getContext()!),
-                  icon: Icon(Icons.menu),
+                  icon: const Icon(Icons.menu),
                 ),
               ],
             ),

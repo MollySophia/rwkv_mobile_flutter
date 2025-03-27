@@ -3,12 +3,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gaimon/gaimon.dart';
 import 'package:halo/halo.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:zone/func/log_trace.dart';
-import 'package:zone/model/argument.dart';
 import 'package:zone/route/method.dart';
 import 'package:zone/state/p.dart';
 
@@ -83,7 +81,7 @@ class AppInfo extends ConsumerWidget {
             children: [iconWidget],
           ),
           16.h,
-          Ro(
+          const Ro(
             m: MAA.center,
             children: [
               T(
@@ -98,16 +96,16 @@ class AppInfo extends ConsumerWidget {
             children: [
               T(
                 version,
-                s: TS(s: 12),
+                s: const TS(s: 12),
               ),
               T(
                 " ($buildNumber)",
-                s: TS(s: 12),
+                s: const TS(s: 12),
               ),
             ],
           ),
           16.h,
-          Ro(
+          const Ro(
             m: MAA.center,
             children: [
               T(
@@ -148,14 +146,14 @@ class AppInfo extends ConsumerWidget {
           12.h,
           TextButton(
             onPressed: _openFeedback,
-            child: T(
+            child: const T(
               "Feedback",
             ),
           ),
           12.h,
           TextButton(
             onPressed: () => _showLicensePage(context, version, buildNumber, iconWidget),
-            child: T(
+            child: const T(
               "License",
             ),
           ),
@@ -202,7 +200,7 @@ class AppInfo extends ConsumerWidget {
       applicationName: "RWKV Chat",
       applicationVersion: "$version ($buildNumber)",
       applicationIcon: C(
-        margin: EI.o(t: 12, b: 12),
+        margin: const EI.o(t: 12, b: 12),
         child: iconWidget,
       ),
       useRootNavigator: true,
@@ -227,14 +225,14 @@ class AppInfo extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    T(title, s: TS(s: 14, w: FontWeight.bold)),
+                    T(title, s: const TS(s: 14, w: FontWeight.bold)),
                     4.h,
-                    T(subtitle, s: TS(s: 12, c: Colors.grey)),
+                    T(subtitle, s: const TS(s: 12, c: Colors.grey)),
                   ],
                 ),
               ),
               8.w,
-              Icon(Icons.arrow_forward_ios, size: 16),
+              const Icon(Icons.arrow_forward_ios, size: 16),
               16.w,
             ],
           ),
