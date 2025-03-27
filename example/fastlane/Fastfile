@@ -10,11 +10,11 @@ lane :all do |params|
   global_replace(env: envString) # 替换环境变量
   build_assets() # 构建 assets
 
-  # 🔥 上传到 TestFlight
-  ios_upload(groups: ["External"])
-
   # 🔥 上传到蒲公英
   android_pgyer()
+
+  # 🔥 上传到 TestFlight
+  ios_upload(groups: ["External"])
 
   git_reset()
   git_pull()
