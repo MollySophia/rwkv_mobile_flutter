@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
+import 'package:zone/widgets/app_info.dart';
 import 'package:zone/widgets/arguments_panel.dart';
 
 class ChatAppBar extends ConsumerWidget {
@@ -24,6 +25,11 @@ class ChatAppBar extends ConsumerWidget {
     }
     await ArgumentsPanel.show(getContext()!);
     return;
+  }
+
+  void _onTitlePressed() async {
+    P.chat.showingModelSelector.u(false);
+    P.chat.showingModelSelector.u(true);
   }
 
   @override
@@ -47,10 +53,7 @@ class ChatAppBar extends ConsumerWidget {
             elevation: 0,
             centerTitle: true,
             title: GD(
-              onTap: () {
-                P.chat.showingModelSelector.u(false);
-                P.chat.showingModelSelector.u(true);
-              },
+              onTap: _onTitlePressed,
               child: C(
                 decoration: const BD(
                   color: kC,
@@ -98,35 +101,22 @@ class ChatAppBar extends ConsumerWidget {
             ),
             leading: Ro(
               children: [
-                4.w,
-                if (demoType == DemoType.chat)
-                  IconButton(
-                    onPressed: loaded
-                        ? () {
-                            P.chat.showingCharacterSelector.u(false);
-                            P.chat.showingCharacterSelector.u(true);
-                          }
-                        : null,
-                    icon: (Platform.isIOS || Platform.isMacOS) ? const Icon(CupertinoIcons.bubble_left_bubble_right) : const Icon(Icons.message_outlined),
-                  ),
-                if (demoType == DemoType.world)
-                  IconButton(
-                    onPressed: () {
-                      P.chat.showingModelSelector.u(false);
-                      P.chat.showingModelSelector.u(true);
-                    },
-                    icon: const Icon(CupertinoIcons.cube_box),
-                  ),
+                IconButton(
+                  onPressed: () => AppInfo.show(getContext()!),
+                  icon: Icon(Icons.menu),
+                ),
               ],
             ),
             actions: [
               if (demoType == DemoType.chat)
                 IconButton(
-                  onPressed: () {
-                    P.chat.showingModelSelector.u(false);
-                    P.chat.showingModelSelector.u(true);
-                  },
-                  icon: const Icon(CupertinoIcons.cube_box),
+                  onPressed: loaded
+                      ? () {
+                          P.chat.showingCharacterSelector.u(false);
+                          P.chat.showingCharacterSelector.u(true);
+                        }
+                      : null,
+                  icon: (Platform.isIOS || Platform.isMacOS) ? const Icon(CupertinoIcons.bubble_left_bubble_right) : const Icon(Icons.message_outlined),
                 ),
               IconButton(
                 onPressed: _onTunePressed,
