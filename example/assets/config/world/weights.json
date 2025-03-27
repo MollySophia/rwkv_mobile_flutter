@@ -46,24 +46,24 @@
     "backends": ["llamacpp"]
   },
   {
-    "name": "RWKV7 Whisper Small adapter For 0.1B ENASR",
+    "name": "RWKV7 Whisper Base adapter For 0.1B ENASR",
     "type": "gguf",
     "modelSize": 0.1,
-    "fileName": "whisper-small-rwkv-0b1-enasr-adapter.gguf",
-    "fileSize": 193592392,
-    "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/whisper_encoder/whisper-small-rwkv-0b1-enasr-adapter.gguf",
+    "fileName": "whisper-base-rwkv-0b1-enasr-adapter.gguf",
+    "fileSize": 55184202,
+    "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/whisper_encoder/whisper-base-rwkv-0b1-enasr-adapter.gguf",
     "quantization": "fp16",
     "platforms": ["macos", "windows", "linux", "android"],
     "backends": ["llamacpp"],
     "tags": ["encoder"]
   },
   {
-    "name": "RWKV7 WhisperS ENASR 0.1B",
+    "name": "RWKV7 WhisperB ENASR 0.1B",
     "type": "gguf",
     "modelSize": 0.1,
-    "fileName": "RWKV7-0.1B-WhisperS-ENASR-DEMO-F16.gguf",
-    "fileSize": 386369888,
-    "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/model/RWKV7-0.1B-WhisperS-ENASR-DEMO-F16.gguf",
+    "fileName": "RWKV7-0.1B-WhisperB-ENASR-DEMO-F16.gguf",
+    "fileSize": 386369760,
+    "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/model/RWKV7-0.1B-WhisperB-ENASR-DEMO-F16.gguf",
     "quantization": "fp16",
     "platforms": ["macos", "windows", "linux", "android"],
     "backends": ["llamacpp"]

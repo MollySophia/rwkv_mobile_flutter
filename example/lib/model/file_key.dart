@@ -36,8 +36,8 @@ enum FileKey {
   rwkv7_0_4b_vision_siglip_gguf,
   rwkv7_0_4b_whisper_small_enqa_adapter_gguf,
   rwkv7_0_4b_whisper_small_enqa_gguf,
-  rwkv7_0_1b_whisper_small_enasr_adapter_gguf,
-  rwkv7_0_1b_whisper_small_enasr_gguf,
+  rwkv7_0_1b_whisper_base_enasr_adapter_gguf,
+  rwkv7_0_1b_whisper_base_enasr_gguf,
 
   // 🔥 Download test
   download_test_github_releases,
@@ -55,10 +55,10 @@ enum FileKey {
         return weights.firstWhereOrNull((e) => e.fileName == 'RWKV7-G1-1.5B-32%25trained-20250319-ctx4k-nf4.prefab');
       case v7_g1_1_5b_gguf_32:
         return weights.firstWhereOrNull((e) => e.fileName == 'RWKV7-G1-1.5B-32%25trained-20250319-ctx4k-Q4_K_M.gguf');
-      case rwkv7_0_1b_whisper_small_enasr_adapter_gguf:
-        return weights.firstWhereOrNull((e) => e.fileName == 'whisper-small-rwkv-0b1-enasr-adapter.gguf');
-      case rwkv7_0_1b_whisper_small_enasr_gguf:
-        return weights.firstWhereOrNull((e) => e.fileName == 'RWKV7-0.1B-WhisperS-ENASR-DEMO-F16.gguf');
+      case rwkv7_0_1b_whisper_base_enasr_adapter_gguf:
+        return weights.firstWhereOrNull((e) => e.fileName == 'whisper-base-rwkv-0b1-enasr-adapter.gguf');
+      case rwkv7_0_1b_whisper_base_enasr_gguf:
+        return weights.firstWhereOrNull((e) => e.fileName == 'RWKV7-0.1B-WhisperB-ENASR-DEMO-F16.gguf');
       case rwkv7_0_4b_whisper_small_enqa_adapter_gguf:
         return weights.firstWhereOrNull((e) => e.fileName == 'whisper-small-rwkv-0b4-enqa-adapter.gguf');
       case rwkv7_0_4b_whisper_small_enqa_gguf:
@@ -179,9 +179,9 @@ enum FileKey {
         return WorldType.engAudioQA;
       case rwkv7_0_4b_whisper_small_enqa_gguf:
         return WorldType.engAudioQA;
-      case rwkv7_0_1b_whisper_small_enasr_adapter_gguf:
+      case rwkv7_0_1b_whisper_base_enasr_adapter_gguf:
         return WorldType.engASR;
-      case rwkv7_0_1b_whisper_small_enasr_gguf:
+      case rwkv7_0_1b_whisper_base_enasr_gguf:
         return WorldType.engASR;
       case download_test_github_releases:
         return null;
