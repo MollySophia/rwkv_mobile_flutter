@@ -224,7 +224,7 @@ class _BottomBar extends ConsumerWidget {
         if (demoType == DemoType.chat) const _ReasonButton(),
         if (usingReasoningModel) 4.w,
         if (usingReasoningModel)
-          if (demoType == DemoType.chat) _LangugaeButton(),
+          if (demoType == DemoType.chat) const _LangugaeButton(),
         8.w,
         Co(
           c: CAA.start,
@@ -438,8 +438,8 @@ class _LangugaeButton extends ConsumerWidget {
                 c: CAA.start,
                 m: MAA.center,
                 children: [
-                  if (preferChinese) T("Prefer", s: TS(c: kW, s: 10, height: 1)),
-                  if (preferChinese) T("Chinese", s: TS(c: kW, s: 10, height: 1)),
+                  if (preferChinese) const T("Prefer", s: TS(c: kW, s: 10, height: 1)),
+                  if (preferChinese) const T("Chinese", s: TS(c: kW, s: 10, height: 1)),
                   if (!preferChinese) T("Auto", s: TS(c: color, s: 10, height: 1)),
                 ],
               ),
