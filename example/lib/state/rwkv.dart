@@ -246,11 +246,7 @@ extension $RWKV on _RWKV {
 
     late final String finalPrompt;
 
-    if (_usingReasoningModel.v) {
-      finalPrompt = _preferChinese.v ? Config.promptForReasoningCN : Config.promptForReasoning;
-    } else {
-      finalPrompt = _preferChinese.v ? Config.promptCN : Config.prompt;
-    }
+    finalPrompt = _preferChinese.v ? Config.promptCN : Config.prompt;
 
     logTrace("💬 setPrompt: $finalPrompt");
 
