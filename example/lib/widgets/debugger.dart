@@ -23,6 +23,7 @@ class Debugger extends ConsumerWidget {
     final hasFocus = ref.watch(P.chat.hasFocus);
     final isOthello = ref.watch(P.app.demoType) == DemoType.othello;
     final soc = ref.watch(P.rwkv.soc);
+    final paddingTop = ref.watch(P.app.paddingTop);
 
     return Positioned(
       left: 0,
@@ -44,6 +45,7 @@ class Debugger extends ConsumerWidget {
                 m: MAA.start,
                 c: CAA.start,
                 children: [
+                  paddingTop.h,
                   const T("Debugger"),
                   T("demoType".codeToName),
                   T(demoType.toString()),
@@ -71,7 +73,7 @@ class Debugger extends ConsumerWidget {
                   T(soc.toString()),
                 ].indexMap((index, e) {
                   return C(
-                    margin: EI.o(t: index % 2 == 0 ? 0 : 2),
+                    margin: EI.o(t: index % 2 == 1 ? 0 : 1),
                     decoration: BD(color: kB.wo(0.67)),
                     child: e,
                   );

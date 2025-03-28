@@ -56,7 +56,9 @@ extension $FileManager on _FileManager {
         final expectFileSize = fileInfo.fileSize;
         final fileSize = await File(path).length();
         fileSizeVerified = expectFileSize == fileSize;
-        if (!fileSizeVerified) File(path).delete();
+        if (!kDebugMode) {
+          if (!fileSizeVerified) File(path).delete();
+        }
       }
       final state = locals(fileInfo);
       state.u(state.v.copyWith(hasFile: fileSizeVerified));
@@ -77,7 +79,6 @@ extension $FileManager on _FileManager {
       final task = bd.DownloadTask(
         url: url,
         baseDirectory: bd.BaseDirectory.applicationDocuments,
-        directory: "llm",
         filename: fileName,
         updates: bd.Updates.statusAndProgress, // request status and progress updates
         requiresWiFi: false,

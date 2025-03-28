@@ -91,6 +91,20 @@
     "tags": ["reasoning", "gpu"]
   },
   {
+    "name": "RWKV7-G1 2.9B 32% trained",
+    "type": "st",
+    "modelSize": 2.9,
+    "fileName": "RWKV7-G1-2.9B-32%25trained-20250327-ctx4k-nf4.prefab",
+    "fileSize": 2315788802,
+    "sha256": "1a9e070fd2aa500a843fc40b6fd04424afd2aa72511e5e62de9f3371f80c37b4",
+    "url": "mollysama/rwkv-mobile-models/resolve/main/WebRWKV/RWKV7-G1-2.9B-32%25trained-20250327-ctx4k-nf4.prefab",
+    "quantization": "NF4",
+    "platforms": ["ios", "macos", "web"],
+    "backends": ["webRwkv"],
+    "tags": ["reasoning", "gpu"],
+    "isDebug": true
+  },
+  {
     "name": "RWKV7-G1 0.1B (8 Gen 3 only)",
     "type": "bin",
     "modelSize": 0.1,
@@ -127,7 +141,8 @@
     "quantization": "NF4",
     "platforms": ["ios", "macos", "web"],
     "backends": ["webRwkv"],
-    "tags": ["gpu"]
+    "tags": ["gpu"],
+    "isDebug": true
   },
   {
     "name": "RWKV v7 World 1.5B",

@@ -239,6 +239,7 @@ extension $Chat on _Chat {
   FV onStopButtonPressed() async {
     logTrace();
     Gaimon.light();
+    await Future.delayed(50.ms);
     P.rwkv.stop();
   }
 }

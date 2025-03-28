@@ -144,7 +144,7 @@ class RWKVMobile {
         final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
         retVal = rwkvMobile.rwkvmobile_runtime_set_prompt(runtime, promptPtr);
         if (retVal != 0) {
-          throw Exception('😡 Failed to set prompt');
+          throw Exception('😡 Failed to set prompt: return value: $retVal');
         }
       } else if (command == 'getPrompt') {
         final stringBuffer = calloc.allocate<ffi.Char>(maxLength);
