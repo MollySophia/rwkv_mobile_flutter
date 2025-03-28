@@ -46,7 +46,7 @@ class _RWKV {
     return currentModel != null;
   });
 
-  late final currentModel = _gsn<FileKey>();
+  late final currentModel = _gsn<FileInfo>();
   late final currentWorldType = _gsn<WorldType>();
 
   late final loading = _gp((ref) {

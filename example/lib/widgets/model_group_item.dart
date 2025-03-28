@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:zone/func/log_trace.dart';
 import 'package:zone/gen/l10n.dart';
-import 'package:zone/model/file_key.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
@@ -21,14 +20,16 @@ class ModelGroupItem extends ConsumerWidget {
   const ModelGroupItem(this.worldType, {super.key});
 
   void _onDownloadAllTap() async {
-    final fileKeys = FileKey.availableModels.where((e) => e.worldType == worldType).toList();
-    final missingFileKeys = fileKeys.where((e) => P.fileManager.files(e).v.hasFile == false).toList();
-    missingFileKeys.forEach((e) => P.fileManager.getFile(fileKey: e));
+    final availableModels = P.fileManager.availableModels.v;
+    final fileInfos = availableModels.where((e) => e.worldType == worldType).toList();
+    final missingFileInfos = fileInfos.where((e) => P.fileManager.locals(e).v.hasFile == false).toList();
+    missingFileInfos.forEach((e) => P.fileManager.getFile(fileInfo: e));
   }
 
   void _onDeleteAllTap() async {
-    final fileKeys = FileKey.availableModels.where((e) => e.worldType == worldType).toList();
-    fileKeys.forEach((e) => P.fileManager.deleteFile(fileKey: e));
+    final availableModels = P.fileManager.availableModels.v;
+    final fileInfos = availableModels.where((e) => e.worldType == worldType).toList();
+    fileInfos.forEach((e) => P.fileManager.deleteFile(fileInfo: e));
   }
 
   void _onStartToChatTap() async {
@@ -36,9 +37,12 @@ class ModelGroupItem extends ConsumerWidget {
       Alert.warning("Please wait for the model to load...");
       return;
     }
-    final fileKeys = FileKey.availableModels.where((e) => e.worldType == worldType).toList();
-    final encoderFileKey = fileKeys.firstWhere((e) => e.isEncoder);
-    final modelFileKey = fileKeys.firstWhere((e) => !e.isEncoder);
+    final availableModels = P.fileManager.availableModels.v;
+    final fileInfos = availableModels.where((e) => e.worldType == worldType).toList();
+    final encoderFileKey = fileInfos.firstWhere((e) => e.isEncoder);
+    final modelFileKey = fileInfos.firstWhere((e) => !e.isEncoder);
+    final encoderLocalFile = P.fileManager.locals(encoderFileKey).v;
+    final modelLocalFile = P.fileManager.locals(modelFileKey).v;
 
     P.rwkv.currentWorldType.u(worldType);
 
@@ -53,15 +57,15 @@ class ModelGroupItem extends ConsumerWidget {
         case WorldType.chineseASR:
         case WorldType.engASR:
           await P.rwkv.loadWorldEngAudioQA(
-            modelPath: modelFileKey.path,
-            encoderPath: encoderFileKey.path,
-            backend: modelFileKey.backend,
+            modelPath: modelLocalFile.targetPath,
+            encoderPath: encoderLocalFile.targetPath,
+            backend: modelFileKey.backend!,
           );
         case WorldType.engVisualQA:
           await P.rwkv.loadWorldVision(
-            modelPath: modelFileKey.path,
-            encoderPath: encoderFileKey.path,
-            backend: modelFileKey.backend,
+            modelPath: modelLocalFile.targetPath,
+            encoderPath: encoderLocalFile.targetPath,
+            backend: modelFileKey.backend!,
           );
         // throw "Not implemented";
       }
@@ -85,12 +89,13 @@ class ModelGroupItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final fileKeys = FileKey.availableModels.where((e) => e.worldType == worldType).toList();
-    if (fileKeys.isEmpty) return const SizedBox.shrink();
+    final availableModels = P.fileManager.availableModels.v;
+    final fileInfos = availableModels.where((e) => e.worldType == worldType).toList();
+    if (fileInfos.isEmpty) return const SizedBox.shrink();
     final primaryColor = Theme.of(context).colorScheme.primaryContainer;
 
-    final files = fileKeys.m((e) {
-      return ref.watch(P.fileManager.files(e));
+    final files = fileInfos.m((e) {
+      return ref.watch(P.fileManager.locals(e));
     });
 
     final allDownloaded = files.every((e) => e.hasFile);
@@ -119,7 +124,7 @@ class ModelGroupItem extends ConsumerWidget {
                 T(worldType.taskDescription, s: const TS(s: 12, w: FW.w400)),
               ],
             ),
-            ...fileKeys.m((e) => C(
+            ...fileInfos.m((e) => C(
                   decoration: BD(
                     color: kC,
                     border: Border.all(color: primaryColor),

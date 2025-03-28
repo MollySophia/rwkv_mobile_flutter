@@ -27,6 +27,7 @@ dependencies:
   collection: # https://pub.dev/packages/collection/
   crypto: # https://pub.dev/packages/crypto/
   cupertino_icons: # https://pub.dev/packages/cupertino_icons/
+  equatable: # https://pub.dev/packages/equatable/
   flutter_markdown: # https://pub.dev/packages/flutter_markdown/
   flutter_native_splash: # https://pub.dev/packages/flutter_native_splash/
   flutter_riverpod: # https://pub.dev/packages/flutter_riverpod/

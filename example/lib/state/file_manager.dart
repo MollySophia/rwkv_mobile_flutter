@@ -3,107 +3,129 @@
 part of 'p.dart';
 
 class _FileManager {
-  late final files = StateProvider.family<FileInfo, FileKey>((ref, key) {
-    return FileInfo(key: key);
+  late final locals = StateProvider.family<LocalFile, FileInfo>((ref, key) {
+    return LocalFile(fileInfo: key, targetPath: ref.watch(paths(key)));
   });
 
-  /// downloading files
-  late final downloadingFiles = _gs<Map<String, FileKey>>({});
+  late final paths = StateProvider.family<String, FileInfo>((ref, key) {
+    final dir = ref.watch(P.app.documentsDir);
+    final fileName = key.fileName;
+    final dirPath = dir!.path;
+    return "$dirPath/$fileName";
+  });
 
-  late final weights = _gs<List<Weights>>([]);
+  late final _all = _gs<Set<FileInfo>>({});
 
-  late final currentSource = _gs(kDebugMode ? FileDownloadSource.huggingface : FileDownloadSource.aifasthub);
+  late final availableModels = _gs<Set<FileInfo>>({});
+
+  late final downloadSource = _gs(FileDownloadSource.aifasthub);
 
   late final hasDownloadedModels = _gs(false);
 }
 
 /// Public methods
 extension $FileManager on _FileManager {
-  FV getFile({required FileKey fileKey}) async {
-    final fileName = fileKey.url.split('/').last.split('?')[0];
-    final task = bd.DownloadTask(
-      url: fileKey.url,
-      baseDirectory: bd.BaseDirectory.applicationDocuments,
-      filename: fileName,
-      updates: bd.Updates.statusAndProgress, // request status and progress updates
-      requiresWiFi: false,
-      retries: 5,
-      allowPause: false,
-      httpRequestMethod: "GET",
-    );
+  FV loadAll() async {
+    // TODO: networking
+    // TODO: networking fallback
 
-    logTrace("💬 fileKey: $fileKey\nfileName: $fileName\nurl: ${fileKey.url}");
-
-    downloadingFiles.uv({task.taskId: fileKey});
-
-    final success = await bd.FileDownloader().enqueue(task);
-
-    if (!success) {
-      if (kDebugMode) print("😡 enqueue failed");
-      return;
-    }
-
-    final modelFile = files(fileKey).v;
-    files(fileKey).u(modelFile.copyWith(downloading: true));
-  }
-
-  FV cancelDownload({required FileKey fileKey}) async {
-    final downloadingFiles = this.downloadingFiles.v;
-    final taskId = downloadingFiles.entries.firstWhereOrNull((e) => e.value == fileKey)?.key;
-    if (taskId == null) {
-      if (kDebugMode) print("😡 cancelDownload: taskId not found");
-      return;
-    }
-    await bd.FileDownloader().cancelTaskWithId(taskId);
-    this.downloadingFiles.ur(taskId);
-    files(fileKey).u(files(fileKey).v.copyWith(downloading: false));
-  }
-
-  FV deleteFile({required FileKey fileKey}) async {
+    final demoType = P.app.demoType.v;
+    final jsonPath = "assets/config/${demoType.name}/weights.json";
+    logTrace("jsonPath: $jsonPath");
+    final jsonString = await rootBundle.loadString(jsonPath);
+    final json = HF.listJSON(jsonDecode(jsonString));
     try {
-      await cancelDownload(fileKey: fileKey);
+      final weights = json.map((e) => FileInfo.fromJSON(e)).toSet();
+      _all.u(weights);
+      availableModels.u(weights.where((e) => e.available).toSet());
+    } catch (e) {
+      logTrace("😡 $e");
+    }
+  }
+
+  FV checkLocal() async {
+    logTrace();
+    await HF.wait(17);
+    final _fileInfos = _all.v.where((e) => e.available).toList();
+    for (final fileInfo in _fileInfos) {
+      // debugger();
+      final path = paths(fileInfo).v;
+      final pathExists = await File(path).exists();
+      bool fileSizeVerified = false;
+      if (pathExists) {
+        final expectFileSize = fileInfo.fileSize;
+        final fileSize = await File(path).length();
+        fileSizeVerified = expectFileSize == fileSize;
+        if (!fileSizeVerified) File(path).delete();
+      }
+      final state = locals(fileInfo);
+      state.u(state.v.copyWith(hasFile: fileSizeVerified));
+    }
+  }
+
+  FV getFile({required FileInfo fileInfo}) async {
+    final fileName = fileInfo.fileName;
+    final url = downloadSource.v.prefix + fileInfo.raw + downloadSource.v.suffix;
+    final state = locals(fileInfo);
+    logTrace("💬 fileKey: $fileInfo\nfileName: $fileName\nurl: $url");
+
+    // TODO: Handle resume after relaunch app
+
+    try {
+      state.u(state.v.copyWith(downloading: true));
+
+      final task = bd.DownloadTask(
+        url: url,
+        baseDirectory: bd.BaseDirectory.applicationDocuments,
+        directory: "llm",
+        filename: fileName,
+        updates: bd.Updates.statusAndProgress, // request status and progress updates
+        requiresWiFi: false,
+        retries: 5,
+        allowPause: false,
+        httpRequestMethod: "GET",
+      );
+
+      state.u(state.v.copyWith(downloadTaskId: task.taskId));
+
+      final success = await bd.FileDownloader().enqueue(task);
+
+      if (!success) {
+        throw Exception("Enqueue failed");
+      }
+    } catch (e) {
+      if (kDebugMode) print("😡 getFile error: $e");
+      state.u(state.v.copyWith(downloading: false));
+    }
+  }
+
+  FV cancelDownload({required FileInfo fileInfo}) async {
+    final state = locals(fileInfo);
+    final value = state.v;
+
+    if (!value.downloading) throw Exception("😡 Download not in progress");
+
+    final taskId = value.downloadTaskId;
+
+    if (taskId == null) throw Exception("😡 Task ID not found");
+
+    await bd.FileDownloader().cancelTaskWithId(taskId);
+    state.u(value.copyWith(downloading: false, downloadTaskId: null));
+  }
+
+  FV deleteFile({required FileInfo fileInfo}) async {
+    final state = locals(fileInfo);
+    final value = state.v;
+
+    try {
+      await cancelDownload(fileInfo: fileInfo);
     } catch (e) {
       logTrace("😡 $e");
       if (kDebugMode) print("😡 $e");
     }
-    final path = fileKey.path;
+    final path = this.paths(fileInfo).v;
     await File(path).delete();
-    files(fileKey).u(files(fileKey).v.copyWith(hasFile: false));
-  }
-
-  FV checkLocalFile() async {
-    logTrace();
-    await HF.wait(17);
-    final fileKeys = FileKey.values.where((e) => e.available).toList();
-    bool gotOne = false;
-    for (final key in fileKeys) {
-      final path = key.path;
-      final pathExists = await File(path).exists();
-      bool fileSizeVerified = false;
-      if (pathExists) {
-        final expectFileSize = key.weights?.fileSize;
-        final fileSize = await File(path).length();
-        fileSizeVerified = expectFileSize == fileSize;
-        if (!fileSizeVerified) {
-          if (kDebugMode) print("😡 $path $expectFileSize $fileSize");
-          if (!kDebugMode) await File(path).delete();
-        }
-      }
-      if (fileSizeVerified) gotOne = true;
-      files(key).u(files(key).v.copyWith(hasFile: fileSizeVerified));
-    }
-    hasDownloadedModels.u(gotOne);
-  }
-
-  FV loadWeights() async {
-    if (this.weights.v.isNotEmpty) return;
-    final demoType = P.app.demoType.v;
-    final jsonPath = "assets/config/${demoType.name}/weights.json";
-    logTrace("💬 jsonPath: $jsonPath");
-    final jsonString = await rootBundle.loadString(jsonPath);
-    final json = HF.listJSON(jsonDecode(jsonString));
-    final weights = json.map((e) => Weights.fromJson(e)).toList();
-    this.weights.u(weights);
+    state.u(value.copyWith(hasFile: false));
   }
 }
 
@@ -114,24 +136,25 @@ extension _$FileManager on _FileManager {
     // 2. check zip file
     await bd.FileDownloader().ready;
     bd.FileDownloader().updates.listen(_onTaskUpdate);
-    checkLocalFile();
+    await loadAll();
+    await checkLocal();
   }
 
   void _onTaskUpdate(bd.TaskUpdate _taskUpdate) {
     final task = _taskUpdate.task;
     final taskId = task.taskId;
 
-    final downloadingFiles = this.downloadingFiles.v;
-    final fileKey = downloadingFiles[taskId];
+    final pairs = _all.v.where((e) => locals(e).v.downloading).map((e) => (e, locals(e).v));
+    final pair = pairs.firstWhereOrNull((e) => e.$2.downloadTaskId == taskId);
 
-    if (fileKey == null) {
+    if (pair == null) {
       if (kDebugMode) print("😡 _onTaskUpdate:");
       if (kDebugMode) print("😡 taskId: $taskId not found");
       bd.FileDownloader().cancelTaskWithId(taskId);
       return;
     }
 
-    final modelFile = files(fileKey).v;
+    final state = locals(pair.$1);
 
     switch (_taskUpdate) {
       case bd.TaskProgressUpdate progressUpdate:
@@ -141,10 +164,10 @@ extension _$FileManager on _FileManager {
         final expectedFileSize = progressUpdate.expectedFileSize;
         if (kDebugMode) print("💬 $progress $networkSpeed $timeRemaining $expectedFileSize");
         final done = progress >= 1.0;
-        files(fileKey).u(modelFile.copyWith(
+        state.u(state.v.copyWith(
           progress: progress,
-          networkSpeed: done ? modelFile.networkSpeed : networkSpeed,
-          timeRemaining: done ? modelFile.timeRemaining : timeRemaining,
+          networkSpeed: done ? state.v.networkSpeed : networkSpeed,
+          timeRemaining: done ? state.v.timeRemaining : timeRemaining,
         ));
         return;
       case bd.TaskStatusUpdate statusUpdate:
@@ -157,16 +180,16 @@ extension _$FileManager on _FileManager {
     final task = statusUpdate.task;
     final taskId = task.taskId;
 
-    final downloadingFiles = this.downloadingFiles.v;
-    final fileKey = downloadingFiles[taskId];
+    final pairs = _all.v.where((e) => locals(e).v.downloading).map((e) => (e, locals(e).v));
+    final pair = pairs.firstWhereOrNull((e) => e.$2.downloadTaskId == taskId);
 
-    if (fileKey == null) {
+    if (pair == null) {
       if (kDebugMode) print("😡 _onTaskUpdate:");
       if (kDebugMode) print("😡 taskId: $taskId not found");
       return;
     }
 
-    final modelFile = files(fileKey).v;
+    final state = locals(pair.$1);
 
     if (kDebugMode) print("✅ _onStatusUpdate:");
     final status = statusUpdate.status;
@@ -198,8 +221,8 @@ extension _$FileManager on _FileManager {
         downloading = false;
     }
 
-    files(fileKey).u(modelFile.copyWith(downloading: downloading));
-    checkLocalFile();
+    state.u(state.v.copyWith(downloading: downloading));
+    checkLocal();
   }
 }
 

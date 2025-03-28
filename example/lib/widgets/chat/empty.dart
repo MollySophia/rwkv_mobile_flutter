@@ -68,7 +68,7 @@ class Empty extends ConsumerWidget {
                         child: T(demoType == DemoType.world ? S.current.select_a_world_type : S.current.select_a_model, s: const TS(s: 16, w: FW.w600)),
                       ),
                     if (!loaded) 12.h,
-                    if (loaded) T(S.current.you_are_now_using(currentModel?.weights?.name ?? "")),
+                    if (loaded) T(S.current.you_are_now_using(currentModel?.name ?? "")),
                     const Spacer(),
                   ],
                 ),

@@ -1,29 +1,196 @@
-// ignore_for_file: constant_identifier_names
+import 'dart:io';
 
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:zone/model/file_key.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+import 'package:halo/halo.dart';
+import 'package:rwkv_mobile_flutter/rwkv.dart';
+import 'package:zone/model/world_type.dart';
 
-part 'file_info.freezed.dart';
+@immutable
+class FileInfo extends Equatable {
+  /// e.g.
+  ///
+  /// RWKV v7 World 0.4B
+  final String name;
 
-@freezed
-abstract class FileInfo with _$FileInfo {
-  const FileInfo._();
+  /// e.g.
+  ///
+  /// rwkv7-world-2.9B-Q4_K_M.gguf
+  final String fileName;
 
-  const factory FileInfo({
-    required FileKey key,
+  final FileType fileType;
 
-    /// 是否存在本地文件
-    @Default(false) bool hasFile,
-    @Default(null) String? sha256,
-    @Default(0) double progress,
-    @Default(0) double networkSpeed,
-    @Default(Duration.zero) Duration timeRemaining,
-    @Default(false) bool downloading,
-    @Default(false) bool checkingSHA256,
-    @Default(false) bool sha256Verified,
-  }) = _FileInfo;
+  /// In bytes
+  ///
+  /// e.g.
+  ///
+  /// 179794688, 501496768
+  final int fileSize;
 
-  int get expectedFileSize {
-    return key.fileSize;
+  /// e.g.
+  ///
+  /// mollysama/rwkv-mobile-models/resolve/main/gguf/rwkv7-world-1.5B-Q5_K_M.gguf
+  final String raw;
+
+  /// This file info is for download debugging purpose
+  final bool isDebug;
+
+  /// e.g.
+  ///
+  /// ["aifasthub", "huggingface", ...]
+  final List<FileDownloadSource> availableIn;
+
+  /// e.g.
+  ///
+  /// ['linux', 'macos', 'windows', ...]
+  ///
+  /// TODO: Should move it to backends?
+  final List<String> supportedPlatforms;
+
+  final Backend? backend;
+
+  final String? sha256;
+
+  /// e.g.
+  ///
+  /// 1.5, 2.9, 7, 14, 32 ...
+  final double? modelSize;
+
+  /// e.g.
+  ///
+  /// gguf, safetensors, ...
+  final String? ext;
+
+  /// e.g.
+  ///
+  /// q4_0, q4_1, q4_2, q4_3, q4_4, q5_0, q5_1, q5_2, q5_3, q5_4, q8_0, q8_1, q8_2, q8_3, q8_4, ...
+  final String? quantization;
+
+  /// e.g.
+  ///
+  /// ["encoder", ...]
+  final List<String> tags;
+
+  const FileInfo({
+    required this.name,
+    required this.fileName,
+    required this.fileType,
+    required this.fileSize,
+    required this.raw,
+    required this.isDebug,
+    required this.availableIn,
+    required this.supportedPlatforms,
+    required this.backend,
+    required this.sha256,
+    required this.modelSize,
+    required this.ext,
+    required this.quantization,
+    required this.tags,
+  });
+
+  factory FileInfo.fromJSON(Map<String, dynamic> json) {
+    final firstBackend = HF.list(json['backends'] ?? []).firstOrNull;
+    final backend = firstBackend == null ? null : Backend.fromString(firstBackend);
+    final rawFileType = json['fileType'];
+    final fileType = rawFileType == null ? FileType.weights : FileType.values.byName(rawFileType);
+    return FileInfo(
+      name: json['name'],
+      fileName: json['fileName'],
+      fileType: fileType,
+      fileSize: json['fileSize'],
+      raw: json['url'],
+      isDebug: json['isDebug'] as bool? ?? false,
+      availableIn: HF.list(json['availableIn'] ?? []).map((e) => FileDownloadSource.values.byName(e.toString())).toList(),
+      supportedPlatforms: HF.list(json['platforms']).map((e) => e.toString()).toList(),
+      backend: backend,
+      sha256: json['sha256'] as String?,
+      modelSize: json['modelSize'] as double?,
+      ext: json['type'] as String?,
+      quantization: json['quantization'] as String?,
+      tags: HF.list(json['tags'] ?? []).map((e) => e.toString()).toList(),
+    );
   }
+
+  bool get available {
+    if (isDebug) return kDebugMode;
+    if (fileType == FileType.downloadTest) return kDebugMode;
+    final platforms = supportedPlatforms;
+    if (Platform.isIOS) return platforms.contains('ios');
+    if (Platform.isMacOS) return platforms.contains('macos');
+    if (Platform.isWindows) return platforms.contains('windows');
+    if (Platform.isLinux) return platforms.contains('linux');
+    if (Platform.isAndroid) return platforms.contains('android');
+    if (Platform.isFuchsia) return platforms.contains('fuchsia');
+    return false;
+  }
+
+  bool get isReasoning => tags.contains('reasoning');
+
+  WorldType? get worldType => switch (fileName) {
+        "rwkv7_0.4B_siglip_vision_encoder-f16.gguf" => WorldType.engVisualQA,
+        "rwkv7_0.4B_vision_siglip-Q8_0.gguf" => WorldType.engVisualQA,
+        "whisper-small-rwkv-0b4-enqa-adapter.gguf" => WorldType.engAudioQA,
+        "RWKV7-0.4B-WhisperS-ENQA-DEMO-Q8_0.gguf" => WorldType.engAudioQA,
+        "whisper-base-rwkv-0b1-enasr-adapter.gguf" => WorldType.engASR,
+        "RWKV7-0.1B-WhisperB-ENASR-DEMO-F16.gguf" => WorldType.engASR,
+        _ => null,
+      };
+
+  bool get isEncoder => tags.contains('encoder');
+
+  @override
+  List<Object?> get props => [raw];
+
+  @override
+  String toString() {
+    return '''
+FileInfo(
+  name: $name,
+  fileName: $fileName,
+  fileType: $fileType,
+  fileSize: $fileSize,
+  raw: $raw,
+  isDebug: $isDebug,
+  availableIn: $availableIn,
+  supportedPlatforms: $supportedPlatforms,
+  backend: $backend,
+  sha256: $sha256,
+  modelSize: $modelSize,
+  ext: $ext,
+  quantization: $quantization,
+  tags: $tags,
+)''';
+  }
+}
+
+enum FileType {
+  weights,
+  encoder,
+  runtime,
+  downloadTest,
+  ;
+}
+
+enum FileDownloadSource {
+  aifasthub,
+  huggingface,
+  github,
+  googleapis,
+  ;
+
+  String get prefix => switch (this) {
+        aifasthub => 'https://aifasthub.com/',
+        huggingface => 'https://huggingface.co/',
+        // TODO: fake for now
+        github => 'https://github.com/',
+        // TODO: fake for now
+        googleapis => 'https://googleapis.com/',
+      };
+
+  String get suffix => switch (this) {
+        aifasthub => '?download=true',
+        huggingface => '',
+        github => '',
+        googleapis => '',
+      };
 }

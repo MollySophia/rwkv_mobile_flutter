@@ -66,8 +66,8 @@ class _PageChatState extends State<PageChat> {
 
   void _onShowingModelSelectorChanged(bool showing) async {
     if (!showing) return;
-    P.fileManager.checkLocalFile();
-    P.fileManager.loadWeights();
+    P.fileManager.checkLocal();
+    P.fileManager.loadAll();
     P.device.sync();
     await showModalBottomSheet(
       isScrollControlled: true,

@@ -78,7 +78,7 @@ class ChatAppBar extends ConsumerWidget {
                         m: MAA.center,
                         children: [
                           T(
-                            currentModel?.weights?.name ?? currentWorldType?.displayName ?? "Click to select a model",
+                            currentModel?.name ?? currentWorldType?.displayName ?? "Click to select a model",
                             s: TS(s: 10, c: primary),
                           ),
                           4.w,

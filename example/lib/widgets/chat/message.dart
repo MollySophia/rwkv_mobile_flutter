@@ -532,7 +532,6 @@ class _AudioBubbleState extends ConsumerState<_AudioBubble> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     ref.listenManual(P.chat.latestClickedMessage, (previous, next) {
@@ -550,8 +549,9 @@ class _AudioBubbleState extends ConsumerState<_AudioBubble> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
+    _timer?.cancel();
+    _timer = null;
   }
 
   @override

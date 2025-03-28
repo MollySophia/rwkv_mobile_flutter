@@ -5,7 +5,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:zone/func/gb_display.dart';
 import 'package:zone/gen/l10n.dart';
-import 'package:zone/model/file_key.dart';
 import 'package:zone/model/world_type.dart';
 import 'package:zone/route/method.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +29,7 @@ class ModelSelector extends ConsumerWidget {
     final memFreeString = gbDisplay(memFree);
     final demoType = ref.watch(P.app.demoType);
     final hasDownloadedModels = ref.watch(P.fileManager.hasDownloadedModels);
+    final availableModels = ref.watch(P.fileManager.availableModels);
 
     return ClipRRect(
       borderRadius: 16.r,
@@ -66,12 +66,12 @@ class ModelSelector extends ConsumerWidget {
             if (demoType == DemoType.world)
               for (final worldType in WorldType.values) ModelGroupItem(worldType),
             if (demoType == DemoType.chat || kDebugMode)
-              for (final fileKey in FileKey.availableModels.sorted((a, b) {
+              for (final fileInfo in availableModels.sorted((a, b) {
                 return a.fileSize.compareTo(b.fileSize);
               }).sorted((a, b) {
-                return (a.isTest ? 1 : 0).compareTo((b.isTest ? 1 : 0));
+                return (a.isDebug ? 1 : 0).compareTo((b.isDebug ? 1 : 0));
               }))
-                ModelItem(fileKey),
+                ModelItem(fileInfo),
             16.h,
             paddingBottom.h,
           ],
@@ -86,7 +86,7 @@ class _DownloadSource extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentSource = ref.watch(P.fileManager.currentSource);
+    final currentSource = ref.watch(P.fileManager.downloadSource);
     final primary = Theme.of(context).colorScheme.primary;
     return Wrap(
       runSpacing: 4,
@@ -94,7 +94,7 @@ class _DownloadSource extends ConsumerWidget {
       children: FileDownloadSource.values.where((e) => kDebugMode ? true : !e.isDebug).map((e) {
         return GD(
           onTap: () {
-            P.fileManager.currentSource.u(e);
+            P.fileManager.downloadSource.u(e);
           },
           child: C(
             decoration: BD(

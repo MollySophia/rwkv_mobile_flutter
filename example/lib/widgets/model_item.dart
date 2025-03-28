@@ -5,7 +5,7 @@ import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:zone/func/gb_display.dart';
 import 'package:zone/func/log_trace.dart';
 import 'package:zone/gen/l10n.dart';
-import 'package:zone/model/file_key.dart';
+import 'package:zone/model/file_info.dart';
 import 'package:zone/route/method.dart';
 import 'package:zone/route/router.dart';
 import 'package:halo_alert/halo_alert.dart';
@@ -15,45 +15,46 @@ import 'package:halo/halo.dart';
 import 'package:zone/state/p.dart';
 
 class ModelItem extends ConsumerWidget {
-  final FileKey fileKey;
+  final FileInfo fileInfo;
 
-  const ModelItem(this.fileKey, {super.key});
+  const ModelItem(this.fileInfo, {super.key});
 
   void _onStartTap() async {
     logTrace();
     if (P.rwkv.loading.v) return;
-    final modelPath = fileKey.path;
-    final backend = fileKey.backend;
+    final localFile = P.fileManager.locals(fileInfo).v;
+    final modelPath = localFile.targetPath;
+    final backend = localFile.backend;
 
     try {
       P.rwkv.clearStates();
       P.chat.messages.u([]);
       await P.rwkv.loadChat(
         modelPath: modelPath,
-        backend: backend,
-        usingReasoningModel: fileKey.isReasoning,
+        backend: backend!,
+        usingReasoningModel: fileInfo.isReasoning,
       );
     } catch (e) {
       Alert.error(e.toString());
       return;
     }
 
-    P.rwkv.currentModel.u(fileKey);
+    P.rwkv.currentModel.u(fileInfo);
     Alert.success(S.current.you_can_now_start_to_chat_with_rwkv);
     pop();
   }
 
   void _onDownloadTap() async {
-    P.fileManager.getFile(fileKey: fileKey);
+    P.fileManager.getFile(fileInfo: fileInfo);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final file = ref.watch(P.fileManager.files(fileKey));
-    final hasFile = file.hasFile;
-    final downloading = file.downloading;
+    final localFile = ref.watch(P.fileManager.locals(fileInfo));
+    final hasFile = localFile.hasFile;
+    final downloading = localFile.downloading;
     final currentModel = ref.watch(P.rwkv.currentModel);
-    final isCurrentModel = currentModel == fileKey;
+    final isCurrentModel = currentModel == fileInfo;
     final loading = ref.watch(P.rwkv.loading);
 
     return ClipRRect(
@@ -65,7 +66,7 @@ class ModelItem extends ConsumerWidget {
         child: Ro(
           children: [
             Exp(
-              child: FileKeyItem(fileKey),
+              child: FileKeyItem(fileInfo),
             ),
             8.w,
             if (!hasFile && !downloading)
@@ -73,7 +74,7 @@ class ModelItem extends ConsumerWidget {
                 onPressed: _onDownloadTap,
                 icon: const Icon(Icons.download),
               ),
-            if (downloading) _DownloadIndicator(fileKey),
+            if (downloading) _DownloadIndicator(fileInfo),
             if (hasFile) ...[
               if (!isCurrentModel)
                 GD(
@@ -100,7 +101,7 @@ class ModelItem extends ConsumerWidget {
                   ),
                 ),
               if (!isCurrentModel) 8.w,
-              if (!isCurrentModel) _Delete(fileKey),
+              if (!isCurrentModel) _Delete(fileInfo),
             ]
           ],
         ),
@@ -110,9 +111,9 @@ class ModelItem extends ConsumerWidget {
 }
 
 class _DownloadIndicator extends ConsumerWidget {
-  final FileKey fileKey;
+  final FileInfo fileInfo;
 
-  const _DownloadIndicator(this.fileKey);
+  const _DownloadIndicator(this.fileInfo);
 
   void _onTap() async {
     logTrace();
@@ -124,7 +125,7 @@ class _DownloadIndicator extends ConsumerWidget {
       cancelLabel: "Continue download",
     );
     if (result == OkCancelResult.ok) {
-      await P.fileManager.cancelDownload(fileKey: fileKey);
+      await P.fileManager.cancelDownload(fileInfo: fileInfo);
     }
   }
 
@@ -162,9 +163,9 @@ class _DownloadIndicator extends ConsumerWidget {
 }
 
 class _Delete extends ConsumerWidget {
-  final FileKey fileKey;
+  final FileInfo fileInfo;
 
-  const _Delete(this.fileKey);
+  const _Delete(this.fileInfo);
 
   void _onTap() async {
     logTrace();
@@ -176,7 +177,7 @@ class _Delete extends ConsumerWidget {
       cancelLabel: "Cancel",
     );
     if (result == OkCancelResult.ok) {
-      await P.fileManager.deleteFile(fileKey: fileKey);
+      await P.fileManager.deleteFile(fileInfo: fileInfo);
     }
   }
 
@@ -194,22 +195,22 @@ class _Delete extends ConsumerWidget {
 }
 
 class FileKeyItem extends ConsumerWidget {
-  final FileKey fileKey;
+  final FileInfo fileInfo;
   final bool showDownloaded;
 
-  const FileKeyItem(this.fileKey, {super.key, this.showDownloaded = false});
+  const FileKeyItem(this.fileInfo, {super.key, this.showDownloaded = false});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final file = ref.watch(P.fileManager.files(fileKey));
-    final fileSize = file.expectedFileSize;
-    final progress = file.progress;
-    final downloading = file.downloading;
-    final modelSizeB = fileKey.modelSizeB;
-    final q = fileKey.quantization;
-    final networkSpeed = file.networkSpeed;
-    final timeRemaining = file.timeRemaining;
-    final tags = fileKey.weights?.tags ?? [];
+    final localFile = ref.watch(P.fileManager.locals(fileInfo));
+    final fileSize = localFile.fileInfo.fileSize;
+    final progress = localFile.progress;
+    final downloading = localFile.downloading;
+    final modelSize = fileInfo.modelSize ?? 0;
+    final quantization = fileInfo.quantization;
+    final networkSpeed = localFile.networkSpeed;
+    final timeRemaining = localFile.timeRemaining;
+    final tags = fileInfo.tags;
     final primary = Theme.of(getContext()!).colorScheme.primary;
     return Co(
       c: CAA.start,
@@ -219,11 +220,11 @@ class FileKeyItem extends ConsumerWidget {
           runSpacing: 0,
           children: [
             T(
-              fileKey.weights?.name ?? "",
+              fileInfo.name,
               s: const TS(c: kB, w: FW.w600),
             ),
             T(gbDisplay(fileSize), s: TS(c: kB.wo(0.7), w: FW.w500)),
-            if (showDownloaded && file.hasFile)
+            if (showDownloaded && localFile.hasFile)
               Icon(
                 Icons.download_done,
                 color: primary,
@@ -256,19 +257,19 @@ class FileKeyItem extends ConsumerWidget {
             C(
               decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
               padding: const EI.s(h: 4),
-              child: T(fileKey.backend.asArgument),
+              child: T(fileInfo.backend?.asArgument ?? ""),
             ),
-            if (modelSizeB > 0)
+            if (modelSize > 0)
               C(
                 decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
                 padding: const EI.s(h: 4),
-                child: T("${modelSizeB}B"),
+                child: T("${modelSize}B"),
               ),
-            if (q.isNotEmpty)
+            if (quantization != null && quantization.isNotEmpty)
               C(
                 decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
                 padding: const EI.s(h: 4),
-                child: T(q),
+                child: T(quantization),
               ),
           ],
         ),

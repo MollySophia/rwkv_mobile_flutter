@@ -22,7 +22,6 @@ class Debugger extends ConsumerWidget {
     final inputHeight = ref.watch(P.chat.inputHeight);
     final hasFocus = ref.watch(P.chat.hasFocus);
     final isOthello = ref.watch(P.app.demoType) == DemoType.othello;
-    final receivingTokens = ref.watch(P.othello.receivingTokens);
     final soc = ref.watch(P.rwkv.soc);
 
     return Positioned(
@@ -42,24 +41,37 @@ class Debugger extends ConsumerWidget {
             child: C(
               decoration: const BD(color: kC),
               child: Co(
-                m: MAA.center,
+                m: MAA.start,
                 c: CAA.start,
                 children: [
                   const T("Debugger"),
-                  T("${"demoType".codeToName}\n" + demoType.toString()),
-                  if (!isOthello) T("${"currentWorldType".codeToName}\n" + currentWorldType.toString()),
-                  if (!isOthello) T("${"currentModel".codeToName}\n" + currentModel.toString()),
-                  if (!isOthello) T("${"visualFloatHeight".codeToName}\n" + visualFloatHeight.toString()),
-                  T("${"loading".codeToName}\n" + loading.toString()),
-                  T("${"streaming".codeToName}\n" + streaming.toString()),
-                  T("${"playing".codeToName}\n" + playing.toString()),
-                  if (!isOthello) T("${"latestClickedMessage".codeToName}\n" + (latestClickedMessage?.id.toString() ?? "null")),
-                  if (!isOthello) T("${"inputHeight".codeToName}\n" + inputHeight.toString()),
-                  if (!isOthello) T("${"hasFocus".codeToName}\n" + hasFocus.toString()),
-                  if (!isOthello) T("${"hasFocus".codeToName}\n" + hasFocus.toString()),
-                  if (!isOthello) T("${"soc".codeToName}\n" + soc.toString()),
-                ].m((e) {
+                  T("demoType".codeToName),
+                  T(demoType.toString()),
+                  if (!isOthello) T("currentWorldType".codeToName),
+                  T(currentWorldType.toString()),
+                  if (!isOthello) T("currentModel".codeToName),
+                  T((currentModel?.name ?? "null")),
+                  if (!isOthello) T("visualFloatHeight".codeToName),
+                  T(visualFloatHeight.toString()),
+                  T("loading".codeToName),
+                  T(loading.toString()),
+                  T("streaming".codeToName),
+                  T(streaming.toString()),
+                  T("playing".codeToName),
+                  T(playing.toString()),
+                  if (!isOthello) T("latestClickedMessage".codeToName),
+                  T((latestClickedMessage?.id.toString() ?? "null")),
+                  if (!isOthello) T("inputHeight".codeToName),
+                  T(inputHeight.toString()),
+                  if (!isOthello) T("hasFocus".codeToName),
+                  T(hasFocus.toString()),
+                  if (!isOthello) T("hasFocus".codeToName),
+                  T(hasFocus.toString()),
+                  if (!isOthello) T("soc".codeToName),
+                  T(soc.toString()),
+                ].indexMap((index, e) {
                   return C(
+                    margin: EI.o(t: index % 2 == 0 ? 0 : 2),
                     decoration: BD(color: kB.wo(0.67)),
                     child: e,
                   );
