@@ -112,4 +112,7 @@ class LocalFile extends Equatable implements FileInfo {
 
   @override
   WorldType? get worldType => fileInfo.worldType;
+
+  @override
+  bool get platformSupported => fileInfo.platformSupported;
 }

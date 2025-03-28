@@ -111,17 +111,21 @@ class FileInfo extends Equatable {
     );
   }
 
-  bool get available {
-    if (isDebug) return kDebugMode;
-    if (fileType == FileType.downloadTest) return kDebugMode;
+  bool get platformSupported {
     final platforms = supportedPlatforms;
+    if (Platform.isAndroid) return platforms.contains('android');
     if (Platform.isIOS) return platforms.contains('ios');
     if (Platform.isMacOS) return platforms.contains('macos');
-    if (Platform.isWindows) return platforms.contains('windows');
     if (Platform.isLinux) return platforms.contains('linux');
-    if (Platform.isAndroid) return platforms.contains('android');
+    if (Platform.isWindows) return platforms.contains('windows');
     if (Platform.isFuchsia) return platforms.contains('fuchsia');
     return false;
+  }
+
+  bool get available {
+    if (isDebug) return kDebugMode && platformSupported;
+    if (fileType == FileType.downloadTest) return kDebugMode;
+    return platformSupported;
   }
 
   bool get isReasoning => tags.contains('reasoning');
