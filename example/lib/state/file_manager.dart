@@ -124,7 +124,7 @@ extension $FileManager on _FileManager {
       logTrace("😡 $e");
       if (kDebugMode) print("😡 $e");
     }
-    final path = this.paths(fileInfo).v;
+    final path = paths(fileInfo).v;
     await File(path).delete();
     state.u(value.copyWith(hasFile: false));
   }
