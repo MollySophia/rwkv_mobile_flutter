@@ -215,7 +215,15 @@ extension $Chat on _Chat {
 
     if (type == MessageType.userImage) return;
 
-    final historyMessage = messages.v.where((e) => e.type != MessageType.userImage).m((e) => e.content);
+    final historyMessage = messages.v.where((e) {
+      return e.type != MessageType.userImage;
+    }).m((e) {
+      if (!e.isReasoning) return e.content;
+      if (!e.isCotFormat) return e.content;
+      if (!e.containsCotEndMark) return e.content;
+      final (cotContent, cotResult) = e.cotContentAndResult;
+      return cotResult;
+    });
     final history = withHistory ? historyMessage : [message];
     P.rwkv.send(history);
     editingIndex.u(null);
@@ -278,12 +286,16 @@ extension _$Chat on _Chat {
     final currentLocale = Intl.getCurrentLocale();
     bool useEn = currentLocale.startsWith("en");
 
-    final jsonString = await rootBundle.loadString(useEn ? "assets/config/chat/suggestions.en-US.json" : "assets/config/chat/suggestions.zh-hans.json");
+    final assetPath = useEn ? "assets/config/chat/suggestions.en-US${kDebugMode ? ".debug" : ""}.json" : "assets/config/chat/suggestions.zh-hans${kDebugMode ? ".debug" : ""}.json";
+    final anotherAssetPath = !useEn ? "assets/config/chat/suggestions.en-US${kDebugMode ? ".debug" : ""}.json" : "assets/config/chat/suggestions.zh-hans${kDebugMode ? ".debug" : ""}.json";
+
+    final jsonString = await rootBundle.loadString(assetPath);
     final list = HF.list(jsonDecode(jsonString));
     suggestions.u(list.map((e) => e.toString()).toList());
 
+    // Merge suggestions
     if (kDebugMode) {
-      final anotherJsonString = await rootBundle.loadString(!useEn ? "assets/config/chat/suggestions.en-US.json" : "assets/config/chat/suggestions.zh-hans.json");
+      final anotherJsonString = await rootBundle.loadString(anotherAssetPath);
       final anotherList = HF.list(jsonDecode(anotherJsonString));
       final anotherSuggestions = anotherList.map((e) => e.toString()).toList();
       suggestions.ul(anotherSuggestions);

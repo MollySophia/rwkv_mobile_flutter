@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_interpolation_to_compose_strings
 
+import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ffi' as ffi;
@@ -12,6 +13,8 @@ import 'package:rwkv_mobile_flutter/rwkv_mobile_ffi.dart';
 
 class RWKVMobile {
   Isolate? _isolate;
+
+  static const _codec = Utf8Codec(allowMalformed: true);
 
   Future<void> runIsolate(StartOptions options) async {
     if (_isolate != null) {
@@ -372,8 +375,16 @@ class RWKVMobile {
           sendPort.send({'generateStop': true});
         }
       } else if (command == 'getResponseBufferContent') {
-        final responseBufferContent = rwkvMobile.rwkvmobile_runtime_get_response_buffer_content(runtime);
-        sendPort.send({'responseBufferContent': responseBufferContent.cast<Utf8>().toDartString()});
+        final ffi.Pointer<ffi.Char> responseBufferContent = rwkvMobile.rwkvmobile_runtime_get_response_buffer_content(runtime);
+        int length = 0;
+        // TODO: @wangce 肯定要写逻辑优化这里的 length 的
+        // TODO: @molly 有没有可能有一个回调函数, 每次只返回一个字符?
+        while (responseBufferContent[length] != 0) {
+          length++;
+        }
+        final Uint8List byteList = responseBufferContent.cast<ffi.Uint8>().asTypedList(length);
+        final String str = _codec.decode(byteList);
+        sendPort.send({'responseBufferContent': str});
       } else if (command == 'getPrefillAndDecodeSpeed') {
         final prefillSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime);
         final decodeSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime);

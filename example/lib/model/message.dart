@@ -83,4 +83,25 @@ Message(
   isReasoning: $isReasoning,
 )""";
   }
+
+  bool get isCotFormat => content.startsWith("<think>");
+  bool get containsCotEndMark => content.contains("</think>");
+
+  (String cotContent, String cotResult) get cotContentAndResult {
+    if (!isCotFormat) {
+      return ("", "");
+    }
+    if (!containsCotEndMark) {
+      return (content.substring(7), "");
+    }
+
+    final endIndex = content.indexOf("</think>");
+    final _content = content.substring(7, endIndex);
+    String _result = "";
+    if (endIndex + 9 < content.length) {
+      _result = content.substring(endIndex + 9);
+    }
+
+    return (_content, _result);
+  }
 }

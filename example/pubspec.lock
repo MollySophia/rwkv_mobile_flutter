@@ -889,10 +889,10 @@ packages:
     dependency: transitive
     description:
       name: macos_window_utils
-      sha256: "10036bd91202d3542b75d40b5b3f4001ca5a232081477ca71690d7c4ea91f7cb"
+      sha256: "28ebb4e6d5cbaa1330b5f78d13cf9693779830d0ffc64b471f8d384dd73b7b21"
       url: "https://pub.dev"
     source: hosted
-    version: "1.7.0"
+    version: "1.7.1"
   markdown:
     dependency: transitive
     description:
