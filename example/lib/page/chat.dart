@@ -41,6 +41,13 @@ class _PageChatState extends State<PageChat> {
     });
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: _Body(),
+    );
+  }
+
   void _onShowingCharacterSelectorChanged(bool showing) async {
     if (!showing) return;
     HF.wait(1).then((_) {
@@ -87,14 +94,6 @@ class _PageChatState extends State<PageChat> {
       },
     );
     P.chat.showingModelSelector.u(false);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      // backgroundColor: kW,
-      body: _Body(),
-    );
   }
 }
 
