@@ -212,7 +212,7 @@ class Message extends ConsumerWidget {
     final markdownStyleSheet = MarkdownStyleSheet(
       listBulletPadding: const EI.o(l: 0),
       listIndent: 20,
-      textScaler: TextScaler.linear(1.1),
+      textScaler: const TextScaler.linear(1.1),
       horizontalRuleDecoration: BoxDecoration(
         color: kB.wo(0.1),
         border: Border(
