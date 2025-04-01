@@ -58,12 +58,14 @@ class RWKVMobile {
   static String getPlatformName() {
     final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
     final platformName = rwkvMobile.rwkvmobile_get_platform_name();
+    if (kDebugMode) print("💬 platformName: ${platformName.cast<Utf8>().toDartString()}");
     return platformName.cast<Utf8>().toDartString();
   }
 
   static String getSocName() {
     final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
     final socName = rwkvMobile.rwkvmobile_get_soc_name();
+    if (kDebugMode) print("💬 socName: ${socName.cast<Utf8>().toDartString()}");
     return socName.cast<Utf8>().toDartString();
   }
 
@@ -76,6 +78,7 @@ class RWKVMobile {
   static String getSnapdragonHtpArch() {
     final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
     final snapdragonHtpArch = rwkvMobile.rwkvmobile_get_htp_arch();
+    if (kDebugMode) print("💬 snapdragonHtpArch: ${snapdragonHtpArch.cast<Utf8>().toDartString()}");
     return snapdragonHtpArch.cast<Utf8>().toDartString();
   }
 
