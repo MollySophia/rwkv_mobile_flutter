@@ -282,9 +282,7 @@ extension _$Chat on _Chat {
     receivingTokens.l(_onReceivingTokensChanged);
   }
 
-  void _onReceivingTokensChanged(bool next) {
-    Gaimon.light();
-  }
+  void _onReceivingTokensChanged(bool next) async {}
 
   FV _loadSuggestions() async {
     final demoType = P.app.demoType.v;
