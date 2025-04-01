@@ -93,21 +93,30 @@ class _PageChatState extends State<PageChat> {
   Widget build(BuildContext context) {
     return const Scaffold(
       // backgroundColor: kW,
-      body: Stack(
-        children: [
-          List(),
-          Empty(),
-          VisualEmpty(),
-          AudioEmpty(),
-          //
-          ChatAppBar(),
-          _NavigationBarBottomLine(),
-          //
-          Suggestions(),
-          Input(),
-          AudioInput(),
-        ],
-      ),
+      body: _Body(),
+    );
+  }
+}
+
+class _Body extends ConsumerWidget {
+  const _Body();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Stack(
+      children: [
+        List(),
+        Empty(),
+        VisualEmpty(),
+        AudioEmpty(),
+        //
+        ChatAppBar(),
+        _NavigationBarBottomLine(),
+        //
+        Suggestions(),
+        Input(),
+        AudioInput(),
+      ],
     );
   }
 }
