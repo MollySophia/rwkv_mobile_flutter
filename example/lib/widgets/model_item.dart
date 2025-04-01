@@ -24,7 +24,7 @@ class ModelItem extends ConsumerWidget {
     if (P.rwkv.loading.v) return;
     final localFile = P.fileManager.locals(fileInfo).v;
     final modelPath = localFile.targetPath;
-    final backend = localFile.backend;
+    final backend = localFile.fileInfo.backend;
 
     try {
       P.rwkv.clearStates();

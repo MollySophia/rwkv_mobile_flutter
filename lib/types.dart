@@ -20,8 +20,6 @@ enum Backend {
   webRwkv,
 
   /// Qualcomm Neural Network
-  ///
-  /// Currently only support Qualcomm Snapdragon 8 Gen 3
   qnn,
   ;
 

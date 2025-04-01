@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:halo/halo.dart';
 import 'package:rwkv_mobile_flutter/rwkv.dart';
 import 'package:zone/model/world_type.dart';
+import 'package:zone/state/p.dart';
 
 @immutable
 class FileInfo extends Equatable {
@@ -71,6 +72,11 @@ class FileInfo extends Equatable {
   /// ["encoder", ...]
   final List<String> tags;
 
+  /// e.g.
+  ///
+  /// ["8 Gen 3", ...]
+  final List<String> socLimitations;
+
   const FileInfo({
     required this.name,
     required this.fileName,
@@ -86,6 +92,7 @@ class FileInfo extends Equatable {
     required this.ext,
     required this.quantization,
     required this.tags,
+    required this.socLimitations,
   });
 
   factory FileInfo.fromJSON(Map<String, dynamic> json) {
@@ -93,6 +100,7 @@ class FileInfo extends Equatable {
     final backend = firstBackend == null ? null : Backend.fromString(firstBackend);
     final rawFileType = json['fileType'];
     final fileType = rawFileType == null ? FileType.weights : FileType.values.byName(rawFileType);
+    final socLimitations = HF.list(json['socLimitations'] ?? []).map((e) => e.toString()).toList();
     return FileInfo(
       name: json['name'],
       fileName: json['fileName'],
@@ -108,6 +116,7 @@ class FileInfo extends Equatable {
       ext: json['type'] as String?,
       quantization: json['quantization'] as String?,
       tags: HF.list(json['tags'] ?? []).map((e) => e.toString()).toList(),
+      socLimitations: socLimitations,
     );
   }
 
@@ -122,10 +131,16 @@ class FileInfo extends Equatable {
     return false;
   }
 
+  bool get socSupported {
+    if (socLimitations.isEmpty) return true;
+    final soc = P.rwkv.soc.v;
+    return socLimitations.contains(soc);
+  }
+
   bool get available {
     if (isDebug) return kDebugMode && platformSupported;
     if (fileType == FileType.downloadTest) return kDebugMode;
-    return platformSupported;
+    return platformSupported && socSupported;
   }
 
   bool get isReasoning => tags.contains('reasoning');
