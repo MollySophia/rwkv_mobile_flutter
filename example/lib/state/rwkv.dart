@@ -173,6 +173,7 @@ extension $RWKV on _RWKV {
       // TODO: @wangce Ask Molly why there are "better" solution here
       final qnnLibList = {
         "libQnnHtp.so",
+        "libQnnHtpNetRunExtensions.so",
         "libQnnHtpV68Stub.so",
         "libQnnHtpV69Stub.so",
         "libQnnHtpV73Stub.so",
