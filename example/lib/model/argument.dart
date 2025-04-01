@@ -70,7 +70,7 @@ enum Argument {
 
   double get reasonDefaults => switch (this) {
         temperature => 1.0,
-        topK => 0,
+        topK => 256,
         topP => 0.3,
         presencePenalty => 0.5,
         frequencyPenalty => 0.5,
@@ -80,7 +80,7 @@ enum Argument {
 
   double get defaults => switch (this) {
         temperature => 1.0,
-        topK => 0,
+        topK => 256,
         topP => 0.3,
         presencePenalty => 0.5,
         frequencyPenalty => 0.5,
