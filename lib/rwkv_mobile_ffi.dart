@@ -482,7 +482,7 @@ class rwkv_mobile {
   late final _rwkvmobile_runtime_set_thinking_tokenPtr = _lookup<ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>)>>('rwkvmobile_runtime_set_thinking_token');
   late final _rwkvmobile_runtime_set_thinking_token = _rwkvmobile_runtime_set_thinking_tokenPtr.asFunction<int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>)>();
 
-  ffi.Pointer<ffi.Char> rwkvmobile_runtime_get_response_buffer_content(
+  response_buffer rwkvmobile_runtime_get_response_buffer_content(
     rwkvmobile_runtime_t runtime,
   ) {
     return _rwkvmobile_runtime_get_response_buffer_content(
@@ -490,8 +490,19 @@ class rwkv_mobile {
     );
   }
 
-  late final _rwkvmobile_runtime_get_response_buffer_contentPtr = _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function(rwkvmobile_runtime_t)>>('rwkvmobile_runtime_get_response_buffer_content');
-  late final _rwkvmobile_runtime_get_response_buffer_content = _rwkvmobile_runtime_get_response_buffer_contentPtr.asFunction<ffi.Pointer<ffi.Char> Function(rwkvmobile_runtime_t)>();
+  late final _rwkvmobile_runtime_get_response_buffer_contentPtr = _lookup<ffi.NativeFunction<response_buffer Function(rwkvmobile_runtime_t)>>('rwkvmobile_runtime_get_response_buffer_content');
+  late final _rwkvmobile_runtime_get_response_buffer_content = _rwkvmobile_runtime_get_response_buffer_contentPtr.asFunction<response_buffer Function(rwkvmobile_runtime_t)>();
+
+  void rwkvmobile_runtime_free_response_buffer(
+    response_buffer buffer,
+  ) {
+    return _rwkvmobile_runtime_free_response_buffer(
+      buffer,
+    );
+  }
+
+  late final _rwkvmobile_runtime_free_response_bufferPtr = _lookup<ffi.NativeFunction<ffi.Void Function(response_buffer)>>('rwkvmobile_runtime_free_response_buffer');
+  late final _rwkvmobile_runtime_free_response_buffer = _rwkvmobile_runtime_free_response_bufferPtr.asFunction<void Function(response_buffer)>();
 
   token_ids rwkvmobile_runtime_get_response_buffer_ids(
     rwkvmobile_runtime_t runtime,
@@ -571,6 +582,13 @@ final class token_ids extends ffi.Struct {
 
   @ffi.Int()
   external int len;
+}
+
+final class response_buffer extends ffi.Struct {
+  external ffi.Pointer<ffi.Char> content;
+
+  @ffi.Int()
+  external int length;
 }
 
 typedef rwkvmobile_runtime_t = ffi.Pointer<ffi.Void>;

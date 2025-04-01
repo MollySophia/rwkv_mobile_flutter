@@ -632,6 +632,11 @@ extension _$RWKV on _RWKV {
       return;
     }
 
+    if (message["error"] != null) {
+      Alert.error(message["error"]);
+      return;
+    }
+
     // TODO: 需要更健壮的代码: method: "", data: ""
 
     if (kDebugMode) print("😡 unknown message: $message");

@@ -156,7 +156,7 @@ class RWKVMobile {
         final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
         retVal = rwkvMobile.rwkvmobile_runtime_set_prompt(runtime, promptPtr);
         if (retVal != 0) {
-          throw Exception('😡 Failed to set prompt: return value: $retVal');
+          sendPort.send({'error': 'Failed to set prompt: return value: $retVal'});
         }
       } else if (command == 'getPrompt') {
         final stringBuffer = calloc.allocate<ffi.Char>(maxLength);
@@ -207,21 +207,21 @@ class RWKVMobile {
         final thinkingTokenPtr = arg.toNativeUtf8().cast<ffi.Char>();
         retVal = rwkvMobile.rwkvmobile_runtime_set_thinking_token(runtime, thinkingTokenPtr);
         if (retVal != 0) {
-          throw Exception('😡 Failed to set thinking token');
+          sendPort.send({'error': 'Failed to set thinking token'});
         }
       } else if (command == 'setEosToken') {
         final arg = message.$2 as String;
         final eosTokenPtr = arg.toNativeUtf8().cast<ffi.Char>();
         retVal = rwkvMobile.rwkvmobile_runtime_set_eos_token(runtime, eosTokenPtr);
         if (retVal != 0) {
-          throw Exception('😡 Failed to set eos token');
+          sendPort.send({'error': 'Failed to set eos token'});
         }
       } else if (command == 'setBosToken') {
         final arg = message.$2 as String;
         final bosTokenPtr = arg.toNativeUtf8().cast<ffi.Char>();
         retVal = rwkvMobile.rwkvmobile_runtime_set_bos_token(runtime, bosTokenPtr);
         if (retVal != 0) {
-          throw Exception('😡 Failed to set bos token');
+          sendPort.send({'error': 'Failed to set bos token'});
         }
       } else if (command == 'setTokenBanned') {
         final arg = message.$2 as List<int>;
@@ -232,52 +232,53 @@ class RWKVMobile {
         retVal = rwkvMobile.rwkvmobile_runtime_set_token_banned(runtime, tokenBannedPtr, arg.length);
         calloc.free(tokenBannedPtr);
         if (retVal != 0) {
-          throw Exception('😡 Failed to set token banned');
+          sendPort.send({'error': 'Failed to set token banned'});
         }
       } else if (command == 'setUserRole') {
         final arg = message.$2 as String;
         final userRolePtr = arg.toNativeUtf8().cast<ffi.Char>();
         retVal = rwkvMobile.rwkvmobile_runtime_set_user_role(runtime, userRolePtr);
         if (retVal != 0) {
-          throw Exception('😡 Failed to set user role');
+          sendPort.send({'error': 'Failed to set user role'});
         }
       } else if (command == 'loadVisionEncoder') {
         final arg = message.$2 as String;
         final encoderPathPtr = arg.toNativeUtf8().cast<ffi.Char>();
         retVal = rwkvMobile.rwkvmobile_runtime_load_vision_encoder(runtime, encoderPathPtr);
         if (retVal != 0) {
-          throw Exception('😡 Failed to load vision encoder');
+          sendPort.send({'error': 'Failed to load vision encoder'});
         }
       } else if (command == 'releaseVisionEncoder') {
         retVal = rwkvMobile.rwkvmobile_runtime_release_vision_encoder(runtime);
         if (retVal != 0) {
-          throw Exception('😡 Failed to release vision encoder');
+          sendPort.send({'error': 'Failed to release vision encoder'});
         }
       } else if (command == 'setVisionPrompt') {
         final arg = message.$2 as String;
         final imagePathPtr = arg.toNativeUtf8().cast<ffi.Char>();
         retVal = rwkvMobile.rwkvmobile_runtime_set_image_prompt(runtime, imagePathPtr);
         if (retVal != 0) {
-          throw Exception('😡 Failed to set image prompt');
+          sendPort.send({'error': 'Failed to set image prompt'});
         }
       } else if (command == 'loadWhisperEncoder') {
         final arg = message.$2 as String;
         final encoderPathPtr = arg.toNativeUtf8().cast<ffi.Char>();
         retVal = rwkvMobile.rwkvmobile_runtime_load_whisper_encoder(runtime, encoderPathPtr);
         if (retVal != 0) {
-          throw Exception('😡 Failed to load whisper encoder');
+          sendPort.send({'error': 'Failed to load whisper encoder'});
         }
       } else if (command == 'releaseWhisperEncoder') {
         retVal = rwkvMobile.rwkvmobile_runtime_release_whisper_encoder(runtime);
         if (retVal != 0) {
-          throw Exception('😡 Failed to release whisper encoder');
+          sendPort.send({'error': 'Failed to release whisper encoder'});
+          continue;
         }
       } else if (command == 'setAudioPrompt') {
         final arg = message.$2 as String;
         final audioPathPtr = arg.toNativeUtf8().cast<ffi.Char>();
         retVal = rwkvMobile.rwkvmobile_runtime_set_audio_prompt(runtime, audioPathPtr);
         if (retVal != 0) {
-          throw Exception('😡 Failed to set audio prompt');
+          sendPort.send({'error': 'Failed to set audio prompt'});
         }
       } else if (command == 'message') {
         final messages = message.$2 as List<String>;
@@ -287,7 +288,8 @@ class RWKVMobile {
         final numInputs = messages.length;
 
         if (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) != 0) {
-          throw Exception('😡 LLM is already generating');
+          sendPort.send({'error': 'LLM is already generating'});
+          continue;
         }
 
         sendPort.send({'generateStart': true});
@@ -295,15 +297,15 @@ class RWKVMobile {
         retVal = rwkvMobile.rwkvmobile_runtime_eval_chat_with_history(runtime, inputsPtr, numInputs, maxLength, ffi.nullptr, enableReasoning);
         if (kDebugMode) print("💬 Started LLM generation thread (chat mode)");
         if (retVal != 0) {
-          sendPort.send({'generateStop': true});
-          throw Exception('😡 Failed to start generation thread: retVal: $retVal');
+          sendPort.send({'generateStop': true, 'error': 'Failed to start generation thread: retVal: $retVal'});
         }
       } else if (command == 'generate') {
         final prompt = message.$2 as String;
         final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
 
         if (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) != 0) {
-          throw Exception('😡 LLM is already generating');
+          sendPort.send({'error': 'LLM is already generating'});
+          continue;
         }
 
         sendPort.send({'generateStart': true});
@@ -311,8 +313,7 @@ class RWKVMobile {
         retVal = rwkvMobile.rwkvmobile_runtime_gen_completion(runtime, promptPtr, maxLength, generationStopToken, ffi.nullptr);
         if (kDebugMode) print("🔥 Started LLM generation thread (gen mode)");
         if (retVal != 0) {
-          sendPort.send({'generateStop': true});
-          throw Exception('😡 Failed to evaluate generation');
+          sendPort.send({'generateStop': true, 'error': 'Failed to start generation'});
         }
       } else if (command == 'generateBlocking') {
         final prompt = message.$2 as String;
@@ -332,7 +333,8 @@ class RWKVMobile {
         retVal = rwkvMobile.rwkvmobile_runtime_gen_completion_blocking(runtime, promptPtr, maxLength, generationStopToken, nativeCallable.nativeFunction);
         if (kDebugMode) print("🔥 Call LLM done (gen mode)");
         if (retVal != 0) {
-          throw Exception('😡 Failed to evaluate generation');
+          sendPort.send({'generateStop': true, 'error': 'Failed to start generation'});
+          continue;
         }
 
         sendPort.send({'response': responseStr});
@@ -379,19 +381,17 @@ class RWKVMobile {
         if (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) == 1) {
           retVal = rwkvMobile.rwkvmobile_runtime_stop_generation(runtime);
           if (retVal != 0) {
-            throw Exception('😡 Failed to stop generation');
+            sendPort.send({'generateStop': false, 'error': 'Failed to stop generation'});
           }
           sendPort.send({'generateStop': true});
         }
       } else if (command == 'getResponseBufferContent') {
-        final ffi.Pointer<ffi.Char> responseBufferContent = rwkvMobile.rwkvmobile_runtime_get_response_buffer_content(runtime);
-        int length = 0;
+        final responseBufferContent = rwkvMobile.rwkvmobile_runtime_get_response_buffer_content(runtime);
+        int length = responseBufferContent.length;
+        print("💬 length: $length");
         // TODO: @wangce 肯定要写逻辑优化这里的 length 的
         // TODO: @molly 有没有可能有一个回调函数, 每次只返回一个字符?
-        while (responseBufferContent[length] != 0) {
-          length++;
-        }
-        final Uint8List byteList = responseBufferContent.cast<ffi.Uint8>().asTypedList(length);
+        final Uint8List byteList = responseBufferContent.content.cast<ffi.Uint8>().asTypedList(length);
         final String str = _codec.decode(byteList);
         sendPort.send({'responseBufferContent': str});
       } else if (command == 'getPrefillAndDecodeSpeed') {
