@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:halo/halo.dart';
 import 'package:rwkv_mobile_flutter/rwkv.dart';
+import 'package:zone/config.dart';
 import 'package:zone/model/world_type.dart';
 import 'package:zone/state/p.dart';
 
@@ -143,7 +144,7 @@ class FileInfo extends Equatable {
     return platformSupported && socSupported;
   }
 
-  bool get isReasoning => tags.contains('reasoning');
+  bool get isReasoning => tags.contains(Config.reasonTag);
 
   WorldType? get worldType => switch (fileName) {
         "rwkv7_0.4B_siglip_vision_encoder-f16.gguf" => WorldType.engVisualQA,

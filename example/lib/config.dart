@@ -25,4 +25,6 @@ User: 你好
 Assistant: 你好，我是你的助手，我会提供专家级的完整回答。请随时提问，我会一直回答。
 
 """;
+
+  static final reasonTag = "reason";
 }

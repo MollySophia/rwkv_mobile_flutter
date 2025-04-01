@@ -2,6 +2,7 @@
 import 'dart:developer';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:zone/config.dart';
 import 'package:zone/func/gb_display.dart';
 import 'package:zone/func/log_trace.dart';
 import 'package:zone/gen/l10n.dart';
@@ -238,18 +239,18 @@ class FileKeyItem extends ConsumerWidget {
           runSpacing: 8,
           children: [
             ...tags.map((tag) {
-              final isReasoningIsEncoder = tag == "reasoning" || tag == "encoder";
+              final showHighlight = tag == Config.reasonTag || tag == "encoder" || tag == "npu";
               return C(
                 decoration: BD(
                   borderRadius: 4.r,
-                  color: isReasoningIsEncoder ? kCG : kG.wo(0.2),
+                  color: showHighlight ? kCG : kG.wo(0.2),
                 ),
                 padding: const EI.s(h: 4),
                 child: T(
                   tag,
                   s: TS(
-                    c: isReasoningIsEncoder ? kW : kB,
-                    w: isReasoningIsEncoder ? FW.w500 : FW.w400,
+                    c: showHighlight ? kW : kB,
+                    w: showHighlight ? FW.w500 : FW.w400,
                   ),
                 ),
               );

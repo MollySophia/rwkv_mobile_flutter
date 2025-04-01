@@ -10,7 +10,7 @@
     "quantization": "Q8_0",
     "platforms": ["macos", "windows", "linux", "android"],
     "backends": ["llamacpp"],
-    "tags": ["reasoning", "cpu"]
+    "tags": ["reason", "cpu"]
   },
   {
     "name": "RWKV7-G1 0.4B",
@@ -23,7 +23,7 @@
     "quantization": "Q8_0",
     "platforms": ["macos", "windows", "linux", "android"],
     "backends": ["llamacpp"],
-    "tags": ["reasoning", "cpu"]
+    "tags": ["reason", "cpu"]
   },
   {
     "name": "RWKV7-G1 1.5B 32% trained",
@@ -36,7 +36,7 @@
     "quantization": "Q6_K",
     "platforms": ["macos", "windows", "linux", "android"],
     "backends": ["llamacpp"],
-    "tags": ["reasoning", "cpu"]
+    "tags": ["reason", "cpu"]
   },
   {
     "name": "RWKV7-G1 2.9B 32% trained",
@@ -49,7 +49,7 @@
     "quantization": "Q6_K",
     "platforms": ["macos", "windows", "linux", "android"],
     "backends": ["llamacpp"],
-    "tags": ["reasoning", "cpu"]
+    "tags": ["reason", "cpu"]
   },
   {
     "name": "RWKV7-G1 0.1B",
@@ -62,7 +62,7 @@
     "quantization": "fp16",
     "platforms": ["ios", "macos", "web"],
     "backends": ["webRwkv"],
-    "tags": ["reasoning", "gpu"]
+    "tags": ["reason", "gpu"]
   },
   {
     "name": "RWKV7-G1 0.4B",
@@ -75,7 +75,7 @@
     "quantization": "fp16",
     "platforms": ["ios", "macos", "web"],
     "backends": ["webRwkv"],
-    "tags": ["reasoning", "gpu"]
+    "tags": ["reason", "gpu"]
   },
   {
     "name": "RWKV7-G1 1.5B 32% trained",
@@ -88,7 +88,7 @@
     "quantization": "NF4",
     "platforms": ["ios", "macos", "web"],
     "backends": ["webRwkv"],
-    "tags": ["reasoning", "gpu"]
+    "tags": ["reason", "gpu"]
   },
   {
     "name": "RWKV7-G1 2.9B 32% trained",
@@ -101,7 +101,7 @@
     "quantization": "NF4",
     "platforms": ["ios", "macos", "web"],
     "backends": ["webRwkv"],
-    "tags": ["reasoning", "gpu"],
+    "tags": ["reason", "gpu"],
     "isDebug": true
   },
   {
@@ -114,7 +114,7 @@
     "quantization": "fp16",
     "platforms": ["android"],
     "backends": ["qnn"],
-    "tags": ["reasoning", "npu"],
+    "tags": ["reason", "npu"],
     "socLimitations": ["8 Gen 3"]
   },
   {
@@ -127,7 +127,7 @@
     "quantization": "a16w8",
     "platforms": ["android"],
     "backends": ["qnn"],
-    "tags": ["reasoning", "npu"],
+    "tags": ["reason", "npu"],
     "socLimitations": ["8 Gen 3"]
   },
   {
@@ -140,7 +140,7 @@
     "quantization": "a16w8",
     "platforms": ["android"],
     "backends": ["qnn"],
-    "tags": ["reasoning", "npu"],
+    "tags": ["reason", "npu"],
     "socLimitations": ["8s Gen 3"]
   },
   {
@@ -153,7 +153,7 @@
     "quantization": "a16w8",
     "platforms": ["android"],
     "backends": ["qnn"],
-    "tags": ["reasoning", "npu"],
+    "tags": ["reason", "npu"],
     "socLimitations": ["8 Gen 2"]
   },
   {
@@ -166,7 +166,7 @@
     "quantization": "a16w8",
     "platforms": ["android"],
     "backends": ["qnn"],
-    "tags": ["reasoning", "npu"],
+    "tags": ["reason", "npu"],
     "socLimitations": ["8+ Gen 1"]
   },
   {
@@ -179,7 +179,7 @@
     "quantization": "a16w8",
     "platforms": ["android"],
     "backends": ["qnn"],
-    "tags": ["reasoning", "npu"],
+    "tags": ["reason", "npu"],
     "socLimitations": ["8 Gen 3"]
   },
   {
@@ -192,7 +192,7 @@
     "quantization": "a16w8",
     "platforms": ["android"],
     "backends": ["qnn"],
-    "tags": ["reasoning", "npu"],
+    "tags": ["reason", "npu"],
     "socLimitations": ["8s Gen 3"]
   },
   {
@@ -205,7 +205,7 @@
     "quantization": "a16w8",
     "platforms": ["android"],
     "backends": ["qnn"],
-    "tags": ["reasoning", "npu"],
+    "tags": ["reason", "npu"],
     "socLimitations": ["8 Gen 2"]
   },
   {
@@ -218,7 +218,7 @@
     "quantization": "a16w8",
     "platforms": ["android"],
     "backends": ["qnn"],
-    "tags": ["reasoning", "npu"],
+    "tags": ["reason", "npu"],
     "socLimitations": ["8+ Gen 1"]
   },
   {

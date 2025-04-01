@@ -92,6 +92,7 @@ class _PageChatState extends State<PageChat> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
+      // backgroundColor: kW,
       body: Stack(
         children: [
           List(),

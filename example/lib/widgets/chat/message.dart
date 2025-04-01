@@ -130,7 +130,7 @@ class Message extends ConsumerWidget {
     const marginHorizontal = 12.0;
     const marginVertical = 0.0;
     const kBubbleMinHeight = 44.0;
-    const kBubbleMaxWidthAdjust = 40.0;
+    const kBubbleMaxWidthAdjust = 0.0;
 
     final content = msg.content;
     final changing = msg.changing;
@@ -212,7 +212,17 @@ class Message extends ConsumerWidget {
     final markdownStyleSheet = MarkdownStyleSheet(
       listBulletPadding: const EI.o(l: 0),
       listIndent: 20,
+      textScaler: TextScaler.linear(1.1),
+      horizontalRuleDecoration: BoxDecoration(
+        color: kB.wo(0.1),
+        border: Border(
+          top: BorderSide(color: kB.wo(0.1), width: 1),
+        ),
+      ),
     );
+
+    final rawFontSize = Theme.of(context).textTheme.bodyMedium?.fontSize ?? 14.0;
+    final userMessageStyle = TS(c: kB, s: rawFontSize * 1.1);
 
     double? cotContentHeight;
 
@@ -279,6 +289,10 @@ class Message extends ConsumerWidget {
       border = Border.all(width: 0);
     }
 
+    // if (!isMine) {
+    //   padding = const EI.a(4);
+    // }
+
     final screenWidth = ref.watch(P.app.screenWidth);
     final screenHeight = ref.watch(P.app.screenHeight);
     final rawMaxWidth = math.min(screenWidth, screenHeight);
@@ -301,7 +315,9 @@ class Message extends ConsumerWidget {
           padding: padding,
           decoration: BD(
             color: isMine ? primaryContainer : kW,
+            // color: isMine ? primaryContainer : kC,
             border: border,
+            // border: isMine ? border : null,
             borderRadius: isUserImage
                 ? null
                 : BorderRadius.only(
@@ -315,7 +331,7 @@ class Message extends ConsumerWidget {
             c: isMine ? CAA.end : CAA.start,
             children: [
               // 🔥 User message
-              if (isMine && !isUserImage && !isUserAudio) T(finalContent, s: const TS(c: kB)),
+              if (isMine && !isUserImage && !isUserAudio) T(finalContent, s: userMessageStyle),
               // 🔥 User message image
               if (isMine && isUserImage)
                 ConstrainedBox(
@@ -380,25 +396,16 @@ class Message extends ConsumerWidget {
                 AnimatedContainer(
                   duration: 250.ms,
                   height: cotContentHeight,
-                  child: C(
-                    decoration: BD(
-                      color: kW.wo(0.1),
-                      border: Border(
-                        left: BorderSide(color: kB.wo(0.15), width: 2),
-                      ),
-                    ),
-                    padding: const EI.o(l: 8),
-                    child: MarkdownBody(
-                      data: cotContent,
-                      selectable: false,
-                      shrinkWrap: true,
-                      styleSheet: markdownStyleSheetForCotContent,
-                      onTapLink: _onTapLink,
-                    ),
+                  child: MarkdownBody(
+                    data: cotContent,
+                    selectable: false,
+                    shrinkWrap: true,
+                    styleSheet: markdownStyleSheetForCotContent,
+                    onTapLink: _onTapLink,
                   ),
                 ),
               // 🔥 Bot message cot result
-              if (!isMine && cotResult.isNotEmpty && usingReasoningModel) 4.h,
+              if (!isMine && cotResult.isNotEmpty && usingReasoningModel) 12.h,
               if (!isMine && cotResult.isNotEmpty && usingReasoningModel)
                 MarkdownBody(
                   data: cotResult,
