@@ -388,8 +388,6 @@ class RWKVMobile {
       } else if (command == 'getResponseBufferContent') {
         final responseBufferContent = rwkvMobile.rwkvmobile_runtime_get_response_buffer_content(runtime);
         int length = responseBufferContent.length;
-        print("💬 length: $length");
-        // TODO: @wangce 肯定要写逻辑优化这里的 length 的
         // TODO: @molly 有没有可能有一个回调函数, 每次只返回一个字符?
         final Uint8List byteList = responseBufferContent.content.cast<ffi.Uint8>().asTypedList(length);
         final String str = _codec.decode(byteList);
