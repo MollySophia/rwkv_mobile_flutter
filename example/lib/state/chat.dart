@@ -278,6 +278,12 @@ extension _$Chat on _Chat {
     focusNode.addListener(_onFocusNodeChanged);
     hasFocus.u(focusNode.hasFocus);
     _loadSuggestions();
+
+    receivingTokens.l(_onReceivingTokensChanged);
+  }
+
+  void _onReceivingTokensChanged(bool next) {
+    Gaimon.light();
   }
 
   FV _loadSuggestions() async {
