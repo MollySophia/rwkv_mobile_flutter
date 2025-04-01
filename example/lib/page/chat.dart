@@ -18,7 +18,9 @@ import 'package:zone/widgets/chat/input.dart';
 import 'package:zone/widgets/chat/message.dart';
 import 'package:zone/widgets/chat/suggestions.dart';
 import 'package:zone/widgets/chat/visual_empty.dart';
+import 'package:zone/widgets/menu.dart';
 import 'package:zone/widgets/model_selector.dart';
+import 'package:zone/widgets/pager.dart';
 
 class PageChat extends StatefulWidget {
   const PageChat({super.key});
@@ -43,8 +45,10 @@ class _PageChatState extends State<PageChat> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: _Body(),
+    return const _Page();
+    return Pager(
+      drawer: const Menu(),
+      child: _Page(),
     );
   }
 
@@ -97,25 +101,27 @@ class _PageChatState extends State<PageChat> {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body();
+class _Page extends ConsumerWidget {
+  const _Page();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Stack(
-      children: [
-        List(),
-        Empty(),
-        VisualEmpty(),
-        AudioEmpty(),
-        //
-        ChatAppBar(),
-        _NavigationBarBottomLine(),
-        //
-        Suggestions(),
-        Input(),
-        AudioInput(),
-      ],
+    return const Scaffold(
+      body: Stack(
+        children: [
+          List(),
+          Empty(),
+          VisualEmpty(),
+          AudioEmpty(),
+          //
+          ChatAppBar(),
+          _NavigationBarBottomLine(),
+          //
+          Suggestions(),
+          Input(),
+          AudioInput(),
+        ],
+      ),
     );
   }
 }
