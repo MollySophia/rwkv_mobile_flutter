@@ -60,6 +60,8 @@ class _RWKV {
   Timer? _getTokensTimer;
 
   late final soc = _gs("");
+
+  late final _qnnLibsCopied = _gs(false);
 }
 
 /// Public methods
@@ -168,7 +170,7 @@ extension $RWKV on _RWKV {
     decodeSpeed.u(0);
     final tokenizerPath = await fromAssetsToTemp(Assets.config.chat.bRwkvVocabV20230424);
 
-    if (Platform.isAndroid) {
+    if (Platform.isAndroid && !_qnnLibsCopied.v) {
       // TODO: @Molly better solution here
       // TODO: @wangce Ask Molly why there are "better" solution here
       final qnnLibList = {
@@ -195,6 +197,7 @@ extension $RWKV on _RWKV {
         final path = await fromAssetsToTemp("assets/lib/$lib");
         if (kDebugMode) print("💬 copied QNN library, path: $path");
       }
+      _qnnLibsCopied.u(true);
     }
 
     final rootIsolateToken = RootIsolateToken.instance;
