@@ -535,6 +535,13 @@ class rwkv_mobile {
 
   late final _rwkvmobile_get_soc_partnamePtr = _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('rwkvmobile_get_soc_partname');
   late final _rwkvmobile_get_soc_partname = _rwkvmobile_get_soc_partnamePtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  ffi.Pointer<ffi.Char> rwkvmobile_get_htp_arch() {
+    return _rwkvmobile_get_htp_arch();
+  }
+
+  late final _rwkvmobile_get_htp_archPtr = _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('rwkvmobile_get_htp_arch');
+  late final _rwkvmobile_get_htp_arch = _rwkvmobile_get_htp_archPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 }
 
 final class sampler_params extends ffi.Struct {

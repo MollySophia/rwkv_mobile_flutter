@@ -73,6 +73,12 @@ class RWKVMobile {
     return socPartname.cast<Utf8>().toDartString();
   }
 
+  static String getSnapdragonHtpArch() {
+    final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
+    final snapdragonHtpArch = rwkvMobile.rwkvmobile_get_htp_arch();
+    return snapdragonHtpArch.cast<Utf8>().toDartString();
+  }
+
   void _isolateMain(StartOptions options) async {
     final sendPort = options.sendPort;
     final rootIsolateToken = options.rootIsolateToken;

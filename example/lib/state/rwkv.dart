@@ -185,7 +185,10 @@ extension $RWKV on _RWKV {
         "libQnnHtpV79Skel.so",
         "libQnnHtpPrepare.so",
         "libQnnSystem.so",
-        "libQnnRwkvWkvOpPackage.so",
+        "libQnnRwkvWkvOpPackageV68.so",
+        "libQnnRwkvWkvOpPackageV69.so",
+        "libQnnRwkvWkvOpPackageV73.so",
+        "libQnnRwkvWkvOpPackageV75.so",
       };
       for (final lib in qnnLibList) {
         final path = await fromAssetsToTemp("assets/lib/$lib");
