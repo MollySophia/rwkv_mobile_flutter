@@ -60,7 +60,7 @@ class _App extends StatelessWidget {
   Widget build(BuildContext context) {
     P.app.firstContextGot(context);
 
-    final locale = !kDebugMode
+    final locale = !false
         ? null
         : [
             Language.zh_Hans.locale,
@@ -89,19 +89,21 @@ class _App extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: kDebugMode,
         routerConfig: kRouter,
-        builder: (context, child) {
-          return MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1)),
-            child: Stack(
-              children: [
-                C(color: Theme.of(context).scaffoldBackgroundColor),
-                if (child != null) child,
-                Alert.deploy(),
-                if (kDebugMode) const Debugger(),
-              ],
-            ),
-          );
-        },
+        builder: _builder,
+      ),
+    );
+  }
+
+  Widget _builder(context, child) {
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1)),
+      child: Stack(
+        children: [
+          C(color: Theme.of(context).scaffoldBackgroundColor),
+          if (child != null) child,
+          Alert.deploy(),
+          if (kDebugMode) const Debugger(),
+        ],
       ),
     );
   }

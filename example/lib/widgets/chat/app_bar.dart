@@ -115,6 +115,7 @@ class ChatAppBar extends ConsumerWidget {
                       ? () {
                           P.chat.showingCharacterSelector.u(false);
                           P.chat.showingCharacterSelector.u(true);
+                          P.chat.loadSuggestions();
                         }
                       : null,
                   icon: (Platform.isIOS || Platform.isMacOS) ? const Icon(CupertinoIcons.bubble_left_bubble_right) : const Icon(Icons.message_outlined),
@@ -135,7 +136,6 @@ class _MenuButton extends ConsumerWidget {
   const _MenuButton();
 
   void _onPressed() {
-    qq;
     if (Config.enableConversation) Pager.toggle();
     if (!Config.enableConversation) AppInfo.show(getContext()!);
   }
@@ -143,7 +143,6 @@ class _MenuButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final childOpacity = Config.enableConversation ? ref.watch(Pager.childOpacity) : 1.0;
-    qq;
     return Opacity(
       opacity: childOpacity,
       child: IconButton(

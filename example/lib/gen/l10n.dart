@@ -28,7 +28,10 @@ class S {
   static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
-    final name = (locale.countryCode?.isEmpty ?? false) ? locale.languageCode : locale.toString();
+    final name =
+        (locale.countryCode?.isEmpty ?? false)
+            ? locale.languageCode
+            : locale.toString();
     final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
@@ -87,7 +90,8 @@ class S {
     return Intl.message(
       'Copied to clipboard',
       name: 'chat_copied_to_clipboard',
-      desc: 'Message displayed when the chat content is copied to the clipboard',
+      desc:
+          'Message displayed when the chat content is copied to the clipboard',
       args: [],
     );
   }

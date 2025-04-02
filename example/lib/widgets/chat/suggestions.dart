@@ -20,7 +20,7 @@ class Suggestions extends ConsumerWidget {
     final demoType = ref.watch(P.app.demoType);
     final messages = ref.watch(P.chat.messages);
     final primary = Theme.of(context).colorScheme.primary;
-    final paddingBottom = ref.watch(P.app.paddingBottom);
+    final paddingBottom = ref.watch(P.app.quantizedIntPaddingBottom);
     final currentModel = ref.watch(P.rwkv.currentModel);
     ref.watch(P.chat.showingModelSelector);
 
@@ -30,9 +30,7 @@ class Suggestions extends ConsumerWidget {
 
     if (demoType == DemoType.chat) {
       show = messages.isEmpty && currentModel != null;
-      final allSuggestions = ref.watch(P.chat.suggestions);
-      final copy = allSuggestions.shuffled;
-      suggestions = copy.take(3).toList();
+      suggestions = ref.watch(P.chat.suggestions);
     }
 
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);

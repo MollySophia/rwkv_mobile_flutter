@@ -57,7 +57,7 @@ class Input extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final paddingBottom = ref.watch(P.app.paddingBottom);
+    final paddingBottom = ref.watch(P.app.quantizedIntPaddingBottom);
     final primary = Theme.of(context).colorScheme.primary;
     final loaded = ref.watch(P.rwkv.loaded);
     final loading = ref.watch(P.rwkv.loading);

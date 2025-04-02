@@ -253,6 +253,31 @@ extension $Chat on _Chat {
     await Future.delayed(50.ms);
     P.rwkv.stop();
   }
+
+  FV loadSuggestions() async {
+    final demoType = P.app.demoType.v;
+    if (demoType != DemoType.chat) return;
+    final currentLocale = Intl.getCurrentLocale();
+    bool useEn = currentLocale.startsWith("en");
+
+    final assetPath = useEn ? "assets/config/chat/suggestions.en-US${kDebugMode ? ".debug" : ""}.json" : "assets/config/chat/suggestions.zh-hans${kDebugMode ? ".debug" : ""}.json";
+    final anotherAssetPath = !useEn ? "assets/config/chat/suggestions.en-US${kDebugMode ? ".debug" : ""}.json" : "assets/config/chat/suggestions.zh-hans${kDebugMode ? ".debug" : ""}.json";
+
+    final jsonString = await rootBundle.loadString(assetPath);
+    final list = HF.list(jsonDecode(jsonString));
+    final s = list.map((e) => e.toString()).shuffled().take(3).toList();
+    suggestions.u(s);
+
+    if (kDebugMode) {
+      // Merge suggestions
+      final anotherJsonString = await rootBundle.loadString(anotherAssetPath);
+      final anotherList = HF.list(jsonDecode(anotherJsonString));
+      final anotherSuggestions = anotherList.map((e) => e.toString()).toList();
+      suggestions.ul(anotherSuggestions);
+    }
+
+    suggestions.u(suggestions.v.shuffled.take(3).toList());
+  }
 }
 
 /// Private methods
@@ -280,34 +305,12 @@ extension _$Chat on _Chat {
     P.world.audioFileStreamController.stream.listen(_onNewFileReceived);
     focusNode.addListener(_onFocusNodeChanged);
     hasFocus.u(focusNode.hasFocus);
-    _loadSuggestions();
+    loadSuggestions();
 
     receivingTokens.l(_onReceivingTokensChanged);
   }
 
   void _onReceivingTokensChanged(bool next) async {}
-
-  FV _loadSuggestions() async {
-    final demoType = P.app.demoType.v;
-    if (demoType != DemoType.chat) return;
-    final currentLocale = Intl.getCurrentLocale();
-    bool useEn = currentLocale.startsWith("en");
-
-    final assetPath = useEn ? "assets/config/chat/suggestions.en-US${kDebugMode ? ".debug" : ""}.json" : "assets/config/chat/suggestions.zh-hans${kDebugMode ? ".debug" : ""}.json";
-    final anotherAssetPath = !useEn ? "assets/config/chat/suggestions.en-US${kDebugMode ? ".debug" : ""}.json" : "assets/config/chat/suggestions.zh-hans${kDebugMode ? ".debug" : ""}.json";
-
-    final jsonString = await rootBundle.loadString(assetPath);
-    final list = HF.list(jsonDecode(jsonString));
-    suggestions.u(list.map((e) => e.toString()).toList());
-
-    // Merge suggestions
-    if (kDebugMode) {
-      final anotherJsonString = await rootBundle.loadString(anotherAssetPath);
-      final anotherList = HF.list(jsonDecode(anotherJsonString));
-      final anotherSuggestions = anotherList.map((e) => e.toString()).toList();
-      suggestions.ul(anotherSuggestions);
-    }
-  }
 
   FV _onFocusNodeChanged() async {
     hasFocus.u(focusNode.hasFocus);
