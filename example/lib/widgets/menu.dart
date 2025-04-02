@@ -19,8 +19,8 @@ class Menu extends ConsumerWidget {
         m: MAA.center,
         children: [
           paddingTop.h,
-          Exp(child: ConversationList()),
-          _BottomInfo(),
+          const Exp(child: ConversationList()),
+          const _BottomInfo(),
         ],
       ),
     );
@@ -59,7 +59,7 @@ class _BottomInfo extends ConsumerWidget {
               child: Co(
                 c: CAA.stretch,
                 children: [
-                  T(
+                  const T(
                     "RWKV Chat",
                     s: TS(s: 20),
                   ),

@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
 import 'package:zone/route/page_key.dart';
 
 const kBG = Color(0xFFF4F8FF);

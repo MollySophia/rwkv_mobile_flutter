@@ -24,7 +24,7 @@ class ConversationList extends ConsumerWidget {
       itemBuilder: (context, index) {
         final conversation = conversations[index];
         return C(
-          decoration: BD(),
+          decoration: const BD(),
           child: Text(conversation.id.toString()),
         );
       },
@@ -51,8 +51,8 @@ class _Empty extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             c: CAA.center,
             children: [
-              Icon(Icons.add),
-              T(S.current.new_chat, s: TS(s: 20)),
+              const Icon(Icons.add),
+              T(S.current.new_chat, s: const TS(s: 20)),
               T(S.current.create_a_new_one_by_clicking_the_button_above, s: TS(s: 10, c: kB.wo(0.5))),
             ],
           ),

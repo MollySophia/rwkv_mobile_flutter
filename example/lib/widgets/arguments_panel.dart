@@ -69,7 +69,7 @@ class ArgumentsPanel extends ConsumerWidget {
                       12.w,
                       T(
                         S.current.session_configuration,
-                        s: TS(s: 16, w: FW.w500),
+                        s: const TS(s: 16, w: FW.w500),
                       ),
                     ],
                   ),

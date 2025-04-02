@@ -3,7 +3,6 @@ import 'package:zone/state/p.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
-import 'package:zone/widgets/pager.dart';
 
 class Debugger extends ConsumerWidget {
   const Debugger({super.key});

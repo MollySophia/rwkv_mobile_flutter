@@ -314,10 +314,10 @@ class FileKeyItem extends ConsumerWidget {
         if (downloading)
           Wrap(
             children: [
-              T(S.current.speed, s: TS(c: kB)),
+              T(S.current.speed, s: const TS(c: kB)),
               T("${networkSpeed.toStringAsFixed(1)}MB/s"),
               12.w,
-              T(S.current.remaining, s: TS(c: kB)),
+              T(S.current.remaining, s: const TS(c: kB)),
               if (timeRemaining.inMinutes > 0) T("${timeRemaining.inMinutes}m"),
               if (timeRemaining.inMinutes == 0) T("${timeRemaining.inSeconds}s"),
             ],

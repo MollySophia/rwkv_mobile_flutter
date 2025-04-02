@@ -74,7 +74,7 @@ class Empty extends ConsumerWidget {
                     4.h,
                     if (loaded)
                       C(
-                        padding: EI.s(h: 4, v: 2),
+                        padding: const EI.s(h: 4, v: 2),
                         decoration: BD(border: Border.all(color: primary), borderRadius: 4.r),
                         child: T(currentModel?.name ?? "", s: TS(s: 16, w: FW.w600, c: primary)),
                       ),

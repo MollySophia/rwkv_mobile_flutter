@@ -103,7 +103,7 @@ class ChatAppBar extends ConsumerWidget {
                 ),
               ),
             ),
-            leading: Ro(
+            leading: const Ro(
               children: [
                 _MenuButton(),
               ],
@@ -147,7 +147,7 @@ class _MenuButton extends ConsumerWidget {
       opacity: childOpacity,
       child: IconButton(
         onPressed: _onPressed,
-        icon: Icon(Icons.menu),
+        icon: const Icon(Icons.menu),
       ),
     );
   }
