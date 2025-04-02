@@ -45,7 +45,6 @@ class _PageChatState extends State<PageChat> {
 
   @override
   Widget build(BuildContext context) {
-    return const _Page();
     return const Pager(
       drawer: Menu(),
       child: _Page(),
