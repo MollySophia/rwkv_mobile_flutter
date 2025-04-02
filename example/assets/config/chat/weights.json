@@ -278,5 +278,32 @@
     "url": "https://storage.googleapis.com/approachcharts/test/5MB-test.ZIP",
     "platforms": ["macos", "windows", "linux", "android", "ios", "web"],
     "isDebug": true
+  },
+  {
+    "name": "RWKV7-G1 1.5B 50% trained (8 Gen 3)",
+    "type": "bin",
+    "modelSize": 1.5,
+    "fileName": "rwkv7-g1-1.5b-50%25-a16w4-8gen3_combined.bin",
+    "fileSize": 1088435824,
+    "sha256": "0199c2be54b3479dfc4f00e63cf073424a3964769fc1049697d26e4db6688220",
+    "url": "mollysama/rwkv-mobile-models/resolve/main/qnn/rwkv7-g1-1.5b-50%25-a16w4-8gen3_combined.bin",
+    "quantization": "a16w4",
+    "platforms": ["android"],
+    "backends": ["qnn"],
+    "tags": ["reason", "npu"],
+    "socLimitations": ["8 Gen 3"]
+  },
+  {
+    "name": "RWKV7-G1 1.5B 50% trained (8s Gen 3)",
+    "type": "bin",
+    "modelSize": 1.5,
+    "fileName": "rwkv7-g1-1.5b-50%25-a16w4-8sgen3_combined.bin",
+    "fileSize": 1090471456,
+    "url": "mollysama/rwkv-mobile-models/resolve/main/qnn/rwkv7-g1-1.5b-50%25-a16w4-8sgen3_combined.bin",
+    "quantization": "a16w4",
+    "platforms": ["android"],
+    "backends": ["qnn"],
+    "tags": ["reason", "npu"],
+    "socLimitations": ["8s Gen 3"]
   }
 ]
