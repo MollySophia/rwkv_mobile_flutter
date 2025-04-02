@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:halo/halo.dart';
+import 'package:halo_state/halo_state.dart';
 import 'package:rwkv_mobile_flutter/rwkv.dart';
 import 'package:zone/config.dart';
 import 'package:zone/model/world_type.dart';

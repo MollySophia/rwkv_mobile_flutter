@@ -1,16 +1,16 @@
 part of 'p.dart';
 
 class _Othello {
-  late final state = _gs<List<List<CellType>>>(List.generate(8, (_) => List.filled(8, CellType.empty)));
+  late final state = qs<List<List<CellType>>>(List.generate(8, (_) => List.filled(8, CellType.empty)));
 
-  late final blackScore = _gp((ref) {
+  late final blackScore = qp((ref) {
     final state = ref.watch(P.othello.state);
     final l0 = state.fold<List<CellType>>([], (previousValue, element) => previousValue + element);
     final score = l0.where((e) => e == CellType.black).length;
     return score;
   });
 
-  late final whiteScore = _gp((ref) {
+  late final whiteScore = qp((ref) {
     final state = ref.watch(P.othello.state);
     final l0 = state.fold<List<CellType>>([], (previousValue, element) => previousValue + element);
     final score = l0.where((e) => e == CellType.white).length;
@@ -18,22 +18,22 @@ class _Othello {
   });
 
   /// row, col
-  late final eatCountMatrixForBlack = _gs<List<List<int>>>(List.generate(8, (_) => List.filled(8, 0)));
+  late final eatCountMatrixForBlack = qs<List<List<int>>>(List.generate(8, (_) => List.filled(8, 0)));
 
   /// row, col
-  late final eatCountMatrixForWhite = _gs<List<List<int>>>(List.generate(8, (_) => List.filled(8, 0)));
+  late final eatCountMatrixForWhite = qs<List<List<int>>>(List.generate(8, (_) => List.filled(8, 0)));
 
-  late final receivingTokens = _gs(false);
+  late final receivingTokens = qs(false);
 
-  late final blackTurn = _gs(_blackFirst);
+  late final blackTurn = qs(_blackFirst);
 
   static final _blackFirst = true;
 
-  late final received = _gs("");
+  late final received = qs("");
 
-  late final searchDepth = _gs(1);
+  late final searchDepth = qs(1);
 
-  late final searchBreadth = _gs(1);
+  late final searchBreadth = qs(1);
 
   late final receivedScrollController = ScrollController();
 
@@ -41,17 +41,17 @@ class _Othello {
 
   late final modelPlacingController = StreamController<(int col, int row)>();
 
-  late final latestPlacing = _gsn<(int col, int row)>();
+  late final latestPlacing = qsn<(int col, int row)>();
 
-  late final usePortrait = _gs(true);
+  late final usePortrait = qs(true);
 
-  late final playerShouldAtSameColumnWithSettings = _gs(true);
+  late final playerShouldAtSameColumnWithSettings = qs(true);
 
-  late final settingsAndPlayersShouldAtDifferentColumnIsHorizontal = _gs(false);
+  late final settingsAndPlayersShouldAtDifferentColumnIsHorizontal = qs(false);
 
-  late final blackIsAI = _gs(false);
+  late final blackIsAI = qs(false);
 
-  late final whiteIsAI = _gs(true);
+  late final whiteIsAI = qs(true);
 }
 
 /// Public methods

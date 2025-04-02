@@ -3,26 +3,26 @@ part of 'p.dart';
 class _World {
   // 🔥 Vision
 
-  late final imagePath = _gsn<String>();
-  late final imageHeight = _gsn<double>();
-  late final visualFloatHeight = _gsn<double>();
+  late final imagePath = qsn<String>();
+  late final imageHeight = qsn<double>();
+  late final visualFloatHeight = qsn<double>();
 
   // 🔥 Audio
 
   /// in milliseconds
-  late final startTime = _gs(0);
+  late final startTime = qs(0);
 
   /// in milliseconds
-  late final endTime = _gs(0);
-  late final audioPath = _gs("");
-  late final audioDuration = _gs(0);
-  late final recording = _gs(false);
-  late final playing = _gs(false);
+  late final endTime = qs(0);
+  late final audioPath = qs("");
+  late final audioDuration = qs(0);
+  late final recording = qs(false);
+  late final playing = qs(false);
   late final _recorder = ar.AudioRecorder();
   late final _audioPlayer = ap.AudioPlayer();
 
   /// TODO: Use it!
-  late final streaming = _gs(false);
+  late final streaming = qs(false);
   late final audioFileStreamController = StreamController<(File file, int length)>.broadcast();
   final List<Uint8List> _audioData = [];
   Stream<Uint8List>? _currentRecorderStream;

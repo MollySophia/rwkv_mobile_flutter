@@ -645,6 +645,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.0"
+  halo_state:
+    dependency: "direct main"
+    description:
+      name: halo_state
+      sha256: e6f0c92e8bcef1177be772a0d43c24291f3530075971eb9f146901cd5d51c22b
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1"
   hashcodes:
     dependency: transitive
     description:

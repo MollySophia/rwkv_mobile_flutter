@@ -18,50 +18,50 @@ class _RWKV {
 
   late Completer<void> _initRuntimeCompleter = Completer<void>();
 
-  late final prefillSpeed = _gs<double>(0.0);
-  late final decodeSpeed = _gs<double>(0.0);
-  late final argumentsPanelShown = _gs(false);
+  late final prefillSpeed = qs<double>(0.0);
+  late final decodeSpeed = qs<double>(0.0);
+  late final argumentsPanelShown = qs(false);
 
   // TODO: @wangce 或许, 默认参数应该和 weights 绑定, 比如, Othello model 的 topK 应该始终是 1
-  late final arguments = StateProvider.family<double, Argument>((ref, argument) {
+  late final arguments = qsff<double, Argument>((ref, argument) {
     return argument.defaults;
   });
 
   // TODO: @wangce 或许, 默认参数应该和 weights 绑定, 比如, G1 系列模型默认使用 reasoning
-  late final usingReasoningModel = _gp((ref) {
+  late final usingReasoningModel = qp((ref) {
     return ref.watch(_usingReasoningModel);
   });
 
-  late final _usingReasoningModel = _gs(false);
+  late final _usingReasoningModel = qs(false);
 
-  late final preferChinese = _gp((ref) {
+  late final preferChinese = qp((ref) {
     return ref.watch(_preferChinese);
   });
 
-  late final _preferChinese = _gs(false);
+  late final _preferChinese = qs(false);
 
   /// 模型是否已加载
-  late final loaded = _gp((ref) {
+  late final loaded = qp((ref) {
     final currentModel = ref.watch(this.currentModel);
     return currentModel != null;
   });
 
-  late final currentModel = _gsn<FileInfo>();
-  late final currentWorldType = _gsn<WorldType>();
+  late final currentModel = qsn<FileInfo>();
+  late final currentWorldType = qsn<WorldType>();
 
-  late final loading = _gp((ref) {
+  late final loading = qp((ref) {
     return ref.watch(_loading);
   });
 
-  late final _loading = _gs(false);
+  late final _loading = qs(false);
 
   late final argumentUpdatingDebouncer = Debouncer(milliseconds: 300);
 
   Timer? _getTokensTimer;
 
-  late final soc = _gs("");
+  late final soc = qs("");
 
-  late final _qnnLibsCopied = _gs(false);
+  late final _qnnLibsCopied = qs(false);
 }
 
 /// Public methods

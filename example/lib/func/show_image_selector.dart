@@ -1,6 +1,7 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:halo_state/halo_state.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:zone/func/log_trace.dart';
 import 'package:zone/model/message.dart';

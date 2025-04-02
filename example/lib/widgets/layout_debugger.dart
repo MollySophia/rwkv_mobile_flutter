@@ -19,7 +19,7 @@ class LayoutDebugger extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (!kDebugMode) return child;
-    final showFrame = ref.watch(P.debugger.showFrame);
+    // final showFrame = ref.watch(P.debugger.showFrame);
     // final showFrame = false;
     final frameWidth = HF.randomInt(min: 2, max: 2) / 2.0;
 

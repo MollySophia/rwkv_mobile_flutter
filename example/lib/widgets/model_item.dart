@@ -2,6 +2,7 @@
 import 'dart:developer';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:halo_state/halo_state.dart';
 import 'package:zone/config.dart';
 import 'package:zone/func/gb_display.dart';
 import 'package:zone/func/log_trace.dart';

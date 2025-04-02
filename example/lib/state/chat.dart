@@ -1,10 +1,10 @@
 part of 'p.dart';
 
 class _Chat {
-  late final messages = _gs<List<Message>>([]);
+  late final messages = qs<List<Message>>([]);
 
   /// The key of it is the id of the message
-  late final cotDisplayState = StateProvider.family<CoTDisplayState, int>((ref, index) {
+  late final cotDisplayState = qsff<CoTDisplayState, int>((ref, index) {
     return CoTDisplayState.showCotHeaderAndCotContent;
   });
 
@@ -14,9 +14,9 @@ class _Chat {
 
   late final focusNode = FocusNode();
 
-  late final _textInInput = _gs("");
+  late final _textInInput = qs("");
 
-  late final canSend = _gp((ref) {
+  late final canSend = qp((ref) {
     final textInInput = ref.watch(_textInInput);
     return textInInput.trim().isNotEmpty;
   });
@@ -24,42 +24,42 @@ class _Chat {
   /// Disable sender
   ///
   /// TODO: Should be moved to state/rwkv.dart
-  late final receivingTokens = _gs(false);
+  late final receivingTokens = qs(false);
 
   /// TODO: Should be moved to state/rwkv.dart
-  late final receivedTokens = _gs("");
+  late final receivedTokens = qs("");
 
-  late final scrollOffset = _gs(0.0);
+  late final scrollOffset = qs(0.0);
 
-  late final inputHeight = _gs(77.0);
+  late final inputHeight = qs(77.0);
 
-  late final atBottom = _gp((ref) {
+  late final atBottom = qp((ref) {
     final scrollOffset = ref.watch(this.scrollOffset);
     return scrollOffset <= 0;
   });
 
-  late final receiveId = _gsn<int>();
+  late final receiveId = qsn<int>();
 
-  late final editingIndex = _gsn<int>();
+  late final editingIndex = qsn<int>();
 
-  late final editingBotMessage = _gp<bool>((ref) {
+  late final editingBotMessage = qp<bool>((ref) {
     final editingIndex = ref.watch(this.editingIndex);
     if (editingIndex == null) return false;
     return messages.v[editingIndex].isMine == false;
   });
 
   /// TODO: Should be moved to state/remote_file.dart
-  late final showingModelSelector = _gs(false);
+  late final showingModelSelector = qs(false);
 
-  late final showingCharacterSelector = _gs(false);
+  late final showingCharacterSelector = qs(false);
 
-  late final roles = _gs<List<Role>>([]);
+  late final roles = qs<List<Role>>([]);
 
-  late final latestClickedMessage = _gsn<Message>();
+  late final latestClickedMessage = qsn<Message>();
 
-  late final hasFocus = _gs(false);
+  late final hasFocus = qs(false);
 
-  late final suggestions = _gs<List<String>>([]);
+  late final suggestions = qs<List<String>>([]);
 }
 
 /// Public methods
@@ -316,8 +316,8 @@ extension _$Chat on _Chat {
 
     final (file, length) = event;
     final path = file.path;
-    final duration = Duration(milliseconds: length);
-    final durationString = Duration(milliseconds: length).toString();
+    // final duration = Duration(milliseconds: length);
+    // final durationString = Duration(milliseconds: length).toString();
 
     final t0 = DateTime.now().millisecondsSinceEpoch;
     P.rwkv.setAudioPrompt(path: path);

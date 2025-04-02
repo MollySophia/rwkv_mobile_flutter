@@ -3,24 +3,24 @@
 part of 'p.dart';
 
 class _FileManager {
-  late final locals = StateProvider.family<LocalFile, FileInfo>((ref, key) {
+  late final locals = qsff<LocalFile, FileInfo>((ref, key) {
     return LocalFile(fileInfo: key, targetPath: ref.watch(paths(key)));
   });
 
-  late final paths = StateProvider.family<String, FileInfo>((ref, key) {
+  late final paths = qsff<String, FileInfo>((ref, key) {
     final dir = ref.watch(P.app.documentsDir);
     final fileName = key.fileName;
     final dirPath = dir!.path;
     return "$dirPath/$fileName";
   });
 
-  late final _all = _gs<Set<FileInfo>>({});
+  late final _all = qs<Set<FileInfo>>({});
 
-  late final availableModels = _gs<Set<FileInfo>>({});
+  late final availableModels = qs<Set<FileInfo>>({});
 
-  late final downloadSource = _gs(FileDownloadSource.aifasthub);
+  late final downloadSource = qs(FileDownloadSource.aifasthub);
 
-  late final hasDownloadedModels = _gs(false);
+  late final hasDownloadedModels = qs(false);
 }
 
 /// Public methods

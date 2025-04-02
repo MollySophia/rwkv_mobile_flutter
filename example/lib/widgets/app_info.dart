@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
+import 'package:halo_state/halo_state.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:zone/func/log_trace.dart';
@@ -11,7 +12,7 @@ import 'package:zone/route/method.dart';
 import 'package:zone/state/p.dart';
 
 class AppInfo extends ConsumerWidget {
-  static final shown = StateProvider<bool>((ref) => false);
+  static final shown = qs(false);
 
   static Future<void> show(BuildContext context) async {
     logTrace("shown: ${shown.v}");
@@ -43,7 +44,6 @@ class AppInfo extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final paddingBottom = ref.watch(P.app.paddingBottom);
-    final paddingTop = ref.watch(P.app.paddingTop);
     final demoType = ref.watch(P.app.demoType);
     final iconPath = "assets/img/${demoType.name}/icon.png";
     final version = ref.watch(P.app.version);

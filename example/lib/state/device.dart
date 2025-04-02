@@ -1,9 +1,9 @@
 part of 'p.dart';
 
 class _Device {
-  final memUsed = _gs(0);
-  final memFree = _gs(0);
-  final memUsedByCurrentModel = _gs(0);
+  final memUsed = qs(0);
+  final memFree = qs(0);
+  final memUsedByCurrentModel = qs(0);
 }
 
 /// Public methods

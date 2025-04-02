@@ -2,6 +2,7 @@
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
+import 'package:halo_state/halo_state.dart';
 import 'package:zone/func/log_trace.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:flutter/material.dart';

@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:gaimon/gaimon.dart';
+import 'package:halo_state/halo_state.dart';
 import 'package:zone/func/log_trace.dart';
 import 'package:zone/func/show_image_selector.dart';
 import 'package:zone/gen/l10n.dart';

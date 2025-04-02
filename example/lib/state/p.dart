@@ -10,8 +10,8 @@ import 'package:audioplayers/audioplayers.dart' as ap;
 import 'package:background_downloader/background_downloader.dart' as bd;
 import 'package:collection/collection.dart';
 import 'package:gaimon/gaimon.dart';
+import 'package:halo_state/halo_state.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart' as ar;
 import 'package:system_info2/system_info2.dart';
 import 'package:zone/config.dart';
@@ -39,7 +39,6 @@ import 'package:halo/halo.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:rwkv_mobile_flutter/rwkv.dart';
 
-part "state.dart";
 part "app.dart";
 part "chat.dart";
 part "rwkv.dart";
