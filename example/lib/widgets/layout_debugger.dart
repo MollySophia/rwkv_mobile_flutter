@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
-import 'package:zone/state/p.dart';
 
 class LayoutDebugger extends ConsumerWidget {
   const LayoutDebugger({
@@ -30,8 +29,6 @@ class LayoutDebugger extends ConsumerWidget {
       const Color(0xFFAA00AA),
       const Color(0xFF000000),
     ];
-
-    final buildTime = DateTime.now().microsecondsSinceEpoch;
 
     final frameColor = colors[HF.randomInt(min: 0, max: colors.length - 1)].wo(0.33);
 

@@ -633,10 +633,10 @@ packages:
     dependency: "direct main"
     description:
       name: halo
-      sha256: d49a629a8d1f0c1a3ae3a4fbfe2c4f3d6cab1a4be9ccd0ad1adf539a0994bee1
+      sha256: e32a54b00de0c00c563c39100bc2b9d1cdb485618534604d7f54e6f00cc2eee4
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.6"
+    version: "0.4.0"
   halo_alert:
     dependency: "direct main"
     description:
@@ -649,10 +649,10 @@ packages:
     dependency: "direct main"
     description:
       name: halo_state
-      sha256: e6f0c92e8bcef1177be772a0d43c24291f3530075971eb9f146901cd5d51c22b
+      sha256: "051c120b643f5a801f222c47ba53bcf4cafa405803e541b839d3e0f3a455117c"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.1"
+    version: "0.0.2"
   hashcodes:
     dependency: transitive
     description:
@@ -1339,7 +1339,7 @@ packages:
     source: hosted
     version: "2.4.0"
   stack_trace:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: stack_trace
       sha256: "8b27215b45d22309b5cddda1aa2b19bdfec9df0e765f2de506401c071d38d1b1"

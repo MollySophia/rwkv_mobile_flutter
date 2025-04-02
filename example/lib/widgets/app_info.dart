@@ -7,7 +7,6 @@ import 'package:halo/halo.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:zone/func/log_trace.dart';
 import 'package:zone/route/method.dart';
 import 'package:zone/state/p.dart';
 
@@ -15,7 +14,7 @@ class AppInfo extends ConsumerWidget {
   static final shown = qs(false);
 
   static Future<void> show(BuildContext context) async {
-    logTrace("shown: ${shown.v}");
+    qqq(shown.v);
     if (shown.v) return;
     shown.u(true);
     await showModalBottomSheet(
@@ -164,7 +163,7 @@ class AppInfo extends ConsumerWidget {
   }
 
   void _openQQGroup1() async {
-    logTrace();
+    qq;
     final mqqapiString = "mqqapi://card/show_pslcard?src_type=internal&version=1&uin=332381861&card_type=group";
     if (await canLaunchUrl(Uri.parse(mqqapiString))) {
       launchUrl(Uri.parse(mqqapiString));

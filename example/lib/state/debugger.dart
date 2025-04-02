@@ -10,7 +10,7 @@ extension $Debugger on _Debugger {}
 /// Private methods
 extension _$Debugger on _Debugger {
   FV _init() async {
-    logTrace();
+    qq;
     Timer.periodic(const Duration(seconds: 1), (timer) {
       showFrame.u(!showFrame.v);
     });

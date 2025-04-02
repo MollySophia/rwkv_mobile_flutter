@@ -795,7 +795,7 @@ class _Console extends ConsumerWidget {
 
           final text = line.replaceAll("● ", "").replaceAll("○ ", "").replaceAll("· ", "").trim();
 
-          // if (kDebugMode) print("💬 girds: $girds");
+          // qqq("girds: $girds");
 
           // return T(received[index]);
 

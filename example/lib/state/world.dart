@@ -32,7 +32,7 @@ class _World {
 /// Public methods
 extension $World on _World {
   FV startRecord() async {
-    logTrace();
+    qq;
     recording.u(true);
     await stopPlaying();
     final hasPermission = await _recorder.hasPermission();
@@ -53,7 +53,7 @@ extension $World on _World {
         _audioData.add(data);
       },
       onDone: () {
-        if (kDebugMode) print("💬 AudioStream Done");
+        qqq("AudioStream Done");
       },
       onError: (error, stackTrace) {
         if (kDebugMode) print("😡 AudioStream Error: $error");
@@ -63,7 +63,7 @@ extension $World on _World {
   }
 
   FV stopRecord({bool isCancel = false}) async {
-    logTrace();
+    qq;
     recording.u(false);
 
     final cc = _currentStreamController;
@@ -124,14 +124,14 @@ extension $World on _World {
 /// Private methods
 extension _$World on _World {
   FV _init() async {
-    logTrace();
+    qq;
     P.rwkv.currentWorldType.lv(_onWorldTypeChanged);
     P.app.demoType.lv(_onWorldTypeChanged);
     _audioPlayer.eventStream.listen(_onPlayerChanged);
   }
 
   void _onPlayerChanged(ap.AudioEvent event) {
-    logTrace("🔊 AudioPlayerEvent: $event");
+    qqq("🔊 AudioPlayerEvent: $event");
     final eventType = event.eventType;
     switch (eventType) {
       case ap.AudioEventType.complete:
@@ -173,7 +173,7 @@ extension _$World on _World {
 
     final hasPermission = await _recorder.hasPermission();
 
-    logTrace("hasPermission: $hasPermission, isAudioDemo: $isAudioDemo, isWorldDemo: $isWorldDemo");
+    qqq("hasPermission: $hasPermission, isAudioDemo: $isAudioDemo, isWorldDemo: $isWorldDemo");
 
     if (!hasPermission) {
       Alert.warning("Please grant permission to use microphone.");
@@ -196,7 +196,8 @@ extension _$World on _World {
       _currentRecorderStream = await _recorder.startStream(config);
     } catch (e) {
       streaming.u(false);
-      logTrace("😡 Failed to start recording stream: $e");
+      qqe("Failed to start recording stream");
+      qqq(e);
     }
 
     _currentRecorderStream!.listen((data) {

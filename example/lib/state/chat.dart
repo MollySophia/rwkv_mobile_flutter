@@ -103,11 +103,11 @@ extension $Chat on _Chat {
   }
 
   FV onEditingComplete() async {
-    if (kDebugMode) print("💬 $runtimeType.onEditingComplete");
+    qq;
   }
 
   FV onSubmitted(String aString) async {
-    if (kDebugMode) print("💬 $runtimeType.onSubmitted: $aString");
+    qqq(aString);
     final textToSend = _textInInput.v.trim();
     if (textToSend.isEmpty) return;
     _textInInput.uc();
@@ -186,8 +186,7 @@ extension $Chat on _Chat {
     int? audioLength,
     bool withHistory = true,
   }) async {
-    // debugger();
-    if (kDebugMode) print("💬 $runtimeType.send: $message");
+    qqq(message);
 
     final _editingIndex = editingIndex.v;
     if (_editingIndex != null) {
@@ -245,7 +244,7 @@ extension $Chat on _Chat {
   }
 
   FV onStopButtonPressed() async {
-    logTrace();
+    qq;
     Gaimon.light();
     await Future.delayed(50.ms);
     P.rwkv.stop();
@@ -255,7 +254,7 @@ extension $Chat on _Chat {
 /// Private methods
 extension _$Chat on _Chat {
   FV _init() async {
-    if (kDebugMode) print("💬 $runtimeType._init");
+    qq;
 
     textEditingController.addListener(_onTextEditingControllerValueChanged);
     _textInInput.l(_onTextChanged);
@@ -322,10 +321,10 @@ extension _$Chat on _Chat {
     final t0 = DateTime.now().millisecondsSinceEpoch;
     P.rwkv.setAudioPrompt(path: path);
     final t1 = DateTime.now().millisecondsSinceEpoch;
-    if (kDebugMode) print("💬 setAudioPrompt done in ${t1 - t0}ms");
+    qqq("setAudioPrompt done in ${t1 - t0}ms");
     send("", type: MessageType.userAudio, audioUrl: path, withHistory: false, audioLength: length);
     final t2 = DateTime.now().millisecondsSinceEpoch;
-    if (kDebugMode) print("💬 send done in ${t2 - t1}ms");
+    qqq("send done in ${t2 - t1}ms");
   }
 
   FV _loadRoles() async {
@@ -340,7 +339,7 @@ extension _$Chat on _Chat {
   }
 
   void _onPageKeyChanged(PageKey pageKey) {
-    if (kDebugMode) print("💬 _onPageKeyChanged: $pageKey");
+    qqq("_onPageKeyChanged: $pageKey");
     Future.delayed(200.ms).then((_) {
       messages.u([]);
     });
@@ -351,13 +350,13 @@ extension _$Chat on _Chat {
   }
 
   void _onTextEditingControllerValueChanged() {
-    // if (kDebugMode) print("💬 _onTextEditingControllerValueChanged");
+    // qqq("_onTextEditingControllerValueChanged");
     final textInController = textEditingController.text;
     if (_textInInput.v != textInController) _textInInput.u(textInController);
   }
 
   void _onTextChanged(String next) {
-    // if (kDebugMode) print("💬 _onTextChanged");
+    // qqq("_onTextChanged");
     final textInController = textEditingController.text;
     if (next != textInController) textEditingController.text = next;
   }
@@ -380,7 +379,7 @@ extension _$Chat on _Chat {
         break;
       }
     }
-    assert(found, "😡 $runtimeType._fullyReceived: message not found");
+    qqe("message not found");
     messages.u(currentMessages);
   }
 
@@ -427,7 +426,7 @@ extension _$Chat on _Chat {
   }
 
   FV _onStreamDone() async {
-    logTrace();
+    qq;
     final demoType = P.app.demoType.v;
     if (demoType != DemoType.chat && demoType != DemoType.world) return;
     receivingTokens.u(false);
@@ -436,7 +435,7 @@ extension _$Chat on _Chat {
   FV _onStreamError(Object error, StackTrace stackTrace) async {
     final demoType = P.app.demoType.v;
     if (demoType != DemoType.chat && demoType != DemoType.world) return;
-    if (kDebugMode) print("💬 _onStreamError");
+    qqq("_onStreamError");
     if (kDebugMode) print("😡 error: $error");
     receivingTokens.u(false);
   }

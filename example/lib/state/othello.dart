@@ -167,7 +167,7 @@ extension _$ on _Othello {
       if (!thinking) break;
     }
 
-    if (kDebugMode) print("💬 Placing event received: $event, thinking: ${receivingTokens.v}");
+    qqq("Placing event received: $event, thinking: ${receivingTokens.v}");
     onCellTap(row: event.$1, col: event.$2);
   }
 
@@ -285,7 +285,7 @@ extension _$ on _Othello {
       final placing = _kTokenPair[token];
       // modelPlacingController.add((placing?[0] ?? 0, placing?[1] ?? 0));
       if (placing != null) {
-        if (kDebugMode) print("✅ Token: $token\nPlacing: (row: ${placing[0]}, col: ${placing[1]})");
+        qqr("Token: $token\nPlacing: (row: ${placing[0]}, col: ${placing[1]})");
         modelPlacingController.add((placing[0], placing[1]));
       }
 
@@ -293,7 +293,7 @@ extension _$ on _Othello {
         if (token != _kPsToken) {
           if (kDebugMode) print("😡 Placing is null:${token.toString()}");
         } else {
-          if (kDebugMode) print("💬 Game over!");
+          qqq("Game over!");
         }
 
         await _showGameOverDialog();
@@ -329,7 +329,7 @@ extension _$ on _Othello {
   FV _onStreamDone() async {
     final pageKey = P.app.pageKey.v;
     if (pageKey != PageKey.othello) return;
-    if (kDebugMode) print("💬 _onStreamDone");
+    qqq("_onStreamDone");
     receivingTokens.u(false);
   }
 
@@ -339,7 +339,7 @@ extension _$ on _Othello {
   }) async {
     final pageKey = P.app.pageKey.v;
     if (pageKey != PageKey.othello) return;
-    if (kDebugMode) print("💬 _onStreamError");
+    qqq("_onStreamError");
     if (kDebugMode) print("😡 error: $error");
     receivingTokens.u(false);
   }
@@ -353,7 +353,7 @@ extension _$ on _Othello {
   }
 
   void _calculateAvailableCells() async {
-    if (kDebugMode) print("💬 $runtimeType.calculateAvailableCells");
+    qq;
 
     final state = this.state.v;
     final blackTurn = this.blackTurn.v;
@@ -724,7 +724,7 @@ MAX_DEPTH-$searchDepth
 </input>
 
 """;
-    print("💬 $runtimeType._getPrompt: ${prompt.length}");
+    qqq(prompt.length);
 
     assert(prompt.length == 186);
 
@@ -733,7 +733,7 @@ MAX_DEPTH-$searchDepth
     }
 
     if (kDebugMode) {
-      print("💬 $runtimeType._getPrompt");
+      qq;
       print("✅ Original prompt:");
       print(prompt);
       print("✅ Formated prompt:");

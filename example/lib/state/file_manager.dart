@@ -31,7 +31,7 @@ extension $FileManager on _FileManager {
 
     final demoType = P.app.demoType.v;
     final jsonPath = "assets/config/${demoType.name}/weights.json";
-    logTrace("jsonPath: $jsonPath");
+    qqq("jsonPath: $jsonPath");
     final jsonString = await rootBundle.loadString(jsonPath);
     final json = HF.listJSON(jsonDecode(jsonString));
     try {
@@ -39,12 +39,12 @@ extension $FileManager on _FileManager {
       _all.u(weights);
       availableModels.u(weights.where((e) => e.available).toSet());
     } catch (e) {
-      logTrace("😡 $e");
+      qqe(e);
     }
   }
 
   FV checkLocal() async {
-    logTrace();
+    qq;
     await HF.wait(17);
     final _fileInfos = _all.v.where((e) => e.available).toList();
     for (final fileInfo in _fileInfos) {
@@ -69,7 +69,7 @@ extension $FileManager on _FileManager {
     final fileName = fileInfo.fileName;
     final url = downloadSource.v.prefix + fileInfo.raw + downloadSource.v.suffix;
     final state = locals(fileInfo);
-    logTrace("💬 fileKey: $fileInfo\nfileName: $fileName\nurl: $url");
+    qqq("fileKey: $fileInfo\nfileName: $fileName\nurl: $url");
 
     // TODO: Handle resume after relaunch app
 
@@ -121,8 +121,8 @@ extension $FileManager on _FileManager {
     try {
       await cancelDownload(fileInfo: fileInfo);
     } catch (e) {
-      logTrace("😡 $e");
-      if (kDebugMode) print("😡 $e");
+      qe;
+      qqe(e);
     }
     final path = paths(fileInfo).v;
     await File(path).delete();
@@ -163,7 +163,7 @@ extension _$FileManager on _FileManager {
         final networkSpeed = progressUpdate.networkSpeed;
         final timeRemaining = progressUpdate.timeRemaining;
         final expectedFileSize = progressUpdate.expectedFileSize;
-        if (kDebugMode) print("💬 $progress $networkSpeed $timeRemaining $expectedFileSize");
+        qqq("$progress $networkSpeed $timeRemaining $expectedFileSize");
         final done = progress >= 1.0;
         state.u(state.v.copyWith(
           progress: progress,
@@ -192,14 +192,14 @@ extension _$FileManager on _FileManager {
 
     final state = locals(pair.$1);
 
-    if (kDebugMode) print("✅ _onStatusUpdate:");
+    qqr("_onStatusUpdate:");
     final status = statusUpdate.status;
     final exception = statusUpdate.exception;
     final responseBody = statusUpdate.responseBody;
     final responseHeaders = statusUpdate.responseHeaders;
     final responseStatusCode = statusUpdate.responseStatusCode;
 
-    if (kDebugMode) print("💬 $status $exception $responseBody $responseHeaders $responseStatusCode");
+    qqq("$status $exception $responseBody $responseHeaders $responseStatusCode");
 
     bool downloading = false;
     if (kDebugMode) print("🔥 $status");

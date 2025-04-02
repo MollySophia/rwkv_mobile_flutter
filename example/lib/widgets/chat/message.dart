@@ -7,7 +7,6 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:photo_viewer/photo_viewer.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:zone/func/log_trace.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:halo_alert/halo_alert.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +53,7 @@ class Message extends ConsumerWidget {
       Focus.of(getContext()!).unfocus();
     }
 
-    logTrace();
+    qq;
 
     P.chat.focusNode.unfocus();
     P.chat.latestClickedMessage.u(msg);
@@ -63,7 +62,7 @@ class Message extends ConsumerWidget {
 
     if (isMine && isAudio) {
       final audioUrl = msg.audioUrl;
-      logTrace("audioUrl: $audioUrl");
+      qqq("audioUrl: $audioUrl");
       if (audioUrl == null) return;
       P.world.play(path: audioUrl);
       return;

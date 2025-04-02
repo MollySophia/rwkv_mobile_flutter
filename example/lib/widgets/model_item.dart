@@ -5,7 +5,6 @@ import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/config.dart';
 import 'package:zone/func/gb_display.dart';
-import 'package:zone/func/log_trace.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/file_info.dart';
 import 'package:zone/route/method.dart';
@@ -22,7 +21,7 @@ class ModelItem extends ConsumerWidget {
   const ModelItem(this.fileInfo, {super.key});
 
   void _onStartTap() async {
-    logTrace();
+    qq;
     if (P.rwkv.loading.v) return;
     final localFile = P.fileManager.locals(fileInfo).v;
     final modelPath = localFile.targetPath;
@@ -118,7 +117,7 @@ class _DownloadIndicator extends ConsumerWidget {
   const _DownloadIndicator(this.fileInfo);
 
   void _onTap() async {
-    logTrace();
+    qq;
     final result = await showOkCancelAlertDialog(
       context: getContext()!,
       title: "Cancel Download?",
@@ -170,7 +169,7 @@ class _Delete extends ConsumerWidget {
   const _Delete(this.fileInfo);
 
   void _onTap() async {
-    logTrace();
+    qq;
     final result = await showOkCancelAlertDialog(
       context: getContext()!,
       title: "Are you sure you want to delete this model?",

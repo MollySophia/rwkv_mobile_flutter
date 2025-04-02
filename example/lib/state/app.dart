@@ -33,7 +33,7 @@ extension $App on _App {
 /// Private methods
 extension _$App on _App {
   FV _init() async {
-    if (kDebugMode) print("💬 $runtimeType._init");
+    qq;
 
     await init();
 
@@ -63,7 +63,7 @@ extension _$App on _App {
     final currentConfiguration = kRouter.routerDelegate.currentConfiguration;
     final matchedLocation = currentConfiguration.last.matchedLocation;
     final pageKey = PageKey.values.byName(matchedLocation.replaceAll("/", ""));
-    if (kDebugMode) print("✅ navigate to page: ${pageKey.toString().split(".").last}");
+    qqr("navigate to page: ${pageKey.toString().split(".").last}");
     HF.wait(0).then((_) {
       _pageKey.u(pageKey);
     });

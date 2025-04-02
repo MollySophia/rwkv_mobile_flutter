@@ -73,7 +73,7 @@ extension $RWKV on _RWKV {
   void send(List<String> messages) {
     prefillSpeed.u(0);
     decodeSpeed.u(0);
-    logTrace("message length: ${messages.m((e) => e.length)}");
+    qqq("message length: ${messages.m((e) => e.length)}");
     final sendPort = _sendPort;
     if (sendPort == null) {
       if (kDebugMode) print("🚧 sendPort is null");
@@ -164,7 +164,7 @@ extension $RWKV on _RWKV {
     required Backend backend,
     required bool usingReasoningModel,
   }) async {
-    logTrace();
+    qq;
     _loading.u(true);
     prefillSpeed.u(0);
     decodeSpeed.u(0);
@@ -195,7 +195,7 @@ extension $RWKV on _RWKV {
       };
       for (final lib in qnnLibList) {
         final path = await fromAssetsToTemp("assets/lib/$lib");
-        if (kDebugMode) print("💬 copied QNN library, path: $path");
+        qqq("copied QNN library, path: $path");
       }
       _qnnLibsCopied.u(true);
     }
@@ -207,7 +207,7 @@ extension $RWKV on _RWKV {
         final startMS = DateTime.now().millisecondsSinceEpoch;
         await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
         final endMS = DateTime.now().millisecondsSinceEpoch;
-        if (kDebugMode) print("✅ initRuntime done in ${endMS - startMS}ms");
+        qqr("initRuntime done in ${endMS - startMS}ms");
       } catch (e) {
         if (kDebugMode) print("😡 initRuntime failed: $e");
         Alert.error("Failed to load model: $e");
@@ -225,7 +225,7 @@ extension $RWKV on _RWKV {
     }
 
     while (_sendPort == null) {
-      if (kDebugMode) print("💬 waiting for sendPort...");
+      qqq("waiting for sendPort...");
       await Future.delayed(const Duration(milliseconds: 50));
     }
 
@@ -255,7 +255,7 @@ extension $RWKV on _RWKV {
 
     finalPrompt = _preferChinese.v ? Config.promptCN : Config.prompt;
 
-    logTrace("💬 setPrompt: $finalPrompt");
+    qqq("setPrompt: $finalPrompt");
 
     _sendPort!.send(("setEnableReasoning", _usingReasoningModel.v));
     _sendPort!.send(("setPrompt", finalPrompt));
@@ -267,7 +267,7 @@ extension $RWKV on _RWKV {
     required String encoderPath,
     required Backend backend,
   }) async {
-    logTrace();
+    qq;
     _loading.u(true);
     prefillSpeed.u(0);
     decodeSpeed.u(0);
@@ -283,7 +283,7 @@ extension $RWKV on _RWKV {
         final startMS = DateTime.now().millisecondsSinceEpoch;
         await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
         final endMS = DateTime.now().millisecondsSinceEpoch;
-        if (kDebugMode) print("✅ initRuntime done in ${endMS - startMS}ms");
+        qqr("initRuntime done in ${endMS - startMS}ms");
       } catch (e) {
         if (kDebugMode) print("😡 initRuntime failed: $e");
         Alert.error("Failed to load model: $e");
@@ -301,7 +301,7 @@ extension $RWKV on _RWKV {
     }
 
     while (_sendPort == null) {
-      if (kDebugMode) print("💬 waiting for sendPort...");
+      qqq("waiting for sendPort...");
       await Future.delayed(const Duration(milliseconds: 50));
     }
 
@@ -319,7 +319,7 @@ extension $RWKV on _RWKV {
     required String encoderPath,
     required Backend backend,
   }) async {
-    logTrace();
+    qq;
     _loading.u(true);
     prefillSpeed.u(0);
     decodeSpeed.u(0);
@@ -334,7 +334,7 @@ extension $RWKV on _RWKV {
       final startMS = DateTime.now().millisecondsSinceEpoch;
       await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
       final endMS = DateTime.now().millisecondsSinceEpoch;
-      if (kDebugMode) print("✅ initRuntime done in ${endMS - startMS}ms");
+      qqr("initRuntime done in ${endMS - startMS}ms");
     } else {
       final options = StartOptions(
         modelPath,
@@ -347,7 +347,7 @@ extension $RWKV on _RWKV {
     }
 
     while (_sendPort == null) {
-      if (kDebugMode) print("💬 waiting for sendPort...");
+      qqq("waiting for sendPort...");
       await Future.delayed(const Duration(milliseconds: 50));
     }
 
@@ -450,7 +450,7 @@ extension $RWKV on _RWKV {
     }
 
     while (_sendPort == null) {
-      if (kDebugMode) print("💬 waiting for sendPort...");
+      qqq("waiting for sendPort...");
       await Future.delayed(const Duration(milliseconds: 50));
     }
 
@@ -558,7 +558,7 @@ extension _$RWKV on _RWKV {
     }
 
     if (message["samplerParams"] != null) {
-      if (kDebugMode) print("💬 Got samplerParams: ${message["samplerParams"]}");
+      qqq("Got samplerParams: ${message["samplerParams"]}");
       _messagesController.add(LLMEvent(
         content: message["samplerParams"].toString(),
         type: _RWKVMessageType.samplerParams,
@@ -567,7 +567,7 @@ extension _$RWKV on _RWKV {
     }
 
     if (message["currentPrompt"] != null) {
-      if (kDebugMode) print("💬 Got currentPrompt: \"${message["currentPrompt"]}\"");
+      qqq("Got currentPrompt: \"${message["currentPrompt"]}\"");
       _messagesController.add(LLMEvent(
         content: message["currentPrompt"].toString(),
         type: _RWKVMessageType.currentPrompt,

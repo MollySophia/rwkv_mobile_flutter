@@ -1,15 +1,14 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:halo/halo.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:zone/func/log_trace.dart';
 import 'package:zone/model/message.dart';
 import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
 
 Future<void> showImageSelector() async {
-  logTrace();
+  qq;
   if (P.chat.focusNode.hasFocus) {
     P.chat.focusNode.unfocus();
     return;
@@ -32,7 +31,7 @@ Future<void> showImageSelector() async {
       ),
     ],
   );
-  if (kDebugMode) print("💬 result: $result");
+  qqq("result: $result");
   if (result == null) return;
   final ImagePicker picker = ImagePicker();
   late final XFile? image;
@@ -40,12 +39,12 @@ Future<void> showImageSelector() async {
     image = await picker.pickImage(source: ImageSource.camera);
     if (image == null) return;
     final imagePath = image.path;
-    if (kDebugMode) print("💬 imagePath: $imagePath");
+    qqq("imagePath: $imagePath");
   } else if (result == "select_from_library") {
     image = await picker.pickImage(source: ImageSource.gallery);
     if (image == null) return;
     final imagePath = image.path;
-    if (kDebugMode) print("💬 imagePath: $imagePath");
+    qqq("imagePath: $imagePath");
   } else {
     throw Exception("Invalid result: $result");
   }

@@ -12,7 +12,7 @@ extension $Device on _Device {
     if (Platform.isIOS) {
       final result = await P.adapter.call(ToNative.checkMemory);
       if (result == null) return;
-      if (kDebugMode) print("💬 $result");
+      qqq("$result");
       final memUsed = result[0];
       final memFree = result[1];
       this.memUsed.u(memUsed);
@@ -22,10 +22,10 @@ extension $Device on _Device {
       final result = await compute((message) async {
         final free = SysInfo.getFreePhysicalMemory();
         final total = SysInfo.getTotalPhysicalMemory();
-        if (kDebugMode) print("💬 free: $free, total: $total");
+        qqq("free: $free, total: $total");
         return [free, total];
       }, []);
-      if (kDebugMode) print("💬 result: $result");
+      qqq("result: $result");
       final memFree = result[0];
       final memTotal = result[1];
       memUsed.u(memTotal - memFree);

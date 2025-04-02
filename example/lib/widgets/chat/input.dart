@@ -6,7 +6,6 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:gaimon/gaimon.dart';
 import 'package:halo_state/halo_state.dart';
-import 'package:zone/func/log_trace.dart';
 import 'package:zone/func/show_image_selector.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:halo_alert/halo_alert.dart';
@@ -23,11 +22,11 @@ class Input extends ConsumerWidget {
   void _onChanged(String value) {}
 
   void onEditingComplete() {
-    logTrace();
+    qq;
   }
 
   void _onTap() async {
-    logTrace();
+    qq;
     await Future.delayed(const Duration(milliseconds: 300));
     await P.chat.scrollToBottom();
   }
@@ -35,7 +34,7 @@ class Input extends ConsumerWidget {
   void _onAppPrivateCommand(String action, Map<String, dynamic> data) {}
 
   void _onTapOutside(PointerDownEvent event) {
-    logTrace();
+    qq;
   }
 
   void _onKeyEvent(KeyEvent event) {
@@ -174,7 +173,7 @@ class _BottomBar extends ConsumerWidget {
   const _BottomBar();
 
   void _onRightButtonPressed() async {
-    logTrace();
+    qq;
 
     final currentWorldType = P.rwkv.currentWorldType.v;
     final imagePath = P.world.imagePath.v;

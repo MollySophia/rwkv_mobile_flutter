@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:halo_state/halo_state.dart';
-import 'package:zone/func/log_trace.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -47,7 +46,7 @@ class ModelGroupItem extends ConsumerWidget {
 
     P.rwkv.currentWorldType.u(worldType);
 
-    logTrace("worldType: $worldType");
+    qqq("worldType: $worldType");
 
     P.rwkv.clearStates();
     P.chat.messages.u([]);
@@ -84,7 +83,7 @@ class ModelGroupItem extends ConsumerWidget {
   }
 
   void _onContinueTap() async {
-    logTrace();
+    qq;
     pop();
   }
 

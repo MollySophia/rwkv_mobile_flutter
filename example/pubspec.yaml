@@ -34,9 +34,9 @@ dependencies:
   freezed_annotation: # https://pub.dev/packages/freezed_annotation/
   gaimon: # https://pub.dev/packages/gaimon/
   go_router: # https://pub.dev/packages/go_router/
-  halo: # https://pub.dev/packages/halo/
+  halo: ^ 0.4.0 # https://pub.dev/packages/halo/
   halo_alert: # https://pub.dev/packages/halo_alert/
-  halo_state: # https://pub.dev/packages/halo_state/
+  halo_state: ^ 0.0.2 # https://pub.dev/packages/halo_state/
   http: # https://pub.dev/packages/http/
   image_picker: # https://pub.dev/packages/image_picker/
   intl: # https://pub.dev/packages/intl/
@@ -46,7 +46,6 @@ dependencies:
   path_provider: # https://pub.dev/packages/path_provider/
   record: # https://pub.dev/packages/record/
   sentry_flutter: # https://pub.dev/packages/sentry_flutter/
-  stack_trace: # https://pub.dev/packages/stack_trace/
   system_info2: # https://pub.dev/packages/system_info2/
   url_launcher: # https://pub.dev/packages/url_launcher/
   vclibs: # https://pub.dev/packages/vclibs/

@@ -16,7 +16,6 @@ import 'package:record/record.dart' as ar;
 import 'package:system_info2/system_info2.dart';
 import 'package:zone/config.dart';
 import 'package:zone/func/from_assets_to_temp.dart';
-import 'package:zone/func/log_trace.dart';
 import 'package:zone/gen/assets.gen.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/io.dart';
@@ -34,9 +33,7 @@ import 'package:halo_alert/halo_alert.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:rwkv_mobile_flutter/rwkv.dart';
 
 part "app.dart";
