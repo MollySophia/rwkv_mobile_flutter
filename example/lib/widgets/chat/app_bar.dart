@@ -8,8 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:halo_state/halo_state.dart';
+import 'package:zone/config.dart';
 import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
+import 'package:zone/widgets/app_info.dart';
 import 'package:zone/widgets/arguments_panel.dart';
 import 'package:zone/widgets/pager.dart';
 
@@ -131,18 +133,21 @@ class ChatAppBar extends ConsumerWidget {
 class _MenuButton extends ConsumerWidget {
   const _MenuButton();
 
+  void _onPressed() {
+    qq;
+    if (Config.enableConversation) Pager.toggle();
+    if (!Config.enableConversation) AppInfo.show(getContext()!);
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final childOpacity = ref.watch(Pager.childOpacity);
+    final childOpacity = Config.enableConversation ? ref.watch(Pager.childOpacity) : 1.0;
+    qq;
     return Opacity(
       opacity: childOpacity,
-      child: SB(
-        width: 24,
-        height: 24,
-        child: IconButton(
-          onPressed: () => Pager.toggle(),
-          icon: Icon(Icons.menu),
-        ),
+      child: IconButton(
+        onPressed: _onPressed,
+        icon: Icon(Icons.menu),
       ),
     );
   }

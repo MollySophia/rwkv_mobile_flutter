@@ -82,16 +82,6 @@ class Empty extends ConsumerWidget {
                 child: Ro(
                   c: CAA.start,
                   children: [
-                    12.w,
-                    if (demoType == DemoType.chat)
-                      Exp(
-                        child: T(
-                          S.current.click_here_to_start_a_new_chat,
-                          s: TS(
-                            c: loaded ? kB.wo(0.8) : kC,
-                          ),
-                        ),
-                      ),
                     const Spacer(),
                     if (demoType == DemoType.chat)
                       Exp(

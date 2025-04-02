@@ -2,6 +2,7 @@
 import 'dart:developer';
 
 import 'package:halo_state/halo_state.dart';
+import 'package:zone/config.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/message.dart' as model;
 import 'package:zone/model/role.dart';
@@ -46,6 +47,8 @@ class _PageChatState extends State<PageChat> {
 
   @override
   Widget build(BuildContext context) {
+    if (!Config.enableConversation) return _Page();
+
     return const Pager(
       drawer: Menu(),
       child: _Page(),

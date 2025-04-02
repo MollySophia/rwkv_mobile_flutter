@@ -7,6 +7,7 @@ import 'package:halo/halo.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:zone/route/method.dart';
 import 'package:zone/state/p.dart';
 
 class AppInfo extends ConsumerWidget {
@@ -64,6 +65,19 @@ class AppInfo extends ConsumerWidget {
           shrinkWrap: true,
           controller: scrollController,
           children: [
+            12.h,
+            Ro(
+              m: MAA.end,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    pop();
+                  },
+                  icon: const Icon(Icons.close),
+                ),
+                12.w,
+              ],
+            ),
             12.h,
             Ro(
               m: MAA.center,

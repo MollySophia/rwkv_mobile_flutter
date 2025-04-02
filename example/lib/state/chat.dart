@@ -214,6 +214,8 @@ extension $Chat on _Chat {
 
     if (type == MessageType.userImage) return;
 
+    if (Config.enableConversation) P.conversation.addMessage(msg);
+
     final historyMessage = messages.v.where((e) {
       return e.type != MessageType.userImage;
     }).m((e) {
@@ -223,7 +225,9 @@ extension $Chat on _Chat {
       final (cotContent, cotResult) = e.cotContentAndResult;
       return cotResult;
     });
+
     final history = withHistory ? historyMessage : [message];
+
     P.rwkv.send(history);
     editingIndex.u(null);
 
