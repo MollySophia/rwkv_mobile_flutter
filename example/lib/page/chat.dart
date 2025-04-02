@@ -256,6 +256,8 @@ class List extends ConsumerWidget {
     // TODO: @wangce Use select to improve performance
     final messages = ref.watch(P.chat.messages);
     final paddingTop = ref.watch(P.app.paddingTop);
+    final paddingLeft = ref.watch(P.app.paddingLeft);
+    final paddingRight = ref.watch(P.app.paddingRight);
     final inputHeight = ref.watch(P.chat.inputHeight);
     final loaded = ref.watch(P.rwkv.loaded);
 
@@ -293,12 +295,16 @@ class List extends ConsumerWidget {
           radius: 100.rr,
           thickness: 4,
           thumbColor: kB.wo(0.4),
-          padding: EI.o(r: 4, b: inputHeight + 4, t: top),
+          padding: EI.o(
+            r: 4,
+            b: inputHeight + 4,
+            t: top,
+          ),
           controller: P.chat.scrollController,
           child: ListView.separated(
             reverse: true,
             physics: loaded ? const AlwaysScrollableScrollPhysics() : const NeverScrollableScrollPhysics(),
-            padding: EI.o(t: top, b: bottom),
+            padding: EI.o(t: top, b: bottom, l: paddingLeft, r: paddingRight),
             controller: P.chat.scrollController,
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
             itemCount: messages.length,

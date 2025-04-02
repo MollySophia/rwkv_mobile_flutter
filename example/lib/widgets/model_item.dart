@@ -209,8 +209,10 @@ class FileKeyItem extends ConsumerWidget {
     final downloading = localFile.downloading;
     final modelSize = fileInfo.modelSize ?? 0;
     final quantization = fileInfo.quantization;
-    final networkSpeed = localFile.networkSpeed;
-    final timeRemaining = localFile.timeRemaining;
+    double networkSpeed = localFile.networkSpeed;
+    if (networkSpeed < 0) networkSpeed = 0;
+    Duration timeRemaining = localFile.timeRemaining;
+    if (timeRemaining.isNegative) timeRemaining = Duration.zero;
     final tags = fileInfo.tags;
     final primary = Theme.of(getContext()!).colorScheme.primary;
     return Co(
