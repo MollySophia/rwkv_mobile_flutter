@@ -7,7 +7,6 @@ import 'package:halo/halo.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:zone/route/method.dart';
 import 'package:zone/state/p.dart';
 
 class AppInfo extends ConsumerWidget {
@@ -57,107 +56,99 @@ class AppInfo extends ConsumerWidget {
       ),
     );
 
-    return ClipRRect(
-      borderRadius: 16.r,
-      child: ListView(
-        controller: scrollController,
-        children: [
-          12.h,
-          Ro(
-            m: MAA.end,
-            children: [
-              IconButton(
-                onPressed: () {
-                  pop();
-                },
-                icon: const Icon(Icons.close),
-              ),
-              12.w,
-            ],
-          ),
-          Ro(
-            m: MAA.center,
-            children: [iconWidget],
-          ),
-          16.h,
-          const Ro(
-            m: MAA.center,
-            children: [
-              T(
-                "RWKV Chat",
-                s: TS(s: 24),
-              ),
-            ],
-          ),
-          4.h,
-          Ro(
-            m: MAA.center,
-            children: [
-              T(
-                version,
-                s: const TS(s: 12),
-              ),
-              T(
-                " ($buildNumber)",
-                s: const TS(s: 12),
-              ),
-            ],
-          ),
-          16.h,
-          const Ro(
-            m: MAA.center,
-            children: [
-              T(
-                "Join the community",
-                s: TS(s: 16, w: FontWeight.bold),
-              ),
-            ],
-          ),
-          16.h,
-          Co(
-            children: [
-              _buildCommunityLink(
-                icon: Icons.chat,
-                title: "QQ group 1",
-                subtitle: "应用内测群: 332381861",
-                onTap: _openQQGroup1,
-              ),
-              _buildCommunityLink(
-                icon: Icons.chat,
-                title: "QQ group 2",
-                subtitle: "技术研发群: 325154699",
-                onTap: _openQQGroup2,
-              ),
-              _buildCommunityLink(
-                icon: Icons.discord,
-                title: "Discord",
-                subtitle: "Join our Discord server",
-                onTap: _openDiscord,
-              ),
-              _buildCommunityLink(
-                icon: Icons.flutter_dash,
-                title: "Twitter",
-                subtitle: "@BlinkDL_AI",
-                onTap: _openTwitter,
-              ),
-            ],
-          ),
-          12.h,
-          TextButton(
-            onPressed: _openFeedback,
-            child: const T(
-              "Feedback",
+    return Material(
+      color: Colors.transparent,
+      child: ClipRRect(
+        borderRadius: 16.r,
+        child: ListView(
+          shrinkWrap: true,
+          controller: scrollController,
+          children: [
+            12.h,
+            Ro(
+              m: MAA.center,
+              children: [iconWidget],
             ),
-          ),
-          12.h,
-          TextButton(
-            onPressed: () => _showLicensePage(context, version, buildNumber, iconWidget),
-            child: const T(
-              "License",
+            16.h,
+            const Ro(
+              m: MAA.center,
+              children: [
+                T(
+                  "RWKV Chat",
+                  s: TS(s: 24),
+                ),
+              ],
             ),
-          ),
-          paddingBottom.h,
-        ],
+            4.h,
+            Ro(
+              m: MAA.center,
+              children: [
+                T(
+                  version,
+                  s: const TS(s: 12),
+                ),
+                T(
+                  " ($buildNumber)",
+                  s: const TS(s: 12),
+                ),
+              ],
+            ),
+            16.h,
+            const Ro(
+              m: MAA.center,
+              children: [
+                T(
+                  "Join the community",
+                  s: TS(s: 16, w: FontWeight.bold),
+                ),
+              ],
+            ),
+            16.h,
+            Co(
+              children: [
+                _buildCommunityLink(
+                  icon: Icons.chat,
+                  title: "QQ group 1",
+                  subtitle: "应用内测群: 332381861",
+                  onTap: _openQQGroup1,
+                ),
+                _buildCommunityLink(
+                  icon: Icons.chat,
+                  title: "QQ group 2",
+                  subtitle: "技术研发群: 325154699",
+                  onTap: _openQQGroup2,
+                ),
+                _buildCommunityLink(
+                  icon: Icons.discord,
+                  title: "Discord",
+                  subtitle: "Join our Discord server",
+                  onTap: _openDiscord,
+                ),
+                _buildCommunityLink(
+                  icon: Icons.flutter_dash,
+                  title: "Twitter",
+                  subtitle: "@BlinkDL_AI",
+                  onTap: _openTwitter,
+                ),
+              ],
+            ),
+            12.h,
+            TextButton(
+              onPressed: _openFeedback,
+              child: const T(
+                "Feedback",
+              ),
+            ),
+            12.h,
+            TextButton(
+              onPressed: () => _showLicensePage(context, version, buildNumber, iconWidget),
+              child: const T(
+                "License",
+              ),
+            ),
+            paddingBottom.h,
+          ],
+        ),
       ),
     );
   }

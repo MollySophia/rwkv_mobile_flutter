@@ -10,8 +10,8 @@ import 'package:halo/halo.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
-import 'package:zone/widgets/app_info.dart';
 import 'package:zone/widgets/arguments_panel.dart';
+import 'package:zone/widgets/pager.dart';
 
 class ChatAppBar extends ConsumerWidget {
   const ChatAppBar({super.key});
@@ -102,10 +102,7 @@ class ChatAppBar extends ConsumerWidget {
             ),
             leading: Ro(
               children: [
-                IconButton(
-                  onPressed: () => AppInfo.show(getContext()!),
-                  icon: const Icon(Icons.menu),
-                ),
+                _MenuButton(),
               ],
             ),
             actions: [
@@ -125,6 +122,26 @@ class ChatAppBar extends ConsumerWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _MenuButton extends ConsumerWidget {
+  const _MenuButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final childOpacity = ref.watch(Pager.childOpacity);
+    return Opacity(
+      opacity: childOpacity,
+      child: SB(
+        width: 24,
+        height: 24,
+        child: IconButton(
+          onPressed: () => Pager.toggle(),
+          icon: Icon(Icons.menu),
         ),
       ),
     );

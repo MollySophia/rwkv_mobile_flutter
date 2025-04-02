@@ -3,6 +3,7 @@ import 'package:zone/state/p.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
+import 'package:zone/widgets/pager.dart';
 
 class Debugger extends ConsumerWidget {
   const Debugger({super.key});
@@ -24,6 +25,8 @@ class Debugger extends ConsumerWidget {
     final isOthello = ref.watch(P.app.demoType) == DemoType.othello;
     final soc = ref.watch(P.rwkv.soc);
     final paddingTop = ref.watch(P.app.paddingTop);
+    final page = ref.watch(Pager.page);
+    final ignorePointer = ref.watch(Pager.ignorePointer);
 
     return Positioned(
       left: 0,
@@ -71,6 +74,10 @@ class Debugger extends ConsumerWidget {
                   T(hasFocus.toString()),
                   if (!isOthello) T("soc".codeToName),
                   T(soc.toString()),
+                  T("page".codeToName),
+                  T(page.toString()),
+                  T("ignorePointer".codeToName),
+                  T(ignorePointer.toString()),
                 ].indexMap((index, e) {
                   return C(
                     margin: EI.o(t: index % 2 == 1 ? 0 : 1),
