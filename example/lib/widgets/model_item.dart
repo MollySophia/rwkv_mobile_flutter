@@ -172,10 +172,10 @@ class _Delete extends ConsumerWidget {
     qq;
     final result = await showOkCancelAlertDialog(
       context: getContext()!,
-      title: "Are you sure you want to delete this model?",
-      okLabel: "Delete",
+      title: S.current.are_you_sure_you_want_to_delete_this_model,
+      okLabel: S.current.delete,
       isDestructiveAction: true,
-      cancelLabel: "Cancel",
+      cancelLabel: S.current.cancel,
     );
     if (result == OkCancelResult.ok) {
       await P.fileManager.deleteFile(fileInfo: fileInfo);

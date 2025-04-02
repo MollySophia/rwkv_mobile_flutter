@@ -197,5 +197,37 @@
   "remaining": "Remaining:",
   "@remaining": {
     "description": "Label for remaining"
+  },
+  "prefer_chinese": "Prefer Chinese",
+  "@prefer_chinese": {
+    "description": "Label for prefer Chinese"
+  },
+  "please_wait_for_the_model_to_load": "Please wait for the model to load",
+  "@please_wait_for_the_model_to_load": {
+    "description": "Message displayed when the model needs to be loaded"
+  },
+  "please_wait_for_the_model_to_finish_generating": "Please wait for the model to finish generating",
+  "@please_wait_for_the_model_to_finish_generating": {
+    "description": "Message displayed when the model needs to finish generating"
+  },
+  "reason": "Reason",
+  "@reason": {
+    "description": "Label for reason"
+  },
+  "reasoning_enabled": "Reasoning enabled",
+  "@reasoning_enabled": {
+    "description": "Message displayed when reasoning is enabled"
+  },
+  "click_to_select_model": "Click to select a model",
+  "@click_to_select_model": {
+    "description": "Label for click to select a model"
+  },
+  "are_you_sure_you_want_to_delete_this_model": "Are you sure you want to delete this model?",
+  "@are_you_sure_you_want_to_delete_this_model": {
+    "description": "Label for delete model"
+  },
+  "delete": "Delete",
+  "@delete": {
+    "description": "Label for delete action"
   }
 }

@@ -29,6 +29,8 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "apply": MessageLookupByLibrary.simpleMessage("应用"),
+    "are_you_sure_you_want_to_delete_this_model":
+        MessageLookupByLibrary.simpleMessage("确定要删除这个模型吗？"),
     "auto": MessageLookupByLibrary.simpleMessage("自动"),
     "bot_message_edited": MessageLookupByLibrary.simpleMessage(
       "机器人消息已编辑，现在可以发送新消息",
@@ -52,8 +54,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "click_here_to_start_a_new_chat": MessageLookupByLibrary.simpleMessage(
       "点击此处开始新聊天",
     ),
+    "click_to_select_model": MessageLookupByLibrary.simpleMessage("点击选择模型"),
     "create_a_new_one_by_clicking_the_button_above":
         MessageLookupByLibrary.simpleMessage("点击上方按钮创建新会话"),
+    "delete": MessageLookupByLibrary.simpleMessage("删除"),
     "download_model": MessageLookupByLibrary.simpleMessage("下载模型"),
     "download_source": MessageLookupByLibrary.simpleMessage("下载源"),
     "ensure_you_have_enough_memory_to_load_the_model":
@@ -72,7 +76,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_select_a_world_type": MessageLookupByLibrary.simpleMessage(
       "请选择世界类型",
     ),
-    "remaining": MessageLookupByLibrary.simpleMessage("剩余："),
+    "please_wait_for_the_model_to_finish_generating":
+        MessageLookupByLibrary.simpleMessage("请等待模型生成完成"),
+    "please_wait_for_the_model_to_load": MessageLookupByLibrary.simpleMessage(
+      "请等待模型加载",
+    ),
+    "prefer_chinese": MessageLookupByLibrary.simpleMessage("使用中文推理"),
+    "reason": MessageLookupByLibrary.simpleMessage("推理"),
+    "reasoning_enabled": MessageLookupByLibrary.simpleMessage("推理模式"),
+    "remaining": MessageLookupByLibrary.simpleMessage("剩余时间："),
     "reset": MessageLookupByLibrary.simpleMessage("重置"),
     "rwkv_chat": MessageLookupByLibrary.simpleMessage("RWKV 聊天"),
     "rwkv_othello": MessageLookupByLibrary.simpleMessage("RWKV 黑白棋"),
@@ -80,7 +92,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "select_a_world_type": MessageLookupByLibrary.simpleMessage("选择世界类型"),
     "send_message_to_rwkv": MessageLookupByLibrary.simpleMessage("发送消息给 RWKV"),
     "session_configuration": MessageLookupByLibrary.simpleMessage("会话配置"),
-    "speed": MessageLookupByLibrary.simpleMessage("速度："),
+    "speed": MessageLookupByLibrary.simpleMessage("下载速度："),
     "start_a_new_chat": MessageLookupByLibrary.simpleMessage("开始新聊天"),
     "start_a_new_chat_by_clicking_the_button_below":
         MessageLookupByLibrary.simpleMessage("点击下方按钮开始新聊天"),

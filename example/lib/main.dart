@@ -2,12 +2,12 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:halo_state/halo_state.dart';
-import 'package:zone/args.dart';
 import 'package:zone/config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:halo/halo.dart';
 import 'package:zone/gen/l10n.dart';
+import 'package:zone/model/language.dart';
 import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
 import 'package:halo_alert/halo_alert.dart';
@@ -51,23 +51,26 @@ FutureOr<void> _configureSentry(SentryFlutterOptions options) {
   }
 }
 
+final _supportedLocales = Language.values.map((e) => e.locale).toList();
+
 class _App extends StatelessWidget {
   const _App();
 
   @override
   Widget build(BuildContext context) {
     P.app.firstContextGot(context);
-    final split = Args.localeString.split("_");
-    final defaultLocale = Args.localeString.isNotEmpty ? Locale(split.first, split.last) : null;
+
+    final locale = !kDebugMode
+        ? null
+        : [
+            Language.zh_Hans.locale,
+            Language.en.locale,
+          ].random!;
+
     return StateWrapper(
       child: MaterialApp.router(
-        locale: defaultLocale,
-        supportedLocales: const [
-          Locale("zh", "Hans"),
-          Locale("zh", "Hant"),
-          Locale("en", "US"),
-          Locale("ja", "JP"),
-        ],
+        locale: locale,
+        supportedLocales: _supportedLocales,
         localizationsDelegates: const [
           S.delegate,
           GlobalMaterialLocalizations.delegate,

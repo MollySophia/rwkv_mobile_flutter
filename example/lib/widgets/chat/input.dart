@@ -322,7 +322,7 @@ class _ReasonButton extends ConsumerWidget {
     final newValue = !P.rwkv.usingReasoningModel.v;
     await P.rwkv.setModelConfig(usingReasoningModel: newValue);
 
-    if (newValue) Alert.success("Reasoning enabled");
+    if (newValue) Alert.success(S.current.reasoning_enabled);
 
     Gaimon.light();
   }
@@ -364,12 +364,12 @@ class _ReasonButton extends ConsumerWidget {
               ),
             if (!loading)
               T(
-                "Reason",
+                S.current.reason,
                 s: TS(c: usingReasoningModel ? kW : color),
               ),
             if (loading)
               T(
-                "Loading...",
+                S.current.loading,
                 s: TS(c: usingReasoningModel ? kW : color),
               ),
           ],
@@ -385,12 +385,12 @@ class _LangugaeButton extends ConsumerWidget {
   void _onTap() async {
     final loading = P.rwkv.loading.v;
     if (loading) {
-      Alert.info("Please wait for the model to load");
+      Alert.info(S.current.please_wait_for_the_model_to_load);
       return;
     }
     final receiving = P.chat.receivingTokens.v;
     if (receiving) {
-      Alert.info("Please wait for the model to finish generating");
+      Alert.info(S.current.please_wait_for_the_model_to_finish_generating);
       return;
     }
     final currentModel = P.rwkv.currentModel.v;
@@ -402,7 +402,7 @@ class _LangugaeButton extends ConsumerWidget {
     final newValue = !P.rwkv.preferChinese.v;
     await P.rwkv.setModelConfig(preferChinese: newValue);
 
-    if (newValue) Alert.success("Prefer Chinese");
+    if (newValue) Alert.success(S.current.prefer_chinese);
 
     Gaimon.light();
   }

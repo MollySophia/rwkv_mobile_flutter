@@ -13,7 +13,6 @@ class Empty extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final paddingTop = ref.watch(P.app.paddingTop);
     final messages = ref.watch(P.chat.messages);
     if (messages.isNotEmpty) return Positioned.fill(child: IgnorePointer(child: Container()));
     final loaded = ref.watch(P.rwkv.loaded);
@@ -24,6 +23,8 @@ class Empty extends ConsumerWidget {
     String logoPath = "assets/img/${demoType.name}/logo.square.png";
 
     final hasSpecificEmpty = demoType == DemoType.world && currentWorldType != null;
+
+    final primary = Theme.of(context).colorScheme.primary;
 
     return AnimatedPositioned(
       duration: 200.ms,
@@ -69,31 +70,15 @@ class Empty extends ConsumerWidget {
                         child: T(demoType == DemoType.world ? S.current.select_a_world_type : S.current.select_a_model, s: const TS(s: 16, w: FW.w600)),
                       ),
                     if (!loaded) 12.h,
-                    if (loaded) T(S.current.you_are_now_using(currentModel?.name ?? "")),
-                    const Spacer(),
-                  ],
-                ),
-              ),
-              Positioned(
-                top: paddingTop + kToolbarHeight + 12,
-                left: 0,
-                right: 0,
-                height: 200,
-                child: Ro(
-                  c: CAA.start,
-                  children: [
-                    const Spacer(),
-                    if (demoType == DemoType.chat)
-                      Exp(
-                        child: T(
-                          S.current.click_here_to_select_a_new_model,
-                          textAlign: TextAlign.end,
-                          s: TS(
-                            c: !loaded ? kB.wo(0.8) : kC,
-                          ),
-                        ),
+                    if (loaded) T(S.current.you_are_now_using("")),
+                    4.h,
+                    if (loaded)
+                      C(
+                        padding: EI.s(h: 4, v: 2),
+                        decoration: BD(border: Border.all(color: primary), borderRadius: 4.r),
+                        child: T(currentModel?.name ?? "", s: TS(s: 16, w: FW.w600, c: primary)),
                       ),
-                    12.w,
+                    const Spacer(),
                   ],
                 ),
               ),

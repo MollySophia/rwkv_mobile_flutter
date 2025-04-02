@@ -30,6 +30,10 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "apply": MessageLookupByLibrary.simpleMessage("Apply"),
+    "are_you_sure_you_want_to_delete_this_model":
+        MessageLookupByLibrary.simpleMessage(
+          "Are you sure you want to delete this model?",
+        ),
     "auto": MessageLookupByLibrary.simpleMessage("Auto"),
     "bot_message_edited": MessageLookupByLibrary.simpleMessage(
       "Bot message edited, you can now send new message",
@@ -61,10 +65,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "click_here_to_start_a_new_chat": MessageLookupByLibrary.simpleMessage(
       "Click here to start a new chat",
     ),
+    "click_to_select_model": MessageLookupByLibrary.simpleMessage(
+      "Click to select a model",
+    ),
     "create_a_new_one_by_clicking_the_button_above":
         MessageLookupByLibrary.simpleMessage(
           "Create a new one by clicking the button above.",
         ),
+    "delete": MessageLookupByLibrary.simpleMessage("Delete"),
     "download_model": MessageLookupByLibrary.simpleMessage("Download model"),
     "download_source": MessageLookupByLibrary.simpleMessage("Download source"),
     "ensure_you_have_enough_memory_to_load_the_model":
@@ -84,6 +92,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "othello_title": MessageLookupByLibrary.simpleMessage("RWKV Othello"),
     "please_select_a_world_type": MessageLookupByLibrary.simpleMessage(
       "Please select a world type",
+    ),
+    "please_wait_for_the_model_to_finish_generating":
+        MessageLookupByLibrary.simpleMessage(
+          "Please wait for the model to finish generating",
+        ),
+    "please_wait_for_the_model_to_load": MessageLookupByLibrary.simpleMessage(
+      "Please wait for the model to load",
+    ),
+    "prefer_chinese": MessageLookupByLibrary.simpleMessage("Prefer Chinese"),
+    "reason": MessageLookupByLibrary.simpleMessage("Reason"),
+    "reasoning_enabled": MessageLookupByLibrary.simpleMessage(
+      "Reasoning enabled",
     ),
     "remaining": MessageLookupByLibrary.simpleMessage("Remaining:"),
     "reset": MessageLookupByLibrary.simpleMessage("Reset"),

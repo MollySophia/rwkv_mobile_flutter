@@ -28,10 +28,7 @@ class S {
   static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
-    final name =
-        (locale.countryCode?.isEmpty ?? false)
-            ? locale.languageCode
-            : locale.toString();
+    final name = (locale.countryCode?.isEmpty ?? false) ? locale.languageCode : locale.toString();
     final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
@@ -90,8 +87,7 @@ class S {
     return Intl.message(
       'Copied to clipboard',
       name: 'chat_copied_to_clipboard',
-      desc:
-          'Message displayed when the chat content is copied to the clipboard',
+      desc: 'Message displayed when the chat content is copied to the clipboard',
       args: [],
     );
   }
@@ -492,6 +488,86 @@ class S {
       'Remaining:',
       name: 'remaining',
       desc: 'Label for remaining',
+      args: [],
+    );
+  }
+
+  /// `Prefer Chinese`
+  String get prefer_chinese {
+    return Intl.message(
+      'Prefer Chinese',
+      name: 'prefer_chinese',
+      desc: 'Label for prefer Chinese',
+      args: [],
+    );
+  }
+
+  /// `Please wait for the model to load`
+  String get please_wait_for_the_model_to_load {
+    return Intl.message(
+      'Please wait for the model to load',
+      name: 'please_wait_for_the_model_to_load',
+      desc: 'Message displayed when the model needs to be loaded',
+      args: [],
+    );
+  }
+
+  /// `Please wait for the model to finish generating`
+  String get please_wait_for_the_model_to_finish_generating {
+    return Intl.message(
+      'Please wait for the model to finish generating',
+      name: 'please_wait_for_the_model_to_finish_generating',
+      desc: 'Message displayed when the model needs to finish generating',
+      args: [],
+    );
+  }
+
+  /// `Reason`
+  String get reason {
+    return Intl.message(
+      'Reason',
+      name: 'reason',
+      desc: 'Label for reason',
+      args: [],
+    );
+  }
+
+  /// `Reasoning enabled`
+  String get reasoning_enabled {
+    return Intl.message(
+      'Reasoning enabled',
+      name: 'reasoning_enabled',
+      desc: 'Message displayed when reasoning is enabled',
+      args: [],
+    );
+  }
+
+  /// `Click to select a model`
+  String get click_to_select_model {
+    return Intl.message(
+      'Click to select a model',
+      name: 'click_to_select_model',
+      desc: 'Label for click to select a model',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete this model?`
+  String get are_you_sure_you_want_to_delete_this_model {
+    return Intl.message(
+      'Are you sure you want to delete this model?',
+      name: 'are_you_sure_you_want_to_delete_this_model',
+      desc: 'Label for delete model',
+      args: [],
+    );
+  }
+
+  /// `Delete`
+  String get delete {
+    return Intl.message(
+      'Delete',
+      name: 'delete',
+      desc: 'Label for delete action',
       args: [],
     );
   }

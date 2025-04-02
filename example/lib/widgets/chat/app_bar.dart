@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/config.dart';
+import 'package:zone/gen/l10n.dart';
 import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
 import 'package:zone/widgets/app_info.dart';
@@ -81,7 +82,7 @@ class ChatAppBar extends ConsumerWidget {
                         m: MAA.center,
                         children: [
                           T(
-                            currentModel?.name ?? currentWorldType?.displayName ?? "Click to select a model",
+                            currentModel?.name ?? currentWorldType?.displayName ?? S.current.click_to_select_model,
                             s: TS(s: 10, c: primary),
                           ),
                           4.w,
