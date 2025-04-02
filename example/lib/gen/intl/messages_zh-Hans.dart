@@ -28,9 +28,12 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "apply": MessageLookupByLibrary.simpleMessage("应用"),
+    "auto": MessageLookupByLibrary.simpleMessage("自动"),
     "bot_message_edited": MessageLookupByLibrary.simpleMessage(
       "机器人消息已编辑，现在可以发送新消息",
     ),
+    "cancel": MessageLookupByLibrary.simpleMessage("取消"),
     "chat_copied_to_clipboard": MessageLookupByLibrary.simpleMessage("已复制到剪贴板"),
     "chat_empty_message": MessageLookupByLibrary.simpleMessage("请输入消息内容"),
     "chat_model_name": MessageLookupByLibrary.simpleMessage("模型名称"),
@@ -49,23 +52,35 @@ class MessageLookup extends MessageLookupByLibrary {
     "click_here_to_start_a_new_chat": MessageLookupByLibrary.simpleMessage(
       "点击此处开始新聊天",
     ),
+    "create_a_new_one_by_clicking_the_button_above":
+        MessageLookupByLibrary.simpleMessage("点击上方按钮创建新会话"),
     "download_model": MessageLookupByLibrary.simpleMessage("下载模型"),
+    "download_source": MessageLookupByLibrary.simpleMessage("下载源"),
     "ensure_you_have_enough_memory_to_load_the_model":
         MessageLookupByLibrary.simpleMessage("请确保设备内存充足，否则可能导致应用崩溃"),
     "foo_bar": MessageLookupByLibrary.simpleMessage("foo bar"),
     "intro": MessageLookupByLibrary.simpleMessage(
       "欢迎探索 RWKV v7 系列大语言模型，包含 0.1B/0.4B/1.5B/2.9B 参数版本，专为移动设备优化，加载后可完全离线运行，无需服务器通信",
     ),
+    "loading": MessageLookupByLibrary.simpleMessage("加载中..."),
     "memory_used": m1,
     "new_chat": MessageLookupByLibrary.simpleMessage("新聊天"),
     "or_you_can_start_a_new_empty_chat": MessageLookupByLibrary.simpleMessage(
       "或开始一个空白聊天",
     ),
     "othello_title": MessageLookupByLibrary.simpleMessage("RWKV 黑白棋"),
+    "please_select_a_world_type": MessageLookupByLibrary.simpleMessage(
+      "请选择世界类型",
+    ),
+    "remaining": MessageLookupByLibrary.simpleMessage("剩余："),
+    "reset": MessageLookupByLibrary.simpleMessage("重置"),
     "rwkv_chat": MessageLookupByLibrary.simpleMessage("RWKV 聊天"),
     "rwkv_othello": MessageLookupByLibrary.simpleMessage("RWKV 黑白棋"),
     "select_a_model": MessageLookupByLibrary.simpleMessage("选择模型"),
+    "select_a_world_type": MessageLookupByLibrary.simpleMessage("选择世界类型"),
     "send_message_to_rwkv": MessageLookupByLibrary.simpleMessage("发送消息给 RWKV"),
+    "session_configuration": MessageLookupByLibrary.simpleMessage("会话配置"),
+    "speed": MessageLookupByLibrary.simpleMessage("速度："),
     "start_a_new_chat": MessageLookupByLibrary.simpleMessage("开始新聊天"),
     "start_a_new_chat_by_clicking_the_button_below":
         MessageLookupByLibrary.simpleMessage("点击下方按钮开始新聊天"),

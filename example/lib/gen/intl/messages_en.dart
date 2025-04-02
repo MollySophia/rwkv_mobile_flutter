@@ -29,9 +29,12 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "apply": MessageLookupByLibrary.simpleMessage("Apply"),
+    "auto": MessageLookupByLibrary.simpleMessage("Auto"),
     "bot_message_edited": MessageLookupByLibrary.simpleMessage(
       "Bot message edited, you can now send new message",
     ),
+    "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
     "chat_copied_to_clipboard": MessageLookupByLibrary.simpleMessage(
       "Copied to clipboard",
     ),
@@ -58,6 +61,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "click_here_to_start_a_new_chat": MessageLookupByLibrary.simpleMessage(
       "Click here to start a new chat",
     ),
+    "create_a_new_one_by_clicking_the_button_above":
+        MessageLookupByLibrary.simpleMessage(
+          "Create a new one by clicking the button above.",
+        ),
     "download_model": MessageLookupByLibrary.simpleMessage("Download model"),
     "download_source": MessageLookupByLibrary.simpleMessage("Download source"),
     "ensure_you_have_enough_memory_to_load_the_model":
@@ -68,6 +75,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "intro": MessageLookupByLibrary.simpleMessage(
       "Get ready to experience RWKV v7, series of compact language models with 0.1, 0.4, 1.5, 2.9 billion parameters, optimized for seamless mobile devices inference. Once loaded, it functions offline without requiring any server communication.",
     ),
+    "loading": MessageLookupByLibrary.simpleMessage("Loading..."),
     "memory_used": m1,
     "new_chat": MessageLookupByLibrary.simpleMessage("New chat"),
     "or_you_can_start_a_new_empty_chat": MessageLookupByLibrary.simpleMessage(
@@ -77,6 +85,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_select_a_world_type": MessageLookupByLibrary.simpleMessage(
       "Please select a world type",
     ),
+    "remaining": MessageLookupByLibrary.simpleMessage("Remaining:"),
+    "reset": MessageLookupByLibrary.simpleMessage("Reset"),
     "rwkv_chat": MessageLookupByLibrary.simpleMessage("RWKV Chat"),
     "rwkv_othello": MessageLookupByLibrary.simpleMessage("RWKV Othello"),
     "select_a_model": MessageLookupByLibrary.simpleMessage("Select a model"),
@@ -86,6 +96,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "send_message_to_rwkv": MessageLookupByLibrary.simpleMessage(
       "Message RWKV",
     ),
+    "session_configuration": MessageLookupByLibrary.simpleMessage(
+      "Session Configuration",
+    ),
+    "speed": MessageLookupByLibrary.simpleMessage("Speed:"),
     "start_a_new_chat": MessageLookupByLibrary.simpleMessage(
       "Start a new chat",
     ),

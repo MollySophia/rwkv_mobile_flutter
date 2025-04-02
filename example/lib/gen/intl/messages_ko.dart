@@ -29,9 +29,12 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "apply": MessageLookupByLibrary.simpleMessage("적용"),
+    "auto": MessageLookupByLibrary.simpleMessage("자동"),
     "bot_message_edited": MessageLookupByLibrary.simpleMessage(
       "봇 메시지가 수정되었습니다. 새 메시지를 보낼 수 있습니다",
     ),
+    "cancel": MessageLookupByLibrary.simpleMessage("취소"),
     "chat_copied_to_clipboard": MessageLookupByLibrary.simpleMessage(
       "클립보드에 복사됨",
     ),
@@ -54,7 +57,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "click_here_to_start_a_new_chat": MessageLookupByLibrary.simpleMessage(
       "여기를 클릭하여 새 채팅 시작",
     ),
+    "create_a_new_one_by_clicking_the_button_above":
+        MessageLookupByLibrary.simpleMessage("위 버튼을 클릭하여 새로 만들기"),
     "download_model": MessageLookupByLibrary.simpleMessage("모델 다운로드"),
+    "download_source": MessageLookupByLibrary.simpleMessage("다운로드 소스"),
     "ensure_you_have_enough_memory_to_load_the_model":
         MessageLookupByLibrary.simpleMessage(
           "메모리가 충분한지 확인하세요. 그렇지 않으면 앱이 충돌할 수 있습니다",
@@ -63,18 +69,27 @@ class MessageLookup extends MessageLookupByLibrary {
     "intro": MessageLookupByLibrary.simpleMessage(
       "RWKV v7 시리즈 경량 언어 모델을 경험해 보세요. 0.1B/0.4B/1.5B/2.9B 파라미터 버전으로 모바일 최적화되어 오프라인에서도 서버 연결 없이 작동합니다",
     ),
+    "loading": MessageLookupByLibrary.simpleMessage("로딩 중..."),
     "memory_used": m1,
     "new_chat": MessageLookupByLibrary.simpleMessage("새 채팅"),
     "or_you_can_start_a_new_empty_chat": MessageLookupByLibrary.simpleMessage(
       "또는 빈 채팅을 시작할 수 있습니다",
     ),
     "othello_title": MessageLookupByLibrary.simpleMessage("RWKV 오델로"),
+    "please_select_a_world_type": MessageLookupByLibrary.simpleMessage(
+      "월드 타입을 선택해 주세요",
+    ),
+    "remaining": MessageLookupByLibrary.simpleMessage("남음:"),
+    "reset": MessageLookupByLibrary.simpleMessage("초기화"),
     "rwkv_chat": MessageLookupByLibrary.simpleMessage("RWKV 채팅"),
     "rwkv_othello": MessageLookupByLibrary.simpleMessage("RWKV 오델로"),
     "select_a_model": MessageLookupByLibrary.simpleMessage("모델 선택"),
+    "select_a_world_type": MessageLookupByLibrary.simpleMessage("월드 타입 선택"),
     "send_message_to_rwkv": MessageLookupByLibrary.simpleMessage(
       "RWKV에게 메시지 보내기",
     ),
+    "session_configuration": MessageLookupByLibrary.simpleMessage("세션 설정"),
+    "speed": MessageLookupByLibrary.simpleMessage("속도:"),
     "start_a_new_chat": MessageLookupByLibrary.simpleMessage("새 채팅 시작"),
     "start_a_new_chat_by_clicking_the_button_below":
         MessageLookupByLibrary.simpleMessage("아래 버튼을 클릭하여 새 채팅 시작"),

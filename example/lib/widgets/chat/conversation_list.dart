@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
+import 'package:zone/gen/l10n.dart';
 import 'package:zone/state/p.dart';
 import 'package:zone/widgets/pager.dart';
 
@@ -51,8 +52,8 @@ class _Empty extends ConsumerWidget {
             c: CAA.center,
             children: [
               Icon(Icons.add),
-              T("New Chat", s: TS(s: 20)),
-              T("Create a new one by clicking the button above.", s: TS(s: 10, c: kB.wo(0.5))),
+              T(S.current.new_chat, s: TS(s: 20)),
+              T(S.current.create_a_new_one_by_clicking_the_button_above, s: TS(s: 10, c: kB.wo(0.5))),
             ],
           ),
         ),

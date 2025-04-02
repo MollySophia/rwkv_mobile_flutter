@@ -28,9 +28,12 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "apply": MessageLookupByLibrary.simpleMessage("適用"),
+    "auto": MessageLookupByLibrary.simpleMessage("自動"),
     "bot_message_edited": MessageLookupByLibrary.simpleMessage(
       "ボットメッセージが編集されました。新しいメッセージを送信できます",
     ),
+    "cancel": MessageLookupByLibrary.simpleMessage("キャンセル"),
     "chat_copied_to_clipboard": MessageLookupByLibrary.simpleMessage(
       "クリップボードにコピーされました",
     ),
@@ -55,25 +58,37 @@ class MessageLookup extends MessageLookupByLibrary {
     "click_here_to_start_a_new_chat": MessageLookupByLibrary.simpleMessage(
       "ここをクリックして新規チャットを開始",
     ),
+    "create_a_new_one_by_clicking_the_button_above":
+        MessageLookupByLibrary.simpleMessage("上記のボタンをクリックして新規作成"),
     "download_model": MessageLookupByLibrary.simpleMessage("モデルをダウンロード"),
+    "download_source": MessageLookupByLibrary.simpleMessage("ダウンロードソース"),
     "ensure_you_have_enough_memory_to_load_the_model":
         MessageLookupByLibrary.simpleMessage("メモリが不足するとアプリがクラッシュする可能性があります"),
     "foo_bar": MessageLookupByLibrary.simpleMessage("foo bar"),
     "intro": MessageLookupByLibrary.simpleMessage(
       "RWKV v7シリーズの軽量言語モデルを体験。0.1B/0.4B/1.5B/2.9Bパラメータ版をモバイル最適化。オフラインでサーバー通信不要",
     ),
+    "loading": MessageLookupByLibrary.simpleMessage("読み込み中..."),
     "memory_used": m1,
     "new_chat": MessageLookupByLibrary.simpleMessage("新規チャット"),
     "or_you_can_start_a_new_empty_chat": MessageLookupByLibrary.simpleMessage(
       "または空白のチャットを開始",
     ),
     "othello_title": MessageLookupByLibrary.simpleMessage("RWKV オセロ"),
+    "please_select_a_world_type": MessageLookupByLibrary.simpleMessage(
+      "ワールドタイプを選択してください",
+    ),
+    "remaining": MessageLookupByLibrary.simpleMessage("残り："),
+    "reset": MessageLookupByLibrary.simpleMessage("リセット"),
     "rwkv_chat": MessageLookupByLibrary.simpleMessage("RWKV チャット"),
     "rwkv_othello": MessageLookupByLibrary.simpleMessage("RWKV オセロ"),
     "select_a_model": MessageLookupByLibrary.simpleMessage("モデルを選択"),
+    "select_a_world_type": MessageLookupByLibrary.simpleMessage("ワールドタイプを選択"),
     "send_message_to_rwkv": MessageLookupByLibrary.simpleMessage(
       "RWKVへメッセージを送信",
     ),
+    "session_configuration": MessageLookupByLibrary.simpleMessage("セッション設定"),
+    "speed": MessageLookupByLibrary.simpleMessage("速度："),
     "start_a_new_chat": MessageLookupByLibrary.simpleMessage("新規チャットを開始"),
     "start_a_new_chat_by_clicking_the_button_below":
         MessageLookupByLibrary.simpleMessage("下のボタンをクリックして新規チャットを開始"),

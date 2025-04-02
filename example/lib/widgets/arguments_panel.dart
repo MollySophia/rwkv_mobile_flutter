@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gaimon/gaimon.dart';
 import 'package:halo/halo.dart';
 import 'package:halo_state/halo_state.dart';
+import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/argument.dart';
 import 'package:zone/route/method.dart';
 import 'package:zone/state/p.dart';
@@ -57,7 +58,7 @@ class ArgumentsPanel extends ConsumerWidget {
                   onPressed: () {
                     pop();
                   },
-                  child: const T("Cancel"),
+                  child: T(S.current.cancel),
                 ),
                 Exp(
                   child: Ro(
@@ -66,8 +67,8 @@ class ArgumentsPanel extends ConsumerWidget {
                     children: [
                       const Icon(Icons.tune),
                       12.w,
-                      const T(
-                        "Session Configuration",
+                      T(
+                        S.current.session_configuration,
                         s: TS(s: 16, w: FW.w500),
                       ),
                     ],
@@ -81,7 +82,7 @@ class ArgumentsPanel extends ConsumerWidget {
                   onPressed: () {
                     pop();
                   },
-                  child: const T("Apply"),
+                  child: T(S.current.apply),
                 ),
                 4.w,
               ],
@@ -132,7 +133,7 @@ class _SamplerOptions extends ConsumerWidget {
             onPressed: () {
               P.rwkv.resetSamplerParams(usingReasoningModel: usingReasoningModel);
             },
-            child: const T("Reset"),
+            child: T(S.current.reset),
           ),
         ],
       ),
@@ -161,7 +162,7 @@ class _CompletionOptions extends ConsumerWidget {
             onPressed: () {
               P.rwkv.resetMaxLength(usingReasoningModel: usingReasoningModel);
             },
-            child: const T("Reset"),
+            child: T(S.current.reset),
           ),
         ],
       ),

@@ -31,5 +31,17 @@
   "or_you_can_start_a_new_empty_chat": "或開始一個空白聊天",
   "start_a_new_chat": "開始新聊天",
   "you_can_now_start_to_chat_with_rwkv": "現在可以開始與 RWKV 聊天了",
-  "bot_message_edited": "機器人訊息已編輯，現在可以傳送新訊息"
+  "bot_message_edited": "機器人訊息已編輯，現在可以發送新訊息",
+  "download_source": "下載源",
+  "select_a_world_type": "選擇世界類型",
+  "please_select_a_world_type": "請選擇世界類型",
+  "loading": "載入中...",
+  "cancel": "取消",
+  "session_configuration": "會話設定",
+  "apply": "套用",
+  "reset": "重設",
+  "auto": "自動",
+  "create_a_new_one_by_clicking_the_button_above": "點擊上方按鈕建立新會話",
+  "speed": "速度：",
+  "remaining": "剩餘："
 }

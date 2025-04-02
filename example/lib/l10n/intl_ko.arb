@@ -31,5 +31,17 @@
   "or_you_can_start_a_new_empty_chat": "또는 빈 채팅을 시작할 수 있습니다",
   "start_a_new_chat": "새 채팅 시작",
   "you_can_now_start_to_chat_with_rwkv": "이제 RWKV와 채팅을 시작할 수 있습니다",
-  "bot_message_edited": "봇 메시지가 수정되었습니다. 새 메시지를 보낼 수 있습니다"
+  "bot_message_edited": "봇 메시지가 수정되었습니다. 새 메시지를 보낼 수 있습니다",
+  "download_source": "다운로드 소스",
+  "select_a_world_type": "월드 타입 선택",
+  "please_select_a_world_type": "월드 타입을 선택해 주세요",
+  "loading": "로딩 중...",
+  "cancel": "취소",
+  "session_configuration": "세션 설정",
+  "apply": "적용",
+  "reset": "초기화",
+  "auto": "자동",
+  "create_a_new_one_by_clicking_the_button_above": "위 버튼을 클릭하여 새로 만들기",
+  "speed": "속도:",
+  "remaining": "남음:"
 }

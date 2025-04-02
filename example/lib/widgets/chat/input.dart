@@ -440,7 +440,7 @@ class _LangugaeButton extends ConsumerWidget {
                 children: [
                   if (preferChinese) const T("Prefer", s: TS(c: kW, s: 10, height: 1)),
                   if (preferChinese) const T("Chinese", s: TS(c: kW, s: 10, height: 1)),
-                  if (!preferChinese) T("Auto", s: TS(c: color, s: 10, height: 1)),
+                  if (!preferChinese) T(S.current.auto, s: TS(c: color, s: 10, height: 1)),
                 ],
               ),
             ],

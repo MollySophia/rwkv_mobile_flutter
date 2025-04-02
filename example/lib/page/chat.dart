@@ -195,7 +195,7 @@ class _RoleSelector extends ConsumerWidget {
                               borderRadius: 8.r,
                             ),
                             padding: const EI.a(8),
-                            child: T(loading ? "Loading..." : S.current.start_to_chat, s: const TS(c: kW)),
+                            child: T(loading ? S.current.loading : S.current.start_to_chat, s: const TS(c: kW)),
                           ),
                         ),
                       ],

@@ -31,5 +31,17 @@
   "or_you_can_start_a_new_empty_chat": "または空白のチャットを開始",
   "start_a_new_chat": "新規チャットを開始",
   "you_can_now_start_to_chat_with_rwkv": "RWKVとのチャットを開始できます",
-  "bot_message_edited": "ボットメッセージが編集されました。新しいメッセージを送信できます"
+  "bot_message_edited": "ボットメッセージが編集されました。新しいメッセージを送信できます",
+  "download_source": "ダウンロードソース",
+  "select_a_world_type": "ワールドタイプを選択",
+  "please_select_a_world_type": "ワールドタイプを選択してください",
+  "loading": "読み込み中...",
+  "cancel": "キャンセル",
+  "session_configuration": "セッション設定",
+  "apply": "適用",
+  "reset": "リセット",
+  "auto": "自動",
+  "create_a_new_one_by_clicking_the_button_above": "上記のボタンをクリックして新規作成",
+  "speed": "速度：",
+  "remaining": "残り："
 }
