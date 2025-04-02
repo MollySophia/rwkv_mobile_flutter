@@ -22,6 +22,7 @@ import 'package:zone/io.dart';
 import 'package:zone/args.dart';
 import 'package:zone/model/argument.dart';
 import 'package:zone/model/cell_type.dart';
+import 'package:zone/model/conversation.dart';
 import 'package:zone/model/file_info.dart';
 import 'package:zone/model/local_file.dart';
 import 'package:zone/model/message.dart';
@@ -45,6 +46,7 @@ part "device.dart";
 part "adapter.dart";
 part "debugger.dart";
 part "world.dart";
+part "conversation.dart";
 
 abstract class P {
   static final app = _App();
@@ -56,6 +58,7 @@ abstract class P {
   static final adapter = _Adapter();
   static final debugger = _Debugger();
   static final world = _World();
+  static final conversation = _Conversation();
 
   static FV init() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -73,6 +76,7 @@ abstract class P {
       adapter._init(),
       debugger._init(),
       world._init(),
+      conversation._init(),
     ]);
   }
 }

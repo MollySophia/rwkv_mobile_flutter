@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
 enum MessageType {
@@ -7,7 +8,7 @@ enum MessageType {
 }
 
 @immutable
-final class Message {
+final class Message extends Equatable {
   final int id;
   final String content;
   final bool isMine;
@@ -42,6 +43,20 @@ final class Message {
       audioLength: json["audioLength"] as int?,
       isReasoning: json["isReasoning"] as bool,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "content": content,
+      "roleType": isMine ? 1 : 0,
+      "type": type,
+      "imageUrl": imageUrl,
+      "audioUrl": audioUrl,
+      "audioLength": audioLength,
+      "isReasoning": isReasoning,
+      "changing": false,
+    };
   }
 
   Message copyWith({
@@ -104,4 +119,17 @@ Message(
 
     return (_content, _result);
   }
+
+  @override
+  List<Object?> get props => [
+        id,
+        content,
+        isMine,
+        changing,
+        type,
+        imageUrl,
+        audioUrl,
+        audioLength,
+        isReasoning,
+      ];
 }
