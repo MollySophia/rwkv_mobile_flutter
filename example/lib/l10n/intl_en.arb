@@ -229,5 +229,13 @@
   "delete": "Delete",
   "@delete": {
     "description": "Label for delete action"
+  },
+  "prefer": "Prefer",
+  "@prefer": {
+    "description": "Label for prefer"
+  },
+  "chinese": "Chinese",
+  "@chinese": {
+    "description": "Label for chinese"
   }
 }

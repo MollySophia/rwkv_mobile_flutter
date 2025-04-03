@@ -575,6 +575,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Prefer`
+  String get prefer {
+    return Intl.message(
+      'Prefer',
+      name: 'prefer',
+      desc: 'Label for prefer',
+      args: [],
+    );
+  }
+
+  /// `Chinese`
+  String get chinese {
+    return Intl.message(
+      'Chinese',
+      name: 'chinese',
+      desc: 'Label for chinese',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

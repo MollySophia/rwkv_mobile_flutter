@@ -506,6 +506,7 @@ extension _$RWKV on _RWKV {
       case PageKey.home:
       case PageKey.empty:
       case PageKey.file:
+      case PageKey.test:
         break;
     }
   }

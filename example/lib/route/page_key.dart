@@ -6,6 +6,7 @@ import 'package:zone/page/home.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:zone/page/othello.dart';
+import 'package:zone/page/textfield_test.dart';
 
 enum PageKey {
   home,
@@ -15,6 +16,7 @@ enum PageKey {
   fifthteenPuzzle,
   sudoku,
   file,
+  test,
   ;
 
   String get path => "/$name";
@@ -35,6 +37,8 @@ enum PageKey {
         return const PageEmpty();
       case PageKey.file:
         return const PageFile();
+      case PageKey.test:
+        return const TextFieldTest();
     }
   }
 
@@ -42,6 +46,7 @@ enum PageKey {
 
   static String get initialLocation {
     return first.path;
+    // return PageKey.test.path;
   }
 
   static PageKey get first {

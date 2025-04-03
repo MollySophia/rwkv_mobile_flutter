@@ -51,5 +51,7 @@
   "reason": "推理",
   "click_to_select_model": "点击选择模型",
   "are_you_sure_you_want_to_delete_this_model": "确定要删除这个模型吗？",
-  "delete": "删除"
+  "delete": "删除",
+  "prefer": "使用",
+  "chinese": "中文"
 }

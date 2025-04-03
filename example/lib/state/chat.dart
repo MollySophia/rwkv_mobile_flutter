@@ -214,7 +214,13 @@ extension $Chat on _Chat {
 
     if (type == MessageType.userImage) return;
 
-    if (Config.enableConversation) P.conversation.addMessage(msg);
+    if (Config.enableConversation) {
+      try {
+        P.conversation.addMessage(msg);
+      } catch (e) {
+        qqe(e);
+      }
+    }
 
     final historyMessage = messages.v.where((e) {
       return e.type != MessageType.userImage;

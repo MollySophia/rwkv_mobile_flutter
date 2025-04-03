@@ -47,6 +47,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "chat_you_need_download_model_if_you_want_to_use_it":
         MessageLookupByLibrary.simpleMessage("您需要先下载模型才能使用"),
     "chatting": MessageLookupByLibrary.simpleMessage("聊天中"),
+    "chinese": MessageLookupByLibrary.simpleMessage("中文"),
     "choose_prebuilt_character": MessageLookupByLibrary.simpleMessage("选择预设角色"),
     "click_here_to_select_a_new_model": MessageLookupByLibrary.simpleMessage(
       "点击此处选择新模型",
@@ -81,6 +82,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_wait_for_the_model_to_load": MessageLookupByLibrary.simpleMessage(
       "请等待模型加载",
     ),
+    "prefer": MessageLookupByLibrary.simpleMessage("使用"),
     "prefer_chinese": MessageLookupByLibrary.simpleMessage("使用中文推理"),
     "reason": MessageLookupByLibrary.simpleMessage("推理"),
     "reasoning_enabled": MessageLookupByLibrary.simpleMessage("推理模式"),

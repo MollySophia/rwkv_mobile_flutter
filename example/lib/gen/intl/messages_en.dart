@@ -56,6 +56,7 @@ class MessageLookup extends MessageLookupByLibrary {
           "You need to download the model first, before you can use it.",
         ),
     "chatting": MessageLookupByLibrary.simpleMessage("Chatting"),
+    "chinese": MessageLookupByLibrary.simpleMessage("Chinese"),
     "choose_prebuilt_character": MessageLookupByLibrary.simpleMessage(
       "Choose prebuilt character",
     ),
@@ -100,6 +101,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_wait_for_the_model_to_load": MessageLookupByLibrary.simpleMessage(
       "Please wait for the model to load",
     ),
+    "prefer": MessageLookupByLibrary.simpleMessage("Prefer"),
     "prefer_chinese": MessageLookupByLibrary.simpleMessage("Prefer Chinese"),
     "reason": MessageLookupByLibrary.simpleMessage("Reason"),
     "reasoning_enabled": MessageLookupByLibrary.simpleMessage(

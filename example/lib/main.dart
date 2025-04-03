@@ -58,14 +58,10 @@ class _App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    qq;
     P.app.firstContextGot(context);
 
-    final locale = !false
-        ? null
-        : [
-            Language.zh_Hans.locale,
-            Language.en.locale,
-          ].random!;
+    final locale = !kDebugMode ? null : [Language.zh_Hans.locale, Language.en.locale].random!;
 
     return StateWrapper(
       child: MaterialApp.router(
@@ -94,9 +90,9 @@ class _App extends StatelessWidget {
     );
   }
 
-  Widget _builder(context, child) {
-    return MediaQuery(
-      data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1)),
+  Widget _builder(BuildContext context, Widget? child) {
+    qq;
+    return MediaQuery.withNoTextScaling(
       child: Stack(
         children: [
           C(color: Theme.of(context).scaffoldBackgroundColor),
