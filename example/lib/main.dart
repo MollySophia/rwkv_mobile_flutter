@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:halo_state/halo_state.dart';
@@ -52,6 +53,7 @@ FutureOr<void> _configureSentry(SentryFlutterOptions options) {
 }
 
 final _supportedLocales = Language.values.map((e) => e.locale).toList();
+Language? _debugLatestLanguage;
 
 class _App extends StatelessWidget {
   const _App();
@@ -61,7 +63,11 @@ class _App extends StatelessWidget {
     qq;
     P.app.firstContextGot(context);
 
-    final locale = !kDebugMode ? null : [Language.zh_Hans.locale, Language.en.locale].random!;
+    if (kDebugMode) {
+      _debugLatestLanguage = [Language.zh_Hans, Language.en].firstWhereOrNull((e) => e != _debugLatestLanguage);
+    }
+
+    final locale = !kDebugMode ? null : _debugLatestLanguage?.locale;
 
     return StateWrapper(
       child: MaterialApp.router(
@@ -91,13 +97,18 @@ class _App extends StatelessWidget {
   }
 
   Widget _builder(BuildContext context, Widget? child) {
-    return Stack(
-      children: [
-        C(color: kBG),
-        if (child != null) child,
-        const Alert(),
-        if (kDebugMode) const Debugger(),
-      ],
+    qq;
+    return MediaQuery.withClampedTextScaling(
+      minScaleFactor: 1,
+      maxScaleFactor: 1.5,
+      child: Stack(
+        children: [
+          C(color: kBG),
+          if (child != null) child,
+          const Alert(),
+          if (kDebugMode) const Debugger(),
+        ],
+      ),
     );
   }
 }

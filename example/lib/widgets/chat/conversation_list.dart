@@ -1,10 +1,13 @@
 // ignore: unused_import
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gaimon/gaimon.dart';
 import 'package:halo/halo.dart';
 import 'package:zone/gen/l10n.dart';
+import 'package:zone/model/conversation.dart';
 import 'package:zone/state/p.dart';
 import 'package:zone/widgets/pager.dart';
 
@@ -13,21 +16,25 @@ class ConversationList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final conversations = ref.watch(P.conversation.conversations);
+    qq;
+    final conversations = ref.watch(P.conversation.sorted);
 
-    if (conversations.isEmpty) {
-      return const _Empty();
-    }
-
-    return ListView.builder(
-      itemCount: conversations.length,
-      itemBuilder: (context, index) {
-        final conversation = conversations[index];
-        return C(
-          decoration: const BD(),
-          child: Text(conversation.id.toString()),
-        );
+    return RefreshIndicator.adaptive(
+      onRefresh: () async {
+        Gaimon.light();
+        await P.conversation.load();
       },
+      child: ListView.builder(
+        padding: EI.a(8),
+        itemCount: conversations.isEmpty ? 1 : conversations.length,
+        itemBuilder: (context, index) {
+          if (conversations.isEmpty) {
+            return const _Empty();
+          }
+          final conversation = conversations[index];
+          return _ConversationItem(conversation: conversation);
+        },
+      ),
     );
   }
 }
@@ -58,6 +65,52 @@ class _Empty extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _ConversationItem extends ConsumerWidget {
+  const _ConversationItem({required this.conversation});
+
+  final Conversation conversation;
+
+  void _onTap() async {
+    await P.conversation.onTapInList(conversation);
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final current = ref.watch(P.conversation.current);
+    final isCurrent = current?.id == conversation.id;
+    final primary = Theme.of(context).colorScheme.primary;
+    final onPrimaryContainer = Theme.of(context).colorScheme.onPrimaryContainer;
+    final onPrimary = Theme.of(context).colorScheme.onPrimary;
+    final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
+    final primaryFixed = Theme.of(context).colorScheme.primaryFixed;
+    final primaryFixedDim = Theme.of(context).colorScheme.primaryFixedDim;
+
+    return CupertinoContextMenu(
+      actions: [
+        CupertinoContextMenuAction(
+          child: T(S.current.delete),
+          onPressed: () {},
+        ),
+      ],
+      enableHapticFeedback: true,
+      child: GD(
+        onTap: _onTap,
+        child: C(
+          decoration: BD(
+            color: isCurrent ? primaryContainer : kW,
+            borderRadius: 8.r,
+          ),
+          padding: EI.a(8),
+          child: T(
+            conversation.name,
+            s: TS(s: 16, w: FW.w600, c: isCurrent ? primary : kB),
+          ),
+        ),
+      ),
     );
   }
 }

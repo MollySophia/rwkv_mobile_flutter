@@ -36,6 +36,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:halo/halo.dart';
 import 'package:rwkv_mobile_flutter/rwkv.dart';
+import 'package:zone/widgets/pager.dart';
 
 part "app.dart";
 part "chat.dart";

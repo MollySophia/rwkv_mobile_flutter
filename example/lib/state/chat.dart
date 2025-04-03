@@ -94,6 +94,7 @@ extension $Chat on _Chat {
         newBotMessage,
       ];
       messages.u(newMessages);
+      P.conversation.updateMessages(newMessages);
       editingIndex.u(null);
       Alert.success(S.current.bot_message_edited);
       return;
@@ -124,6 +125,12 @@ extension $Chat on _Chat {
   }
 
   FV onTapEditInUserMessageBubble({required int index}) async {
+    final loaded = P.rwkv.loaded.v;
+    if (!loaded) {
+      Alert.info("Please load model first");
+      showingModelSelector.u(true);
+      return;
+    }
     final content = messages.v[index].content;
     textEditingController.value = TextEditingValue(text: content);
     focusNode.requestFocus();
@@ -131,6 +138,12 @@ extension $Chat on _Chat {
   }
 
   FV onTapEditInBotMessageBubble({required int index}) async {
+    final loaded = P.rwkv.loaded.v;
+    if (!loaded) {
+      Alert.info("Please load model first");
+      showingModelSelector.u(true);
+      return;
+    }
     final content = messages.v[index].content;
     textEditingController.value = TextEditingValue(text: content);
     focusNode.requestFocus();
@@ -138,6 +151,12 @@ extension $Chat on _Chat {
   }
 
   FV onRegeneratePressed({required int index}) async {
+    final loaded = P.rwkv.loaded.v;
+    if (!loaded) {
+      Alert.info("Please load model first");
+      showingModelSelector.u(true);
+      return;
+    }
     final userMessage = messages.v[index - 1];
     editingIndex.u(index - 1);
     _textInInput.uc();
@@ -174,6 +193,7 @@ extension $Chat on _Chat {
   }
 
   FV startNewChat() async {
+    qq;
     P.rwkv.clearStates();
     messages.u([]);
   }
@@ -194,6 +214,7 @@ extension $Chat on _Chat {
       final messagesWithoutEditing = messages.v.sublist(0, _editingIndex);
       // debugger();
       messages.u(messagesWithoutEditing);
+      P.conversation.updateMessages(messagesWithoutEditing);
     }
 
     final id = DateTime.now().microsecondsSinceEpoch;
@@ -208,6 +229,7 @@ extension $Chat on _Chat {
       isReasoning: false,
     );
     messages.ua(msg);
+    P.conversation.updateMessages([...messages.v, msg]);
     Future.delayed(34.ms).then((_) {
       scrollToBottom();
     });
@@ -251,6 +273,7 @@ extension $Chat on _Chat {
     );
 
     messages.ua(receiveMsg);
+    P.conversation.updateMessages([...messages.v, receiveMsg]);
   }
 
   FV onStopButtonPressed() async {
@@ -283,6 +306,14 @@ extension $Chat on _Chat {
     }
 
     suggestions.u(suggestions.v.shuffled.take(3).toList());
+  }
+
+  FV loadConversation(Conversation? conversation) async {
+    if (conversation == null) {
+      messages.u([]);
+      return;
+    }
+    messages.u(conversation.messages);
   }
 }
 
@@ -392,8 +423,9 @@ extension _$Chat on _Chat {
         break;
       }
     }
-    qqe("message not found");
+    if (!found) qqe("message not found");
     messages.u(currentMessages);
+    P.conversation.updateMessages(currentMessages);
   }
 
   FV _onStreamEvent(LLMEvent event) async {

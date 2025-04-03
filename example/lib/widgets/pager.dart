@@ -7,7 +7,7 @@ import 'package:halo/halo.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/state/p.dart';
 
-const _toRight = 60.0;
+const _toRight = 80.0;
 
 class Pager extends ConsumerStatefulWidget {
   final Widget child;
@@ -19,13 +19,12 @@ class Pager extends ConsumerStatefulWidget {
   @override
   ConsumerState<Pager> createState() => _PagerState();
 
-  static final page = qs(0.0);
-  static final ignorePointer = qs(false);
+  static final page = qs(1.0);
+  static final mainPageNotIgnoring = qs(true);
   static final childOpacity = qs(1.0);
   static final drawerOpacity = qs(0.0);
 
   static FV toggle() async {
-    qq;
     if (page.v == 1) {
       await _controller!.animateToPage(0, duration: 300.ms, curve: Curves.easeOutCubic);
     } else {
@@ -46,7 +45,7 @@ class _PagerState extends ConsumerState<Pager> {
     final rawString = (_controller!.page ?? 0).toStringAsFixed(2);
     final v = double.tryParse(rawString) ?? 0.0;
     Pager.page.u(v);
-    Pager.ignorePointer.u(v == 1);
+    Pager.mainPageNotIgnoring.u(v == 1);
     Pager.childOpacity.u(v);
     Pager.drawerOpacity.u(1 - v);
   }
@@ -68,40 +67,52 @@ class _PagerState extends ConsumerState<Pager> {
       _controller!.addListener(_onPageChanged);
     }
 
-    final ignorePointer = ref.watch(Pager.ignorePointer);
+    final ignorePointer = ref.watch(Pager.mainPageNotIgnoring);
 
     return PopScope(
       canPop: ignorePointer,
       onPopInvokedWithResult: _onPopInvokedWithResult,
-      child: SingleChildScrollView(
-        controller: _controller,
-        physics: const PageScrollPhysics(),
-        scrollDirection: Axis.horizontal,
-        child: SB(
-          width: screenWidth * 2 - drawerToRight,
-          height: screenHeight,
-          child: Ro(
-            children: [
-              SB(
-                width: screenWidth - drawerToRight,
-                height: screenHeight,
-                child: widget.drawer,
-              ),
-              Stack(
-                children: [
-                  SB(
-                    width: screenWidth,
-                    height: screenHeight,
-                    child: widget.child,
-                  ),
-                  const _Dim(),
-                ],
-              ),
-            ],
+      child: NotificationListener<ScrollNotification>(
+        onNotification: _onNotification,
+        child: SingleChildScrollView(
+          controller: _controller,
+          physics: const PageScrollPhysics(parent: ClampingScrollPhysics()),
+          scrollDirection: Axis.horizontal,
+          child: SB(
+            width: screenWidth * 2 - drawerToRight,
+            height: screenHeight,
+            child: Ro(
+              children: [
+                SB(
+                  width: screenWidth - drawerToRight,
+                  height: screenHeight,
+                  child: widget.drawer,
+                ),
+                Stack(
+                  children: [
+                    SB(
+                      width: screenWidth,
+                      height: screenHeight,
+                      child: widget.child,
+                    ),
+                    const _Dim(),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  bool _onNotification(notification) {
+    if (notification is ScrollStartNotification) {
+      if (notification.depth == 0) {
+        if (P.chat.focusNode.hasFocus) P.chat.focusNode.unfocus();
+      }
+    }
+    return false;
   }
 }
 
@@ -117,7 +128,7 @@ class _Dim extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final screenWidth = ref.watch(P.app.screenWidth);
     final screenHeight = ref.watch(P.app.screenHeight);
-    final ignorePointer = ref.watch(Pager.ignorePointer);
+    final ignorePointer = ref.watch(Pager.mainPageNotIgnoring);
     final drawerOpacity = ref.watch(Pager.drawerOpacity);
 
     return IgnorePointer(

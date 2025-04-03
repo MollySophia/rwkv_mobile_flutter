@@ -38,6 +38,7 @@ class Input extends ConsumerWidget {
   }
 
   void _onKeyEvent(KeyEvent event) {
+    qq;
     final character = event.character;
     final isShiftPressed = HardwareKeyboard.instance.isShiftPressed;
     final isEnterPressed = event.logicalKey == LogicalKeyboardKey.enter && character != null;
@@ -52,6 +53,16 @@ class Input extends ConsumerWidget {
       }
     } else {
       P.chat.onInputRightButtonPressed();
+    }
+  }
+
+  void _onTapTextFieldWhenItsDisabled() {
+    qq;
+    final loaded = P.rwkv.loaded.v;
+    if (!loaded) {
+      Alert.info("Please load model first");
+      P.chat.showingModelSelector.u(true);
+      return;
     }
   }
 
@@ -109,51 +120,54 @@ class Input extends ConsumerWidget {
               padding: EI.o(l: 10, r: 10, b: paddingBottom + 12, t: 12),
               child: Co(
                 children: [
-                  KeyboardListener(
-                    onKeyEvent: _onKeyEvent,
-                    focusNode: P.chat.focusNode,
-                    child: TextField(
-                      enabled: textFieldEnabled,
-                      controller: P.chat.textEditingController,
-                      onSubmitted: P.chat.onSubmitted,
-                      onChanged: _onChanged,
-                      onEditingComplete: P.chat.onEditingComplete,
-                      onAppPrivateCommand: _onAppPrivateCommand,
-                      onTap: _onTap,
-                      onTapOutside: _onTapOutside,
-                      keyboardType: TextInputType.multiline,
-                      enableSuggestions: true,
-                      textInputAction: TextInputAction.send,
-                      maxLines: 10,
-                      minLines: 1,
-                      decoration: InputDecoration(
-                        contentPadding: const EI.o(
-                          l: 12,
-                          r: 12,
-                          t: 4,
-                          b: 4,
+                  GD(
+                    onTap: textFieldEnabled ? null : _onTapTextFieldWhenItsDisabled,
+                    child: KeyboardListener(
+                      onKeyEvent: _onKeyEvent,
+                      focusNode: P.chat.focusNode,
+                      child: TextField(
+                        enabled: textFieldEnabled,
+                        controller: P.chat.textEditingController,
+                        onSubmitted: P.chat.onSubmitted,
+                        onChanged: _onChanged,
+                        onEditingComplete: P.chat.onEditingComplete,
+                        onAppPrivateCommand: _onAppPrivateCommand,
+                        onTap: _onTap,
+                        onTapOutside: _onTapOutside,
+                        keyboardType: TextInputType.multiline,
+                        enableSuggestions: true,
+                        textInputAction: TextInputAction.send,
+                        maxLines: 10,
+                        minLines: 1,
+                        decoration: InputDecoration(
+                          contentPadding: const EI.o(
+                            l: 12,
+                            r: 12,
+                            t: 4,
+                            b: 4,
+                          ),
+                          fillColor: kW,
+                          focusColor: kW,
+                          hoverColor: kW,
+                          iconColor: kW,
+                          border: OutlineInputBorder(
+                            borderRadius: 12.r,
+                            borderSide: BorderSide(color: primary.wo(0.33)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: 12.r,
+                            borderSide: BorderSide(color: primary.wo(0.33)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: 12.r,
+                            borderSide: BorderSide(color: primary.wo(0.33)),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: 12.r,
+                            borderSide: BorderSide(color: primary.wo(0.33)),
+                          ),
+                          hintText: hintText,
                         ),
-                        fillColor: kW,
-                        focusColor: kW,
-                        hoverColor: kW,
-                        iconColor: kW,
-                        border: OutlineInputBorder(
-                          borderRadius: 12.r,
-                          borderSide: BorderSide(color: primary.wo(0.33)),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: 12.r,
-                          borderSide: BorderSide(color: primary.wo(0.33)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: 12.r,
-                          borderSide: BorderSide(color: primary.wo(0.33)),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: 12.r,
-                          borderSide: BorderSide(color: primary.wo(0.33)),
-                        ),
-                        hintText: hintText,
                       ),
                     ),
                   ),

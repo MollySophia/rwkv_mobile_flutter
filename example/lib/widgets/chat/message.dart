@@ -19,8 +19,8 @@ import 'package:zone/route/method.dart';
 import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
 
-const double _kTextScaleFactor = 1.3;
-const double _kTextScaleFactorForCotContent = 1.2;
+const double _kTextScaleFactor = 1.1;
+const double _kTextScaleFactorForCotContent = 1;
 
 class Message extends ConsumerWidget {
   final model.Message msg;
@@ -74,8 +74,6 @@ class Message extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    qq;
-
     final isMine = msg.isMine;
     final alignment = isMine ? Alignment.centerRight : Alignment.centerLeft;
     const marginHorizontal = 12.0;
