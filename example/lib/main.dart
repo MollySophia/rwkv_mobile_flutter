@@ -97,7 +97,7 @@ class _App extends StatelessWidget {
         children: [
           C(color: Theme.of(context).scaffoldBackgroundColor),
           if (child != null) child,
-          Alert.deploy(),
+          const Alert(),
           if (kDebugMode) const Debugger(),
         ],
       ),
