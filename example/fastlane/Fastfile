@@ -1,5 +1,5 @@
 lane :all do |params|
-  envString = params[:env] != "chat" ? params[:env] : "chat"
+  envString = (params[:env] != "chat" && params[:env] != nil && params[:env] != "") ? params[:env] : "chat"
   increase_version = params[:increase_version] == false ? false : true
   build_number = raw_increase_build_number()
   raw_change_analysis_options()
@@ -61,10 +61,9 @@ lane :switch_env do |params|
 end
 
 lane :test do |params|
-  envString = params[:env] || "chat"
-  increase_version = params[:increase_version] == false ? false : true
-  version_number = raw_get_version_number()
-  print("increase_version: #{increase_version}")
+  envString = (params[:env] != "chat" && params[:env] != nil && params[:env] != "") ? params[:env] : "chat"
+  puts("✅ envString: #{envString}")
+  # global_replace(env: envString)
 end
 
 # ✅ Shared
