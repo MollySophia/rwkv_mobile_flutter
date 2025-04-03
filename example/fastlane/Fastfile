@@ -1,10 +1,15 @@
 lane :all do |params|
   envString = params[:env] || "chat"
+  increase_version = params[:increase_version] || true
   build_number = raw_increase_build_number()
   raw_change_analysis_options()
   dart_fix()
   raw_change_analysis_options()
-  version_number = raw_increase_version_number()
+  if increase_version
+    version_number = raw_increase_version_number()
+  else
+    version_number = raw_get_version_number()
+  end
   git_commit(message: version_number.to_s + "(" + build_number.to_s + ")", path: "*")
   push_to_git_remote()
   global_replace(env: envString) # 替换环境变量
