@@ -19,6 +19,9 @@ import 'package:zone/route/method.dart';
 import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
 
+const double _kTextScaleFactor = 1.3;
+const double _kTextScaleFactorForCotContent = 1.2;
+
 class Message extends ConsumerWidget {
   final model.Message msg;
   final int index;
@@ -69,62 +72,10 @@ class Message extends ConsumerWidget {
     }
   }
 
-  void _showContextMenu(BuildContext context, TapDownDetails details) async {
-    final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
-
-    final result = await showMenu(
-      context: context,
-      position: RelativeRect.fromRect(
-        details.globalPosition & const Size(40, 40),
-        Offset.zero & overlay.size,
-      ),
-      items: [
-        PopupMenuItem(
-          onTap: _onUserEditPressed,
-          child: const Row(
-            children: [
-              Icon(Icons.edit),
-              SizedBox(width: 8),
-              Text('Edit'),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          onTap: _onBotEditPressed,
-          child: const Row(
-            children: [
-              Icon(Icons.edit),
-              SizedBox(width: 8),
-              Text('Edit'),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          onTap: _onCopyPressed,
-          child: const Row(
-            children: [
-              Icon(Icons.copy),
-              SizedBox(width: 8),
-              Text('Copy'),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          onTap: _onRegeneratePressed,
-          child: const Row(
-            children: [
-              Icon(Icons.refresh),
-              SizedBox(width: 8),
-              Text('Regenerate'),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    qq;
+
     final isMine = msg.isMine;
     final alignment = isMine ? Alignment.centerRight : Alignment.centerLeft;
     const marginHorizontal = 12.0;
@@ -196,6 +147,8 @@ class Message extends ConsumerWidget {
     final receiving = ref.watch(P.chat.receivingTokens);
     final thisMessageIsReceiving = receiveId == msg.id && receiving;
 
+    final textScaleFactorForCotContent = TextScaler.linear(MediaQuery.textScalerOf(context).scale(_kTextScaleFactorForCotContent));
+
     final markdownStyleSheetForCotContent = MarkdownStyleSheet(
       p: TS(c: kB.wo(0.5)),
       h1: TS(c: kB.wo(0.5)),
@@ -207,12 +160,15 @@ class Message extends ConsumerWidget {
       listBullet: TS(c: kB.wo(0.5)),
       listBulletPadding: const EI.o(l: 0),
       listIndent: 20,
+      textScaler: textScaleFactorForCotContent,
     );
+
+    final textScaleFactor = TextScaler.linear(MediaQuery.textScalerOf(context).scale(_kTextScaleFactor));
 
     final markdownStyleSheet = MarkdownStyleSheet(
       listBulletPadding: const EI.o(l: 0),
       listIndent: 20,
-      textScaler: const TextScaler.linear(1.1),
+      textScaler: textScaleFactor,
       horizontalRuleDecoration: BoxDecoration(
         color: kB.wo(0.1),
         border: Border(
@@ -222,7 +178,7 @@ class Message extends ConsumerWidget {
     );
 
     final rawFontSize = Theme.of(context).textTheme.bodyMedium?.fontSize ?? 14.0;
-    final userMessageStyle = TS(c: kB, s: rawFontSize * 1.1);
+    final userMessageStyle = TS(c: kB, s: rawFontSize * _kTextScaleFactor);
 
     double? cotContentHeight;
 
@@ -288,10 +244,6 @@ class Message extends ConsumerWidget {
       padding = EI.zero;
       border = Border.all(width: 0);
     }
-
-    // if (!isMine) {
-    //   padding = const EI.a(4);
-    // }
 
     final screenWidth = ref.watch(P.app.screenWidth);
     final screenHeight = ref.watch(P.app.screenHeight);
@@ -384,7 +336,7 @@ class Message extends ConsumerWidget {
                     decoration: const BD(color: kC),
                     child: Ro(
                       children: [
-                        T(thisMessageIsReceiving ? "Thinking..." : "Thought result", s: TS(c: kB.wo(0.5), w: FW.w600)),
+                        T(thisMessageIsReceiving ? S.current.thinking : S.current.thought_result, s: TS(c: kB.wo(0.5), w: FW.w600)),
                         showingCotContent ? Icon(Icons.expand_more, color: kB.wo(0.5)) : Icon(Icons.expand_less, color: kB.wo(0.5)),
                       ],
                     ),
@@ -405,7 +357,7 @@ class Message extends ConsumerWidget {
                   ),
                 ),
               // 🔥 Bot message cot result
-              if (!isMine && cotResult.isNotEmpty && usingReasoningModel) 12.h,
+              if (!isMine && cotResult.isNotEmpty && usingReasoningModel && showingCotContent) 12.h,
               if (!isMine && cotResult.isNotEmpty && usingReasoningModel)
                 MarkdownBody(
                   data: cotResult,

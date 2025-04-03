@@ -130,6 +130,8 @@ class MessageLookup extends MessageLookupByLibrary {
           "You can start a new chat by clicking the button below.",
         ),
     "start_to_chat": MessageLookupByLibrary.simpleMessage("Start to chat"),
+    "thinking": MessageLookupByLibrary.simpleMessage("Thinking..."),
+    "thought_result": MessageLookupByLibrary.simpleMessage("Thought result"),
     "use_it_now": MessageLookupByLibrary.simpleMessage("Use it now"),
     "welcome_to_use_rwkv": MessageLookupByLibrary.simpleMessage(
       "Welcome to use RWKV",

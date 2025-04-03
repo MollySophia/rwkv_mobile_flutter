@@ -237,5 +237,13 @@
   "chinese": "Chinese",
   "@chinese": {
     "description": "Label for chinese"
+  },
+  "thinking": "Thinking...",
+  "@thinking": {
+    "description": "Label for thinking"
+  },
+  "thought_result": "Thought result",
+  "@thought_result": {
+    "description": "Label for thought result"
   }
 }

@@ -99,6 +99,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "start_a_new_chat_by_clicking_the_button_below":
         MessageLookupByLibrary.simpleMessage("点击下方按钮开始新聊天"),
     "start_to_chat": MessageLookupByLibrary.simpleMessage("开始聊天"),
+    "thinking": MessageLookupByLibrary.simpleMessage("思考中..."),
+    "thought_result": MessageLookupByLibrary.simpleMessage("思考结果"),
     "use_it_now": MessageLookupByLibrary.simpleMessage("立即使用"),
     "welcome_to_use_rwkv": MessageLookupByLibrary.simpleMessage("欢迎使用 RWKV"),
     "you_are_now_using": m2,

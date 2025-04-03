@@ -595,6 +595,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Thinking...`
+  String get thinking {
+    return Intl.message(
+      'Thinking...',
+      name: 'thinking',
+      desc: 'Label for thinking',
+      args: [],
+    );
+  }
+
+  /// `Thought result`
+  String get thought_result {
+    return Intl.message(
+      'Thought result',
+      name: 'thought_result',
+      desc: 'Label for thought result',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

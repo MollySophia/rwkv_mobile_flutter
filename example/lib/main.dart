@@ -91,16 +91,13 @@ class _App extends StatelessWidget {
   }
 
   Widget _builder(BuildContext context, Widget? child) {
-    qq;
-    return MediaQuery.withNoTextScaling(
-      child: Stack(
-        children: [
-          C(color: Theme.of(context).scaffoldBackgroundColor),
-          if (child != null) child,
-          const Alert(),
-          if (kDebugMode) const Debugger(),
-        ],
-      ),
+    return Stack(
+      children: [
+        C(color: kBG),
+        if (child != null) child,
+        const Alert(),
+        if (kDebugMode) const Debugger(),
+      ],
     );
   }
 }
