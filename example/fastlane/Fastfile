@@ -1,12 +1,11 @@
 lane :all do |params|
-  envString = params[:env] || "chat"
-  increase_version = params[:increase_version] || true
+  envString = params[:env] != "chat" ? params[:env] : "chat"
+  increase_version = params[:increase_version] == false ? false : true
   build_number = raw_increase_build_number()
   raw_change_analysis_options()
   dart_fix()
   raw_change_analysis_options()
   version_number = raw_get_version_number()
-  print("increase_version: #{increase_version}")
   if increase_version
     version_number = raw_increase_version_number()
   end
@@ -62,12 +61,10 @@ lane :switch_env do |params|
 end
 
 lane :test do |params|
-  run_flutter_build_apk()
-  # version_number = raw_increase_version_number()
-  # build_number = raw_increase_build_number()
-  # git_commit(message: version_number.to_s + "(" + build_number.to_s + ")", path: "*")
-  # push_to_git_remote()
-  raw_firebase_app_distribution()
+  envString = params[:env] || "chat"
+  increase_version = params[:increase_version] == false ? false : true
+  version_number = raw_get_version_number()
+  print("increase_version: #{increase_version}")
 end
 
 # ✅ Shared
