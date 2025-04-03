@@ -5,10 +5,10 @@ lane :all do |params|
   raw_change_analysis_options()
   dart_fix()
   raw_change_analysis_options()
+  version_number = raw_get_version_number()
+  print("increase_version: #{increase_version}")
   if increase_version
     version_number = raw_increase_version_number()
-  else
-    version_number = raw_get_version_number()
   end
   git_commit(message: version_number.to_s + "(" + build_number.to_s + ")", path: "*")
   push_to_git_remote()
