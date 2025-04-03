@@ -71,6 +71,7 @@ class _App extends StatelessWidget {
 
     return StateWrapper(
       child: MaterialApp.router(
+        color: kBG,
         locale: locale,
         supportedLocales: _supportedLocales,
         localizationsDelegates: const [

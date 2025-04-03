@@ -32,7 +32,7 @@ class ConversationList extends ConsumerWidget {
             return const _Empty();
           }
           final conversation = conversations[index];
-          return _ConversationItem(conversation: conversation);
+          return _Item(conversation: conversation);
         },
       ),
     );
@@ -69,8 +69,8 @@ class _Empty extends ConsumerWidget {
   }
 }
 
-class _ConversationItem extends ConsumerWidget {
-  const _ConversationItem({required this.conversation});
+class _Item extends ConsumerWidget {
+  const _Item({required this.conversation});
 
   final Conversation conversation;
 
@@ -83,11 +83,7 @@ class _ConversationItem extends ConsumerWidget {
     final current = ref.watch(P.conversation.current);
     final isCurrent = current?.id == conversation.id;
     final primary = Theme.of(context).colorScheme.primary;
-    final onPrimaryContainer = Theme.of(context).colorScheme.onPrimaryContainer;
-    final onPrimary = Theme.of(context).colorScheme.onPrimary;
     final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
-    final primaryFixed = Theme.of(context).colorScheme.primaryFixed;
-    final primaryFixedDim = Theme.of(context).colorScheme.primaryFixedDim;
 
     return CupertinoContextMenu(
       actions: [
@@ -97,17 +93,20 @@ class _ConversationItem extends ConsumerWidget {
         ),
       ],
       enableHapticFeedback: true,
-      child: GD(
-        onTap: _onTap,
-        child: C(
-          decoration: BD(
-            color: isCurrent ? primaryContainer : kW,
-            borderRadius: 8.r,
-          ),
-          padding: EI.a(8),
-          child: T(
-            conversation.name,
-            s: TS(s: 16, w: FW.w600, c: isCurrent ? primary : kB),
+      child: Material(
+        color: kW,
+        child: GD(
+          onTap: _onTap,
+          child: C(
+            decoration: BD(
+              color: isCurrent ? primaryContainer : kW,
+              borderRadius: 8.r,
+            ),
+            padding: EI.a(8),
+            child: T(
+              conversation.name,
+              s: TS(s: 16, w: FW.w600, c: isCurrent ? primary : kB),
+            ),
           ),
         ),
       ),

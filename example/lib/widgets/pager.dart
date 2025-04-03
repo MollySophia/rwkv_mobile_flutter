@@ -8,6 +8,8 @@ import 'package:halo_state/halo_state.dart';
 import 'package:zone/state/p.dart';
 
 const _toRight = 80.0;
+PageController? _controller;
+final _reverse = true;
 
 class Pager extends ConsumerStatefulWidget {
   final Widget child;
@@ -19,21 +21,19 @@ class Pager extends ConsumerStatefulWidget {
   @override
   ConsumerState<Pager> createState() => _PagerState();
 
-  static final page = qs(1.0);
+  static final page = qs<double>(_reverse ? 0 : 1);
   static final mainPageNotIgnoring = qs(true);
   static final childOpacity = qs(1.0);
   static final drawerOpacity = qs(0.0);
 
   static FV toggle() async {
     if (page.v == 1) {
-      await _controller!.animateToPage(0, duration: 300.ms, curve: Curves.easeOutCubic);
+      await _controller!.animateToPage(_reverse ? 0 : 1, duration: 300.ms, curve: Curves.easeOutCubic);
     } else {
-      await _controller!.animateToPage(1, duration: 300.ms, curve: Curves.easeOutCubic);
+      await _controller!.animateToPage(_reverse ? 1 : 0, duration: 300.ms, curve: Curves.easeOutCubic);
     }
   }
 }
-
-PageController? _controller;
 
 class _PagerState extends ConsumerState<Pager> {
   @override
