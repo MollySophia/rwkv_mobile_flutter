@@ -1,8 +1,10 @@
 // ignore: unused_import
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gaimon/gaimon.dart';
 import 'package:halo/halo.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/state/p.dart';
@@ -76,7 +78,7 @@ class _PagerState extends ConsumerState<Pager> {
         onNotification: _onNotification,
         child: SingleChildScrollView(
           controller: _controller,
-          physics: const PageScrollPhysics(parent: ClampingScrollPhysics()),
+          physics: const _CustomPageScrollPhysics(parent: ClampingScrollPhysics()),
           scrollDirection: Axis.horizontal,
           child: SB(
             width: screenWidth * 2 - drawerToRight,
@@ -148,5 +150,58 @@ class _Dim extends ConsumerWidget {
         ),
       ),
     );
+  }
+}
+
+class _CustomPageScrollPhysics extends PageScrollPhysics {
+  static int? _latestTargetPage;
+
+  const _CustomPageScrollPhysics({super.parent});
+
+  @override
+  SpringDescription get spring => const SpringDescription(
+        mass: 1, // 质量，控制惯性
+        stiffness: 100.0, // 刚度，控制弹簧力度
+        damping: 1, // 阻尼，控制减速
+      );
+
+  // 获取目标页面索引
+  int getTargetPage(ScrollMetrics position, double velocity) {
+    final double pageSize = position.viewportDimension;
+    final double currentPage = position.pixels / pageSize;
+
+    // 根据速度和当前位置计算目标页面
+    if (velocity.abs() >= minFlingVelocity) {
+      // 如果有足够的甩动速度，则根据方向确定目标页
+      return velocity > 0.0 ? currentPage.ceil() : currentPage.floor();
+    } else {
+      // 如果速度较小，则看当前位置是否超过一半决定目标页
+      return (currentPage - currentPage.floor() >= 0.5) ? currentPage.ceil() : currentPage.floor();
+    }
+  }
+
+  @override
+  Simulation? createBallisticSimulation(ScrollMetrics position, double velocity) {
+    if (Platform.isAndroid) return super.createBallisticSimulation(position, velocity);
+
+    // 在模拟开始前，可以计算并存储目标页面
+    final targetPage = getTargetPage(position, velocity);
+
+    if (_latestTargetPage != null && _latestTargetPage != targetPage) {
+      Gaimon.soft();
+    }
+
+    _latestTargetPage = targetPage;
+
+    // 您可以通过全局状态管理或回调将目标页面暴露给外部
+    // 例如：Pager.targetPage.u(targetPage);
+
+    // 返回原始模拟
+    return super.createBallisticSimulation(position, velocity);
+  }
+
+  @override
+  PageScrollPhysics applyTo(ScrollPhysics? ancestor) {
+    return _CustomPageScrollPhysics(parent: buildParent(ancestor));
   }
 }
