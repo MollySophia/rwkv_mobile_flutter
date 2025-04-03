@@ -438,8 +438,8 @@ class _LangugaeButton extends ConsumerWidget {
                 c: CAA.start,
                 m: MAA.center,
                 children: [
-                  if (preferChinese) T(S.current.prefer, s: TS(c: kW, s: 10, height: 1)),
-                  if (preferChinese) T(S.current.chinese, s: TS(c: kW, s: 10, height: 1)),
+                  if (preferChinese) T(S.current.prefer, s: const TS(c: kW, s: 10, height: 1)),
+                  if (preferChinese) T(S.current.chinese, s: const TS(c: kW, s: 10, height: 1)),
                   if (!preferChinese) T(S.current.auto, s: TS(c: color, s: 10, height: 1)),
                 ],
               ),

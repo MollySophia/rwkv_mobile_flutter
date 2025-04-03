@@ -21,7 +21,7 @@ class _TextFieldTestState extends State<TextFieldTest> {
           _focusNode.unfocus();
         },
         child: C(
-          decoration: BD(color: kW),
+          decoration: const BD(color: kW),
           child: Column(
             children: [
               TextField(
