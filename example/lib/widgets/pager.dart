@@ -78,7 +78,7 @@ class _PagerState extends ConsumerState<Pager> {
         onNotification: _onNotification,
         child: SingleChildScrollView(
           controller: _controller,
-          physics: const _CustomPageScrollPhysics(parent: ClampingScrollPhysics()),
+          physics: _CustomPageScrollPhysics(parent: ClampingScrollPhysics()),
           scrollDirection: Axis.horizontal,
           child: SB(
             width: screenWidth * 2 - drawerToRight,
@@ -160,9 +160,9 @@ class _CustomPageScrollPhysics extends PageScrollPhysics {
 
   @override
   SpringDescription get spring => const SpringDescription(
-        mass: 1, // 质量，控制惯性
-        stiffness: 100.0, // 刚度，控制弹簧力度
-        damping: 1, // 阻尼，控制减速
+        mass: 1.2, // 质量，控制惯性
+        stiffness: 100, // 刚度，控制弹簧力度
+        damping: 2, // 阻尼，控制减速
       );
 
   // 获取目标页面索引
