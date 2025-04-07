@@ -160,8 +160,8 @@ class _CustomPageScrollPhysics extends PageScrollPhysics {
 
   @override
   SpringDescription get spring => const SpringDescription(
-        mass: 1.2, // 质量，控制惯性
-        stiffness: 100, // 刚度，控制弹簧力度
+        mass: 3, // 质量，控制惯性
+        stiffness: 400, // 刚度，控制弹簧力度
         damping: 2, // 阻尼，控制减速
       );
 
