@@ -20,16 +20,14 @@
 | Sudoku            |   🚧    |             |     |       |         |       |
 | 15Puzzle          |   🚧    |             |     |       |         |       |
 
-## TODO
+## 下载链接
 
-- Update readme
-- Add download links
+### Android APK
 
-## prompt settings
+- [Pgyer](https://www.pgyer.com/rwkvchat)
 
-prompt
+### iOS
 
-|            | force-chinese on | force-chinese off |
-| ---------- | ---------------- | ----------------- |
-| reason on  | `<think>嗯`      | `<think`          |
-| reason off | ???              | ???               |
+- [TestFlight](https://testflight.apple.com/join/DaMqCNKh)
+
+
