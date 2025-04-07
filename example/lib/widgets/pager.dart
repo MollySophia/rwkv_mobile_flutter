@@ -14,6 +14,18 @@ PageController? _controller;
 final _reverse = true;
 
 class Pager extends ConsumerStatefulWidget {
+  static final page = qs<double>(_reverse ? 0 : 1);
+  static final mainPageNotIgnoring = qs(true);
+  static final childOpacity = qs(1.0);
+  static final drawerOpacity = qs(0.0);
+
+  static FV toggle() async {
+    final page = Pager.page.v;
+    qqq("page: $page, _reverse: $_reverse");
+    final targetPage = _reverse ? (page - 1).toInt() : (page + 1).toInt();
+    await _controller!.animateToPage(targetPage, duration: 300.ms, curve: Curves.easeOutCirc);
+  }
+
   final Widget child;
   final Widget drawer;
   final double drawerToRight;
@@ -22,19 +34,6 @@ class Pager extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<Pager> createState() => _PagerState();
-
-  static final page = qs<double>(_reverse ? 0 : 1);
-  static final mainPageNotIgnoring = qs(true);
-  static final childOpacity = qs(1.0);
-  static final drawerOpacity = qs(0.0);
-
-  static FV toggle() async {
-    if (page.v == 1) {
-      await _controller!.animateToPage(_reverse ? 0 : 1, duration: 300.ms, curve: Curves.easeOutCubic);
-    } else {
-      await _controller!.animateToPage(_reverse ? 1 : 0, duration: 300.ms, curve: Curves.easeOutCubic);
-    }
-  }
 }
 
 class _PagerState extends ConsumerState<Pager> {
