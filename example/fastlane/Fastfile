@@ -65,9 +65,8 @@ lane :switch_env do |params|
 end
 
 lane :test do |params|
-  envString = (params[:env] != "chat" && params[:env] != nil && params[:env] != "") ? params[:env] : "chat"
-  puts("✅ envString: #{envString}")
-  # global_replace(env: envString)
+  raw_increase_build_number()
+  raw_increase_version_number()
 end
 
 # ✅ Shared
