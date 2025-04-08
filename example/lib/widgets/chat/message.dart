@@ -79,7 +79,7 @@ class Message extends ConsumerWidget {
 
     final received = ref.watch(P.chat.receivedTokens.select((v) => msg.changing ? v : ""));
 
-    String finalContent = changing ? received : content;
+    String finalContent = changing ? (received.isEmpty ? content : received) : content;
 
     finalContent = finalContent.replaceAll("\n", "\n\n");
     while (finalContent.contains("\n\n\n")) {
@@ -107,12 +107,8 @@ class Message extends ConsumerWidget {
             final startIndex = endIndex + subStringCount;
             cotResult = finalContent.substring(startIndex);
             if (worldType == WorldType.engVisualQAReason) {
-              if (cotResult.endsWith("</answer>")) {
-                cotResult = cotResult.replaceFirst("</answer>", "");
-              }
-              if (cotResult.startsWith("<answer>")) {
-                cotResult = cotResult.replaceFirst("<answer>", "");
-              }
+              if (cotResult.endsWith("</answer>")) cotResult = cotResult.replaceFirst("</answer>", "");
+              if (cotResult.startsWith("<answer>")) cotResult = cotResult.replaceFirst("<answer>", "");
             }
           } else {
             cotResult = "";
@@ -243,6 +239,7 @@ class Message extends ConsumerWidget {
       r: 12,
       // b: 12,
     );
+    
     Border border = Border.all(color: primaryColor.wo(0.2));
 
     if (isUserImage) {
@@ -445,8 +442,6 @@ class _BotMessageBottom extends ConsumerWidget {
     if (msg.isMine) return const SizedBox.shrink();
 
     final paused = msg.paused;
-
-    qqq("paused: $paused");
 
     final changing = msg.changing;
 

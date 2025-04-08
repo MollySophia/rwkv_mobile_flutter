@@ -379,6 +379,7 @@ class RWKVMobile {
           }
           while (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) == 1) {
             if (kDebugMode) print("💬 Waiting for generation to stop...");
+            await Future.delayed(const Duration(milliseconds: 10));
             rwkvMobile.rwkvmobile_runtime_stop_generation(runtime);
           }
           if (kDebugMode) print("💬 Generation stopped");

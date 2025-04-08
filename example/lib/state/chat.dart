@@ -326,9 +326,10 @@ extension $Chat on _Chat {
   }
 
   FV resumeMessageById({required int id}) async {
+    qq;
     Gaimon.light();
-    _updateMessageById(id: id, changing: true, paused: false);
     P.rwkv.send(_history());
+    _updateMessageById(id: id, changing: true, paused: false);
   }
 }
 
@@ -363,12 +364,12 @@ extension _$Chat on _Chat {
   }
 
   List<String> _history() {
-    final history = messages.v.where((e) {
-      return e.type != MessageType.userImage;
-    }).m((e) {
+    qq;
+    final history = messages.v.where((msg) => msg.type == MessageType.text).m((e) {
       if (!e.isReasoning) return e.content;
       if (!e.isCotFormat) return e.content;
       if (!e.containsCotEndMark) return e.content;
+      if (e.paused) return e.content;
       final (cotContent, cotResult) = e.cotContentAndResult;
       return cotResult;
     });
@@ -526,9 +527,7 @@ extension _$Chat on _Chat {
         if (!isGenerating) _fullyReceived();
         break;
       case _RWKVMessageType.responseBufferContent:
-        qqq("content: ${event.content}");
         receivedTokens.u(event.content);
-        receivingTokens.u(true);
         break;
       case _RWKVMessageType.response:
         receivedTokens.u(event.content);
