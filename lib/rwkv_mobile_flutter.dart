@@ -180,14 +180,7 @@ class RWKVMobile {
         final samplerParams = rwkvMobile.rwkvmobile_runtime_get_sampler_params(runtime);
         final penaltyParams = rwkvMobile.rwkvmobile_runtime_get_penalty_params(runtime);
         sendPort.send({
-          'samplerParams': {
-            'temperature': samplerParams.temperature,
-            'top_k': samplerParams.top_k,
-            'top_p': samplerParams.top_p,
-            'presence_penalty': penaltyParams.presence_penalty,
-            'frequency_penalty': penaltyParams.frequency_penalty,
-            'penalty_decay': penaltyParams.penalty_decay,
-          }
+          'samplerParams': {'temperature': samplerParams.temperature, 'top_k': samplerParams.top_k, 'top_p': samplerParams.top_p, 'presence_penalty': penaltyParams.presence_penalty, 'frequency_penalty': penaltyParams.frequency_penalty, 'penalty_decay': penaltyParams.penalty_decay},
         });
       } else if (command == 'setEnableReasoning') {
         final arg = message.$2 as bool;
@@ -383,6 +376,10 @@ class RWKVMobile {
           if (retVal != 0) {
             sendPort.send({'generateStop': false, 'error': 'Failed to stop generation'});
           }
+          while (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) == 1) {
+            if (kDebugMode) print("💬 Waiting for generation to stop...");
+          }
+          if (kDebugMode) print("💬 Generation stopped");
           sendPort.send({'generateStop': true});
         }
       } else if (command == 'getResponseBufferContent') {
