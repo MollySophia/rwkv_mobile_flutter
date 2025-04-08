@@ -14,16 +14,19 @@ final class Message extends Equatable {
   final bool isMine;
   final bool changing;
   final MessageType type;
+  final bool isReasoning;
+  final bool paused;
+
   final String? imageUrl;
   final String? audioUrl;
   final int? audioLength;
-  final bool isReasoning;
 
   const Message({
     required this.id,
     required this.content,
     required this.isMine,
     required this.isReasoning,
+    required this.paused,
     this.changing = false,
     this.type = MessageType.text,
     this.imageUrl,
@@ -42,6 +45,7 @@ final class Message extends Equatable {
       audioUrl: json["audioUrl"] as String?,
       audioLength: json["audioLength"] as int?,
       isReasoning: json["isReasoning"] as bool,
+      paused: json["paused"] as bool,
     );
   }
 
@@ -56,6 +60,7 @@ final class Message extends Equatable {
       "audioLength": audioLength,
       "isReasoning": isReasoning,
       "changing": false,
+      "paused": paused,
     };
   }
 
@@ -69,6 +74,7 @@ final class Message extends Equatable {
     String? audioUrl,
     int? audioLength,
     bool? isReasoning,
+    bool? paused,
   }) {
     return Message(
       id: id ?? this.id,
@@ -80,6 +86,7 @@ final class Message extends Equatable {
       audioUrl: audioUrl ?? this.audioUrl,
       audioLength: audioLength ?? this.audioLength,
       isReasoning: isReasoning ?? this.isReasoning,
+      paused: paused ?? this.paused,
     );
   }
 
@@ -96,6 +103,7 @@ Message(
   audioUrl: $audioUrl,
   audioLength: $audioLength,
   isReasoning: $isReasoning,
+  paused: $paused,
 )""";
   }
 
@@ -131,5 +139,6 @@ Message(
         audioUrl,
         audioLength,
         isReasoning,
+        paused,
       ];
 }

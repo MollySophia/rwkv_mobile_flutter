@@ -55,5 +55,6 @@
   "prefer": "使用",
   "chinese": "中文",
   "thinking": "思考中...",
-  "thought_result": "思考结果"
+  "thought_result": "思考结果",
+  "chat_resume": "继续"
 }

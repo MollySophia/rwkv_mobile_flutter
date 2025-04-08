@@ -87,6 +87,7 @@ extension $Chat on _Chat {
         isMine: false,
         changing: false,
         isReasoning: messages.v[_editingIndex].isReasoning,
+        paused: false,
       );
       // currentMessages.replaceRange(_editingIndex, _editingIndex + 1, [newBotMessage]);
       final newMessages = [
@@ -206,7 +207,7 @@ extension $Chat on _Chat {
     int? audioLength,
     bool withHistory = true,
   }) async {
-    qqq(message);
+    qqq("message length: ${message.length}");
 
     final _editingIndex = editingIndex.v;
     if (_editingIndex != null) {
@@ -227,6 +228,7 @@ extension $Chat on _Chat {
       audioUrl: audioUrl,
       audioLength: audioLength,
       isReasoning: false,
+      paused: false,
     );
     messages.ua(msg);
     P.conversation.updateMessages([...messages.v, msg]);
@@ -270,6 +272,7 @@ extension $Chat on _Chat {
       isMine: false,
       changing: true,
       isReasoning: P.rwkv.usingReasoningModel.v,
+      paused: false,
     );
 
     messages.ua(receiveMsg);
@@ -277,10 +280,16 @@ extension $Chat on _Chat {
   }
 
   FV onStopButtonPressed() async {
-    qq;
+    qqq("receiveId: ${receiveId.v}");
     Gaimon.light();
     await Future.delayed(1.ms);
     P.rwkv.stop();
+    final id = receiveId.v;
+    if (id == null) {
+      qqw("message id is null");
+      return;
+    }
+    _pauseMessageById(id: id);
   }
 
   FV loadSuggestions() async {
@@ -315,6 +324,11 @@ extension $Chat on _Chat {
     }
     messages.u(conversation.messages);
   }
+
+  FV resumeMessageById({required int id}) async {
+    _updateMessageById(id: id, changing: true, paused: false);
+    P.rwkv.send(_history());
+  }
 }
 
 /// Private methods
@@ -347,7 +361,43 @@ extension _$Chat on _Chat {
     receivingTokens.l(_onReceivingTokensChanged);
   }
 
+  List<String> _history() {
+    final history = messages.v.where((e) {
+      return e.type != MessageType.userImage;
+    }).m((e) {
+      if (!e.isReasoning) return e.content;
+      if (!e.isCotFormat) return e.content;
+      if (!e.containsCotEndMark) return e.content;
+      final (cotContent, cotResult) = e.cotContentAndResult;
+      return cotResult;
+    });
+    return history;
+  }
+
   void _onReceivingTokensChanged(bool next) async {}
+
+  FV _pauseMessageById({required int id}) async {
+    qq;
+
+    final msg = messages.v.firstWhereOrNull((e) => e.id == id);
+    if (msg == null) {
+      qqw("message not found");
+      return;
+    }
+
+    if (msg.paused) {
+      qqw("message already paused");
+      return;
+    }
+
+    final newMessages = messages.v.map((e) {
+      if (e.id == id) {
+        return e.copyWith(paused: true);
+      }
+      return e;
+    }).toList();
+    messages.u(newMessages);
+  }
 
   FV _onFocusNodeChanged() async {
     hasFocus.u(focusNode.hasFocus);
@@ -405,18 +455,44 @@ extension _$Chat on _Chat {
     if (next != textInController) textEditingController.text = next;
   }
 
-  FV _fullyReceived() async {
+  void _fullyReceived() {
+    qqq;
+
+    _updateMessageById(
+      id: receiveId.v!,
+      content: receivedTokens.v,
+      changing: false,
+    );
+  }
+
+  void _updateMessageById({
+    required int id,
+    String? content,
+    bool? isMine,
+    bool? changing,
+    MessageType? type,
+    String? imageUrl,
+    String? audioUrl,
+    int? audioLength,
+    bool? isReasoning,
+    bool? paused,
+  }) {
     final currentMessages = [...messages.v];
     bool found = false;
     for (var i = 0; i < currentMessages.length; i++) {
       final msg = currentMessages[i];
-      if (msg.id == receiveId.v) {
+      if (msg.id == id) {
         final newMsg = Message(
           id: msg.id,
-          content: receivedTokens.v,
-          isMine: msg.isMine,
-          changing: false,
-          isReasoning: msg.isReasoning,
+          content: content ?? msg.content,
+          isMine: isMine ?? msg.isMine,
+          changing: changing ?? msg.changing,
+          type: type ?? msg.type,
+          imageUrl: imageUrl ?? msg.imageUrl,
+          audioUrl: audioUrl ?? msg.audioUrl,
+          audioLength: audioLength ?? msg.audioLength,
+          isReasoning: isReasoning ?? msg.isReasoning,
+          paused: paused ?? msg.paused,
         );
         currentMessages.replaceRange(i, i + 1, [newMsg]);
         found = true;
@@ -433,6 +509,14 @@ extension _$Chat on _Chat {
     if (demoType != DemoType.chat && demoType != DemoType.world) return;
 
     switch (event.type) {
+      case _RWKVMessageType.isGenerating:
+      case _RWKVMessageType.responseBufferContent:
+        break;
+      default:
+        qqq("event: $event");
+    }
+
+    switch (event.type) {
       case _RWKVMessageType.responseBufferIds:
         break;
       case _RWKVMessageType.isGenerating:
@@ -441,6 +525,7 @@ extension _$Chat on _Chat {
         if (!isGenerating) _fullyReceived();
         break;
       case _RWKVMessageType.responseBufferContent:
+        qqq("content: ${event.content}");
         receivedTokens.u(event.content);
         receivingTokens.u(true);
         break;
@@ -478,10 +563,9 @@ extension _$Chat on _Chat {
   }
 
   FV _onStreamError(Object error, StackTrace stackTrace) async {
+    qqe("error: $error");
     final demoType = P.app.demoType.v;
     if (demoType != DemoType.chat && demoType != DemoType.world) return;
-    qqq("_onStreamError");
-    if (kDebugMode) print("😡 error: $error");
     receivingTokens.u(false);
   }
 }

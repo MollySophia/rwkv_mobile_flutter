@@ -73,7 +73,7 @@ extension $RWKV on _RWKV {
   void send(List<String> messages) {
     prefillSpeed.u(0);
     decodeSpeed.u(0);
-    qqq("message length: ${messages.m((e) => e.length)}");
+    qqq("message lengths: ${messages.m((e) => e.length)}");
     final sendPort = _sendPort;
     if (sendPort == null) {
       if (kDebugMode) print("🚧 sendPort is null");
@@ -692,4 +692,9 @@ final class LLMEvent {
     this.responseBufferIds,
     this.token,
   });
+
+  @override
+  String toString() {
+    return "LLMEvent.type: $type";
+  }
 }

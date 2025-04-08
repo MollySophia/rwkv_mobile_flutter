@@ -615,6 +615,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Resume`
+  String get chat_resume {
+    return Intl.message(
+      'Resume',
+      name: 'chat_resume',
+      desc: 'Label for chat resume',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

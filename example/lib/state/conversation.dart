@@ -14,12 +14,13 @@ class _Conversation {
 /// Private methods
 extension _$Conversation on _Conversation {
   FV _init() async {
-    qq;
     if (!Config.enableConversation) return;
+    qq;
     await load();
   }
 
   String _getConversationPath(Conversation conversation) {
+    if (!Config.enableConversation) return "";
     final dirPath = P.app.documentsDir.v?.path;
     if (dirPath == null) return "";
     return "$dirPath/conversation_${conversation.id}.json";
@@ -29,6 +30,7 @@ extension _$Conversation on _Conversation {
 /// Public methods
 extension $Conversation on _Conversation {
   FV load() async {
+    if (!Config.enableConversation) return;
     final dir = P.app.documentsDir.v;
     if (dir == null) {
       qqe("Failed to load conversations: No documents directory found");
@@ -62,6 +64,7 @@ extension $Conversation on _Conversation {
   }
 
   FV delete(Conversation conversation) async {
+    if (!Config.enableConversation) return;
     // Remove from memory
     conversations.u(conversations.v.where((c) => c.id != conversation.id).toList());
     if (current.v?.id == conversation.id) {
@@ -76,6 +79,7 @@ extension $Conversation on _Conversation {
   }
 
   FV addMessage(Message message, [Conversation? conversation]) async {
+    if (!Config.enableConversation) return;
     final now = DateTime.now().millisecondsSinceEpoch;
     if (conversation == null) {
       // Create new conversation
@@ -123,12 +127,14 @@ extension $Conversation on _Conversation {
   FV updateMessage(Message message, {required Conversation conversation}) async {}
 
   FV onTapInList(Conversation conversation) async {
+    if (!Config.enableConversation) return;
     current.u(conversation);
     Pager.toggle();
     P.chat.loadConversation(conversation);
   }
 
   FV updateMessages(List<Message> messages) async {
+    if (!Config.enableConversation) return;
     final conversation = current.v;
     if (conversation == null) return;
     final updatedConversation = Conversation(

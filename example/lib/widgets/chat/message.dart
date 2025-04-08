@@ -224,7 +224,12 @@ class Message extends ConsumerWidget {
         showUserCopyButton = false;
     }
 
-    EI padding = const EI.a(12);
+    EI padding = EI.o(
+      t: 12,
+      l: 12,
+      r: 12,
+      // b: 12,
+    );
     Border border = Border.all(color: primaryColor.wo(0.2));
 
     if (isUserImage) {
@@ -363,20 +368,25 @@ class Message extends ConsumerWidget {
                     if (showUserEditButton)
                       GD(
                         onTap: _onUserEditPressed,
-                        child: Icon(
-                          Icons.edit,
-                          color: primaryColor.wo(0.8),
-                          size: 20,
+                        child: Padding(
+                          padding: EI.o(b: 12, l: 4),
+                          child: Icon(
+                            Icons.edit,
+                            color: primaryColor.wo(0.8),
+                            size: 20,
+                          ),
                         ),
                       ),
-                    if (showUserEditButton) 4.w,
                     if (showUserCopyButton)
                       GD(
                         onTap: _onCopyPressed,
-                        child: Icon(
-                          Icons.copy,
-                          color: primaryColor.wo(0.8),
-                          size: 20,
+                        child: Padding(
+                          padding: EI.o(b: 12, l: 4),
+                          child: Icon(
+                            Icons.copy,
+                            color: primaryColor.wo(0.8),
+                            size: 20,
+                          ),
                         ),
                       ),
                   ],
@@ -417,22 +427,13 @@ class _BotMessageBottom extends ConsumerWidget {
 
   const _BotMessageBottom(this.msg, this.index);
 
-  void _onBotEditPressed() async {
-    await P.chat.onTapEditInBotMessageBubble(index: index);
-  }
-
-  void _onRegeneratePressed() async {
-    await P.chat.onRegeneratePressed(index: index);
-  }
-
-  void _onCopyPressed() {
-    Alert.success(S.current.chat_copied_to_clipboard);
-    Clipboard.setData(ClipboardData(text: msg.content));
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (msg.isMine) return const SizedBox.shrink();
+
+    final paused = msg.paused;
+
+    qqq("paused: $paused");
 
     final changing = msg.changing;
 
@@ -459,52 +460,96 @@ class _BotMessageBottom extends ConsumerWidget {
         children: [
           if (changing)
             GD(
-              child: TweenAnimationBuilder(
-                tween: Tween(begin: 0.0, end: 1.0),
-                duration: const Duration(milliseconds: 1000000000),
-                builder: (context, value, child) => Transform.rotate(
-                  angle: value * 2 * pi * 1000000,
-                  child: child,
-                ),
-                child: Icon(
-                  Icons.hourglass_top,
-                  color: primaryColor,
-                  size: 20,
+              child: Padding(
+                padding: EI.o(b: 12, r: 4),
+                child: TweenAnimationBuilder(
+                  tween: Tween(begin: 0.0, end: 1.0),
+                  duration: const Duration(milliseconds: 1000000000),
+                  builder: (context, value, child) => Transform.rotate(
+                    angle: value * 2 * pi * 1000000,
+                    child: child,
+                  ),
+                  child: Icon(
+                    Icons.hourglass_top,
+                    color: primaryColor,
+                    size: 20,
+                  ),
                 ),
               ),
             ),
           4.w,
           GD(
             onTap: _onRegeneratePressed,
-            child: Icon(
-              Icons.refresh,
-              color: primaryColor.wo(0.8),
-              size: 20,
+            child: Padding(
+              padding: EI.o(b: 12, r: 4),
+              child: Icon(
+                Icons.refresh,
+                color: primaryColor.wo(0.8),
+                size: 20,
+              ),
             ),
           ),
-          if (showBotEditButton) 4.w,
           if (showBotEditButton)
             GD(
               onTap: _onBotEditPressed,
-              child: Icon(
-                Icons.edit,
-                color: primaryColor.wo(0.8),
-                size: 20,
+              child: Padding(
+                padding: EI.o(b: 12, r: 4),
+                child: Icon(
+                  Icons.edit,
+                  color: primaryColor.wo(0.8),
+                  size: 20,
+                ),
               ),
             ),
           if (showBotCopyButton) 4.w,
           if (showBotCopyButton)
             GD(
               onTap: _onCopyPressed,
-              child: Icon(
-                Icons.copy,
-                color: primaryColor.wo(0.8),
-                size: 20,
-              ),
+              child: Padding(
+                padding: EI.o(b: 12, r: 4),
+                child: Icon(
+                  Icons.copy,
+                  color: primaryColor.wo(0.8),
+                  size: 20,
+                ),
+              ).debug,
+            ),
+          if (paused) Spacer(),
+          if (paused)
+            GD(
+              onTap: _onResumePressed,
+              child: C(
+                padding: EI.o(b: 10, l: 12),
+                child: C(
+                  padding: EI.s(v: 1, h: 8),
+                  decoration: BD(color: kC, border: Border.all(color: primaryColor.wo(0.67)), borderRadius: 4.r),
+                  child: T(
+                    S.current.chat_resume,
+                    s: TS(c: primaryColor, w: FW.w600, s: 16),
+                  ),
+                ),
+              ).debug,
             ),
         ],
-      ),
+      ).debug,
     );
+  }
+
+  void _onResumePressed() {
+    P.chat.resumeMessageById(id: msg.id);
+  }
+
+  void _onBotEditPressed() async {
+    await P.chat.onTapEditInBotMessageBubble(index: index);
+  }
+
+  void _onRegeneratePressed() async {
+    await P.chat.onRegeneratePressed(index: index);
+  }
+
+  void _onCopyPressed() {
+    Alert.success(S.current.chat_copied_to_clipboard);
+    Clipboard.setData(ClipboardData(text: msg.content));
   }
 }
 

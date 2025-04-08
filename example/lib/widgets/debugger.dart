@@ -28,6 +28,8 @@ class Debugger extends ConsumerWidget {
     final page = ref.watch(Pager.page);
     final mainPageNotIgnoring = ref.watch(Pager.mainPageNotIgnoring);
     final conversation = ref.watch(P.conversation.current);
+    final receivingTokens = ref.watch(P.chat.receivingTokens);
+    final receiveId = ref.watch(P.chat.receiveId);
 
     return Positioned(
       left: 0,
@@ -81,6 +83,10 @@ class Debugger extends ConsumerWidget {
                   T(mainPageNotIgnoring.toString()),
                   T("conversation".codeToName),
                   T(conversation?.name ?? "null"),
+                  T("receivingTokens".codeToName),
+                  T(receivingTokens.toString()),
+                  T("receiveId".codeToName),
+                  T(receiveId.toString()),
                 ].indexMap((index, e) {
                   return C(
                     margin: EI.o(t: index % 2 == 1 ? 0 : 1),

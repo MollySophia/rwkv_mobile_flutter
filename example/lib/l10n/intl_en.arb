@@ -245,5 +245,9 @@
   "thought_result": "Thought result",
   "@thought_result": {
     "description": "Label for thought result"
+  },
+  "chat_resume": "Resume",
+  "@chat_resume": {
+    "description": "Label for chat resume"
   }
 }

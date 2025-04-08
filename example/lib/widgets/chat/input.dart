@@ -250,9 +250,7 @@ class _BottomBar extends ConsumerWidget {
         const Spacer(),
         if (receiving)
           GD(
-            onTap: () {
-              P.chat.onStopButtonPressed();
-            },
+            onTap: P.chat.onStopButtonPressed,
             child: C(
               decoration: const BD(color: kC),
               child: Stack(
