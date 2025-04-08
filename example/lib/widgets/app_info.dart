@@ -88,7 +88,7 @@ class AppInfo extends ConsumerWidget {
               m: MAA.center,
               children: [
                 T(
-                  "World RWKV",
+                  "RWKV Chat",
                   s: TS(s: 24),
                 ),
               ],
@@ -201,7 +201,7 @@ class AppInfo extends ConsumerWidget {
   void _showLicensePage(BuildContext context, String version, String buildNumber, Widget iconWidget) {
     showLicensePage(
       context: context,
-      applicationName: "World RWKV",
+      applicationName: "RWKV Chat",
       applicationVersion: "$version ($buildNumber)",
       applicationIcon: C(
         margin: const EI.o(t: 12, b: 12),

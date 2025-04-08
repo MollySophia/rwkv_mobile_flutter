@@ -274,7 +274,7 @@ extension $RWKV on _RWKV {
     prefillSpeed.u(0);
     decodeSpeed.u(0);
 
-    final tokenizerPath = await fromAssetsToTemp("assets/config/world/b_rwkv_vocab_v20230424.txt");
+    final tokenizerPath = await fromAssetsToTemp("assets/config/chat/b_rwkv_vocab_v20230424.txt");
 
     final rootIsolateToken = RootIsolateToken.instance;
 
@@ -331,7 +331,7 @@ extension $RWKV on _RWKV {
     prefillSpeed.u(0);
     decodeSpeed.u(0);
 
-    final tokenizerPath = await fromAssetsToTemp("assets/config/world/b_rwkv_vocab_v20230424.txt");
+    final tokenizerPath = await fromAssetsToTemp("assets/config/chat/b_rwkv_vocab_v20230424.txt");
 
     final rootIsolateToken = RootIsolateToken.instance;
 
