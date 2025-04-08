@@ -20,9 +20,9 @@ class Pager extends ConsumerStatefulWidget {
   static final drawerOpacity = qs(0.0);
 
   static FV toggle() async {
-    final page = Pager.page.v;
-    qqq("page: $page, _reverse: $_reverse");
-    final targetPage = _reverse ? (page - 1).toInt() : (page + 1).toInt();
+    final currentPage = Pager.page.v;
+    qqq("currentPage: $currentPage, _reverse: $_reverse");
+    final targetPage = currentPage == 0 ? 1 : 0;
     await _controller!.animateToPage(targetPage, duration: 300.ms, curve: Curves.easeOutCirc);
   }
 
