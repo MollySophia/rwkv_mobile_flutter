@@ -326,6 +326,7 @@ extension $Chat on _Chat {
   }
 
   FV resumeMessageById({required int id}) async {
+    Gaimon.light();
     _updateMessageById(id: id, changing: true, paused: false);
     P.rwkv.send(_history());
   }
