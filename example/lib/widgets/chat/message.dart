@@ -19,8 +19,8 @@ import 'package:zone/route/method.dart';
 import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
 
-const double _kTextScaleFactor = 1.3;
-const double _kTextScaleFactorForCotContent = 1.2;
+const double _kTextScaleFactor = 1.1;
+const double _kTextScaleFactorForCotContent = 1;
 
 class Message extends ConsumerWidget {
   final model.Message msg;
@@ -30,14 +30,6 @@ class Message extends ConsumerWidget {
 
   void _onUserEditPressed() async {
     await P.chat.onTapEditInUserMessageBubble(index: index);
-  }
-
-  void _onBotEditPressed() async {
-    await P.chat.onTapEditInBotMessageBubble(index: index);
-  }
-
-  void _onRegeneratePressed() async {
-    await P.chat.onRegeneratePressed(index: index);
   }
 
   void _onCopyPressed() {
@@ -74,8 +66,6 @@ class Message extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    qq;
-
     final isMine = msg.isMine;
     final alignment = isMine ? Alignment.centerRight : Alignment.centerLeft;
     const marginHorizontal = 12.0;
@@ -103,6 +93,7 @@ class Message extends ConsumerWidget {
     String cotResult = "";
 
     if (usingReasoningModel) {
+      assert(!msg.isMine);
       final isCot = finalContent.startsWith("<think>");
       if (isCot) {
         if (finalContent.contains("</think>")) {
@@ -223,18 +214,14 @@ class Message extends ConsumerWidget {
     }
 
     bool showUserEditButton = true;
-    bool showBotEditButton = true;
     bool showUserCopyButton = true;
-    bool showBotCopyButton = true;
 
     switch (worldType) {
       case null:
         break;
       default:
         showUserEditButton = false;
-        showBotEditButton = false;
         showUserCopyButton = false;
-        showBotCopyButton = false;
     }
 
     EI padding = const EI.a(12);
@@ -395,59 +382,7 @@ class Message extends ConsumerWidget {
                   ],
                 ),
               // 🔥 Bot message bottom row
-              if (!isMine) 12.h,
-              if (!isMine)
-                Ro(
-                  m: MAA.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (changing)
-                      GD(
-                        child: TweenAnimationBuilder(
-                          tween: Tween(begin: 0.0, end: 1.0),
-                          duration: const Duration(milliseconds: 1000000000),
-                          builder: (context, value, child) => Transform.rotate(
-                            angle: value * 2 * pi * 1000000,
-                            child: child,
-                          ),
-                          child: Icon(
-                            Icons.hourglass_top,
-                            color: primaryColor,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    4.w,
-                    GD(
-                      onTap: _onRegeneratePressed,
-                      child: Icon(
-                        Icons.refresh,
-                        color: primaryColor.wo(0.8),
-                        size: 20,
-                      ),
-                    ),
-                    if (showBotEditButton) 4.w,
-                    if (showBotEditButton)
-                      GD(
-                        onTap: _onBotEditPressed,
-                        child: Icon(
-                          Icons.edit,
-                          color: primaryColor.wo(0.8),
-                          size: 20,
-                        ),
-                      ),
-                    if (showBotCopyButton) 4.w,
-                    if (showBotCopyButton)
-                      GD(
-                        onTap: _onCopyPressed,
-                        child: Icon(
-                          Icons.copy,
-                          color: primaryColor.wo(0.8),
-                          size: 20,
-                        ),
-                      ),
-                  ],
-                ),
+              _BotMessageBottom(msg, index),
             ],
           ),
         ),
@@ -471,6 +406,103 @@ class Message extends ConsumerWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _BotMessageBottom extends ConsumerWidget {
+  final model.Message msg;
+  final int index;
+
+  const _BotMessageBottom(this.msg, this.index);
+
+  void _onBotEditPressed() async {
+    await P.chat.onTapEditInBotMessageBubble(index: index);
+  }
+
+  void _onRegeneratePressed() async {
+    await P.chat.onRegeneratePressed(index: index);
+  }
+
+  void _onCopyPressed() {
+    Alert.success(S.current.chat_copied_to_clipboard);
+    Clipboard.setData(ClipboardData(text: msg.content));
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (msg.isMine) return const SizedBox.shrink();
+
+    final changing = msg.changing;
+
+    final primaryColor = Theme.of(context).colorScheme.primary;
+
+    final worldType = ref.watch(P.rwkv.currentWorldType);
+
+    bool showBotEditButton = true;
+    bool showBotCopyButton = true;
+
+    switch (worldType) {
+      case null:
+        break;
+      default:
+        showBotEditButton = false;
+        showBotCopyButton = false;
+    }
+
+    return C(
+      padding: const EI.o(t: 12),
+      child: Ro(
+        m: MAA.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (changing)
+            GD(
+              child: TweenAnimationBuilder(
+                tween: Tween(begin: 0.0, end: 1.0),
+                duration: const Duration(milliseconds: 1000000000),
+                builder: (context, value, child) => Transform.rotate(
+                  angle: value * 2 * pi * 1000000,
+                  child: child,
+                ),
+                child: Icon(
+                  Icons.hourglass_top,
+                  color: primaryColor,
+                  size: 20,
+                ),
+              ),
+            ),
+          4.w,
+          GD(
+            onTap: _onRegeneratePressed,
+            child: Icon(
+              Icons.refresh,
+              color: primaryColor.wo(0.8),
+              size: 20,
+            ),
+          ),
+          if (showBotEditButton) 4.w,
+          if (showBotEditButton)
+            GD(
+              onTap: _onBotEditPressed,
+              child: Icon(
+                Icons.edit,
+                color: primaryColor.wo(0.8),
+                size: 20,
+              ),
+            ),
+          if (showBotCopyButton) 4.w,
+          if (showBotCopyButton)
+            GD(
+              onTap: _onCopyPressed,
+              child: Icon(
+                Icons.copy,
+                color: primaryColor.wo(0.8),
+                size: 20,
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -559,8 +591,6 @@ class _PhotoViewerOverlay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final screenWidth = ref.watch(P.app.screenWidth);
-    final screenHeight = ref.watch(P.app.screenHeight);
     final paddingTop = ref.watch(P.app.paddingTop);
     final paddingRight = ref.watch(P.app.paddingRight);
     return Ro(

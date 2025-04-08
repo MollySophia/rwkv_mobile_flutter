@@ -22,14 +22,24 @@ class ModelItem extends ConsumerWidget {
 
   void _onStartTap() async {
     qq;
-    if (P.rwkv.loading.v) return;
+
+    if (P.chat.receivingTokens.v) {
+      Alert.warning("Please wait for the model to generate");
+      return;
+    }
+
+    if (P.rwkv.loading.v) {
+      Alert.info("Please wait for the model to load");
+      return;
+    }
+
     final localFile = P.fileManager.locals(fileInfo).v;
     final modelPath = localFile.targetPath;
     final backend = localFile.fileInfo.backend;
 
     try {
       P.rwkv.clearStates();
-      P.chat.messages.u([]);
+      if (!Config.enableConversation) P.chat.messages.u([]);
       await P.rwkv.loadChat(
         modelPath: modelPath,
         backend: backend!,

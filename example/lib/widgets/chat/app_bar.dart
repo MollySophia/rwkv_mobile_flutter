@@ -136,6 +136,7 @@ class _MenuButton extends ConsumerWidget {
   const _MenuButton();
 
   void _onPressed() {
+    qqq;
     if (Config.enableConversation) Pager.toggle();
     if (!Config.enableConversation) AppInfo.show(getContext()!);
   }

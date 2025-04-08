@@ -3,6 +3,12 @@ part of 'p.dart';
 class _Conversation {
   final conversations = qs<List<Conversation>>([]);
   final current = qs<Conversation?>(null);
+
+  final sorted = qp<List<Conversation>>((ref) {
+    final conversations = ref.watch(P.conversation.conversations);
+    conversations.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+    return conversations;
+  });
 }
 
 /// Private methods
@@ -13,10 +19,10 @@ extension _$Conversation on _Conversation {
     await load();
   }
 
-  String _getConversationPath(int id) {
-    final dir = P.app.documentsDir.v;
-    if (dir == null) return "";
-    return "$dir/conversation_$id.json";
+  String _getConversationPath(Conversation conversation) {
+    final dirPath = P.app.documentsDir.v?.path;
+    if (dirPath == null) return "";
+    return "$dirPath/conversation_${conversation.id}.json";
   }
 }
 
@@ -29,8 +35,7 @@ extension $Conversation on _Conversation {
       return;
     }
 
-    final directory = Directory(dir.path);
-    final files = await directory.list().toList();
+    final files = await dir.list().toList();
     final conversationFiles = files.where((file) => file.path.contains('conversation_')).toList();
 
     final loadedConversations = <Conversation>[];
@@ -39,6 +44,11 @@ extension $Conversation on _Conversation {
         final content = await File(file.path).readAsString();
         final json = jsonDecode(content);
         final conversation = Conversation.fromJson(json);
+        if (kDebugMode) {
+          for (final msg in conversation.messages) {
+            qqq(msg.content.length);
+          }
+        }
         loadedConversations.add(conversation);
       } catch (e) {
         qqe("Failed to load conversation");
@@ -47,25 +57,26 @@ extension $Conversation on _Conversation {
     }
 
     // Sort conversations by id in descending order (newest first)
-    loadedConversations.sort((a, b) => b.id.compareTo(a.id));
+    loadedConversations.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
     conversations.u(loadedConversations);
   }
 
-  FV delete(int id) async {
+  FV delete(Conversation conversation) async {
     // Remove from memory
-    conversations.u(conversations.v.where((c) => c.id != id).toList());
-    if (current.v?.id == id) {
+    conversations.u(conversations.v.where((c) => c.id != conversation.id).toList());
+    if (current.v?.id == conversation.id) {
       current.u(null);
     }
 
     // Delete file
-    final file = File(_getConversationPath(id));
+    final file = File(_getConversationPath(conversation));
     if (await file.exists()) {
       await file.delete();
     }
   }
 
   FV addMessage(Message message, [Conversation? conversation]) async {
+    final now = DateTime.now().millisecondsSinceEpoch;
     if (conversation == null) {
       // Create new conversation
       final newId = conversations.v.isEmpty ? 1 : (conversations.v.firstOrNull?.id ?? 0) + 1;
@@ -73,6 +84,8 @@ extension $Conversation on _Conversation {
         id: newId,
         name: message.content.substring(0, message.content.length.clamp(0, 30)) + (message.content.length > 30 ? "..." : ""),
         messages: [message],
+        createdAt: now,
+        updatedAt: now,
       );
     } else {
       // Add message to existing conversation
@@ -80,6 +93,8 @@ extension $Conversation on _Conversation {
         id: conversation.id,
         name: conversation.name,
         messages: [...conversation.messages, message],
+        createdAt: conversation.createdAt,
+        updatedAt: now,
       );
     }
 
@@ -98,11 +113,40 @@ extension $Conversation on _Conversation {
     current.u(conversation);
 
     // Save to file
-    final file = File(_getConversationPath(conversation.id));
+    final file = File(_getConversationPath(conversation));
+    if (!await file.exists()) await file.create(recursive: true);
     await file.writeAsString(jsonEncode(conversation.toJson()));
   }
 
   FV removeMessage(Message message, {required Conversation conversation}) async {}
 
   FV updateMessage(Message message, {required Conversation conversation}) async {}
+
+  FV onTapInList(Conversation conversation) async {
+    current.u(conversation);
+    Pager.toggle();
+    P.chat.loadConversation(conversation);
+  }
+
+  FV updateMessages(List<Message> messages) async {
+    final conversation = current.v;
+    if (conversation == null) return;
+    final updatedConversation = Conversation(
+      id: conversation.id,
+      name: conversation.name,
+      messages: messages,
+      createdAt: conversation.createdAt,
+      updatedAt: DateTime.now().millisecondsSinceEpoch,
+    );
+
+    conversations.u([
+      ...conversations.v.where((c) => c.id != conversation.id),
+      updatedConversation,
+    ]);
+
+    // Save to file
+    final file = File(_getConversationPath(conversation));
+    if (!await file.exists()) await file.create(recursive: true);
+    await file.writeAsString(jsonEncode(updatedConversation.toJson()));
+  }
 }

@@ -15,6 +15,7 @@ class Menu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final paddingTop = ref.watch(P.app.paddingTop);
     return Material(
+      color: kW,
       child: Co(
         m: MAA.center,
         children: [

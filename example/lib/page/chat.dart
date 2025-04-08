@@ -303,7 +303,6 @@ class List extends ConsumerWidget {
           controller: P.chat.scrollController,
           child: ListView.separated(
             reverse: true,
-            physics: loaded ? const AlwaysScrollableScrollPhysics() : const NeverScrollableScrollPhysics(),
             padding: EI.o(t: top, b: bottom, l: paddingLeft, r: paddingRight),
             controller: P.chat.scrollController,
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
