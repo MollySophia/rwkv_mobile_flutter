@@ -9,8 +9,10 @@ lane :all do |params|
   if increase_version
     version_number = raw_increase_version_number()
   end
-  git_commit(message: version_number.to_s + "(" + build_number.to_s + ")", path: "*")
-  push_to_git_remote()
+  if envString == "chat"
+    git_commit(message: version_number.to_s + "(" + build_number.to_s + ")", path: "*")
+    push_to_git_remote()
+  end
   global_replace(env: envString) # 替换环境变量
   build_assets() # 构建 assets
 
@@ -22,8 +24,10 @@ lane :all do |params|
     ios_upload(groups: ["External"])
   end
 
-  git_reset()
-  git_pull()
+  if envString == "chat"
+    git_reset()
+    git_pull()
+  end
 end
 
 lane :ios_upload do |params|
