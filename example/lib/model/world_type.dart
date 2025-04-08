@@ -1,5 +1,6 @@
 enum WorldType {
   engVisualQA,
+  engVisualQAReason,
   engAudioQA,
   chineseASR,
   engASR,
@@ -9,6 +10,8 @@ enum WorldType {
     switch (this) {
       case WorldType.engVisualQA:
         return "English Visual QA";
+      case WorldType.engVisualQAReason:
+        return "English Visual QA Reasoning";
       case WorldType.engAudioQA:
         return "English Audio QA";
       case WorldType.chineseASR:
@@ -22,6 +25,8 @@ enum WorldType {
     switch (this) {
       case WorldType.engVisualQA:
         return "Visual Question Answering";
+      case WorldType.engVisualQAReason:
+        return "Visual Question Answering (Reasoning)";
       case WorldType.engAudioQA:
         return "Audio Question Answering";
       case WorldType.chineseASR:
@@ -39,6 +44,7 @@ enum WorldType {
       case WorldType.engASR:
         return true;
       case WorldType.engVisualQA:
+      case WorldType.engVisualQAReason:
         return false;
     }
   }
@@ -47,6 +53,7 @@ enum WorldType {
   bool get isVisualDemo {
     switch (this) {
       case WorldType.engVisualQA:
+      case WorldType.engVisualQAReason:
         return true;
       case WorldType.engAudioQA:
       case WorldType.chineseASR:

@@ -82,6 +82,7 @@ class Input extends ConsumerWidget {
 
     switch (currentWorldType) {
       case WorldType.engVisualQA:
+      case WorldType.engVisualQAReason:
         if (imagePath != null && imagePath.isNotEmpty) {
           hintText = "Ask me anything about the image";
         } else {

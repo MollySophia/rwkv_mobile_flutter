@@ -54,6 +54,7 @@ class AudioInput extends ConsumerWidget {
       switch (currentWorldType) {
         case null:
         case WorldType.engVisualQA:
+        case WorldType.engVisualQAReason:
           shouldShow = false;
         case WorldType.engAudioQA:
         case WorldType.chineseASR:
@@ -68,6 +69,7 @@ class AudioInput extends ConsumerWidget {
       switch (currentWorldType) {
         case null:
         case WorldType.engVisualQA:
+        case WorldType.engVisualQAReason:
           bottomMessage = "";
         case WorldType.engAudioQA:
           bottomMessage = "Press and hold the microphone button above\nrelease to send";

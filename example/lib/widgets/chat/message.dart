@@ -209,6 +209,7 @@ class Message extends ConsumerWidget {
         }
       case null:
       case WorldType.engVisualQA:
+      case WorldType.engVisualQAReason:
       case WorldType.engAudioQA:
         break;
     }
@@ -512,7 +513,7 @@ class _BotMessageBottom extends ConsumerWidget {
                   color: primaryColor.wo(0.8),
                   size: 20,
                 ),
-              ).debug,
+              ),
             ),
           if (paused) Spacer(),
           if (paused)
@@ -528,10 +529,10 @@ class _BotMessageBottom extends ConsumerWidget {
                     s: TS(c: primaryColor, w: FW.w600, s: 16),
                   ),
                 ),
-              ).debug,
+              ),
             ),
         ],
-      ).debug,
+      ),
     );
   }
 

@@ -62,6 +62,7 @@ class ModelGroupItem extends ConsumerWidget {
             backend: modelFileKey.backend!,
           );
         case WorldType.engVisualQA:
+        case WorldType.engVisualQAReason:
           await P.rwkv.loadWorldVision(
             modelPath: modelLocalFile.targetPath,
             encoderPath: encoderLocalFile.targetPath,
@@ -115,12 +116,11 @@ class ModelGroupItem extends ConsumerWidget {
         child: Co(
           c: CAA.stretch,
           children: [
-            Ro(
-              c: CAA.baseline,
-              textBaseline: TextBaseline.alphabetic,
+            Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 T(worldType.displayName, s: const TS(s: 18, w: FW.w600)),
-                const Spacer(),
                 T(worldType.taskDescription, s: const TS(s: 12, w: FW.w400)),
               ],
             ),

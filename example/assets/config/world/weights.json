@@ -1,5 +1,28 @@
 [
   {
+    "name": "RWKV7-G1 Siglip Vision Encoder",
+    "type": "gguf",
+    "modelSize": 0.4,
+    "fileName": "rwkv7-g1-0.4B-siglip_vision_encoder-F16.gguf",
+    "fileSize": 197526912,
+    "url": "mollysama/rwkv-mobile-models/blob/main/multimodal/vision_encoder/rwkv7-g1-0.4B-siglip_vision_encoder-F16.gguf",
+    "quantization": "fp16",
+    "platforms": ["macos", "windows", "linux", "android"],
+    "backends": ["llamacpp"],
+    "tags": ["encoder"]
+  },
+  {
+    "name": "RWKV7-G1 Siglip Vision 0.4B",
+    "type": "gguf",
+    "modelSize": 0.4,
+    "fileName": "rwkv7-g1-0.4B-siglip-F16.gguf",
+    "fileSize": 910441408,
+    "url": "mollysama/rwkv-mobile-models/raw/main/multimodal/model/rwkv7-g1-0.4B-siglip-F16.gguf",
+    "quantization": "fp16",
+    "platforms": ["macos", "windows", "linux", "android"],
+    "backends": ["llamacpp"]
+  },
+  {
     "name": "RWKV7 Siglip Vision Encoder",
     "type": "gguf",
     "modelSize": 0.4,

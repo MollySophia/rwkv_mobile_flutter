@@ -270,6 +270,7 @@ class List extends ConsumerWidget {
       case null:
         break;
       case WorldType.engVisualQA:
+      case WorldType.engVisualQAReason:
         // final visualFloatHeight = ref.watch(P.world.visualFloatHeight);
         // if (visualFloatHeight != null) {
         //   top += visualFloatHeight;
