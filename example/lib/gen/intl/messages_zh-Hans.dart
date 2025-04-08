@@ -76,7 +76,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "othello_title": MessageLookupByLibrary.simpleMessage("RWKV 黑白棋"),
     "please_select_a_world_type": MessageLookupByLibrary.simpleMessage(
-      "请选择世界类型",
+      "请选择 World 类型",
     ),
     "please_wait_for_the_model_to_finish_generating":
         MessageLookupByLibrary.simpleMessage("请等待模型生成完成"),
@@ -92,7 +92,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "rwkv_chat": MessageLookupByLibrary.simpleMessage("RWKV 聊天"),
     "rwkv_othello": MessageLookupByLibrary.simpleMessage("RWKV 黑白棋"),
     "select_a_model": MessageLookupByLibrary.simpleMessage("选择模型"),
-    "select_a_world_type": MessageLookupByLibrary.simpleMessage("选择世界类型"),
+    "select_a_world_type": MessageLookupByLibrary.simpleMessage("选择 World 类型"),
     "send_message_to_rwkv": MessageLookupByLibrary.simpleMessage("发送消息给 RWKV"),
     "session_configuration": MessageLookupByLibrary.simpleMessage("会话配置"),
     "speed": MessageLookupByLibrary.simpleMessage("下载速度："),

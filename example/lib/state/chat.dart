@@ -298,8 +298,8 @@ extension $Chat on _Chat {
     final currentLocale = Intl.getCurrentLocale();
     bool useEn = currentLocale.startsWith("en");
 
-    final assetPath = useEn ? "assets/config/chat/suggestions.en-US${kDebugMode ? ".debug" : ""}.json" : "assets/config/chat/suggestions.zh-hans${kDebugMode ? ".debug" : ""}.json";
-    final anotherAssetPath = !useEn ? "assets/config/chat/suggestions.en-US${kDebugMode ? ".debug" : ""}.json" : "assets/config/chat/suggestions.zh-hans${kDebugMode ? ".debug" : ""}.json";
+    final assetPath = useEn ? "assets/config/world/suggestions.en-US${kDebugMode ? ".debug" : ""}.json" : "assets/config/world/suggestions.zh-hans${kDebugMode ? ".debug" : ""}.json";
+    final anotherAssetPath = !useEn ? "assets/config/world/suggestions.en-US${kDebugMode ? ".debug" : ""}.json" : "assets/config/world/suggestions.zh-hans${kDebugMode ? ".debug" : ""}.json";
 
     final jsonString = await rootBundle.loadString(assetPath);
     final list = HF.list(jsonDecode(jsonString));

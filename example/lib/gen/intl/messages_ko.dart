@@ -20,7 +20,7 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ko';
 
-  static String m0(demoName) => "RWKV 월드 v7을 탐색해 보세요";
+  static String m0(demoName) => "${demoName} 을 탐색해 보세요";
 
   static String m1(memUsed, memFree) =>
       "사용 중 메모리: ${memUsed}, 여유 메모리: ${memFree}";

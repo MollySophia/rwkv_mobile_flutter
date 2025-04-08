@@ -6,6 +6,8 @@ enum WorldType {
   engASR,
   ;
 
+
+
   String get displayName {
     switch (this) {
       case WorldType.engVisualQA:
@@ -49,7 +51,6 @@ enum WorldType {
     }
   }
 
-  // TODO: Use it in the future @wangce
   bool get isVisualDemo {
     switch (this) {
       case WorldType.engVisualQA:

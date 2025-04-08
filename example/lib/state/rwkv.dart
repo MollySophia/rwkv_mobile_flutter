@@ -247,6 +247,7 @@ extension $RWKV on _RWKV {
   FV setModelConfig({
     bool? usingReasoningModel,
     bool? preferChinese,
+    bool setPrompt = true,
   }) async {
     if (usingReasoningModel != null) _usingReasoningModel.u(usingReasoningModel);
     if (preferChinese != null) _preferChinese.u(preferChinese);
@@ -258,7 +259,7 @@ extension $RWKV on _RWKV {
     qqq("setPrompt: $finalPrompt");
 
     _sendPort!.send(("setEnableReasoning", _usingReasoningModel.v));
-    _sendPort!.send(("setPrompt", finalPrompt));
+    if (setPrompt) _sendPort!.send(("setPrompt", finalPrompt));
     _sendPort!.send(("setThinkingToken", _preferChinese.v ? "<think>嗯" : "<think"));
   }
 
@@ -273,7 +274,7 @@ extension $RWKV on _RWKV {
     prefillSpeed.u(0);
     decodeSpeed.u(0);
 
-    final tokenizerPath = await fromAssetsToTemp("assets/config/chat/b_rwkv_vocab_v20230424.txt");
+    final tokenizerPath = await fromAssetsToTemp("assets/config/world/b_rwkv_vocab_v20230424.txt");
 
     final rootIsolateToken = RootIsolateToken.instance;
 
@@ -307,7 +308,11 @@ extension $RWKV on _RWKV {
     }
 
     _sendPort!.send(("loadVisionEncoder", encoderPath));
-    await setModelConfig(usingReasoningModel: usingReasoningModel);
+    await setModelConfig(
+      usingReasoningModel: usingReasoningModel,
+      preferChinese: false,
+      setPrompt: false,
+    );
     await resetSamplerParams(usingReasoningModel: usingReasoningModel);
     await resetMaxLength(usingReasoningModel: usingReasoningModel);
     _sendPort!.send(("setEosToken", "\x17"));
@@ -326,7 +331,7 @@ extension $RWKV on _RWKV {
     prefillSpeed.u(0);
     decodeSpeed.u(0);
 
-    final tokenizerPath = await fromAssetsToTemp("assets/config/chat/b_rwkv_vocab_v20230424.txt");
+    final tokenizerPath = await fromAssetsToTemp("assets/config/world/b_rwkv_vocab_v20230424.txt");
 
     final rootIsolateToken = RootIsolateToken.instance;
 

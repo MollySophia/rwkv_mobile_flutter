@@ -7,6 +7,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:photo_viewer/photo_viewer.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:zone/config.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:halo_alert/halo_alert.dart';
 import 'package:flutter/material.dart';
@@ -92,6 +93,9 @@ class Message extends ConsumerWidget {
     String cotContent = "";
     String cotResult = "";
 
+    final worldType = ref.watch(P.rwkv.currentWorldType);
+    final subStringCount = worldType == WorldType.engVisualQAReason ? 8 : 9;
+
     if (usingReasoningModel) {
       assert(!msg.isMine);
       final isCot = finalContent.startsWith("<think>");
@@ -99,8 +103,17 @@ class Message extends ConsumerWidget {
         if (finalContent.contains("</think>")) {
           final endIndex = finalContent.indexOf("</think>");
           cotContent = finalContent.substring(7, endIndex);
-          if (endIndex + 9 < finalContent.length) {
-            cotResult = finalContent.substring(endIndex + 9);
+          if (endIndex + subStringCount < finalContent.length) {
+            final startIndex = endIndex + subStringCount;
+            cotResult = finalContent.substring(startIndex);
+            if (worldType == WorldType.engVisualQAReason) {
+              if (cotResult.endsWith("</answer>")) {
+                cotResult = cotResult.replaceFirst("</answer>", "");
+              }
+              if (cotResult.startsWith("<answer>")) {
+                cotResult = cotResult.replaceFirst("<answer>", "");
+              }
+            }
           } else {
             cotResult = "";
           }
@@ -192,7 +205,6 @@ class Message extends ConsumerWidget {
     final isUserAudio = msg.type == model.MessageType.userAudio;
 
     String worldDemoMessageHeader = "";
-    final worldType = ref.watch(P.rwkv.currentWorldType);
 
     switch (worldType) {
       case WorldType.chineseASR:
@@ -225,7 +237,7 @@ class Message extends ConsumerWidget {
         showUserCopyButton = false;
     }
 
-    EI padding = EI.o(
+    EI padding = const EI.o(
       t: 12,
       l: 12,
       r: 12,
@@ -370,7 +382,7 @@ class Message extends ConsumerWidget {
                       GD(
                         onTap: _onUserEditPressed,
                         child: Padding(
-                          padding: EI.o(b: 12, l: 4),
+                          padding: const EI.o(b: 12, l: 4),
                           child: Icon(
                             Icons.edit,
                             color: primaryColor.wo(0.8),
@@ -382,7 +394,7 @@ class Message extends ConsumerWidget {
                       GD(
                         onTap: _onCopyPressed,
                         child: Padding(
-                          padding: EI.o(b: 12, l: 4),
+                          padding: const EI.o(b: 12, l: 4),
                           child: Icon(
                             Icons.copy,
                             color: primaryColor.wo(0.8),
@@ -462,7 +474,7 @@ class _BotMessageBottom extends ConsumerWidget {
           if (changing)
             GD(
               child: Padding(
-                padding: EI.o(b: 12, r: 4),
+                padding: const EI.o(b: 12, r: 4),
                 child: TweenAnimationBuilder(
                   tween: Tween(begin: 0.0, end: 1.0),
                   duration: const Duration(milliseconds: 1000000000),
@@ -482,7 +494,7 @@ class _BotMessageBottom extends ConsumerWidget {
           GD(
             onTap: _onRegeneratePressed,
             child: Padding(
-              padding: EI.o(b: 12, r: 4),
+              padding: const EI.o(b: 12, r: 4),
               child: Icon(
                 Icons.refresh,
                 color: primaryColor.wo(0.8),
@@ -494,7 +506,7 @@ class _BotMessageBottom extends ConsumerWidget {
             GD(
               onTap: _onBotEditPressed,
               child: Padding(
-                padding: EI.o(b: 12, r: 4),
+                padding: const EI.o(b: 12, r: 4),
                 child: Icon(
                   Icons.edit,
                   color: primaryColor.wo(0.8),
@@ -507,7 +519,7 @@ class _BotMessageBottom extends ConsumerWidget {
             GD(
               onTap: _onCopyPressed,
               child: Padding(
-                padding: EI.o(b: 12, r: 4),
+                padding: const EI.o(b: 12, r: 4),
                 child: Icon(
                   Icons.copy,
                   color: primaryColor.wo(0.8),
@@ -515,14 +527,14 @@ class _BotMessageBottom extends ConsumerWidget {
                 ),
               ),
             ),
-          if (paused) Spacer(),
-          if (paused)
+          if (paused && Config.enableResume) const Spacer(),
+          if (paused && Config.enableResume)
             GD(
               onTap: _onResumePressed,
               child: C(
-                padding: EI.o(b: 10, l: 12),
+                padding: const EI.o(b: 10, l: 12),
                 child: C(
-                  padding: EI.s(v: 1, h: 8),
+                  padding: const EI.s(v: 1, h: 8),
                   decoration: BD(color: kC, border: Border.all(color: primaryColor.wo(0.67)), borderRadius: 4.r),
                   child: T(
                     S.current.chat_resume,

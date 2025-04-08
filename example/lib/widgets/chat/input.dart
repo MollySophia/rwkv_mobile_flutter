@@ -216,7 +216,7 @@ class _BottomBar extends ConsumerWidget {
 
     return Row(
       children: [
-        if (currentWorldType == WorldType.engVisualQA)
+        if (currentWorldType?.isVisualDemo ?? false)
           GD(
             onTap: () async {
               await showImageSelector();

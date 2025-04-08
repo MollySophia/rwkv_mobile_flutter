@@ -77,7 +77,7 @@ class _PagerState extends ConsumerState<Pager> {
         onNotification: _onNotification,
         child: SingleChildScrollView(
           controller: _controller,
-          physics: _CustomPageScrollPhysics(parent: ClampingScrollPhysics()),
+          physics: const _CustomPageScrollPhysics(parent: ClampingScrollPhysics()),
           scrollDirection: Axis.horizontal,
           child: SB(
             width: screenWidth * 2 - drawerToRight,

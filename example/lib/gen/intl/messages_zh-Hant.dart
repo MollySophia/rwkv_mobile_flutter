@@ -20,7 +20,7 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'zh_Hant';
 
-  static String m0(demoName) => "歡迎探索 RWKV World v7";
+  static String m0(demoName) => "歡迎探索 ${demoName}";
 
   static String m1(memUsed, memFree) => "已用記憶體：${memUsed}，剩餘記憶體：${memFree}";
 
@@ -70,14 +70,14 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "othello_title": MessageLookupByLibrary.simpleMessage("RWKV 黑白棋"),
     "please_select_a_world_type": MessageLookupByLibrary.simpleMessage(
-      "請選擇世界類型",
+      "請選擇 World 類型",
     ),
     "remaining": MessageLookupByLibrary.simpleMessage("剩餘："),
     "reset": MessageLookupByLibrary.simpleMessage("重設"),
     "rwkv_chat": MessageLookupByLibrary.simpleMessage("RWKV 聊天"),
     "rwkv_othello": MessageLookupByLibrary.simpleMessage("RWKV 黑白棋"),
     "select_a_model": MessageLookupByLibrary.simpleMessage("選擇模型"),
-    "select_a_world_type": MessageLookupByLibrary.simpleMessage("選擇世界類型"),
+    "select_a_world_type": MessageLookupByLibrary.simpleMessage("選擇 World 類型"),
     "send_message_to_rwkv": MessageLookupByLibrary.simpleMessage("傳送訊息給 RWKV"),
     "session_configuration": MessageLookupByLibrary.simpleMessage("會話設定"),
     "speed": MessageLookupByLibrary.simpleMessage("速度："),

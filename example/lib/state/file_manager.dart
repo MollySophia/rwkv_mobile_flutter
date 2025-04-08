@@ -229,6 +229,7 @@ extension _$FileManager on _FileManager {
 
 enum FileDownloadSource {
   aifasthub,
+  hfmirror,
   huggingface,
   github,
   googleapis,
@@ -236,6 +237,7 @@ enum FileDownloadSource {
 
   String get prefix => switch (this) {
         aifasthub => 'https://aifasthub.com/',
+        hfmirror => 'https://hf-mirror.com/',
         huggingface => 'https://huggingface.co/',
         github => 'https://github.com/',
         googleapis => 'https://googleapis.com/',
@@ -243,6 +245,7 @@ enum FileDownloadSource {
 
   String get suffix => switch (this) {
         aifasthub => '?download=true',
+        hfmirror => '?download=true',
         huggingface => '',
         github => '',
         googleapis => '',
@@ -251,6 +254,8 @@ enum FileDownloadSource {
   bool get isDebug {
     switch (this) {
       case huggingface:
+        return false;
+      case hfmirror:
         return false;
       case aifasthub:
         return false;

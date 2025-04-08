@@ -61,7 +61,7 @@ class _BottomInfo extends ConsumerWidget {
                 c: CAA.stretch,
                 children: [
                   const T(
-                    "RWKV Chat",
+                    "World RWKV",
                     s: TS(s: 20),
                   ),
                   Ro(

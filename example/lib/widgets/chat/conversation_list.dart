@@ -25,7 +25,7 @@ class ConversationList extends ConsumerWidget {
         await P.conversation.load();
       },
       child: ListView.builder(
-        padding: EI.a(8),
+        padding: const EI.a(8),
         itemCount: conversations.isEmpty ? 1 : conversations.length,
         itemBuilder: (context, index) {
           if (conversations.isEmpty) {
@@ -102,7 +102,7 @@ class _Item extends ConsumerWidget {
               color: isCurrent ? primaryContainer : kW,
               borderRadius: 8.r,
             ),
-            padding: EI.a(8),
+            padding: const EI.a(8),
             child: T(
               conversation.name,
               s: TS(s: 16, w: FW.w600, c: isCurrent ? primary : kB),
