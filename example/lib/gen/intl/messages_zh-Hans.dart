@@ -20,7 +20,7 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'zh_Hans';
 
-  static String m0(demoName) => "欢迎探索 RWKV Chat";
+  static String m0(demoName) => "欢迎探索 ${demoName}";
 
   static String m1(memUsed, memFree) => "已用内存：${memUsed}，剩余内存：${memFree}";
 

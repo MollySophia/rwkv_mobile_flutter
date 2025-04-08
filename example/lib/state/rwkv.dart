@@ -266,6 +266,7 @@ extension $RWKV on _RWKV {
     required String modelPath,
     required String encoderPath,
     required Backend backend,
+    required bool usingReasoningModel,
   }) async {
     qq;
     _loading.u(true);
@@ -306,8 +307,9 @@ extension $RWKV on _RWKV {
     }
 
     _sendPort!.send(("loadVisionEncoder", encoderPath));
-    await resetSamplerParams(usingReasoningModel: false);
-    await resetMaxLength(usingReasoningModel: false);
+    await setModelConfig(usingReasoningModel: usingReasoningModel);
+    await resetSamplerParams(usingReasoningModel: usingReasoningModel);
+    await resetMaxLength(usingReasoningModel: usingReasoningModel);
     _sendPort!.send(("setEosToken", "\x17"));
     _sendPort!.send(("setBosToken", "\x16"));
     _sendPort!.send(("setTokenBanned", [0]));

@@ -5,7 +5,7 @@
   "send_message_to_rwkv": "傳送訊息給 RWKV",
   "chat_copied_to_clipboard": "已複製到剪貼簿",
   "chat_empty_message": "請輸入訊息內容",
-  "chat_welcome_to_use": "歡迎探索 RWKV World v7",
+  "chat_welcome_to_use": "歡迎探索 {demoName}",
   "chat_please_select_a_model": "請選擇一個模型",
   "chat_you_need_download_model_if_you_want_to_use_it": "您需要先下載模型才能使用",
   "download_model": "下載模型",

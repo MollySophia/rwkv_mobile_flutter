@@ -5,7 +5,7 @@
   "send_message_to_rwkv": "RWKVへメッセージを送信",
   "chat_copied_to_clipboard": "クリップボードにコピーされました",
   "chat_empty_message": "メッセージを入力してください",
-  "chat_welcome_to_use": "RWKV ワールド v7へようこそ",
+  "chat_welcome_to_use": "{demoName} へようこそ",
   "chat_please_select_a_model": "モデルを選択してください",
   "chat_you_need_download_model_if_you_want_to_use_it": "使用するにはモデルのダウンロードが必要です",
   "download_model": "モデルをダウンロード",

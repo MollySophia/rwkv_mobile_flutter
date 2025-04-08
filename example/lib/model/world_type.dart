@@ -1,6 +1,6 @@
 enum WorldType {
-  engVisualQA,
   engVisualQAReason,
+  engVisualQA,
   engAudioQA,
   chineseASR,
   engASR,
@@ -61,4 +61,9 @@ enum WorldType {
         return false;
     }
   }
+
+  bool get isReasoning => switch (this) {
+        WorldType.engVisualQAReason => true,
+        _ => false,
+      };
 }
