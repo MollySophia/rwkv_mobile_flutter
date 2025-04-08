@@ -359,6 +359,11 @@ extension $RWKV on _RWKV {
     }
 
     _sendPort!.send(("loadWhisperEncoder", encoderPath));
+    await setModelConfig(
+      usingReasoningModel: false,
+      preferChinese: false,
+      setPrompt: false,
+    );
     await resetSamplerParams(usingReasoningModel: false);
     await resetMaxLength(usingReasoningModel: false);
     _sendPort!.send(("setEosToken", "\x17"));

@@ -6,62 +6,32 @@ enum WorldType {
   engASR,
   ;
 
+  String get displayName => switch (this) {
+        WorldType.engVisualQA => "English Visual QA",
+        WorldType.engVisualQAReason => "English Visual QA Reasoning",
+        WorldType.engAudioQA => "English Audio QA",
+        WorldType.chineseASR => "Chinese ASR",
+        WorldType.engASR => "English ASR",
+      };
 
-
-  String get displayName {
-    switch (this) {
-      case WorldType.engVisualQA:
-        return "English Visual QA";
-      case WorldType.engVisualQAReason:
-        return "English Visual QA Reasoning";
-      case WorldType.engAudioQA:
-        return "English Audio QA";
-      case WorldType.chineseASR:
-        return "Chinese ASR";
-      case WorldType.engASR:
-        return "English ASR";
-    }
-  }
-
-  String get taskDescription {
-    switch (this) {
-      case WorldType.engVisualQA:
-        return "Visual Question Answering";
-      case WorldType.engVisualQAReason:
-        return "Visual Question Answering (Reasoning)";
-      case WorldType.engAudioQA:
-        return "Audio Question Answering";
-      case WorldType.chineseASR:
-        return "Automatic Speech Recognition";
-      case WorldType.engASR:
-        return "Automatic Speech Recognition";
-    }
-  }
+  String get taskDescription => switch (this) {
+        WorldType.engVisualQA => "Visual Question Answering",
+        WorldType.engVisualQAReason => "Visual Question Answering (Reasoning)",
+        WorldType.engAudioQA => "Audio Question Answering",
+        WorldType.chineseASR => "Automatic Speech Recognition",
+        WorldType.engASR => "Automatic Speech Recognition",
+      };
 
   // TODO: Use it in the future @wangce
-  bool get isAudioDemo {
-    switch (this) {
-      case WorldType.engAudioQA:
-      case WorldType.chineseASR:
-      case WorldType.engASR:
-        return true;
-      case WorldType.engVisualQA:
-      case WorldType.engVisualQAReason:
-        return false;
-    }
-  }
+  bool get isAudioDemo => switch (this) {
+        WorldType.engAudioQA || WorldType.chineseASR || WorldType.engASR => true,
+        WorldType.engVisualQA || WorldType.engVisualQAReason => false,
+      };
 
-  bool get isVisualDemo {
-    switch (this) {
-      case WorldType.engVisualQA:
-      case WorldType.engVisualQAReason:
-        return true;
-      case WorldType.engAudioQA:
-      case WorldType.chineseASR:
-      case WorldType.engASR:
-        return false;
-    }
-  }
+  bool get isVisualDemo => switch (this) {
+        WorldType.engVisualQA || WorldType.engVisualQAReason => true,
+        WorldType.engAudioQA || WorldType.chineseASR || WorldType.engASR => false,
+      };
 
   bool get isReasoning => switch (this) {
         WorldType.engVisualQAReason => true,
