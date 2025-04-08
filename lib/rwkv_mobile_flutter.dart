@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ffi' as ffi;
+import 'dart:developer';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -378,6 +379,7 @@ class RWKVMobile {
           }
           while (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) == 1) {
             if (kDebugMode) print("💬 Waiting for generation to stop...");
+            rwkvMobile.rwkvmobile_runtime_stop_generation(runtime);
           }
           if (kDebugMode) print("💬 Generation stopped");
           sendPort.send({'generateStop': true});
