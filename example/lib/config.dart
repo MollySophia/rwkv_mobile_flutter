@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:zone/args.dart';
 import 'package:zone/route/page_key.dart';
 
 const kBG = Color(0xFFF4F8FF);
@@ -27,6 +28,6 @@ Assistant: 你好，我是你的助手，我会提供专家级的完整回答。
 """;
 
   static final reasonTag = "reason";
-  static final enableConversation = false;
-  static final enableChain = true;
+  static final enableConversation = false && Args.isChat;
+  static final enableChain = true && Args.isChat;
 }

@@ -7,7 +7,6 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:photo_viewer/photo_viewer.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:zone/config.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:halo_alert/halo_alert.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +24,10 @@ const double _kTextScaleFactorForCotContent = 1;
 
 class Message extends ConsumerWidget {
   final model.Message msg;
+
+  /// 使用逆顺序
+  ///
+  /// TODO: 明确一下这里的 index, 到底是顺序还是逆序
   final int index;
 
   const Message(this.msg, this.index, {super.key});
@@ -460,87 +463,85 @@ class _BotMessageBottom extends ConsumerWidget {
         showBotCopyButton = false;
     }
 
-    return C(
-      padding: const EI.o(t: 12),
-      child: Ro(
-        m: MAA.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (changing)
-            GD(
-              child: Padding(
-                padding: const EI.o(b: 12, r: 4),
-                child: TweenAnimationBuilder(
-                  tween: Tween(begin: 0.0, end: 1.0),
-                  duration: const Duration(milliseconds: 1000000000),
-                  builder: (context, value, child) => Transform.rotate(
-                    angle: value * 2 * pi * 1000000,
-                    child: child,
-                  ),
-                  child: Icon(
-                    Icons.hourglass_top,
-                    color: primaryColor,
-                    size: 20,
-                  ),
+    return Ro(
+      m: MAA.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _BranchSwitcher(msg, index),
+        if (changing)
+          GD(
+            child: Padding(
+              padding: const EI.o(v: 12, r: 4),
+              child: TweenAnimationBuilder(
+                tween: Tween(begin: 0.0, end: 1.0),
+                duration: const Duration(milliseconds: 1000000000),
+                builder: (context, value, child) => Transform.rotate(
+                  angle: value * 2 * pi * 1000000,
+                  child: child,
+                ),
+                child: Icon(
+                  Icons.hourglass_top,
+                  color: primaryColor,
+                  size: 20,
                 ),
               ),
             ),
-          4.w,
+          ),
+        4.w,
+        GD(
+          onTap: _onRegeneratePressed,
+          child: Padding(
+            padding: const EI.o(v: 12, r: 4),
+            child: Icon(
+              Icons.refresh,
+              color: primaryColor.wo(0.8),
+              size: 20,
+            ),
+          ),
+        ),
+        if (showBotEditButton)
           GD(
-            onTap: _onRegeneratePressed,
+            onTap: _onBotEditPressed,
             child: Padding(
-              padding: const EI.o(b: 12, r: 4),
+              padding: const EI.o(v: 12, r: 4),
               child: Icon(
-                Icons.refresh,
+                Icons.edit,
                 color: primaryColor.wo(0.8),
                 size: 20,
               ),
             ),
           ),
-          if (showBotEditButton)
-            GD(
-              onTap: _onBotEditPressed,
-              child: Padding(
-                padding: const EI.o(b: 12, r: 4),
-                child: Icon(
-                  Icons.edit,
-                  color: primaryColor.wo(0.8),
-                  size: 20,
-                ),
+        if (showBotCopyButton) 4.w,
+        if (showBotCopyButton)
+          GD(
+            onTap: _onCopyPressed,
+            child: Padding(
+              padding: const EI.o(v: 12, r: 4),
+              child: Icon(
+                Icons.copy,
+                color: primaryColor.wo(0.8),
+                size: 20,
               ),
             ),
-          if (showBotCopyButton) 4.w,
-          if (showBotCopyButton)
-            GD(
-              onTap: _onCopyPressed,
-              child: Padding(
-                padding: const EI.o(b: 12, r: 4),
-                child: Icon(
-                  Icons.copy,
-                  color: primaryColor.wo(0.8),
-                  size: 20,
-                ),
-              ),
-            ),
-          if (paused) const Spacer(),
-          if (paused)
-            GD(
-              onTap: _onResumePressed,
+          ),
+        if (paused) const Spacer(),
+        if (paused)
+          GD(
+            onTap: _onResumePressed,
+            child: C(
+              padding: const EI.o(v: 10, l: 12),
               child: C(
-                padding: const EI.o(b: 10, l: 12),
-                child: C(
-                  padding: const EI.s(v: 1, h: 8),
-                  decoration: BD(color: kC, border: Border.all(color: primaryColor.wo(0.67)), borderRadius: 4.r),
-                  child: T(
-                    S.current.chat_resume,
-                    s: TS(c: primaryColor, w: FW.w600, s: 16),
-                  ),
+                padding: const EI.s(v: 1, h: 8),
+                decoration: BD(color: kC, border: Border.all(color: primaryColor.wo(0.67)), borderRadius: 4.r),
+                child: T(
+                  S.current.chat_resume,
+                  s: TS(c: primaryColor, w: FW.w600, s: 16),
                 ),
               ),
             ),
-        ],
-      ),
-    );
+          ),
+      ],
+    ).debug;
   }
 
   void _onResumePressed() {
@@ -558,6 +559,24 @@ class _BotMessageBottom extends ConsumerWidget {
   void _onCopyPressed() {
     Alert.success(S.current.chat_copied_to_clipboard);
     Clipboard.setData(ClipboardData(text: msg.content));
+  }
+}
+
+class _BranchSwitcher extends ConsumerWidget {
+  final model.Message msg;
+  final int index;
+
+  const _BranchSwitcher(this.msg, this.index);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // TODO: 思考一下这里怎么区序列
+    final branchesCountList = ref.watch(P.chat.branchesCountList.select((v) => v[index]));
+    return C(
+      height: 16,
+      width: 16,
+      decoration: BD(color: kCR),
+    );
   }
 }
 

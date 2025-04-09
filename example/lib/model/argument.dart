@@ -1,3 +1,5 @@
+import 'package:zone/args.dart';
+
 enum Argument {
   temperature,
   topK,
@@ -75,7 +77,7 @@ enum Argument {
         presencePenalty => 0.5,
         frequencyPenalty => 0.5,
         penaltyDecay => 0.996,
-        maxLength => 4000,
+        maxLength => Args.maxTokens > 0 ? Args.maxTokens.toDouble() : 4000,
       };
 
   double get defaults => switch (this) {
@@ -85,6 +87,6 @@ enum Argument {
         presencePenalty => 0.5,
         frequencyPenalty => 0.5,
         penaltyDecay => 0.996,
-        maxLength => 2000,
+        maxLength => Args.maxTokens > 0 ? Args.maxTokens.toDouble() : 2000,
       };
 }

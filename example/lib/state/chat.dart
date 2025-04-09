@@ -9,7 +9,9 @@ class _Chat {
   late final currentChain = qs(MessageChain(ids: []));
 
   /// 用于实现 DeepSeek 的 “分叉对话” 功能
-  late final chains = qs([MessageChain(ids: [])]);
+  late final chains = qs({MessageChain(ids: [])});
+
+  late final branchesCountList = qs<List<int>>([]);
 
   /// The key of it is the id of the message
   late final cotDisplayState = qsff<CoTDisplayState, int>((ref, index) {
@@ -152,14 +154,16 @@ extension $Chat on _Chat {
   }
 
   FV onRegeneratePressed({required int index}) async {
+    qqq("index: $index");
     final loaded = P.rwkv.loaded.v;
     if (!loaded) {
       Alert.info("Please load model first");
       P.fileManager.modelSelectorShown.u(true);
       return;
     }
+
     final userMessage = messages.v[index - 1];
-    editingIndex.u(index - 1);
+    editingIndex.u(index);
     _textInInput.uc();
     focusNode.unfocus();
     if (userMessage.type == MessageType.userAudio) {
@@ -172,7 +176,7 @@ extension $Chat on _Chat {
       );
       return;
     }
-    await send(userMessage.content);
+    await send(userMessage.content, isRegenerate: true);
   }
 
   FV scrollToBottom({Duration? duration, bool? animate = true}) async {
@@ -206,11 +210,13 @@ extension $Chat on _Chat {
     String? audioUrl,
     int? audioLength,
     bool withHistory = true,
+    bool isRegenerate = false,
   }) async {
     qqq("message: $message");
 
     final _editingIndex = editingIndex.v;
     if (_editingIndex != null) {
+      qqq("editingIndex: $_editingIndex");
       assert(_editingIndex >= 0 && _editingIndex < messages.v.length);
       final messagesWithoutEditing = messages.v.sublist(0, _editingIndex);
       // 将 editingIndex, 及 editingIndex 之后的消息都删掉
@@ -219,34 +225,43 @@ extension $Chat on _Chat {
       if (Config.enableConversation) P.conversation.updateMessages(messagesWithoutEditing);
     }
 
-    final id = DateTime.now().microsecondsSinceEpoch;
-    final msg = Message(
-      id: id,
-      content: message,
-      isMine: true,
-      type: type,
-      imageUrl: imageUrl,
-      audioUrl: audioUrl,
-      audioLength: audioLength,
-      isReasoning: false,
-      paused: false,
-    );
+    late final Message? msg;
 
-    messages.ua(msg);
-    if (Config.enableConversation) P.conversation.updateMessages([...messages.v, msg]);
+    final id = DateTime.now().microsecondsSinceEpoch;
+    if (!isRegenerate) {
+      msg = Message(
+        id: id,
+        content: message,
+        isMine: true,
+        type: type,
+        imageUrl: imageUrl,
+        audioUrl: audioUrl,
+        audioLength: audioLength,
+        isReasoning: false,
+        paused: false,
+      );
+      messages.ua(msg);
+      // if (Config.enableConversation) P.conversation.updateMessages([...messages.v, msg]);
+    } else {
+      msg = null;
+    }
+
     Future.delayed(34.ms).then((_) {
       scrollToBottom();
     });
 
-    if (type == MessageType.userImage) return;
-
-    if (Config.enableConversation) {
-      try {
-        P.conversation.addMessage(msg);
-      } catch (e) {
-        qqe(e);
-      }
+    if (type == MessageType.userImage) {
+      // 在之前的操作中已经注入了 LLM 了
+      return;
     }
+
+    // if (Config.enableConversation) {
+    //   try {
+    //     P.conversation.addMessage(msg);
+    //   } catch (e) {
+    //     qqe(e);
+    //   }
+    // }
 
     final historyMessage = messages.v.where((e) {
       return e.type != MessageType.userImage;
@@ -360,10 +375,37 @@ extension _$Chat on _Chat {
     receivingTokens.l(_onReceivingTokensChanged);
 
     P.app.lifecycleState.lb(_onLifecycleStateChanged);
-    messages.lb(_onMessagesChanged);
+
+    if (Config.enableChain) messages.lb(_onMessagesChanged);
+    if (Config.enableChain) chains.lv(_syncBranchesCountList);
+    if (Config.enableChain) currentChain.lv(_syncBranchesCountList);
   }
 
   void _onMessagesChanged(List<Message>? previous, List<Message> next) {
+    _syncChains(previous, next);
+  }
+
+  void _syncBranchesCountList() {
+    qq;
+    final chains = this.chains.v;
+    final currentChain = this.currentChain.v;
+    final List<int> newValue = [];
+    final currentMessageIds = currentChain.ids;
+    for (var i = 0; i < currentMessageIds.length; i++) {
+      if (i == 0) {
+        final allBranchIds = chains.m((e) => e.ids.first).toSet();
+        newValue.add(allBranchIds.length);
+        continue;
+      }
+      final previousMessageId = currentMessageIds[i - 1];
+      final allBranchIds = chains.where((e) => e.ids[i - 1] == previousMessageId).m((e) => e.ids[i]).toSet();
+      newValue.add(allBranchIds.length + 1);
+    }
+    if (listEquals(branchesCountList.v, newValue)) return;
+    branchesCountList.u(newValue);
+  }
+
+  void _syncChains(List<Message>? previous, List<Message> next) {
     qq;
     if (previous == null) {
       qqe("previous is null");
@@ -374,6 +416,53 @@ extension _$Chat on _Chat {
     final nextIds = next.map((e) => e.id).toList();
     final previousLength = previous.length;
     final nextLength = next.length;
+
+    if (listEquals(previousIds, nextIds)) return;
+
+    // Add a new chain
+    if (previousLength == 0 && nextLength == 1) {
+      final firstId = nextIds.first;
+      final chain = MessageChain(ids: [firstId]);
+      this.chains.u({chain});
+      this.currentChain.u(chain);
+      return;
+    }
+
+    // 是否应该消息分叉?
+    final shouldCreateNewBranch = nextLength <= previousLength;
+
+    final chains = this.chains.v;
+    final currentChain = this.currentChain.v;
+
+    if (!chains.contains(currentChain)) {
+      qqe("currentChain not found in chains");
+      return;
+    }
+
+    late final MessageChain newChain;
+
+    if (nextIds.isEmpty) {
+      qqe("nextIds is empty");
+      qqe("next: $next");
+      debugger();
+      return;
+    }
+
+    final latestId = nextIds.last;
+
+    if (shouldCreateNewBranch) {
+      newChain = currentChain.addAt(latestId, nextLength - 1);
+    } else {
+      newChain = currentChain.add(latestId);
+    }
+
+    if (!shouldCreateNewBranch) chains.remove(currentChain);
+    chains.add(newChain);
+
+    if (!setEquals(this.chains.v, chains)) this.chains.u(chains);
+    this.currentChain.u(newChain);
+
+    qqq("chains count: ${this.chains.v.length}, currentChain length: ${this.currentChain.v.ids.length}");
   }
 
   void _onLifecycleStateChanged(AppLifecycleState? previous, AppLifecycleState next) {
