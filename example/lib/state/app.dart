@@ -3,6 +3,8 @@ part of 'p.dart';
 class _App extends RawApp with WidgetsBindingObserver {
   final gotContextOnce = qs(false);
 
+  final lifecycleState = qs(AppLifecycleState.resumed);
+
   final _pageKey = qs(PageKey.first);
 
   late final pageKey = qp((ref) => ref.watch(_pageKey));
@@ -18,6 +20,11 @@ class _App extends RawApp with WidgetsBindingObserver {
     if (context == null) return;
     if (!context.mounted) return;
     contextGot(context);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    lifecycleState.u(state);
   }
 }
 

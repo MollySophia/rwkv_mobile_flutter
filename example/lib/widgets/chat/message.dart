@@ -412,7 +412,7 @@ class Message extends ConsumerWidget {
     return Align(
       alignment: alignment,
       child: IgnorePointer(
-        ignoring: editingIndex != null && editingIndex != index,
+      ignoring: editingIndex != null && editingIndex != index,
         child: AnimatedOpacity(
           opacity: opacity,
           duration: 250.ms,

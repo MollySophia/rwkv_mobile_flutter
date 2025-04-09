@@ -30,6 +30,8 @@ class Debugger extends ConsumerWidget {
     final conversation = ref.watch(P.conversation.current);
     final receivingTokens = ref.watch(P.chat.receivingTokens);
     final receiveId = ref.watch(P.chat.receiveId);
+    final lifecycleState = ref.watch(P.app.lifecycleState);
+    final autoPauseId = ref.watch(P.chat.autoPauseId);
 
     return Positioned(
       left: 0,
@@ -87,6 +89,10 @@ class Debugger extends ConsumerWidget {
                   T(receivingTokens.toString()),
                   T("receiveId".codeToName),
                   T(receiveId.toString()),
+                  T("lifecycleState".codeToName),
+                  T(lifecycleState.toString().split(".").last),
+                  T("autoPauseId".codeToName),
+                  T(autoPauseId.toString()),
                 ].indexMap((index, e) {
                   return C(
                     margin: EI.o(t: index % 2 == 1 ? 0 : 1),

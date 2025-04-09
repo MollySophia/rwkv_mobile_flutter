@@ -651,6 +651,7 @@ extension _$RWKV on _RWKV {
 
     if (message["error"] != null) {
       Alert.error(message["error"]);
+      qqq("error: ${message["error"]}");
       return;
     }
 

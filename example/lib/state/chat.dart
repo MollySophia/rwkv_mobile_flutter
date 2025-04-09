@@ -60,6 +60,8 @@ class _Chat {
   late final hasFocus = qs(false);
 
   late final suggestions = qs<List<String>>([]);
+
+  late final autoPauseId = qsn<int>();
 }
 
 /// Public methods
@@ -87,7 +89,7 @@ extension $Chat on _Chat {
         isMine: false,
         changing: false,
         isReasoning: messages.v[_editingIndex].isReasoning,
-        paused: false,
+        paused: messages.v[_editingIndex].paused,
       );
       // currentMessages.replaceRange(_editingIndex, _editingIndex + 1, [newBotMessage]);
       final newMessages = [
@@ -283,7 +285,6 @@ extension $Chat on _Chat {
     qqq("receiveId: ${receiveId.v}");
     Gaimon.light();
     await Future.delayed(1.ms);
-    P.rwkv.stop();
     final id = receiveId.v;
     if (id == null) {
       qqw("message id is null");
@@ -325,9 +326,9 @@ extension $Chat on _Chat {
     messages.u(conversation.messages);
   }
 
-  FV resumeMessageById({required int id}) async {
+  FV resumeMessageById({required int id, bool withHaptic = true}) async {
     qq;
-    Gaimon.light();
+    if (withHaptic) Gaimon.light();
     P.rwkv.send(_history());
     _updateMessageById(id: id, changing: true, paused: false);
   }
@@ -361,10 +362,27 @@ extension _$Chat on _Chat {
     loadSuggestions();
 
     receivingTokens.l(_onReceivingTokensChanged);
+
+    P.app.lifecycleState.lb(_onLifecycleStateChanged);
+  }
+
+  void _onLifecycleStateChanged(AppLifecycleState? previous, AppLifecycleState next) {
+    final isToBackground = next == AppLifecycleState.paused || next == AppLifecycleState.hidden;
+    if (isToBackground) {
+      if (receiveId.v != null && autoPauseId.v == null && receivingTokens.v == true) {
+        autoPauseId.u(receiveId.v!);
+        _pauseMessageById(id: receiveId.v!);
+      }
+    } else {
+      if (autoPauseId.v != null) {
+        resumeMessageById(id: autoPauseId.v!, withHaptic: false);
+        autoPauseId.uc();
+      }
+    }
+    qqq("autoPauseId: ${autoPauseId.v}, receiveId: ${receiveId.v}, state: $next");
   }
 
   List<String> _history() {
-    qq;
     final history = messages.v.where((msg) => msg.type == MessageType.text).m((e) {
       if (!e.isReasoning) return e.content;
       if (!e.isCotFormat) return e.content;
@@ -380,6 +398,8 @@ extension _$Chat on _Chat {
 
   FV _pauseMessageById({required int id}) async {
     qq;
+
+    P.rwkv.stop();
 
     final msg = messages.v.firstWhereOrNull((e) => e.id == id);
     if (msg == null) {
