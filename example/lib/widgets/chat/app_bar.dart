@@ -23,8 +23,8 @@ class ChatAppBar extends ConsumerWidget {
     final loaded = P.rwkv.loaded.v;
 
     if (!loaded) {
-      P.chat.showingModelSelector.u(false);
-      P.chat.showingModelSelector.u(true);
+      P.fileManager.modelSelectorShown.u(false);
+      P.fileManager.modelSelectorShown.u(true);
       return;
     }
     await ArgumentsPanel.show(getContext()!);
@@ -32,8 +32,8 @@ class ChatAppBar extends ConsumerWidget {
   }
 
   void _onTitlePressed() async {
-    P.chat.showingModelSelector.u(false);
-    P.chat.showingModelSelector.u(true);
+    P.fileManager.modelSelectorShown.u(false);
+    P.fileManager.modelSelectorShown.u(true);
   }
 
   @override

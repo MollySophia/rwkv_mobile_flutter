@@ -61,7 +61,7 @@ class Input extends ConsumerWidget {
     final loaded = P.rwkv.loaded.v;
     if (!loaded) {
       Alert.info("Please load model first");
-      P.chat.showingModelSelector.u(true);
+      P.fileManager.modelSelectorShown.u(true);
       return;
     }
   }
@@ -328,8 +328,8 @@ class _ReasonButton extends ConsumerWidget {
     }
     final currentModel = P.rwkv.currentModel.v;
     if (currentModel == null) {
-      if (P.chat.showingModelSelector.v) return;
-      P.chat.showingModelSelector.u(true);
+      if (P.fileManager.modelSelectorShown.v) return;
+      P.fileManager.modelSelectorShown.u(true);
       return;
     }
     final newValue = !P.rwkv.usingReasoningModel.v;
@@ -408,8 +408,8 @@ class _LangugaeButton extends ConsumerWidget {
     }
     final currentModel = P.rwkv.currentModel.v;
     if (currentModel == null) {
-      if (P.chat.showingModelSelector.v) return;
-      P.chat.showingModelSelector.u(true);
+      if (P.fileManager.modelSelectorShown.v) return;
+      P.fileManager.modelSelectorShown.u(true);
       return;
     }
     final newValue = !P.rwkv.preferChinese.v;

@@ -22,7 +22,7 @@ class Suggestions extends ConsumerWidget {
     final primary = Theme.of(context).colorScheme.primary;
     final paddingBottom = ref.watch(P.app.quantizedIntPaddingBottom);
     final currentModel = ref.watch(P.rwkv.currentModel);
-    ref.watch(P.chat.showingModelSelector);
+    ref.watch(P.fileManager.modelSelectorShown);
 
     bool show = false;
 

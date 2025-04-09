@@ -29,14 +29,7 @@ class _Chat {
   /// TODO: Should be moved to state/rwkv.dart
   late final receivedTokens = qs("");
 
-  late final scrollOffset = qs(0.0);
-
   late final inputHeight = qs(77.0);
-
-  late final atBottom = qp((ref) {
-    final scrollOffset = ref.watch(this.scrollOffset);
-    return scrollOffset <= 0;
-  });
 
   late final receiveId = qsn<int>();
 
@@ -47,9 +40,6 @@ class _Chat {
     if (editingIndex == null) return false;
     return messages.v[editingIndex].isMine == false;
   });
-
-  /// TODO: Should be moved to state/remote_file.dart
-  late final showingModelSelector = qs(false);
 
   late final showingCharacterSelector = qs(false);
 
@@ -71,7 +61,7 @@ class _Chat {
 extension $Chat on _Chat {
   FV onInputRightButtonPressed() async {
     if (P.rwkv.currentModel.v == null) {
-      showingModelSelector.u(true);
+      P.fileManager.modelSelectorShown.u(true);
       return;
     }
 
@@ -134,7 +124,7 @@ extension $Chat on _Chat {
     final loaded = P.rwkv.loaded.v;
     if (!loaded) {
       Alert.info("Please load model first");
-      showingModelSelector.u(true);
+      P.fileManager.modelSelectorShown.u(true);
       return;
     }
     final content = messages.v[index].content;
@@ -147,7 +137,7 @@ extension $Chat on _Chat {
     final loaded = P.rwkv.loaded.v;
     if (!loaded) {
       Alert.info("Please load model first");
-      showingModelSelector.u(true);
+      P.fileManager.modelSelectorShown.u(true);
       return;
     }
     final content = messages.v[index].content;
@@ -160,7 +150,7 @@ extension $Chat on _Chat {
     final loaded = P.rwkv.loaded.v;
     if (!loaded) {
       Alert.info("Please load model first");
-      showingModelSelector.u(true);
+      P.fileManager.modelSelectorShown.u(true);
       return;
     }
     final userMessage = messages.v[index - 1];
@@ -345,10 +335,6 @@ extension _$Chat on _Chat {
     textEditingController.addListener(_onTextEditingControllerValueChanged);
     _textInInput.l(_onTextChanged);
 
-    scrollController.addListener(() {
-      scrollOffset.u(scrollController.offset);
-    });
-
     P.app.pageKey.l(_onPageKeyChanged);
 
     P.rwkv.broadcastStream.listen(
@@ -464,7 +450,7 @@ extension _$Chat on _Chat {
     });
 
     if (!P.rwkv.loaded.v) {
-      showingModelSelector.u(true);
+      P.fileManager.modelSelectorShown.u(true);
     }
   }
 

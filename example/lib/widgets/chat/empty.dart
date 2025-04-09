@@ -64,8 +64,8 @@ class Empty extends ConsumerWidget {
                     if (!loaded)
                       TextButton(
                         onPressed: () async {
-                          P.chat.showingModelSelector.u(false);
-                          P.chat.showingModelSelector.u(true);
+                          P.fileManager.modelSelectorShown.u(false);
+                          P.fileManager.modelSelectorShown.u(true);
                         },
                         child: T(demoType == DemoType.world ? S.current.select_a_world_type : S.current.select_a_model, s: const TS(s: 16, w: FW.w600)),
                       ),

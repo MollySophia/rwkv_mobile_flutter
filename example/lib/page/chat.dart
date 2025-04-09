@@ -35,12 +35,12 @@ class _PageChatState extends State<PageChat> {
   @override
   void initState() {
     super.initState();
-    P.chat.showingModelSelector.l(_onShowingModelSelectorChanged);
+    P.fileManager.modelSelectorShown.l(_onShowingModelSelectorChanged);
     P.chat.showingCharacterSelector.l(_onShowingCharacterSelectorChanged);
     HF.wait(1000).then((_) {
       final loaded = P.rwkv.loaded.v;
       if (!loaded) {
-        P.chat.showingModelSelector.u(true);
+        P.fileManager.modelSelectorShown.u(true);
       }
     });
   }
@@ -100,7 +100,7 @@ class _PageChatState extends State<PageChat> {
         );
       },
     );
-    P.chat.showingModelSelector.u(false);
+    P.fileManager.modelSelectorShown.u(false);
   }
 }
 

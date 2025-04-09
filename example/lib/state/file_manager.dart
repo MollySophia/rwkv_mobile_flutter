@@ -21,6 +21,8 @@ class _FileManager {
   late final downloadSource = qs(FileDownloadSource.aifasthub);
 
   late final hasDownloadedModels = qs(false);
+
+  late final modelSelectorShown = qs(false);
 }
 
 /// Public methods
