@@ -2,19 +2,19 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
 @immutable
-final class MessageLink extends Equatable {
+final class MessageNode extends Equatable {
   final int messageId;
   final List<int> children;
   final int actived;
 
-  const MessageLink(
+  const MessageNode(
     this.children,
     this.actived, {
     required this.messageId,
   });
 
-  factory MessageLink.fromJson(Map<String, dynamic> json) {
-    return MessageLink(
+  factory MessageNode.fromJson(Map<String, dynamic> json) {
+    return MessageNode(
       json["c"] as List<int>,
       json["a"] as int,
       messageId: json["m"] as int,

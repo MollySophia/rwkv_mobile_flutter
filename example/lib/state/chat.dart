@@ -62,6 +62,9 @@ class _Chat {
   late final suggestions = qs<List<String>>([]);
 
   late final autoPauseId = qsn<int>();
+
+  late final currentChain = qs(MessageChain(ids: []));
+  late final chains = qs([MessageChain(ids: [])]);
 }
 
 /// Public methods

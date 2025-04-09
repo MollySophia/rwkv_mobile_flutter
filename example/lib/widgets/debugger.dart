@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:zone/config.dart';
 import 'package:zone/state/p.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,13 +18,11 @@ class Debugger extends ConsumerWidget {
     final currentModel = ref.watch(P.rwkv.currentModel);
     final visualFloatHeight = ref.watch(P.world.visualFloatHeight);
     final loading = ref.watch(P.rwkv.loading);
-    final streaming = ref.watch(P.world.streaming);
     final playing = ref.watch(P.world.playing);
     final latestClickedMessage = ref.watch(P.chat.latestClickedMessage);
     final inputHeight = ref.watch(P.chat.inputHeight);
     final hasFocus = ref.watch(P.chat.hasFocus);
     final isOthello = ref.watch(P.app.demoType) == DemoType.othello;
-    final soc = ref.watch(P.rwkv.soc);
     final paddingTop = ref.watch(P.app.paddingTop);
     final page = ref.watch(Pager.page);
     final mainPageNotIgnoring = ref.watch(Pager.mainPageNotIgnoring);
@@ -67,8 +66,6 @@ class Debugger extends ConsumerWidget {
                   if (currentWorldType != null) T(visualFloatHeight.toString()),
                   T("loading".codeToName),
                   T(loading.toString()),
-                  T("streaming".codeToName),
-                  T(streaming.toString()),
                   if (currentWorldType != null) T("playing".codeToName),
                   if (currentWorldType != null) T(playing.toString()),
                   if (!isOthello) T("latestClickedMessage".codeToName),
@@ -77,14 +74,12 @@ class Debugger extends ConsumerWidget {
                   T(inputHeight.toString()),
                   if (!isOthello) T("hasFocus".codeToName),
                   T(hasFocus.toString()),
-                  if (!isOthello) T("soc".codeToName),
-                  T(soc.toString()),
-                  T("page".codeToName),
-                  T(page.toString()),
-                  T("mainPageNotIgnoring".codeToName),
-                  T(mainPageNotIgnoring.toString()),
-                  T("conversation".codeToName),
-                  T(conversation?.name ?? "null"),
+                  if (Config.enableConversation) T("page".codeToName),
+                  if (Config.enableConversation) T(page.toString()),
+                  if (Config.enableConversation) T("mainPageNotIgnoring".codeToName),
+                  if (Config.enableConversation) T(mainPageNotIgnoring.toString()),
+                  if (Config.enableConversation) T("conversation".codeToName),
+                  if (Config.enableConversation) T(conversation?.name ?? "null"),
                   T("receivingTokens".codeToName),
                   T(receivingTokens.toString()),
                   T("receiveId".codeToName),
@@ -96,7 +91,7 @@ class Debugger extends ConsumerWidget {
                 ].indexMap((index, e) {
                   return C(
                     margin: EI.o(t: index % 2 == 1 ? 0 : 1),
-                    decoration: BD(color: kB.wo(0.67)),
+                    decoration: BD(color: kB.wo(0.33)),
                     child: e,
                   );
                 }),
