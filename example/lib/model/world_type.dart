@@ -22,7 +22,6 @@ enum WorldType {
         WorldType.engASR => "Automatic Speech Recognition",
       };
 
-  // TODO: Use it in the future @wangce
   bool get isAudioDemo => switch (this) {
         WorldType.engAudioQA || WorldType.chineseASR || WorldType.engASR => true,
         WorldType.engVisualQA || WorldType.engVisualQAReason => false,
