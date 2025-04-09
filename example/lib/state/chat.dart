@@ -3,6 +3,14 @@ part of 'p.dart';
 class _Chat {
   late final messages = qs<List<Message>>([]);
 
+  /// 用于实现 DeepSeek 的 “分叉对话” 功能
+  ///
+  /// TODO: 想办法存到聊天记录中
+  late final currentChain = qs(MessageChain(ids: []));
+
+  /// 用于实现 DeepSeek 的 “分叉对话” 功能
+  late final chains = qs([MessageChain(ids: [])]);
+
   /// The key of it is the id of the message
   late final cotDisplayState = qsff<CoTDisplayState, int>((ref, index) {
     return CoTDisplayState.showCotHeaderAndCotContent;
@@ -52,9 +60,6 @@ class _Chat {
   late final suggestions = qs<List<String>>([]);
 
   late final autoPauseId = qsn<int>();
-
-  late final currentChain = qs(MessageChain(ids: []));
-  late final chains = qs([MessageChain(ids: [])]);
 }
 
 /// Public methods
@@ -191,7 +196,7 @@ extension $Chat on _Chat {
   FV startNewChat() async {
     qq;
     P.rwkv.clearStates();
-    messages.u([]);
+    messages.uc();
   }
 
   FV send(
@@ -202,15 +207,16 @@ extension $Chat on _Chat {
     int? audioLength,
     bool withHistory = true,
   }) async {
-    qqq("message length: ${message.length}");
+    qqq("message: $message");
 
     final _editingIndex = editingIndex.v;
     if (_editingIndex != null) {
       assert(_editingIndex >= 0 && _editingIndex < messages.v.length);
       final messagesWithoutEditing = messages.v.sublist(0, _editingIndex);
-      // debugger();
+      // 将 editingIndex, 及 editingIndex 之后的消息都删掉
+      // TODO: 分叉
       messages.u(messagesWithoutEditing);
-      P.conversation.updateMessages(messagesWithoutEditing);
+      if (Config.enableConversation) P.conversation.updateMessages(messagesWithoutEditing);
     }
 
     final id = DateTime.now().microsecondsSinceEpoch;
@@ -225,8 +231,9 @@ extension $Chat on _Chat {
       isReasoning: false,
       paused: false,
     );
+
     messages.ua(msg);
-    P.conversation.updateMessages([...messages.v, msg]);
+    if (Config.enableConversation) P.conversation.updateMessages([...messages.v, msg]);
     Future.delayed(34.ms).then((_) {
       scrollToBottom();
     });
@@ -313,7 +320,7 @@ extension $Chat on _Chat {
 
   FV loadConversation(Conversation? conversation) async {
     if (conversation == null) {
-      messages.u([]);
+      messages.uc();
       return;
     }
     messages.u(conversation.messages);
@@ -353,6 +360,20 @@ extension _$Chat on _Chat {
     receivingTokens.l(_onReceivingTokensChanged);
 
     P.app.lifecycleState.lb(_onLifecycleStateChanged);
+    messages.lb(_onMessagesChanged);
+  }
+
+  void _onMessagesChanged(List<Message>? previous, List<Message> next) {
+    qq;
+    if (previous == null) {
+      qqe("previous is null");
+      return;
+    }
+
+    final previousIds = previous.map((e) => e.id).toList();
+    final nextIds = next.map((e) => e.id).toList();
+    final previousLength = previous.length;
+    final nextLength = next.length;
   }
 
   void _onLifecycleStateChanged(AppLifecycleState? previous, AppLifecycleState next) {
@@ -446,7 +467,7 @@ extension _$Chat on _Chat {
   void _onPageKeyChanged(PageKey pageKey) {
     qqq("_onPageKeyChanged: $pageKey");
     Future.delayed(200.ms).then((_) {
-      messages.u([]);
+      messages.uc();
     });
 
     if (!P.rwkv.loaded.v) {

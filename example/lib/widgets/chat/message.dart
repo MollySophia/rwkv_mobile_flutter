@@ -239,7 +239,7 @@ class Message extends ConsumerWidget {
       r: 12,
       // b: 12,
     );
-    
+
     Border border = Border.all(color: primaryColor.wo(0.2));
 
     if (isUserImage) {
@@ -412,7 +412,7 @@ class Message extends ConsumerWidget {
     return Align(
       alignment: alignment,
       child: IgnorePointer(
-      ignoring: editingIndex != null && editingIndex != index,
+        ignoring: editingIndex != null && editingIndex != index,
         child: AnimatedOpacity(
           opacity: opacity,
           duration: 250.ms,
@@ -522,8 +522,8 @@ class _BotMessageBottom extends ConsumerWidget {
                 ),
               ),
             ),
-          if (paused && Config.enableResume) const Spacer(),
-          if (paused && Config.enableResume)
+          if (paused) const Spacer(),
+          if (paused)
             GD(
               onTap: _onResumePressed,
               child: C(

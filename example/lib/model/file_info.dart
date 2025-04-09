@@ -193,27 +193,3 @@ enum FileType {
   downloadTest,
   ;
 }
-
-enum FileDownloadSource {
-  aifasthub,
-  huggingface,
-  github,
-  googleapis,
-  ;
-
-  String get prefix => switch (this) {
-        aifasthub => 'https://aifasthub.com/',
-        huggingface => 'https://huggingface.co/',
-        // TODO: fake for now
-        github => 'https://github.com/',
-        // TODO: fake for now
-        googleapis => 'https://googleapis.com/',
-      };
-
-  String get suffix => switch (this) {
-        aifasthub => '?download=true',
-        huggingface => '',
-        github => '',
-        googleapis => '',
-      };
-}
