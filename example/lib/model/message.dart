@@ -34,6 +34,20 @@ final class Message extends Equatable {
     this.audioLength,
   });
 
+  @override
+  List<Object?> get props => [
+        id,
+        content,
+        isMine,
+        changing,
+        type,
+        imageUrl,
+        audioUrl,
+        audioLength,
+        isReasoning,
+        paused,
+      ];
+
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
       id: json["id"] as int,
@@ -127,18 +141,4 @@ Message(
 
     return (_content, _result);
   }
-
-  @override
-  List<Object?> get props => [
-        id,
-        content,
-        isMine,
-        changing,
-        type,
-        imageUrl,
-        audioUrl,
-        audioLength,
-        isReasoning,
-        paused,
-      ];
 }

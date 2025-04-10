@@ -49,7 +49,7 @@ class ModelGroupItem extends ConsumerWidget {
     qqq("worldType: $worldType");
 
     P.rwkv.clearStates();
-    P.chat.messages.uc();
+    P.chat.clearMessages();
 
     try {
       switch (worldType) {

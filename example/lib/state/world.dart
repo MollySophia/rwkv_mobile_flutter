@@ -151,7 +151,7 @@ extension _$World on _World {
     final currentWorldType = P.rwkv.currentWorldType.v;
     final isAudioDemo = currentWorldType == WorldType.engAudioQA || currentWorldType == WorldType.chineseASR || currentWorldType == WorldType.engASR;
 
-    P.chat.messages.uc();
+    P.chat.clearMessages();
     imagePath.u(null);
     imageHeight.uc();
     visualFloatHeight.uc();

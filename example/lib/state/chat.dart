@@ -1,21 +1,6 @@
 part of 'p.dart';
 
 class _Chat {
-  late final messages = qs<List<Message>>([]);
-
-  /// 用于实现 DeepSeek 的 “分叉对话” 功能
-  ///
-  /// TODO: 想办法存到聊天记录中
-  late final currentChain = qs(MessageChain(ids: []));
-
-  /// 用于实现 DeepSeek 的 “分叉对话” 功能
-  late final chains = qs({MessageChain(ids: [])});
-
-  /// 用于在切换分叉时, 如果同一层级有多个分叉, 能切回原先的分叉
-  late final chainSwitchingHistory = qs<List<MessageChain>>([]);
-
-  late final branchesCountList = qs<List<List<int>>>([]);
-
   /// The key of it is the id of the message
   late final cotDisplayState = qsff<CoTDisplayState, int>((_, __) => CoTDisplayState.showCotHeaderAndCotContent);
 
@@ -63,10 +48,34 @@ class _Chat {
   late final suggestions = qs<List<String>>([]);
 
   late final autoPauseId = qsn<int>();
+
+  // late final messages = qp<List<Message>>((_) => []);
+  late final messages = qs<List<Message>>([]);
+
+  /// 用于实现 DeepSeek 的 “分叉对话” 功能
+  ///
+  /// TODO: 想办法存到聊天记录中
+  late final currentChain = qs(MessageChain(ids: []));
+
+  /// 用于实现 DeepSeek 的 “分叉对话” 功能
+  late final chains = qs({MessageChain(ids: [])});
+
+  /// 用于在切换分叉时, 如果同一层级有多个分叉, 能切回原先的分叉
+  late final chainSwitchingHistory = qs<List<MessageChain>>([]);
+
+  late final branchesCountList = qs<List<List<int>>>([]);
 }
 
 /// Public methods
 extension $Chat on _Chat {
+  void clearMessages() {
+    messages.uc();
+    branchesCountList.uc();
+    chainSwitchingHistory.uc();
+    currentChain.u(MessageChain(ids: []));
+    chains.u({MessageChain(ids: [])});
+  }
+
   FV onInputRightButtonPressed() async {
     if (P.rwkv.currentModel.v == null) {
       P.fileManager.modelSelectorShown.u(true);
