@@ -26,10 +26,10 @@ class Debugger extends ConsumerWidget {
     final page = ref.watch(Pager.page);
     final mainPageNotIgnoring = ref.watch(Pager.mainPageNotIgnoring);
     final conversation = ref.watch(P.conversation.current);
-    final chains = ref.watch(P.chat.chains);
-    final currentChain = ref.watch(P.chat.currentChain);
+    // final chains = ref.watch(P.chat.chains);
+    // final currentChain = ref.watch(P.chat.currentChain);
     final editingIndex = ref.watch(P.chat.editingIndex);
-    final branchesCountList = ref.watch(P.chat.branchesCountList);
+    // final branchesCountList = ref.watch(P.chat.branchesCountList);
 
     return Positioned(
       left: 0,
@@ -70,12 +70,12 @@ class Debugger extends ConsumerWidget {
                   T(inputHeight.toString()),
                   if (!isOthello) T("hasFocus".codeToName),
                   T(hasFocus.toString()),
-                  if (Config.enableConversation) T("page".codeToName),
-                  if (Config.enableConversation) T(page.toString()),
-                  if (Config.enableConversation) T("mainPageNotIgnoring".codeToName),
-                  if (Config.enableConversation) T(mainPageNotIgnoring.toString()),
-                  if (Config.enableConversation) T("conversation".codeToName),
-                  if (Config.enableConversation) T(conversation?.name ?? "null"),
+                  if (false) T("page".codeToName),
+                  if (false) T(page.toString()),
+                  if (false) T("mainPageNotIgnoring".codeToName),
+                  if (false) T(mainPageNotIgnoring.toString()),
+                  if (false) T("conversation".codeToName),
+                  if (false) T(conversation?.name ?? "null"),
                   // T("receivingTokens".codeToName),
                   // T(receivingTokens.toString()),
                   // T("receiveId".codeToName),
@@ -86,12 +86,12 @@ class Debugger extends ConsumerWidget {
                   // T(autoPauseId.toString()),
                   T("editingIndex".codeToName),
                   T(editingIndex.toString()),
-                  T("chains".codeToName),
-                  T(chains.toString()),
-                  T("currentChain".codeToName),
-                  T(currentChain.toString()),
-                  T("branchesCountList".codeToName),
-                  T(branchesCountList.toString()),
+                  // T("chains".codeToName),
+                  // T(chains.toString()),
+                  // T("currentChain".codeToName),
+                  // T(currentChain.toString()),
+                  // T("branchesCountList".codeToName),
+                  // T(branchesCountList.toString()),
                 ].indexMap((index, e) {
                   return C(
                     margin: EI.o(t: index % 2 == 0 ? 0 : 1),

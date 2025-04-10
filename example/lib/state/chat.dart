@@ -49,31 +49,22 @@ class _Chat {
 
   late final autoPauseId = qsn<int>();
 
-  // late final messages = qp<List<Message>>((_) => []);
-  late final messages = qs<List<Message>>([]);
+  late final messages = qp<List<Message>>((ref) {
+    ref.watch(_msgRefreshMark);
+    final values = _tree.values;
+    return values.map((e) => _msgPool(e).v).where((e) => e != null).map((e) => e!).toList();
+  });
+  // late final messages = qs<List<Message>>([]);
 
-  /// 用于实现 DeepSeek 的 “分叉对话” 功能
-  ///
-  /// TODO: 想办法存到聊天记录中
-  late final currentChain = qs(MessageChain(ids: []));
-
-  /// 用于实现 DeepSeek 的 “分叉对话” 功能
-  late final chains = qs({MessageChain(ids: [])});
-
-  /// 用于在切换分叉时, 如果同一层级有多个分叉, 能切回原先的分叉
-  late final chainSwitchingHistory = qs<List<MessageChain>>([]);
-
-  late final branchesCountList = qs<List<List<int>>>([]);
+  late final _msgPool = qsff<Message?, int>((_, __) => null);
+  TreeNode<int> _tree = TreeNode<int>(0);
+  late final _msgRefreshMark = qs(0);
 }
 
 /// Public methods
 extension $Chat on _Chat {
   void clearMessages() {
-    messages.uc();
-    branchesCountList.uc();
-    chainSwitchingHistory.uc();
-    currentChain.u(MessageChain(ids: []));
-    chains.u({MessageChain(ids: [])});
+    _tree = TreeNode<int>(0);
   }
 
   FV onInputRightButtonPressed() async {
@@ -102,12 +93,7 @@ extension $Chat on _Chat {
         paused: messages.v[_editingIndex].paused,
       );
       // currentMessages.replaceRange(_editingIndex, _editingIndex + 1, [newBotMessage]);
-      final newMessages = [
-        ...messages.v.sublist(0, _editingIndex),
-        newBotMessage,
-      ];
-      messages.u(newMessages);
-      P.conversation.updateMessages(newMessages);
+      _msgPool(_editingIndex).u(newBotMessage);
       editingIndex.u(null);
       Alert.success(S.current.bot_message_edited);
       return;
@@ -211,7 +197,6 @@ extension $Chat on _Chat {
   FV startNewChat() async {
     qq;
     P.rwkv.clearStates();
-    messages.uc();
   }
 
   FV send(
@@ -224,17 +209,6 @@ extension $Chat on _Chat {
     bool isRegenerate = false,
   }) async {
     qqq("message: $message");
-
-    final _editingIndex = editingIndex.v;
-    if (_editingIndex != null) {
-      qqq("editingIndex: $_editingIndex");
-      assert(_editingIndex >= 0 && _editingIndex < messages.v.length);
-      final messagesWithoutEditing = messages.v.sublist(0, _editingIndex);
-      // 将 editingIndex, 及 editingIndex 之后的消息都删掉
-      // TODO: 分叉
-      messages.u(messagesWithoutEditing);
-      if (Config.enableConversation) P.conversation.updateMessages(messagesWithoutEditing);
-    }
 
     late final Message? msg;
 
@@ -251,9 +225,11 @@ extension $Chat on _Chat {
         isReasoning: false,
         paused: false,
       );
-      messages.ua(msg);
-      // if (Config.enableConversation) P.conversation.updateMessages([...messages.v, msg]);
+      _msgPool(id).u(msg);
+      _tree.addAtLast(id);
+      _msgRefreshMark.ua(1);
     } else {
+      // TODO: 分叉
       msg = null;
     }
 
@@ -262,19 +238,13 @@ extension $Chat on _Chat {
     });
 
     if (type == MessageType.userImage) {
-      // 在之前的操作中已经注入了 LLM 了
       return;
     }
 
-    // if (Config.enableConversation) {
-    //   try {
-    //     P.conversation.addMessage(msg);
-    //   } catch (e) {
-    //     qqe(e);
-    //   }
-    // }
-
-    final historyMessage = messages.v.where((e) {
+    qqq("_tree.values: ${_tree.values}");
+    final messages = this.messages.v;
+    // debugger();
+    final historyMessage = messages.where((e) {
       return e.type != MessageType.userImage;
     }).m((e) {
       if (!e.isReasoning) return e.content;
@@ -285,6 +255,7 @@ extension $Chat on _Chat {
     });
 
     final history = withHistory ? historyMessage : [message];
+    // debugger();
 
     P.rwkv.send(history);
     editingIndex.u(null);
@@ -303,8 +274,9 @@ extension $Chat on _Chat {
       paused: false,
     );
 
-    messages.ua(receiveMsg);
-    P.conversation.updateMessages([...messages.v, receiveMsg]);
+    _msgPool(receiveId).u(receiveMsg);
+    _tree.addAtLast(id);
+    _msgRefreshMark.ua(1);
   }
 
   FV onStopButtonPressed() async {
@@ -344,13 +316,7 @@ extension $Chat on _Chat {
     suggestions.u(suggestions.v.shuffled.take(3).toList());
   }
 
-  FV loadConversation(Conversation? conversation) async {
-    if (conversation == null) {
-      messages.uc();
-      return;
-    }
-    messages.u(conversation.messages);
-  }
+  FV loadConversation(Conversation? conversation) async {}
 
   FV resumeMessageById({required int id, bool withHaptic = true}) async {
     qq;
@@ -360,52 +326,7 @@ extension $Chat on _Chat {
   }
 
   void onTapSwitchAtIndex(int index, {required bool isBack, required Message msg}) {
-    qq;
-    final branches = P.chat.branchesCountList.v[index];
-    if (branches.length <= 1) {
-      qqw("No branches to switch");
-      return;
-    }
-    final isFirstMessageSwitching = index == 0;
-    final currentChain = this.currentChain.v;
-    final previousMessageId = isFirstMessageSwitching ? null : currentChain.ids[index - 1];
-    final history = chainSwitchingHistory.v.reversed;
-
-    MessageChain? targetChain;
-
-    if (previousMessageId == null) {
-      targetChain = history.firstWhereOrNull((e) => e != currentChain);
-      if (targetChain == null) {
-        qqw("When switching the first message, no target chain found in history");
-        return;
-      }
-      this.currentChain.u(targetChain);
-      chainSwitchingHistory.ua(targetChain);
-      return;
-    }
-
-    targetChain = history.firstWhereOrNull((e) => e.ids[index - 1] == previousMessageId && e != currentChain);
-    if (targetChain != null) {
-      qqr("Found target chain in history");
-      this.currentChain.u(targetChain);
-      chainSwitchingHistory.ua(targetChain);
-      return;
-    } else {
-      qqw("No target chain found in history");
-    }
-
-    // 如果找不到, 则从 chains 中找
-    targetChain = chains.v.firstWhereOrNull((e) => e.ids[index - 1] == previousMessageId && e != currentChain);
-    if (targetChain != null) {
-      qqr("Found target chain in chains");
-      this.currentChain.u(targetChain);
-      chainSwitchingHistory.ua(targetChain);
-      return;
-    } else {
-      qqw("No target chain found in chains");
-    }
-
-    qqe("No target chain found");
+    // TODO: 分叉
   }
 }
 
@@ -437,94 +358,9 @@ extension _$Chat on _Chat {
     P.app.lifecycleState.lb(_onLifecycleStateChanged);
 
     if (Config.enableChain) messages.lb(_onMessagesChanged);
-    if (Config.enableChain) chains.lv(_syncBranchesCountList);
-    if (Config.enableChain) currentChain.lv(_syncBranchesCountList);
   }
 
-  void _onMessagesChanged(List<Message>? previous, List<Message> next) {
-    _syncChains(previous, next);
-  }
-
-  void _syncBranchesCountList() {
-    final chains = this.chains.v;
-    final currentChain = this.currentChain.v;
-    final List<List<int>> newValue = [];
-    final currentMessageIds = currentChain.ids;
-    for (var i = 0; i < currentMessageIds.length; i++) {
-      if (i == 0) {
-        final firstBranchIds = chains.m((e) => e.ids.first).toSet().sorted((a, b) => a.compareTo(b));
-        newValue.add(firstBranchIds);
-        continue;
-      }
-      // 获取上一个消息的 id
-      final previousMessageId = currentMessageIds[i - 1];
-      // 遍历所有消息链, 获取所有上一个消息的 id 等于 previousMessageId 的消息链
-      final branchIds = chains.where((e) => e.ids[i - 1] == previousMessageId).map((e) => e.ids[i]).sorted((a, b) => a.compareTo(b)).toList();
-      newValue.add(branchIds);
-    }
-    if (listEquals(branchesCountList.v, newValue)) return;
-    branchesCountList.u(newValue);
-  }
-
-  void _syncChains(List<Message>? previous, List<Message> next) {
-    qq;
-    if (previous == null) {
-      qqe("previous is null");
-      return;
-    }
-
-    final previousIds = previous.map((e) => e.id).toList();
-    final nextIds = next.map((e) => e.id).toList();
-    final previousLength = previous.length;
-    final nextLength = next.length;
-
-    if (listEquals(previousIds, nextIds)) return;
-
-    // Add a new chain
-    if (previousLength == 0 && nextLength == 1) {
-      final firstId = nextIds.first;
-      final chain = MessageChain(ids: [firstId]);
-      this.chains.u({chain});
-      this.currentChain.u(chain);
-      return;
-    }
-
-    // 是否应该消息分叉?
-    final shouldCreateNewBranch = nextLength <= previousLength;
-
-    final chains = this.chains.v;
-    final currentChain = this.currentChain.v;
-
-    if (!chains.contains(currentChain)) {
-      qqe("currentChain not found in chains");
-      return;
-    }
-
-    late final MessageChain newChain;
-
-    if (nextIds.isEmpty) {
-      qqe("nextIds is empty");
-      qqe("next: $next");
-      debugger();
-      return;
-    }
-
-    final latestId = nextIds.last;
-
-    if (shouldCreateNewBranch) {
-      newChain = currentChain.addAt(latestId, nextLength - 1);
-    } else {
-      newChain = currentChain.add(latestId);
-    }
-
-    if (!shouldCreateNewBranch) chains.remove(currentChain);
-    chains.add(newChain);
-
-    if (!setEquals(this.chains.v, chains)) this.chains.u(chains);
-    this.currentChain.u(newChain);
-
-    qqq("chains count: ${this.chains.v.length}, currentChain length: ${this.currentChain.v.ids.length}");
-  }
+  void _onMessagesChanged(List<Message>? previous, List<Message> next) {}
 
   void _onLifecycleStateChanged(AppLifecycleState? previous, AppLifecycleState next) {
     final isToBackground = next == AppLifecycleState.paused || next == AppLifecycleState.hidden;
@@ -572,13 +408,7 @@ extension _$Chat on _Chat {
       return;
     }
 
-    final newMessages = messages.v.map((e) {
-      if (e.id == id) {
-        return e.copyWith(paused: true);
-      }
-      return e;
-    }).toList();
-    messages.u(newMessages);
+    _msgPool(id).u(_msgPool(id).v?.copyWith(paused: true));
   }
 
   FV _onFocusNodeChanged() async {
@@ -616,10 +446,6 @@ extension _$Chat on _Chat {
 
   void _onPageKeyChanged(PageKey pageKey) {
     qqq("_onPageKeyChanged: $pageKey");
-    Future.delayed(200.ms).then((_) {
-      messages.uc();
-    });
-
     if (!P.rwkv.loaded.v) {
       P.fileManager.modelSelectorShown.u(true);
     }
@@ -659,6 +485,7 @@ extension _$Chat on _Chat {
     bool? isReasoning,
     bool? paused,
   }) {
+    // debugger();
     final currentMessages = [...messages.v];
     bool found = false;
     for (var i = 0; i < currentMessages.length; i++) {
@@ -678,12 +505,11 @@ extension _$Chat on _Chat {
         );
         currentMessages.replaceRange(i, i + 1, [newMsg]);
         found = true;
+        _msgPool(id).u(newMsg);
         break;
       }
     }
     if (!found) qqe("message not found");
-    messages.u(currentMessages);
-    P.conversation.updateMessages(currentMessages);
   }
 
   FV _onStreamEvent(LLMEvent event) async {

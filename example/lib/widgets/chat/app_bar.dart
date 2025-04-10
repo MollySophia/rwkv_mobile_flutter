@@ -137,13 +137,13 @@ class _MenuButton extends ConsumerWidget {
 
   void _onPressed() {
     qqq;
-    if (Config.enableConversation) Pager.toggle();
-    if (!Config.enableConversation) AppInfo.show(getContext()!);
+    if (false) Pager.toggle();
+    if (!false) AppInfo.show(getContext()!);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final childOpacity = Config.enableConversation ? ref.watch(Pager.childOpacity) : 1.0;
+    final childOpacity = false ? ref.watch(Pager.childOpacity) : 1.0;
     return Opacity(
       opacity: childOpacity,
       child: IconButton(

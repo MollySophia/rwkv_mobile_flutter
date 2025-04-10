@@ -39,7 +39,7 @@ class ModelItem extends ConsumerWidget {
 
     try {
       P.rwkv.clearStates();
-      if (!Config.enableConversation) P.chat.clearMessages();
+      if (!false) P.chat.clearMessages();
       await P.rwkv.loadChat(
         modelPath: modelPath,
         backend: backend!,
