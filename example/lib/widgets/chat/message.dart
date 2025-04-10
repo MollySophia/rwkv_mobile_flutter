@@ -1,6 +1,5 @@
 // ignore: unused_import
 import 'dart:async';
-import 'dart:math';
 import 'dart:math' as math;
 
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -8,16 +7,18 @@ import 'package:halo_state/halo_state.dart';
 import 'package:photo_viewer/photo_viewer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zone/gen/l10n.dart';
-import 'package:halo_alert/halo_alert.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
+import 'package:zone/model/co_t_display_state.dart';
 import 'package:zone/model/message.dart' as model;
 import 'package:zone/model/world_type.dart';
-import 'package:zone/route/method.dart';
 import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
+import 'package:zone/widgets/chat/audio_bubble.dart';
+import 'package:zone/widgets/chat/bot_message_bottom.dart';
+import 'package:zone/widgets/chat/photo_viewer_overlay.dart';
+import 'package:zone/widgets/chat/user_message_bottom.dart';
 
 const double _kTextScaleFactor = 1.1;
 const double _kTextScaleFactorForCotContent = 1;
@@ -32,27 +33,17 @@ class Message extends ConsumerWidget {
 
   const Message(this.msg, this.index, {super.key});
 
-  void _onUserEditPressed() async {
-    await P.chat.onTapEditInUserMessageBubble(index: index);
-  }
-
-  void _onCopyPressed() {
-    Alert.success(S.current.chat_copied_to_clipboard);
-    Clipboard.setData(ClipboardData(text: msg.content));
-  }
-
   void _onTapLink(String text, String? href, String title) async {
-    if (href != null) {
-      await launchUrl(Uri.parse(href));
-    }
+    if (href == null) return;
+    await launchUrl(Uri.parse(href));
   }
 
   void _onTap() async {
+    qq;
+
     if (P.rwkv.currentWorldType.v != null) {
       Focus.of(getContext()!).unfocus();
     }
-
-    qq;
 
     P.chat.focusNode.unfocus();
     P.chat.latestClickedMessage.u(msg);
@@ -301,12 +292,12 @@ class Message extends ConsumerWidget {
                     imageUrl: msg.imageUrl!,
                     showDefaultCloseButton: false,
                     overlayBuilder: (context) {
-                      return const _PhotoViewerOverlay();
+                      return const PhotoViewerOverlay();
                     },
                   ),
                 ),
               // 🔥 User message audio
-              if (isMine && isUserAudio) _AudioBubble(msg),
+              if (isMine && isUserAudio) AudioBubble(msg),
               // 🔥 Bot message audio recognition result
               if (!isMine && worldDemoMessageHeader.isNotEmpty)
                 T(
@@ -371,41 +362,8 @@ class Message extends ConsumerWidget {
                   styleSheet: markdownStyleSheet,
                   onTapLink: _onTapLink,
                 ),
-              // 🔥 User message bottom row
-              if (isMine && !isUserImage && !isUserAudio && (showUserEditButton || showUserCopyButton)) 12.h,
-              if (isMine && !isUserImage && !isUserAudio)
-                Ro(
-                  m: MAA.end,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (showUserEditButton)
-                      GD(
-                        onTap: _onUserEditPressed,
-                        child: Padding(
-                          padding: const EI.o(b: 12, l: 4),
-                          child: Icon(
-                            Icons.edit,
-                            color: primaryColor.wo(0.8),
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    if (showUserCopyButton)
-                      GD(
-                        onTap: _onCopyPressed,
-                        child: Padding(
-                          padding: const EI.o(b: 12, l: 4),
-                          child: Icon(
-                            Icons.copy,
-                            color: primaryColor.wo(0.8),
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              // 🔥 Bot message bottom row
-              _BotMessageBottom(msg, index),
+              UserMessageBottom(msg, index),
+              BotMessageBottom(msg, index),
             ],
           ),
         ),
@@ -430,257 +388,6 @@ class Message extends ConsumerWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _BotMessageBottom extends ConsumerWidget {
-  final model.Message msg;
-  final int index;
-
-  const _BotMessageBottom(this.msg, this.index);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    if (msg.isMine) return const SizedBox.shrink();
-
-    final paused = msg.paused;
-
-    final changing = msg.changing;
-
-    final primaryColor = Theme.of(context).colorScheme.primary;
-
-    final worldType = ref.watch(P.rwkv.currentWorldType);
-
-    bool showBotEditButton = true;
-    bool showBotCopyButton = true;
-
-    switch (worldType) {
-      case null:
-        break;
-      default:
-        showBotEditButton = false;
-        showBotCopyButton = false;
-    }
-
-    return Ro(
-      m: MAA.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _BranchSwitcher(msg, index),
-        if (changing)
-          GD(
-            child: Padding(
-              padding: const EI.o(v: 12, r: 4),
-              child: TweenAnimationBuilder(
-                tween: Tween(begin: 0.0, end: 1.0),
-                duration: const Duration(milliseconds: 1000000000),
-                builder: (context, value, child) => Transform.rotate(
-                  angle: value * 2 * pi * 1000000,
-                  child: child,
-                ),
-                child: Icon(
-                  Icons.hourglass_top,
-                  color: primaryColor,
-                  size: 20,
-                ),
-              ),
-            ),
-          ),
-        4.w,
-        GD(
-          onTap: _onRegeneratePressed,
-          child: Padding(
-            padding: const EI.o(v: 12, r: 4),
-            child: Icon(
-              Icons.refresh,
-              color: primaryColor.wo(0.8),
-              size: 20,
-            ),
-          ),
-        ),
-        if (showBotEditButton)
-          GD(
-            onTap: _onBotEditPressed,
-            child: Padding(
-              padding: const EI.o(v: 12, r: 4),
-              child: Icon(
-                Icons.edit,
-                color: primaryColor.wo(0.8),
-                size: 20,
-              ),
-            ),
-          ),
-        if (showBotCopyButton) 4.w,
-        if (showBotCopyButton)
-          GD(
-            onTap: _onCopyPressed,
-            child: Padding(
-              padding: const EI.o(v: 12, r: 4),
-              child: Icon(
-                Icons.copy,
-                color: primaryColor.wo(0.8),
-                size: 20,
-              ),
-            ),
-          ),
-        if (paused) const Spacer(),
-        if (paused)
-          GD(
-            onTap: _onResumePressed,
-            child: C(
-              padding: const EI.o(v: 10, l: 12),
-              child: C(
-                padding: const EI.s(v: 1, h: 8),
-                decoration: BD(color: kC, border: Border.all(color: primaryColor.wo(0.67)), borderRadius: 4.r),
-                child: T(
-                  S.current.chat_resume,
-                  s: TS(c: primaryColor, w: FW.w600, s: 16),
-                ),
-              ),
-            ),
-          ),
-      ],
-    ).debug;
-  }
-
-  void _onResumePressed() {
-    P.chat.resumeMessageById(id: msg.id);
-  }
-
-  void _onBotEditPressed() async {
-    await P.chat.onTapEditInBotMessageBubble(index: index);
-  }
-
-  void _onRegeneratePressed() async {
-    await P.chat.onRegeneratePressed(index: index);
-  }
-
-  void _onCopyPressed() {
-    Alert.success(S.current.chat_copied_to_clipboard);
-    Clipboard.setData(ClipboardData(text: msg.content));
-  }
-}
-
-class _BranchSwitcher extends ConsumerWidget {
-  final model.Message msg;
-  final int index;
-
-  const _BranchSwitcher(this.msg, this.index);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // TODO: 思考一下这里怎么区序列
-    final branchesCountList = ref.watch(P.chat.branchesCountList.select((v) => v[index]));
-    return C(
-      height: 16,
-      width: 16,
-      decoration: BD(color: kCR),
-    );
-  }
-}
-
-class _AudioBubble extends ConsumerStatefulWidget {
-  final model.Message msg;
-
-  const _AudioBubble(this.msg);
-
-  @override
-  ConsumerState<_AudioBubble> createState() => _AudioBubbleState();
-}
-
-class _AudioBubbleState extends ConsumerState<_AudioBubble> {
-  Timer? _timer;
-  int _tick = 0;
-
-  @override
-  void initState() {
-    super.initState();
-
-    ref.listenManual(P.chat.latestClickedMessage, (previous, next) {
-      if (next?.id == widget.msg.id) {
-        _timer?.cancel();
-        _timer = Timer.periodic(500.ms, (timer) {
-          _tick++;
-          setState(() {});
-        });
-      } else {
-        _timer?.cancel();
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _timer?.cancel();
-    _timer = null;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final primaryColor = Theme.of(context).colorScheme.primary;
-    final length = widget.msg.audioLength ?? 2000;
-    final base = 4000;
-    final width = 200 * (length / (length + base));
-    final isPlaying = ref.watch(P.world.playing);
-    final latestClickedMessage = ref.watch(P.chat.latestClickedMessage);
-    final isLatestClickedMessage = latestClickedMessage?.id == widget.msg.id;
-    return C(
-      decoration: const BD(color: kC),
-      width: width,
-      child: Ro(
-        m: MAA.end,
-        children: [
-          T(
-            (length / 1000).toStringAsFixed(0) + "s",
-            s: TS(c: kB.wo(0.8), w: FW.w600),
-          ),
-          8.w,
-          if (_tick % 3 == 0 || !isPlaying || !isLatestClickedMessage)
-            Icon(
-              Icons.volume_up,
-              color: primaryColor,
-            ),
-          if (_tick % 3 == 2 && isPlaying && isLatestClickedMessage)
-            Icon(
-              Icons.volume_down,
-              color: primaryColor,
-            ),
-          if (_tick % 3 == 1 && isPlaying && isLatestClickedMessage)
-            Icon(
-              Icons.volume_mute,
-              color: primaryColor,
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-class _PhotoViewerOverlay extends ConsumerWidget {
-  const _PhotoViewerOverlay();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final paddingTop = ref.watch(P.app.paddingTop);
-    final paddingRight = ref.watch(P.app.paddingRight);
-    return Ro(
-      m: MAA.end,
-      children: [
-        C(
-          margin: EI.o(t: paddingTop + 12, r: paddingRight + 12),
-          child: IconButton(
-            onPressed: () {
-              pop();
-            },
-            icon: const Icon(
-              Icons.close,
-              color: kW,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

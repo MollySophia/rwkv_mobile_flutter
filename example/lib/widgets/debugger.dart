@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:zone/config.dart';
+import 'package:zone/func/data_time_e.dart';
 import 'package:zone/state/p.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,9 +14,7 @@ class Debugger extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // return const SizedBox.shrink();
     if (!kDebugMode) return const SizedBox.shrink();
-    final demoType = ref.watch(P.app.demoType);
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
-    final currentModel = ref.watch(P.rwkv.currentModel);
     final visualFloatHeight = ref.watch(P.world.visualFloatHeight);
     final loading = ref.watch(P.rwkv.loading);
     final playing = ref.watch(P.world.playing);
@@ -27,10 +26,6 @@ class Debugger extends ConsumerWidget {
     final page = ref.watch(Pager.page);
     final mainPageNotIgnoring = ref.watch(Pager.mainPageNotIgnoring);
     final conversation = ref.watch(P.conversation.current);
-    final receivingTokens = ref.watch(P.chat.receivingTokens);
-    final receiveId = ref.watch(P.chat.receiveId);
-    final lifecycleState = ref.watch(P.app.lifecycleState);
-    final autoPauseId = ref.watch(P.chat.autoPauseId);
     final chains = ref.watch(P.chat.chains);
     final currentChain = ref.watch(P.chat.currentChain);
     final editingIndex = ref.watch(P.chat.editingIndex);
@@ -63,6 +58,10 @@ class Debugger extends ConsumerWidget {
                   if (currentWorldType != null) T(visualFloatHeight.toString()),
                   T("loading".codeToName),
                   T(loading.toString()),
+                  T(DateTime.now().microsecondsSinceEpoch.toString()),
+                  T(qDebugShorterMicroseconds.toString()),
+                  T(DateTime.now().millisecondsSinceEpoch.toString()),
+                  T(qDebugShorterMilliseconds.toString()),
                   if (currentWorldType != null) T("playing".codeToName),
                   if (currentWorldType != null) T(playing.toString()),
                   if (!isOthello) T("latestClickedMessage".codeToName),
@@ -95,7 +94,7 @@ class Debugger extends ConsumerWidget {
                   T(branchesCountList.toString()),
                 ].indexMap((index, e) {
                   return C(
-                    margin: EI.o(t: index % 2 == 1 ? 0 : 1),
+                    margin: EI.o(t: index % 2 == 0 ? 0 : 1),
                     decoration: BD(color: kB.wo(0.33)),
                     child: e,
                   );

@@ -204,9 +204,9 @@ extension $RWKV on _RWKV {
 
     if (_sendPort != null) {
       try {
-        final startMS = DateTime.now().millisecondsSinceEpoch;
+        final startMS = qDebugShorterMicroseconds;
         await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
-        final endMS = DateTime.now().millisecondsSinceEpoch;
+        final endMS = qDebugShorterMicroseconds;
         qqr("initRuntime done in ${endMS - startMS}ms");
       } catch (e) {
         if (kDebugMode) print("😡 initRuntime failed: $e");
@@ -282,9 +282,9 @@ extension $RWKV on _RWKV {
       try {
         _sendPort!.send(("releaseWhisperEncoder", null));
         _sendPort!.send(("releaseModel", null));
-        final startMS = DateTime.now().millisecondsSinceEpoch;
+        final startMS = qDebugShorterMicroseconds;
         await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
-        final endMS = DateTime.now().millisecondsSinceEpoch;
+        final endMS = qDebugShorterMicroseconds;
         qqr("initRuntime done in ${endMS - startMS}ms");
       } catch (e) {
         if (kDebugMode) print("😡 initRuntime failed: $e");
@@ -338,9 +338,9 @@ extension $RWKV on _RWKV {
     if (_sendPort != null) {
       _sendPort!.send(("releaseVisionEncoder", null));
       _sendPort!.send(("releaseModel", null));
-      final startMS = DateTime.now().millisecondsSinceEpoch;
+      final startMS = qDebugShorterMicroseconds;
       await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
-      final endMS = DateTime.now().millisecondsSinceEpoch;
+      final endMS = qDebugShorterMicroseconds;
       qqr("initRuntime done in ${endMS - startMS}ms");
     } else {
       final options = StartOptions(

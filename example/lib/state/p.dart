@@ -22,6 +22,7 @@ import 'package:zone/io.dart';
 import 'package:zone/args.dart';
 import 'package:zone/model/argument.dart';
 import 'package:zone/model/cell_type.dart';
+import 'package:zone/model/co_t_display_state.dart';
 import 'package:zone/model/conversation.dart';
 import 'package:zone/model/file_info.dart';
 import 'package:zone/model/local_file.dart';
@@ -38,6 +39,7 @@ import 'package:flutter/services.dart';
 import 'package:halo/halo.dart';
 import 'package:rwkv_mobile_flutter/rwkv.dart';
 import 'package:zone/widgets/pager.dart';
+import 'package:zone/func/data_time_e.dart';
 
 part "app.dart";
 part "chat.dart";

@@ -41,7 +41,7 @@ extension $World on _World {
       return;
     }
 
-    final t = DateTime.now().millisecondsSinceEpoch;
+    final t = qDebugShorterMicroseconds;
     startTime.u(t);
     _currentStreamController = StreamController<Uint8List>();
     final rawAudioStream = _currentStreamController!.stream;
@@ -75,7 +75,7 @@ extension $World on _World {
       return;
     }
 
-    final t = DateTime.now().millisecondsSinceEpoch;
+    final t = qDebugShorterMicroseconds;
     endTime.u(t);
 
     final audioLengthInMilliseconds = endTime.v - startTime.v;
@@ -90,7 +90,7 @@ extension $World on _World {
     final cacheDir = P.app.cacheDir.v;
     if (cacheDir == null) throw Exception("😡 cacheDir is null");
 
-    final path = "${cacheDir.path}/${DateTime.now().millisecondsSinceEpoch}.wav";
+    final path = "${cacheDir.path}/${qDebugShorterMicroseconds}.wav";
     final file = File(path);
 
     List<int> wavHeader = _createWavHeader(dataSize: _audioData.expand((x) => x).length, sampleRate: 16000, numChannels: 1, bitsPerSample: 16);

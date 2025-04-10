@@ -80,7 +80,7 @@ extension $Conversation on _Conversation {
 
   FV addMessage(Message message, [Conversation? conversation]) async {
     if (!Config.enableConversation) return;
-    final now = DateTime.now().millisecondsSinceEpoch;
+    final now = qDebugShorterMicroseconds;
     if (conversation == null) {
       // Create new conversation
       final newId = conversations.v.isEmpty ? 1 : (conversations.v.firstOrNull?.id ?? 0) + 1;
@@ -142,7 +142,7 @@ extension $Conversation on _Conversation {
       name: conversation.name,
       messages: messages,
       createdAt: conversation.createdAt,
-      updatedAt: DateTime.now().millisecondsSinceEpoch,
+      updatedAt: qDebugShorterMicroseconds,
     );
 
     conversations.u([

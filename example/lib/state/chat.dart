@@ -11,12 +11,13 @@ class _Chat {
   /// 用于实现 DeepSeek 的 “分叉对话” 功能
   late final chains = qs({MessageChain(ids: [])});
 
-  late final branchesCountList = qs<List<int>>([]);
+  /// 用于在切换分叉时, 如果同一层级有多个分叉, 能切回原先的分叉
+  late final chainSwitchingHistory = qs<List<MessageChain>>([]);
+
+  late final branchesCountList = qs<List<List<int>>>([]);
 
   /// The key of it is the id of the message
-  late final cotDisplayState = qsff<CoTDisplayState, int>((ref, index) {
-    return CoTDisplayState.showCotHeaderAndCotContent;
-  });
+  late final cotDisplayState = qsff<CoTDisplayState, int>((_, __) => CoTDisplayState.showCotHeaderAndCotContent);
 
   late final scrollController = ScrollController();
 
@@ -82,7 +83,7 @@ extension $Chat on _Chat {
     if (_editingBotMessage) {
       // final currentMessages = [...messages.v];
       final _editingIndex = editingIndex.v!;
-      final id = DateTime.now().microsecondsSinceEpoch;
+      final id = qDebugShorterMilliseconds;
       final newBotMessage = Message(
         id: id,
         content: textToSend,
@@ -141,6 +142,7 @@ extension $Chat on _Chat {
   }
 
   FV onTapEditInBotMessageBubble({required int index}) async {
+    // TODO: 这里也要消息分叉
     final loaded = P.rwkv.loaded.v;
     if (!loaded) {
       Alert.info("Please load model first");
@@ -227,7 +229,7 @@ extension $Chat on _Chat {
 
     late final Message? msg;
 
-    final id = DateTime.now().microsecondsSinceEpoch;
+    final id = qDebugShorterMilliseconds;
     if (!isRegenerate) {
       msg = Message(
         id: id,
@@ -281,7 +283,7 @@ extension $Chat on _Chat {
     receivedTokens.uc();
     receivingTokens.u(true);
 
-    final receiveId = DateTime.now().microsecondsSinceEpoch;
+    final receiveId = qDebugShorterMilliseconds;
     this.receiveId.u(receiveId);
     final receiveMsg = Message(
       id: receiveId,
@@ -347,6 +349,55 @@ extension $Chat on _Chat {
     P.rwkv.send(_history());
     _updateMessageById(id: id, changing: true, paused: false);
   }
+
+  void onTapSwitchAtIndex(int index, {required bool isBack, required Message msg}) {
+    qq;
+    final branches = P.chat.branchesCountList.v[index];
+    if (branches.length <= 1) {
+      qqw("No branches to switch");
+      return;
+    }
+    final isFirstMessageSwitching = index == 0;
+    final currentChain = this.currentChain.v;
+    final previousMessageId = isFirstMessageSwitching ? null : currentChain.ids[index - 1];
+    final history = chainSwitchingHistory.v.reversed;
+
+    MessageChain? targetChain;
+
+    if (previousMessageId == null) {
+      targetChain = history.firstWhereOrNull((e) => e != currentChain);
+      if (targetChain == null) {
+        qqw("When switching the first message, no target chain found in history");
+        return;
+      }
+      this.currentChain.u(targetChain);
+      chainSwitchingHistory.ua(targetChain);
+      return;
+    }
+
+    targetChain = history.firstWhereOrNull((e) => e.ids[index - 1] == previousMessageId && e != currentChain);
+    if (targetChain != null) {
+      qqr("Found target chain in history");
+      this.currentChain.u(targetChain);
+      chainSwitchingHistory.ua(targetChain);
+      return;
+    } else {
+      qqw("No target chain found in history");
+    }
+
+    // 如果找不到, 则从 chains 中找
+    targetChain = chains.v.firstWhereOrNull((e) => e.ids[index - 1] == previousMessageId && e != currentChain);
+    if (targetChain != null) {
+      qqr("Found target chain in chains");
+      this.currentChain.u(targetChain);
+      chainSwitchingHistory.ua(targetChain);
+      return;
+    } else {
+      qqw("No target chain found in chains");
+    }
+
+    qqe("No target chain found");
+  }
 }
 
 /// Private methods
@@ -386,20 +437,21 @@ extension _$Chat on _Chat {
   }
 
   void _syncBranchesCountList() {
-    qq;
     final chains = this.chains.v;
     final currentChain = this.currentChain.v;
-    final List<int> newValue = [];
+    final List<List<int>> newValue = [];
     final currentMessageIds = currentChain.ids;
     for (var i = 0; i < currentMessageIds.length; i++) {
       if (i == 0) {
-        final allBranchIds = chains.m((e) => e.ids.first).toSet();
-        newValue.add(allBranchIds.length);
+        final firstBranchIds = chains.m((e) => e.ids.first).toSet().sorted((a, b) => a.compareTo(b));
+        newValue.add(firstBranchIds);
         continue;
       }
+      // 获取上一个消息的 id
       final previousMessageId = currentMessageIds[i - 1];
-      final allBranchIds = chains.where((e) => e.ids[i - 1] == previousMessageId).m((e) => e.ids[i]).toSet();
-      newValue.add(allBranchIds.length + 1);
+      // 遍历所有消息链, 获取所有上一个消息的 id 等于 previousMessageId 的消息链
+      final branchIds = chains.where((e) => e.ids[i - 1] == previousMessageId).map((e) => e.ids[i]).sorted((a, b) => a.compareTo(b)).toList();
+      newValue.add(branchIds);
     }
     if (listEquals(branchesCountList.v, newValue)) return;
     branchesCountList.u(newValue);
@@ -533,12 +585,12 @@ extension _$Chat on _Chat {
     // final duration = Duration(milliseconds: length);
     // final durationString = Duration(milliseconds: length).toString();
 
-    final t0 = DateTime.now().millisecondsSinceEpoch;
+    final t0 = qDebugShorterMicroseconds;
     P.rwkv.setAudioPrompt(path: path);
-    final t1 = DateTime.now().millisecondsSinceEpoch;
+    final t1 = qDebugShorterMicroseconds;
     qqq("setAudioPrompt done in ${t1 - t0}ms");
     send("", type: MessageType.userAudio, audioUrl: path, withHistory: false, audioLength: length);
-    final t2 = DateTime.now().millisecondsSinceEpoch;
+    final t2 = qDebugShorterMicroseconds;
     qqq("send done in ${t2 - t1}ms");
   }
 
@@ -687,10 +739,4 @@ extension _$Chat on _Chat {
     if (demoType != DemoType.chat && demoType != DemoType.world) return;
     receivingTokens.u(false);
   }
-}
-
-enum CoTDisplayState {
-  showCotHeaderIfCotResultIsEmpty,
-  hideCotHeader,
-  showCotHeaderAndCotContent,
 }
