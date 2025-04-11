@@ -1,7 +1,6 @@
 - 多个文件同时下载时似乎有 bug, 得到的文件数据长度似乎不对, 感觉是第三方库的 bug, 可以在 debug 模式下复现
   - 感觉可以构建本地的 download server 测试这个问题
 - 下载模型需要支持断点续传
-- 需要 8s gen3 QNN 版本, @Molly
 - 远程配置文件
   - App version
   - Weights
