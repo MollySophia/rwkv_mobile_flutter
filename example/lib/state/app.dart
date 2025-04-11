@@ -14,6 +14,8 @@ class _App extends RawApp with WidgetsBindingObserver {
   /// 当前正在运行的任务
   late final demoType = qs(DemoType.chat);
 
+  late final latestBuild = qs(-1);
+
   @override
   void didChangeMetrics() {
     final context = getContext();
@@ -34,6 +36,38 @@ extension $App on _App {
     await Future.delayed(Duration.zero);
     // ignore: use_build_context_synchronously
     contextGot(context);
+  }
+
+  FV getConfig() async {
+    qq;
+    await HF.wait(17);
+    try {
+      final res = await _get("get-demo-config");
+      qqq("res: $res");
+      if (res is! Map) {
+        throw "res is not a Map, res: ${res.runtimeType}";
+      }
+      final success = res["success"];
+      final message = res["message"];
+      final data = res["data"];
+      if (success != true) {
+        throw "success is false, success: $success, message: $message";
+      }
+      if (data is! Map) {
+        throw "data is not a Map, data: ${data.runtimeType}";
+      }
+      final config = data[demoType.v.name];
+      if (config is! Map) {
+        throw "config is not a Map, config: ${config.runtimeType}";
+      }
+      final build = config["latest_build"];
+      if (build is! num) {
+        throw "build is not an num, build: $build";
+      }
+      latestBuild.u(build.toInt());
+    } catch (e) {
+      Sentry.captureException(e);
+    }
   }
 }
 
@@ -64,6 +98,7 @@ extension _$App on _App {
     }
 
     WidgetsBinding.instance.addObserver(this);
+    getConfig();
   }
 
   void _routerListener() {

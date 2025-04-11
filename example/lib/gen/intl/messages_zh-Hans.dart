@@ -70,6 +70,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "loading": MessageLookupByLibrary.simpleMessage("加载中..."),
     "memory_used": m1,
+    "network_error": MessageLookupByLibrary.simpleMessage("网络错误"),
     "new_chat": MessageLookupByLibrary.simpleMessage("新聊天"),
     "or_you_can_start_a_new_empty_chat": MessageLookupByLibrary.simpleMessage(
       "或开始一个空白聊天",
@@ -94,6 +95,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "select_a_model": MessageLookupByLibrary.simpleMessage("选择模型"),
     "select_a_world_type": MessageLookupByLibrary.simpleMessage("选择 World 类型"),
     "send_message_to_rwkv": MessageLookupByLibrary.simpleMessage("发送消息给 RWKV"),
+    "server_error": MessageLookupByLibrary.simpleMessage("服务器错误"),
     "session_configuration": MessageLookupByLibrary.simpleMessage("会话配置"),
     "speed": MessageLookupByLibrary.simpleMessage("下载速度："),
     "start_a_new_chat": MessageLookupByLibrary.simpleMessage("开始新聊天"),

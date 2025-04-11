@@ -18,7 +18,7 @@ class _FileManager {
 
   late final availableModels = qs<Set<FileInfo>>({});
 
-  late final downloadSource = qs(FileDownloadSource.aifasthub);
+  late final downloadSource = qs(FileDownloadSource.hfmirror);
 
   late final hasDownloadedModels = qs(false);
 

@@ -256,7 +256,7 @@ extension $RWKV on _RWKV {
 
     finalPrompt = _preferChinese.v ? Config.promptCN : Config.prompt;
 
-    qqq("setPrompt: $finalPrompt");
+    if (setPrompt) qqq("setPrompt: $finalPrompt");
 
     _sendPort!.send(("setEnableReasoning", _usingReasoningModel.v));
     if (setPrompt) _sendPort!.send(("setPrompt", finalPrompt));

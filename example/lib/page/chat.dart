@@ -1,6 +1,7 @@
 // ignore: unused_import
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/config.dart';
 import 'package:zone/gen/l10n.dart';
@@ -109,7 +110,15 @@ class _Page extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const Scaffold(
+    return Scaffold(
+      floatingActionButton: kDebugMode
+          ? FloatingActionButton(
+              onPressed: () {
+                P.app.getConfig();
+              },
+              child: const Icon(Icons.send),
+            )
+          : null,
       body: Stack(
         children: [
           List(),

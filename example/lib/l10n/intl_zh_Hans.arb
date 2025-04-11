@@ -56,5 +56,7 @@
   "chinese": "中文",
   "thinking": "思考中...",
   "thought_result": "思考结果",
-  "chat_resume": "继续"
+  "chat_resume": "继续",
+  "network_error": "网络错误",
+  "server_error": "服务器错误"
 }

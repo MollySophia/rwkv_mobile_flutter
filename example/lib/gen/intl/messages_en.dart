@@ -87,6 +87,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "loading": MessageLookupByLibrary.simpleMessage("Loading..."),
     "memory_used": m1,
+    "network_error": MessageLookupByLibrary.simpleMessage("Network error"),
     "new_chat": MessageLookupByLibrary.simpleMessage("New chat"),
     "or_you_can_start_a_new_empty_chat": MessageLookupByLibrary.simpleMessage(
       "Or you can start a new empty chat",
@@ -119,6 +120,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "send_message_to_rwkv": MessageLookupByLibrary.simpleMessage(
       "Message RWKV",
     ),
+    "server_error": MessageLookupByLibrary.simpleMessage("Server error"),
     "session_configuration": MessageLookupByLibrary.simpleMessage(
       "Session Configuration",
     ),
