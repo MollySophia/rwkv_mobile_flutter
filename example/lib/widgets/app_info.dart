@@ -225,7 +225,7 @@ class AppInfo extends ConsumerWidget {
           Ro(
             children: [
               16.w,
-              Expanded(
+              Exp(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

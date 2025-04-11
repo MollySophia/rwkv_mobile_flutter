@@ -30,6 +30,7 @@ class Debugger extends ConsumerWidget {
     final currentChain = ref.watch(P.chat.currentChain);
     final editingIndex = ref.watch(P.chat.editingIndex);
     final branchesCountList = ref.watch(P.chat.branchesCountList);
+    final receiveId = ref.watch(P.chat.receiveId);
 
     return Positioned(
       left: 0,
@@ -58,10 +59,6 @@ class Debugger extends ConsumerWidget {
                   if (currentWorldType != null) T(visualFloatHeight.toString()),
                   T("loading".codeToName),
                   T(loading.toString()),
-                  T(DateTime.now().microsecondsSinceEpoch.toString()),
-                  T(qDebugShorterMicroseconds.toString()),
-                  T(DateTime.now().millisecondsSinceEpoch.toString()),
-                  T(qDebugShorterMilliseconds.toString()),
                   if (currentWorldType != null) T("playing".codeToName),
                   if (currentWorldType != null) T(playing.toString()),
                   if (!isOthello) T("latestClickedMessage".codeToName),
@@ -78,20 +75,14 @@ class Debugger extends ConsumerWidget {
                   if (Config.enableConversation) T(conversation?.name ?? "null"),
                   // T("receivingTokens".codeToName),
                   // T(receivingTokens.toString()),
-                  // T("receiveId".codeToName),
-                  // T(receiveId.toString()),
+                  T("receiveId".codeToName),
+                  T(receiveId.toString()),
                   // T("lifecycleState".codeToName),
                   // T(lifecycleState.toString().split(".").last),
                   // T("autoPauseId".codeToName),
                   // T(autoPauseId.toString()),
                   T("editingIndex".codeToName),
                   T(editingIndex.toString()),
-                  T("chains".codeToName),
-                  T(chains.toString()),
-                  T("currentChain".codeToName),
-                  T(currentChain.toString()),
-                  T("branchesCountList".codeToName),
-                  T(branchesCountList.toString()),
                 ].indexMap((index, e) {
                   return C(
                     margin: EI.o(t: index % 2 == 0 ? 0 : 1),

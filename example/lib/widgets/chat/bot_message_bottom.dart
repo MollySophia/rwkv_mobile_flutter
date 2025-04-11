@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:halo_alert/halo_alert.dart';
+import 'package:zone/config.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/message.dart' as model;
 import 'package:zone/state/p.dart';
@@ -20,6 +21,8 @@ class BotMessageBottom extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (msg.isMine) return const SizedBox.shrink();
+
+    final receiveId = ref.watch(P.chat.receiveId);
 
     final paused = msg.paused;
 
@@ -42,9 +45,8 @@ class BotMessageBottom extends ConsumerWidget {
 
     return Ro(
       m: MAA.start,
-      mainAxisSize: MainAxisSize.min,
       children: [
-        BranchSwitcher(msg, index),
+        if (Config.enableChain) BranchSwitcher(msg, index),
         if (changing)
           GD(
             child: Padding(
@@ -99,12 +101,12 @@ class BotMessageBottom extends ConsumerWidget {
               ),
             ),
           ),
-        if (paused) const Spacer(),
-        if (paused)
+        if (paused && receiveId == msg.id) const Spacer(),
+        if (paused && receiveId == msg.id)
           GD(
             onTap: _onResumePressed,
             child: C(
-              padding: const EI.o(v: 10, l: 12),
+              padding: const EI.o(v: 9, l: 12),
               child: C(
                 padding: const EI.s(v: 1, h: 8),
                 decoration: BD(
@@ -119,9 +121,7 @@ class BotMessageBottom extends ConsumerWidget {
               ),
             ),
           ),
-      ].m(
-        (w) => w.debug,
-      ),
+      ],
     );
   }
 
