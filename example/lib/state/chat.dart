@@ -50,21 +50,28 @@ class _Chat {
   late final autoPauseId = qsn<int>();
 
   late final messages = qp<List<Message>>((ref) {
-    ref.watch(_msgRefreshMark);
-    final values = _tree.values;
-    return values.map((e) => _msgPool(e).v).where((e) => e != null).map((e) => e!).toList();
+    ref.watch(msgRefreshMark);
+
+    final values = tree.values;
+    return values
+        .map((e) {
+          return ref.watch(msgPool(e));
+        })
+        .where((e) => e != null)
+        .map((e) => e!)
+        .toList();
   });
   // late final messages = qs<List<Message>>([]);
 
-  late final _msgPool = qsff<Message?, int>((_, __) => null);
-  TreeNode<int> _tree = TreeNode<int>(0);
-  late final _msgRefreshMark = qs(0);
+  late final msgPool = qsff<Message?, int>((_, __) => null);
+  var tree = TreeNode(0);
+  late final msgRefreshMark = qs(0);
 }
 
 /// Public methods
 extension $Chat on _Chat {
   void clearMessages() {
-    _tree = TreeNode<int>(0);
+    tree = TreeNode(0);
   }
 
   FV onInputRightButtonPressed() async {
@@ -93,7 +100,7 @@ extension $Chat on _Chat {
         paused: messages.v[_editingIndex].paused,
       );
       // currentMessages.replaceRange(_editingIndex, _editingIndex + 1, [newBotMessage]);
-      _msgPool(_editingIndex).u(newBotMessage);
+      msgPool(_editingIndex).u(newBotMessage);
       editingIndex.u(null);
       Alert.success(S.current.bot_message_edited);
       return;
@@ -158,7 +165,6 @@ extension $Chat on _Chat {
       P.fileManager.modelSelectorShown.u(true);
       return;
     }
-
     final userMessage = messages.v[index - 1];
     editingIndex.u(index);
     _textInInput.uc();
@@ -173,7 +179,7 @@ extension $Chat on _Chat {
       );
       return;
     }
-    await send(userMessage.content, isRegenerate: true);
+    await send(userMessage.content, regenerateIndex: index);
   }
 
   FV scrollToBottom({Duration? duration, bool? animate = true}) async {
@@ -206,14 +212,14 @@ extension $Chat on _Chat {
     String? audioUrl,
     int? audioLength,
     bool withHistory = true,
-    bool isRegenerate = false,
+    int? regenerateIndex,
   }) async {
     qqq("message: $message");
 
     late final Message? msg;
 
     final id = qDebugShorterMilliseconds;
-    if (!isRegenerate) {
+    if (regenerateIndex == null) {
       msg = Message(
         id: id,
         content: message,
@@ -225,9 +231,9 @@ extension $Chat on _Chat {
         isReasoning: false,
         paused: false,
       );
-      _msgPool(id).u(msg);
-      _tree.addAtLast(id);
-      _msgRefreshMark.ua(1);
+      msgPool(id).u(msg);
+      tree.addAtLast(id);
+      msgRefreshMark.ua(1);
     } else {
       // TODO: 分叉
       msg = null;
@@ -241,7 +247,7 @@ extension $Chat on _Chat {
       return;
     }
 
-    qqq("_tree.values: ${_tree.values}");
+    qqq("_tree.values: ${tree.values}");
     final messages = this.messages.v;
     // debugger();
     final historyMessage = messages.where((e) {
@@ -274,9 +280,13 @@ extension $Chat on _Chat {
       paused: false,
     );
 
-    _msgPool(receiveId).u(receiveMsg);
-    _tree.addAtLast(id);
-    _msgRefreshMark.ua(1);
+    msgPool(receiveId).u(receiveMsg);
+    if (regenerateIndex == null) {
+      tree.addAtLast(receiveId);
+    } else {
+      tree.addAt(receiveId, regenerateIndex);
+    }
+    msgRefreshMark.ua(1);
   }
 
   FV onStopButtonPressed() async {
@@ -408,7 +418,7 @@ extension _$Chat on _Chat {
       return;
     }
 
-    _msgPool(id).u(_msgPool(id).v?.copyWith(paused: true));
+    msgPool(id).u(msgPool(id).v?.copyWith(paused: true));
   }
 
   FV _onFocusNodeChanged() async {
@@ -464,7 +474,7 @@ extension _$Chat on _Chat {
   }
 
   void _fullyReceived() {
-    qqq;
+    qq;
 
     _updateMessageById(
       id: receiveId.v!,
@@ -485,6 +495,8 @@ extension _$Chat on _Chat {
     bool? isReasoning,
     bool? paused,
   }) {
+    qqq("id: $id, changing: $changing");
+
     // debugger();
     final currentMessages = [...messages.v];
     bool found = false;
@@ -505,7 +517,7 @@ extension _$Chat on _Chat {
         );
         currentMessages.replaceRange(i, i + 1, [newMsg]);
         found = true;
-        _msgPool(id).u(newMsg);
+        msgPool(id).u(newMsg);
         break;
       }
     }

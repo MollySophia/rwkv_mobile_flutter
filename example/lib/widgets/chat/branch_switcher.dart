@@ -1,5 +1,7 @@
 // ignore: unused_import
 
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +35,6 @@ class BranchSwitcher extends ConsumerWidget {
     final isLast = indexInBranches == branches.length - 1;
 
     qqq("message: $msg, index: $index");
-
     return C(
       decoration: BD(color: primary.wo(0.0)),
       child: Stack(

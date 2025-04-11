@@ -1,3 +1,5 @@
+// ignore_for_file: dead_code
+
 import 'package:flutter/foundation.dart';
 import 'package:zone/config.dart';
 import 'package:zone/func/data_time_e.dart';
@@ -30,6 +32,9 @@ class Debugger extends ConsumerWidget {
     // final currentChain = ref.watch(P.chat.currentChain);
     final editingIndex = ref.watch(P.chat.editingIndex);
     // final branchesCountList = ref.watch(P.chat.branchesCountList);
+
+    final msgRefreshMark = ref.watch(P.chat.msgRefreshMark);
+    final tree = P.chat.tree;
 
     return Positioned(
       left: 0,
@@ -92,6 +97,8 @@ class Debugger extends ConsumerWidget {
                   // T(currentChain.toString()),
                   // T("branchesCountList".codeToName),
                   // T(branchesCountList.toString()),
+                  T("tree".codeToName),
+                  T(tree.values.toString()),
                 ].indexMap((index, e) {
                   return C(
                     margin: EI.o(t: index % 2 == 0 ? 0 : 1),
