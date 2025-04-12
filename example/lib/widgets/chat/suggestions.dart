@@ -41,9 +41,7 @@ class Suggestions extends ConsumerWidget {
         case WorldType.engVisualQAReason:
           show = imagePath != null && imagePath.isNotEmpty && messages.length == 1;
           suggestions = [
-            'What do you see in this picture?',
-            "Are there any interesting details you notice?",
-            "Does this picture remind you of anything?",
+            "Please describe this image for me~",
           ];
         case WorldType.engAudioQA:
         case WorldType.chineseASR:
