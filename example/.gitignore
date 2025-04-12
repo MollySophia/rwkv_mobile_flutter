@@ -47,3 +47,5 @@ app.*.map.json
 assets/model/
 
 sentry.properties
+
+.env
