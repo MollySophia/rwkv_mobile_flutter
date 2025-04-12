@@ -591,8 +591,8 @@ extension _$Chat on _Chat {
 
     final (file, length) = event;
     final path = file.path;
-    // final duration = Duration(milliseconds: length);
-    // final durationString = Duration(milliseconds: length).toString();
+
+    qqq("new file received: $path, length: $length");
 
     final t0 = qDebugShorterMicroseconds;
     P.rwkv.setAudioPrompt(path: path);
