@@ -55,10 +55,10 @@ class _Chat {
   /// 用于实现 DeepSeek 的 “分叉对话” 功能
   ///
   /// TODO: 想办法存到聊天记录中
-  late final currentChain = qs(MessageChain(ids: []));
+  late final currentChain = qs(const MessageChain(ids: []));
 
   /// 用于实现 DeepSeek 的 “分叉对话” 功能
-  late final chains = qs({MessageChain(ids: [])});
+  late final chains = qs({const MessageChain(ids: [])});
 
   /// 用于在切换分叉时, 如果同一层级有多个分叉, 能切回原先的分叉
   late final chainSwitchingHistory = qs<List<MessageChain>>([]);
@@ -72,8 +72,8 @@ extension $Chat on _Chat {
     messages.uc();
     branchesCountList.uc();
     chainSwitchingHistory.uc();
-    currentChain.u(MessageChain(ids: []));
-    chains.u({MessageChain(ids: [])});
+    currentChain.u(const MessageChain(ids: []));
+    chains.u({const MessageChain(ids: [])});
   }
 
   FV onInputRightButtonPressed() async {
