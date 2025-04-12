@@ -22,6 +22,7 @@ import 'package:record/record.dart' as ar;
 import 'package:rwkv_mobile_flutter/rwkv.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:system_info2/system_info2.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:zone/args.dart';
 import 'package:zone/config.dart';

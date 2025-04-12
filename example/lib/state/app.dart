@@ -9,12 +9,17 @@ class _App extends RawApp with WidgetsBindingObserver {
 
   late final pageKey = qp((ref) => ref.watch(_pageKey));
 
-  late final locale = qsn<Locale>();
-
   /// 当前正在运行的任务
   late final demoType = qs(DemoType.chat);
 
   late final latestBuild = qs(-1);
+  late final noteZh = qs<List<String>>([]);
+  late final noteEn = qs<List<String>>([]);
+  late final modelConfig = qs<List<JSON>>([]);
+  late final androidUrl = qsn<String>();
+  late final iosUrl = qsn<String>();
+
+  late final newVersionDialogShown = qs(false);
 
   @override
   void didChangeMetrics() {
@@ -44,6 +49,7 @@ extension $App on _App {
     try {
       final res = await _get("get-demo-config");
       qqq("res: $res");
+
       if (res is! Map) {
         throw "res is not a Map, res: ${res.runtimeType}";
       }
@@ -65,7 +71,16 @@ extension $App on _App {
         throw "build is not an num, build: $build";
       }
       latestBuild.u(build.toInt());
+      noteZh.u((config["note_zh"] as List<dynamic>).m((e) => e.toString()));
+      noteEn.u((config["note_en"] as List<dynamic>).m((e) => e.toString()));
+      modelConfig.u(HF.listJSON(config["model_config"]));
+      androidUrl.u(config["android_url"].toString());
+      iosUrl.u(config["ios_url"].toString());
+      if (latestBuild.v <= int.parse(buildNumber.v)) return;
+      _showNewVersionDialog();
     } catch (e) {
+      qqe("e: $e");
+      qe;
       Sentry.captureException(e);
     }
   }
@@ -99,6 +114,68 @@ extension _$App on _App {
 
     WidgetsBinding.instance.addObserver(this);
     getConfig();
+  }
+
+  FV _showNewVersionDialog() async {
+    qq;
+    if (!kDebugMode) {
+      if (P.app.demoType.v == DemoType.chat && !Platform.isIOS && !Platform.isAndroid) {
+        return;
+      }
+
+      if (P.app.demoType.v == DemoType.othello && !Platform.isAndroid) {
+        return;
+      }
+    }
+
+    final androidUrl = this.androidUrl.v;
+    final iosUrl = this.iosUrl.v;
+
+    if (Platform.isAndroid && (androidUrl == null || androidUrl.isEmpty)) {
+      return;
+    }
+
+    if (Platform.isIOS && (iosUrl == null || iosUrl.isEmpty)) {
+      return;
+    }
+
+    await HF.wait(1);
+
+    final noteZh = this.noteZh.v;
+    final noteEn = this.noteEn.v;
+
+    final currentLocale = Intl.getCurrentLocale();
+    final useEn = currentLocale.startsWith("en");
+
+    final message = useEn ? noteEn.join("\n") : noteZh.join("\n");
+
+    newVersionDialogShown.u(true);
+    final res = await showOkCancelAlertDialog(
+      context: getContext()!,
+      title: S.current.new_version_found,
+      message: message,
+      okLabel: S.current.update_now,
+      cancelLabel: S.current.cancel_update,
+    );
+    newVersionDialogShown.u(false);
+
+    if (res != OkCancelResult.ok) return;
+
+    if (Platform.isAndroid) {
+      if (androidUrl == null) {
+        qqe("androidUrl is null");
+        return;
+      }
+      launchUrl(Uri.parse(androidUrl), mode: LaunchMode.externalApplication);
+    }
+
+    if (Platform.isIOS) {
+      if (iosUrl == null) {
+        qqe("iosUrl is null");
+        return;
+      }
+      launchUrl(Uri.parse(iosUrl), mode: LaunchMode.externalApplication);
+    }
   }
 
   void _routerListener() {

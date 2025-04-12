@@ -30,8 +30,12 @@ void main() async {
 }
 
 FV _loadEnv() async {
-  await dotenv.load(fileName: ".env");
-  Config.xApiKey = dotenv.env["x-api-key"] ?? "";
+  try {
+    await dotenv.load(fileName: ".env");
+    Config.xApiKey = dotenv.env["x-api-key"] ?? "";
+  } catch (e) {
+    qqe(e);
+  }
 }
 
 FV _sentryAppRunner() async {

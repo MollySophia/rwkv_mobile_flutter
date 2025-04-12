@@ -3,6 +3,8 @@
     "latest_build": 291,
     "note_zh": ["提升应用程序的稳定性", "修复了已知问题"],
     "note_en": ["Improve application stability", "Fix known issues"],
+    "android_url": "https://www.pgyer.com/rwkvchat",
+    "ios_url": "https://testflight.apple.com/join/DaMqCNKh",
     "model_config": [
       {
         "name": "RWKV7-G1 0.1B",
@@ -317,6 +319,8 @@
     "latest_build": 291,
     "note_zh": ["提升应用程序的稳定性", "修复了已知问题"],
     "note_en": ["Improve application stability", "Fix known issues"],
+    "android_url": "https://www.pgyer.com/worldrwkv",
+    "ios_url": "",
     "model_config": [
       {
         "name": "RWKV7-G1 Siglip Vision Encoder",

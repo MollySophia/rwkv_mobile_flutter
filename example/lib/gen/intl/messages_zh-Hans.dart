@@ -36,6 +36,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "机器人消息已编辑，现在可以发送新消息",
     ),
     "cancel": MessageLookupByLibrary.simpleMessage("取消"),
+    "cancel_update": MessageLookupByLibrary.simpleMessage("暂不更新"),
     "chat_copied_to_clipboard": MessageLookupByLibrary.simpleMessage("已复制到剪贴板"),
     "chat_empty_message": MessageLookupByLibrary.simpleMessage("请输入消息内容"),
     "chat_model_name": MessageLookupByLibrary.simpleMessage("模型名称"),
@@ -72,6 +73,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "memory_used": m1,
     "network_error": MessageLookupByLibrary.simpleMessage("网络错误"),
     "new_chat": MessageLookupByLibrary.simpleMessage("新聊天"),
+    "new_version_found": MessageLookupByLibrary.simpleMessage("发现新版本"),
     "or_you_can_start_a_new_empty_chat": MessageLookupByLibrary.simpleMessage(
       "或开始一个空白聊天",
     ),
@@ -104,6 +106,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "start_to_chat": MessageLookupByLibrary.simpleMessage("开始聊天"),
     "thinking": MessageLookupByLibrary.simpleMessage("思考中..."),
     "thought_result": MessageLookupByLibrary.simpleMessage("思考结果"),
+    "update_now": MessageLookupByLibrary.simpleMessage("立即更新"),
     "use_it_now": MessageLookupByLibrary.simpleMessage("立即使用"),
     "welcome_to_use_rwkv": MessageLookupByLibrary.simpleMessage("欢迎使用 RWKV"),
     "you_are_now_using": m2,
