@@ -633,10 +633,10 @@ packages:
     dependency: "direct main"
     description:
       name: halo
-      sha256: e32a54b00de0c00c563c39100bc2b9d1cdb485618534604d7f54e6f00cc2eee4
+      sha256: "91070a13eceba8d28d262f8b2d10c6b24416c722bce0fb56b8caf3d4b3f49ea1"
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.0"
+    version: "0.4.1"
   halo_alert:
     dependency: "direct main"
     description:
@@ -673,10 +673,10 @@ packages:
     dependency: transitive
     description:
       name: html
-      sha256: "1fc58edeaec4307368c60d59b7e15b9d658b57d7f3125098b6294153c75337ec"
+      sha256: "9475be233c437f0e3637af55e7702cbbe5c23a68bd56e8a5fa2d426297b7c6c8"
       url: "https://pub.dev"
     source: hosted
-    version: "0.15.5"
+    version: "0.15.5+1"
   http:
     dependency: "direct main"
     description:
