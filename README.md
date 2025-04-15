@@ -11,8 +11,8 @@
 
 | 功能              | Android | Android-QNN | iOS | macOS | Windows | Linux |
 | ----------------- | :-----: | :---------: | :-: | :---: | :-----: | :---: |
-| Chat              |   ✅    |     ✅      | ✅  |  ✅   |   ✅    |       |
-| Othello           |   ✅    |             | ✅  |  ✅   |   ✅    |       |
+| Chat              |   ✅    |     ✅      | ✅  |  ✅   |         |  ✅   |
+| Othello           |   ✅    |             | ✅  |  ✅   |         |       |
 | English Vision QA |   ✅    |             |     |       |         |       |
 | English Audio QA  |   ✅    |             |     |       |         |       |
 | English ASR       |   ✅    |             |     |       |         |       |
@@ -29,5 +29,3 @@
 ### iOS
 
 - [TestFlight](https://testflight.apple.com/join/DaMqCNKh)
-
-
