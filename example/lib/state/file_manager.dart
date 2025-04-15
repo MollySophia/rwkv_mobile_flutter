@@ -53,7 +53,9 @@ extension $FileManager on _FileManager {
   FV checkLocal() async {
     qq;
     await HF.wait(17);
-    final _fileInfos = _all.v.where((e) => e.available).toList();
+    final all = _all.v;
+    final _fileInfos = all.where((e) => e.available).toList();
+
     for (final fileInfo in _fileInfos) {
       // debugger();
       final path = paths(fileInfo).v;

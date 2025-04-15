@@ -35,7 +35,7 @@ class ModelItem extends ConsumerWidget {
 
     final localFile = P.fileManager.locals(fileInfo).v;
     final modelPath = localFile.targetPath;
-    final backend = localFile.fileInfo.backend;
+    final backend = fileInfo.backend;
 
     try {
       P.rwkv.clearStates();
@@ -214,7 +214,7 @@ class FileKeyItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final localFile = ref.watch(P.fileManager.locals(fileInfo));
-    final fileSize = localFile.fileInfo.fileSize;
+    final fileSize = fileInfo.fileSize;
     final progress = localFile.progress;
     final downloading = localFile.downloading;
     final modelSize = fileInfo.modelSize ?? 0;

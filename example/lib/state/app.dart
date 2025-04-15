@@ -74,8 +74,8 @@ extension $App on _App {
       modelConfig.u(HF.listJSON(config["model_config"]));
       androidUrl.u(config["android_url"].toString());
       iosUrl.u(config["ios_url"].toString());
-      _showNewVersionDialogIfNeeded();
-      P.fileManager.syncAvailableModels();
+      await P.fileManager.syncAvailableModels();
+      await P.fileManager.checkLocal();
     } catch (e) {
       qqe("e: $e");
       qe;
@@ -111,14 +111,19 @@ extension _$App on _App {
     }
 
     WidgetsBinding.instance.addObserver(this);
-    getConfig();
+
+    getConfig().then((_) async {
+      await HF.wait(1000);
+      _showNewVersionDialogIfNeeded();
+    });
   }
 
   FV _showNewVersionDialogIfNeeded() async {
     qq;
     if (latestBuild.v <= int.parse(buildNumber.v)) return;
+
     if (!kDebugMode) {
-      if (P.app.demoType.v == DemoType.chat && !Platform.isIOS && !Platform.isAndroid) {
+      if (P.app.demoType.v == DemoType.chat && !(Platform.isIOS || Platform.isAndroid)) {
         return;
       }
 

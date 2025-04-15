@@ -11,10 +11,11 @@ class LocalFile extends Equatable {
   final String targetPath;
   final bool hasFile;
   final String? downloadTaskId;
-  final FileInfo fileInfo;
+
+  final FileInfo _fileInfo;
 
   const LocalFile({
-    required this.fileInfo,
+    required FileInfo fileInfo,
     required this.targetPath,
     this.progress = 0,
     this.networkSpeed = 0,
@@ -22,7 +23,7 @@ class LocalFile extends Equatable {
     this.downloading = false,
     this.hasFile = false,
     this.downloadTaskId,
-  });
+  }) : _fileInfo = fileInfo;
 
   LocalFile copyWith({
     FileInfo? fileInfo,
@@ -35,7 +36,7 @@ class LocalFile extends Equatable {
     String? downloadTaskId,
   }) =>
       LocalFile(
-        fileInfo: fileInfo ?? this.fileInfo,
+        fileInfo: fileInfo ?? _fileInfo,
         progress: progress ?? this.progress,
         networkSpeed: networkSpeed ?? this.networkSpeed,
         timeRemaining: timeRemaining ?? this.timeRemaining,
@@ -54,6 +55,6 @@ class LocalFile extends Equatable {
         targetPath,
         hasFile,
         downloadTaskId,
-        fileInfo,
+        _fileInfo,
       ];
 }

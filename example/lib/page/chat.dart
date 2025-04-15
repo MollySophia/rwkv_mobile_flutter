@@ -82,7 +82,10 @@ class _PageChatState extends State<PageChat> {
   void _onShowingModelSelectorChanged(bool showing) async {
     if (!showing) return;
     P.fileManager.checkLocal();
-    P.fileManager.syncAvailableModels();
+    P.app.getConfig().then((_) async {
+      await P.fileManager.syncAvailableModels();
+      await P.fileManager.checkLocal();
+    });
     P.device.sync();
     await showModalBottomSheet(
       isScrollControlled: true,
@@ -111,15 +114,6 @@ class _Page extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      floatingActionButton: kDebugMode
-          ? FloatingActionButton(
-              onPressed: () async {
-                await P.app.getConfig();
-                await P.fileManager.syncAvailableModels();
-              },
-              child: const Icon(Icons.send),
-            )
-          : null,
       body: Stack(
         children: [
           List(),
