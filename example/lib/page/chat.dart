@@ -1,6 +1,7 @@
 // ignore: unused_import
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/config.dart';
 import 'package:zone/gen/l10n.dart';
@@ -81,7 +82,10 @@ class _PageChatState extends State<PageChat> {
   void _onShowingModelSelectorChanged(bool showing) async {
     if (!showing) return;
     P.fileManager.checkLocal();
-    P.fileManager.loadAll();
+    P.app.getConfig().then((_) async {
+      await P.fileManager.syncAvailableModels();
+      await P.fileManager.checkLocal();
+    });
     P.device.sync();
     await showModalBottomSheet(
       isScrollControlled: true,
@@ -109,7 +113,7 @@ class _Page extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const Scaffold(
+    return Scaffold(
       body: Stack(
         children: [
           List(),

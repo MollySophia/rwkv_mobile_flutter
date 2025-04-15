@@ -11,7 +11,7 @@ abstract class Config {
 
   // TODO: @wangce 需要有一个统一的标识来决定当前的 App 正在运行什么逻辑
 
-  static final prompt = """
+  static const prompt = """
 
 User: hi
 
@@ -19,7 +19,7 @@ Assistant: Hi. I am your assistant and I will provide expert full response in fu
 
 """;
 
-  static final promptCN = """
+  static const promptCN = """
 
 User: 你好
 
@@ -27,7 +27,11 @@ Assistant: 你好，我是你的助手，我会提供专家级的完整回答。
 
 """;
 
-  static final reasonTag = "reason";
-  static final enableConversation = false && Args.isChat;
-  static final enableChain = false && Args.isChat;
+  static const reasonTag = "reason";
+  static const enableConversation = false && Args.isChat;
+  static const enableChain = false && Args.isChat;
+
+  static const domain = "https://api-model.rwkvos.com";
+  static const timeout = Duration(seconds: 60);
+  static late final String xApiKey;
 }

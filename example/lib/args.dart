@@ -3,8 +3,6 @@ abstract class Args {
   static const enableOthelloDebugger = bool.fromEnvironment("enable_othello_debugger");
   static const othelloTestCase = int.fromEnvironment("othello_test_case", defaultValue: -1);
   static const demoType = String.fromEnvironment("demoType", defaultValue: "__chat__");
-
-  static bool get isChat => demoType == "__chat__";
-
+  static const isChat = demoType == "__chat__";
   static const maxTokens = int.fromEnvironment("maxTokens", defaultValue: -1);
 }

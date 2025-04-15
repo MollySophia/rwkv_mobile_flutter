@@ -625,6 +625,56 @@ class S {
       args: [],
     );
   }
+
+  /// `Network error`
+  String get network_error {
+    return Intl.message(
+      'Network error',
+      name: 'network_error',
+      desc: 'Label for network error',
+      args: [],
+    );
+  }
+
+  /// `Server error`
+  String get server_error {
+    return Intl.message(
+      'Server error',
+      name: 'server_error',
+      desc: 'Label for server error',
+      args: [],
+    );
+  }
+
+  /// `New version found`
+  String get new_version_found {
+    return Intl.message(
+      'New version found',
+      name: 'new_version_found',
+      desc: 'Label for new version found',
+      args: [],
+    );
+  }
+
+  /// `Cancel update`
+  String get cancel_update {
+    return Intl.message(
+      'Cancel update',
+      name: 'cancel_update',
+      desc: 'Label for cancel update',
+      args: [],
+    );
+  }
+
+  /// `Update now`
+  String get update_now {
+    return Intl.message(
+      'Update now',
+      name: 'update_now',
+      desc: 'Label for update now',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -39,6 +39,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Bot message edited, you can now send new message",
     ),
     "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+    "cancel_update": MessageLookupByLibrary.simpleMessage("Cancel update"),
     "chat_copied_to_clipboard": MessageLookupByLibrary.simpleMessage(
       "Copied to clipboard",
     ),
@@ -87,7 +88,11 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "loading": MessageLookupByLibrary.simpleMessage("Loading..."),
     "memory_used": m1,
+    "network_error": MessageLookupByLibrary.simpleMessage("Network error"),
     "new_chat": MessageLookupByLibrary.simpleMessage("New chat"),
+    "new_version_found": MessageLookupByLibrary.simpleMessage(
+      "New version found",
+    ),
     "or_you_can_start_a_new_empty_chat": MessageLookupByLibrary.simpleMessage(
       "Or you can start a new empty chat",
     ),
@@ -119,6 +124,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "send_message_to_rwkv": MessageLookupByLibrary.simpleMessage(
       "Message RWKV",
     ),
+    "server_error": MessageLookupByLibrary.simpleMessage("Server error"),
     "session_configuration": MessageLookupByLibrary.simpleMessage(
       "Session Configuration",
     ),
@@ -133,6 +139,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "start_to_chat": MessageLookupByLibrary.simpleMessage("Start to chat"),
     "thinking": MessageLookupByLibrary.simpleMessage("Thinking..."),
     "thought_result": MessageLookupByLibrary.simpleMessage("Thought result"),
+    "update_now": MessageLookupByLibrary.simpleMessage("Update now"),
     "use_it_now": MessageLookupByLibrary.simpleMessage("Use it now"),
     "welcome_to_use_rwkv": MessageLookupByLibrary.simpleMessage(
       "Welcome to use RWKV",

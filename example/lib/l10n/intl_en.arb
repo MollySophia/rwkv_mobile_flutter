@@ -249,5 +249,25 @@
   "chat_resume": "Resume",
   "@chat_resume": {
     "description": "Label for chat resume"
+  },
+  "network_error": "Network error",
+  "@network_error": {
+    "description": "Label for network error"
+  },
+  "server_error": "Server error",
+  "@server_error": {
+    "description": "Label for server error"
+  },
+  "new_version_found": "New version found",
+  "@new_version_found": {
+    "description": "Label for new version found"
+  },
+  "cancel_update": "Cancel update",
+  "@cancel_update": {
+    "description": "Label for cancel update"
+  },
+  "update_now": "Update now",
+  "@update_now": {
+    "description": "Label for update now"
   }
 }

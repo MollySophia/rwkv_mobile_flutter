@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/config.dart';
@@ -17,6 +18,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 
 void main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  await _loadEnv();
   await P.init();
   if (kDebugMode) {
     await _debugAppRunner();
@@ -25,6 +27,15 @@ void main() async {
   }
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   FlutterNativeSplash.remove();
+}
+
+FV _loadEnv() async {
+  try {
+    await dotenv.load(fileName: ".env");
+    Config.xApiKey = dotenv.env["x-api-key"] ?? "";
+  } catch (e) {
+    qqe(e);
+  }
 }
 
 FV _sentryAppRunner() async {
