@@ -48,7 +48,6 @@ extension $App on _App {
     await HF.wait(17);
     try {
       final res = await _get("get-demo-config");
-      qqq("res: $res");
       if (res is! Map) {
         throw "res is not a Map, res: ${res.runtimeType}";
       }
@@ -75,8 +74,8 @@ extension $App on _App {
       modelConfig.u(HF.listJSON(config["model_config"]));
       androidUrl.u(config["android_url"].toString());
       iosUrl.u(config["ios_url"].toString());
-      if (latestBuild.v <= int.parse(buildNumber.v)) return;
-      _showNewVersionDialog();
+      _showNewVersionDialogIfNeeded();
+      P.fileManager.syncAvailableModels();
     } catch (e) {
       qqe("e: $e");
       qe;
@@ -115,8 +114,9 @@ extension _$App on _App {
     getConfig();
   }
 
-  FV _showNewVersionDialog() async {
+  FV _showNewVersionDialogIfNeeded() async {
     qq;
+    if (latestBuild.v <= int.parse(buildNumber.v)) return;
     if (!kDebugMode) {
       if (P.app.demoType.v == DemoType.chat && !Platform.isIOS && !Platform.isAndroid) {
         return;

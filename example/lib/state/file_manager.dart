@@ -27,15 +27,20 @@ class _FileManager {
 
 /// Public methods
 extension $FileManager on _FileManager {
-  FV loadAll() async {
-    // TODO: networking
-    // TODO: networking fallback
+  FV syncAvailableModels() async {
+    qq;
+    late final List<JSON> json;
 
-    final demoType = P.app.demoType.v;
-    final jsonPath = "assets/config/${demoType.name}/weights.json";
-    qqq("jsonPath: $jsonPath");
-    final jsonString = await rootBundle.loadString(jsonPath);
-    final json = HF.listJSON(jsonDecode(jsonString));
+    if (P.app.modelConfig.v.isEmpty) {
+      final demoType = P.app.demoType.v;
+      final jsonPath = "assets/config/${demoType.name}/weights.json";
+      qqq("jsonPath: $jsonPath");
+      final jsonString = await rootBundle.loadString(jsonPath);
+      json = HF.listJSON(jsonDecode(jsonString));
+    } else {
+      json = P.app.modelConfig.v;
+    }
+
     try {
       final weights = json.map((e) => FileInfo.fromJSON(e)).toSet();
       _all.u(weights);
@@ -139,7 +144,7 @@ extension _$FileManager on _FileManager {
     // 2. check zip file
     await bd.FileDownloader().ready;
     bd.FileDownloader().updates.listen(_onTaskUpdate);
-    await loadAll();
+    await syncAvailableModels();
     await checkLocal();
   }
 
