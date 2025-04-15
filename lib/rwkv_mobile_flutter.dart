@@ -400,6 +400,35 @@ class RWKVMobile {
         final responseBufferIdsList = responseBufferIds.ids.asTypedList(responseBufferIds.len).toList();
         rwkvMobile.rwkvmobile_runtime_free_token_ids(responseBufferIds);
         sendPort.send({'responseBufferIds': responseBufferIdsList});
+      } else if (command == 'loadTTSModels') {
+        final args = message.$2 as Map<String, dynamic>;
+        final speechTokenizerPath = args['speechTokenizerPath'] as String;
+        final campPlusPath = args['campPlusPath'] as String;
+        final flowEncoderPath = args['flowEncoderPath'] as String;
+        final flowDecoderEstimatorPath = args['flowDecoderEstimatorPath'] as String;
+        final hiftGeneratorPath = args['hiftGeneratorPath'] as String;
+        final ttsTokenizerPath = args['ttsTokenizerPath'] as String;
+        retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_load_models(runtime, speechTokenizerPath.toNativeUtf8().cast<ffi.Char>(), campPlusPath.toNativeUtf8().cast<ffi.Char>(), flowEncoderPath.toNativeUtf8().cast<ffi.Char>(), flowDecoderEstimatorPath.toNativeUtf8().cast<ffi.Char>(), hiftGeneratorPath.toNativeUtf8().cast<ffi.Char>(), ttsTokenizerPath.toNativeUtf8().cast<ffi.Char>());
+        if (retVal != 0) {
+          sendPort.send({'error': 'Failed to load TTS models'});
+        }
+      } else if (command == 'releaseTTSModels') {
+        retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_release_models(runtime);
+        if (retVal != 0) {
+          sendPort.send({'error': 'Failed to release TTS models'});
+        }
+      } else if (command == 'runTTSZeroshot') {
+        final args = message.$2 as Map<String, dynamic>;
+        final ttsText = args['ttsText'] as String;
+        final instructionText = args['instructionText'] as String;
+        final promptWavPath = args['promptWavPath'] as String;
+        final outputWavPath = args['outputWavPath'] as String;
+        retVal = rwkvMobile.rwkvmobile_runtime_tts_zero_shot(runtime, ttsText.toNativeUtf8().cast<ffi.Char>(), instructionText.toNativeUtf8().cast<ffi.Char>(), promptWavPath.toNativeUtf8().cast<ffi.Char>(), outputWavPath.toNativeUtf8().cast<ffi.Char>());
+        if (retVal != 0) {
+          sendPort.send({'error': 'Failed to run TTS zeroshot'});
+        } else {
+          sendPort.send({'ttsDone': true, 'outputWavPath': outputWavPath});
+        }
       } else {
         if (kDebugMode) print("😡 unknown command: $command");
       }

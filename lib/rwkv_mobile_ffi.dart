@@ -526,6 +526,59 @@ class rwkv_mobile {
   late final _rwkvmobile_runtime_free_token_idsPtr = _lookup<ffi.NativeFunction<ffi.Void Function(token_ids)>>('rwkvmobile_runtime_free_token_ids');
   late final _rwkvmobile_runtime_free_token_ids = _rwkvmobile_runtime_free_token_idsPtr.asFunction<void Function(token_ids)>();
 
+  int rwkvmobile_runtime_cosyvoice_load_models(
+    rwkvmobile_runtime_t runtime,
+    ffi.Pointer<ffi.Char> speech_tokenizer_path,
+    ffi.Pointer<ffi.Char> campplus_path,
+    ffi.Pointer<ffi.Char> flow_encoder_path,
+    ffi.Pointer<ffi.Char> flow_decoder_estimator_path,
+    ffi.Pointer<ffi.Char> hift_generator_path,
+    ffi.Pointer<ffi.Char> tts_tokenizer_path,
+  ) {
+    return _rwkvmobile_runtime_cosyvoice_load_models(
+      runtime,
+      speech_tokenizer_path,
+      campplus_path,
+      flow_encoder_path,
+      flow_decoder_estimator_path,
+      hift_generator_path,
+      tts_tokenizer_path,
+    );
+  }
+
+  late final _rwkvmobile_runtime_cosyvoice_load_modelsPtr = _lookup<ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>>('rwkvmobile_runtime_cosyvoice_load_models');
+  late final _rwkvmobile_runtime_cosyvoice_load_models = _rwkvmobile_runtime_cosyvoice_load_modelsPtr.asFunction<int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
+
+  int rwkvmobile_runtime_cosyvoice_release_models(
+    rwkvmobile_runtime_t runtime,
+  ) {
+    return _rwkvmobile_runtime_cosyvoice_release_models(
+      runtime,
+    );
+  }
+
+  late final _rwkvmobile_runtime_cosyvoice_release_modelsPtr = _lookup<ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t)>>('rwkvmobile_runtime_cosyvoice_release_models');
+  late final _rwkvmobile_runtime_cosyvoice_release_models = _rwkvmobile_runtime_cosyvoice_release_modelsPtr.asFunction<int Function(rwkvmobile_runtime_t)>();
+
+  int rwkvmobile_runtime_tts_zero_shot(
+    rwkvmobile_runtime_t runtime,
+    ffi.Pointer<ffi.Char> tts_text,
+    ffi.Pointer<ffi.Char> instruction_text,
+    ffi.Pointer<ffi.Char> prompt_wav_path,
+    ffi.Pointer<ffi.Char> output_wav_path,
+  ) {
+    return _rwkvmobile_runtime_tts_zero_shot(
+      runtime,
+      tts_text,
+      instruction_text,
+      prompt_wav_path,
+      output_wav_path,
+    );
+  }
+
+  late final _rwkvmobile_runtime_tts_zero_shotPtr = _lookup<ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>>('rwkvmobile_runtime_tts_zero_shot');
+  late final _rwkvmobile_runtime_tts_zero_shot = _rwkvmobile_runtime_tts_zero_shotPtr.asFunction<int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
+
   ffi.Pointer<ffi.Char> rwkvmobile_get_platform_name() {
     return _rwkvmobile_get_platform_name();
   }
