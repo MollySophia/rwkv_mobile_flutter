@@ -1,5 +1,8 @@
-example/android/ linguist-vendored
-example/ios/ linguist-vendored
-example/web/ linguist-vendored
-example/macos/ linguist-vendored
-*.lock  linguist-vendored
+example/android/* linguist-vendored
+example/ios/* linguist-vendored
+example/web/* linguist-vendored
+example/linux/* linguist-vendored
+example/macos/* linguist-vendored
+example/windows/* linguist-vendored
+
+*.lock linguist-vendored
