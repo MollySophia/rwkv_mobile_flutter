@@ -35,6 +35,7 @@ import 'package:zone/model/argument.dart';
 import 'package:zone/model/cell_type.dart';
 import 'package:zone/model/co_t_display_state.dart';
 import 'package:zone/model/conversation.dart';
+import 'package:zone/model/demo_type.dart';
 import 'package:zone/model/file_info.dart';
 import 'package:zone/model/local_file.dart';
 import 'package:zone/model/message.dart';

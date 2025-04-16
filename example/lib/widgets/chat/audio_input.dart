@@ -8,6 +8,7 @@ import 'package:gaimon/gaimon.dart';
 import 'package:halo/halo.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/config.dart';
+import 'package:zone/model/demo_type.dart';
 import 'package:zone/model/world_type.dart';
 import 'package:zone/state/p.dart';
 

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:zone/config.dart';
+import 'package:zone/model/demo_type.dart';
 import 'package:zone/state/p.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

@@ -684,14 +684,6 @@ enum _RWKVMessageType {
   generateStop;
 }
 
-enum DemoType {
-  othello,
-  chat,
-  world,
-  fifthteenPuzzle,
-  sudoku,
-}
-
 @immutable
 final class LLMEvent {
   final _RWKVMessageType type;

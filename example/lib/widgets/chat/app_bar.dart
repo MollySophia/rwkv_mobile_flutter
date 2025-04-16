@@ -10,6 +10,7 @@ import 'package:halo/halo.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/config.dart';
 import 'package:zone/gen/l10n.dart';
+import 'package:zone/model/demo_type.dart';
 import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
 import 'package:zone/widgets/app_info.dart';
