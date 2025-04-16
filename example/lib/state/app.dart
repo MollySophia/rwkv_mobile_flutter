@@ -45,6 +45,10 @@ extension $App on _App {
 
   FV getConfig() async {
     qq;
+    if (Args.disableRemoteConfig) {
+      qqw("Remote config is disabled");
+      return;
+    }
     await HF.wait(17);
     try {
       final res = await _get("get-demo-config");
@@ -112,10 +116,12 @@ extension _$App on _App {
 
     WidgetsBinding.instance.addObserver(this);
 
-    getConfig().then((_) async {
-      await HF.wait(1000);
-      _showNewVersionDialogIfNeeded();
-    });
+    if (!Args.disableRemoteConfig) {
+      getConfig().then((_) async {
+        await HF.wait(1000);
+        _showNewVersionDialogIfNeeded();
+      });
+    }
   }
 
   FV _showNewVersionDialogIfNeeded() async {

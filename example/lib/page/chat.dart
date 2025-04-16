@@ -2,6 +2,7 @@
 import 'dart:developer';
 
 import 'package:halo_state/halo_state.dart';
+import 'package:zone/args.dart';
 import 'package:zone/config.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/message.dart' as model;
@@ -81,10 +82,18 @@ class _PageChatState extends State<PageChat> {
   void _onShowingModelSelectorChanged(bool showing) async {
     if (!showing) return;
     P.fileManager.checkLocal();
-    P.app.getConfig().then((_) async {
-      await P.fileManager.syncAvailableModels();
-      await P.fileManager.checkLocal();
-    });
+
+    if (!Args.disableRemoteConfig) {
+      P.app.getConfig().then((_) async {
+        await P.fileManager.syncAvailableModels();
+        await P.fileManager.checkLocal();
+      });
+    } else {
+      P.fileManager.syncAvailableModels().then((_) {
+        P.fileManager.checkLocal();
+      });
+    }
+
     P.device.sync();
     await showModalBottomSheet(
       isScrollControlled: true,

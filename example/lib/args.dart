@@ -5,4 +5,5 @@ abstract class Args {
   static const demoType = String.fromEnvironment("demoType", defaultValue: "__chat__");
   static const isChat = demoType == "__chat__";
   static const maxTokens = int.fromEnvironment("maxTokens", defaultValue: -1);
+  static const disableRemoteConfig = bool.fromEnvironment("disableRemoteConfig", defaultValue: false);
 }
