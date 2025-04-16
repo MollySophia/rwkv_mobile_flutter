@@ -1,4 +1,4 @@
-require "yaml"
+require 'yaml'
 
 module Fastlane
   module Actions
@@ -7,7 +7,7 @@ module Fastlane
         [
           FastlaneCore::ConfigItem.new(
             key: :env,
-            description: "Target environment name",
+            description: 'Target environment name',
             optional: false,
             type: String,
           ),
@@ -15,7 +15,7 @@ module Fastlane
       end
 
       def self.run(params)
-        config_path = File.join(__dir__, "..", "environments.yml")
+        config_path = File.join(__dir__, '..', 'environments.yml')
         UI.user_error!("Missing environments config file at #{config_path}") unless File.exist?(config_path)
 
         environments = YAML.load_file(config_path)
@@ -26,45 +26,45 @@ module Fastlane
         # Define file patterns to process
         target_files = [
           # 代码文件
-          "**/*.dart",
-          "**/*.swift",
-          "**/*.kt",
-          "**/*.m",
-          "**/*.h",
-          "**/*.dart",
+          '**/*.dart',
+          '**/*.swift',
+          '**/*.kt',
+          '**/*.m',
+          '**/*.h',
+          '**/*.dart',
 
           # 配置文件
-          "**/*.yaml",
-          "**/*.yml",
-          "**/*.json",
-          "**/*.plist",
-          "**/*.xml",
-          "**/*.pbxproj",
-          "**/*.xcconfig",
+          '**/*.yaml',
+          '**/*.yml',
+          '**/*.json',
+          '**/*.plist',
+          '**/*.xml',
+          '**/*.pbxproj',
+          '**/*.xcconfig',
 
           # 构建文件
-          "**/Podfile",
-          "**/*.gradle",
-          "**/*.properties",
+          '**/Podfile',
+          '**/*.gradle',
+          '**/*.properties',
 
           # Fastlane文件
-          "fastlane/Appfile",
-          "fastlane/Fastfile",
+          'fastlane/Appfile',
+          'fastlane/Fastfile',
         ]
 
         # 添加排除模式（替代原来的exclude_files）
         exclude_patterns = [
-          "**/build/**",
-          "**/.git/**",
-          "**/Pods/**",
-          "**/Carthage/**",
-          "**/vendor/**",
-          "**/node_modules/**",
-          "fastlane/actions/**",  # 排除action文件自身
-          "fastlane/environments.yml",
-          "**/gen/**",
-          "**/l10n/**",
-          "assets/config/**",
+          '**/build/**',
+          '**/.git/**',
+          '**/Pods/**',
+          '**/Carthage/**',
+          '**/vendor/**',
+          '**/node_modules/**',
+          'fastlane/actions/**',  # 排除action文件自身
+          'fastlane/environments.yml',
+          '**/gen/**',
+          '**/l10n/**',
+          'assets/config/**',
         ]
 
         # 遍历 key 值

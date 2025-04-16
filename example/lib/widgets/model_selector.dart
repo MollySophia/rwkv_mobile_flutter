@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/func/gb_display.dart';
 import 'package:zone/gen/l10n.dart';
+import 'package:zone/model/demo_type.dart';
 import 'package:zone/model/world_type.dart';
 import 'package:zone/route/method.dart';
 import 'package:flutter/material.dart';

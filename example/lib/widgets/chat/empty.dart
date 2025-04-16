@@ -6,6 +6,7 @@ import 'package:zone/gen/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
+import 'package:zone/model/demo_type.dart';
 import 'package:zone/state/p.dart';
 
 class Empty extends ConsumerWidget {
