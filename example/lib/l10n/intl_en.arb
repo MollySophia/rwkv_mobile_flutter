@@ -269,5 +269,21 @@
   "update_now": "Update now",
   "@update_now": {
     "description": "Label for update now"
+  },
+  "back_to_chat": "Back to Chat",
+  "@back_to_chat": {
+    "description": "Label for back to chat"
+  },
+  "delete_all": "Delete all",
+  "@delete_all": {
+    "description": "Label for delete all"
+  },
+  "download_missing": "Download missing files",
+  "@download_missing": {
+    "description": "Label for download missing files"
+  },
+  "exploring": "Exploring...",
+  "@exploring": {
+    "description": "Label for exploring"
   }
 }

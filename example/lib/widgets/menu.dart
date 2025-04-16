@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
+import 'package:zone/config.dart';
 import 'package:zone/state/p.dart';
 import 'package:zone/widgets/app_info.dart';
 import 'package:zone/widgets/chat/conversation_list.dart';
@@ -61,7 +62,7 @@ class _BottomInfo extends ConsumerWidget {
                 c: CAA.stretch,
                 children: [
                   const T(
-                    "RWKV Chat",
+                    Config.appTitle,
                     s: TS(s: 20),
                   ),
                   Ro(

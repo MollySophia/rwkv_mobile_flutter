@@ -2,6 +2,7 @@
 import 'dart:developer';
 
 import 'package:halo_state/halo_state.dart';
+import 'package:zone/config.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -53,7 +54,7 @@ class Empty extends ConsumerWidget {
                     const Spacer(),
                     Image.asset(logoPath, width: 140),
                     12.h,
-                    T(S.current.chat_welcome_to_use("RWKV Chat"), s: const TS(s: 18, w: FW.w600)),
+                    T(S.current.chat_welcome_to_use(Config.appTitle), s: const TS(s: 18, w: FW.w600)),
                     12.h,
                     ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 500),

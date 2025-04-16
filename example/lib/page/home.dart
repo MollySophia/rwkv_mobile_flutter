@@ -1,4 +1,6 @@
 import 'package:halo/halo.dart';
+import 'package:zone/args.dart';
+import 'package:zone/config.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/route/method.dart';
 import 'package:zone/route/page_key.dart';
@@ -27,7 +29,7 @@ class PageHome extends ConsumerWidget {
             onPressed: () {
               push(PageKey.chat);
             },
-            child: const T("RWKV Chat"),
+            child: const T(Config.appTitle),
           ),
           TextButton(
             onPressed: () {

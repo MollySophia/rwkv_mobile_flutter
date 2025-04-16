@@ -35,6 +35,7 @@ class MessageLookup extends MessageLookupByLibrary {
           "Are you sure you want to delete this model?",
         ),
     "auto": MessageLookupByLibrary.simpleMessage("Auto"),
+    "back_to_chat": MessageLookupByLibrary.simpleMessage("Back to Chat"),
     "bot_message_edited": MessageLookupByLibrary.simpleMessage(
       "Bot message edited, you can now send new message",
     ),
@@ -76,12 +77,17 @@ class MessageLookup extends MessageLookupByLibrary {
           "Create a new one by clicking the button above.",
         ),
     "delete": MessageLookupByLibrary.simpleMessage("Delete"),
+    "delete_all": MessageLookupByLibrary.simpleMessage("Delete all"),
+    "download_missing": MessageLookupByLibrary.simpleMessage(
+      "Download missing files",
+    ),
     "download_model": MessageLookupByLibrary.simpleMessage("Download model"),
     "download_source": MessageLookupByLibrary.simpleMessage("Download source"),
     "ensure_you_have_enough_memory_to_load_the_model":
         MessageLookupByLibrary.simpleMessage(
           "Please ensure you have enough memory to load the model, otherwise the application may crash.",
         ),
+    "exploring": MessageLookupByLibrary.simpleMessage("Exploring..."),
     "foo_bar": MessageLookupByLibrary.simpleMessage("foo bar"),
     "intro": MessageLookupByLibrary.simpleMessage(
       "Get ready to experience RWKV v7, series of compact language models with 0.1, 0.4, 1.5, 2.9 billion parameters, optimized for seamless mobile devices inference. Once loaded, it functions offline without requiring any server communication.",

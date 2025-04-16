@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:halo_state/halo_state.dart';
+import 'package:zone/config.dart';
 import 'package:zone/func/gb_display.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/demo_type.dart';
@@ -45,7 +46,7 @@ class ModelSelector extends ConsumerWidget {
           children: [
             Ro(
               children: [
-                Exp(child: T(S.current.chat_welcome_to_use("RWKV Chat"), s: const TS(s: 18, w: FW.w600))),
+                Exp(child: T(S.current.chat_welcome_to_use(Config.appTitle), s: const TS(s: 18, w: FW.w600))),
                 IconButton(
                   onPressed: () {
                     pop();

@@ -7,6 +7,7 @@ import 'package:halo/halo.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:zone/config.dart';
 import 'package:zone/route/method.dart';
 import 'package:zone/state/p.dart';
 
@@ -88,7 +89,7 @@ class AppInfo extends ConsumerWidget {
               m: MAA.center,
               children: [
                 T(
-                  "RWKV Chat",
+                  Config.appTitle,
                   s: TS(s: 24),
                 ),
               ],
@@ -201,7 +202,7 @@ class AppInfo extends ConsumerWidget {
   void _showLicensePage(BuildContext context, String version, String buildNumber, Widget iconWidget) {
     showLicensePage(
       context: context,
-      applicationName: "RWKV Chat",
+      applicationName: Config.appTitle,
       applicationVersion: "$version ($buildNumber)",
       applicationIcon: C(
         margin: const EI.o(t: 12, b: 12),

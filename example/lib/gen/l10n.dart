@@ -675,6 +675,46 @@ class S {
       args: [],
     );
   }
+
+  /// `Back to Chat`
+  String get back_to_chat {
+    return Intl.message(
+      'Back to Chat',
+      name: 'back_to_chat',
+      desc: 'Label for back to chat',
+      args: [],
+    );
+  }
+
+  /// `Delete all`
+  String get delete_all {
+    return Intl.message(
+      'Delete all',
+      name: 'delete_all',
+      desc: 'Label for delete all',
+      args: [],
+    );
+  }
+
+  /// `Download missing files`
+  String get download_missing {
+    return Intl.message(
+      'Download missing files',
+      name: 'download_missing',
+      desc: 'Label for download missing files',
+      args: [],
+    );
+  }
+
+  /// `Exploring...`
+  String get exploring {
+    return Intl.message(
+      'Exploring...',
+      name: 'exploring',
+      desc: 'Label for exploring',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

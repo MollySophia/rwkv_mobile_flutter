@@ -184,8 +184,8 @@ class GroupItem extends ConsumerWidget {
                 if (!allMissing && !allDownloaded && !downloading)
                   TextButton(
                     onPressed: _onDownloadAllTap,
-                    child: const T(
-                      "Download Missing",
+                    child: T(
+                      S.current.download_missing,
                       s: TS(
                         w: FW.w600,
                       ),
@@ -194,18 +194,18 @@ class GroupItem extends ConsumerWidget {
                 if (allDownloaded && !alreadyStarted)
                   TextButton(
                     onPressed: _onDeleteAllTap,
-                    child: const T(
-                      "Delete All",
+                    child: T(
+                      S.current.delete_all,
                       s: TS(
                         w: FW.w600,
                       ),
                     ),
                   ),
                 if (alreadyStarted)
-                  const TextButton(
+                  TextButton(
                     onPressed: null,
                     child: T(
-                      "Exploring...",
+                      S.current.exploring,
                       s: TS(
                         w: FW.w600,
                       ),
@@ -216,7 +216,7 @@ class GroupItem extends ConsumerWidget {
                   TextButton(
                     onPressed: loading ? null : _onStartToChatTap,
                     child: T(
-                      loading ? "Loading..." : "Start to Chat",
+                      loading ? S.current.loading : S.current.start_to_chat,
                       s: const TS(
                         w: FW.w600,
                       ),
@@ -226,7 +226,7 @@ class GroupItem extends ConsumerWidget {
                   TextButton(
                     onPressed: loading ? null : _onContinueTap,
                     child: T(
-                      loading ? "Loading..." : "Back to Chat",
+                      loading ? S.current.loading : S.current.back_to_chat,
                       s: const TS(
                         w: FW.w600,
                       ),
