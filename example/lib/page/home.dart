@@ -1,5 +1,4 @@
 import 'package:halo/halo.dart';
-import 'package:zone/args.dart';
 import 'package:zone/config.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/route/method.dart';

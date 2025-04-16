@@ -186,7 +186,7 @@ class GroupItem extends ConsumerWidget {
                     onPressed: _onDownloadAllTap,
                     child: T(
                       S.current.download_missing,
-                      s: TS(
+                      s: const TS(
                         w: FW.w600,
                       ),
                     ),
@@ -196,7 +196,7 @@ class GroupItem extends ConsumerWidget {
                     onPressed: _onDeleteAllTap,
                     child: T(
                       S.current.delete_all,
-                      s: TS(
+                      s: const TS(
                         w: FW.w600,
                       ),
                     ),
@@ -206,7 +206,7 @@ class GroupItem extends ConsumerWidget {
                     onPressed: null,
                     child: T(
                       S.current.exploring,
-                      s: TS(
+                      s: const TS(
                         w: FW.w600,
                       ),
                     ),
