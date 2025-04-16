@@ -423,6 +423,8 @@ class RWKVMobile {
         // names is a list of strings, separated by ','
         final names = spksNames.cast<Utf8>().toDartString().split(',');
         final namesList = names.map((name) => name.replaceAll("'", "")).toList();
+        // remove the last empty string
+        namesList.removeLast();
         sendPort.send({'spksNames': namesList});
       } else if (command == 'runTTS') {
         final args = message.$2 as Map<String, dynamic>;
