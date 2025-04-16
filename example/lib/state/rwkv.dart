@@ -47,7 +47,10 @@ class _RWKV {
   });
 
   late final currentModel = qsn<FileInfo>();
+
   late final currentWorldType = qsn<WorldType>();
+
+  late final currentGroupInfo = qsn<GroupInfo>();
 
   late final loading = qp((ref) {
     return ref.watch(_loading);
@@ -373,6 +376,56 @@ extension $RWKV on _RWKV {
     _loading.u(false);
   }
 
+  FV loadTTSModels({
+    required String modelPath,
+    required Backend backend,
+    required bool usingReasoningModel,
+    required String campPlusPath,
+    required String flowEncoderPath,
+    required String flowDecoderEstimatorPath,
+    required String hiftGeneratorPath,
+    required String speechTokenizerPath,
+  }) async {
+    qq;
+    _loading.u(true);
+    prefillSpeed.u(0);
+    decodeSpeed.u(0);
+
+    final tokenizerPath = await fromAssetsToTemp("assets/config/chat/b_rwkv_vocab_v20230424.txt");
+
+    final rootIsolateToken = RootIsolateToken.instance;
+
+    final options = StartOptions(
+      modelPath,
+      tokenizerPath,
+      backend,
+      _receivePort.sendPort,
+      rootIsolateToken!,
+    );
+    await RWKVMobile().runIsolate(options);
+
+    while (_sendPort == null) {
+      qqq("waiting for sendPort...");
+      await Future.delayed(const Duration(milliseconds: 50));
+    }
+
+    final ttsTokenizerPath = await fromAssetsToTemp("assets/config/chat/b_rwkv_vocab_v20230424_tts.txt");
+
+    _sendPort!.send((
+      "loadTTSModels",
+      {
+        "campPlusPath": campPlusPath,
+        "flowDecoderEstimatorPath": flowDecoderEstimatorPath,
+        "flowEncoderPath": flowEncoderPath,
+        "hiftGeneratorPath": hiftGeneratorPath,
+        "speechTokenizerPath": speechTokenizerPath,
+        "ttsTokenizerPath": ttsTokenizerPath,
+      }
+    ));
+
+    _loading.u(false);
+  }
+
   FV resetSamplerParams({required bool usingReasoningModel}) async {
     await syncSamplerParams(
       temperature: usingReasoningModel ? Argument.temperature.reasonDefaults : Argument.temperature.defaults,
@@ -509,14 +562,7 @@ extension _$RWKV on _RWKV {
       case PageKey.chat:
         // await _loadChat();
         break;
-      case PageKey.fifthteenPuzzle:
-        await _loadFifthteenPuzzle();
-        break;
-      case PageKey.sudoku:
-        await _loadSudoku();
-        break;
       case PageKey.home:
-      case PageKey.empty:
       case PageKey.file:
       case PageKey.test:
         break;

@@ -1,6 +1,6 @@
 [
   {
-    "name": "TTS test",
+    "name": "RWKV7 TTS",
     "type": "gguf",
     "modelSize": 1.5,
     "fileName": "CosyVoice2-0.5B-RWKV-7-1.5B-Instruct-CHENJPKO-q4_k_m.gguf",
@@ -13,9 +13,8 @@
     "tags": ["cpu"]
   },
   {
-    "name": "TTS test",
+    "name": "Campplus",
     "type": "gguf",
-    "modelSize": 0.5,
     "fileName": "campplus.onnx",
     "fileSize": 28303423,
     "sha256": "ba82eb5c87f08e73fa40c0d81e5a5cde002e32f975157de139d853000a79531e",
@@ -23,12 +22,11 @@
     "quantization": "",
     "platforms": ["android"],
     "backends": ["llamacpp"],
-    "tags": []
+    "tags": ["campplus"]
   },
   {
-    "name": "TTS test",
+    "name": "Flow Decoder Estimator 32",
     "type": "gguf",
-    "modelSize": 0.5,
     "fileName": "flow.decoder.estimator.fp32.onnx",
     "fileSize": 286521895,
     "sha256": "51aed3efa2c153898ea53a780893c920e968dab1d7aec25402bd6c9815d94702",
@@ -36,12 +34,11 @@
     "quantization": "fp32",
     "platforms": ["android"],
     "backends": ["llamacpp"],
-    "tags": []
+    "tags": ["flow.decoder.estimator"]
   },
   {
-    "name": "TTS test",
+    "name": "Flow Encoder",
     "type": "gguf",
-    "modelSize": 0.5,
     "fileName": "flow_encoder.fp16.onnx",
     "fileSize": 93055040,
     "sha256": "5364de30bf52b80c7d986ceab5cb4ae7ddba588f3017ba61ac9c8c8dd164a94d",
@@ -49,12 +46,11 @@
     "quantization": "fp16",
     "platforms": ["android"],
     "backends": ["llamacpp"],
-    "tags": []
+    "tags": ["flow.encoder"]
   },
   {
-    "name": "TTS test",
+    "name": "Hift",
     "type": "gguf",
-    "modelSize": 0.5,
     "fileName": "hift.onnx",
     "fileSize": 83390012,
     "sha256": "2e14d42dde9994b2c9df2a7bdfaf2182e5c0d61fbcb373f3d4f505e3ec48597b",
@@ -62,12 +58,11 @@
     "quantization": "",
     "platforms": ["android"],
     "backends": ["llamacpp"],
-    "tags": []
+    "tags": ["hift"]
   },
   {
-    "name": "TTS test",
+    "name": "Speech Tokenizer V2",
     "type": "gguf",
-    "modelSize": 0.5,
     "fileName": "speech_tokenizer_v2.onnx",
     "fileSize": 496082973,
     "sha256": "ba82eb5c87f08e73fa40c0d81e5a5cde002e32f975157de139d853000a79531e",
@@ -75,6 +70,6 @@
     "quantization": "",
     "platforms": ["android"],
     "backends": ["llamacpp"],
-    "tags": []
+    "tags": ["speech.tokenizer"]
   }
 ]

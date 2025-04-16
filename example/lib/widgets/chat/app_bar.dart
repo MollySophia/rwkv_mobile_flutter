@@ -42,9 +42,17 @@ class ChatAppBar extends ConsumerWidget {
     final loaded = ref.watch(P.rwkv.loaded);
 
     final demoType = ref.watch(P.app.demoType);
-    final currentWorldType = ref.watch(P.rwkv.currentWorldType);
     final primary = Theme.of(context).colorScheme.primary;
     final currentModel = ref.watch(P.rwkv.currentModel);
+    final currentWorldType = ref.watch(P.rwkv.currentWorldType);
+    final currentGroupInfo = ref.watch(P.rwkv.currentGroupInfo);
+
+    String displayName = S.current.click_to_select_model;
+    if (currentGroupInfo != null) {
+      displayName = currentGroupInfo.displayName;
+    } else if (currentModel != null) {
+      displayName = currentModel.name;
+    }
 
     return Positioned(
       top: 0,
@@ -83,7 +91,7 @@ class ChatAppBar extends ConsumerWidget {
                         m: MAA.center,
                         children: [
                           T(
-                            currentModel?.name ?? currentWorldType?.displayName ?? S.current.click_to_select_model,
+                            displayName,
                             s: TS(s: 10, c: primary),
                           ),
                           4.w,

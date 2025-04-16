@@ -1,34 +1,35 @@
 // ignore: unused_import
 import 'dart:developer';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
-import 'package:zone/model/world_type.dart';
+import 'package:zone/model/group_info.dart';
 import 'package:zone/route/method.dart';
 import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
 import 'package:halo_alert/halo_alert.dart';
 import 'package:zone/widgets/model_item.dart';
 
-class ModelGroupItem extends ConsumerWidget {
-  final WorldType worldType;
+class GroupItem extends ConsumerWidget {
+  final GroupInfo groupInfo;
 
-  const ModelGroupItem(this.worldType, {super.key});
+  const GroupItem(this.groupInfo, {super.key});
 
   void _onDownloadAllTap() async {
     final availableModels = P.fileManager.availableModels.v;
-    final fileInfos = availableModels.where((e) => e.worldType == worldType).toList();
+    final fileInfos = availableModels..toList();
     final missingFileInfos = fileInfos.where((e) => P.fileManager.locals(e).v.hasFile == false).toList();
     missingFileInfos.forEach((e) => P.fileManager.getFile(fileInfo: e));
   }
 
   void _onDeleteAllTap() async {
     final availableModels = P.fileManager.availableModels.v;
-    final fileInfos = availableModels.where((e) => e.worldType == worldType).toList();
+    final fileInfos = availableModels.toList();
     fileInfos.forEach((e) => P.fileManager.deleteFile(fileInfo: e));
   }
 
@@ -38,47 +39,79 @@ class ModelGroupItem extends ConsumerWidget {
       return;
     }
     final availableModels = P.fileManager.availableModels.v;
-    final fileInfos = availableModels.where((e) => e.worldType == worldType).toList();
-    final encoderFileKey = fileInfos.firstWhere((e) => e.isEncoder);
-    final modelFileKey = fileInfos.firstWhere((e) => !e.isEncoder);
-    final encoderLocalFile = P.fileManager.locals(encoderFileKey).v;
+    final fileInfos = availableModels.toList();
+
+    final campPlusFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("campplus"));
+    final flowEncoderFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("flow.encoder"));
+    final flowDecoderEstimatorFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("flow.decoder.estimator"));
+    final hiftGeneratorFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("hift"));
+    final speechTokenizerFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("speech.tokenizer"));
+    final modelFileKey = fileInfos.firstWhereOrNull((e) => e.name == "RWKV7 TTS");
+
+    if (campPlusFileKey == null) {
+      Alert.error("Campplus file not found");
+      return;
+    }
+
+    if (flowEncoderFileKey == null) {
+      Alert.error("Flow encoder file not found");
+      return;
+    }
+
+    if (flowDecoderEstimatorFileKey == null) {
+      Alert.error("Flow decoder estimator file not found");
+      return;
+    }
+
+    if (hiftGeneratorFileKey == null) {
+      Alert.error("Hift generator file not found");
+      return;
+    }
+
+    if (speechTokenizerFileKey == null) {
+      Alert.error("TTS tokenizer file not found");
+      return;
+    }
+
+    if (modelFileKey == null) {
+      Alert.error("Model file not found");
+      return;
+    }
+
     final modelLocalFile = P.fileManager.locals(modelFileKey).v;
+    final localCampPlusFile = P.fileManager.locals(campPlusFileKey).v;
+    final localFlowEncoderFile = P.fileManager.locals(flowEncoderFileKey).v;
+    final localFlowDecoderEstimatorFile = P.fileManager.locals(flowDecoderEstimatorFileKey).v;
+    final localHiftGeneratorFile = P.fileManager.locals(hiftGeneratorFileKey).v;
+    final localSpeechTokenizerFile = P.fileManager.locals(speechTokenizerFileKey).v;
 
-    P.rwkv.currentWorldType.u(worldType);
+    P.rwkv.currentGroupInfo.u(groupInfo);
 
-    qqq("worldType: $worldType");
+    qqq("groupInfo: $groupInfo");
 
     P.rwkv.clearStates();
     P.chat.clearMessages();
 
     try {
-      switch (worldType) {
-        case WorldType.engAudioQA:
-        case WorldType.chineseASR:
-        case WorldType.engASR:
-          await P.rwkv.loadWorldEngAudioQA(
-            modelPath: modelLocalFile.targetPath,
-            encoderPath: encoderLocalFile.targetPath,
-            backend: modelFileKey.backend!,
-          );
-        case WorldType.engVisualQA:
-        case WorldType.engVisualQAReason:
-          await P.rwkv.loadWorldVision(
-            modelPath: modelLocalFile.targetPath,
-            encoderPath: encoderLocalFile.targetPath,
-            backend: modelFileKey.backend!,
-            usingReasoningModel: worldType.isReasoning,
-          );
-        // throw "Not implemented";
-      }
+      await P.rwkv.loadTTSModels(
+        modelPath: modelLocalFile.targetPath,
+        backend: modelFileKey.backend!,
+        usingReasoningModel: false,
+        campPlusPath: localCampPlusFile.targetPath,
+        flowEncoderPath: localFlowEncoderFile.targetPath,
+        flowDecoderEstimatorPath: localFlowDecoderEstimatorFile.targetPath,
+        hiftGeneratorPath: localHiftGeneratorFile.targetPath,
+        speechTokenizerPath: localSpeechTokenizerFile.targetPath,
+      );
       Navigator.pop(getContext()!);
     } catch (e) {
       if (kDebugMode) print("😡 $e");
       Alert.error(e.toString());
-      P.rwkv.currentWorldType.u(null);
+      P.rwkv.currentGroupInfo.u(null);
       return;
     }
 
+    P.rwkv.currentGroupInfo.u(groupInfo);
     P.rwkv.currentModel.u(modelFileKey);
     Alert.success(S.current.you_can_now_start_to_chat_with_rwkv);
     pop();
@@ -92,7 +125,7 @@ class ModelGroupItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final availableModels = P.fileManager.availableModels.v;
-    final fileInfos = availableModels.where((e) => e.worldType == worldType).toList();
+    final fileInfos = availableModels.toList();
     if (fileInfos.isEmpty) return const SizedBox.shrink();
     final primaryColor = Theme.of(context).colorScheme.primaryContainer;
 
@@ -104,8 +137,8 @@ class ModelGroupItem extends ConsumerWidget {
     final allMissing = files.every((e) => !e.hasFile);
     final downloading = files.any((e) => e.downloading);
 
-    final currentWorldType = ref.watch(P.rwkv.currentWorldType);
-    final alreadyStarted = currentWorldType == worldType;
+    final currentGroupInfo = ref.watch(P.rwkv.currentGroupInfo);
+    final alreadyStarted = currentGroupInfo == groupInfo;
     final loading = ref.watch(P.rwkv.loading);
 
     return ClipRRect(
@@ -121,8 +154,8 @@ class ModelGroupItem extends ConsumerWidget {
               alignment: WrapAlignment.spaceBetween,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                T(worldType.displayName, s: const TS(s: 18, w: FW.w600)),
-                T(worldType.taskDescription, s: const TS(s: 12, w: FW.w400)),
+                T(groupInfo.displayName, s: const TS(s: 18, w: FW.w600)),
+                T(groupInfo.taskDescription, s: const TS(s: 12, w: FW.w400)),
               ],
             ),
             ...fileInfos.m((e) => C(

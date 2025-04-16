@@ -40,7 +40,7 @@ world:
 tts:
   app_icon: assets/icon/icon.tts.png
   bundle_id_android: com.rwkv.tts
-  bundle_id_ios: com.rwkv.tts
+  bundle_id_ios: com.rwkv.tts.ios
   file_android_path: android/app/src/main/kotlin/com/rwkv/tts/MainActivity.kt
   app_name: RWKV TTS
   assets_config_0: assets/model/tts
@@ -62,7 +62,7 @@ bundle_id_ios:
     com.rwkv.othello.v7.ios,
     com.rwkv.chat.v7.100m,
     com.world.rwkv.ios,
-    com.rwkv.tts,
+    com.rwkv.tts.ios,
   ]
 bundle_id_android:
   [com.rwkv.zone, com.rwkvzone.chat, com.worldrwkv.android, com.rwkv.tts]

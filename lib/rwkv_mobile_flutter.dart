@@ -402,11 +402,11 @@ class RWKVMobile {
         sendPort.send({'responseBufferIds': responseBufferIdsList});
       } else if (command == 'loadTTSModels') {
         final args = message.$2 as Map<String, dynamic>;
-        final speechTokenizerPath = args['speechTokenizerPath'] as String;
         final campPlusPath = args['campPlusPath'] as String;
-        final flowEncoderPath = args['flowEncoderPath'] as String;
         final flowDecoderEstimatorPath = args['flowDecoderEstimatorPath'] as String;
+        final flowEncoderPath = args['flowEncoderPath'] as String;
         final hiftGeneratorPath = args['hiftGeneratorPath'] as String;
+        final speechTokenizerPath = args['speechTokenizerPath'] as String;
         final ttsTokenizerPath = args['ttsTokenizerPath'] as String;
         retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_load_models(runtime, speechTokenizerPath.toNativeUtf8().cast<ffi.Char>(), campPlusPath.toNativeUtf8().cast<ffi.Char>(), flowEncoderPath.toNativeUtf8().cast<ffi.Char>(), flowDecoderEstimatorPath.toNativeUtf8().cast<ffi.Char>(), hiftGeneratorPath.toNativeUtf8().cast<ffi.Char>(), ttsTokenizerPath.toNativeUtf8().cast<ffi.Char>());
         if (retVal != 0) {

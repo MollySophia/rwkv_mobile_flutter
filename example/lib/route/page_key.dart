@@ -1,6 +1,5 @@
 import 'package:zone/config.dart';
 import 'package:zone/page/chat.dart';
-import 'package:zone/page/empty.dart';
 import 'package:zone/page/file.dart';
 import 'package:zone/page/home.dart';
 import 'package:flutter/material.dart';
@@ -11,10 +10,7 @@ import 'package:zone/page/textfield_test.dart';
 enum PageKey {
   home,
   chat,
-  empty,
   othello,
-  fifthteenPuzzle,
-  sudoku,
   file,
   test,
   ;
@@ -29,12 +25,6 @@ enum PageKey {
         return const PageChat();
       case PageKey.othello:
         return const PageOthello();
-      case PageKey.empty:
-        return const PageEmpty();
-      case PageKey.fifthteenPuzzle:
-        return const PageEmpty();
-      case PageKey.sudoku:
-        return const PageEmpty();
       case PageKey.file:
         return const PageFile();
       case PageKey.test:

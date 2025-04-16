@@ -7,13 +7,15 @@ import 'package:halo_state/halo_state.dart';
 import 'package:zone/func/gb_display.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/demo_type.dart';
+import 'package:zone/model/group_info.dart';
 import 'package:zone/model/world_type.dart';
 import 'package:zone/route/method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:zone/state/p.dart';
-import 'package:zone/widgets/model_group_item.dart';
+import 'package:zone/widgets/group_item.dart';
+import 'package:zone/widgets/world_group_item.dart';
 import 'package:zone/widgets/model_item.dart';
 
 class ModelSelector extends ConsumerWidget {
@@ -66,8 +68,9 @@ class ModelSelector extends ConsumerWidget {
             const _DownloadSource(),
             4.h,
             if (demoType == DemoType.world)
-              for (final worldType in WorldType.values) ModelGroupItem(worldType),
-            if (demoType == DemoType.chat || kDebugMode)
+              for (final worldType in WorldType.values) WorldGroupItem(worldType),
+            if (demoType == DemoType.tts) GroupItem(GroupInfo()),
+            if (demoType == DemoType.chat)
               for (final fileInfo in availableModels.sorted((a, b) {
                 return a.fileSize.compareTo(b.fileSize);
               }).sorted((a, b) {
