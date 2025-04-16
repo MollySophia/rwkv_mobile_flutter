@@ -1,4 +1,4 @@
-package com.rwkv.chat.v7.100m
+package com.rwkvzone.chat
 
 import io.flutter.embedding.android.FlutterActivity
 

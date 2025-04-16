@@ -65,7 +65,7 @@ lane :switch_env do |params|
 end
 
 lane :test do |params|
-  ios_upload(groups: ['External'])
+  run_flutter_build_apk()
 end
 
 # ✅ Shared
