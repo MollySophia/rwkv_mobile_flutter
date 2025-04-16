@@ -92,12 +92,12 @@ class _App extends StatelessWidget {
           GlobalCupertinoLocalizations.delegate,
         ],
         theme: ThemeData(
-          brightness: Brightness.light,
+          colorScheme: P.app.demoType.v.colorScheme,
           appBarTheme: const AppBarTheme(scrolledUnderElevation: 0, backgroundColor: kBG),
           scaffoldBackgroundColor: kBG,
         ),
         darkTheme: ThemeData(
-          brightness: Brightness.light,
+          colorScheme: P.app.demoType.v.colorScheme,
           appBarTheme: const AppBarTheme(scrolledUnderElevation: 0, backgroundColor: kBG),
           scaffoldBackgroundColor: kBG,
         ),
