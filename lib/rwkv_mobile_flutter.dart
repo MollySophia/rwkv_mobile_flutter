@@ -408,7 +408,8 @@ class RWKVMobile {
         final hiftGeneratorPath = args['hiftGeneratorPath'] as String;
         final speechTokenizerPath = args['speechTokenizerPath'] as String;
         final ttsTokenizerPath = args['ttsTokenizerPath'] as String;
-        retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_load_models(runtime, speechTokenizerPath.toNativeUtf8().cast<ffi.Char>(), campPlusPath.toNativeUtf8().cast<ffi.Char>(), flowEncoderPath.toNativeUtf8().cast<ffi.Char>(), flowDecoderEstimatorPath.toNativeUtf8().cast<ffi.Char>(), hiftGeneratorPath.toNativeUtf8().cast<ffi.Char>(), ttsTokenizerPath.toNativeUtf8().cast<ffi.Char>());
+        final spksInfoPath = args['spksInfoPath'] as String;
+        retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_load_models(runtime, speechTokenizerPath.toNativeUtf8().cast<ffi.Char>(), campPlusPath.toNativeUtf8().cast<ffi.Char>(), flowEncoderPath.toNativeUtf8().cast<ffi.Char>(), flowDecoderEstimatorPath.toNativeUtf8().cast<ffi.Char>(), hiftGeneratorPath.toNativeUtf8().cast<ffi.Char>(), ttsTokenizerPath.toNativeUtf8().cast<ffi.Char>(), spksInfoPath.toNativeUtf8().cast<ffi.Char>());
         if (retVal != 0) {
           sendPort.send({'error': 'Failed to load TTS models'});
         }
@@ -417,15 +418,33 @@ class RWKVMobile {
         if (retVal != 0) {
           sendPort.send({'error': 'Failed to release TTS models'});
         }
-      } else if (command == 'runTTSZeroshot') {
+      } else if (command == 'getTTSSpkNames') {
+        final spksNames = rwkvMobile.rwkvmobile_runtime_cosyvoice_get_spk_names(runtime);
+        // names is a list of strings, separated by ','
+        final names = spksNames.cast<Utf8>().toDartString().split(',');
+        final namesList = names.map((name) => name.replaceAll("'", "")).toList();
+        sendPort.send({'spksNames': namesList});
+      } else if (command == 'runTTS') {
         final args = message.$2 as Map<String, dynamic>;
         final ttsText = args['ttsText'] as String;
         final instructionText = args['instructionText'] as String;
         final promptWavPath = args['promptWavPath'] as String;
         final outputWavPath = args['outputWavPath'] as String;
-        retVal = rwkvMobile.rwkvmobile_runtime_tts_zero_shot(runtime, ttsText.toNativeUtf8().cast<ffi.Char>(), instructionText.toNativeUtf8().cast<ffi.Char>(), promptWavPath.toNativeUtf8().cast<ffi.Char>(), outputWavPath.toNativeUtf8().cast<ffi.Char>());
+        retVal = rwkvMobile.rwkvmobile_runtime_run_tts(runtime, ttsText.toNativeUtf8().cast<ffi.Char>(), instructionText.toNativeUtf8().cast<ffi.Char>(), promptWavPath.toNativeUtf8().cast<ffi.Char>(), outputWavPath.toNativeUtf8().cast<ffi.Char>());
         if (retVal != 0) {
-          sendPort.send({'error': 'Failed to run TTS zeroshot'});
+          sendPort.send({'error': 'Failed to run TTS'});
+        } else {
+          sendPort.send({'ttsDone': true, 'outputWavPath': outputWavPath});
+        }
+      } else if (command == 'runTTSWithPredefinedSpk') {
+        final args = message.$2 as Map<String, dynamic>;
+        final ttsText = args['ttsText'] as String;
+        final instructionText = args['instructionText'] as String;
+        final spkName = args['spkName'] as String;
+        final outputWavPath = args['outputWavPath'] as String;
+        retVal = rwkvMobile.rwkvmobile_runtime_run_tts_with_predefined_spks(runtime, ttsText.toNativeUtf8().cast<ffi.Char>(), instructionText.toNativeUtf8().cast<ffi.Char>(), spkName.toNativeUtf8().cast<ffi.Char>(), outputWavPath.toNativeUtf8().cast<ffi.Char>());
+        if (retVal != 0) {
+          sendPort.send({'error': 'Failed to run TTS with predefined speech embedding'});
         } else {
           sendPort.send({'ttsDone': true, 'outputWavPath': outputWavPath});
         }
