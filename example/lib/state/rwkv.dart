@@ -197,7 +197,7 @@ extension $RWKV on _RWKV {
         "libQnnRwkvWkvOpPackageV75.so",
       };
       for (final lib in qnnLibList) {
-        final path = await fromAssetsToTemp("assets/lib/$lib");
+        final path = await fromAssetsToTemp("assets/lib/chat/$lib");
         qqq("copied QNN library, path: $path");
       }
       _qnnLibsCopied.u(true);

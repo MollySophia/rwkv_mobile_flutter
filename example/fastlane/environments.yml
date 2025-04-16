@@ -7,7 +7,7 @@ othello:
   assets_config_0: assets/model/othello
   assets_config_1: assets/config/othello
   assets_config_2: assets/img/othello
-  assets_config_3: '    # - assets/lib/'
+  assets_config_3: assets/lib/othello
   args: __othello__
   fp: static final firstPage = PageKey.othello.name;
 
@@ -20,7 +20,7 @@ chat:
   assets_config_0: assets/model/chat
   assets_config_1: assets/config/chat
   assets_config_2: assets/img/chat
-  assets_config_3: '    - assets/lib/'
+  assets_config_3: assets/lib/chat
   args: __chat__
   fp: static final firstPage = PageKey.chat.name;
 
@@ -33,20 +33,20 @@ world:
   assets_config_0: assets/model/world
   assets_config_1: assets/config/world
   assets_config_2: assets/img/world
-  assets_config_3: '    # - assets/lib/'
+  assets_config_3: assets/lib/world
   args: __world__
   fp: static final firstPage = PageKey.chat.name;
 
 tts:
   app_icon: assets/icon/icon.tts.png
   bundle_id_android: com.rwkv.tts
-  bundle_id_ios: com.rwkv.tts.ios
+  bundle_id_ios: com.rwkvtts.ios
   file_android_path: android/app/src/main/kotlin/com/rwkv/tts/MainActivity.kt
   app_name: RWKV TTS
   assets_config_0: assets/model/tts
   assets_config_1: assets/config/tts
   assets_config_2: assets/img/tts
-  assets_config_3: '    # - assets/lib/'
+  assets_config_3: assets/lib/tts
   args: __tts__
   fp: static final firstPage = PageKey.chat.name;
 
@@ -62,7 +62,7 @@ bundle_id_ios:
     com.rwkv.othello.v7.ios,
     com.rwkv.chat.v7.100m,
     com.world.rwkv.ios,
-    com.rwkv.tts.ios,
+    com.rwkvtts.ios,
   ]
 bundle_id_android:
   [com.rwkv.zone, com.rwkvzone.chat, com.worldrwkv.android, com.rwkv.tts]
@@ -90,7 +90,8 @@ assets_config_1:
   ]
 assets_config_2:
   [assets/img/othello, assets/img/chat, assets/img/world, assets/img/tts]
-assets_config_3: ['    # - assets/lib/', '    - assets/lib/']
+assets_config_3:
+  [assets/lib/othello, assets/lib/chat, assets/lib/world, assets/lib/tts]
 args: [__othello__, __chat__, __world__, __tts__]
 fp:
   [
