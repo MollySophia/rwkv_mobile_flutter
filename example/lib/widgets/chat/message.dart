@@ -10,7 +10,7 @@ import 'package:zone/gen/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
-import 'package:zone/model/co_t_display_state.dart';
+import 'package:zone/model/cot_display_state.dart';
 import 'package:zone/model/message.dart' as model;
 import 'package:zone/model/world_type.dart';
 import 'package:zone/route/router.dart';
