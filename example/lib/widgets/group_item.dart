@@ -47,6 +47,7 @@ class GroupItem extends ConsumerWidget {
     final hiftGeneratorFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("hift"));
     final speechTokenizerFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("speech.tokenizer"));
     final modelFileKey = fileInfos.firstWhereOrNull((e) => e.name == "RWKV7 TTS");
+    final spksInfoFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("spk_info"));
 
     if (campPlusFileKey == null) {
       Alert.error("Campplus file not found");
@@ -78,13 +79,18 @@ class GroupItem extends ConsumerWidget {
       return;
     }
 
+    if (spksInfoFileKey == null) {
+      Alert.error("Speaker info file not found");
+      return;
+    }
+
     final modelLocalFile = P.fileManager.locals(modelFileKey).v;
     final localCampPlusFile = P.fileManager.locals(campPlusFileKey).v;
     final localFlowEncoderFile = P.fileManager.locals(flowEncoderFileKey).v;
     final localFlowDecoderEstimatorFile = P.fileManager.locals(flowDecoderEstimatorFileKey).v;
     final localHiftGeneratorFile = P.fileManager.locals(hiftGeneratorFileKey).v;
     final localSpeechTokenizerFile = P.fileManager.locals(speechTokenizerFileKey).v;
-
+    final localSpksInfoFile = P.fileManager.locals(spksInfoFileKey).v;
     P.rwkv.currentGroupInfo.u(groupInfo);
 
     qqq("groupInfo: $groupInfo");
@@ -102,6 +108,7 @@ class GroupItem extends ConsumerWidget {
         flowDecoderEstimatorPath: localFlowDecoderEstimatorFile.targetPath,
         hiftGeneratorPath: localHiftGeneratorFile.targetPath,
         speechTokenizerPath: localSpeechTokenizerFile.targetPath,
+        spksInfoPath: localSpksInfoFile.targetPath,
       );
       Navigator.pop(getContext()!);
     } catch (e) {
