@@ -34,5 +34,5 @@ Assistant: 你好，我是你的助手，我会提供专家级的完整回答。
   static const domain = "https://api-model.rwkvos.com";
   static const timeout = Duration(seconds: 60);
   static late final String xApiKey;
-  static const appTitle = "RWKV Chat";
+  static const appTitle = "RWKV TTS";
 }

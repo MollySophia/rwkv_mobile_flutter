@@ -206,7 +206,7 @@ extension $RWKV on _RWKV {
         "libQnnRwkvWkvOpPackageV75.so",
       };
       for (final lib in qnnLibList) {
-        final path = await fromAssetsToTemp("assets/lib/chat/$lib");
+        final path = await fromAssetsToTemp("assets/lib/tts/$lib");
         qqq("copied QNN library, path: $path");
       }
       _qnnLibsCopied.u(true);
@@ -286,7 +286,7 @@ extension $RWKV on _RWKV {
     prefillSpeed.u(0);
     decodeSpeed.u(0);
 
-    final tokenizerPath = await fromAssetsToTemp("assets/config/chat/b_rwkv_vocab_v20230424.txt");
+    final tokenizerPath = await fromAssetsToTemp("assets/config/tts/b_rwkv_vocab_v20230424.txt");
 
     final rootIsolateToken = RootIsolateToken.instance;
 
@@ -343,7 +343,7 @@ extension $RWKV on _RWKV {
     prefillSpeed.u(0);
     decodeSpeed.u(0);
 
-    final tokenizerPath = await fromAssetsToTemp("assets/config/chat/b_rwkv_vocab_v20230424.txt");
+    final tokenizerPath = await fromAssetsToTemp("assets/config/tts/b_rwkv_vocab_v20230424.txt");
 
     final rootIsolateToken = RootIsolateToken.instance;
 
@@ -401,7 +401,7 @@ extension $RWKV on _RWKV {
     prefillSpeed.u(0);
     decodeSpeed.u(0);
 
-    final tokenizerPath = await fromAssetsToTemp("assets/config/chat/b_rwkv_vocab_v20230424.txt");
+    final tokenizerPath = await fromAssetsToTemp("assets/config/tts/b_rwkv_vocab_v20230424.txt");
 
     final rootIsolateToken = RootIsolateToken.instance;
 
@@ -419,7 +419,7 @@ extension $RWKV on _RWKV {
       await Future.delayed(const Duration(milliseconds: 50));
     }
 
-    final ttsTokenizerPath = await fromAssetsToTemp("assets/config/chat/b_rwkv_vocab_v20230424_tts.txt");
+    final ttsTokenizerPath = await fromAssetsToTemp("assets/config/tts/b_rwkv_vocab_v20230424_tts.txt");
 
     _sendPort!.send((
       "loadTTSModels",

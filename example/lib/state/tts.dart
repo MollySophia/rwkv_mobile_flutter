@@ -126,7 +126,7 @@ outputWavPath: $outputWavPath''');
 
   FV getTTSSpkNames() async {
     qq;
-    final data = await rootBundle.loadString("assets/config/chat/spk_names.json");
+    final data = await rootBundle.loadString("assets/config/tts/spk_names.json");
     final spkNames = await compute(_parseSpkNames, data);
     this.spkNames.u(spkNames);
   }
