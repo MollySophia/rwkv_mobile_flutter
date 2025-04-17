@@ -16,7 +16,7 @@ extension _$TTS on _TTS {
 
 /// Public methods
 extension $TTS on _TTS {
-  FV test() async {
+  FV testSpk() async {
     qq;
     // await runTTS(
     //   ttsText: "你好，世界",
@@ -41,7 +41,7 @@ extension $TTS on _TTS {
       outputWavPath: outputWavPath,
     );
 
-    int count = 100;
+    int count = 2000;
     while (!ttsDone.v) {
       await HF.wait(50);
       count--;
@@ -54,6 +54,46 @@ extension $TTS on _TTS {
     final result = await Share.shareXFiles([XFile(outputWavPath)], text: '''spk: $spkName
 ttsText: $ttsText
 instructionText: $instructionText
+outputWavPath: $outputWavPath''');
+
+    if (result.status == ShareResultStatus.success) {
+      qqr("Share success");
+    } else {
+      qqw("Share failed");
+    }
+  }
+
+  FV testWav() async {
+    qq;
+
+    final outputWavPath = P.app.cacheDir.v!.path + "/output.wav";
+    final ttsText = "你好，世界, 哈哈哈哈";
+    final instructionText = "";
+    final promptWavPath = await fromAssetsToTemp("assets/lib/tts/Trump.wav");
+    qqr(outputWavPath);
+    qqr(ttsText);
+    qqr(instructionText);
+
+    await runTTS(
+      ttsText: ttsText,
+      instructionText: instructionText,
+      promptWavPath: promptWavPath,
+      outputWavPath: outputWavPath,
+    );
+
+    int count = 2000;
+    while (!ttsDone.v) {
+      await HF.wait(50);
+      count--;
+      if (count <= 0) {
+        qqw("TTS done timeout");
+        break;
+      }
+    }
+
+    final result = await Share.shareXFiles([XFile(outputWavPath)], text: '''ttsText: $ttsText
+instructionText: $instructionText
+promptWavPath: $promptWavPath
 outputWavPath: $outputWavPath''');
 
     if (result.status == ShareResultStatus.success) {

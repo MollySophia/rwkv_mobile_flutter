@@ -125,9 +125,19 @@ class _Page extends ConsumerWidget {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: kDebugMode
-          ? FloatingActionButton(
-              onPressed: _onFloatingActionButtonPressed,
-              child: const Icon(Icons.bug_report),
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FloatingActionButton(
+                  onPressed: P.tts.testSpk,
+                  child: const Icon(Icons.person),
+                ),
+                const SizedBox(width: 16), // Add spacing between buttons
+                FloatingActionButton(
+                  onPressed: P.tts.testWav,
+                  child: const Icon(Icons.music_note),
+                ),
+              ],
             )
           : null,
       body: Stack(
@@ -144,11 +154,6 @@ class _Page extends ConsumerWidget {
         ],
       ),
     );
-  }
-
-  void _onFloatingActionButtonPressed() {
-    qq;
-    P.tts.test();
   }
 }
 
