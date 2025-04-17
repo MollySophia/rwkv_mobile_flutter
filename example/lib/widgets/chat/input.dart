@@ -20,11 +20,129 @@ import 'package:zone/state/p.dart';
 class Input extends ConsumerWidget {
   const Input({super.key});
 
-  void _onChanged(String value) {}
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final paddingBottom = ref.watch(P.app.quantizedIntPaddingBottom);
+    final primary = Theme.of(context).colorScheme.primary;
 
-  void onEditingComplete() {
-    qq;
+    final currentWorldType = ref.watch(P.rwkv.currentWorldType);
+    bool show = true;
+
+    switch (currentWorldType) {
+      case WorldType.engAudioQA:
+      case WorldType.chineseASR:
+      case WorldType.engASR:
+        show = false;
+      case WorldType.engVisualQA:
+      case WorldType.engVisualQAReason:
+      case null:
+        show = true;
+    }
+
+    return Positioned(
+      bottom: show ? 0 : -P.chat.inputHeight.v,
+      left: 0,
+      right: 0,
+      child: MeasureSize(
+        onChange: (size) {
+          P.chat.inputHeight.u(size.height);
+        },
+        child: ClipRRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+            child: C(
+              decoration: BD(
+                color: kW.wo(0.8),
+                border: Border(
+                  top: BorderSide(
+                    color: primary.wo(0.33),
+                    width: 0.5,
+                  ),
+                ),
+              ),
+              padding: EI.o(l: 10, r: 10, b: paddingBottom + 12, t: 12),
+              child: Co(
+                children: [
+                  const _TextField(),
+                  8.h,
+                  const _BottomBar(),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
+}
+
+class _TextField extends ConsumerWidget {
+  const _TextField();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final primary = Theme.of(context).colorScheme.primary;
+    final loaded = ref.watch(P.rwkv.loaded);
+    final loading = ref.watch(P.rwkv.loading);
+
+    String hintText = S.current.send_message_to_rwkv;
+
+    bool textFieldEnabled = loaded && !loading;
+
+    return GD(
+      onTap: textFieldEnabled ? null : _onTapTextFieldWhenItsDisabled,
+      child: KeyboardListener(
+        onKeyEvent: _onKeyEvent,
+        focusNode: P.chat.focusNode,
+        child: TextField(
+          enabled: textFieldEnabled,
+          controller: P.chat.textEditingController,
+          onSubmitted: P.chat.onSubmitted,
+          onChanged: _onChanged,
+          onEditingComplete: P.chat.onEditingComplete,
+          onAppPrivateCommand: _onAppPrivateCommand,
+          onTap: _onTap,
+          onTapOutside: _onTapOutside,
+          keyboardType: TextInputType.multiline,
+          enableSuggestions: true,
+          textInputAction: TextInputAction.send,
+          maxLines: 10,
+          minLines: 1,
+          decoration: InputDecoration(
+            contentPadding: const EI.o(
+              l: 12,
+              r: 12,
+              t: 4,
+              b: 4,
+            ),
+            fillColor: kW,
+            focusColor: kW,
+            hoverColor: kW,
+            iconColor: kW,
+            border: OutlineInputBorder(
+              borderRadius: 12.r,
+              borderSide: BorderSide(color: primary.wo(0.33)),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: 12.r,
+              borderSide: BorderSide(color: primary.wo(0.33)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: 12.r,
+              borderSide: BorderSide(color: primary.wo(0.33)),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: 12.r,
+              borderSide: BorderSide(color: primary.wo(0.33)),
+            ),
+            hintText: hintText,
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _onChanged(String value) {}
 
   void _onTap() async {
     qq;
@@ -65,123 +183,6 @@ class Input extends ConsumerWidget {
       P.fileManager.modelSelectorShown.u(true);
       return;
     }
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final paddingBottom = ref.watch(P.app.quantizedIntPaddingBottom);
-    final primary = Theme.of(context).colorScheme.primary;
-    final loaded = ref.watch(P.rwkv.loaded);
-    final loading = ref.watch(P.rwkv.loading);
-
-    String hintText = S.current.send_message_to_rwkv;
-
-    final currentWorldType = ref.watch(P.rwkv.currentWorldType);
-    final imagePath = ref.watch(P.world.imagePath);
-    bool textFieldEnabled = loaded && !loading;
-    bool show = true;
-
-    switch (currentWorldType) {
-      case WorldType.engVisualQA:
-      case WorldType.engVisualQAReason:
-        if (imagePath != null && imagePath.isNotEmpty) {
-          hintText = "Ask me anything about the image";
-        } else {
-          hintText = "Please select an image or take a photo";
-        }
-        textFieldEnabled = imagePath != null && imagePath.isNotEmpty;
-      case WorldType.engAudioQA:
-      case WorldType.chineseASR:
-      case WorldType.engASR:
-        show = false;
-      case null:
-        break;
-    }
-
-    return Positioned(
-      bottom: show ? 0 : -P.chat.inputHeight.v,
-      left: 0,
-      right: 0,
-      child: MeasureSize(
-        onChange: (size) {
-          P.chat.inputHeight.u(size.height);
-        },
-        child: ClipRRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-            child: C(
-              decoration: BD(
-                color: kW.wo(0.8),
-                border: Border(
-                  top: BorderSide(
-                    color: primary.wo(0.33),
-                    width: 0.5,
-                  ),
-                ),
-              ),
-              padding: EI.o(l: 10, r: 10, b: paddingBottom + 12, t: 12),
-              child: Co(
-                children: [
-                  GD(
-                    onTap: textFieldEnabled ? null : _onTapTextFieldWhenItsDisabled,
-                    child: KeyboardListener(
-                      onKeyEvent: _onKeyEvent,
-                      focusNode: P.chat.focusNode,
-                      child: TextField(
-                        enabled: textFieldEnabled,
-                        controller: P.chat.textEditingController,
-                        onSubmitted: P.chat.onSubmitted,
-                        onChanged: _onChanged,
-                        onEditingComplete: P.chat.onEditingComplete,
-                        onAppPrivateCommand: _onAppPrivateCommand,
-                        onTap: _onTap,
-                        onTapOutside: _onTapOutside,
-                        keyboardType: TextInputType.multiline,
-                        enableSuggestions: true,
-                        textInputAction: TextInputAction.send,
-                        maxLines: 10,
-                        minLines: 1,
-                        decoration: InputDecoration(
-                          contentPadding: const EI.o(
-                            l: 12,
-                            r: 12,
-                            t: 4,
-                            b: 4,
-                          ),
-                          fillColor: kW,
-                          focusColor: kW,
-                          hoverColor: kW,
-                          iconColor: kW,
-                          border: OutlineInputBorder(
-                            borderRadius: 12.r,
-                            borderSide: BorderSide(color: primary.wo(0.33)),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: 12.r,
-                            borderSide: BorderSide(color: primary.wo(0.33)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: 12.r,
-                            borderSide: BorderSide(color: primary.wo(0.33)),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: 12.r,
-                            borderSide: BorderSide(color: primary.wo(0.33)),
-                          ),
-                          hintText: hintText,
-                        ),
-                      ),
-                    ),
-                  ),
-                  8.h,
-                  const _BottomBar(),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }
 
