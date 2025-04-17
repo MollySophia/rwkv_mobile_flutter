@@ -93,8 +93,6 @@ class GroupItem extends ConsumerWidget {
     final localSpksInfoFile = P.fileManager.locals(spksInfoFileKey).v;
     P.rwkv.currentGroupInfo.u(groupInfo);
 
-    qqq("groupInfo: $groupInfo");
-
     P.rwkv.clearStates();
     P.chat.clearMessages();
 
@@ -113,7 +111,7 @@ class GroupItem extends ConsumerWidget {
       P.tts.getTTSSpkNames();
       Navigator.pop(getContext()!);
     } catch (e) {
-      if (kDebugMode) print("😡 $e");
+      qqe("$e");
       Alert.error(e.toString());
       P.rwkv.currentGroupInfo.u(null);
       return;

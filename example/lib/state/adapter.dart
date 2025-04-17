@@ -12,7 +12,7 @@ extension $Adapter on _Adapter {
     try {
       return await _channel.invokeMethod<T>(toNative.name, arguments);
     } catch (e) {
-      if (kDebugMode) print("😡 $e");
+      qqe("$e");
       return null;
     }
   }
@@ -20,8 +20,8 @@ extension $Adapter on _Adapter {
   FV _onCall(MethodCall call) async {
     final method = FromNative.values.byName(call.method);
     if (kDebugMode && !_registry.containsKey(method)) {
-      if (kDebugMode) print("🚧 Engine: HUD: Native calling received but there is no listener in adapter");
-      if (kDebugMode) print("🚧 `$method` is the name of method");
+      qqw("Engine: HUD: Native calling received but there is no listener in adapter");
+      qqw("`$method` is the name of method");
       return;
     }
 

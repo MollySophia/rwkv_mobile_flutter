@@ -11,7 +11,7 @@ void go(PageKey pageKey, {Object? extra}) {
   final location = pageKey.path;
   final context = getContext();
   if (context == null) {
-    if (kDebugMode) print("🚧 Context is null when calling go");
+    qqw("Context is null when calling go");
     return;
   }
   context.go(location, extra: extra);
@@ -21,7 +21,7 @@ void replace(PageKey pageKey, {Object? extra}) {
   final location = pageKey.path;
   final context = getContext();
   if (context == null) {
-    if (kDebugMode) print("🚧 Context is null when calling replace");
+    qqw("Context is null when calling replace");
     return;
   }
   context.replace(location, extra: extra);
@@ -32,7 +32,7 @@ Future<T?> push<T extends Object?>(PageKey pageKey, {Object? extra}) async {
   final location = pageKey.path;
   final context = getContext();
   if (context == null) {
-    if (kDebugMode) print("🚧 Context is null when calling push");
+    qqw("Context is null when calling push");
     return null;
   }
   final r = await context.push<T>(location, extra: extra);
@@ -43,7 +43,7 @@ Future<T?> push<T extends Object?>(PageKey pageKey, {Object? extra}) async {
 FV pop<T extends Object?>([T? result]) async {
   final context = getContext();
   if (context == null) {
-    if (kDebugMode) print("🚧 Context is null when calling pop");
+    qqw("Context is null when calling pop");
     return;
   }
   if (!context.canPop()) {

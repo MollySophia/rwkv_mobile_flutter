@@ -73,7 +73,7 @@ class WorldGroupItem extends ConsumerWidget {
       }
       Navigator.pop(getContext()!);
     } catch (e) {
-      if (kDebugMode) print("😡 $e");
+      qqe("$e");
       Alert.error(e.toString());
       P.rwkv.currentWorldType.u(null);
       return;

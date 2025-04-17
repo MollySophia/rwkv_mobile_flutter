@@ -56,8 +56,8 @@ extension $World on _World {
         qqq("AudioStream Done");
       },
       onError: (error, stackTrace) {
-        if (kDebugMode) print("😡 AudioStream Error: $error");
-        if (kDebugMode) print("😡 AudioStream StackTrace: $stackTrace");
+        qqe("AudioStream Error: $error");
+        qqe("AudioStream StackTrace: $stackTrace");
       },
     );
   }

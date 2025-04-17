@@ -104,7 +104,7 @@ extension $FileManager on _FileManager {
         throw Exception("Enqueue failed");
       }
     } catch (e) {
-      if (kDebugMode) print("😡 getFile error: $e");
+      qqe("getFile error: $e");
       state.u(state.v.copyWith(downloading: false));
     }
   }
@@ -158,8 +158,8 @@ extension _$FileManager on _FileManager {
     final pair = pairs.firstWhereOrNull((e) => e.$2.downloadTaskId == taskId);
 
     if (pair == null) {
-      if (kDebugMode) print("😡 _onTaskUpdate:");
-      if (kDebugMode) print("😡 taskId: $taskId not found");
+      qqe("_onTaskUpdate:");
+      qqe("taskId: $taskId not found");
       bd.FileDownloader().cancelTaskWithId(taskId);
       return;
     }
@@ -194,8 +194,8 @@ extension _$FileManager on _FileManager {
     final pair = pairs.firstWhereOrNull((e) => e.$2.downloadTaskId == taskId);
 
     if (pair == null) {
-      if (kDebugMode) print("😡 _onTaskUpdate:");
-      if (kDebugMode) print("😡 taskId: $taskId not found");
+      qqe("_onTaskUpdate:");
+      qqe("taskId: $taskId not found");
       return;
     }
 
@@ -211,7 +211,7 @@ extension _$FileManager on _FileManager {
     qqq("$status $exception $responseBody $responseHeaders $responseStatusCode");
 
     bool downloading = false;
-    if (kDebugMode) print("🔥 $status");
+    qqq("🔥 $status");
     switch (status) {
       case bd.TaskStatus.enqueued:
         downloading = true;

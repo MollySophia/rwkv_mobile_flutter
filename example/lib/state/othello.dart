@@ -294,7 +294,7 @@ extension _$ on _Othello {
 
       if (placing == null) {
         if (token != _kPsToken) {
-          if (kDebugMode) print("😡 Placing is null:${token.toString()}");
+          qqe("Placing is null:${token.toString()}");
         } else {
           qqq("Game over!");
         }
@@ -343,7 +343,7 @@ extension _$ on _Othello {
     final pageKey = P.app.pageKey.v;
     if (pageKey != PageKey.othello) return;
     qqq("_onStreamError");
-    if (kDebugMode) print("😡 error: $error");
+    qqe("error: $error");
     receivingTokens.u(false);
   }
 

@@ -20,7 +20,7 @@ Future<String> fromAssetsToTemp(String assetsPath) async {
     qqw("从assets到temp的时间: ${endTimeStamp - startTimeStamp}ms");
     return tempFile.path;
   } catch (e) {
-    if (kDebugMode) print("😡 $e");
+    qqe("$e");
     return "";
   }
 }

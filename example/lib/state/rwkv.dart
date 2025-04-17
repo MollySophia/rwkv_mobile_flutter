@@ -88,7 +88,7 @@ extension $RWKV on _RWKV {
 
     final sendPort = _sendPort;
     if (sendPort == null) {
-      if (kDebugMode) print("🚧 sendPort is null");
+      qqw("sendPort is null");
       return;
     }
     sendPort.send(("message", messages));
@@ -109,7 +109,7 @@ extension $RWKV on _RWKV {
     decodeSpeed.u(0);
     final sendPort = _sendPort;
     if (sendPort == null) {
-      if (kDebugMode) print("🚧 sendPort is null");
+      qqw("sendPort is null");
       return;
     }
     sendPort.send(("generateBlocking", prompt));
@@ -136,7 +136,7 @@ extension $RWKV on _RWKV {
     decodeSpeed.u(0);
     final sendPort = _sendPort;
     if (sendPort == null) {
-      if (kDebugMode) print("🚧 sendPort is null");
+      qqw("sendPort is null");
       return;
     }
     sendPort.send(("clearStates", null));
@@ -145,7 +145,7 @@ extension $RWKV on _RWKV {
   FV stop() async {
     final sendPort = _sendPort;
     if (sendPort == null) {
-      if (kDebugMode) print("🚧 sendPort is null");
+      qqw("sendPort is null");
       return;
     }
     sendPort.send(("stop", null));
@@ -221,7 +221,7 @@ extension $RWKV on _RWKV {
         final endMS = qDebugShorterMicroseconds;
         qqr("initRuntime done in ${endMS - startMS}ms");
       } catch (e) {
-        if (kDebugMode) print("😡 initRuntime failed: $e");
+        qqe("initRuntime failed: $e");
         Alert.error("Failed to load model: $e");
         return;
       }
@@ -299,7 +299,7 @@ extension $RWKV on _RWKV {
         final endMS = qDebugShorterMicroseconds;
         qqr("initRuntime done in ${endMS - startMS}ms");
       } catch (e) {
-        if (kDebugMode) print("😡 initRuntime failed: $e");
+        qqe("initRuntime failed: $e");
         Alert.error("Failed to load model: $e");
         return;
       }
@@ -695,7 +695,7 @@ extension _$RWKV on _RWKV {
         _initRuntimeCompleter.complete();
       } else {
         final error = message["error"];
-        if (kDebugMode) print("😡 initRuntime failed: $error");
+        qqe("initRuntime failed: $error");
         if (_initRuntimeCompleter.isCompleted) return;
         _initRuntimeCompleter.completeError(error);
       }
@@ -737,7 +737,7 @@ extension _$RWKV on _RWKV {
 
     // TODO: 需要更健壮的代码: method: "", data: ""
 
-    if (kDebugMode) print("😡 unknown message: $message");
+    qqe("unknown message: $message");
   }
 }
 
