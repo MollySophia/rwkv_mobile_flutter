@@ -1,6 +1,7 @@
 // ignore: unused_import
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/args.dart';
 import 'package:zone/config.dart';
@@ -121,23 +122,33 @@ class _Page extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const Scaffold(
+    return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: kDebugMode
+          ? FloatingActionButton(
+              onPressed: _onFloatingActionButtonPressed,
+              child: const Icon(Icons.bug_report),
+            )
+          : null,
       body: Stack(
         children: [
           List(),
           Empty(),
           VisualEmpty(),
           AudioEmpty(),
-          //
           ChatAppBar(),
           _NavigationBarBottomLine(),
-          //
           Suggestions(),
           Input(),
           AudioInput(),
         ],
       ),
     );
+  }
+
+  void _onFloatingActionButtonPressed() {
+    qq;
+    P.tts.test();
   }
 }
 

@@ -110,6 +110,7 @@ class GroupItem extends ConsumerWidget {
         speechTokenizerPath: localSpeechTokenizerFile.targetPath,
         spksInfoPath: localSpksInfoFile.targetPath,
       );
+      P.tts.getTTSSpkNames();
       Navigator.pop(getContext()!);
     } catch (e) {
       if (kDebugMode) print("😡 $e");

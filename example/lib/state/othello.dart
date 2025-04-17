@@ -107,6 +107,9 @@ extension $Othello on _Othello {
 /// Private methods
 extension _$ on _Othello {
   FV _init() async {
+    if (P.app.demoType.v != DemoType.othello) return;
+    qq;
+
     P.app.pageKey.lb((_, next) {
       if (next == PageKey.othello) {
         start();

@@ -47,6 +47,7 @@ dependencies:
   path_provider: # https://pub.dev/packages/path_provider/
   record: # https://pub.dev/packages/record/
   sentry_flutter: # https://pub.dev/packages/sentry_flutter/
+  share_plus: # https://pub.dev/packages/share_plus/
   system_info2: # https://pub.dev/packages/system_info2/
   url_launcher: # https://pub.dev/packages/url_launcher/
   vclibs: # https://pub.dev/packages/vclibs/

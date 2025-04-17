@@ -31,6 +31,8 @@ class Debugger extends ConsumerWidget {
     final editingIndex = ref.watch(P.chat.editingIndex);
     final branchesCountList = ref.watch(P.chat.branchesCountList);
     final receiveId = ref.watch(P.chat.receiveId);
+    final ttsDone = ref.watch(P.tts.ttsDone);
+    final spkNames = ref.watch(P.tts.spkNames);
 
     return Positioned(
       left: 0,
@@ -83,6 +85,10 @@ class Debugger extends ConsumerWidget {
                   // T(autoPauseId.toString()),
                   T("editingIndex".codeToName),
                   T(editingIndex.toString()),
+                  T("ttsDone".codeToName),
+                  T(ttsDone.toString()),
+                  T("spkNames length".codeToName),
+                  T(spkNames.length.toString()),
                 ].indexMap((index, e) {
                   return C(
                     margin: EI.o(t: index % 2 == 0 ? 0 : 1),
