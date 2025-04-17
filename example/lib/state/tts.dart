@@ -18,12 +18,6 @@ extension _$TTS on _TTS {
 extension $TTS on _TTS {
   FV testSpk() async {
     qq;
-    // await runTTS(
-    //   ttsText: "你好，世界",
-    //   instructionText: "",
-    //   promptWavPath: "prompt.wav",
-    //   outputWavPath: "output.wav",
-    // );
 
     final spkName = spkNames.v.random!;
     final outputWavPath = P.app.cacheDir.v!.path + "/output.wav";
@@ -67,7 +61,7 @@ outputWavPath: $outputWavPath''');
     qq;
 
     final outputWavPath = P.app.cacheDir.v!.path + "/output.wav";
-    final ttsText = "你好，世界, 哈哈哈哈";
+    final ttsText = "奇怪奇怪真奇怪";
     final instructionText = "";
     final promptWavPath = await fromAssetsToTemp("assets/lib/tts/Trump.wav");
     qqr(outputWavPath);

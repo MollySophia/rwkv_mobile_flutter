@@ -123,23 +123,6 @@ class _Page extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: kDebugMode
-          ? Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                FloatingActionButton(
-                  onPressed: P.tts.testSpk,
-                  child: const Icon(Icons.person),
-                ),
-                const SizedBox(width: 16), // Add spacing between buttons
-                FloatingActionButton(
-                  onPressed: P.tts.testWav,
-                  child: const Icon(Icons.music_note),
-                ),
-              ],
-            )
-          : null,
       body: Stack(
         children: [
           List(),
