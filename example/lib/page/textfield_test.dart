@@ -22,7 +22,7 @@ class _TextFieldTestState extends State<TextFieldTest> {
         },
         child: C(
           decoration: const BD(color: kW),
-          child: Column(
+          child: Co(
             children: [
               TextField(
                 focusNode: _focusNode,

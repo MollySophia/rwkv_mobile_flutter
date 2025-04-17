@@ -65,5 +65,6 @@
   "back_to_chat": "返回聊天",
   "delete_all": "全部删除",
   "download_missing": "下载缺失文件",
-  "exploring": "探索中..."
+  "exploring": "探索中...",
+  "i_want_rwkv_to_say": "我想让 RWKV 说..."
 }

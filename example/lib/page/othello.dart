@@ -245,13 +245,13 @@ class _ModelSettings extends ConsumerWidget {
                   )
                 : Wrap(
                     children: [
-                      Row(
+                      Ro(
                         children: [
                           const T("Search Depth", textAlign: TextAlign.center),
                           searchDepthControls,
                         ],
                       ),
-                      Row(
+                      Ro(
                         children: [
                           const T("Search Breadth", textAlign: TextAlign.center),
                           searchBreadthControls,

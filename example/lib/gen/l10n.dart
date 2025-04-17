@@ -715,6 +715,16 @@ class S {
       args: [],
     );
   }
+
+  /// `I want RWKV to say...`
+  String get i_want_rwkv_to_say {
+    return Intl.message(
+      'I want RWKV to say...',
+      name: 'i_want_rwkv_to_say',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

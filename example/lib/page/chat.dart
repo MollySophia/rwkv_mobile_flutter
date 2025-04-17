@@ -181,7 +181,7 @@ class _RoleSelector extends ConsumerWidget {
                 itemBuilder: (context, index) {
                   return C(
                     margin: const EI.o(b: 12),
-                    child: Row(
+                    child: Ro(
                       children: [
                         Exp(
                           child: SelectionArea(

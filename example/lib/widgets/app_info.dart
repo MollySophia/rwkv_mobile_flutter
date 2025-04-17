@@ -227,8 +227,8 @@ class AppInfo extends ConsumerWidget {
             children: [
               16.w,
               Exp(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Co(
+                  c: CAA.start,
                   children: [
                     T(title, s: const TS(s: 14, w: FontWeight.bold)),
                     4.h,

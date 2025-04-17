@@ -76,4 +76,39 @@ enum TTSInstruction {
             "[mn]",
           ],
       };
+
+//       当然可以～以下是这些声音标签转换成表情 (emoji) 的版本：
+
+// - `[breath]` → 😮‍💨
+// - `[noise]` → 🔊
+// - `[laughter]` → 😂
+// - `[cough]` → 🤧
+// - `[clucking]` → 🐔
+// - `[accent]` → 🗣️
+// - `[quick_breath]` → 😤
+// - `[hissing]` → 🐍
+// - `[sigh]` → 😔
+// - `[vocalized-noise]` → 🎤
+// - `[lipsmack]` → 😗
+// - `[mn]` → 🤔
+
+// 如果有特定语境或语气，我可以帮你微调！要不要来点更夸张或可爱风格的？
+
+  List<String> get emojiOptions => switch (this) {
+        intonation => [
+            "😮‍💨",
+            "🔊",
+            "😂",
+            "🤧",
+            "🐔",
+            "🗣️",
+            "😤",
+            "🐍",
+            "😔",
+            "🎤",
+            "😗",
+            "🤔",
+          ],
+        _ => [],
+      };
 }

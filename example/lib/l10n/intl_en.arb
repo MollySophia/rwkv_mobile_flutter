@@ -285,5 +285,6 @@
   "exploring": "Exploring...",
   "@exploring": {
     "description": "Label for exploring"
-  }
+  },
+  "i_want_rwkv_to_say": "I want RWKV to say..."
 }

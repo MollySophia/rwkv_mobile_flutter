@@ -16,6 +16,8 @@ import 'package:halo/halo.dart';
 import 'package:zone/model/demo_type.dart';
 import 'package:zone/model/world_type.dart';
 import 'package:zone/state/p.dart';
+import 'package:zone/widgets/chat/bottom_bar.dart';
+import 'package:zone/widgets/chat/t_t_s_bar.dart';
 
 class Input extends ConsumerWidget {
   const Input({super.key});
@@ -25,10 +27,13 @@ class Input extends ConsumerWidget {
     final paddingBottom = ref.watch(P.app.quantizedIntPaddingBottom);
     final primary = Theme.of(context).colorScheme.primary;
 
-    final currentWorldType = ref.watch(P.rwkv.currentWorldType);
+    final worldType = ref.watch(P.rwkv.currentWorldType);
+
+    final demoType = ref.watch(P.app.demoType);
+
     bool show = true;
 
-    switch (currentWorldType) {
+    switch (worldType) {
       case WorldType.engAudioQA:
       case WorldType.chineseASR:
       case WorldType.engASR:
@@ -38,6 +43,8 @@ class Input extends ConsumerWidget {
       case null:
         show = true;
     }
+
+    qqq(paddingBottom);
 
     return Positioned(
       bottom: show ? 0 : -P.chat.inputHeight.v,
@@ -60,12 +67,18 @@ class Input extends ConsumerWidget {
                   ),
                 ),
               ),
-              padding: EI.o(l: 10, r: 10, b: paddingBottom + 12, t: 12),
+              padding: EI.o(
+                l: 10,
+                r: 10,
+                b: paddingBottom + 12,
+                t: 12,
+              ),
               child: Co(
                 children: [
                   const _TextField(),
                   8.h,
-                  const _BottomBar(),
+                  if (demoType != DemoType.tts) const BottomBar(),
+                  if (demoType == DemoType.tts) const TTSBar(),
                 ],
               ),
             ),
@@ -84,8 +97,19 @@ class _TextField extends ConsumerWidget {
     final primary = Theme.of(context).colorScheme.primary;
     final loaded = ref.watch(P.rwkv.loaded);
     final loading = ref.watch(P.rwkv.loading);
+    final demoType = ref.watch(P.app.demoType);
 
-    String hintText = S.current.send_message_to_rwkv;
+    late final String hintText;
+    switch (demoType) {
+      case DemoType.chat:
+      case DemoType.fifthteenPuzzle:
+      case DemoType.othello:
+      case DemoType.sudoku:
+      case DemoType.world:
+        hintText = S.current.send_message_to_rwkv;
+      case DemoType.tts:
+        hintText = S.current.i_want_rwkv_to_say;
+    }
 
     bool textFieldEnabled = loaded && !loading;
 
@@ -183,285 +207,5 @@ class _TextField extends ConsumerWidget {
       P.fileManager.modelSelectorShown.u(true);
       return;
     }
-  }
-}
-
-class _BottomBar extends ConsumerWidget {
-  const _BottomBar();
-
-  void _onRightButtonPressed() async {
-    qq;
-
-    final currentWorldType = P.rwkv.currentWorldType.v;
-    final imagePath = P.world.imagePath.v;
-
-    if (currentWorldType != null && imagePath == null) {
-      await showImageSelector();
-      return;
-    }
-
-    await P.chat.onInputRightButtonPressed();
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final receiving = ref.watch(P.chat.receivingTokens);
-    final canSend = ref.watch(P.chat.canSend);
-    final editingBotMessage = ref.watch(P.chat.editingBotMessage);
-    final color = Theme.of(context).colorScheme.primary;
-    final prefillSpeed = ref.watch(P.rwkv.prefillSpeed);
-    final decodeSpeed = ref.watch(P.rwkv.decodeSpeed);
-    final currentWorldType = ref.watch(P.rwkv.currentWorldType);
-    final demoType = ref.watch(P.app.demoType);
-    final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
-    final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
-
-    return Row(
-      children: [
-        if (currentWorldType?.isVisualDemo ?? false)
-          GD(
-            onTap: () async {
-              await showImageSelector();
-            },
-            child: C(
-              decoration: BD(
-                color: primaryContainer,
-                border: Border.all(
-                  color: color.wo(0.5),
-                ),
-                borderRadius: 12.r,
-              ),
-              padding: const EI.o(l: 8, r: 8, t: 8, b: 8),
-              child: T(
-                "Select new image",
-                s: TS(c: color),
-              ),
-            ),
-          ),
-        if (demoType == DemoType.chat) const _ReasonButton(),
-        if (usingReasoningModel) 4.w,
-        if (usingReasoningModel)
-          if (demoType == DemoType.chat) const _LangugaeButton(),
-        8.w,
-        Co(
-          c: CAA.start,
-          children: [
-            T("Prefill: ${prefillSpeed.toStringAsFixed(2)} t/s", s: TS(c: kB.wo(0.6), s: 10)),
-            T("Decode: ${decodeSpeed.toStringAsFixed(2)} t/s", s: TS(c: kB.wo(0.6), s: 10)),
-          ],
-        ),
-        const Spacer(),
-        if (receiving)
-          GD(
-            onTap: P.chat.onStopButtonPressed,
-            child: C(
-              decoration: const BD(color: kC),
-              child: Stack(
-                children: [
-                  SizedBox(
-                    width: 46,
-                    height: 34,
-                    child: Center(
-                      child: C(
-                        decoration: BD(color: color, borderRadius: 2.r),
-                        width: 12,
-                        height: 12,
-                      ),
-                    ),
-                  ),
-                  SB(
-                    width: 46,
-                    height: 34,
-                    child: Center(
-                      child: SB(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(
-                          color: color.wo(0.5),
-                          strokeWidth: 3,
-                          strokeCap: StrokeCap.round,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        if (!receiving)
-          AnimatedOpacity(
-            opacity: canSend ? 1 : 0.333,
-            duration: 250.ms,
-            child: GD(
-              onTap: _onRightButtonPressed,
-              child: C(
-                padding: const EI.s(h: 10, v: 5),
-                child: Icon(
-                  (Platform.isIOS || Platform.isMacOS)
-                      ? editingBotMessage
-                          ? CupertinoIcons.pencil_circle_fill
-                          : CupertinoIcons.arrow_up_circle_fill
-                      : editingBotMessage
-                          ? Icons.edit
-                          : Icons.send,
-                  color: color,
-                ),
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-}
-
-class _ReasonButton extends ConsumerWidget {
-  const _ReasonButton();
-
-  void _onTap() async {
-    final loading = P.rwkv.loading.v;
-    if (loading) {
-      Alert.info("Please wait for the model to load");
-      return;
-    }
-    final receiving = P.chat.receivingTokens.v;
-    if (receiving) {
-      Alert.info("Please wait for the model to finish generating");
-      return;
-    }
-    final currentModel = P.rwkv.currentModel.v;
-    if (currentModel == null) {
-      if (P.fileManager.modelSelectorShown.v) return;
-      P.fileManager.modelSelectorShown.u(true);
-      return;
-    }
-    final newValue = !P.rwkv.usingReasoningModel.v;
-    await P.rwkv.setModelConfig(usingReasoningModel: newValue);
-
-    if (newValue) Alert.success(S.current.reasoning_enabled);
-
-    Gaimon.light();
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final color = Theme.of(context).colorScheme.primary;
-    final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
-    final loading = ref.watch(P.rwkv.loading);
-    return GD(
-      onTap: _onTap,
-      child: AnimatedContainer(
-        duration: 150.ms,
-        decoration: BD(
-          color: usingReasoningModel ? color : kC,
-          border: Border.all(
-            color: color.wo(0.5),
-          ),
-          borderRadius: 12.r,
-        ),
-        padding: const EI.o(l: 4, r: 8, t: 4, b: 4),
-        child: Ro(
-          c: CAA.center,
-          children: [
-            if (!loading)
-              Icon(
-                Icons.emoji_objects_outlined,
-                color: usingReasoningModel ? kW : color,
-              ),
-            if (loading)
-              C(
-                margin: const EI.o(l: 8, t: 6, b: 6, r: 10),
-                height: 12,
-                width: 12,
-                child: CircularProgressIndicator(
-                  color: usingReasoningModel ? kW : color,
-                  strokeWidth: 2,
-                ),
-              ),
-            if (!loading)
-              T(
-                S.current.reason,
-                s: TS(c: usingReasoningModel ? kW : color),
-              ),
-            if (loading)
-              T(
-                S.current.loading,
-                s: TS(c: usingReasoningModel ? kW : color),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _LangugaeButton extends ConsumerWidget {
-  const _LangugaeButton();
-
-  void _onTap() async {
-    final loading = P.rwkv.loading.v;
-    if (loading) {
-      Alert.info(S.current.please_wait_for_the_model_to_load);
-      return;
-    }
-    final receiving = P.chat.receivingTokens.v;
-    if (receiving) {
-      Alert.info(S.current.please_wait_for_the_model_to_finish_generating);
-      return;
-    }
-    final currentModel = P.rwkv.currentModel.v;
-    if (currentModel == null) {
-      if (P.fileManager.modelSelectorShown.v) return;
-      P.fileManager.modelSelectorShown.u(true);
-      return;
-    }
-    final newValue = !P.rwkv.preferChinese.v;
-    await P.rwkv.setModelConfig(preferChinese: newValue);
-
-    if (newValue) Alert.success(S.current.prefer_chinese);
-
-    Gaimon.light();
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final color = Theme.of(context).colorScheme.primary;
-    final preferChinese = ref.watch(P.rwkv.preferChinese);
-    final loading = ref.watch(P.rwkv.loading);
-    return AnimatedOpacity(
-      opacity: loading ? 0.33 : 1,
-      duration: 250.ms,
-      child: GD(
-        onTap: _onTap,
-        child: C(
-          decoration: BD(
-            color: preferChinese ? color : kC,
-            border: Border.all(
-              color: color.wo(0.5),
-            ),
-            borderRadius: 12.r,
-          ),
-          padding: const EI.o(l: 4, r: 8, t: 4, b: 4),
-          child: Ro(
-            c: CAA.center,
-            children: [
-              Icon(
-                Icons.translate,
-                color: preferChinese ? kW : color,
-              ),
-              2.w,
-              Co(
-                c: CAA.start,
-                m: MAA.center,
-                children: [
-                  if (preferChinese) T(S.current.prefer, s: const TS(c: kW, s: 10, height: 1)),
-                  if (preferChinese) T(S.current.chinese, s: const TS(c: kW, s: 10, height: 1)),
-                  if (!preferChinese) T(S.current.auto, s: TS(c: color, s: 10, height: 1)),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }
