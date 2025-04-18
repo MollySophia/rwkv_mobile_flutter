@@ -48,9 +48,16 @@ class Message extends ConsumerWidget {
     P.chat.focusNode.unfocus();
     P.chat.latestClickedMessage.u(msg);
     final isMine = msg.isMine;
-    final isAudio = msg.type == model.MessageType.userAudio;
 
-    if (isMine && isAudio) {
+    if (isMine && msg.type == model.MessageType.userAudio) {
+      final audioUrl = msg.audioUrl;
+      qqq("audioUrl: $audioUrl");
+      if (audioUrl == null) return;
+      P.world.play(path: audioUrl);
+      return;
+    }
+
+    if (msg.type == model.MessageType.ttsGeneration) {
       final audioUrl = msg.audioUrl;
       qqq("audioUrl: $audioUrl");
       if (audioUrl == null) return;

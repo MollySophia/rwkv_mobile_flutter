@@ -8,12 +8,12 @@ class _Chat {
   late final scrollController = ScrollController();
 
   /// The text editing controller of the chat page input
-  late final textEditingController = TextEditingController();
+  late final textEditingController = TextEditingController(text: kDebugMode ? "Hello World" : "");
 
   /// The focus node of the chat page input
   late final focusNode = FocusNode();
 
-  late final _textInInput = qs("");
+  late final _textInInput = qs(kDebugMode ? "Hello World" : "");
 
   late final canSend = qp((ref) {
     final textInInput = ref.watch(_textInInput);
@@ -641,7 +641,7 @@ extension _$Chat on _Chat {
   }
 
   void _fullyReceived() {
-    qqq;
+    qq;
 
     _updateMessageById(
       id: receiveId.v!,
@@ -691,7 +691,15 @@ extension _$Chat on _Chat {
 
   FV _onStreamEvent(LLMEvent event) async {
     final demoType = P.app.demoType.v;
-    if (demoType != DemoType.chat && demoType != DemoType.world) return;
+    // if (demoType != DemoType.chat && demoType != DemoType.world) return;
+    switch (demoType) {
+      case DemoType.chat:
+      case DemoType.world:
+      case DemoType.tts:
+        break;
+      default:
+        return;
+    }
 
     switch (event.type) {
       case _RWKVMessageType.isGenerating:
@@ -702,6 +710,10 @@ extension _$Chat on _Chat {
     }
 
     switch (event.type) {
+      case _RWKVMessageType.ttsDone:
+        qq;
+        _fullyReceived();
+        break;
       case _RWKVMessageType.responseBufferIds:
         break;
       case _RWKVMessageType.isGenerating:

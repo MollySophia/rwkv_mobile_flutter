@@ -5,6 +5,8 @@ enum MessageType {
   text,
   userImage,
   userAudio,
+  userTTS,
+  ttsGeneration,
 }
 
 @immutable

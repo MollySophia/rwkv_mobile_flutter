@@ -231,6 +231,8 @@ extension _$ on _Othello {
     if (pageKey != PageKey.othello) return;
 
     switch (event.type) {
+      case _RWKVMessageType.ttsDone:
+        break;
       case _RWKVMessageType.responseBufferIds:
         final ids = event.responseBufferIds;
         if (ids != null) {

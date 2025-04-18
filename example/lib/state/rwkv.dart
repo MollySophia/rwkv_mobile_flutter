@@ -596,8 +596,6 @@ extension _$RWKV on _RWKV {
       return;
     }
 
-    qq;
-
     if (message["responseBufferContent"] != null) {
       final responseBufferContent = message["responseBufferContent"];
       _messagesController.add(LLMEvent(
@@ -714,9 +712,14 @@ extension _$RWKV on _RWKV {
       return;
     }
 
-    if (message["ttsDone"] != null && message["ttsDone"] == true) {
-      qqr("ttsDone: true");
+    if (message["ttsDone"] != null) {
+      qqr("ttsDone");
       P.tts.ttsDone.u(true);
+      final ttsDoneWithSuccess = message["ttsDone"] == true;
+      _messagesController.add(LLMEvent(
+        ttsDoneWithSuccess: ttsDoneWithSuccess,
+        type: _RWKVMessageType.ttsDone,
+      ));
       return;
     }
 
@@ -746,7 +749,10 @@ enum _RWKVMessageType {
 
   responseBufferIds,
 
-  generateStop;
+  generateStop,
+
+  ttsDone,
+  ;
 }
 
 @immutable
@@ -755,12 +761,14 @@ final class LLMEvent {
   final String content;
   final List<int>? responseBufferIds;
   final int? token;
+  final bool? ttsDoneWithSuccess;
 
   const LLMEvent({
     required this.type,
     this.content = "",
     this.responseBufferIds,
     this.token,
+    this.ttsDoneWithSuccess,
   });
 
   @override

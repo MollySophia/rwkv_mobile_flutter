@@ -31,6 +31,16 @@ extension _$TTS on _TTS {
         spkShown.u(false);
       }
     });
+  void _onTextChanged(String next) {
+    // qqq("_onTextChanged");
+    final textInController = textEditingController.text;
+    if (next != textInController) textEditingController.text = next;
+  }
+
+  void _onTextEditingControllerValueChanged() {
+    // qqq("_onTextEditingControllerValueChanged");
+    final textInController = textEditingController.text;
+    if (_textInInput.v != textInController) _textInInput.u(textInController);
   }
 }
 
@@ -232,6 +242,94 @@ outputWavPath: $outputWavPath''');
       name = name.replaceAll(key, value);
     });
     return name;
+  }
+
+  FV gen() async {
+    qq;
+    late final Message? msg;
+    final id = qDebugShorterMilliseconds;
+    final receiveId = qDebugShorterMilliseconds + 1;
+    final selectSourceAudioPath = this.selectSourceAudioPath.q;
+    final spkName = selectSpkName.q;
+    final ttsText = P.chat.textEditingController.text;
+
+    // TODO: implement instructionText
+    final instructionText = "";
+
+    final outputWavPath = P.app.cacheDir.v!.path + "/$receiveId.output.wav";
+
+    if (ttsText.isEmpty) {
+      Alert.warning("Please enter text to generate TTS");
+      return;
+    }
+
+    if (spkName == null && selectSourceAudioPath == null) {
+      Alert.warning("Please select a spk or a wav file");
+      return;
+    }
+
+    final locale = Intl.getCurrentLocale();
+    final useEn = locale.startsWith("en");
+
+    final finalUserMessageContent = useEn
+        ? """User:
+${spkName != null ? "- Use ${P.tts.safe(spkName)} as the speaker" : ""}
+${selectSourceAudioPath != null ? "- Use $selectSourceAudioPath as the background music" : ""}
+- Use $ttsText as the speaking content
+${instructionText.isNotEmpty ? "- Use $instructionText as the speaking instruction" : ""}"""
+        : """用户要求：
+${spkName != null ? "- 使用 ${P.tts.safe(spkName)} 作为说话人" : ""}
+${selectSourceAudioPath != null ? "- 使用 $selectSourceAudioPath 作为背景音乐" : ""}
+- 使用 $ttsText 作为说话内容
+${instructionText.isNotEmpty ? "- 使用 $instructionText 作为说话指令" : ""}""";
+
+    msg = Message(
+      id: id,
+      content: finalUserMessageContent,
+      isMine: true,
+      type: MessageType.userTTS,
+      isReasoning: false,
+      paused: false,
+      audioUrl: selectSourceAudioPath,
+    );
+
+    P.chat.messages.ua(msg);
+
+    Future.delayed(34.ms).then((_) {
+      P.chat.scrollToBottom();
+    });
+
+    final receiveMsg = Message(
+      id: receiveId,
+      content: "",
+      isMine: false,
+      changing: true,
+      isReasoning: P.rwkv.usingReasoningModel.v,
+      paused: false,
+      type: MessageType.ttsGeneration,
+      audioUrl: outputWavPath,
+    );
+
+    P.chat.receiveId.u(receiveId);
+    P.chat.messages.ua(receiveMsg);
+
+    if (spkName != null) {
+      await runTTSWithPredefinedSpk(
+        ttsText: ttsText,
+        instructionText: instructionText,
+        spkName: spkName,
+        outputWavPath: outputWavPath,
+      );
+    }
+
+    if (selectSourceAudioPath != null) {
+      await runTTS(
+        ttsText: ttsText,
+        instructionText: instructionText,
+        promptWavPath: selectSourceAudioPath,
+        outputWavPath: outputWavPath,
+      );
+    }
   }
 }
 

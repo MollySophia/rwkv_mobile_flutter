@@ -27,12 +27,23 @@ class UserMessageBottom extends ConsumerWidget {
     final primaryColor = Theme.of(context).colorScheme.primary;
     final worldType = ref.watch(P.rwkv.currentWorldType);
 
-    bool showUserEditButton = true;
-    bool showUserCopyButton = true;
+    bool showUserEditButton = false;
+    bool showUserCopyButton = false;
 
     switch (worldType) {
       case null:
-        break;
+        switch (msg.type) {
+          case model.MessageType.text:
+          case model.MessageType.userImage:
+          case model.MessageType.userAudio:
+            showUserEditButton = true;
+            showUserCopyButton = true;
+          case model.MessageType.userTTS:
+          case model.MessageType.ttsGeneration:
+            showUserEditButton = false;
+            showUserCopyButton = true;
+        }
+
       default:
         showUserEditButton = false;
         showUserCopyButton = false;

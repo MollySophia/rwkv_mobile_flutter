@@ -46,13 +46,19 @@ class _AudioInteractor extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SB(
       height: 250,
-      child: Center(child: T("Audio Interactor")),
+      child: Center(child: T("🚧 WIP: Audio Interactor\n\na. Select a voice file\nb. Record a voice\nc. Play a voice")),
     );
   }
 }
 
 class _Intonation extends ConsumerWidget {
   const _Intonation();
+
+  void _onTap(String e) {
+    qqq(e);
+    P.chat.textEditingController.text += e;
+    Gaimon.light();
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -66,7 +72,9 @@ class _Intonation extends ConsumerWidget {
           children: TTSInstruction.intonation.options.indexMap((index, e) {
             final emoji = TTSInstruction.intonation.emojiOptions[index];
             return GD(
-              onTap: () {},
+              onTap: () {
+                _onTap(e);
+              },
               child: C(
                 decoration: BD(
                   color: kC,
@@ -183,16 +191,10 @@ class _Actions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final receiving = ref.watch(P.chat.receivingTokens);
+    final ttsDone = ref.watch(P.tts.ttsDone);
     final canSend = ref.watch(P.chat.canSend);
     final editingBotMessage = ref.watch(P.chat.editingBotMessage);
     final color = Theme.of(context).colorScheme.primary;
-    final prefillSpeed = ref.watch(P.rwkv.prefillSpeed);
-    final decodeSpeed = ref.watch(P.rwkv.decodeSpeed);
-    final currentWorldType = ref.watch(P.rwkv.currentWorldType);
-    final demoType = ref.watch(P.app.demoType);
-    final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
-    final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
 
     return Ro(
       children: [
@@ -201,44 +203,41 @@ class _Actions extends ConsumerWidget {
         _SpkButton(),
         _IntonationButton(),
         Spacer(),
-        if (receiving)
-          GD(
-            onTap: P.chat.onStopButtonPressed,
-            child: C(
-              decoration: const BD(color: kC),
-              child: Stack(
-                children: [
-                  SizedBox(
-                    width: 46,
-                    height: 34,
-                    child: Center(
-                      child: C(
-                        decoration: BD(color: color, borderRadius: 2.r),
-                        width: 12,
-                        height: 12,
+        if (!ttsDone)
+          C(
+            decoration: const BD(color: kC),
+            child: Stack(
+              children: [
+                SizedBox(
+                  width: 46,
+                  height: 34,
+                  child: Center(
+                    child: C(
+                      decoration: BD(color: kC, borderRadius: 2.r),
+                      width: 12,
+                      height: 12,
+                    ),
+                  ),
+                ),
+                SB(
+                  width: 46,
+                  height: 34,
+                  child: Center(
+                    child: SB(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                        color: color.wo(0.5),
+                        strokeWidth: 3,
+                        strokeCap: StrokeCap.round,
                       ),
                     ),
                   ),
-                  SB(
-                    width: 46,
-                    height: 34,
-                    child: Center(
-                      child: SB(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(
-                          color: color.wo(0.5),
-                          strokeWidth: 3,
-                          strokeCap: StrokeCap.round,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-        if (!receiving)
+        if (ttsDone)
           AnimatedOpacity(
             opacity: canSend ? 1 : 0.333,
             duration: 250.ms,
@@ -265,7 +264,7 @@ class _Actions extends ConsumerWidget {
 
   void _onRightButtonPressed() async {
     qq;
-    await P.chat.onInputRightButtonPressed();
+    await P.tts.gen();
   }
 }
 
@@ -556,7 +555,7 @@ class _TextField extends ConsumerWidget {
         P.chat.textEditingController.value = const TextEditingValue(text: "");
       }
     } else {
-      P.chat.onInputRightButtonPressed();
+      P.tts.gen();
     }
   }
 
