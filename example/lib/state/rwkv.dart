@@ -714,21 +714,6 @@ extension _$RWKV on _RWKV {
       return;
     }
 
-    if (message["spksNames"] != null) {
-      final spkNames = message["spksNames"];
-      P.tts.spkNames.u(spkNames);
-
-      // Write spkNames to file and share
-      final cacheDir = P.app.cacheDir.v;
-      if (cacheDir != null) {
-        final path = "${cacheDir.path}/spk_names.txt";
-        final file = File(path);
-        file.writeAsStringSync(spkNames.toString());
-        Share.shareXFiles([XFile(path)], text: 'Speaker Names');
-      }
-      return;
-    }
-
     if (message["ttsDone"] != null && message["ttsDone"] == true) {
       qqr("ttsDone: true");
       P.tts.ttsDone.u(true);

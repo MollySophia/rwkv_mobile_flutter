@@ -43,6 +43,7 @@ import 'package:zone/model/local_file.dart';
 import 'package:zone/model/message.dart';
 import 'package:zone/model/message_chain.dart';
 import 'package:zone/model/role.dart';
+import 'package:zone/model/tts_instruction.dart';
 import 'package:zone/model/world_type.dart';
 import 'package:zone/route/page_key.dart';
 import 'package:zone/route/router.dart';

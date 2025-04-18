@@ -34,6 +34,12 @@ class Debugger extends ConsumerWidget {
     final ttsDone = ref.watch(P.tts.ttsDone);
     final spkNames = ref.watch(P.tts.spkNames);
 
+    final spkShown = ref.watch(P.tts.spkShown);
+    final audioInteractorShown = ref.watch(P.tts.audioInteractorShown);
+    final intonationShown = ref.watch(P.tts.intonationShown);
+    final selectSpkName = ref.watch(P.tts.selectSpkName);
+    final selectSourceAudioPath = ref.watch(P.tts.selectSourceAudioPath);
+
     return Positioned(
       left: 0,
       top: 0,
@@ -89,6 +95,16 @@ class Debugger extends ConsumerWidget {
                   T(ttsDone.toString()),
                   T("spkNames length".codeToName),
                   T(spkNames.length.toString()),
+                  T("spkShown".codeToName),
+                  T(spkShown.toString()),
+                  T("audioInteractorShown".codeToName),
+                  T(audioInteractorShown.toString()),
+                  T("intonationShown".codeToName),
+                  T(intonationShown.toString()),
+                  T("selectSpkName".codeToName),
+                  T(selectSpkName.toString()),
+                  T("selectSourceAudioPath".codeToName),
+                  T(selectSourceAudioPath.toString()),
                 ].indexMap((index, e) {
                   return C(
                     margin: EI.o(t: index % 2 == 0 ? 0 : 1),

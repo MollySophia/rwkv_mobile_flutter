@@ -1,12 +1,8 @@
 // ignore: unused_import
 import 'dart:developer';
-import 'dart:io';
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
-import 'package:gaimon/gaimon.dart';
 import 'package:halo_state/halo_state.dart';
-import 'package:zone/func/show_image_selector.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:halo_alert/halo_alert.dart';
 import 'package:flutter/material.dart';
@@ -44,8 +40,6 @@ class Input extends ConsumerWidget {
         show = true;
     }
 
-    qqq(paddingBottom);
-
     return Positioned(
       bottom: show ? 0 : -P.chat.inputHeight.v,
       left: 0,
@@ -76,7 +70,7 @@ class Input extends ConsumerWidget {
               child: Co(
                 children: [
                   const _TextField(),
-                  8.h,
+                  if (demoType != DemoType.tts) 8.h,
                   if (demoType != DemoType.tts) const BottomBar(),
                   if (demoType == DemoType.tts) const TTSBar(),
                 ],
@@ -113,6 +107,8 @@ class _TextField extends ConsumerWidget {
 
     bool textFieldEnabled = loaded && !loading;
 
+    final borderRadius = demoType != DemoType.tts ? 12.r : 6.r;
+
     return GD(
       onTap: textFieldEnabled ? null : _onTapTextFieldWhenItsDisabled,
       child: KeyboardListener(
@@ -144,19 +140,19 @@ class _TextField extends ConsumerWidget {
             hoverColor: kW,
             iconColor: kW,
             border: OutlineInputBorder(
-              borderRadius: 12.r,
+              borderRadius: borderRadius,
               borderSide: BorderSide(color: primary.wo(0.33)),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: 12.r,
+              borderRadius: borderRadius,
               borderSide: BorderSide(color: primary.wo(0.33)),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: 12.r,
+              borderRadius: borderRadius,
               borderSide: BorderSide(color: primary.wo(0.33)),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderRadius: 12.r,
+              borderRadius: borderRadius,
               borderSide: BorderSide(color: primary.wo(0.33)),
             ),
             hintText: hintText,

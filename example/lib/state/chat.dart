@@ -4,10 +4,13 @@ class _Chat {
   /// The key of it is the id of the message
   late final cotDisplayState = qsff<CoTDisplayState, int>((_, __) => CoTDisplayState.showCotHeaderAndCotContent);
 
+  /// The scroll controller of the chat page message list
   late final scrollController = ScrollController();
 
+  /// The text editing controller of the chat page input
   late final textEditingController = TextEditingController();
 
+  /// The focus node of the chat page input
   late final focusNode = FocusNode();
 
   late final _textInInput = qs("");

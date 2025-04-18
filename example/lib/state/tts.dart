@@ -3,6 +3,19 @@ part of 'p.dart';
 class _TTS {
   late final spkNames = qs<List<String>>([]);
   late final ttsDone = qs(true);
+
+  late final focusNode = FocusNode();
+  late final textEditingController = TextEditingController();
+  late final _textInInput = qs("");
+
+  late final instructions = qsf<int?, TTSInstruction>(null);
+
+  late final audioInteractorShown = qs(false);
+  late final spkShown = qs(false);
+  late final intonationShown = qs(false);
+
+  late final selectSpkName = qsn<String>();
+  late final selectSourceAudioPath = qsn<String>();
 }
 
 /// Private methods
@@ -11,6 +24,13 @@ extension _$TTS on _TTS {
     if (P.app.demoType.v != DemoType.tts) return;
     qq;
     getTTSSpkNames();
+    P.chat.focusNode.addListener(() {
+      if (P.chat.focusNode.hasFocus) {
+        audioInteractorShown.u(false);
+        intonationShown.u(false);
+        spkShown.u(false);
+      }
+    });
   }
 }
 
@@ -162,7 +182,56 @@ outputWavPath: $outputWavPath''');
     qq;
     final data = await rootBundle.loadString("assets/config/tts/spk_names.json");
     final spkNames = await compute(_parseSpkNames, data);
-    this.spkNames.u(spkNames);
+    this.spkNames.u(spkNames.shuffled);
+  }
+
+  FV onAudioInteractorButtonPressed() async {
+    qq;
+    if (focusNode.hasFocus) focusNode.unfocus();
+    if (P.chat.focusNode.hasFocus) P.chat.focusNode.unfocus();
+    audioInteractorShown.u(!audioInteractorShown.v);
+    if (audioInteractorShown.v) {
+      intonationShown.u(false);
+      spkShown.u(false);
+    }
+  }
+
+  FV onSpkButtonPressed() async {
+    qq;
+    if (focusNode.hasFocus) focusNode.unfocus();
+    if (P.chat.focusNode.hasFocus) P.chat.focusNode.unfocus();
+    spkShown.u(!spkShown.v);
+    if (spkShown.v) {
+      audioInteractorShown.u(false);
+      intonationShown.u(false);
+    }
+  }
+
+  FV onIntonationButtonPressed() async {
+    qq;
+    if (focusNode.hasFocus) focusNode.unfocus();
+    if (P.chat.focusNode.hasFocus) P.chat.focusNode.unfocus();
+    intonationShown.u(!intonationShown.v);
+    if (intonationShown.v) {
+      audioInteractorShown.u(false);
+      spkShown.u(false);
+    }
+  }
+
+  String safe(String input) {
+    const replaceMap = {
+      "(PRC)": ")",
+      "_": " (",
+      "Japanese": "Japanese)",
+      "Korean": "Korean)",
+      "English": "English)",
+    };
+
+    String name = input;
+    replaceMap.forEach((key, value) {
+      name = name.replaceAll(key, value);
+    });
+    return name;
   }
 }
 
