@@ -23,7 +23,6 @@ extension _$TTS on _TTS {
   FV _init() async {
     if (P.app.demoType.v != DemoType.tts) return;
     qq;
-    getTTSSpkNames();
     P.chat.focusNode.addListener(() {
       if (P.chat.focusNode.hasFocus) {
         audioInteractorShown.u(false);
@@ -31,6 +30,12 @@ extension _$TTS on _TTS {
         spkShown.u(false);
       }
     });
+    textEditingController.addListener(_onTextEditingControllerValueChanged);
+    _textInInput.l(_onTextChanged);
+    await getTTSSpkNames();
+    selectSpkName.u(spkNames.v.random);
+  }
+
   void _onTextChanged(String next) {
     // qqq("_onTextChanged");
     final textInController = textEditingController.text;
