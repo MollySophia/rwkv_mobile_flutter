@@ -29,7 +29,7 @@ class TTSBar extends ConsumerWidget {
       c: CAA.stretch,
       children: [
         if (selectSpkName != null) T("Target: " + P.tts.safe(selectSpkName), s: TS(c: primary, w: FW.w600)),
-        _Actions(),
+        const _Actions(),
         if (audioInteractorShown) _AudioInteractor(),
         if (spkShown) _SpkPanel(),
         if (intonationShown) _Intonation(),
@@ -46,7 +46,13 @@ class _AudioInteractor extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SB(
       height: 250,
-      child: Center(child: T("🚧 WIP: Audio Interactor\n\na. Select a voice file\nb. Record a voice\nc. Play a voice")),
+      child: Ro(
+        children: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.file_upload)),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.play_arrow)),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.stop)),
+        ],
+      ),
     );
   }
 }
@@ -97,11 +103,9 @@ class _AudioButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
     final primary = Theme.of(context).colorScheme.primary;
     final demoType = ref.watch(P.app.demoType);
     final borderRadius = demoType != DemoType.tts ? 12.r : 6.r;
-    final intonationShown = ref.watch(P.tts.intonationShown);
     final audioInteractorShown = ref.watch(P.tts.audioInteractorShown);
     return GD(
       onTap: P.tts.onAudioInteractorButtonPressed,
@@ -114,7 +118,7 @@ class _AudioButton extends ConsumerWidget {
             borderRadius: borderRadius,
           ),
           child: T(
-            "录音" + (audioInteractorShown ? " ×" : ""),
+            "录音文件" + (audioInteractorShown ? " ×" : ""),
             s: TS(c: audioInteractorShown ? kW : primary),
           ),
         ),
@@ -160,12 +164,10 @@ class _IntonationButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
     final primary = Theme.of(context).colorScheme.primary;
     final demoType = ref.watch(P.app.demoType);
     final borderRadius = demoType != DemoType.tts ? 12.r : 6.r;
     final intonationShown = ref.watch(P.tts.intonationShown);
-    final audioInteractorShown = ref.watch(P.tts.audioInteractorShown);
     return GD(
       onTap: P.tts.onIntonationButtonPressed,
       child: Padding(
@@ -199,10 +201,10 @@ class _Actions extends ConsumerWidget {
     return Ro(
       children: [
         // _AudioOrSpkButton(),
-        _AudioButton(),
-        _SpkButton(),
-        _IntonationButton(),
-        Spacer(),
+        const _AudioButton(),
+        const _SpkButton(),
+        const _IntonationButton(),
+        const Spacer(),
         if (!ttsDone)
           C(
             decoration: const BD(color: kC),

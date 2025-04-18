@@ -202,6 +202,7 @@ outputWavPath: $outputWavPath''');
 
   FV onAudioInteractorButtonPressed() async {
     qq;
+    Gaimon.light();
     if (focusNode.hasFocus) focusNode.unfocus();
     if (P.chat.focusNode.hasFocus) P.chat.focusNode.unfocus();
     audioInteractorShown.u(!audioInteractorShown.v);
@@ -213,6 +214,7 @@ outputWavPath: $outputWavPath''');
 
   FV onSpkButtonPressed() async {
     qq;
+    Gaimon.light();
     if (focusNode.hasFocus) focusNode.unfocus();
     if (P.chat.focusNode.hasFocus) P.chat.focusNode.unfocus();
     spkShown.u(!spkShown.v);
@@ -224,6 +226,7 @@ outputWavPath: $outputWavPath''');
 
   FV onIntonationButtonPressed() async {
     qq;
+    Gaimon.light();
     if (focusNode.hasFocus) focusNode.unfocus();
     if (P.chat.focusNode.hasFocus) P.chat.focusNode.unfocus();
     intonationShown.u(!intonationShown.v);
@@ -259,7 +262,7 @@ outputWavPath: $outputWavPath''');
     final ttsText = P.chat.textEditingController.text;
 
     // TODO: implement instructionText
-    final instructionText = "";
+    final instructionText = "请用正常的语气说";
 
     final outputWavPath = P.app.cacheDir.v!.path + "/$receiveId.output.wav";
 

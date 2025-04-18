@@ -50,3 +50,4 @@ sentry.properties
 
 .env
 /ignore
+*.log
