@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:gaimon/gaimon.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/gen/l10n.dart';
@@ -15,6 +16,7 @@ import 'package:halo/halo.dart';
 import 'package:zone/model/demo_type.dart';
 import 'package:zone/model/tts_instruction.dart';
 import 'package:zone/state/p.dart';
+import 'package:file_picker/file_picker.dart';
 
 class TTSBar extends ConsumerWidget {
   const TTSBar({super.key});
@@ -54,6 +56,33 @@ class TTSBar extends ConsumerWidget {
 class _AudioInteractor extends ConsumerWidget {
   const _AudioInteractor();
 
+  void _onUploadFilePressed() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['wav'],
+      allowMultiple: false,
+    );
+
+    if (result == null) return;
+
+    final path = result.files.single.path;
+    if (path == null) {
+      Alert.error("File path not found");
+      return;
+    }
+
+    final extension = path.split('.').last;
+
+    if (extension != 'wav') {
+      Alert.error("File extension must be wav");
+      return;
+    }
+
+    P.tts.selectSourceAudioPath.u(path);
+    P.tts.selectSpkName.u(null);
+    Gaimon.light();
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final primary = Theme.of(context).colorScheme.primary;
@@ -66,12 +95,31 @@ class _AudioInteractor extends ConsumerWidget {
             children: [
               24.w,
               Exp(
-                child: T(
-                  "You can record your voice and then let RWKV to copy it",
-                  textAlign: TextAlign.center,
-                  s: TS(
-                    c: primary,
-                    w: FW.w600,
+                child: Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "You can record your voice and then let RWKV to copy it. ",
+                        style: TS(
+                          c: primary,
+                          w: FW.w600,
+                        ),
+                      ),
+                      TextSpan(
+                        text: "Or select a wav file to let RWKV to copy it.",
+                        style: TS(
+                          c: Colors.blue,
+                          w: FW.w600,
+                        ),
+                        recognizer: TapGestureRecognizer()..onTap = _onUploadFilePressed,
+                      ),
+                      WidgetSpan(
+                          child: Icon(
+                        Icons.upload_file,
+                        color: Colors.blue,
+                        size: 20,
+                      )),
+                    ],
                   ),
                 ),
               ),
@@ -330,7 +378,12 @@ class _SpkPanel extends ConsumerWidget {
                 ),
                 child: Ro(
                   children: [
-                    Exp(child: T(P.tts.safe(spkName), s: TS(c: selected ? primary : primary.wo(0.8), w: selected ? FW.w600 : FW.w400))),
+                    Exp(
+                      child: T(
+                        P.tts.safe(spkName),
+                        s: TS(c: selected ? primary : primary.wo(0.8), w: selected ? FW.w600 : FW.w400),
+                      ),
+                    ),
                     if (selected)
                       Icon(
                         Icons.check,

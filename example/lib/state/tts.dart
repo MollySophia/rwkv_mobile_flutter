@@ -291,17 +291,19 @@ outputWavPath: $outputWavPath''');
     final locale = Intl.getCurrentLocale();
     final useEn = locale.startsWith("en");
 
+    final fileName = selectSourceAudioPath?.split("/").last;
+
     final finalUserMessageContent = useEn
         ? """User:
 ${spkName != null ? "- Use ${P.tts.safe(spkName)} as the speaker" : ""}
-${selectSourceAudioPath != null ? "- Use $selectSourceAudioPath as the clone sound" : ""}
+${fileName != null ? "- Use $fileName as the clone sound" : ""}
 - Use $ttsText as the speaking content
-${instructionText.isNotEmpty ? "- Use $instructionText as the speaking instruction" : ""}"""
+${instructionText.isNotEmpty ? "- Use \"$instructionText\" as the speaking instruction" : ""}"""
         : """用户要求：
 ${spkName != null ? "- 使用 ${P.tts.safe(spkName)} 作为说话人" : ""}
-${selectSourceAudioPath != null ? "- 使用 $selectSourceAudioPath 作为克隆声音" : ""}
+${fileName != null ? "- 使用 $fileName 作为克隆声音" : ""}
 - 使用 $ttsText 作为说话内容
-${instructionText.isNotEmpty ? "- 使用 $instructionText 作为说话指令" : ""}""";
+${instructionText.isNotEmpty ? "- 使用“$instructionText”作为说话指令" : ""}""";
 
     msg = Message(
       id: id,

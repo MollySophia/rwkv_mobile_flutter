@@ -28,6 +28,7 @@ dependencies:
   crypto: # https://pub.dev/packages/crypto/
   cupertino_icons: # https://pub.dev/packages/cupertino_icons/
   equatable: # https://pub.dev/packages/equatable/
+  file_picker: # https://pub.dev/packages/file_picker/
   flutter_dotenv: # https://pub.dev/packages/flutter_dotenv/
   flutter_markdown: # https://pub.dev/packages/flutter_markdown/
   flutter_native_splash: # https://pub.dev/packages/flutter_native_splash/

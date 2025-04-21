@@ -1,10 +1,13 @@
 // ignore: unused_import
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:halo_alert/halo_alert.dart';
+import 'package:halo_state/halo_state.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/message.dart' as model;
 import 'package:zone/state/p.dart';
@@ -29,6 +32,7 @@ class UserMessageBottom extends ConsumerWidget {
 
     bool showUserEditButton = false;
     bool showUserCopyButton = false;
+    bool showUserTTSPlayButton = false;
 
     switch (worldType) {
       case null:
@@ -41,6 +45,9 @@ class UserMessageBottom extends ConsumerWidget {
           case model.MessageType.userTTS:
             showUserEditButton = false;
             showUserCopyButton = true;
+            if (msg.audioUrl != null) {
+              showUserTTSPlayButton = true;
+            }
           case model.MessageType.ttsGeneration:
             showUserEditButton = false;
             showUserCopyButton = false;
@@ -50,6 +57,10 @@ class UserMessageBottom extends ConsumerWidget {
         showUserEditButton = false;
         showUserCopyButton = false;
     }
+
+    final latestClickedMessage = ref.watch(P.chat.latestClickedMessage);
+    final playing = ref.watch(P.world.playing);
+    final isCurrentMessage = latestClickedMessage?.id == msg.id;
 
     return Ro(
       m: MAA.end,
@@ -65,6 +76,22 @@ class UserMessageBottom extends ConsumerWidget {
                 color: primaryColor.wo(0.8),
                 size: 20,
               ),
+            ),
+          ),
+        if (showUserTTSPlayButton && (!playing || !isCurrentMessage))
+          GD(
+            onTap: _onTTSPlayPressed,
+            child: Padding(
+              padding: const EI.o(v: 12, l: 4, r: 4),
+              child: Icon(Icons.play_arrow, color: primaryColor.wo(0.8), size: 20),
+            ),
+          ),
+        if (showUserTTSPlayButton && (playing && isCurrentMessage))
+          GD(
+            onTap: _onTTSPausePressed,
+            child: Padding(
+              padding: const EI.o(v: 12, l: 4, r: 4),
+              child: Icon(Icons.pause, color: primaryColor.wo(0.8), size: 20),
             ),
           ),
         if (showUserCopyButton)
@@ -96,5 +123,14 @@ class UserMessageBottom extends ConsumerWidget {
       return;
     }
     Clipboard.setData(ClipboardData(text: msg.content));
+  }
+
+  void _onTTSPlayPressed() {
+    P.chat.latestClickedMessage.u(msg);
+    P.world.play(path: msg.audioUrl!);
+  }
+
+  void _onTTSPausePressed() {
+    P.world.stopPlaying();
   }
 }
