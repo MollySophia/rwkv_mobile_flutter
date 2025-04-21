@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:gaimon/gaimon.dart';
 import 'package:halo_state/halo_state.dart';
@@ -276,7 +275,7 @@ class _Actions extends ConsumerWidget {
 
     return Ro(
       children: [
-        if (kDebugMode) const _AudioButton(),
+        const _AudioButton(),
         const _SpkButton(),
         const _IntonationButton(),
         const Spacer(),
