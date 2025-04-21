@@ -46,7 +46,7 @@ class GroupItem extends ConsumerWidget {
     final flowDecoderEstimatorParamFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("flow.decoder.estimator.param"));
     final hiftGeneratorFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("hift"));
     final speechTokenizerFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("speech.tokenizer"));
-    final modelFileKey = fileInfos.firstWhereOrNull((e) => e.name == "RWKV7 TTS");
+    final modelFileKey = fileInfos.firstWhereOrNull((e) => e.name == "RWKV7 TTS 1.5B (8 Gen 3)");
     final spksInfoFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("spk_info"));
 
     if (campPlusFileKey == null) {
