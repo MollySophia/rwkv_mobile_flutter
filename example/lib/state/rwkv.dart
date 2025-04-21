@@ -206,7 +206,7 @@ extension $RWKV on _RWKV {
         "libQnnRwkvWkvOpPackageV75.so",
       };
       for (final lib in qnnLibList) {
-        final path = await fromAssetsToTemp("assets/lib/$lib");
+        final path = await fromAssetsToTemp("assets/lib/qnn/$lib", targetPath: "assets/lib/$lib");
         qqq("copied QNN library, path: $path");
       }
       _qnnLibsCopied.u(true);
@@ -427,7 +427,7 @@ extension $RWKV on _RWKV {
         "libQnnRwkvWkvOpPackageV75.so",
       };
       for (final lib in qnnLibList) {
-        final path = await fromAssetsToTemp("assets/lib/$lib");
+        final path = await fromAssetsToTemp("assets/lib/qnn/$lib", targetPath: "assets/lib/$lib");
         qqq("copied QNN library, path: $path");
       }
       _qnnLibsCopied.u(true);

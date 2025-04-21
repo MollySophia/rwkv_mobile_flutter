@@ -8,6 +8,7 @@ othello:
   assets_config_1: assets/config/othello
   assets_config_2: assets/img/othello
   assets_config_3: assets/lib/othello
+  assets_config_4: '# - assets/lib/qnn/'
   args: __othello__
   fp: static final firstPage = PageKey.othello.name;
 
@@ -21,6 +22,7 @@ chat:
   assets_config_1: assets/config/chat
   assets_config_2: assets/img/chat
   assets_config_3: assets/lib/chat
+  assets_config_4: '- assets/lib/qnn/'
   args: __chat__
   fp: static final firstPage = PageKey.chat.name;
 
@@ -34,6 +36,7 @@ world:
   assets_config_1: assets/config/world
   assets_config_2: assets/img/world
   assets_config_3: assets/lib/world
+  assets_config_4: '# - assets/lib/qnn/'
   args: __world__
   fp: static final firstPage = PageKey.chat.name;
 
@@ -47,6 +50,7 @@ tts:
   assets_config_1: assets/config/tts
   assets_config_2: assets/img/tts
   assets_config_3: assets/lib/tts
+  assets_config_4: '- assets/lib/qnn/'
   args: __tts__
   fp: static final firstPage = PageKey.chat.name;
 
@@ -92,6 +96,7 @@ assets_config_2:
   [assets/img/othello, assets/img/chat, assets/img/world, assets/img/tts]
 assets_config_3:
   [assets/lib/othello, assets/lib/chat, assets/lib/world, assets/lib/tts]
+assets_config_4: ['# - assets/lib/qnn/', '- assets/lib/qnn/']
 args: [__othello__, __chat__, __world__, __tts__]
 fp:
   [

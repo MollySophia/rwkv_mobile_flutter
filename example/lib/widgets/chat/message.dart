@@ -47,6 +47,8 @@ class Message extends ConsumerWidget {
     }
 
     P.chat.focusNode.unfocus();
+    P.tts.dismissAllShown();
+
     P.chat.latestClickedMessage.u(msg);
     final isMine = msg.isMine;
 

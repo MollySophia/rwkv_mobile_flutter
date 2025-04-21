@@ -439,17 +439,17 @@
     "ios_url": "",
     "model_config": [
       {
-        "name": "RWKV7 TTS",
+        "name": "RWKV7 TTS 1.5B (8 Gen 3)",
         "type": "gguf",
         "modelSize": 1.5,
-        "fileName": "CosyVoice2-0.5B-RWKV-7-1.5B-Instruct-CHENJPKO-q4_k_m.gguf",
-        "fileSize": 1009165600,
-        "sha256": "ba82eb5c87f08e73fa40c0d81e5a5cde002e32f975157de139d853000a79531e",
-        "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/model/CosyVoice2-0.5B-RWKV-7-1.5B-Instruct-CHENJPKO-q4_k_m.gguf",
-        "quantization": "Q4_K_M",
+        "fileName": "CosyVoice2-0.5B-RWKV-7-1.5B-Instruct-CHENJPKO-8gen3-a16w8_combined.bin",
+        "fileSize": 1597115648,
+        "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/model/CosyVoice2-0.5B-RWKV-7-1.5B-Instruct-CHENJPKO-8gen3-a16w8_combined.bin",
+        "quantization": "a16w8",
         "platforms": ["android"],
-        "backends": ["llamacpp"],
-        "tags": ["cpu"]
+        "backends": ["qnn"],
+        "tags": ["npu"],
+        "socLimitations": ["8 Gen 3"]
       },
       {
         "name": "Campplus",
@@ -460,7 +460,7 @@
         "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/cosyvoice/campplus.onnx",
         "quantization": "",
         "platforms": ["android"],
-        "backends": ["llamacpp"],
+        "backends": ["onnxruntime"],
         "tags": ["campplus"]
       },
       {
@@ -472,7 +472,7 @@
         "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/cosyvoice/flow_decoder_estimator.ncnn.bin",
         "quantization": "fp16",
         "platforms": ["android"],
-        "backends": ["llamacpp"],
+        "backends": ["ncnn"],
         "tags": ["flow.decoder.estimator.bin"]
       },
       {
@@ -484,7 +484,7 @@
         "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/cosyvoice/flow_decoder_estimator.ncnn.param",
         "quantization": "fp16",
         "platforms": ["android"],
-        "backends": ["llamacpp"],
+        "backends": ["ncnn"],
         "tags": ["flow.decoder.estimator.param"]
       },
       {
@@ -496,7 +496,7 @@
         "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/cosyvoice/flow_encoder.fp16.onnx",
         "quantization": "fp16",
         "platforms": ["android"],
-        "backends": ["llamacpp"],
+        "backends": ["onnxruntime"],
         "tags": ["flow.encoder"]
       },
       {
@@ -508,7 +508,7 @@
         "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/cosyvoice/hift.onnx",
         "quantization": "",
         "platforms": ["android"],
-        "backends": ["llamacpp"],
+        "backends": ["onnxruntime"],
         "tags": ["hift"]
       },
       {
@@ -520,7 +520,7 @@
         "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/cosyvoice/speech_tokenizer_v2.onnx",
         "quantization": "",
         "platforms": ["android"],
-        "backends": ["llamacpp"],
+        "backends": ["onnxruntime"],
         "tags": ["speech.tokenizer"]
       },
       {
@@ -532,7 +532,7 @@
         "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/cosyvoice/spk_info.msgpack",
         "quantization": "",
         "platforms": ["android"],
-        "backends": ["llamacpp"],
+        "backends": ["onnxruntime"],
         "tags": ["spk_info"]
       }
     ]

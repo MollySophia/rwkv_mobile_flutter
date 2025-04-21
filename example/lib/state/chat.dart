@@ -134,6 +134,7 @@ extension $Chat on _Chat {
 
   FV onTapMessageList() async {
     P.chat.focusNode.unfocus();
+    P.tts.dismissAllShown();
     final _editingIndex = P.chat.editingIndex.v;
     if (_editingIndex == null) return;
     editingIndex.u(null);

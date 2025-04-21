@@ -25,9 +25,7 @@ extension _$TTS on _TTS {
     qq;
     P.chat.focusNode.addListener(() {
       if (P.chat.focusNode.hasFocus) {
-        audioInteractorShown.u(false);
-        intonationShown.u(false);
-        spkShown.u(false);
+        dismissAllShown();
       }
     });
     textEditingController.addListener(_onTextEditingControllerValueChanged);
@@ -344,6 +342,12 @@ ${instructionText.isNotEmpty ? "- 使用 $instructionText 作为说话指令" : 
         outputWavPath: outputWavPath,
       );
     }
+  }
+
+  void dismissAllShown() {
+    audioInteractorShown.q = false;
+    spkShown.q = false;
+    intonationShown.q = false;
   }
 }
 
