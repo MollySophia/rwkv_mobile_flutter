@@ -21,6 +21,9 @@ enum Backend {
 
   /// Qualcomm Neural Network
   qnn,
+
+  /// dummy onnxruntime backend string
+  onnxruntime,
   ;
 
   String get asArgument => switch (this) {
@@ -28,6 +31,7 @@ enum Backend {
         Backend.webRwkv => 'web-rwkv',
         Backend.llamacpp => 'llama.cpp',
         Backend.qnn => 'qnn',
+        Backend.onnxruntime => 'onnxruntime',
       };
 
   static Backend fromString(String value) {
@@ -40,6 +44,8 @@ enum Backend {
       return Backend.llamacpp;
     } else if (toLower.contains('qnn')) {
       return Backend.qnn;
+    } else if (toLower.contains('onnxruntime')) {
+      return Backend.onnxruntime;
     } else {
       throw Exception('Unknown backend: $value');
     }

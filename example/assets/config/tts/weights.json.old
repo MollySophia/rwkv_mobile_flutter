@@ -1,16 +1,16 @@
 [
   {
-    "name": "RWKV7 TTS 1.5B (8 Gen 3)",
+    "name": "RWKV7 TTS 1.5B",
     "type": "gguf",
     "modelSize": 1.5,
-    "fileName": "CosyVoice2-0.5B-RWKV-7-1.5B-Instruct-CHENJPKO-8gen3-a16w8_combined.bin",
-    "fileSize": 1597115648,
-    "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/model/CosyVoice2-0.5B-RWKV-7-1.5B-Instruct-CHENJPKO-8gen3-a16w8_combined.bin",
-    "quantization": "a16w8",
+    "fileName": "CosyVoice2-0.5B-RWKV-7-1.5B-Instruct-CHENJPKO-q4_k_m.gguf",
+    "fileSize": 1009165600,
+    "sha256": "ba82eb5c87f08e73fa40c0d81e5a5cde002e32f975157de139d853000a79531e",
+    "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/model/CosyVoice2-0.5B-RWKV-7-1.5B-Instruct-CHENJPKO-q4_k_m.gguf",
+    "quantization": "Q4_K_M",
     "platforms": ["android"],
-    "backends": ["qnn"],
-    "tags": ["npu"],
-    "socLimitations": ["8 Gen 3"]
+    "backends": ["llamacpp"],
+    "tags": ["cpu"]
   },
   {
     "name": "Campplus",
