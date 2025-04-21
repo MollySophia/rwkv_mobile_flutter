@@ -302,6 +302,7 @@ ${instructionText.isNotEmpty ? "- 使用 $instructionText 作为说话指令" : 
       type: MessageType.userTTS,
       isReasoning: false,
       paused: false,
+      ttsTarget: ttsText,
       audioUrl: selectSourceAudioPath,
     );
 

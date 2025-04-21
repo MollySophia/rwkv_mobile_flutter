@@ -39,6 +39,8 @@ class UserMessageBottom extends ConsumerWidget {
             showUserEditButton = true;
             showUserCopyButton = true;
           case model.MessageType.userTTS:
+            showUserEditButton = false;
+            showUserCopyButton = true;
           case model.MessageType.ttsGeneration:
             showUserEditButton = false;
             showUserCopyButton = false;
@@ -89,6 +91,10 @@ class UserMessageBottom extends ConsumerWidget {
 
   void _onCopyPressed() {
     Alert.success(S.current.chat_copied_to_clipboard);
+    if (msg.ttsTarget != null) {
+      Clipboard.setData(ClipboardData(text: msg.ttsTarget!));
+      return;
+    }
     Clipboard.setData(ClipboardData(text: msg.content));
   }
 }

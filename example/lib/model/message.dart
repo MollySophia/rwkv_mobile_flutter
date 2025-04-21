@@ -22,6 +22,7 @@ final class Message extends Equatable {
   final String? imageUrl;
   final String? audioUrl;
   final int? audioLength;
+  final String? ttsTarget;
 
   const Message({
     required this.id,
@@ -34,6 +35,7 @@ final class Message extends Equatable {
     this.imageUrl,
     this.audioUrl,
     this.audioLength,
+    this.ttsTarget,
   });
 
   @override
@@ -48,6 +50,7 @@ final class Message extends Equatable {
         audioLength,
         isReasoning,
         paused,
+        ttsTarget,
       ];
 
   factory Message.fromJson(Map<String, dynamic> json) {
@@ -62,6 +65,7 @@ final class Message extends Equatable {
       audioLength: json["audioLength"] as int?,
       isReasoning: json["isReasoning"] as bool,
       paused: json["paused"] as bool,
+      ttsTarget: json["ttsTarget"] as String?,
     );
   }
 
@@ -77,6 +81,7 @@ final class Message extends Equatable {
       "isReasoning": isReasoning,
       "changing": false,
       "paused": paused,
+      "ttsTarget": ttsTarget,
     };
   }
 
@@ -91,6 +96,7 @@ final class Message extends Equatable {
     int? audioLength,
     bool? isReasoning,
     bool? paused,
+    String? ttsTarget,
   }) {
     return Message(
       id: id ?? this.id,
@@ -103,6 +109,7 @@ final class Message extends Equatable {
       audioLength: audioLength ?? this.audioLength,
       isReasoning: isReasoning ?? this.isReasoning,
       paused: paused ?? this.paused,
+      ttsTarget: ttsTarget ?? this.ttsTarget,
     );
   }
 
@@ -120,6 +127,7 @@ Message(
   audioLength: $audioLength,
   isReasoning: $isReasoning,
   paused: $paused,
+  ttsTarget: $ttsTarget,
 )""";
   }
 
