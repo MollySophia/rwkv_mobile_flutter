@@ -464,16 +464,28 @@
         "tags": ["campplus"]
       },
       {
-        "name": "Flow Decoder Estimator 32",
+        "name": "Flow Decoder Estimator ncnn.bin",
         "type": "gguf",
-        "fileName": "flow.decoder.estimator.fp32.onnx",
-        "fileSize": 286521895,
-        "sha256": "51aed3efa2c153898ea53a780893c920e968dab1d7aec25402bd6c9815d94702",
-        "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/cosyvoice/flow.decoder.estimator.fp32.onnx",
-        "quantization": "fp32",
+        "fileName": "flow_decoder_estimator.ncnn.bin",
+        "fileSize": 143159224,
+        "sha256": "075cdfb68e3b97a94bef9348d472fa6fe9632805d86e6e580f544c55a48c1886",
+        "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/cosyvoice/flow_decoder_estimator.ncnn.bin",
+        "quantization": "fp16",
         "platforms": ["android"],
         "backends": ["llamacpp"],
-        "tags": ["flow.decoder.estimator"]
+        "tags": ["flow.decoder.estimator.bin"]
+      },
+      {
+        "name": "Flow Decoder Estimator ncnn.param",
+        "type": "gguf",
+        "fileName": "flow_decoder_estimator.ncnn.param",
+        "fileSize": 74111,
+        "sha256": "7bba047892dab7a9c4cd1f6481a4dba3c13a8f933a66037011fa84e85ac40ea3",
+        "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/cosyvoice/flow_decoder_estimator.ncnn.param",
+        "quantization": "fp16",
+        "platforms": ["android"],
+        "backends": ["llamacpp"],
+        "tags": ["flow.decoder.estimator.param"]
       },
       {
         "name": "Flow Encoder",
