@@ -126,6 +126,7 @@ extension _$World on _World {
   FV _init() async {
     qq;
     P.rwkv.currentWorldType.lv(_onWorldTypeChanged);
+    P.tts.audioInteractorShown.lv(_onAudioInteractorShown);
     P.app.demoType.lv(_onWorldTypeChanged);
     _audioPlayer.eventStream.listen(_onPlayerChanged);
   }
@@ -145,13 +146,9 @@ extension _$World on _World {
     }
   }
 
-  void _onWorldTypeChanged() async {
-    final demoType = P.app.demoType.v;
-    final isWorldDemo = demoType == DemoType.world;
-    final currentWorldType = P.rwkv.currentWorldType.v;
-    final isAudioDemo = currentWorldType == WorldType.engAudioQA || currentWorldType == WorldType.chineseASR || currentWorldType == WorldType.engASR;
+  void _onAudioInteractorShown() async {
+    qq;
 
-    P.chat.clearMessages();
     imagePath.u(null);
     imageHeight.uc();
     visualFloatHeight.uc();
@@ -162,7 +159,7 @@ extension _$World on _World {
     playing.u(false);
     audioPath.u("");
 
-    if (!isAudioDemo || !isWorldDemo) {
+    if (!P.tts.audioInteractorShown.q) {
       await _recorder.pause();
       await _recorder.stop();
       await _audioPlayer.stop();
@@ -171,9 +168,14 @@ extension _$World on _World {
       return;
     }
 
+    await _startStream();
+  }
+
+  FV _startStream() async {
+    qr;
     final hasPermission = await _recorder.hasPermission();
 
-    qqq("hasPermission: $hasPermission, isAudioDemo: $isAudioDemo, isWorldDemo: $isWorldDemo");
+    qqq("hasPermission: $hasPermission");
 
     if (!hasPermission) {
       Alert.warning("Please grant permission to use microphone.");
@@ -205,6 +207,37 @@ extension _$World on _World {
       if (cc == null) return;
       cc.add(data);
     });
+  }
+
+  void _onWorldTypeChanged() async {
+    qq;
+
+    final demoType = P.app.demoType.v;
+    final isWorldDemo = demoType == DemoType.world;
+    final currentWorldType = P.rwkv.currentWorldType.v;
+    final isAudioDemo = currentWorldType == WorldType.engAudioQA || currentWorldType == WorldType.chineseASR || currentWorldType == WorldType.engASR;
+
+    P.chat.clearMessages();
+    imagePath.u(null);
+    imageHeight.uc();
+    visualFloatHeight.uc();
+    startTime.u(0);
+    endTime.u(0);
+    audioDuration.u(0);
+    recording.u(false);
+    playing.u(false);
+    audioPath.u("");
+
+    if (!isAudioDemo || !isWorldDemo) {
+      await _recorder.pause();
+      await _recorder.stop();
+      await _audioPlayer.stop();
+      _currentRecorderStream = null;
+      streaming.u(false);
+      return;
+    }
+
+    await _startStream();
   }
 
   List<int> _createWavHeader({

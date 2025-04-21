@@ -19,27 +19,6 @@ const _kWidgetSize = _kButtonSize + _kButtonBottom;
 class AudioInput extends ConsumerWidget {
   const AudioInput({super.key});
 
-  FV _onTapDown(TapDownDetails details) async {
-    final receiving = P.chat.receivingTokens.v;
-    if (receiving) return;
-    Gaimon.light();
-    await P.world.startRecord();
-  }
-
-  FV _onTapCancel() async {
-    final receiving = P.chat.receivingTokens.v;
-    if (receiving) return;
-    Gaimon.light();
-    await P.world.stopRecord(isCancel: true);
-  }
-
-  FV _onTapUp(TapUpDetails details) async {
-    final receiving = P.chat.receivingTokens.v;
-    if (receiving) return;
-    Gaimon.medium();
-    await P.world.stopRecord();
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final paddingBottom = ref.watch(P.app.paddingBottom);
@@ -48,6 +27,7 @@ class AudioInput extends ConsumerWidget {
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
     final screenWidth = ref.watch(P.app.screenWidth);
     final receiving = ref.watch(P.chat.receivingTokens);
+    final audioInteractorShown = ref.watch(P.tts.audioInteractorShown);
 
     bool shouldShow = false;
 
@@ -87,6 +67,15 @@ class AudioInput extends ConsumerWidget {
       bottomAdjust = 12;
     }
 
+    bool showGradient = true;
+
+    if (demoType == DemoType.tts) {
+      shouldShow = audioInteractorShown;
+      bottomMessage = "Press and hold the microphone button above\nrelease to send";
+      bottomAdjust = audioInteractorShown ? 24.0 : 0;
+      showGradient = false;
+    }
+
     return AnimatedPositioned(
       duration: 250.ms,
       curve: Curves.easeInOutBack,
@@ -111,15 +100,17 @@ class AudioInput extends ConsumerWidget {
                 bottom: 0,
                 child: C(
                   decoration: BD(
-                    gradient: LinearGradient(
-                      colors: [
-                        kBG.wo(0),
-                        kBG,
-                        kBG,
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
+                    gradient: showGradient
+                        ? LinearGradient(
+                            colors: [
+                              kBG.wo(0),
+                              kBG,
+                              kBG,
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          )
+                        : null,
                   ),
                 ),
               ),
@@ -179,5 +170,26 @@ class AudioInput extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  FV _onTapDown(TapDownDetails details) async {
+    final receiving = P.chat.receivingTokens.v;
+    if (receiving) return;
+    Gaimon.light();
+    await P.world.startRecord();
+  }
+
+  FV _onTapCancel() async {
+    final receiving = P.chat.receivingTokens.v;
+    if (receiving) return;
+    Gaimon.light();
+    await P.world.stopRecord(isCancel: true);
+  }
+
+  FV _onTapUp(TapUpDetails details) async {
+    final receiving = P.chat.receivingTokens.v;
+    if (receiving) return;
+    Gaimon.medium();
+    await P.world.stopRecord();
   }
 }

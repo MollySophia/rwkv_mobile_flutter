@@ -591,20 +591,28 @@ extension _$Chat on _Chat {
 
   FV _onNewFileReceived((File, int) event) async {
     final demoType = P.app.demoType.v;
-    if (demoType != DemoType.world) return;
+    if (demoType == DemoType.world) {
+      final (file, length) = event;
+      final path = file.path;
 
-    final (file, length) = event;
-    final path = file.path;
+      qqq("new file received: $path, length: $length");
 
-    qqq("new file received: $path, length: $length");
+      final t0 = qDebugShorterMicroseconds;
+      P.rwkv.setAudioPrompt(path: path);
+      final t1 = qDebugShorterMicroseconds;
+      qqq("setAudioPrompt done in ${t1 - t0}ms");
+      send("", type: MessageType.userAudio, audioUrl: path, withHistory: false, audioLength: length);
+      final t2 = qDebugShorterMicroseconds;
+      qqq("send done in ${t2 - t1}ms");
+    }
 
-    final t0 = qDebugShorterMicroseconds;
-    P.rwkv.setAudioPrompt(path: path);
-    final t1 = qDebugShorterMicroseconds;
-    qqq("setAudioPrompt done in ${t1 - t0}ms");
-    send("", type: MessageType.userAudio, audioUrl: path, withHistory: false, audioLength: length);
-    final t2 = qDebugShorterMicroseconds;
-    qqq("send done in ${t2 - t1}ms");
+    if (demoType == DemoType.tts) {
+      final (file, length) = event;
+      final path = file.path;
+      qqq("new file received: $path, length: $length");
+      P.tts.selectSourceAudioPath.u(path);
+      P.tts.selectSpkName.uc();
+    }
   }
 
   FV _loadRoles() async {

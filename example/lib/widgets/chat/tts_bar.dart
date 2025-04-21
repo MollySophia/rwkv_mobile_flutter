@@ -26,10 +26,21 @@ class TTSBar extends ConsumerWidget {
     final spkShown = ref.watch(P.tts.spkShown);
     final selectSpkName = ref.watch(P.tts.selectSpkName);
     final primary = Theme.of(context).colorScheme.primary;
+    final selectSourceAudioPath = ref.watch(P.tts.selectSourceAudioPath);
+    final sourceWavName = selectSourceAudioPath?.split("/").last;
     return Co(
       c: CAA.stretch,
       children: [
-        if (selectSpkName != null) T("Target: " + P.tts.safe(selectSpkName), s: TS(c: primary, w: FW.w600)),
+        if (selectSpkName != null)
+          C(
+            padding: EI.s(v: 4),
+            child: T("Target: " + (P.tts.safe(selectSpkName)), s: TS(c: primary, w: FW.w600)),
+          ),
+        if (selectSourceAudioPath != null)
+          C(
+            padding: EI.s(v: 4),
+            child: T("Source: " + (sourceWavName ?? ""), s: TS(c: primary, w: FW.w600)),
+          ),
         const _Actions(),
         if (audioInteractorShown) _AudioInteractor(),
         if (spkShown) _SpkPanel(),
@@ -45,13 +56,28 @@ class _AudioInteractor extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final primary = Theme.of(context).colorScheme.primary;
     return SB(
       height: 250,
-      child: Ro(
+      child: Co(
         children: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.file_upload)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.play_arrow)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.stop)),
+          24.h,
+          Ro(
+            children: [
+              24.w,
+              Exp(
+                child: T(
+                  "You can record your voice and then let RWKV to copy it",
+                  textAlign: TextAlign.center,
+                  s: TS(
+                    c: primary,
+                    w: FW.w600,
+                  ),
+                ),
+              ),
+              24.w,
+            ],
+          ),
         ],
       ),
     );
@@ -119,7 +145,7 @@ class _AudioButton extends ConsumerWidget {
             borderRadius: borderRadius,
           ),
           child: T(
-            "录音文件" + (audioInteractorShown ? " ×" : ""),
+            "声音克隆" + (audioInteractorShown ? " ×" : ""),
             s: TS(c: audioInteractorShown ? kW : primary),
           ),
         ),
@@ -271,75 +297,6 @@ class _Actions extends ConsumerWidget {
   }
 }
 
-class _AudioOrSpkButton extends ConsumerWidget {
-  const _AudioOrSpkButton();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final primary = Theme.of(context).colorScheme.primary;
-    final secondary = Theme.of(context).colorScheme.secondary;
-    final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
-    final onPrimaryContainer = Theme.of(context).colorScheme.onPrimaryContainer;
-    final demoType = ref.watch(P.app.demoType);
-    final borderRadius = demoType != DemoType.tts ? 12.r : 6.r;
-    final audioInteractorShown = ref.watch(P.tts.audioInteractorShown);
-
-    final intonationShown = ref.watch(P.tts.intonationShown);
-    final spkShown = ref.watch(P.tts.spkShown);
-
-    final highlighting = audioInteractorShown || spkShown;
-
-    final selectSpkName = ref.watch(P.tts.selectSpkName);
-
-    return Padding(
-      padding: const EI.o(l: 0, r: 4, t: 4, b: 4),
-      child: C(
-        // padding: const EI.a(1),
-        decoration: BD(
-          color: primary.wo(highlighting ? 0.1 : 0.1),
-          border: Border.all(
-            color: primary.wo(highlighting ? 1 : 0.1),
-            width: 2,
-          ),
-          borderRadius: borderRadius,
-        ),
-        child: Wrap(
-          children: [
-            GD(
-              onTap: P.tts.onAudioInteractorButtonPressed,
-              child: C(
-                padding: const EI.o(t: 2, b: 2, l: 4, r: 8),
-                decoration: BD(color: audioInteractorShown ? primary : kC, borderRadius: 4.r),
-                child: T(
-                  "选择录音",
-                  s: TS(c: audioInteractorShown ? kW : primary),
-                ),
-              ),
-            ),
-            GD(
-              onTap: P.tts.onSpkButtonPressed,
-              child: C(
-                padding: const EI.o(t: 2, b: 2, l: 8, r: 4),
-                decoration: BD(color: spkShown ? primary : kC, borderRadius: BorderRadius.only(topLeft: 4.rr, bottomLeft: 4.rr)),
-                child: T(
-                  "预置声音",
-                  s: TS(c: spkShown ? kW : primary),
-                ),
-              ),
-            ),
-            if (highlighting)
-              C(
-                padding: const EI.o(t: 6, b: 6, l: 6, r: 4),
-                decoration: BD(color: primary),
-                child: Icon(Icons.close, color: kW, size: 12),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class _SpkPanel extends ConsumerWidget {
   const _SpkPanel();
 
@@ -362,6 +319,7 @@ class _SpkPanel extends ConsumerWidget {
             return GD(
               onTap: () {
                 P.tts.selectSpkName.u(spkName);
+                P.tts.selectSourceAudioPath.u(null);
                 Gaimon.light();
               },
               child: C(

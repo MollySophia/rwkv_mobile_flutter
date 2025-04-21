@@ -1,7 +1,6 @@
 // ignore: unused_import
 import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/args.dart';
 import 'package:zone/config.dart';

@@ -32,6 +32,7 @@ extension _$TTS on _TTS {
     _textInInput.l(_onTextChanged);
     await getTTSSpkNames();
     selectSpkName.u(spkNames.v.random);
+    selectSourceAudioPath.u(null);
   }
 
   void _onTextChanged(String next) {
@@ -293,12 +294,12 @@ outputWavPath: $outputWavPath''');
     final finalUserMessageContent = useEn
         ? """User:
 ${spkName != null ? "- Use ${P.tts.safe(spkName)} as the speaker" : ""}
-${selectSourceAudioPath != null ? "- Use $selectSourceAudioPath as the background music" : ""}
+${selectSourceAudioPath != null ? "- Use $selectSourceAudioPath as the clone sound" : ""}
 - Use $ttsText as the speaking content
 ${instructionText.isNotEmpty ? "- Use $instructionText as the speaking instruction" : ""}"""
         : """用户要求：
 ${spkName != null ? "- 使用 ${P.tts.safe(spkName)} 作为说话人" : ""}
-${selectSourceAudioPath != null ? "- 使用 $selectSourceAudioPath 作为背景音乐" : ""}
+${selectSourceAudioPath != null ? "- 使用 $selectSourceAudioPath 作为克隆声音" : ""}
 - 使用 $ttsText 作为说话内容
 ${instructionText.isNotEmpty ? "- 使用 $instructionText 作为说话指令" : ""}""";
 
