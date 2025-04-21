@@ -1,6 +1,5 @@
 // ignore: unused_import
 
-import 'dart:developer';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,7 +23,7 @@ class BotMessageBottom extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     if (msg.isMine) return const SizedBox.shrink();
     final demoType = ref.watch(P.app.demoType);
-    if (demoType == DemoType.tts) return SizedBox.shrink();
+    if (demoType == DemoType.tts) return const SizedBox.shrink();
 
     final receiveId = ref.watch(P.chat.receiveId);
 

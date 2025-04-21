@@ -35,19 +35,19 @@ class TTSBar extends ConsumerWidget {
       children: [
         if (selectSpkName != null)
           C(
-            padding: EI.s(v: 4),
+            padding: const EI.s(v: 4),
             child: T("Target: " + (P.tts.safe(selectSpkName)), s: TS(c: primary, w: FW.w600)),
           ),
         if (selectSourceAudioPath != null)
           C(
-            padding: EI.s(v: 4),
+            padding: const EI.s(v: 4),
             child: T("Source: " + (sourceWavName ?? ""), s: TS(c: primary, w: FW.w600)),
           ),
         const _Actions(),
-        if (audioInteractorShown) _AudioInteractor(),
-        if (spkShown) _SpkPanel(),
-        if (intonationShown) _Intonation(),
-        if (!audioInteractorShown && !intonationShown && !spkShown) _Instruction(),
+        if (audioInteractorShown) const _AudioInteractor(),
+        if (spkShown) const _SpkPanel(),
+        if (intonationShown) const _Intonation(),
+        if (!audioInteractorShown && !intonationShown && !spkShown) const _Instruction(),
       ],
     );
   }
@@ -107,13 +107,13 @@ class _AudioInteractor extends ConsumerWidget {
                       ),
                       TextSpan(
                         text: "Or select a wav file to let RWKV to copy it.",
-                        style: TS(
+                        style: const TS(
                           c: Colors.blue,
                           w: FW.w600,
                         ),
                         recognizer: TapGestureRecognizer()..onTap = _onUploadFilePressed,
                       ),
-                      WidgetSpan(
+                      const WidgetSpan(
                           child: Icon(
                         Icons.upload_file,
                         color: Colors.blue,
@@ -407,7 +407,7 @@ class _Instruction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return C();
-    return Co(
+    return const Co(
       children: [
         _TextField(),
         _InstructActions(),

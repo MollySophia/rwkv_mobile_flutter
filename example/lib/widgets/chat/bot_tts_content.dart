@@ -65,7 +65,7 @@ class _BotTtsContentState extends ConsumerState<BotTtsContent> {
   Widget build(BuildContext context) {
     if (widget.msg.isMine) return const SizedBox.shrink();
     final demoType = ref.watch(P.app.demoType);
-    if (demoType != DemoType.tts) return SizedBox.shrink();
+    if (demoType != DemoType.tts) return const SizedBox.shrink();
 
     _getWavDuration(widget.msg.audioUrl!).then((value) {
       if (_length == value.toDouble()) return;
@@ -87,7 +87,7 @@ class _BotTtsContentState extends ConsumerState<BotTtsContent> {
 
     return C(
       decoration: const BD(color: kC),
-      padding: EI.o(),
+      padding: const EI.o(),
       width: changing ? 130 : width,
       // height: 50,
       child: Co(
@@ -143,15 +143,15 @@ class _BotTtsContentState extends ConsumerState<BotTtsContent> {
             ),
           if (!changing)
             C(
-              decoration: BD(color: kC),
+              decoration: const BD(color: kC),
               child: Ro(
                 m: MAA.start,
                 children: [
                   GD(
                     onTap: _onSharePressed,
                     child: C(
-                      padding: EI.s(v: 12, h: 3),
-                      child: Icon(Icons.share),
+                      padding: const EI.s(v: 12, h: 3),
+                      child: const Icon(Icons.share),
                     ),
                   ),
                 ],
