@@ -271,6 +271,12 @@ outputWavPath: $outputWavPath''');
       return;
     }
 
+    audioInteractorShown.u(false);
+    intonationShown.u(false);
+    spkShown.u(false);
+
+    P.chat.textEditingController.clear();
+
     if (spkName == null && selectSourceAudioPath == null) {
       Alert.warning("Please select a spk or a wav file");
       return;

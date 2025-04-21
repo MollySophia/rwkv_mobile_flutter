@@ -2,7 +2,6 @@
 import 'dart:developer';
 
 import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:flutter/material.dart';

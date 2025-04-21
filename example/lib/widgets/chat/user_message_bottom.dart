@@ -41,7 +41,7 @@ class UserMessageBottom extends ConsumerWidget {
           case model.MessageType.userTTS:
           case model.MessageType.ttsGeneration:
             showUserEditButton = false;
-            showUserCopyButton = true;
+            showUserCopyButton = false;
         }
 
       default:
@@ -77,6 +77,7 @@ class UserMessageBottom extends ConsumerWidget {
               ),
             ),
           ),
+        if (!showUserEditButton && !showUserCopyButton) 8.h,
         BranchSwitcher(msg, index),
       ],
     );

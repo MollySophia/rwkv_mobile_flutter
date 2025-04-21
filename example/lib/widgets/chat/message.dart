@@ -17,6 +17,7 @@ import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
 import 'package:zone/widgets/chat/audio_bubble.dart';
 import 'package:zone/widgets/chat/bot_message_bottom.dart';
+import 'package:zone/widgets/chat/bot_tts_content.dart';
 import 'package:zone/widgets/chat/photo_viewer_overlay.dart';
 import 'package:zone/widgets/chat/user_message_bottom.dart';
 
@@ -85,6 +86,10 @@ class Message extends ConsumerWidget {
     finalContent = finalContent.replaceAll("\n", "\n\n");
     while (finalContent.contains("\n\n\n")) {
       finalContent = finalContent.replaceAll("\n\n\n", "\n\n");
+    }
+
+    if (isMine) {
+      finalContent = finalContent.replaceAll("\n\n", "\n");
     }
 
     final cotDisplayState = ref.watch(P.chat.cotDisplayState(msg.id));
@@ -371,6 +376,7 @@ class Message extends ConsumerWidget {
                 ),
               UserMessageBottom(msg, index),
               BotMessageBottom(msg, index),
+              BotTtsContent(msg, index),
             ],
           ),
         ),
