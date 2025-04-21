@@ -251,6 +251,13 @@ outputWavPath: $outputWavPath''');
   }
 
   FV gen() async {
+    if (P.rwkv.currentModel.v == null) {
+      P.fileManager.modelSelectorShown.u(true);
+      return;
+    }
+
+    if (!P.chat.canSend.v) return;
+
     qq;
     late final Message? msg;
     final id = qDebugShorterMilliseconds;

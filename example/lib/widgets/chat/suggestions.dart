@@ -23,6 +23,7 @@ class Suggestions extends ConsumerWidget {
     final primary = Theme.of(context).colorScheme.primary;
     final paddingBottom = ref.watch(P.app.quantizedIntPaddingBottom);
     final currentModel = ref.watch(P.rwkv.currentModel);
+
     ref.watch(P.fileManager.modelSelectorShown);
 
     bool show = false;
@@ -52,7 +53,7 @@ class Suggestions extends ConsumerWidget {
       }
     }
 
-    final bottom = show ? paddingBottom + 114 : -paddingBottom - _height;
+    double bottom = show ? paddingBottom + 114 : -paddingBottom - _height;
 
     return Positioned(
       bottom: bottom,

@@ -1,7 +1,6 @@
 // ignore: unused_import
 
 import 'dart:io';
-import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,7 +9,6 @@ import 'package:halo_state/halo_state.dart';
 import 'package:zone/func/show_image_selector.dart';
 import 'package:zone/model/demo_type.dart';
 import 'package:zone/state/p.dart';
-import 'package:zone/widgets/chat/input.dart';
 import 'package:zone/widgets/chat/language_button.dart';
 import 'package:zone/widgets/chat/reason_button.dart';
 

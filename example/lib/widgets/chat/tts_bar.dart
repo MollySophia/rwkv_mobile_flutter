@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:gaimon/gaimon.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/gen/l10n.dart';
@@ -197,11 +198,11 @@ class _Actions extends ConsumerWidget {
     final canSend = ref.watch(P.chat.canSend);
     final editingBotMessage = ref.watch(P.chat.editingBotMessage);
     final color = Theme.of(context).colorScheme.primary;
+    final loaded = ref.watch(P.rwkv.loaded);
 
     return Ro(
       children: [
-        // _AudioOrSpkButton(),
-        const _AudioButton(),
+        if (kDebugMode) const _AudioButton(),
         const _SpkButton(),
         const _IntonationButton(),
         const Spacer(),
@@ -241,7 +242,7 @@ class _Actions extends ConsumerWidget {
           ),
         if (ttsDone)
           AnimatedOpacity(
-            opacity: canSend ? 1 : 0.333,
+            opacity: (canSend && loaded) ? 1 : 0.333,
             duration: 250.ms,
             child: GD(
               onTap: _onRightButtonPressed,
