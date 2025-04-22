@@ -24,6 +24,7 @@ class GroupItem extends ConsumerWidget {
     final availableModels = P.fileManager.availableModels.v;
     final fileInfos = availableModels..toList();
     final missingFileInfos = fileInfos.where((e) => P.fileManager.locals(e).v.hasFile == false).toList();
+    // TODO: Fix the bug reported by @Molly
     missingFileInfos.forEach((e) => P.fileManager.getFile(fileInfo: e));
   }
 
