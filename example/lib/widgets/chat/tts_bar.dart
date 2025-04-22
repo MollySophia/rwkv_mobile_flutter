@@ -281,10 +281,17 @@ class _Actions extends ConsumerWidget {
 
     return Ro(
       children: [
-        const _AudioButton(),
-        const _SpkButton(),
-        const _IntonationButton(),
-        const Spacer(),
+        Exp(
+          child: Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              const _AudioButton(),
+              const _SpkButton(),
+              const _IntonationButton(),
+              const _PerformanceInfo(),
+            ],
+          ),
+        ),
         if (!ttsDone)
           C(
             decoration: const BD(color: kC),
@@ -731,5 +738,24 @@ class _TextField extends ConsumerWidget {
       P.fileManager.modelSelectorShown.u(true);
       return;
     }
+  }
+}
+
+class _PerformanceInfo extends ConsumerWidget {
+  const _PerformanceInfo();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final prefillSpeed = ref.watch(P.rwkv.prefillSpeed);
+    final decodeSpeed = ref.watch(P.rwkv.decodeSpeed);
+    return Co(
+      c: CAA.start,
+      m: MAA.center,
+      children: [
+        T("Prefill: ${prefillSpeed.toStringAsFixed(2)} t/s", s: TS(c: kB.wo(0.6), s: 10)),
+        T("Decode: ${decodeSpeed.toStringAsFixed(2)} t/s", s: TS(c: kB.wo(0.6), s: 10)),
+        6.h,
+      ],
+    );
   }
 }

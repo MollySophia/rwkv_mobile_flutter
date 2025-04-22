@@ -260,6 +260,7 @@ outputWavPath: $outputWavPath''');
   }
 
   FV gen() async {
+    qq;
     if (P.rwkv.currentModel.v == null) {
       P.fileManager.modelSelectorShown.u(true);
       return;
@@ -267,7 +268,6 @@ outputWavPath: $outputWavPath''');
 
     if (!P.chat.canSend.v) return;
 
-    qq;
     late final Message? msg;
     final id = HF.shorterMS;
     final receiveId = HF.shorterMS + 1;
@@ -275,7 +275,6 @@ outputWavPath: $outputWavPath''');
     final spkName = selectSpkName.q;
     final ttsText = P.chat.textEditingController.text;
 
-    // TODO: implement instructionText
     final instructionText = textInInput.q;
 
     final outputWavPath = P.app.cacheDir.v!.path + "/$receiveId.output.wav";
@@ -404,7 +403,6 @@ ${instructionText.isNotEmpty ? "- 使用“$instructionText”作为说话指令
     instruction = instruction.replaceAll("用用", "用");
     instruction = instruction.replaceAll("用以", "以");
     instruction = instruction.replaceAll("用模仿", "模仿");
-    print(instruction);
     textInInput.u(instruction);
     textEditingController.text = instruction;
   }

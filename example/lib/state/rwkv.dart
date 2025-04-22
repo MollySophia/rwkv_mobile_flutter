@@ -65,6 +65,8 @@ class _RWKV {
   late final soc = qs("");
 
   late final _qnnLibsCopied = qs(false);
+
+  Timer? _ttsPerformanceTimer;
 }
 
 /// Public methods
@@ -406,6 +408,15 @@ extension $RWKV on _RWKV {
       qqq("waiting for sendPort...");
       await Future.delayed(const Duration(milliseconds: 50));
     }
+
+    if (_ttsPerformanceTimer != null) {
+      _ttsPerformanceTimer!.cancel();
+      _ttsPerformanceTimer = null;
+    }
+
+    _ttsPerformanceTimer = Timer.periodic(Duration(milliseconds: HF.randomInt(min: 150, max: 300)), (timer) async {
+      _sendPort!.send(("getPrefillAndDecodeSpeed", null));
+    });
 
     final ttsTokenizerPath = await fromAssetsToTemp("assets/config/tts/b_rwkv_vocab_v20230424_tts.txt");
 
