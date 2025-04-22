@@ -125,6 +125,12 @@ extension $Chat on _Chat {
 
   FV onSubmitted(String aString) async {
     qqq(aString);
+
+    if (P.app.demoType.v == DemoType.tts) {
+      await P.tts.gen();
+      return;
+    }
+
     final textToSend = _textInInput.v.trim();
     if (textToSend.isEmpty) return;
     _textInInput.uc();
