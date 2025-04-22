@@ -263,8 +263,8 @@ outputWavPath: $outputWavPath''');
 
     qq;
     late final Message? msg;
-    final id = qDebugShorterMilliseconds;
-    final receiveId = qDebugShorterMilliseconds + 1;
+    final id = HF.shorterMS;
+    final receiveId = HF.shorterMS + 1;
     final selectSourceAudioPath = this.selectSourceAudioPath.q;
     final spkName = selectSpkName.q;
     final ttsText = P.chat.textEditingController.text;
