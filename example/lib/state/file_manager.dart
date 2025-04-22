@@ -23,6 +23,8 @@ class _FileManager {
   late final hasDownloadedModels = qs(false);
 
   late final modelSelectorShown = qs(false);
+
+  late final ttsCores = qs<Set<FileInfo>>({});
 }
 
 /// Public methods
@@ -45,6 +47,9 @@ extension $FileManager on _FileManager {
       final weights = json.map((e) => FileInfo.fromJSON(e)).toSet();
       _all.u(weights);
       availableModels.u(weights.where((e) => e.available).toSet());
+      if (P.app.demoType.v == DemoType.tts) {
+        ttsCores.u(weights.where((e) => e.tags.contains("core")).toSet());
+      }
     } catch (e) {
       qqe(e);
     }

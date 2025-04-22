@@ -7,6 +7,7 @@ import 'package:zone/gen/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
+import 'package:zone/model/file_info.dart';
 import 'package:zone/model/group_info.dart';
 import 'package:zone/route/method.dart';
 import 'package:zone/route/router.dart';
@@ -15,9 +16,9 @@ import 'package:halo_alert/halo_alert.dart';
 import 'package:zone/widgets/model_item.dart';
 
 class GroupItem extends ConsumerWidget {
-  final GroupInfo groupInfo;
+  final FileInfo fileInfo;
 
-  const GroupItem(this.groupInfo, {super.key});
+  const GroupItem(this.fileInfo, {super.key});
 
   void _onDownloadAllTap() async {
     final availableModels = P.fileManager.availableModels.v;
@@ -46,7 +47,6 @@ class GroupItem extends ConsumerWidget {
     final flowDecoderEstimatorParamFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("flow.decoder.estimator.param"));
     final hiftGeneratorFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("hift"));
     final speechTokenizerFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("speech.tokenizer"));
-    final modelFileKey = fileInfos.firstWhereOrNull((e) => e.name == "RWKV7 TTS 1.5B (8 Gen 3)");
     final spksInfoFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("spk_info"));
 
     if (campPlusFileKey == null) {
@@ -79,17 +79,12 @@ class GroupItem extends ConsumerWidget {
       return;
     }
 
-    if (modelFileKey == null) {
-      Alert.error("Model file not found");
-      return;
-    }
-
     if (spksInfoFileKey == null) {
       Alert.error("Speaker info file not found");
       return;
     }
 
-    final modelLocalFile = P.fileManager.locals(modelFileKey).v;
+    final modelLocalFile = P.fileManager.locals(fileInfo).v;
     final localCampPlusFile = P.fileManager.locals(campPlusFileKey).v;
     final localFlowEncoderFile = P.fileManager.locals(flowEncoderFileKey).v;
     final localFlowDecoderEstimatorBinFile = P.fileManager.locals(flowDecoderEstimatorBinFileKey).v;
@@ -97,7 +92,7 @@ class GroupItem extends ConsumerWidget {
     final localHiftGeneratorFile = P.fileManager.locals(hiftGeneratorFileKey).v;
     final localSpeechTokenizerFile = P.fileManager.locals(speechTokenizerFileKey).v;
     final localSpksInfoFile = P.fileManager.locals(spksInfoFileKey).v;
-    P.rwkv.currentGroupInfo.u(groupInfo);
+    P.rwkv.currentGroupInfo.u(GroupInfo(displayName: fileInfo.name));
 
     P.rwkv.clearStates();
     P.chat.clearMessages();
@@ -105,7 +100,7 @@ class GroupItem extends ConsumerWidget {
     try {
       await P.rwkv.loadTTSModels(
         modelPath: modelLocalFile.targetPath,
-        backend: modelFileKey.backend!,
+        backend: fileInfo.backend!,
         usingReasoningModel: false,
         campPlusPath: localCampPlusFile.targetPath,
         flowEncoderPath: localFlowEncoderFile.targetPath,
@@ -123,8 +118,8 @@ class GroupItem extends ConsumerWidget {
       return;
     }
 
-    P.rwkv.currentGroupInfo.u(groupInfo);
-    P.rwkv.currentModel.u(modelFileKey);
+    P.rwkv.currentGroupInfo.u(GroupInfo(displayName: fileInfo.name));
+    P.rwkv.currentModel.u(fileInfo);
     Alert.success(S.current.you_can_now_start_to_chat_with_rwkv);
     pop();
   }
@@ -137,7 +132,8 @@ class GroupItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final availableModels = P.fileManager.availableModels.v;
-    final fileInfos = availableModels.toList();
+    final fileInfos = availableModels.toList().where((e) => !e.tags.contains("core")).toList();
+    fileInfos.insert(0, fileInfo);
     if (fileInfos.isEmpty) return const SizedBox.shrink();
     final primaryColor = Theme.of(context).colorScheme.primaryContainer;
 
@@ -149,8 +145,8 @@ class GroupItem extends ConsumerWidget {
     final allMissing = files.every((e) => !e.hasFile);
     final downloading = files.any((e) => e.downloading);
 
-    final currentGroupInfo = ref.watch(P.rwkv.currentGroupInfo);
-    final alreadyStarted = currentGroupInfo == groupInfo;
+    final currentModel = ref.watch(P.rwkv.currentModel);
+    final alreadyStarted = currentModel == fileInfo;
     final loading = ref.watch(P.rwkv.loading);
 
     return ClipRRect(
@@ -166,8 +162,8 @@ class GroupItem extends ConsumerWidget {
               alignment: WrapAlignment.spaceBetween,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                T(groupInfo.displayName, s: const TS(s: 18, w: FW.w600)),
-                T(groupInfo.taskDescription, s: const TS(s: 12, w: FW.w400)),
+                T(fileInfo.name, s: const TS(s: 18, w: FW.w600)),
+                T("TTS", s: const TS(s: 12, w: FW.w400)),
               ],
             ),
             Ro(

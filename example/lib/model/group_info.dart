@@ -1,5 +1,5 @@
 class GroupInfo {
-  String get displayName => "RWKV7 1.5B CH/EN/JP/KO";
+  final String displayName;
 
   String get taskDescription => "TTS";
 
@@ -8,4 +8,6 @@ class GroupInfo {
   bool get isVisualDemo => false;
 
   bool get isReasoning => false;
+
+  GroupInfo({required this.displayName});
 }

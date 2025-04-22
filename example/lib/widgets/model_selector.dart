@@ -35,6 +35,7 @@ class ModelSelector extends ConsumerWidget {
     final demoType = ref.watch(P.app.demoType);
     final hasDownloadedModels = ref.watch(P.fileManager.hasDownloadedModels);
     final availableModels = ref.watch(P.fileManager.availableModels);
+    final ttsCores = ref.watch(P.fileManager.ttsCores);
 
     return ClipRRect(
       borderRadius: 16.r,
@@ -70,7 +71,8 @@ class ModelSelector extends ConsumerWidget {
             4.h,
             if (demoType == DemoType.world)
               for (final worldType in WorldType.values) WorldGroupItem(worldType),
-            if (demoType == DemoType.tts) GroupItem(GroupInfo()),
+            if (demoType == DemoType.tts)
+              for (final fileInfo in ttsCores) GroupItem(fileInfo),
             if (demoType == DemoType.chat)
               for (final fileInfo in availableModels.sorted((a, b) {
                 return a.fileSize.compareTo(b.fileSize);

@@ -41,6 +41,8 @@ class Debugger extends ConsumerWidget {
     final selectSourceAudioPath = ref.watch(P.tts.selectSourceAudioPath);
 
     final textInInput = ref.watch(P.tts.textInInput);
+    final ttsCores = ref.watch(P.fileManager.ttsCores);
+    final demoType = ref.watch(P.app.demoType);
 
     return Positioned(
       left: 0,
@@ -109,6 +111,8 @@ class Debugger extends ConsumerWidget {
                   T(selectSourceAudioPath.toString()),
                   T("textInInput".codeToName),
                   T(textInInput.toString()),
+                  if (demoType == DemoType.tts) T("ttsCores".codeToName),
+                  if (demoType == DemoType.tts) T(ttsCores.map((e) => e.name).join("\n")),
                 ].indexMap((index, e) {
                   return C(
                     margin: EI.o(t: index % 2 == 0 ? 0 : 1),

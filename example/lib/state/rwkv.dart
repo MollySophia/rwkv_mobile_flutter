@@ -182,35 +182,7 @@ extension $RWKV on _RWKV {
     decodeSpeed.u(0);
     final tokenizerPath = await fromAssetsToTemp(Assets.config.chat.bRwkvVocabV20230424);
 
-    if (Platform.isAndroid && !_qnnLibsCopied.v) {
-      // TODO: @Molly better solution here
-      // TODO: @wangce Ask Molly why there are "better" solution here
-      final qnnLibList = {
-        "libQnnHtp.so",
-        "libQnnHtpNetRunExtensions.so",
-        "libQnnHtpV68Stub.so",
-        "libQnnHtpV69Stub.so",
-        "libQnnHtpV73Stub.so",
-        "libQnnHtpV75Stub.so",
-        "libQnnHtpV79Stub.so",
-        "libQnnHtpV68Skel.so",
-        "libQnnHtpV69Skel.so",
-        "libQnnHtpV73Skel.so",
-        "libQnnHtpV75Skel.so",
-        "libQnnHtpV79Skel.so",
-        "libQnnHtpPrepare.so",
-        "libQnnSystem.so",
-        "libQnnRwkvWkvOpPackageV68.so",
-        "libQnnRwkvWkvOpPackageV69.so",
-        "libQnnRwkvWkvOpPackageV73.so",
-        "libQnnRwkvWkvOpPackageV75.so",
-      };
-      for (final lib in qnnLibList) {
-        final path = await fromAssetsToTemp("assets/lib/qnn/$lib", targetPath: "assets/lib/$lib");
-        qqq("copied QNN library, path: $path");
-      }
-      _qnnLibsCopied.u(true);
-    }
+    await _ensureQNNCopied();
 
     final rootIsolateToken = RootIsolateToken.instance;
 
@@ -403,46 +375,32 @@ extension $RWKV on _RWKV {
 
     final tokenizerPath = await fromAssetsToTemp("assets/config/tts/b_rwkv_vocab_v20230424.txt");
 
-    if (Platform.isAndroid && !_qnnLibsCopied.v) {
-      // TODO: @Molly better solution here
-      // TODO: @wangce Ask Molly why there are "better" solution here
-      final qnnLibList = {
-        "libQnnHtp.so",
-        "libQnnHtpNetRunExtensions.so",
-        "libQnnHtpV68Stub.so",
-        "libQnnHtpV69Stub.so",
-        "libQnnHtpV73Stub.so",
-        "libQnnHtpV75Stub.so",
-        "libQnnHtpV79Stub.so",
-        "libQnnHtpV68Skel.so",
-        "libQnnHtpV69Skel.so",
-        "libQnnHtpV73Skel.so",
-        "libQnnHtpV75Skel.so",
-        "libQnnHtpV79Skel.so",
-        "libQnnHtpPrepare.so",
-        "libQnnSystem.so",
-        "libQnnRwkvWkvOpPackageV68.so",
-        "libQnnRwkvWkvOpPackageV69.so",
-        "libQnnRwkvWkvOpPackageV73.so",
-        "libQnnRwkvWkvOpPackageV75.so",
-      };
-      for (final lib in qnnLibList) {
-        final path = await fromAssetsToTemp("assets/lib/qnn/$lib", targetPath: "assets/lib/$lib");
-        qqq("copied QNN library, path: $path");
-      }
-      _qnnLibsCopied.u(true);
-    }
+    await _ensureQNNCopied();
 
     final rootIsolateToken = RootIsolateToken.instance;
 
-    final options = StartOptions(
-      modelPath,
-      tokenizerPath,
-      backend,
-      _receivePort.sendPort,
-      rootIsolateToken!,
-    );
-    await RWKVMobile().runIsolate(options);
+    if (_sendPort != null) {
+      try {
+        _sendPort!.send(("releaseTTSModels", null));
+        final startMS = HF.shorterUS;
+        await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
+        final endMS = HF.shorterUS;
+        qqr("initRuntime done in ${endMS - startMS}ms");
+      } catch (e) {
+        qqe("initRuntime failed: $e");
+        Alert.error("Failed to load model: $e");
+        return;
+      }
+    } else {
+      final options = StartOptions(
+        modelPath,
+        tokenizerPath,
+        backend,
+        _receivePort.sendPort,
+        rootIsolateToken!,
+      );
+      await RWKVMobile().runIsolate(options);
+    }
 
     while (_sendPort == null) {
       qqq("waiting for sendPort...");
@@ -756,6 +714,38 @@ extension _$RWKV on _RWKV {
     // TODO: 需要更健壮的代码: method: "", data: ""
 
     qqe("unknown message: $message");
+  }
+
+  FV _ensureQNNCopied() async {
+    if (Platform.isAndroid && !_qnnLibsCopied.v) {
+      // TODO: @Molly better solution here
+      // TODO: @wangce Ask Molly why there are "better" solution here
+      final qnnLibList = {
+        "libQnnHtp.so",
+        "libQnnHtpNetRunExtensions.so",
+        "libQnnHtpV68Stub.so",
+        "libQnnHtpV69Stub.so",
+        "libQnnHtpV73Stub.so",
+        "libQnnHtpV75Stub.so",
+        "libQnnHtpV79Stub.so",
+        "libQnnHtpV68Skel.so",
+        "libQnnHtpV69Skel.so",
+        "libQnnHtpV73Skel.so",
+        "libQnnHtpV75Skel.so",
+        "libQnnHtpV79Skel.so",
+        "libQnnHtpPrepare.so",
+        "libQnnSystem.so",
+        "libQnnRwkvWkvOpPackageV68.so",
+        "libQnnRwkvWkvOpPackageV69.so",
+        "libQnnRwkvWkvOpPackageV73.so",
+        "libQnnRwkvWkvOpPackageV75.so",
+      };
+      for (final lib in qnnLibList) {
+        final path = await fromAssetsToTemp("assets/lib/qnn/$lib", targetPath: "assets/lib/$lib");
+        qqq("copied QNN library, path: $path");
+      }
+      _qnnLibsCopied.u(true);
+    }
   }
 }
 
