@@ -163,7 +163,7 @@ class GroupItem extends ConsumerWidget {
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 T(fileInfo.name, s: const TS(s: 18, w: FW.w600)),
-                T("TTS", s: const TS(s: 12, w: FW.w400)),
+                const T("TTS", s: TS(s: 12, w: FW.w400)),
               ],
             ),
             Ro(

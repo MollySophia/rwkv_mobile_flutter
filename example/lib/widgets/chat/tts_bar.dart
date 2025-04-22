@@ -32,7 +32,7 @@ class TTSBar extends ConsumerWidget {
     return GD(
       onTap: P.tts.dismissAllShown,
       child: C(
-        decoration: BD(color: kC),
+        decoration: const BD(color: kC),
         child: Co(
           c: CAA.stretch,
           children: [
@@ -281,14 +281,14 @@ class _Actions extends ConsumerWidget {
 
     return Ro(
       children: [
-        Exp(
+        const Exp(
           child: Wrap(
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              const _AudioButton(),
-              const _SpkButton(),
-              const _IntonationButton(),
-              const _PerformanceInfo(),
+              _AudioButton(),
+              _SpkButton(),
+              _IntonationButton(),
+              _PerformanceInfo(),
             ],
           ),
         ),
@@ -423,9 +423,9 @@ class _Instruction extends ConsumerWidget {
     return Co(
       c: CAA.stretch,
       children: [
-        _TextField(),
-        if (!hasFocus) _InstructTabs(),
-        if (!hasFocus && interactingInstruction != TTSInstruction.none) _InstructOptions(),
+        const _TextField(),
+        if (!hasFocus) const _InstructTabs(),
+        if (!hasFocus && interactingInstruction != TTSInstruction.none) const _InstructOptions(),
       ],
     );
   }
@@ -495,7 +495,7 @@ class _InstructTabs extends ConsumerWidget {
                   opacity: enabled ? 1 : 0.333,
                   duration: 250.ms,
                   child: C(
-                    margin: EI.o(t: 4),
+                    margin: const EI.o(t: 4),
                     padding: const EI.o(l: 8, r: 8, t: 4, b: 4),
                     decoration: BD(
                       color: isSelected ? primary.wo(0.2) : kC,
@@ -572,7 +572,7 @@ class _InstructOptions extends ConsumerWidget {
               },
               child: C(
                 padding: const EI.o(l: 8, r: 8, t: 4, b: 4),
-                margin: EI.o(t: 4),
+                margin: const EI.o(t: 4),
                 decoration: BD(
                   color: selected ? primary.wo(0.2) : kC,
                   border: Border.all(color: kB.wo(0.5), width: 0.5),
@@ -645,16 +645,16 @@ class _TextField extends ConsumerWidget {
                     opacity: textInInput.trim().isNotEmpty ? 1 : 0.5,
                     duration: 250.ms,
                     child: C(
-                      padding: EI.s(v: 6, h: 4),
-                      child: Icon(Icons.clear),
+                      padding: const EI.s(v: 6, h: 4),
+                      child: const Icon(Icons.clear),
                     ),
                   ),
                 ),
                 GD(
                   onTap: P.tts.onRefreshButtonPressed,
                   child: C(
-                    padding: EI.s(v: 6, h: 4),
-                    child: Icon(Icons.refresh),
+                    padding: const EI.s(v: 6, h: 4),
+                    child: const Icon(Icons.refresh),
                   ),
                 ),
               ],
