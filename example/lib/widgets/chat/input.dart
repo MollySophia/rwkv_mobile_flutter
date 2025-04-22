@@ -67,13 +67,16 @@ class Input extends ConsumerWidget {
                 b: paddingBottom + 12,
                 t: 12,
               ),
-              child: Co(
-                children: [
-                  const _TextField(),
-                  if (demoType != DemoType.tts) 8.h,
-                  if (demoType != DemoType.tts) const BottomBar(),
-                  if (demoType == DemoType.tts) const TTSBar(),
-                ],
+              child: AnimatedSize(
+                duration: 250.ms,
+                child: Co(
+                  children: [
+                    const _TextField(),
+                    if (demoType != DemoType.tts) 8.h,
+                    if (demoType != DemoType.tts) const BottomBar(),
+                    if (demoType == DemoType.tts) const TTSBar(),
+                  ],
+                ),
               ),
             ),
           ),

@@ -184,7 +184,7 @@ class _AudioButton extends ConsumerWidget {
     return GD(
       onTap: P.tts.onAudioInteractorButtonPressed,
       child: Padding(
-        padding: const EI.o(l: 0, r: 4, t: 2, b: 2),
+        padding: const EI.o(l: 0, r: 4, t: 2, b: 6),
         child: C(
           padding: const EI.o(l: 8, r: 8, t: 6, b: 6),
           decoration: BD(
@@ -216,7 +216,7 @@ class _SpkButton extends ConsumerWidget {
     return GD(
       onTap: P.tts.onSpkButtonPressed,
       child: Padding(
-        padding: const EI.o(l: 0, r: 4, t: 2, b: 2),
+        padding: const EI.o(l: 0, r: 4, t: 2, b: 6),
         child: C(
           padding: const EI.o(l: 8, r: 8, t: 6, b: 6),
           decoration: BD(
@@ -245,7 +245,7 @@ class _IntonationButton extends ConsumerWidget {
     return GD(
       onTap: P.tts.onIntonationButtonPressed,
       child: Padding(
-        padding: const EI.o(l: 0, r: 4, t: 2, b: 2),
+        padding: const EI.o(l: 0, r: 4, t: 2, b: 6),
         child: C(
           padding: const EI.o(l: 8, r: 8, t: 6, b: 6),
           decoration: BD(
@@ -405,7 +405,6 @@ class _Instruction extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return C();
     return const Co(
       children: [
         _TextField(),
@@ -431,21 +430,35 @@ class _InstructActions extends ConsumerWidget {
     final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
     final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
 
+    final loaded = ref.watch(P.rwkv.loaded);
+    final loading = ref.watch(P.rwkv.loading);
+    bool enabled = loaded && !loading;
+
     return Ro(
       children: [
         Exp(
           child: Wrap(
+            // runSpacing: 4,
+            spacing: 4,
             children: TTSInstruction.values.indexMap((index, e) {
               return GD(
-                onTap: () {},
-                child: C(
-                  decoration: BD(
-                    color: kC,
-                    border: Border.all(color: kB.wo(0.5), width: 0.5),
-                    borderRadius: 4.r,
+                onTap: () {
+                  if (!enabled) return;
+                  // TODO:
+                },
+                child: AnimatedOpacity(
+                  opacity: enabled ? 1 : 0.333,
+                  duration: 250.ms,
+                  child: C(
+                    margin: EI.o(t: 4),
+                    padding: const EI.o(l: 8, r: 8, t: 4, b: 4),
+                    decoration: BD(
+                      color: kC,
+                      border: Border.all(color: kB.wo(0.5), width: 0.5),
+                      borderRadius: 4.r,
+                    ),
+                    child: T(e.toString().split(".").last),
                   ),
-                  padding: const EI.o(l: 8, r: 8, t: 4, b: 4),
-                  child: T(e.toString()),
                 ),
               );
             }),
@@ -499,7 +512,7 @@ class _TextField extends ConsumerWidget {
           keyboardType: TextInputType.multiline,
           enableSuggestions: true,
           textInputAction: TextInputAction.send,
-          maxLines: 10,
+          maxLines: 5,
           minLines: 1,
           decoration: InputDecoration(
             contentPadding: const EI.o(

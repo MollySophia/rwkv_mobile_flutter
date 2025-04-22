@@ -5,8 +5,10 @@ class _TTS {
   late final ttsDone = qs(true);
 
   late final focusNode = FocusNode();
-  late final textEditingController = TextEditingController();
-  late final _textInInput = qs("");
+
+  late final defaultTextInInput = "请用正常的语气说";
+  late final textEditingController = TextEditingController(text: defaultTextInInput);
+  late final textInInput = qs(defaultTextInInput);
 
   late final instructions = qsf<int?, TTSInstruction>(null);
 
@@ -29,7 +31,7 @@ extension _$TTS on _TTS {
       }
     });
     textEditingController.addListener(_onTextEditingControllerValueChanged);
-    _textInInput.l(_onTextChanged);
+    textInInput.l(_onTextChanged);
     await getTTSSpkNames();
     selectSpkName.u(spkNames.v.random);
     selectSourceAudioPath.u(null);
@@ -44,7 +46,7 @@ extension _$TTS on _TTS {
   void _onTextEditingControllerValueChanged() {
     // qqq("_onTextEditingControllerValueChanged");
     final textInController = textEditingController.text;
-    if (_textInInput.v != textInController) _textInInput.u(textInController);
+    if (textInInput.v != textInController) textInInput.u(textInController);
   }
 }
 
@@ -268,7 +270,7 @@ outputWavPath: $outputWavPath''');
     final ttsText = P.chat.textEditingController.text;
 
     // TODO: implement instructionText
-    final instructionText = "请用正常的语气说";
+    final instructionText = textInInput.q;
 
     final outputWavPath = P.app.cacheDir.v!.path + "/$receiveId.output.wav";
 

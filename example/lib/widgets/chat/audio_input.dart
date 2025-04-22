@@ -69,16 +69,19 @@ class AudioInput extends ConsumerWidget {
 
     bool showGradient = true;
 
+    Curve curve = shouldShow ? Curves.easeOutBack : Curves.easeInBack;
+
     if (demoType == DemoType.tts) {
       shouldShow = audioInteractorShown;
       bottomMessage = "Press and hold the microphone button above\nrelease to send";
       bottomAdjust = audioInteractorShown ? 24.0 : 0;
       showGradient = false;
+      curve = Curves.easeOut;
     }
 
     return AnimatedPositioned(
       duration: 250.ms,
-      curve: Curves.easeInOutBack,
+      curve: curve,
       bottom: shouldShow ? (0 + paddingBottom + bottomAdjust) : -_kWidgetSize,
       left: 0,
       child: MeasureSize(
