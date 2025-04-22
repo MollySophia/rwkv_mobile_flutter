@@ -9,8 +9,45 @@
     "quantization": "a16w8",
     "platforms": ["android"],
     "backends": ["qnn"],
-    "tags": ["npu"],
+    "tags": ["npu", "core"],
     "socLimitations": ["8 Gen 3"]
+  },
+  {
+    "name": "RWKV7 TTS 0.4B (8 Gen 3)",
+    "type": "gguf",
+    "modelSize": 0.4,
+    "fileName": "CosyVoice2-0.5B-RWKV-7-0.4B-Instruct-CHENJPKO-8gen3-a16w8_combined.bin",
+    "fileSize": 488234368,
+    "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/model/CosyVoice2-0.5B-RWKV-7-0.4B-Instruct-CHENJPKO-8gen3-a16w8_combined.bin",
+    "quantization": "a16w8",
+    "platforms": ["android"],
+    "backends": ["qnn"],
+    "tags": ["npu", "core"],
+    "socLimitations": ["8 Gen 3"]
+  },
+  {
+    "name": "RWKV7 TTS 0.4B",
+    "type": "gguf",
+    "modelSize": 0.4,
+    "fileName": "CosyVoice2-0.5B-RWKV-7-0.4B-Instruct-CHENJPKO-q8_0.gguf",
+    "fileSize": 516297248,
+    "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/model/CosyVoice2-0.5B-RWKV-7-0.4B-Instruct-CHENJPKO-q8_0.gguf",
+    "quantization": "q8_0",
+    "platforms": ["macos", "windows", "linux", "android"],
+    "backends": ["llamacpp"],
+    "tags": ["npu", "core"]
+  },
+  {
+    "name": "RWKV7 TTS 1.5B",
+    "type": "gguf",
+    "modelSize": 1.5,
+    "fileName": "CosyVoice2-0.5B-RWKV-7-1.5B-Instruct-CHENJPKO-q4_k_m.gguf",
+    "fileSize": 1009165600,
+    "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/model/CosyVoice2-0.5B-RWKV-7-1.5B-Instruct-CHENJPKO-q4_k_m.gguf",
+    "quantization": "q4_k_m",
+    "platforms": ["macos", "windows", "linux", "android"],
+    "backends": ["llamacpp"],
+    "tags": ["npu", "core"]
   },
   {
     "name": "Campplus",
