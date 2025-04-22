@@ -413,6 +413,7 @@ class RWKVMobile {
         if (retVal != 0) {
           sendPort.send({'error': 'Failed to load TTS models'});
         }
+        rwkvMobile.rwkvmobile_runtime_cosyvoice_set_cfm_steps(runtime, 3);
       } else if (command == 'releaseTTSModels') {
         retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_release_models(runtime);
         if (retVal != 0) {
@@ -449,6 +450,13 @@ class RWKVMobile {
           sendPort.send({'error': 'Failed to run TTS with predefined speech embedding'});
         } else {
           sendPort.send({'ttsDone': true, 'outputWavPath': outputWavPath});
+        }
+      } else if (command == 'setTTSCFMSteps') {
+        final args = message.$2 as Map<String, dynamic>;
+        final cfmSteps = args['cfmSteps'] as int;
+        retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_set_cfm_steps(runtime, cfmSteps);
+        if (retVal != 0) {
+          sendPort.send({'error': 'Failed to set TTS CFM steps'});
         }
       } else {
         if (kDebugMode) print("😡 unknown command: $command");
