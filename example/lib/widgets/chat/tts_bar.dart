@@ -419,17 +419,6 @@ class _InstructActions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final receiving = ref.watch(P.chat.receivingTokens);
-    final canSend = ref.watch(P.chat.canSend);
-    final editingBotMessage = ref.watch(P.chat.editingBotMessage);
-    final color = Theme.of(context).colorScheme.primary;
-    final prefillSpeed = ref.watch(P.rwkv.prefillSpeed);
-    final decodeSpeed = ref.watch(P.rwkv.decodeSpeed);
-    final currentWorldType = ref.watch(P.rwkv.currentWorldType);
-    final demoType = ref.watch(P.app.demoType);
-    final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
-    final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
-
     final loaded = ref.watch(P.rwkv.loaded);
     final loading = ref.watch(P.rwkv.loading);
     bool enabled = loaded && !loading;
@@ -440,11 +429,12 @@ class _InstructActions extends ConsumerWidget {
           child: Wrap(
             // runSpacing: 4,
             spacing: 4,
-            children: TTSInstruction.values.indexMap((index, e) {
+            children: TTSInstruction.values.where((e) => e.forInstruction).indexMap((index, e) {
               return GD(
                 onTap: () {
                   if (!enabled) return;
-                  // TODO:
+                  // TODO: 添加指令
+                  Gaimon.light();
                 },
                 child: AnimatedOpacity(
                   opacity: enabled ? 1 : 0.333,
@@ -495,6 +485,8 @@ class _TextField extends ConsumerWidget {
 
     final borderRadius = demoType != DemoType.tts ? 12.r : 6.r;
 
+    final textInInput = ref.watch(P.tts.textInInput);
+
     return GD(
       onTap: textFieldEnabled ? null : _onTapTextFieldWhenItsDisabled,
       child: KeyboardListener(
@@ -515,9 +507,32 @@ class _TextField extends ConsumerWidget {
           maxLines: 5,
           minLines: 1,
           decoration: InputDecoration(
+            suffixIcon: Ro(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GD(
+                  onTap: P.tts.onClearButtonPressed,
+                  child: AnimatedOpacity(
+                    opacity: textInInput.trim().isNotEmpty ? 1 : 0.5,
+                    duration: 250.ms,
+                    child: C(
+                      padding: EI.s(v: 6, h: 4),
+                      child: Icon(Icons.clear),
+                    ),
+                  ),
+                ),
+                GD(
+                  onTap: P.tts.onRefreshButtonPressed,
+                  child: C(
+                    padding: EI.s(v: 6, h: 4),
+                    child: Icon(Icons.refresh),
+                  ),
+                ),
+              ],
+            ),
             contentPadding: const EI.o(
               l: 12,
-              r: 12,
+              r: 8,
               t: 4,
               b: 4,
             ),
@@ -581,6 +596,7 @@ class _TextField extends ConsumerWidget {
         P.chat.textEditingController.value = const TextEditingValue(text: "");
       }
     } else {
+      P.tts.dismissAllShown();
       P.tts.gen();
     }
   }

@@ -361,6 +361,23 @@ ${instructionText.isNotEmpty ? "- 使用“$instructionText”作为说话指令
     audioInteractorShown.q = false;
     spkShown.q = false;
     intonationShown.q = false;
+    focusNode.unfocus();
+  }
+
+  void onRefreshButtonPressed() {
+    qq;
+    textInInput.u(defaultTextInInput);
+    TTSInstruction.values.forEach((action) {
+      instructions(action).q = null;
+    });
+  }
+
+  void onClearButtonPressed() {
+    qq;
+    textInInput.u("");
+    TTSInstruction.values.forEach((action) {
+      instructions(action).q = null;
+    });
   }
 }
 
