@@ -1,4 +1,5 @@
 enum TTSInstruction {
+  none,
   emotion,
   dialect,
   speed,
@@ -12,6 +13,7 @@ enum TTSInstruction {
         speed => "语速",
         role => "角色扮演",
         intonation => "语气词",
+        none => "无",
       };
 
   String get nameEN => switch (this) {
@@ -20,23 +22,44 @@ enum TTSInstruction {
         speed => "speed",
         role => "role",
         intonation => "intonation",
+        none => "none",
       };
 
   bool get forInstruction => switch (this) {
+        none => false,
         intonation => false,
         _ => true,
       };
 
+  String get tail => switch (this) {
+        none => "",
+        intonation => "",
+        emotion => "的情感",
+        dialect => "的口音",
+        speed => "的语速",
+        role => "的声音",
+      };
+
+  String get head => switch (this) {
+        none => "",
+        intonation => "",
+        emotion => "",
+        dialect => "模仿",
+        speed => "以",
+        role => "用",
+      };
+
   List<String> get options => switch (this) {
+        none => [],
         emotion => [
-            "高兴(Happy)",
-            "悲伤(Sad)",
-            "惊讶(Surprised)",
-            "愤怒(Angry)",
-            "恐惧(Fearful)",
-            "厌恶(Disgusted)",
-            "冷静(Calm)",
-            "严肃(Serious)",
+            "高兴",
+            "悲伤",
+            "惊讶",
+            "愤怒",
+            "恐惧",
+            "厌恶",
+            "冷静",
+            "严肃",
           ],
         dialect => [
             "粤语",
@@ -47,19 +70,19 @@ enum TTSInstruction {
             "天津话",
           ],
         speed => [
-            "快速(Fast)",
-            "非常快速(Very Fast)",
-            "慢速(Slow)",
-            "非常慢速(Very Slow)",
+            "快速",
+            "非常快速",
+            "慢速",
+            "非常慢速",
           ],
         role => [
-            "神秘(Mysterious)",
-            "凶猛(Fierce)",
-            "好奇(Curious)",
-            "优雅(Elegant)",
-            "孤独(Lonely)",
-            "机器人(Robot)",
-            "小猪佩奇(Peppa)",
+            "神秘",
+            "凶猛",
+            "好奇",
+            "优雅",
+            "孤独",
+            "机器人",
+            "小猪佩奇",
           ],
         intonation => [
             "[breath]",

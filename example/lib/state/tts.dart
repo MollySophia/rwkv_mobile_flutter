@@ -5,11 +5,13 @@ class _TTS {
   late final ttsDone = qs(true);
 
   late final focusNode = FocusNode();
+  late final hasFocus = qs(false);
 
   late final defaultTextInInput = "请用正常的语气说";
   late final textEditingController = TextEditingController(text: defaultTextInInput);
   late final textInInput = qs(defaultTextInInput);
 
+  late final interactingInstruction = qs(TTSInstruction.none);
   late final instructions = qsf<int?, TTSInstruction>(null);
 
   late final audioInteractorShown = qs(false);
@@ -35,6 +37,10 @@ extension _$TTS on _TTS {
     await getTTSSpkNames();
     selectSpkName.u(spkNames.v.random);
     selectSourceAudioPath.u(null);
+
+    focusNode.addListener(() {
+      hasFocus.u(focusNode.hasFocus);
+    });
   }
 
   void _onTextChanged(String next) {
@@ -279,6 +285,9 @@ outputWavPath: $outputWavPath''');
       return;
     }
 
+    P.chat.textEditingController.text = "";
+    P.chat.focusNode.unfocus();
+
     audioInteractorShown.u(false);
     intonationShown.u(false);
     spkShown.u(false);
@@ -358,10 +367,12 @@ ${instructionText.isNotEmpty ? "- 使用“$instructionText”作为说话指令
   }
 
   void dismissAllShown() {
+    qq;
     audioInteractorShown.q = false;
     spkShown.q = false;
     intonationShown.q = false;
     focusNode.unfocus();
+    interactingInstruction.q = TTSInstruction.none;
   }
 
   void onRefreshButtonPressed() {
@@ -378,6 +389,24 @@ ${instructionText.isNotEmpty ? "- 使用“$instructionText”作为说话指令
     TTSInstruction.values.forEach((action) {
       instructions(action).q = null;
     });
+  }
+
+  void syncInstruction() {
+    qq;
+    String instruction = "请用";
+    TTSInstruction.values.where((e) => e.forInstruction).forEach((action) {
+      final index = instructions(action).q;
+      if (index != null) {
+        instruction += "${action.head}${action.options[index]}${action.tail}";
+      }
+    });
+    instruction += "说一下";
+    instruction = instruction.replaceAll("用用", "用");
+    instruction = instruction.replaceAll("用以", "以");
+    instruction = instruction.replaceAll("用模仿", "模仿");
+    print(instruction);
+    textInInput.u(instruction);
+    textEditingController.text = instruction;
   }
 }
 

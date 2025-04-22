@@ -44,6 +44,11 @@ class Debugger extends ConsumerWidget {
     final ttsCores = ref.watch(P.fileManager.ttsCores);
     final demoType = ref.watch(P.app.demoType);
 
+    final interactingInstruction = ref.watch(P.tts.interactingInstruction);
+
+    final selectedIndex = ref.watch(P.tts.instructions(interactingInstruction));
+    final selectedInstruction = selectedIndex != null ? interactingInstruction.options[selectedIndex] : null;
+
     return Positioned(
       left: 0,
       top: 0,
@@ -113,6 +118,10 @@ class Debugger extends ConsumerWidget {
                   T(textInInput.toString()),
                   if (demoType == DemoType.tts) T("ttsCores".codeToName),
                   if (demoType == DemoType.tts) T(ttsCores.map((e) => e.name).join("\n")),
+                  if (demoType == DemoType.tts) T("interactingInstruction".codeToName),
+                  if (demoType == DemoType.tts) T(interactingInstruction.toString()),
+                  if (demoType == DemoType.tts) T("selectedInstruction".codeToName),
+                  if (demoType == DemoType.tts) T(selectedInstruction.toString()),
                 ].indexMap((index, e) {
                   return C(
                     margin: EI.o(t: index % 2 == 0 ? 0 : 1),

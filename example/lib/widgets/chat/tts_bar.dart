@@ -29,25 +29,31 @@ class TTSBar extends ConsumerWidget {
     final primary = Theme.of(context).colorScheme.primary;
     final selectSourceAudioPath = ref.watch(P.tts.selectSourceAudioPath);
     final sourceWavName = selectSourceAudioPath?.split("/").last;
-    return Co(
-      c: CAA.stretch,
-      children: [
-        if (selectSpkName != null)
-          C(
-            padding: const EI.s(v: 4),
-            child: T("Target: " + (P.tts.safe(selectSpkName)), s: TS(c: primary, w: FW.w600)),
-          ),
-        if (selectSourceAudioPath != null)
-          C(
-            padding: const EI.s(v: 4),
-            child: T("Source: " + (sourceWavName ?? ""), s: TS(c: primary, w: FW.w600)),
-          ),
-        const _Actions(),
-        if (audioInteractorShown) const _AudioInteractor(),
-        if (spkShown) const _SpkPanel(),
-        if (intonationShown) const _Intonation(),
-        if (!audioInteractorShown && !intonationShown && !spkShown) const _Instruction(),
-      ],
+    return GD(
+      onTap: P.tts.dismissAllShown,
+      child: C(
+        decoration: BD(color: kC),
+        child: Co(
+          c: CAA.stretch,
+          children: [
+            if (selectSpkName != null)
+              C(
+                padding: const EI.s(v: 4),
+                child: T("Target: " + (P.tts.safe(selectSpkName)), s: TS(c: primary, w: FW.w600)),
+              ),
+            if (selectSourceAudioPath != null)
+              C(
+                padding: const EI.s(v: 4),
+                child: T("Source: " + (sourceWavName ?? ""), s: TS(c: primary, w: FW.w600)),
+              ),
+            const _Actions(),
+            if (audioInteractorShown) const _AudioInteractor(),
+            if (spkShown) const _SpkPanel(),
+            if (intonationShown) const _Intonation(),
+            if (!audioInteractorShown && !intonationShown && !spkShown) const _Instruction(),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -253,7 +259,7 @@ class _IntonationButton extends ConsumerWidget {
             borderRadius: borderRadius,
           ),
           child: T(
-            "Intonation" + (intonationShown ? " ×" : ""),
+            "语气词" + (intonationShown ? " ×" : ""),
             s: TS(c: intonationShown ? kW : primary),
           ),
         ),
@@ -405,23 +411,48 @@ class _Instruction extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const Co(
+    final hasFocus = ref.watch(P.tts.hasFocus);
+    final interactingInstruction = ref.watch(P.tts.interactingInstruction);
+    return Co(
+      c: CAA.stretch,
       children: [
         _TextField(),
-        _InstructActions(),
+        if (!hasFocus) _InstructTabs(),
+        if (!hasFocus && interactingInstruction != TTSInstruction.none) _InstructOptions(),
       ],
     );
   }
 }
 
-class _InstructActions extends ConsumerWidget {
-  const _InstructActions();
+class _InstructTabs extends ConsumerWidget {
+  const _InstructTabs();
+
+  void _onTap(TTSInstruction e) {
+    qq;
+    if (P.tts.interactingInstruction.q == e) {
+      P.tts.interactingInstruction.u(TTSInstruction.none);
+    } else {
+      P.tts.interactingInstruction.u(e);
+    }
+
+    Gaimon.light();
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final loaded = ref.watch(P.rwkv.loaded);
     final loading = ref.watch(P.rwkv.loading);
     bool enabled = loaded && !loading;
+
+    final primary = Theme.of(context).colorScheme.primary;
+    // final interactingInstruction = ref.watch(P.tts.interactingInstruction);
+    // final selectedIndex = ref.watch(P.tts.instructions(interactingInstruction));
+    // final selectedInstruction = selectedIndex != null ? interactingInstruction.options[selectedIndex] : null;
+
+    final i1 = ref.watch(P.tts.instructions(TTSInstruction.emotion));
+    final i2 = ref.watch(P.tts.instructions(TTSInstruction.intonation));
+    final i3 = ref.watch(P.tts.instructions(TTSInstruction.speed));
+    final i4 = ref.watch(P.tts.instructions(TTSInstruction.role));
 
     return Ro(
       children: [
@@ -430,11 +461,28 @@ class _InstructActions extends ConsumerWidget {
             // runSpacing: 4,
             spacing: 4,
             children: TTSInstruction.values.where((e) => e.forInstruction).indexMap((index, e) {
+              final isSelected = P.tts.interactingInstruction.v == e;
+              String displayText = e.toString().split(".").last;
+              if (isSelected) displayText += " ×";
+
+              bool hasValue = false;
+              switch (e) {
+                case TTSInstruction.none:
+                case TTSInstruction.emotion:
+                  hasValue = i1 != null;
+                case TTSInstruction.dialect:
+                  hasValue = i2 != null;
+                case TTSInstruction.speed:
+                  hasValue = i3 != null;
+                case TTSInstruction.role:
+                  hasValue = i4 != null;
+                case TTSInstruction.intonation:
+              }
+
               return GD(
                 onTap: () {
                   if (!enabled) return;
-                  // TODO: 添加指令
-                  Gaimon.light();
+                  _onTap(e);
                 },
                 child: AnimatedOpacity(
                   opacity: enabled ? 1 : 0.333,
@@ -443,11 +491,24 @@ class _InstructActions extends ConsumerWidget {
                     margin: EI.o(t: 4),
                     padding: const EI.o(l: 8, r: 8, t: 4, b: 4),
                     decoration: BD(
-                      color: kC,
+                      color: isSelected ? primary.wo(0.2) : kC,
                       border: Border.all(color: kB.wo(0.5), width: 0.5),
                       borderRadius: 4.r,
                     ),
-                    child: T(e.toString().split(".").last),
+                    child: Ro(
+                      c: CAA.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (hasValue)
+                          Icon(
+                            Icons.circle,
+                            color: primary,
+                            size: 8,
+                          ),
+                        if (hasValue) 4.w,
+                        T(displayText),
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -455,6 +516,67 @@ class _InstructActions extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _InstructOptions extends ConsumerWidget {
+  const _InstructOptions();
+
+  void _onTap(int index) {
+    qq;
+    Gaimon.light();
+    final interactingInstruction = P.tts.interactingInstruction.q;
+    if (interactingInstruction == TTSInstruction.none) return;
+    if (P.tts.instructions(interactingInstruction).q == index) {
+      P.tts.instructions(interactingInstruction).u(null);
+    } else {
+      P.tts.instructions(interactingInstruction).u(index);
+    }
+    P.tts.syncInstruction();
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final interactingInstruction = ref.watch(P.tts.interactingInstruction);
+    final primary = Theme.of(context).colorScheme.primary;
+    final options = interactingInstruction.options;
+    final selectedIndex = ref.watch(P.tts.instructions(interactingInstruction));
+    final selectedInstruction = selectedIndex != null ? options[selectedIndex] : null;
+    return GD(
+      onTap: () {},
+      child: AnimatedContainer(
+        duration: 250.ms,
+        height: interactingInstruction == TTSInstruction.none ? 0 : 150,
+        margin: const EI.o(t: 4),
+        decoration: BD(border: Border(top: BorderSide(color: kB.wo(0.5), width: 0.5))),
+        child: Wrap(
+          alignment: WrapAlignment.start,
+          spacing: 4,
+          children: options.indexMap((index, e) {
+            bool selected = false;
+            if (interactingInstruction != TTSInstruction.none) {
+              selected = P.tts.instructions(interactingInstruction).v == index;
+            }
+
+            return GD(
+              onTap: () {
+                _onTap(index);
+              },
+              child: C(
+                padding: const EI.o(l: 8, r: 8, t: 4, b: 4),
+                margin: EI.o(t: 4),
+                decoration: BD(
+                  color: selected ? primary.wo(0.2) : kC,
+                  border: Border.all(color: kB.wo(0.5), width: 0.5),
+                  borderRadius: 4.r,
+                ),
+                child: T(e + (selected ? " ×" : "")),
+              ),
+            );
+          }),
+        ),
+      ),
     );
   }
 }

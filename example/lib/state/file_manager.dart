@@ -48,7 +48,7 @@ extension $FileManager on _FileManager {
       _all.u(weights);
       availableModels.u(weights.where((e) => e.available).toSet());
       if (P.app.demoType.v == DemoType.tts) {
-        ttsCores.u(weights.where((e) => e.tags.contains("core")).toSet());
+        ttsCores.u(availableModels.q.where((e) => e.tags.contains("core")).toSet());
       }
     } catch (e) {
       qqe(e);
