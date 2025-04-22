@@ -1,7 +1,7 @@
 name: zone
 description: 'A new Flutter project.'
 publish_to: 'none'
-version: 1.4.1+301
+version: 1.4.1+302
 
 environment:
   sdk: ^3.6.0
@@ -69,10 +69,10 @@ flutter:
 
   assets:
     # TODO: @wangce 需要在编译脚本中决定是否打包这些为 Chat 准备的高通加速库
-    - assets/lib/tts/
-    - assets/model/tts/
-    - assets/config/tts/
-    - assets/img/tts/
+    - assets/lib/chat/
+    - assets/model/chat/
+    - assets/config/chat/
+    - assets/img/chat/
     - assets/lib/qnn/
     - .env
 
