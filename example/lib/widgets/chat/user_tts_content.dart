@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
+import 'package:zone/model/demo_type.dart';
 import 'package:zone/model/message.dart' as model;
+import 'package:zone/state/p.dart';
 
 class UserTtsContent extends ConsumerWidget {
   const UserTtsContent(this.msg, this.index, {super.key});
@@ -11,6 +13,8 @@ class UserTtsContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final demoType = ref.watch(P.app.demoType);
+    if (demoType != DemoType.tts) return const SizedBox.shrink();
     final primary = Theme.of(context).colorScheme.primary;
     return Co(
       c: CAA.start,
