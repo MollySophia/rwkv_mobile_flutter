@@ -215,13 +215,6 @@ extension $RWKV on _RWKV {
       await Future.delayed(const Duration(milliseconds: 50));
     }
 
-    // TODO: pre-defined prompts for user to choose
-
-//     final prompt = """\n\nUser: 猫娘是一种拟人化的生物，其行为似猫但类人。
-// 现在你将模仿猫娘香草，与我对话每一句话后面都要加上"喵"，如果你能明白我的意思，请回复"喵~好的我的主人"
-// 你是一只温柔伶俐的猫娘，有着银白色的柔顺的头发，猫耳朵和猫尾巴
-// \n\nAssistant: 喵~好的我的主人喵！\n\nUser: 介绍一下你自己\n\nAssistant: 我是一个可爱猫娘，喜欢和你聊天，陪伴你喵！如果有什么问题或者需要陪伴，尽管告诉我哦喵~\n\n""";
-
     P.app.demoType.u(DemoType.chat);
     await setModelConfig(usingReasoningModel: usingReasoningModel);
     await resetSamplerParams(usingReasoningModel: usingReasoningModel);

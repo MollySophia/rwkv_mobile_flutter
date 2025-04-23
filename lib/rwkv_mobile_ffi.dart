@@ -651,6 +651,13 @@ class rwkv_mobile {
 
   late final _rwkvmobile_get_htp_archPtr = _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('rwkvmobile_get_htp_arch');
   late final _rwkvmobile_get_htp_arch = _rwkvmobile_get_htp_archPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  ffi.Pointer<ffi.Char> rwkvmobile_dump_log() {
+    return _rwkvmobile_dump_log();
+  }
+
+  late final _rwkvmobile_dump_logPtr = _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('rwkvmobile_dump_log');
+  late final _rwkvmobile_dump_log = _rwkvmobile_dump_logPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 }
 
 final class sampler_params extends ffi.Struct {

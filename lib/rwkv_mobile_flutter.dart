@@ -458,6 +458,9 @@ class RWKVMobile {
         if (retVal != 0) {
           sendPort.send({'error': 'Failed to set TTS CFM steps'});
         }
+      } else if (command == 'dumpLog') {
+        final log = rwkvMobile.rwkvmobile_dump_log();
+        sendPort.send({'runtimeLog': log.cast<Utf8>().toDartString()});
       } else {
         if (kDebugMode) print("😡 unknown command: $command");
       }
