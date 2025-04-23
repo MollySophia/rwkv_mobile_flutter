@@ -238,7 +238,7 @@ extension $RWKV on _RWKV {
     if (setPrompt) qqq("setPrompt: $finalPrompt");
 
     _sendPort!.send(("setEnableReasoning", _usingReasoningModel.v));
-    if (setPrompt) _sendPort!.send(("setPrompt", finalPrompt));
+    if (setPrompt) _sendPort!.send(("setPrompt", _usingReasoningModel.v ? "<EOD>" : finalPrompt));
     _sendPort!.send(("setThinkingToken", _preferChinese.v ? "<think>嗯" : "<think"));
   }
 

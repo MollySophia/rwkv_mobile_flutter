@@ -711,7 +711,6 @@ class _TextField extends ConsumerWidget {
   }
 
   void _onKeyEvent(KeyEvent event) {
-    qq;
     final character = event.character;
     final isShiftPressed = HardwareKeyboard.instance.isShiftPressed;
     final isEnterPressed = event.logicalKey == LogicalKeyboardKey.enter && character != null;

@@ -8,12 +8,12 @@ class _Chat {
   late final scrollController = ScrollController();
 
   /// The text editing controller of the chat page input
-  late final textEditingController = TextEditingController(text: kDebugMode ? "Hello World" : "");
+  late final textEditingController = TextEditingController(text: "");
 
   /// The focus node of the chat page input
   late final focusNode = FocusNode();
 
-  late final _textInInput = qs(kDebugMode ? "Hello World" : "");
+  late final _textInInput = qs("");
 
   late final canSend = qp((ref) {
     final textInInput = ref.watch(_textInInput);
