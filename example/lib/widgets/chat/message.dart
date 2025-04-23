@@ -20,6 +20,7 @@ import 'package:zone/widgets/chat/bot_message_bottom.dart';
 import 'package:zone/widgets/chat/bot_tts_content.dart';
 import 'package:zone/widgets/chat/photo_viewer_overlay.dart';
 import 'package:zone/widgets/chat/user_message_bottom.dart';
+import 'package:zone/widgets/chat/user_tts_content.dart';
 
 const double _kTextScaleFactor = 1.1;
 const double _kTextScaleFactorForCotContent = 1;
@@ -52,7 +53,7 @@ class Message extends ConsumerWidget {
     P.chat.latestClickedMessage.u(msg);
     final isMine = msg.isMine;
 
-    if (isMine && msg.type == model.MessageType.userAudio) {
+    if (msg.type == model.MessageType.userAudio) {
       final audioUrl = msg.audioUrl;
       qqq("audioUrl: $audioUrl");
       if (audioUrl == null) return;
@@ -292,93 +293,98 @@ class Message extends ConsumerWidget {
           child: Co(
             c: isMine ? CAA.end : CAA.start,
             children: [
-              // 🔥 User message
-              if (isMine && !isUserImage && !isUserAudio) T(finalContent, s: userMessageStyle),
-              // 🔥 User message image
-              if (isMine && isUserImage)
-                ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxWidth: rawMaxWidth * 0.8,
-                    maxHeight: rawMaxWidth * 0.8,
-                  ),
-                  child: PhotoViewerImage(
-                    borderRadius: 24,
-                    imageUrl: msg.imageUrl!,
-                    showDefaultCloseButton: false,
-                    overlayBuilder: (context) {
-                      return const PhotoViewerOverlay();
-                    },
-                  ),
-                ),
-              // 🔥 User message audio
-              if (isMine && isUserAudio) AudioBubble(msg),
-              // 🔥 Bot message audio recognition result
-              if (!isMine && worldDemoMessageHeader.isNotEmpty)
-                T(
-                  worldDemoMessageHeader,
-                  s: TS(
-                    c: kB.wo(0.5),
-                    w: FW.w700,
-                    s: 10,
-                  ),
-                ),
-              if (!isMine && worldDemoMessageHeader.isNotEmpty) 4.h,
-              // 🔥 Bot message
-              if (!isMine && !usingReasoningModel)
-                MarkdownBody(
-                  data: finalContent,
-                  selectable: false,
-                  shrinkWrap: true,
-                  styleSheet: markdownStyleSheet,
-                  onTapLink: _onTapLink,
-                ),
-              // 🔥 Bot message cot header
-              if (!isMine && usingReasoningModel)
-                GD(
-                  onTap: () {
-                    if (showingCotContent) {
-                      ref.read(P.chat.cotDisplayState(msg.id).notifier).state = CoTDisplayState.hideCotHeader;
-                    } else {
-                      ref.read(P.chat.cotDisplayState(msg.id).notifier).state = CoTDisplayState.showCotHeaderAndCotContent;
-                    }
-                  },
-                  child: C(
-                    decoration: const BD(color: kC),
-                    child: Ro(
-                      children: [
-                        T(thisMessageIsReceiving ? S.current.thinking : S.current.thought_result, s: TS(c: kB.wo(0.5), w: FW.w600)),
-                        showingCotContent ? Icon(Icons.expand_more, color: kB.wo(0.5)) : Icon(Icons.expand_less, color: kB.wo(0.5)),
-                      ],
+              if (isMine) ...[
+                // 🔥 User message
+                if (!isUserImage && !isUserAudio && finalContent.isNotEmpty) T(finalContent, s: userMessageStyle),
+                // 🔥 User message image
+                if (isUserImage)
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: rawMaxWidth * 0.8,
+                      maxHeight: rawMaxWidth * 0.8,
+                    ),
+                    child: PhotoViewerImage(
+                      borderRadius: 24,
+                      imageUrl: msg.imageUrl!,
+                      showDefaultCloseButton: false,
+                      overlayBuilder: (context) {
+                        return const PhotoViewerOverlay();
+                      },
                     ),
                   ),
-                ),
-              // 🔥 Bot message cot content
-              if (!isMine && usingReasoningModel) 4.h,
-              if (!isMine && usingReasoningModel)
-                AnimatedContainer(
-                  duration: 250.ms,
-                  height: cotContentHeight,
-                  child: MarkdownBody(
-                    data: cotContent,
+                // 🔥 User message audio
+                if (isUserAudio) AudioBubble(msg),
+                UserTtsContent(msg, index),
+                UserMessageBottom(msg, index),
+              ],
+              if (!isMine) ...[
+                // 🔥 Bot message audio recognition result
+                if (worldDemoMessageHeader.isNotEmpty)
+                  T(
+                    worldDemoMessageHeader,
+                    s: TS(
+                      c: kB.wo(0.5),
+                      w: FW.w700,
+                      s: 10,
+                    ),
+                  ),
+                if (worldDemoMessageHeader.isNotEmpty) 4.h,
+                // 🔥 Bot message
+                if (!usingReasoningModel)
+                  MarkdownBody(
+                    data: finalContent,
                     selectable: false,
                     shrinkWrap: true,
-                    styleSheet: markdownStyleSheetForCotContent,
+                    styleSheet: markdownStyleSheet,
                     onTapLink: _onTapLink,
                   ),
-                ),
-              // 🔥 Bot message cot result
-              if (!isMine && cotResult.isNotEmpty && usingReasoningModel && showingCotContent) 12.h,
-              if (!isMine && cotResult.isNotEmpty && usingReasoningModel)
-                MarkdownBody(
-                  data: cotResult,
-                  selectable: false,
-                  shrinkWrap: true,
-                  styleSheet: markdownStyleSheet,
-                  onTapLink: _onTapLink,
-                ),
-              UserMessageBottom(msg, index),
-              BotMessageBottom(msg, index),
-              BotTtsContent(msg, index),
+                // 🔥 Bot message cot header
+                if (usingReasoningModel)
+                  GD(
+                    onTap: () {
+                      if (showingCotContent) {
+                        ref.read(P.chat.cotDisplayState(msg.id).notifier).state = CoTDisplayState.hideCotHeader;
+                      } else {
+                        ref.read(P.chat.cotDisplayState(msg.id).notifier).state = CoTDisplayState.showCotHeaderAndCotContent;
+                      }
+                    },
+                    child: C(
+                      decoration: const BD(color: kC),
+                      child: Ro(
+                        children: [
+                          T(thisMessageIsReceiving ? S.current.thinking : S.current.thought_result, s: TS(c: kB.wo(0.5), w: FW.w600)),
+                          showingCotContent ? Icon(Icons.expand_more, color: kB.wo(0.5)) : Icon(Icons.expand_less, color: kB.wo(0.5)),
+                        ],
+                      ),
+                    ),
+                  ),
+                // 🔥 Bot message cot content
+                if (usingReasoningModel) 4.h,
+                if (usingReasoningModel)
+                  AnimatedContainer(
+                    duration: 250.ms,
+                    height: cotContentHeight,
+                    child: MarkdownBody(
+                      data: cotContent,
+                      selectable: false,
+                      shrinkWrap: true,
+                      styleSheet: markdownStyleSheetForCotContent,
+                      onTapLink: _onTapLink,
+                    ),
+                  ),
+                // 🔥 Bot message cot result
+                if (cotResult.isNotEmpty && usingReasoningModel && showingCotContent) 12.h,
+                if (cotResult.isNotEmpty && usingReasoningModel)
+                  MarkdownBody(
+                    data: cotResult,
+                    selectable: false,
+                    shrinkWrap: true,
+                    styleSheet: markdownStyleSheet,
+                    onTapLink: _onTapLink,
+                  ),
+                BotMessageBottom(msg, index),
+                BotTtsContent(msg, index),
+              ],
             ],
           ),
         ),

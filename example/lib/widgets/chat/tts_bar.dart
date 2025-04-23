@@ -198,7 +198,7 @@ class _AudioButton extends ConsumerWidget {
             borderRadius: borderRadius,
           ),
           child: T(
-            "声音克隆" + (audioInteractorShown ? " ×" : ""),
+            S.current.voice_cloning + (audioInteractorShown ? " ×" : ""),
             s: TS(c: audioInteractorShown ? kW : primary),
           ),
         ),
@@ -230,7 +230,7 @@ class _SpkButton extends ConsumerWidget {
             borderRadius: borderRadius,
           ),
           child: T(
-            "预置声音" + (spkShown ? " ×" : ""),
+            S.current.prebuilt_voices + (spkShown ? " ×" : ""),
             s: TS(c: spkShown ? kW : primary),
           ),
         ),
@@ -259,7 +259,7 @@ class _IntonationButton extends ConsumerWidget {
             borderRadius: borderRadius,
           ),
           child: T(
-            "语气词" + (intonationShown ? " ×" : ""),
+            S.current.intonations + (intonationShown ? " ×" : ""),
             s: TS(c: intonationShown ? kW : primary),
           ),
         ),
@@ -452,14 +452,15 @@ class _InstructTabs extends ConsumerWidget {
     bool enabled = loaded && !loading;
 
     final primary = Theme.of(context).colorScheme.primary;
-    // final interactingInstruction = ref.watch(P.tts.interactingInstruction);
-    // final selectedIndex = ref.watch(P.tts.instructions(interactingInstruction));
-    // final selectedInstruction = selectedIndex != null ? interactingInstruction.options[selectedIndex] : null;
 
     final i1 = ref.watch(P.tts.instructions(TTSInstruction.emotion));
-    final i2 = ref.watch(P.tts.instructions(TTSInstruction.intonation));
+    final i2 = ref.watch(P.tts.instructions(TTSInstruction.dialect));
     final i3 = ref.watch(P.tts.instructions(TTSInstruction.speed));
     final i4 = ref.watch(P.tts.instructions(TTSInstruction.role));
+    final _ = ref.watch(P.tts.interactingInstruction);
+
+    final isZh = Localizations.localeOf(context).languageCode == "zh";
+    qqq("isZh: $isZh");
 
     return Ro(
       children: [
@@ -469,7 +470,7 @@ class _InstructTabs extends ConsumerWidget {
             spacing: 4,
             children: TTSInstruction.values.where((e) => e.forInstruction).indexMap((index, e) {
               final isSelected = P.tts.interactingInstruction.v == e;
-              String displayText = e.toString().split(".").last;
+              String displayText = isZh ? e.nameCN : e.nameEN;
               if (isSelected) displayText += " ×";
 
               bool hasValue = false;

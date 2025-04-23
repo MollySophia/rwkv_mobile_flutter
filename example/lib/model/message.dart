@@ -23,6 +23,9 @@ final class Message extends Equatable {
   final String? audioUrl;
   final int? audioLength;
   final String? ttsTarget;
+  final String? ttsSpeakerName;
+  final String? ttsSourceAudioPath;
+  final String? ttsInstruction;
 
   const Message({
     required this.id,
@@ -36,6 +39,9 @@ final class Message extends Equatable {
     this.audioUrl,
     this.audioLength,
     this.ttsTarget,
+    this.ttsSpeakerName,
+    this.ttsSourceAudioPath,
+    this.ttsInstruction,
   });
 
   @override
@@ -51,6 +57,9 @@ final class Message extends Equatable {
         isReasoning,
         paused,
         ttsTarget,
+        ttsSpeakerName,
+        ttsSourceAudioPath,
+        ttsInstruction,
       ];
 
   factory Message.fromJson(Map<String, dynamic> json) {
@@ -66,6 +75,9 @@ final class Message extends Equatable {
       isReasoning: json["isReasoning"] as bool,
       paused: json["paused"] as bool,
       ttsTarget: json["ttsTarget"] as String?,
+      ttsSpeakerName: json["ttsSpeakerName"] as String?,
+      ttsSourceAudioPath: json["ttsSourceAudioPath"] as String?,
+      ttsInstruction: json["ttsInstruction"] as String?,
     );
   }
 
@@ -82,6 +94,9 @@ final class Message extends Equatable {
       "changing": false,
       "paused": paused,
       "ttsTarget": ttsTarget,
+      "ttsSpeakerName": ttsSpeakerName,
+      "ttsSourceAudioPath": ttsSourceAudioPath,
+      "ttsInstruction": ttsInstruction,
     };
   }
 
@@ -97,6 +112,9 @@ final class Message extends Equatable {
     bool? isReasoning,
     bool? paused,
     String? ttsTarget,
+    String? ttsSpeakerName,
+    String? ttsSourceAudioPath,
+    String? ttsInstruction,
   }) {
     return Message(
       id: id ?? this.id,
@@ -110,6 +128,9 @@ final class Message extends Equatable {
       isReasoning: isReasoning ?? this.isReasoning,
       paused: paused ?? this.paused,
       ttsTarget: ttsTarget ?? this.ttsTarget,
+      ttsSpeakerName: ttsSpeakerName ?? this.ttsSpeakerName,
+      ttsSourceAudioPath: ttsSourceAudioPath ?? this.ttsSourceAudioPath,
+      ttsInstruction: ttsInstruction ?? this.ttsInstruction,
     );
   }
 
@@ -128,6 +149,9 @@ Message(
   isReasoning: $isReasoning,
   paused: $paused,
   ttsTarget: $ttsTarget,
+  ttsSpeakerName: $ttsSpeakerName,
+  ttsSourceAudioPath: $ttsSourceAudioPath,
+  ttsInstruction: $ttsInstruction,
 )""";
   }
 

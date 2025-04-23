@@ -286,5 +286,17 @@
   "@exploring": {
     "description": "Label for exploring"
   },
-  "i_want_rwkv_to_say": "I want RWKV to say..."
+  "i_want_rwkv_to_say": "I want RWKV to say...",
+  "voice_cloning": "Voice cloning",
+  "@voice_cloning": {
+    "description": "Label for voice cloning"
+  },
+  "prebuilt_voices": "Prebuilt voices",
+  "@prebuilt_voices": {
+    "description": "Label for prebuilt voices"
+  },
+  "intonations": "Intonations",
+  "@intonations": {
+    "description": "Label for intonations"
+  }
 }

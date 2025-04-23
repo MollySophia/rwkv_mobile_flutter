@@ -28,6 +28,8 @@ class Empty extends ConsumerWidget {
 
     final primary = Theme.of(context).colorScheme.primary;
 
+    final inputHeight = demoType == DemoType.tts ? ref.watch(P.chat.inputHeight) : 0;
+
     return AnimatedPositioned(
       duration: 200.ms,
       curve: Curves.easeInOutBack,
@@ -81,6 +83,7 @@ class Empty extends ConsumerWidget {
                         child: T(currentModel?.name ?? "", s: TS(s: 16, w: FW.w600, c: primary)),
                       ),
                     const Spacer(),
+                    if (demoType == DemoType.tts) (inputHeight / 1.5).h,
                   ],
                 ),
               ),

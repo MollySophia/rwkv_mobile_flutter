@@ -92,6 +92,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "i_want_rwkv_to_say": MessageLookupByLibrary.simpleMessage(
       "I want RWKV to say...",
     ),
+    "intonations": MessageLookupByLibrary.simpleMessage("Intonations"),
     "intro": MessageLookupByLibrary.simpleMessage(
       "Get ready to experience RWKV v7, series of compact language models with 0.1, 0.4, 1.5, 2.9 billion parameters, optimized for seamless mobile devices inference. Once loaded, it functions offline without requiring any server communication.",
     ),
@@ -116,6 +117,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_wait_for_the_model_to_load": MessageLookupByLibrary.simpleMessage(
       "Please wait for the model to load",
     ),
+    "prebuilt_voices": MessageLookupByLibrary.simpleMessage("Prebuilt voices"),
     "prefer": MessageLookupByLibrary.simpleMessage("Prefer"),
     "prefer_chinese": MessageLookupByLibrary.simpleMessage("Prefer Chinese"),
     "reason": MessageLookupByLibrary.simpleMessage("Reason"),
@@ -150,6 +152,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "thought_result": MessageLookupByLibrary.simpleMessage("Thought result"),
     "update_now": MessageLookupByLibrary.simpleMessage("Update now"),
     "use_it_now": MessageLookupByLibrary.simpleMessage("Use it now"),
+    "voice_cloning": MessageLookupByLibrary.simpleMessage("Voice cloning"),
     "welcome_to_use_rwkv": MessageLookupByLibrary.simpleMessage(
       "Welcome to use RWKV",
     ),

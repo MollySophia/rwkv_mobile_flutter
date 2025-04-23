@@ -725,6 +725,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Voice cloning`
+  String get voice_cloning {
+    return Intl.message(
+      'Voice cloning',
+      name: 'voice_cloning',
+      desc: 'Label for voice cloning',
+      args: [],
+    );
+  }
+
+  /// `Prebuilt voices`
+  String get prebuilt_voices {
+    return Intl.message(
+      'Prebuilt voices',
+      name: 'prebuilt_voices',
+      desc: 'Label for prebuilt voices',
+      args: [],
+    );
+  }
+
+  /// `Intonations`
+  String get intonations {
+    return Intl.message(
+      'Intonations',
+      name: 'intonations',
+      desc: 'Label for intonations',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -71,6 +71,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "exploring": MessageLookupByLibrary.simpleMessage("探索中..."),
     "foo_bar": MessageLookupByLibrary.simpleMessage("foo bar"),
     "i_want_rwkv_to_say": MessageLookupByLibrary.simpleMessage("我想让 RWKV 说..."),
+    "intonations": MessageLookupByLibrary.simpleMessage("语气词"),
     "intro": MessageLookupByLibrary.simpleMessage(
       "欢迎探索 RWKV v7 系列大语言模型，包含 0.1B/0.4B/1.5B/2.9B 参数版本，专为移动设备优化，加载后可完全离线运行，无需服务器通信",
     ),
@@ -91,6 +92,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_wait_for_the_model_to_load": MessageLookupByLibrary.simpleMessage(
       "请等待模型加载",
     ),
+    "prebuilt_voices": MessageLookupByLibrary.simpleMessage("预设声音"),
     "prefer": MessageLookupByLibrary.simpleMessage("使用"),
     "prefer_chinese": MessageLookupByLibrary.simpleMessage("使用中文推理"),
     "reason": MessageLookupByLibrary.simpleMessage("推理"),
@@ -113,6 +115,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "thought_result": MessageLookupByLibrary.simpleMessage("思考结果"),
     "update_now": MessageLookupByLibrary.simpleMessage("立即更新"),
     "use_it_now": MessageLookupByLibrary.simpleMessage("立即使用"),
+    "voice_cloning": MessageLookupByLibrary.simpleMessage("声音克隆"),
     "welcome_to_use_rwkv": MessageLookupByLibrary.simpleMessage("欢迎使用 RWKV"),
     "you_are_now_using": m2,
     "you_can_now_start_to_chat_with_rwkv": MessageLookupByLibrary.simpleMessage(

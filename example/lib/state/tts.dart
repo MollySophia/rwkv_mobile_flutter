@@ -204,7 +204,7 @@ outputWavPath: $outputWavPath''');
     qq;
     final data = await rootBundle.loadString("assets/config/chat/spk_names.json");
     final spkNames = await compute(_parseSpkNames, data);
-    this.spkNames.u(spkNames.shuffled);
+    this.spkNames.u(spkNames);
   }
 
   FV onAudioInteractorButtonPressed() async {
@@ -298,31 +298,17 @@ outputWavPath: $outputWavPath''');
       return;
     }
 
-    final locale = Intl.getCurrentLocale();
-    final useEn = locale.startsWith("en");
-
-    final fileName = selectSourceAudioPath?.split("/").last;
-
-    final finalUserMessageContent = useEn
-        ? """User:
-${spkName != null ? "- Use ${P.tts.safe(spkName)} as the speaker" : ""}
-${fileName != null ? "- Use $fileName as the clone sound" : ""}
-- Use $ttsText as the speaking content
-${instructionText.isNotEmpty ? "- Use \"$instructionText\" as the speaking instruction" : ""}"""
-        : """用户要求：
-${spkName != null ? "- 使用 ${P.tts.safe(spkName)} 作为说话人" : ""}
-${fileName != null ? "- 使用 $fileName 作为克隆声音" : ""}
-- 使用 $ttsText 作为说话内容
-${instructionText.isNotEmpty ? "- 使用“$instructionText”作为说话指令" : ""}""";
-
     msg = Message(
       id: id,
-      content: finalUserMessageContent,
+      content: "",
       isMine: true,
       type: MessageType.userTTS,
       isReasoning: false,
       paused: false,
       ttsTarget: ttsText,
+      ttsSpeakerName: spkName,
+      ttsSourceAudioPath: selectSourceAudioPath,
+      ttsInstruction: instructionText,
       audioUrl: selectSourceAudioPath,
     );
 

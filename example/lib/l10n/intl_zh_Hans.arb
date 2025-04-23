@@ -66,5 +66,8 @@
   "delete_all": "全部删除",
   "download_missing": "下载缺失文件",
   "exploring": "探索中...",
-  "i_want_rwkv_to_say": "我想让 RWKV 说..."
+  "i_want_rwkv_to_say": "我想让 RWKV 说...",
+  "voice_cloning": "声音克隆",
+  "prebuilt_voices": "预设声音",
+  "intonations": "语气词"
 }
