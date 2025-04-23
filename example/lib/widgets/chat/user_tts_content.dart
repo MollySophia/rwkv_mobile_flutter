@@ -28,12 +28,12 @@ class UserTtsContent extends ConsumerWidget {
               width: 0.5,
             ),
           ),
-          padding: EI.s(h: 6, v: 4),
+          padding: const EI.s(h: 6, v: 4),
           child: Co(
             c: CAA.start,
             children: [
               if (msg.ttsSourceAudioPath != null) ...[
-                T("模仿下面的声音"),
+                const T("模仿下面的声音"),
                 T(msg.ttsSourceAudioPath!.split("/").last),
               ],
               if (msg.ttsSpeakerName != null) ...[
@@ -46,7 +46,7 @@ class UserTtsContent extends ConsumerWidget {
         4.h,
         T(
           msg.ttsTarget,
-          s: TS(s: 16),
+          s: const TS(s: 16),
         ),
       ],
     );
