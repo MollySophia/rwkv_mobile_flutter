@@ -15,23 +15,25 @@ import 'package:zone/state/p.dart';
 import 'package:halo_alert/halo_alert.dart';
 import 'package:zone/widgets/model_item.dart';
 
-class GroupItem extends ConsumerWidget {
+class TTSGroupItem extends ConsumerWidget {
   final FileInfo fileInfo;
 
-  const GroupItem(this.fileInfo, {super.key});
+  TTSGroupItem(
+    this.fileInfo, {
+    super.key,
+  }) : assert(fileInfo.tags.contains("core"), "fileInfo must be a core model");
 
   void _onDownloadAllTap() async {
-    final availableModels = P.fileManager.availableModels.v;
-    final fileInfos = availableModels..toList();
-    final missingFileInfos = fileInfos.where((e) => P.fileManager.locals(e).v.hasFile == false).toList();
-    // TODO: Fix the bug reported by @Molly
+    final helperModels = P.fileManager.availableModels.v.where((e) => !e.tags.contains("core")).toList();
+    final core = fileInfo;
+    final missingFileInfos = [...helperModels, core].where((e) => P.fileManager.locals(e).v.hasFile == false).toList();
     missingFileInfos.forEach((e) => P.fileManager.getFile(fileInfo: e));
   }
 
   void _onDeleteAllTap() async {
-    final availableModels = P.fileManager.availableModels.v;
-    final fileInfos = availableModels.toList();
-    fileInfos.forEach((e) => P.fileManager.deleteFile(fileInfo: e));
+    final helperModels = P.fileManager.availableModels.v.where((e) => !e.tags.contains("core")).toList();
+    final core = fileInfo;
+    [...helperModels, core].forEach((e) => P.fileManager.deleteFile(fileInfo: e));
   }
 
   void _onStartToChatTap() async {

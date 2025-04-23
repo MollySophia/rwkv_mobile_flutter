@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:zone/state/p.dart';
-import 'package:zone/widgets/group_item.dart';
+import 'package:zone/widgets/tts_group_item.dart';
 import 'package:zone/widgets/world_group_item.dart';
 import 'package:zone/widgets/model_item.dart';
 
@@ -71,7 +71,7 @@ class ModelSelector extends ConsumerWidget {
             if (demoType == DemoType.world)
               for (final worldType in WorldType.values) WorldGroupItem(worldType),
             if (demoType == DemoType.tts)
-              for (final fileInfo in ttsCores) GroupItem(fileInfo),
+              for (final fileInfo in ttsCores) TTSGroupItem(fileInfo),
             if (demoType == DemoType.chat)
               for (final fileInfo in availableModels.sorted((a, b) {
                 return a.fileSize.compareTo(b.fileSize);
