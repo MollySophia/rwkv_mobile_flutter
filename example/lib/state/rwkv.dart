@@ -190,9 +190,9 @@ extension $RWKV on _RWKV {
 
     if (_sendPort != null) {
       try {
-        final startMS = HF.shorterUS;
+        final startMS = HF.microseconds;
         await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
-        final endMS = HF.shorterUS;
+        final endMS = HF.microseconds;
         qqr("initRuntime done in ${endMS - startMS}ms");
       } catch (e) {
         qqe("initRuntime failed: $e");
@@ -261,9 +261,9 @@ extension $RWKV on _RWKV {
       try {
         _sendPort!.send(("releaseWhisperEncoder", null));
         _sendPort!.send(("releaseModel", null));
-        final startMS = HF.shorterUS;
+        final startMS = HF.microseconds;
         await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
-        final endMS = HF.shorterUS;
+        final endMS = HF.microseconds;
         qqr("initRuntime done in ${endMS - startMS}ms");
       } catch (e) {
         qqe("initRuntime failed: $e");
@@ -317,9 +317,9 @@ extension $RWKV on _RWKV {
     if (_sendPort != null) {
       _sendPort!.send(("releaseVisionEncoder", null));
       _sendPort!.send(("releaseModel", null));
-      final startMS = HF.shorterUS;
+      final startMS = HF.microseconds;
       await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
-      final endMS = HF.shorterUS;
+      final endMS = HF.microseconds;
       qqr("initRuntime done in ${endMS - startMS}ms");
     } else {
       final options = StartOptions(
@@ -377,9 +377,9 @@ extension $RWKV on _RWKV {
     if (_sendPort != null) {
       try {
         _sendPort!.send(("releaseTTSModels", null));
-        final startMS = HF.shorterUS;
+        final startMS = HF.microseconds;
         await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
-        final endMS = HF.shorterUS;
+        final endMS = HF.microseconds;
         qqr("initRuntime done in ${endMS - startMS}ms");
       } catch (e) {
         qqe("initRuntime failed: $e");

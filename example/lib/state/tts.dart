@@ -269,8 +269,8 @@ outputWavPath: $outputWavPath''');
     if (!P.chat.canSend.v) return;
 
     late final Message? msg;
-    final id = HF.shorterMS;
-    final receiveId = HF.shorterMS + 1;
+    final id = HF.milliseconds;
+    final receiveId = HF.milliseconds + 1;
     final selectSourceAudioPath = this.selectSourceAudioPath.q;
     final spkName = selectSpkName.q;
     final ttsText = P.chat.textEditingController.text;

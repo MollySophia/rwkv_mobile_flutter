@@ -95,7 +95,7 @@ extension $Chat on _Chat {
     if (_editingBotMessage) {
       // final currentMessages = [...messages.v];
       final _editingIndex = editingIndex.v!;
-      final id = HF.shorterMS;
+      final id = HF.milliseconds;
       final newBotMessage = Message(
         id: id,
         content: textToSend,
@@ -248,7 +248,7 @@ extension $Chat on _Chat {
 
     late final Message? msg;
 
-    final id = HF.shorterMS;
+    final id = HF.milliseconds;
     if (!isRegenerate) {
       msg = Message(
         id: id,
@@ -302,7 +302,7 @@ extension $Chat on _Chat {
     receivedTokens.uc();
     receivingTokens.u(true);
 
-    final receiveId = HF.shorterMS;
+    final receiveId = HF.milliseconds;
     this.receiveId.u(receiveId);
     final receiveMsg = Message(
       id: receiveId,
@@ -603,12 +603,12 @@ extension _$Chat on _Chat {
 
       qqq("new file received: $path, length: $length");
 
-      final t0 = HF.shorterUS;
+      final t0 = HF.microseconds;
       P.rwkv.setAudioPrompt(path: path);
-      final t1 = HF.shorterUS;
+      final t1 = HF.microseconds;
       qqq("setAudioPrompt done in ${t1 - t0}ms");
       send("", type: MessageType.userAudio, audioUrl: path, withHistory: false, audioLength: length);
-      final t2 = HF.shorterUS;
+      final t2 = HF.microseconds;
       qqq("send done in ${t2 - t1}ms");
     }
 
