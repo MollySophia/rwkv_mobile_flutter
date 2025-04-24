@@ -29,6 +29,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "application_language": MessageLookupByLibrary.simpleMessage("Language"),
     "apply": MessageLookupByLibrary.simpleMessage("Apply"),
     "are_you_sure_you_want_to_delete_this_model":
         MessageLookupByLibrary.simpleMessage(
@@ -88,6 +89,11 @@ class MessageLookup extends MessageLookupByLibrary {
           "Please ensure you have enough memory to load the model, otherwise the application may crash.",
         ),
     "exploring": MessageLookupByLibrary.simpleMessage("Exploring..."),
+    "extra_large": MessageLookupByLibrary.simpleMessage("Extra large (130%)"),
+    "follow_system": MessageLookupByLibrary.simpleMessage("System"),
+    "font_setting": MessageLookupByLibrary.simpleMessage("Font setting"),
+    "font_size": MessageLookupByLibrary.simpleMessage("Font size"),
+    "font_size_default": MessageLookupByLibrary.simpleMessage("Default (100%)"),
     "foo_bar": MessageLookupByLibrary.simpleMessage("foo bar"),
     "i_want_rwkv_to_say": MessageLookupByLibrary.simpleMessage(
       "I want RWKV to say...",
@@ -96,7 +102,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "intro": MessageLookupByLibrary.simpleMessage(
       "Get ready to experience RWKV v7, series of compact language models with 0.1, 0.4, 1.5, 2.9 billion parameters, optimized for seamless mobile devices inference. Once loaded, it functions offline without requiring any server communication.",
     ),
+    "large": MessageLookupByLibrary.simpleMessage("Large (120%)"),
     "loading": MessageLookupByLibrary.simpleMessage("Loading..."),
+    "medium": MessageLookupByLibrary.simpleMessage("Medium (110%)"),
     "memory_used": m1,
     "network_error": MessageLookupByLibrary.simpleMessage("Network error"),
     "new_chat": MessageLookupByLibrary.simpleMessage("New chat"),
@@ -109,6 +117,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "othello_title": MessageLookupByLibrary.simpleMessage("RWKV Othello"),
     "please_select_a_world_type": MessageLookupByLibrary.simpleMessage(
       "Please select a world type",
+    ),
+    "please_select_application_language": MessageLookupByLibrary.simpleMessage(
+      "Please select application language",
+    ),
+    "please_select_font_size": MessageLookupByLibrary.simpleMessage(
+      "Please select font size",
     ),
     "please_wait_for_the_model_to_finish_generating":
         MessageLookupByLibrary.simpleMessage(
@@ -139,6 +153,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "session_configuration": MessageLookupByLibrary.simpleMessage(
       "Session Configuration",
     ),
+    "small": MessageLookupByLibrary.simpleMessage("Small (90%)"),
     "speed": MessageLookupByLibrary.simpleMessage("Speed:"),
     "start_a_new_chat": MessageLookupByLibrary.simpleMessage(
       "Start a new chat",
@@ -150,8 +165,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "start_to_chat": MessageLookupByLibrary.simpleMessage("Start to chat"),
     "thinking": MessageLookupByLibrary.simpleMessage("Thinking..."),
     "thought_result": MessageLookupByLibrary.simpleMessage("Thought result"),
+    "ultra_large": MessageLookupByLibrary.simpleMessage("Ultra large (140%)"),
     "update_now": MessageLookupByLibrary.simpleMessage("Update now"),
     "use_it_now": MessageLookupByLibrary.simpleMessage("Use it now"),
+    "very_small": MessageLookupByLibrary.simpleMessage("Very small (80%)"),
     "voice_cloning": MessageLookupByLibrary.simpleMessage("Voice cloning"),
     "welcome_to_use_rwkv": MessageLookupByLibrary.simpleMessage(
       "Welcome to use RWKV",

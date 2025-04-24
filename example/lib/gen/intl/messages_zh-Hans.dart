@@ -28,6 +28,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "application_language": MessageLookupByLibrary.simpleMessage("应用语言"),
     "apply": MessageLookupByLibrary.simpleMessage("应用"),
     "are_you_sure_you_want_to_delete_this_model":
         MessageLookupByLibrary.simpleMessage("确定要删除这个模型吗？"),
@@ -69,6 +70,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "ensure_you_have_enough_memory_to_load_the_model":
         MessageLookupByLibrary.simpleMessage("请确保设备内存充足，否则可能导致应用崩溃"),
     "exploring": MessageLookupByLibrary.simpleMessage("探索中..."),
+    "follow_system": MessageLookupByLibrary.simpleMessage("跟随系统"),
+    "font_size": MessageLookupByLibrary.simpleMessage("字体大小"),
     "foo_bar": MessageLookupByLibrary.simpleMessage("foo bar"),
     "i_want_rwkv_to_say": MessageLookupByLibrary.simpleMessage("我想让 RWKV 说..."),
     "intonations": MessageLookupByLibrary.simpleMessage("语气词"),
@@ -87,6 +90,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_select_a_world_type": MessageLookupByLibrary.simpleMessage(
       "请选择 World 类型",
     ),
+    "please_select_application_language": MessageLookupByLibrary.simpleMessage(
+      "请选择应用语言",
+    ),
+    "please_select_font_size": MessageLookupByLibrary.simpleMessage("请选择字体大小"),
     "please_wait_for_the_model_to_finish_generating":
         MessageLookupByLibrary.simpleMessage("请等待模型生成完成"),
     "please_wait_for_the_model_to_load": MessageLookupByLibrary.simpleMessage(

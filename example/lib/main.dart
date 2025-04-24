@@ -3,6 +3,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/config.dart';
 import 'package:flutter/material.dart';
@@ -63,27 +64,18 @@ FutureOr<void> _configureSentry(SentryFlutterOptions options) {
   }
 }
 
-final _supportedLocales = Language.values.map((e) => e.locale).toList();
-Language? _debugLatestLanguage;
+final _supportedLocales = Language.values.where((e) => e != Language.none).map((e) => e.locale).toList();
 
 class _App extends StatelessWidget {
   const _App();
 
   @override
   Widget build(BuildContext context) {
-    qq;
     P.app.firstContextGot(context);
-
-    if (kDebugMode) {
-      _debugLatestLanguage = [Language.zh_Hans, Language.en].firstWhereOrNull((e) => e != _debugLatestLanguage);
-    }
-
-    final locale = !kDebugMode ? null : _debugLatestLanguage?.locale;
 
     return StateWrapper(
       child: MaterialApp.router(
         color: kBG,
-        locale: locale,
         supportedLocales: _supportedLocales,
         localizationsDelegates: const [
           S.delegate,
@@ -110,17 +102,52 @@ class _App extends StatelessWidget {
 
   Widget _builder(BuildContext context, Widget? child) {
     qq;
-    return MediaQuery.withClampedTextScaling(
-      minScaleFactor: 1,
-      maxScaleFactor: 1.5,
-      child: Stack(
-        children: [
-          C(color: kBG),
-          if (child != null) child,
-          const Alert(),
-          if (kDebugMode) const Debugger(),
-        ],
+    return _LocaleWrapper(
+      child: _TextScaleWrapper(
+        child: Stack(
+          children: [
+            C(color: kBG),
+            if (child != null) child,
+            const Alert(),
+            if (kDebugMode) const Debugger(),
+          ],
+        ),
       ),
+    );
+  }
+}
+
+class _TextScaleWrapper extends ConsumerWidget {
+  final Widget child;
+
+  const _TextScaleWrapper({required this.child});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final preferredTextScaleFactor = ref.watch(P.preference.preferredTextScaleFactor);
+    if (preferredTextScaleFactor == P.preference.textScaleFactorSystem) return child;
+    return MediaQuery.withClampedTextScaling(
+      minScaleFactor: preferredTextScaleFactor,
+      maxScaleFactor: preferredTextScaleFactor,
+      child: child,
+    );
+  }
+}
+
+class _LocaleWrapper extends ConsumerWidget {
+  final Widget child;
+
+  const _LocaleWrapper({required this.child});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final language = ref.watch(P.preference.preferredLanguage);
+    Locale locale = language.locale;
+    // if (kDebugMode) locale = Language.values.random!.locale;
+    return Localizations.override(
+      context: context,
+      locale: locale,
+      child: child,
     );
   }
 }

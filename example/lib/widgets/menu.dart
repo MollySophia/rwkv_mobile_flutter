@@ -8,27 +8,27 @@ import 'package:zone/config.dart';
 import 'package:zone/state/p.dart';
 import 'package:zone/widgets/app_info.dart';
 import 'package:zone/widgets/chat/conversation_list.dart';
+import 'package:zone/widgets/settings.dart';
 
 class Menu extends ConsumerWidget {
   const Menu({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final paddingTop = ref.watch(P.app.paddingTop);
     return Material(
       color: kW,
       child: Co(
         m: MAA.center,
         children: [
-          paddingTop.h,
-          const Exp(child: ConversationList()),
-          const _BottomInfo(),
+          const Exp(child: Settings()),
         ],
       ),
     );
   }
 }
 
+// ignore: unused_element
+// TODO: Use this in the future
 class _BottomInfo extends ConsumerWidget {
   const _BottomInfo();
 

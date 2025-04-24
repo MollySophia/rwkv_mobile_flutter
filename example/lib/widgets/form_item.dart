@@ -1,0 +1,98 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:halo/halo.dart';
+
+class FormItem extends ConsumerWidget {
+  final bool isSectionStart;
+  final bool isSectionEnd;
+  final bool autoShowBottomBorder;
+  final String title;
+  final String? info;
+  final VoidCallback onTap;
+  final bool showArrow;
+  final TextAlign? titleTextAlign;
+  final Widget? icon;
+  final Color? titleColor;
+  final String? subtitle;
+
+  const FormItem({
+    super.key,
+    required this.title,
+    required this.onTap,
+    this.isSectionStart = false,
+    this.isSectionEnd = false,
+    this.info,
+    this.icon,
+    this.showArrow = true,
+    this.autoShowBottomBorder = true,
+    this.titleTextAlign,
+    this.titleColor,
+    this.subtitle,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return GD(
+      onTap: onTap,
+      child: C(
+        decoration: BD(
+          color: kW,
+          borderRadius: BorderRadius.only(
+            topLeft: isSectionStart ? 12.rr : Radius.zero,
+            topRight: isSectionStart ? 12.rr : Radius.zero,
+            bottomLeft: isSectionEnd ? 12.rr : Radius.zero,
+            bottomRight: isSectionEnd ? 12.rr : Radius.zero,
+          ),
+          border: Border(
+            bottom: (autoShowBottomBorder && !isSectionEnd)
+                ? BorderSide(
+                    color: kB.wo(0.1),
+                    width: 0.5,
+                  )
+                : BorderSide.none,
+          ),
+        ),
+        padding: const EI.o(t: 12, b: 12, r: 8, l: 8),
+        child: Ro(
+          children: [
+            if (icon != null) icon!,
+            if (icon != null) 8.w,
+            Exp(
+              child: Co(
+                c: CAA.start,
+                children: [
+                  T(
+                    title,
+                    textAlign: titleTextAlign,
+                    s: TS(w: FW.w500, s: 16, c: titleColor),
+                  ),
+                  if (subtitle != null)
+                    T(
+                      subtitle!,
+                      s: TS(w: FW.w500, s: 12, c: kB.wo(0.6)),
+                    ),
+                ],
+              ),
+            ),
+            if (info != null) 8.w,
+            if (info != null)
+              Exp(
+                child: T(
+                  info,
+                  s: TS(w: FW.w500, s: 12, c: kB.wo(0.6)),
+                  textAlign: TextAlign.right,
+                ),
+              ),
+            if (!showArrow && info != null) 4.w,
+            if (showArrow) 8.w,
+            if (showArrow)
+              Icon(
+                Icons.chevron_right,
+                color: kB.wo(0.4),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}

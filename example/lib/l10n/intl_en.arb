@@ -298,5 +298,57 @@
   "intonations": "Intonations",
   "@intonations": {
     "description": "Label for intonations"
+  },
+  "follow_system": "System",
+  "@follow_system": {
+    "description": "Label for system"
+  },
+  "application_language": "Language",
+  "@application_language": {
+    "description": "Label for application language"
+  },
+  "please_select_application_language": "Please select application language",
+  "@please_select_application_language": {
+    "description": "Label for please select application language"
+  },
+  "please_select_font_size": "Please select font size",
+  "@please_select_font_size": {
+    "description": "Label for please select font size"
+  },
+  "font_size": "Font size",
+  "@font_size": {
+    "description": "Label for font size"
+  },
+  "font_setting": "Font setting",
+  "@font_setting": {
+    "description": "Label for font setting"
+  },
+  "very_small": "Very small (80%)",
+  "@very_small": {
+    "description": "Label for very small"
+  },
+  "small": "Small (90%)",
+  "@small": {
+    "description": "Label for small"
+  },
+  "font_size_default": "Default (100%)",
+  "@font_size_default": {
+    "description": "Label for font size default"
+  },
+  "medium": "Medium (110%)",
+  "@medium": {
+    "description": "Label for medium"
+  },
+  "large": "Large (120%)",
+  "@large": {
+    "description": "Label for large"
+  },
+  "extra_large": "Extra large (130%)",
+  "@extra_large": {
+    "description": "Label for extra large"
+  },
+  "ultra_large": "Ultra large (140%)",
+  "@ultra_large": {
+    "description": "Label for ultra large"
   }
 }

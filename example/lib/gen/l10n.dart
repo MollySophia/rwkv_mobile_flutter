@@ -755,6 +755,136 @@ class S {
       args: [],
     );
   }
+
+  /// `System`
+  String get follow_system {
+    return Intl.message(
+      'System',
+      name: 'follow_system',
+      desc: 'Label for system',
+      args: [],
+    );
+  }
+
+  /// `Language`
+  String get application_language {
+    return Intl.message(
+      'Language',
+      name: 'application_language',
+      desc: 'Label for application language',
+      args: [],
+    );
+  }
+
+  /// `Please select application language`
+  String get please_select_application_language {
+    return Intl.message(
+      'Please select application language',
+      name: 'please_select_application_language',
+      desc: 'Label for please select application language',
+      args: [],
+    );
+  }
+
+  /// `Please select font size`
+  String get please_select_font_size {
+    return Intl.message(
+      'Please select font size',
+      name: 'please_select_font_size',
+      desc: 'Label for please select font size',
+      args: [],
+    );
+  }
+
+  /// `Font size`
+  String get font_size {
+    return Intl.message(
+      'Font size',
+      name: 'font_size',
+      desc: 'Label for font size',
+      args: [],
+    );
+  }
+
+  /// `Font setting`
+  String get font_setting {
+    return Intl.message(
+      'Font setting',
+      name: 'font_setting',
+      desc: 'Label for font setting',
+      args: [],
+    );
+  }
+
+  /// `Very small (80%)`
+  String get very_small {
+    return Intl.message(
+      'Very small (80%)',
+      name: 'very_small',
+      desc: 'Label for very small',
+      args: [],
+    );
+  }
+
+  /// `Small (90%)`
+  String get small {
+    return Intl.message(
+      'Small (90%)',
+      name: 'small',
+      desc: 'Label for small',
+      args: [],
+    );
+  }
+
+  /// `Default (100%)`
+  String get font_size_default {
+    return Intl.message(
+      'Default (100%)',
+      name: 'font_size_default',
+      desc: 'Label for font size default',
+      args: [],
+    );
+  }
+
+  /// `Medium (110%)`
+  String get medium {
+    return Intl.message(
+      'Medium (110%)',
+      name: 'medium',
+      desc: 'Label for medium',
+      args: [],
+    );
+  }
+
+  /// `Large (120%)`
+  String get large {
+    return Intl.message(
+      'Large (120%)',
+      name: 'large',
+      desc: 'Label for large',
+      args: [],
+    );
+  }
+
+  /// `Extra large (130%)`
+  String get extra_large {
+    return Intl.message(
+      'Extra large (130%)',
+      name: 'extra_large',
+      desc: 'Label for extra large',
+      args: [],
+    );
+  }
+
+  /// `Ultra large (140%)`
+  String get ultra_large {
+    return Intl.message(
+      'Ultra large (140%)',
+      name: 'ultra_large',
+      desc: 'Label for ultra large',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -12,12 +12,12 @@ import 'package:zone/route/method.dart';
 import 'package:zone/state/p.dart';
 
 class AppInfo extends ConsumerWidget {
-  static final shown = qs(false);
+  static final _shown = qs(false);
 
   static Future<void> show(BuildContext context) async {
-    qqq(shown.v);
-    if (shown.v) return;
-    shown.u(true);
+    qqq(_shown.v);
+    if (_shown.v) return;
+    _shown.u(true);
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -34,7 +34,7 @@ class AppInfo extends ConsumerWidget {
         );
       },
     );
-    shown.u(false);
+    _shown.u(false);
   }
 
   final ScrollController? scrollController;
@@ -199,7 +199,12 @@ class AppInfo extends ConsumerWidget {
     launchUrlString("https://community.rwkv.cn/", mode: LaunchMode.externalApplication);
   }
 
-  void _showLicensePage(BuildContext context, String version, String buildNumber, Widget iconWidget) {
+  void _showLicensePage(
+    BuildContext context,
+    String version,
+    String buildNumber,
+    Widget iconWidget,
+  ) {
     showLicensePage(
       context: context,
       applicationName: Config.appTitle,

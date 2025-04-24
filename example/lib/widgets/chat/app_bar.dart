@@ -144,19 +144,13 @@ class ChatAppBar extends ConsumerWidget {
 class _MenuButton extends ConsumerWidget {
   const _MenuButton();
 
-  void _onPressed() {
-    qqq;
-    if (Config.enableConversation) Pager.toggle();
-    if (!Config.enableConversation) AppInfo.show(getContext()!);
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final childOpacity = Config.enableConversation ? ref.watch(Pager.childOpacity) : 1.0;
+    final childOpacity = ref.watch(Pager.childOpacity);
     return Opacity(
       opacity: childOpacity,
       child: IconButton(
-        onPressed: _onPressed,
+        onPressed: Pager.toggle,
         icon: const Icon(Icons.menu),
       ),
     );

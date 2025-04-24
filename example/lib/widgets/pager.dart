@@ -23,7 +23,13 @@ class Pager extends ConsumerStatefulWidget {
     final currentPage = Pager.page.v;
     qqq("currentPage: $currentPage, _reverse: $_reverse");
     final targetPage = currentPage == 0 ? 1 : 0;
-    await _controller!.animateToPage(targetPage, duration: 300.ms, curve: Curves.easeOutCirc);
+    _CustomPageScrollPhysics.disableGaimon = true;
+    HF.wait(20).then((_) {
+      Gaimon.soft();
+    });
+    await _controller!.animateToPage(targetPage, duration: 300.ms, curve: Curves.easeOutCubic);
+    await Future.delayed(50.ms);
+    _CustomPageScrollPhysics.disableGaimon = false;
   }
 
   final Widget child;
@@ -120,9 +126,8 @@ class _PagerState extends ConsumerState<Pager> {
 class _Dim extends ConsumerWidget {
   const _Dim();
 
-  void _onTap() {
-    qqq("tap");
-    _controller!.animateToPage(1, duration: 300.ms, curve: Curves.easeOutCubic);
+  void _onTap() async {
+    await Pager.toggle();
   }
 
   @override
@@ -154,6 +159,7 @@ class _Dim extends ConsumerWidget {
 
 class _CustomPageScrollPhysics extends PageScrollPhysics {
   static int? _latestTargetPage;
+  static bool disableGaimon = false;
 
   const _CustomPageScrollPhysics({super.parent});
 
@@ -187,7 +193,7 @@ class _CustomPageScrollPhysics extends PageScrollPhysics {
     final targetPage = getTargetPage(position, velocity);
 
     if (_latestTargetPage != null && _latestTargetPage != targetPage) {
-      Gaimon.soft();
+      if (!disableGaimon) Gaimon.soft();
     }
 
     _latestTargetPage = targetPage;
