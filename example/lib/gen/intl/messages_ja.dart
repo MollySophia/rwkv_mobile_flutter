@@ -50,7 +50,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "モデルを選択してください",
     ),
     "chat_resume": MessageLookupByLibrary.simpleMessage("再開"),
-    "chat_title": MessageLookupByLibrary.simpleMessage("RWKV チャット"),
+    "chat_title": MessageLookupByLibrary.simpleMessage("RWKV World v7"),
     "chat_welcome_to_use": m0,
     "chat_you_need_download_model_if_you_want_to_use_it":
         MessageLookupByLibrary.simpleMessage("使用する前に、まずモデルをダウンロードする必要があります。"),

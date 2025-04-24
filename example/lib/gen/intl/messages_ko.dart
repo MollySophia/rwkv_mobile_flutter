@@ -49,7 +49,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "모델을 선택하세요",
     ),
     "chat_resume": MessageLookupByLibrary.simpleMessage("재개"),
-    "chat_title": MessageLookupByLibrary.simpleMessage("RWKV 채팅"),
+    "chat_title": MessageLookupByLibrary.simpleMessage("RWKV World v7"),
     "chat_welcome_to_use": m0,
     "chat_you_need_download_model_if_you_want_to_use_it":
         MessageLookupByLibrary.simpleMessage("모델을 사용하려면 먼저 다운로드해야 합니다."),
