@@ -352,6 +352,7 @@ outputWavPath: $outputWavPath''');
   }
 
   void dismissAllShown() {
+    if (P.app.demoType.v != DemoType.tts) return;
     qq;
     audioInteractorShown.q = false;
     spkShown.q = false;

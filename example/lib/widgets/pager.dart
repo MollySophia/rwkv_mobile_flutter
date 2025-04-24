@@ -25,7 +25,8 @@ class Pager extends ConsumerStatefulWidget {
     final targetPage = currentPage == 0 ? 1 : 0;
     _CustomPageScrollPhysics.disableGaimon = true;
     HF.wait(20).then((_) {
-      Gaimon.soft();
+      if (Platform.isAndroid) Gaimon.light();
+      if (Platform.isIOS) Gaimon.soft();
     });
     await _controller!.animateToPage(targetPage, duration: 300.ms, curve: Curves.easeOutCubic);
     await Future.delayed(50.ms);
