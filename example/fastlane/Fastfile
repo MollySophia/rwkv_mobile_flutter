@@ -65,7 +65,9 @@ lane :switch_env do |params|
 end
 
 lane :test do |params|
-  run_flutter_build_apk()
+  # 🔥 上传到蒲公英
+  raw_increase_build_number()
+  android_pgyer()
 end
 
 # ✅ Shared

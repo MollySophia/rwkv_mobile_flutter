@@ -78,6 +78,7 @@ extension $RWKV on _RWKV {
   void send(List<String> messages) {
     prefillSpeed.u(0);
     decodeSpeed.u(0);
+
     qqq("message lengths: ${messages.m((e) => e.length)}");
 
     if (kDebugMode) {
@@ -89,10 +90,12 @@ extension $RWKV on _RWKV {
     }
 
     final sendPort = _sendPort;
+
     if (sendPort == null) {
       qqw("sendPort is null");
       return;
     }
+
     sendPort.send(("message", messages));
 
     if (_getTokensTimer != null) {
@@ -196,6 +199,7 @@ extension $RWKV on _RWKV {
         qqr("initRuntime done in ${endMS - startMS}ms");
       } catch (e) {
         qqe("initRuntime failed: $e");
+        if (!kDebugMode) Sentry.captureException(e);
         Alert.error("Failed to load model: $e");
         return;
       }
@@ -267,6 +271,7 @@ extension $RWKV on _RWKV {
         qqr("initRuntime done in ${endMS - startMS}ms");
       } catch (e) {
         qqe("initRuntime failed: $e");
+        if (!kDebugMode) Sentry.captureException(e);
         Alert.error("Failed to load model: $e");
         return;
       }
@@ -383,6 +388,7 @@ extension $RWKV on _RWKV {
         qqr("initRuntime done in ${endMS - startMS}ms");
       } catch (e) {
         qqe("initRuntime failed: $e");
+        if (!kDebugMode) Sentry.captureException(e);
         Alert.error("Failed to load model: $e");
         return;
       }
@@ -686,6 +692,7 @@ extension _$RWKV on _RWKV {
       } else {
         final error = message["error"];
         qqe("initRuntime failed: $error");
+        if (!kDebugMode) Sentry.captureException(Exception("initRuntime failed: $error"));
         if (_initRuntimeCompleter.isCompleted) return;
         _initRuntimeCompleter.completeError(error);
       }
@@ -718,6 +725,7 @@ extension _$RWKV on _RWKV {
     // TODO: 需要更健壮的代码: method: "", data: ""
 
     qqe("unknown message: $message");
+    if (!kDebugMode) Sentry.captureException(Exception("unknown message: $message"));
   }
 
   FV _ensureQNNCopied() async {

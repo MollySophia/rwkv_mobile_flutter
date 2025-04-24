@@ -297,6 +297,7 @@ extension _$ on _Othello {
       if (placing == null) {
         if (token != _kPsToken) {
           qqe("Placing is null:${token.toString()}");
+          if (!kDebugMode) Sentry.captureException(Exception("Placing is null:${token.toString()}"));
         } else {
           qqq("Game over!");
         }
@@ -346,6 +347,7 @@ extension _$ on _Othello {
     if (pageKey != PageKey.othello) return;
     qqq("_onStreamError");
     qqe("error: $error");
+    if (!kDebugMode) Sentry.captureException(error, stackTrace: stackTrace);
     receivingTokens.u(false);
   }
 

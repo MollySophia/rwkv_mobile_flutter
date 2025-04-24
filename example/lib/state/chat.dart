@@ -416,6 +416,7 @@ extension $Chat on _Chat {
     }
 
     qqe("No target chain found");
+    if (!kDebugMode) Sentry.captureException(Exception("No target chain found"));
   }
 }
 
@@ -480,6 +481,7 @@ extension _$Chat on _Chat {
     qq;
     if (previous == null) {
       qqe("previous is null");
+      if (!kDebugMode) Sentry.captureException(Exception("previous is null"));
       return;
     }
 
@@ -507,6 +509,7 @@ extension _$Chat on _Chat {
 
     if (!chains.contains(currentChain)) {
       qqe("currentChain not found in chains");
+      if (!kDebugMode) Sentry.captureException(Exception("currentChain not found in chains"));
       return;
     }
 
@@ -515,6 +518,7 @@ extension _$Chat on _Chat {
     if (nextIds.isEmpty) {
       qqe("nextIds is empty");
       qqe("next: $next");
+      if (!kDebugMode) Sentry.captureException(Exception("nextIds is empty"));
       debugger();
       return;
     }
@@ -700,6 +704,7 @@ extension _$Chat on _Chat {
       }
     }
     if (!found) qqe("message not found");
+    if (!kDebugMode) Sentry.captureException(Exception("message not found"));
     messages.u(currentMessages);
     P.conversation.updateMessages(currentMessages);
   }
@@ -774,6 +779,7 @@ extension _$Chat on _Chat {
 
   FV _onStreamError(Object error, StackTrace stackTrace) async {
     qqe("error: $error");
+    if (!kDebugMode) Sentry.captureException(error, stackTrace: stackTrace);
     final demoType = P.app.demoType.v;
     if (demoType != DemoType.chat && demoType != DemoType.world) return;
     receivingTokens.u(false);

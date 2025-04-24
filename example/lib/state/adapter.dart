@@ -13,6 +13,7 @@ extension $Adapter on _Adapter {
       return await _channel.invokeMethod<T>(toNative.name, arguments);
     } catch (e) {
       qqe("$e");
+      if (!kDebugMode) Sentry.captureException(e);
       return null;
     }
   }

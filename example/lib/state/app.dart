@@ -81,9 +81,9 @@ extension $App on _App {
       await P.fileManager.syncAvailableModels();
       await P.fileManager.checkLocal();
     } catch (e) {
-      qqe("e: $e");
       qe;
-      Sentry.captureException(e);
+      qqe("e: $e");
+      if (!kDebugMode) Sentry.captureException(e);
     }
   }
 }
@@ -174,6 +174,7 @@ extension _$App on _App {
     if (Platform.isAndroid) {
       if (androidUrl == null) {
         qqe("androidUrl is null");
+        if (!kDebugMode) Sentry.captureException(Exception("androidUrl is null"));
         return;
       }
       launchUrl(Uri.parse(androidUrl), mode: LaunchMode.externalApplication);
@@ -182,6 +183,7 @@ extension _$App on _App {
     if (Platform.isIOS) {
       if (iosUrl == null) {
         qqe("iosUrl is null");
+        if (!kDebugMode) Sentry.captureException(Exception("iosUrl is null"));
         return;
       }
       launchUrl(Uri.parse(iosUrl), mode: LaunchMode.externalApplication);
