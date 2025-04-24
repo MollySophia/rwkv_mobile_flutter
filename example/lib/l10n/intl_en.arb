@@ -1,354 +1,86 @@
 {
   "@@locale": "en",
   "chat_title": "RWKV Chat",
-  "@chat_title": {
-    "description": "Title of the chat screen"
-  },
   "othello_title": "RWKV Othello",
-  "@othello_title": {
-    "description": "Title of the othello game"
-  },
   "send_message_to_rwkv": "Message RWKV",
-  "@send_message_to_rwkv": {
-    "description": "Placeholder for the message input field"
-  },
   "chat_copied_to_clipboard": "Copied to clipboard",
-  "@chat_copied_to_clipboard": {
-    "description": "Message displayed when the chat content is copied to the clipboard"
-  },
   "chat_empty_message": "Please enter a message",
-  "@chat_empty_message": {
-    "description": "Placeholder for the message input field"
-  },
   "chat_welcome_to_use": "Welcome to explore {demoName}",
-  "@chat_welcome_to_use": {
-    "description": "Welcome message for the chat demo",
-    "placeholders": {
-      "demoName": {
-        "type": "String",
-        "example": "RWKV Chat"
-      }
-    }
-  },
   "chat_please_select_a_model": "Please select a model",
-  "@chat_please_select_a_model": {
-    "description": "Placeholder for the model selection dropdown"
-  },
   "chat_you_need_download_model_if_you_want_to_use_it": "You need to download the model first, before you can use it.",
-  "@chat_you_need_download_model_if_you_want_to_use_it": {
-    "description": "Message displayed when the model needs to be downloaded"
-  },
   "download_model": "Download model",
-  "@download_model": {
-    "description": "Button text for downloading the model"
-  },
   "use_it_now": "Use it now",
-  "@use_it_now": {
-    "description": "Button text for using the model"
-  },
   "choose_prebuilt_character": "Choose prebuilt character",
-  "@choose_prebuilt_character": {
-    "description": "Button text for choosing a prebuilt character"
-  },
   "start_to_chat": "Start to chat",
-  "@start_to_chat": {
-    "description": "Button text for starting a chat"
-  },
   "chat_model_name": "Model name",
-  "@chat_model_name": {
-    "description": "Label for the model name"
-  },
   "foo_bar": "foo bar",
-  "@foo_bar": {
-    "description": "Example of a placeholder"
-  },
   "chatting": "Chatting",
-  "@chatting": {
-    "description": "Label for the chatting section"
-  },
   "welcome_to_use_rwkv": "Welcome to use RWKV",
-  "@welcome_to_use_rwkv": {
-    "description": "Welcome message for the chat demo"
-  },
   "rwkv_othello": "RWKV Othello",
-  "@rwkv_othello": {
-    "description": "Label for the othello game"
-  },
   "rwkv_chat": "RWKV Chat",
-  "@rwkv_chat": {
-    "description": "Label for the chat demo"
-  },
   "start_a_new_chat_by_clicking_the_button_below": "You can start a new chat by clicking the button below.",
-  "@start_a_new_chat_by_clicking_the_button_below": {
-    "description": "Helper text explaining how to start a new chat"
-  },
   "intro": "Get ready to experience RWKV v7, series of compact language models with 0.1, 0.4, 1.5, 2.9 billion parameters, optimized for seamless mobile devices inference. Once loaded, it functions offline without requiring any server communication.",
-  "@intro": {
-    "description": "Introduction text explaining RWKV v7 capabilities"
-  },
   "select_a_model": "Select a model",
-  "@select_a_model": {
-    "description": "Label for model selection action"
-  },
   "you_are_now_using": "You are now using {modelName}",
-  "@you_are_now_using": {
-    "description": "Message indicating which model is currently in use",
-    "placeholders": {
-      "modelName": {
-        "type": "String",
-        "example": "RWKV-4-World-0.1B"
-      }
-    }
-  },
   "click_here_to_start_a_new_chat": "Click here to start a new chat",
-  "@click_here_to_start_a_new_chat": {
-    "description": "Call to action for starting a new chat"
-  },
   "click_here_to_select_a_new_model": "Click here to select a new model.",
-  "@click_here_to_select_a_new_model": {
-    "description": "Call to action for selecting a new model"
-  },
   "ensure_you_have_enough_memory_to_load_the_model": "Please ensure you have enough memory to load the model, otherwise the application may crash.",
-  "@ensure_you_have_enough_memory_to_load_the_model": {
-    "description": "Warning message about memory requirements"
-  },
   "memory_used": "Memory used: {memUsed}, Memory free: {memFree}",
-  "@memory_used": {
-    "description": "Display of memory usage statistics",
-    "placeholders": {
-      "memUsed": {
-        "type": "String",
-        "example": "2GB"
-      },
-      "memFree": {
-        "type": "String",
-        "example": "4GB"
-      }
-    }
-  },
   "you_can_select_a_role_to_chat": "You can select a role to chat",
-  "@you_can_select_a_role_to_chat": {
-    "description": "Instruction for role selection in chat"
-  },
   "new_chat": "New chat",
-  "@new_chat": {
-    "description": "Label for starting a new chat"
-  },
   "or_you_can_start_a_new_empty_chat": "Or you can start a new empty chat",
-  "@or_you_can_start_a_new_empty_chat": {
-    "description": "Alternative option to start an empty chat"
-  },
   "start_a_new_chat": "Start a new chat",
-  "@start_a_new_chat": {
-    "description": "Button label for starting a new chat"
-  },
   "you_can_now_start_to_chat_with_rwkv": "You can now start to chat with RWKV",
-  "@you_can_now_start_to_chat_with_rwkv": {
-    "description": "Confirmation message that chat is ready to begin"
-  },
   "bot_message_edited": "Bot message edited, you can now send new message",
-  "@bot_message_edited": {
-    "description": "Notification that bot's message has been edited"
-  },
   "download_source": "Download source",
-  "@download_source": {
-    "description": "Label for downloading source content"
-  },
   "select_a_world_type": "Select a world type",
-  "@select_a_world_type": {
-    "description": "Label for world type selection"
-  },
   "please_select_a_world_type": "Please select a world type",
-  "@please_select_a_world_type": {
-    "description": "Prompt to select a world type"
-  },
   "loading": "Loading...",
-  "@loading": {
-    "description": "Label for loading state"
-  },
   "cancel": "Cancel",
-  "@cancel": {
-    "description": "Label for cancel action"
-  },
   "session_configuration": "Session Configuration",
-  "@session_configuration": {
-    "description": "Label for session configuration"
-  },
   "apply": "Apply",
-  "@apply": {
-    "description": "Label for apply action"
-  },
   "reset": "Reset",
-  "@reset": {
-    "description": "Label for reset action"
-  },
   "auto": "Auto",
-  "@auto": {
-    "description": "Label for auto action"
-  },
   "create_a_new_one_by_clicking_the_button_above": "Create a new one by clicking the button above.",
-  "@create_a_new_one_by_clicking_the_button_above": {
-    "description": "Helper text explaining how to create a new chat"
-  },
   "speed": "Speed:",
-  "@speed": {
-    "description": "Label for speed"
-  },
   "remaining": "Remaining:",
-  "@remaining": {
-    "description": "Label for remaining"
-  },
   "prefer_chinese": "Prefer Chinese",
-  "@prefer_chinese": {
-    "description": "Label for prefer Chinese"
-  },
-  "please_wait_for_the_model_to_load": "Please wait for the model to load",
-  "@please_wait_for_the_model_to_load": {
-    "description": "Message displayed when the model needs to be loaded"
-  },
-  "please_wait_for_the_model_to_finish_generating": "Please wait for the model to finish generating",
-  "@please_wait_for_the_model_to_finish_generating": {
-    "description": "Message displayed when the model needs to finish generating"
-  },
-  "reason": "Reason",
-  "@reason": {
-    "description": "Label for reason"
-  },
   "reasoning_enabled": "Reasoning enabled",
-  "@reasoning_enabled": {
-    "description": "Message displayed when reasoning is enabled"
-  },
+  "please_wait_for_the_model_to_load": "Please wait for the model to load",
+  "please_wait_for_the_model_to_finish_generating": "Please wait for the model to finish generating",
+  "reason": "Reason",
   "click_to_select_model": "Click to select a model",
-  "@click_to_select_model": {
-    "description": "Label for click to select a model"
-  },
   "are_you_sure_you_want_to_delete_this_model": "Are you sure you want to delete this model?",
-  "@are_you_sure_you_want_to_delete_this_model": {
-    "description": "Label for delete model"
-  },
   "delete": "Delete",
-  "@delete": {
-    "description": "Label for delete action"
-  },
   "prefer": "Prefer",
-  "@prefer": {
-    "description": "Label for prefer"
-  },
   "chinese": "Chinese",
-  "@chinese": {
-    "description": "Label for chinese"
-  },
   "thinking": "Thinking...",
-  "@thinking": {
-    "description": "Label for thinking"
-  },
   "thought_result": "Thought result",
-  "@thought_result": {
-    "description": "Label for thought result"
-  },
   "chat_resume": "Resume",
-  "@chat_resume": {
-    "description": "Label for chat resume"
-  },
   "network_error": "Network error",
-  "@network_error": {
-    "description": "Label for network error"
-  },
   "server_error": "Server error",
-  "@server_error": {
-    "description": "Label for server error"
-  },
   "new_version_found": "New version found",
-  "@new_version_found": {
-    "description": "Label for new version found"
-  },
   "cancel_update": "Cancel update",
-  "@cancel_update": {
-    "description": "Label for cancel update"
-  },
   "update_now": "Update now",
-  "@update_now": {
-    "description": "Label for update now"
-  },
   "back_to_chat": "Back to Chat",
-  "@back_to_chat": {
-    "description": "Label for back to chat"
-  },
   "delete_all": "Delete all",
-  "@delete_all": {
-    "description": "Label for delete all"
-  },
   "download_missing": "Download missing files",
-  "@download_missing": {
-    "description": "Label for download missing files"
-  },
   "exploring": "Exploring...",
-  "@exploring": {
-    "description": "Label for exploring"
-  },
   "i_want_rwkv_to_say": "I want RWKV to say...",
   "voice_cloning": "Voice cloning",
-  "@voice_cloning": {
-    "description": "Label for voice cloning"
-  },
   "prebuilt_voices": "Prebuilt voices",
-  "@prebuilt_voices": {
-    "description": "Label for prebuilt voices"
-  },
   "intonations": "Intonations",
-  "@intonations": {
-    "description": "Label for intonations"
-  },
   "follow_system": "System",
-  "@follow_system": {
-    "description": "Label for system"
-  },
   "application_language": "Language",
-  "@application_language": {
-    "description": "Label for application language"
-  },
   "please_select_application_language": "Please select application language",
-  "@please_select_application_language": {
-    "description": "Label for please select application language"
-  },
   "please_select_font_size": "Please select font size",
-  "@please_select_font_size": {
-    "description": "Label for please select font size"
-  },
   "font_size": "Font size",
-  "@font_size": {
-    "description": "Label for font size"
-  },
   "font_setting": "Font setting",
-  "@font_setting": {
-    "description": "Label for font setting"
-  },
   "very_small": "Very small (80%)",
-  "@very_small": {
-    "description": "Label for very small"
-  },
   "small": "Small (90%)",
-  "@small": {
-    "description": "Label for small"
-  },
   "font_size_default": "Default (100%)",
-  "@font_size_default": {
-    "description": "Label for font size default"
-  },
   "medium": "Medium (110%)",
-  "@medium": {
-    "description": "Label for medium"
-  },
   "large": "Large (120%)",
-  "@large": {
-    "description": "Label for large"
-  },
   "extra_large": "Extra large (130%)",
-  "@extra_large": {
-    "description": "Label for extra large"
-  },
-  "ultra_large": "Ultra large (140%)",
-  "@ultra_large": {
-    "description": "Label for ultra large"
-  }
+  "ultra_large": "Ultra large (140%)"
 }

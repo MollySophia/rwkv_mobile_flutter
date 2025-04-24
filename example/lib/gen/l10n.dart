@@ -57,12 +57,7 @@ class S {
 
   /// `RWKV Chat`
   String get chat_title {
-    return Intl.message(
-      'RWKV Chat',
-      name: 'chat_title',
-      desc: 'Title of the chat screen',
-      args: [],
-    );
+    return Intl.message('RWKV Chat', name: 'chat_title', desc: '', args: []);
   }
 
   /// `RWKV Othello`
@@ -70,7 +65,7 @@ class S {
     return Intl.message(
       'RWKV Othello',
       name: 'othello_title',
-      desc: 'Title of the othello game',
+      desc: '',
       args: [],
     );
   }
@@ -80,7 +75,7 @@ class S {
     return Intl.message(
       'Message RWKV',
       name: 'send_message_to_rwkv',
-      desc: 'Placeholder for the message input field',
+      desc: '',
       args: [],
     );
   }
@@ -90,8 +85,7 @@ class S {
     return Intl.message(
       'Copied to clipboard',
       name: 'chat_copied_to_clipboard',
-      desc:
-          'Message displayed when the chat content is copied to the clipboard',
+      desc: '',
       args: [],
     );
   }
@@ -101,17 +95,17 @@ class S {
     return Intl.message(
       'Please enter a message',
       name: 'chat_empty_message',
-      desc: 'Placeholder for the message input field',
+      desc: '',
       args: [],
     );
   }
 
   /// `Welcome to explore {demoName}`
-  String chat_welcome_to_use(String demoName) {
+  String chat_welcome_to_use(Object demoName) {
     return Intl.message(
       'Welcome to explore $demoName',
       name: 'chat_welcome_to_use',
-      desc: 'Welcome message for the chat demo',
+      desc: '',
       args: [demoName],
     );
   }
@@ -121,7 +115,7 @@ class S {
     return Intl.message(
       'Please select a model',
       name: 'chat_please_select_a_model',
-      desc: 'Placeholder for the model selection dropdown',
+      desc: '',
       args: [],
     );
   }
@@ -131,7 +125,7 @@ class S {
     return Intl.message(
       'You need to download the model first, before you can use it.',
       name: 'chat_you_need_download_model_if_you_want_to_use_it',
-      desc: 'Message displayed when the model needs to be downloaded',
+      desc: '',
       args: [],
     );
   }
@@ -141,19 +135,14 @@ class S {
     return Intl.message(
       'Download model',
       name: 'download_model',
-      desc: 'Button text for downloading the model',
+      desc: '',
       args: [],
     );
   }
 
   /// `Use it now`
   String get use_it_now {
-    return Intl.message(
-      'Use it now',
-      name: 'use_it_now',
-      desc: 'Button text for using the model',
-      args: [],
-    );
+    return Intl.message('Use it now', name: 'use_it_now', desc: '', args: []);
   }
 
   /// `Choose prebuilt character`
@@ -161,7 +150,7 @@ class S {
     return Intl.message(
       'Choose prebuilt character',
       name: 'choose_prebuilt_character',
-      desc: 'Button text for choosing a prebuilt character',
+      desc: '',
       args: [],
     );
   }
@@ -171,7 +160,7 @@ class S {
     return Intl.message(
       'Start to chat',
       name: 'start_to_chat',
-      desc: 'Button text for starting a chat',
+      desc: '',
       args: [],
     );
   }
@@ -181,29 +170,19 @@ class S {
     return Intl.message(
       'Model name',
       name: 'chat_model_name',
-      desc: 'Label for the model name',
+      desc: '',
       args: [],
     );
   }
 
   /// `foo bar`
   String get foo_bar {
-    return Intl.message(
-      'foo bar',
-      name: 'foo_bar',
-      desc: 'Example of a placeholder',
-      args: [],
-    );
+    return Intl.message('foo bar', name: 'foo_bar', desc: '', args: []);
   }
 
   /// `Chatting`
   String get chatting {
-    return Intl.message(
-      'Chatting',
-      name: 'chatting',
-      desc: 'Label for the chatting section',
-      args: [],
-    );
+    return Intl.message('Chatting', name: 'chatting', desc: '', args: []);
   }
 
   /// `Welcome to use RWKV`
@@ -211,7 +190,7 @@ class S {
     return Intl.message(
       'Welcome to use RWKV',
       name: 'welcome_to_use_rwkv',
-      desc: 'Welcome message for the chat demo',
+      desc: '',
       args: [],
     );
   }
@@ -221,19 +200,14 @@ class S {
     return Intl.message(
       'RWKV Othello',
       name: 'rwkv_othello',
-      desc: 'Label for the othello game',
+      desc: '',
       args: [],
     );
   }
 
   /// `RWKV Chat`
   String get rwkv_chat {
-    return Intl.message(
-      'RWKV Chat',
-      name: 'rwkv_chat',
-      desc: 'Label for the chat demo',
-      args: [],
-    );
+    return Intl.message('RWKV Chat', name: 'rwkv_chat', desc: '', args: []);
   }
 
   /// `You can start a new chat by clicking the button below.`
@@ -241,7 +215,7 @@ class S {
     return Intl.message(
       'You can start a new chat by clicking the button below.',
       name: 'start_a_new_chat_by_clicking_the_button_below',
-      desc: 'Helper text explaining how to start a new chat',
+      desc: '',
       args: [],
     );
   }
@@ -251,7 +225,7 @@ class S {
     return Intl.message(
       'Get ready to experience RWKV v7, series of compact language models with 0.1, 0.4, 1.5, 2.9 billion parameters, optimized for seamless mobile devices inference. Once loaded, it functions offline without requiring any server communication.',
       name: 'intro',
-      desc: 'Introduction text explaining RWKV v7 capabilities',
+      desc: '',
       args: [],
     );
   }
@@ -261,17 +235,17 @@ class S {
     return Intl.message(
       'Select a model',
       name: 'select_a_model',
-      desc: 'Label for model selection action',
+      desc: '',
       args: [],
     );
   }
 
   /// `You are now using {modelName}`
-  String you_are_now_using(String modelName) {
+  String you_are_now_using(Object modelName) {
     return Intl.message(
       'You are now using $modelName',
       name: 'you_are_now_using',
-      desc: 'Message indicating which model is currently in use',
+      desc: '',
       args: [modelName],
     );
   }
@@ -281,7 +255,7 @@ class S {
     return Intl.message(
       'Click here to start a new chat',
       name: 'click_here_to_start_a_new_chat',
-      desc: 'Call to action for starting a new chat',
+      desc: '',
       args: [],
     );
   }
@@ -291,7 +265,7 @@ class S {
     return Intl.message(
       'Click here to select a new model.',
       name: 'click_here_to_select_a_new_model',
-      desc: 'Call to action for selecting a new model',
+      desc: '',
       args: [],
     );
   }
@@ -301,17 +275,17 @@ class S {
     return Intl.message(
       'Please ensure you have enough memory to load the model, otherwise the application may crash.',
       name: 'ensure_you_have_enough_memory_to_load_the_model',
-      desc: 'Warning message about memory requirements',
+      desc: '',
       args: [],
     );
   }
 
   /// `Memory used: {memUsed}, Memory free: {memFree}`
-  String memory_used(String memUsed, String memFree) {
+  String memory_used(Object memUsed, Object memFree) {
     return Intl.message(
       'Memory used: $memUsed, Memory free: $memFree',
       name: 'memory_used',
-      desc: 'Display of memory usage statistics',
+      desc: '',
       args: [memUsed, memFree],
     );
   }
@@ -321,19 +295,14 @@ class S {
     return Intl.message(
       'You can select a role to chat',
       name: 'you_can_select_a_role_to_chat',
-      desc: 'Instruction for role selection in chat',
+      desc: '',
       args: [],
     );
   }
 
   /// `New chat`
   String get new_chat {
-    return Intl.message(
-      'New chat',
-      name: 'new_chat',
-      desc: 'Label for starting a new chat',
-      args: [],
-    );
+    return Intl.message('New chat', name: 'new_chat', desc: '', args: []);
   }
 
   /// `Or you can start a new empty chat`
@@ -341,7 +310,7 @@ class S {
     return Intl.message(
       'Or you can start a new empty chat',
       name: 'or_you_can_start_a_new_empty_chat',
-      desc: 'Alternative option to start an empty chat',
+      desc: '',
       args: [],
     );
   }
@@ -351,7 +320,7 @@ class S {
     return Intl.message(
       'Start a new chat',
       name: 'start_a_new_chat',
-      desc: 'Button label for starting a new chat',
+      desc: '',
       args: [],
     );
   }
@@ -361,7 +330,7 @@ class S {
     return Intl.message(
       'You can now start to chat with RWKV',
       name: 'you_can_now_start_to_chat_with_rwkv',
-      desc: 'Confirmation message that chat is ready to begin',
+      desc: '',
       args: [],
     );
   }
@@ -371,7 +340,7 @@ class S {
     return Intl.message(
       'Bot message edited, you can now send new message',
       name: 'bot_message_edited',
-      desc: 'Notification that bot\'s message has been edited',
+      desc: '',
       args: [],
     );
   }
@@ -381,7 +350,7 @@ class S {
     return Intl.message(
       'Download source',
       name: 'download_source',
-      desc: 'Label for downloading source content',
+      desc: '',
       args: [],
     );
   }
@@ -391,7 +360,7 @@ class S {
     return Intl.message(
       'Select a world type',
       name: 'select_a_world_type',
-      desc: 'Label for world type selection',
+      desc: '',
       args: [],
     );
   }
@@ -401,29 +370,19 @@ class S {
     return Intl.message(
       'Please select a world type',
       name: 'please_select_a_world_type',
-      desc: 'Prompt to select a world type',
+      desc: '',
       args: [],
     );
   }
 
   /// `Loading...`
   String get loading {
-    return Intl.message(
-      'Loading...',
-      name: 'loading',
-      desc: 'Label for loading state',
-      args: [],
-    );
+    return Intl.message('Loading...', name: 'loading', desc: '', args: []);
   }
 
   /// `Cancel`
   String get cancel {
-    return Intl.message(
-      'Cancel',
-      name: 'cancel',
-      desc: 'Label for cancel action',
-      args: [],
-    );
+    return Intl.message('Cancel', name: 'cancel', desc: '', args: []);
   }
 
   /// `Session Configuration`
@@ -431,39 +390,24 @@ class S {
     return Intl.message(
       'Session Configuration',
       name: 'session_configuration',
-      desc: 'Label for session configuration',
+      desc: '',
       args: [],
     );
   }
 
   /// `Apply`
   String get apply {
-    return Intl.message(
-      'Apply',
-      name: 'apply',
-      desc: 'Label for apply action',
-      args: [],
-    );
+    return Intl.message('Apply', name: 'apply', desc: '', args: []);
   }
 
   /// `Reset`
   String get reset {
-    return Intl.message(
-      'Reset',
-      name: 'reset',
-      desc: 'Label for reset action',
-      args: [],
-    );
+    return Intl.message('Reset', name: 'reset', desc: '', args: []);
   }
 
   /// `Auto`
   String get auto {
-    return Intl.message(
-      'Auto',
-      name: 'auto',
-      desc: 'Label for auto action',
-      args: [],
-    );
+    return Intl.message('Auto', name: 'auto', desc: '', args: []);
   }
 
   /// `Create a new one by clicking the button above.`
@@ -471,29 +415,19 @@ class S {
     return Intl.message(
       'Create a new one by clicking the button above.',
       name: 'create_a_new_one_by_clicking_the_button_above',
-      desc: 'Helper text explaining how to create a new chat',
+      desc: '',
       args: [],
     );
   }
 
   /// `Speed:`
   String get speed {
-    return Intl.message(
-      'Speed:',
-      name: 'speed',
-      desc: 'Label for speed',
-      args: [],
-    );
+    return Intl.message('Speed:', name: 'speed', desc: '', args: []);
   }
 
   /// `Remaining:`
   String get remaining {
-    return Intl.message(
-      'Remaining:',
-      name: 'remaining',
-      desc: 'Label for remaining',
-      args: [],
-    );
+    return Intl.message('Remaining:', name: 'remaining', desc: '', args: []);
   }
 
   /// `Prefer Chinese`
@@ -501,37 +435,7 @@ class S {
     return Intl.message(
       'Prefer Chinese',
       name: 'prefer_chinese',
-      desc: 'Label for prefer Chinese',
-      args: [],
-    );
-  }
-
-  /// `Please wait for the model to load`
-  String get please_wait_for_the_model_to_load {
-    return Intl.message(
-      'Please wait for the model to load',
-      name: 'please_wait_for_the_model_to_load',
-      desc: 'Message displayed when the model needs to be loaded',
-      args: [],
-    );
-  }
-
-  /// `Please wait for the model to finish generating`
-  String get please_wait_for_the_model_to_finish_generating {
-    return Intl.message(
-      'Please wait for the model to finish generating',
-      name: 'please_wait_for_the_model_to_finish_generating',
-      desc: 'Message displayed when the model needs to finish generating',
-      args: [],
-    );
-  }
-
-  /// `Reason`
-  String get reason {
-    return Intl.message(
-      'Reason',
-      name: 'reason',
-      desc: 'Label for reason',
+      desc: '',
       args: [],
     );
   }
@@ -541,9 +445,34 @@ class S {
     return Intl.message(
       'Reasoning enabled',
       name: 'reasoning_enabled',
-      desc: 'Message displayed when reasoning is enabled',
+      desc: '',
       args: [],
     );
+  }
+
+  /// `Please wait for the model to load`
+  String get please_wait_for_the_model_to_load {
+    return Intl.message(
+      'Please wait for the model to load',
+      name: 'please_wait_for_the_model_to_load',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please wait for the model to finish generating`
+  String get please_wait_for_the_model_to_finish_generating {
+    return Intl.message(
+      'Please wait for the model to finish generating',
+      name: 'please_wait_for_the_model_to_finish_generating',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reason`
+  String get reason {
+    return Intl.message('Reason', name: 'reason', desc: '', args: []);
   }
 
   /// `Click to select a model`
@@ -551,7 +480,7 @@ class S {
     return Intl.message(
       'Click to select a model',
       name: 'click_to_select_model',
-      desc: 'Label for click to select a model',
+      desc: '',
       args: [],
     );
   }
@@ -561,49 +490,29 @@ class S {
     return Intl.message(
       'Are you sure you want to delete this model?',
       name: 'are_you_sure_you_want_to_delete_this_model',
-      desc: 'Label for delete model',
+      desc: '',
       args: [],
     );
   }
 
   /// `Delete`
   String get delete {
-    return Intl.message(
-      'Delete',
-      name: 'delete',
-      desc: 'Label for delete action',
-      args: [],
-    );
+    return Intl.message('Delete', name: 'delete', desc: '', args: []);
   }
 
   /// `Prefer`
   String get prefer {
-    return Intl.message(
-      'Prefer',
-      name: 'prefer',
-      desc: 'Label for prefer',
-      args: [],
-    );
+    return Intl.message('Prefer', name: 'prefer', desc: '', args: []);
   }
 
   /// `Chinese`
   String get chinese {
-    return Intl.message(
-      'Chinese',
-      name: 'chinese',
-      desc: 'Label for chinese',
-      args: [],
-    );
+    return Intl.message('Chinese', name: 'chinese', desc: '', args: []);
   }
 
   /// `Thinking...`
   String get thinking {
-    return Intl.message(
-      'Thinking...',
-      name: 'thinking',
-      desc: 'Label for thinking',
-      args: [],
-    );
+    return Intl.message('Thinking...', name: 'thinking', desc: '', args: []);
   }
 
   /// `Thought result`
@@ -611,19 +520,14 @@ class S {
     return Intl.message(
       'Thought result',
       name: 'thought_result',
-      desc: 'Label for thought result',
+      desc: '',
       args: [],
     );
   }
 
   /// `Resume`
   String get chat_resume {
-    return Intl.message(
-      'Resume',
-      name: 'chat_resume',
-      desc: 'Label for chat resume',
-      args: [],
-    );
+    return Intl.message('Resume', name: 'chat_resume', desc: '', args: []);
   }
 
   /// `Network error`
@@ -631,7 +535,7 @@ class S {
     return Intl.message(
       'Network error',
       name: 'network_error',
-      desc: 'Label for network error',
+      desc: '',
       args: [],
     );
   }
@@ -641,7 +545,7 @@ class S {
     return Intl.message(
       'Server error',
       name: 'server_error',
-      desc: 'Label for server error',
+      desc: '',
       args: [],
     );
   }
@@ -651,7 +555,7 @@ class S {
     return Intl.message(
       'New version found',
       name: 'new_version_found',
-      desc: 'Label for new version found',
+      desc: '',
       args: [],
     );
   }
@@ -661,19 +565,14 @@ class S {
     return Intl.message(
       'Cancel update',
       name: 'cancel_update',
-      desc: 'Label for cancel update',
+      desc: '',
       args: [],
     );
   }
 
   /// `Update now`
   String get update_now {
-    return Intl.message(
-      'Update now',
-      name: 'update_now',
-      desc: 'Label for update now',
-      args: [],
-    );
+    return Intl.message('Update now', name: 'update_now', desc: '', args: []);
   }
 
   /// `Back to Chat`
@@ -681,19 +580,14 @@ class S {
     return Intl.message(
       'Back to Chat',
       name: 'back_to_chat',
-      desc: 'Label for back to chat',
+      desc: '',
       args: [],
     );
   }
 
   /// `Delete all`
   String get delete_all {
-    return Intl.message(
-      'Delete all',
-      name: 'delete_all',
-      desc: 'Label for delete all',
-      args: [],
-    );
+    return Intl.message('Delete all', name: 'delete_all', desc: '', args: []);
   }
 
   /// `Download missing files`
@@ -701,19 +595,14 @@ class S {
     return Intl.message(
       'Download missing files',
       name: 'download_missing',
-      desc: 'Label for download missing files',
+      desc: '',
       args: [],
     );
   }
 
   /// `Exploring...`
   String get exploring {
-    return Intl.message(
-      'Exploring...',
-      name: 'exploring',
-      desc: 'Label for exploring',
-      args: [],
-    );
+    return Intl.message('Exploring...', name: 'exploring', desc: '', args: []);
   }
 
   /// `I want RWKV to say...`
@@ -731,7 +620,7 @@ class S {
     return Intl.message(
       'Voice cloning',
       name: 'voice_cloning',
-      desc: 'Label for voice cloning',
+      desc: '',
       args: [],
     );
   }
@@ -741,29 +630,19 @@ class S {
     return Intl.message(
       'Prebuilt voices',
       name: 'prebuilt_voices',
-      desc: 'Label for prebuilt voices',
+      desc: '',
       args: [],
     );
   }
 
   /// `Intonations`
   String get intonations {
-    return Intl.message(
-      'Intonations',
-      name: 'intonations',
-      desc: 'Label for intonations',
-      args: [],
-    );
+    return Intl.message('Intonations', name: 'intonations', desc: '', args: []);
   }
 
   /// `System`
   String get follow_system {
-    return Intl.message(
-      'System',
-      name: 'follow_system',
-      desc: 'Label for system',
-      args: [],
-    );
+    return Intl.message('System', name: 'follow_system', desc: '', args: []);
   }
 
   /// `Language`
@@ -771,7 +650,7 @@ class S {
     return Intl.message(
       'Language',
       name: 'application_language',
-      desc: 'Label for application language',
+      desc: '',
       args: [],
     );
   }
@@ -781,7 +660,7 @@ class S {
     return Intl.message(
       'Please select application language',
       name: 'please_select_application_language',
-      desc: 'Label for please select application language',
+      desc: '',
       args: [],
     );
   }
@@ -791,19 +670,14 @@ class S {
     return Intl.message(
       'Please select font size',
       name: 'please_select_font_size',
-      desc: 'Label for please select font size',
+      desc: '',
       args: [],
     );
   }
 
   /// `Font size`
   String get font_size {
-    return Intl.message(
-      'Font size',
-      name: 'font_size',
-      desc: 'Label for font size',
-      args: [],
-    );
+    return Intl.message('Font size', name: 'font_size', desc: '', args: []);
   }
 
   /// `Font setting`
@@ -811,7 +685,7 @@ class S {
     return Intl.message(
       'Font setting',
       name: 'font_setting',
-      desc: 'Label for font setting',
+      desc: '',
       args: [],
     );
   }
@@ -821,19 +695,14 @@ class S {
     return Intl.message(
       'Very small (80%)',
       name: 'very_small',
-      desc: 'Label for very small',
+      desc: '',
       args: [],
     );
   }
 
   /// `Small (90%)`
   String get small {
-    return Intl.message(
-      'Small (90%)',
-      name: 'small',
-      desc: 'Label for small',
-      args: [],
-    );
+    return Intl.message('Small (90%)', name: 'small', desc: '', args: []);
   }
 
   /// `Default (100%)`
@@ -841,29 +710,19 @@ class S {
     return Intl.message(
       'Default (100%)',
       name: 'font_size_default',
-      desc: 'Label for font size default',
+      desc: '',
       args: [],
     );
   }
 
   /// `Medium (110%)`
   String get medium {
-    return Intl.message(
-      'Medium (110%)',
-      name: 'medium',
-      desc: 'Label for medium',
-      args: [],
-    );
+    return Intl.message('Medium (110%)', name: 'medium', desc: '', args: []);
   }
 
   /// `Large (120%)`
   String get large {
-    return Intl.message(
-      'Large (120%)',
-      name: 'large',
-      desc: 'Label for large',
-      args: [],
-    );
+    return Intl.message('Large (120%)', name: 'large', desc: '', args: []);
   }
 
   /// `Extra large (130%)`
@@ -871,7 +730,7 @@ class S {
     return Intl.message(
       'Extra large (130%)',
       name: 'extra_large',
-      desc: 'Label for extra large',
+      desc: '',
       args: [],
     );
   }
@@ -881,7 +740,7 @@ class S {
     return Intl.message(
       'Ultra large (140%)',
       name: 'ultra_large',
-      desc: 'Label for ultra large',
+      desc: '',
       args: [],
     );
   }

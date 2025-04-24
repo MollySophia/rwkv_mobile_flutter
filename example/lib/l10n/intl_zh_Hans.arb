@@ -74,5 +74,13 @@
   "application_language": "应用语言",
   "please_select_application_language": "请选择应用语言",
   "please_select_font_size": "请选择字体大小",
-  "font_size": "字体大小"
+  "font_size": "字体大小",
+  "font_setting": "字体设置",
+  "very_small": "非常小 (80%)",
+  "small": "小 (90%)",
+  "font_size_default": "默认 (100%)",
+  "medium": "中 (110%)",
+  "large": "大 (120%)",
+  "extra_large": "特大 (130%)",
+  "ultra_large": "超大 (140%)"
 }
