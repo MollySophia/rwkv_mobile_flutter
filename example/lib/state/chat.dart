@@ -683,6 +683,7 @@ extension _$Chat on _Chat {
   }) {
     final currentMessages = [...messages.v];
     bool found = false;
+    
     for (var i = 0; i < currentMessages.length; i++) {
       final msg = currentMessages[i];
       if (msg.id == id) {
@@ -703,6 +704,7 @@ extension _$Chat on _Chat {
         break;
       }
     }
+
     if (!found) qqe("message not found");
     if (!kDebugMode) Sentry.captureException(Exception("message not found"));
     messages.u(currentMessages);

@@ -51,7 +51,7 @@ extension $App on _App {
     }
     await HF.wait(17);
     try {
-      final res = await _get("get-demo-config");
+      final res = await _get("get-demo-config", timeout: 10000.ms);
       if (res is! Map) {
         throw "res is not a Map, res: ${res.runtimeType}";
       }

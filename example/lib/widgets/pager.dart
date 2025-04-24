@@ -11,18 +11,17 @@ import 'package:zone/state/p.dart';
 
 const _toRight = 80.0;
 PageController? _controller;
-final _reverse = true;
 
 class Pager extends ConsumerStatefulWidget {
-  static final page = qs<double>(_reverse ? 0 : 1);
+  static final page = qs<double>(1.0); 
   static final mainPageNotIgnoring = qs(true);
   static final childOpacity = qs(1.0);
   static final drawerOpacity = qs(0.0);
 
   static FV toggle() async {
     final currentPage = Pager.page.v;
-    qqq("currentPage: $currentPage, _reverse: $_reverse");
     final targetPage = currentPage == 0 ? 1 : 0;
+    qqq("currentPage: $currentPage, targetPage: $targetPage");
     _CustomPageScrollPhysics.disableGaimon = true;
     HF.wait(20).then((_) {
       if (Platform.isAndroid) Gaimon.light();
