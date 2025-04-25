@@ -65,9 +65,7 @@ lane :switch_env do |params|
 end
 
 lane :test do |params|
-  # 🔥 上传到蒲公英
-  raw_increase_build_number()
-  android_pgyer()
+  ios_upload(groups: ['External'])
 end
 
 # ✅ Shared

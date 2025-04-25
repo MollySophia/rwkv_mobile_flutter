@@ -142,7 +142,7 @@ class _LocaleWrapper extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final language = ref.watch(P.preference.preferredLanguage);
-    Locale locale = language.locale;
+    Locale locale = language.resolved.locale;
     return Localizations.override(
       context: context,
       locale: locale,

@@ -35,18 +35,26 @@ enum Language {
     return name.startsWith('zh') || this == ja || this == ko;
   }
 
+
+  Language get resolved => switch (this) {
+        none => fromSystemLocale(),
+        _ => this,
+      };
+
   Locale get locale {
     if (this == none) {
       return PlatformDispatcher.instance.locale;
     }
 
     final locale = name.split('_');
+    final scriptCode = locale.length > 1 ? locale[1] : null;
+    final countryCode = locale.length > 2 ? locale[2] : null;
 
     if (name.startsWith("zh")) {
       return Locale.fromSubtags(
         languageCode: locale[0],
-        scriptCode: locale.length > 1 ? locale[1] : null,
-        countryCode: locale.length > 2 ? locale[2] : null,
+        scriptCode: scriptCode,
+        countryCode: countryCode,
       );
     }
 

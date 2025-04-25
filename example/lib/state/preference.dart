@@ -41,8 +41,6 @@ extension _$Preference on _Preference {
     final sp = await SharedPreferences.getInstance();
 
     final language = sp.getString("halo_state.language");
-    final textScaleFactor = sp.getDouble("halo_state.textScaleFactor");
-
     if (language != null) {
       final r = Language.values.firstWhereOrNull((e) => e.name == language) ?? Language.none;
       qqq("language: $language, r: $r");
@@ -50,7 +48,9 @@ extension _$Preference on _Preference {
     } else {
       preferredLanguage.u(Language.none);
     }
+    
 
+    final textScaleFactor = sp.getDouble("halo_state.textScaleFactor");
     if (textScaleFactor != null) {
       preferredTextScaleFactor.u(textScaleFactor);
     } else {
