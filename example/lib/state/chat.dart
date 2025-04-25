@@ -366,7 +366,11 @@ extension $Chat on _Chat {
     qq;
     if (withHaptic) Gaimon.light();
     P.rwkv.send(_history());
-    _updateMessageById(id: id, changing: true, paused: false);
+    _updateMessageById(
+      id: id,
+      changing: true,
+      paused: false,
+    );
   }
 
   void onTapSwitchAtIndex(int index, {required bool isBack, required Message msg}) {
@@ -687,6 +691,7 @@ extension _$Chat on _Chat {
     int? audioLength,
     bool? isReasoning,
     bool? paused,
+    String? callingFunction,
   }) {
     final currentMessages = [...messages.v];
     bool found = false;
@@ -713,7 +718,12 @@ extension _$Chat on _Chat {
     }
 
     if (!found) qqe("message not found");
-    if (!kDebugMode) Sentry.captureException(Exception("message not found"));
+    if (!kDebugMode) {
+      Sentry.captureException(
+        Exception("message not found, callingFunction: $callingFunction"),
+        stackTrace: StackTrace.current,
+      );
+    }
     messages.u(currentMessages);
     P.conversation.updateMessages(currentMessages);
   }
