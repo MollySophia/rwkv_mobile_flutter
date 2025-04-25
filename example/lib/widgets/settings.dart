@@ -75,7 +75,7 @@ class Settings extends ConsumerWidget {
             m: MAA.start,
             children: [
               T(
-                "Application settings",
+                S.current.application_settings,
                 s: TS(w: FW.w500, c: kB.wo(0.8), s: 12),
               ),
             ],
@@ -100,7 +100,7 @@ class Settings extends ConsumerWidget {
             m: MAA.start,
             children: [
               T(
-                "Join the community",
+                S.current.join_the_community,
                 s: TS(w: FW.w500, c: kB.wo(0.8), s: 12),
               ),
             ],
@@ -137,7 +137,7 @@ class Settings extends ConsumerWidget {
             m: MAA.start,
             children: [
               T(
-                "About",
+                S.current.about,
                 s: TS(w: FW.w500, c: kB.wo(0.8), s: 12),
               ),
             ],
@@ -145,13 +145,13 @@ class Settings extends ConsumerWidget {
           8.h,
           FormItem(
             isSectionStart: true,
-            title: "Feedback",
+            title: S.current.feedback,
             icon: Icon(Icons.feedback_outlined, color: kB.wo(0.667), size: 16),
             onTap: _openFeedback,
           ),
           FormItem(
             isSectionEnd: true,
-            title: "License",
+            title: S.current.license,
             icon: Icon(Icons.contact_page_outlined, color: kB.wo(0.667), size: 16),
             onTap: () => _showLicensePage(context, version, buildNumber, iconWidget),
           ),

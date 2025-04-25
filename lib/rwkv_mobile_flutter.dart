@@ -371,18 +371,15 @@ class RWKVMobile {
           }
         }
       } else if (command == 'stop') {
-        if (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) == 1) {
-          retVal = rwkvMobile.rwkvmobile_runtime_stop_generation(runtime);
-          if (retVal != 0) {
-            sendPort.send({'generateStop': false, 'error': 'Failed to stop generation'});
+        bool generating = rwkvMobile.rwkvmobile_runtime_is_generating(runtime) == 1;
+        while (generating) {
+          rwkvMobile.rwkvmobile_runtime_stop_generation(runtime);
+          if (kDebugMode) print("💬 Waiting for generation to stop...");
+          await Future.delayed(const Duration(milliseconds: 5));
+          generating = rwkvMobile.rwkvmobile_runtime_is_generating(runtime) == 1;
+          if (!generating) {
+            sendPort.send({'generateStop': true});
           }
-          while (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) == 1) {
-            if (kDebugMode) print("💬 Waiting for generation to stop...");
-            await Future.delayed(const Duration(milliseconds: 10));
-            rwkvMobile.rwkvmobile_runtime_stop_generation(runtime);
-          }
-          if (kDebugMode) print("💬 Generation stopped");
-          sendPort.send({'generateStop': true});
         }
       } else if (command == 'getResponseBufferContent') {
         final responseBufferContent = rwkvMobile.rwkvmobile_runtime_get_response_buffer_content(runtime);

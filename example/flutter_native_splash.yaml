@@ -1,5 +1,5 @@
 flutter_native_splash:
   color: '#FFFFFF'
-  image: assets/img/tts/logo.png
+  image: assets/img/chat/logo.png
 
   android_12:

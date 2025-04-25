@@ -29,7 +29,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "about": MessageLookupByLibrary.simpleMessage("About"),
     "application_language": MessageLookupByLibrary.simpleMessage("Language"),
+    "application_settings": MessageLookupByLibrary.simpleMessage(
+      "Application settings",
+    ),
     "apply": MessageLookupByLibrary.simpleMessage("Apply"),
     "are_you_sure_you_want_to_delete_this_model":
         MessageLookupByLibrary.simpleMessage(
@@ -90,6 +94,7 @@ class MessageLookup extends MessageLookupByLibrary {
         ),
     "exploring": MessageLookupByLibrary.simpleMessage("Exploring..."),
     "extra_large": MessageLookupByLibrary.simpleMessage("Extra large (130%)"),
+    "feedback": MessageLookupByLibrary.simpleMessage("Feedback"),
     "follow_system": MessageLookupByLibrary.simpleMessage("System"),
     "font_setting": MessageLookupByLibrary.simpleMessage("Font setting"),
     "font_size": MessageLookupByLibrary.simpleMessage("Font size"),
@@ -102,7 +107,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "intro": MessageLookupByLibrary.simpleMessage(
       "Get ready to experience RWKV v7, series of compact language models with 0.1, 0.4, 1.5, 2.9 billion parameters, optimized for seamless mobile devices inference. Once loaded, it functions offline without requiring any server communication.",
     ),
+    "join_the_community": MessageLookupByLibrary.simpleMessage(
+      "Join the community",
+    ),
     "large": MessageLookupByLibrary.simpleMessage("Large (120%)"),
+    "license": MessageLookupByLibrary.simpleMessage("Open source license"),
     "loading": MessageLookupByLibrary.simpleMessage("Loading..."),
     "medium": MessageLookupByLibrary.simpleMessage("Medium (110%)"),
     "memory_used": m1,

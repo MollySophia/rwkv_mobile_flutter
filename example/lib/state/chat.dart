@@ -335,8 +335,8 @@ extension $Chat on _Chat {
     final currentLocale = Intl.getCurrentLocale();
     bool useEn = currentLocale.startsWith("en");
 
-    final assetPath = useEn ? "assets/config/tts/suggestions.en-US${kDebugMode ? ".debug" : ""}.json" : "assets/config/tts/suggestions.zh-hans${kDebugMode ? ".debug" : ""}.json";
-    final anotherAssetPath = !useEn ? "assets/config/tts/suggestions.en-US${kDebugMode ? ".debug" : ""}.json" : "assets/config/tts/suggestions.zh-hans${kDebugMode ? ".debug" : ""}.json";
+    final assetPath = useEn ? "assets/config/chat/suggestions.en-US${kDebugMode ? ".debug" : ""}.json" : "assets/config/chat/suggestions.zh-hans${kDebugMode ? ".debug" : ""}.json";
+    final anotherAssetPath = !useEn ? "assets/config/chat/suggestions.en-US${kDebugMode ? ".debug" : ""}.json" : "assets/config/chat/suggestions.zh-hans${kDebugMode ? ".debug" : ""}.json";
 
     final jsonString = await rootBundle.loadString(assetPath);
     final list = HF.list(jsonDecode(jsonString));
@@ -659,11 +659,18 @@ extension _$Chat on _Chat {
     if (next != textInController) textEditingController.text = next;
   }
 
-  void _fullyReceived() {
-    qq;
+  void _fullyReceived({String? callingFunction}) {
+    qqq("callingFunction: $callingFunction");
+
+    final id = receiveId.v;
+
+    if (id == null) {
+      qqe("receiveId is null");
+      return;
+    }
 
     _updateMessageById(
-      id: receiveId.v!,
+      id: id,
       content: receivedTokens.v,
       changing: false,
     );
@@ -683,7 +690,7 @@ extension _$Chat on _Chat {
   }) {
     final currentMessages = [...messages.v];
     bool found = false;
-    
+
     for (var i = 0; i < currentMessages.length; i++) {
       final msg = currentMessages[i];
       if (msg.id == id) {
@@ -734,14 +741,14 @@ extension _$Chat on _Chat {
     switch (event.type) {
       case _RWKVMessageType.ttsDone:
         qq;
-        _fullyReceived();
+        _fullyReceived(callingFunction: "_onStreamEvent:ttsDone");
         break;
       case _RWKVMessageType.responseBufferIds:
         break;
       case _RWKVMessageType.isGenerating:
         final isGenerating = event.content == "true";
         receivingTokens.u(isGenerating);
-        if (!isGenerating) _fullyReceived();
+        if (!isGenerating) _fullyReceived(callingFunction: "_onStreamEvent:isGenerating");
         break;
       case _RWKVMessageType.responseBufferContent:
         receivedTokens.u(event.content);
@@ -749,7 +756,7 @@ extension _$Chat on _Chat {
       case _RWKVMessageType.response:
         receivedTokens.u(event.content);
         receivingTokens.u(false);
-        _fullyReceived();
+        _fullyReceived(callingFunction: "_onStreamEvent:response");
         break;
       case _RWKVMessageType.generateStart:
         receivedTokens.u("");

@@ -28,7 +28,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "about": MessageLookupByLibrary.simpleMessage("关于"),
     "application_language": MessageLookupByLibrary.simpleMessage("应用语言"),
+    "application_settings": MessageLookupByLibrary.simpleMessage("应用设置"),
     "apply": MessageLookupByLibrary.simpleMessage("应用"),
     "are_you_sure_you_want_to_delete_this_model":
         MessageLookupByLibrary.simpleMessage("确定要删除这个模型吗？"),
@@ -71,6 +73,7 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage("请确保设备内存充足，否则可能导致应用崩溃"),
     "exploring": MessageLookupByLibrary.simpleMessage("探索中..."),
     "extra_large": MessageLookupByLibrary.simpleMessage("特大 (130%)"),
+    "feedback": MessageLookupByLibrary.simpleMessage("反馈问题"),
     "follow_system": MessageLookupByLibrary.simpleMessage("跟随系统"),
     "font_setting": MessageLookupByLibrary.simpleMessage("字体设置"),
     "font_size": MessageLookupByLibrary.simpleMessage("字体大小"),
@@ -81,7 +84,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "intro": MessageLookupByLibrary.simpleMessage(
       "欢迎探索 RWKV v7 系列大语言模型，包含 0.1B/0.4B/1.5B/2.9B 参数版本，专为移动设备优化，加载后可完全离线运行，无需服务器通信",
     ),
+    "join_the_community": MessageLookupByLibrary.simpleMessage("加入社区"),
     "large": MessageLookupByLibrary.simpleMessage("大 (120%)"),
+    "license": MessageLookupByLibrary.simpleMessage("开源许可证"),
     "loading": MessageLookupByLibrary.simpleMessage("加载中..."),
     "medium": MessageLookupByLibrary.simpleMessage("中 (110%)"),
     "memory_used": m1,

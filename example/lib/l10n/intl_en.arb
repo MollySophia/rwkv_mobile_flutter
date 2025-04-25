@@ -82,5 +82,10 @@
   "medium": "Medium (110%)",
   "large": "Large (120%)",
   "extra_large": "Extra large (130%)",
-  "ultra_large": "Ultra large (140%)"
+  "ultra_large": "Ultra large (140%)",
+  "feedback": "Feedback",
+  "license": "Open source license",
+  "application_settings": "Application settings",
+  "join_the_community": "Join the community",
+  "about": "About"
 }

@@ -8,6 +8,7 @@ import 'package:halo_state/halo_state.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:zone/config.dart';
+import 'package:zone/gen/l10n.dart';
 import 'package:zone/route/method.dart';
 import 'package:zone/state/p.dart';
 
@@ -150,15 +151,15 @@ class AppInfo extends ConsumerWidget {
             12.h,
             TextButton(
               onPressed: _openFeedback,
-              child: const T(
-                "Feedback",
+              child: T(
+                S.current.feedback,
               ),
             ),
             12.h,
             TextButton(
               onPressed: () => _showLicensePage(context, version, buildNumber, iconWidget),
-              child: const T(
-                "License",
+              child: T(
+                S.current.license,
               ),
             ),
             paddingBottom.h,
