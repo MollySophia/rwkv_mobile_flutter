@@ -3,9 +3,11 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:gaimon/gaimon.dart';
 import 'package:halo_state/halo_state.dart';
+import 'package:zone/func/from_assets_to_temp.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:halo_alert/halo_alert.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +31,17 @@ class TTSBar extends ConsumerWidget {
     final primary = Theme.of(context).colorScheme.primary;
     final selectSourceAudioPath = ref.watch(P.tts.selectSourceAudioPath);
     final sourceWavName = selectSourceAudioPath?.split("/").last;
+    final pairs = ref.watch(P.tts.spkPairs);
+
+    String target = "";
+    if (selectSpkName != null) {
+      target = "Target: " + (P.tts.safe(selectSpkName));
+      target += " " + pairs[selectSpkName];
+      if (kDebugMode) {
+        target += " (" + selectSpkName + ")";
+      }
+    }
+
     return GD(
       onTap: P.tts.dismissAllShown,
       child: C(
@@ -39,7 +52,7 @@ class TTSBar extends ConsumerWidget {
             if (selectSpkName != null)
               C(
                 padding: const EI.s(v: 4),
-                child: T("Target: " + (P.tts.safe(selectSpkName)), s: TS(c: primary, w: FW.w600)),
+                child: T(target, s: TS(c: primary, w: FW.w600)),
               ),
             if (selectSourceAudioPath != null)
               C(
@@ -278,17 +291,22 @@ class _Actions extends ConsumerWidget {
     final editingBotMessage = ref.watch(P.chat.editingBotMessage);
     final color = Theme.of(context).colorScheme.primary;
     final loaded = ref.watch(P.rwkv.loaded);
+    final interactingInstruction = ref.watch(P.tts.interactingInstruction);
+
+    final audioInteractorShown = ref.watch(P.tts.audioInteractorShown);
+    final intonationShown = ref.watch(P.tts.intonationShown);
+    final spkShown = ref.watch(P.tts.spkShown);
 
     return Ro(
       children: [
-        const Exp(
+        Exp(
           child: Wrap(
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              _AudioButton(),
+              const _AudioButton(),
               _SpkButton(),
               _IntonationButton(),
-              _PerformanceInfo(),
+              if (!audioInteractorShown && !intonationShown && !spkShown && interactingInstruction == TTSInstruction.none) _PerformanceInfo(),
             ],
           ),
         ),
@@ -362,7 +380,8 @@ class _SpkPanel extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final spkNames = ref.watch(P.tts.spkNames);
+    final spkPairs = ref.watch(P.tts.spkPairs);
+    final spkNames = spkPairs.keys;
     final selectSpkName = ref.watch(P.tts.selectSpkName);
     final primary = Theme.of(context).colorScheme.primary;
     return SB(
@@ -373,39 +392,62 @@ class _SpkPanel extends ConsumerWidget {
           padding: const EI.o(t: 12, b: 12),
           itemCount: spkNames.length,
           itemBuilder: (context, index) {
-            final spkName = spkNames[index];
+            final k = spkNames.elementAt(index);
+            final v = spkPairs[k];
 
-            final selected = selectSpkName == spkName;
+            final selected = selectSpkName == k;
             return GD(
-              onTap: () {
-                P.tts.selectSpkName.u(spkName);
-                P.tts.selectSourceAudioPath.u(null);
-                Gaimon.light();
-              },
-              child: C(
-                padding: const EI.o(t: 4, b: 4, l: 8, r: 8),
-                decoration: BD(
-                  color: selected ? primary.wo(0.1) : kC,
-                  borderRadius: 6.r,
-                ),
+                onTap: () {
+                  qq;
+                  P.tts.selectSpkName.u(k);
+                  P.tts.selectSourceAudioPath.u(null);
+                  Gaimon.light();
+                },
                 child: Ro(
                   children: [
                     Exp(
-                      child: T(
-                        P.tts.safe(spkName),
-                        s: TS(c: selected ? primary : primary.wo(0.8), w: selected ? FW.w600 : FW.w400),
+                      child: C(
+                        padding: const EI.o(t: 4, b: 4, l: 8, r: 8),
+                        decoration: BD(
+                          color: selected ? primary.wo(0.1) : kC,
+                          borderRadius: 6.r,
+                        ),
+                        child: Ro(
+                          children: [
+                            Exp(
+                              child: T(
+                                P.tts.safe(k) + " " + P.tts.safe(v),
+                                s: TS(c: selected ? primary : primary.wo(0.8), w: selected ? FW.w600 : FW.w400),
+                              ),
+                            ),
+                            if (selected)
+                              Icon(
+                                Icons.check,
+                                color: primary,
+                                size: 14,
+                              ),
+                          ],
+                        ),
                       ),
                     ),
-                    if (selected)
-                      Icon(
-                        Icons.check,
-                        color: primary,
-                        size: 14,
+                    GD(
+                      onTap: () async {
+                        final path = await P.tts.getPrebuiltSpkAudioPathFromTemp(k);
+                        P.chat.latestClickedMessage.u(null);
+                        await P.world.play(path: path);
+                      },
+                      child: C(
+                        padding: EI.a(6.5),
+                        decoration: BD(color: kC),
+                        child: Icon(
+                          Icons.volume_up,
+                          color: primary,
+                          size: 14,
+                        ),
                       ),
+                    ),
                   ],
-                ),
-              ),
-            );
+                ));
           },
         ),
       ),

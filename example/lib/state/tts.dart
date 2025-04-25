@@ -1,7 +1,9 @@
 part of 'p.dart';
 
 class _TTS {
-  late final spkNames = qs<List<String>>([]);
+  late final spkPairs = qs<JSON>({});
+  late final selectSpkName = qsn<String>();
+
   late final ttsDone = qs(true);
 
   late final focusNode = FocusNode();
@@ -18,7 +20,6 @@ class _TTS {
   late final spkShown = qs(false);
   late final intonationShown = qs(false);
 
-  late final selectSpkName = qsn<String>();
   late final selectSourceAudioPath = qsn<String>();
 }
 
@@ -35,7 +36,7 @@ extension _$TTS on _TTS {
     textEditingController.addListener(_onTextEditingControllerValueChanged);
     textInInput.l(_onTextChanged);
     await getTTSSpkNames();
-    selectSpkName.u(spkNames.v.random);
+    selectSpkName.u(spkPairs.q.keys.random);
     selectSourceAudioPath.u(null);
 
     focusNode.addListener(() {
@@ -54,96 +55,13 @@ extension _$TTS on _TTS {
     final textInController = textEditingController.text;
     if (textInInput.v != textInController) textInInput.u(textInController);
   }
-}
 
-/// Public methods
-extension $TTS on _TTS {
-  FV testSpk() async {
-    qq;
-
-    final spkName = spkNames.v.random!;
-    final outputWavPath = P.app.cacheDir.v!.path + "/output.wav";
-    final ttsText = "你好，世界";
-    final instructionText = "";
-    qqr(outputWavPath);
-    qqr(spkName);
-    qqr(ttsText);
-    qqr(instructionText);
-
-    await runTTSWithPredefinedSpk(
-      ttsText: ttsText,
-      instructionText: instructionText,
-      spkName: spkName,
-      outputWavPath: outputWavPath,
-    );
-
-    int count = 2000;
-    while (!ttsDone.v) {
-      await HF.wait(50);
-      count--;
-      if (count <= 0) {
-        qqw("TTS done timeout");
-        break;
-      }
-    }
-
-    final result = await Share.shareXFiles([XFile(outputWavPath)], text: '''spk: $spkName
-ttsText: $ttsText
-instructionText: $instructionText
-outputWavPath: $outputWavPath''');
-
-    if (result.status == ShareResultStatus.success) {
-      qqr("Share success");
-    } else {
-      qqw("Share failed");
-    }
-  }
-
-  FV testWav() async {
-    qq;
-
-    final outputWavPath = P.app.cacheDir.v!.path + "/output.wav";
-    final ttsText = "奇怪奇怪真奇怪";
-    final instructionText = "";
-    final promptWavPath = await fromAssetsToTemp("assets/lib/tts/Trump.wav");
-    qqr(outputWavPath);
-    qqr(ttsText);
-    qqr(instructionText);
-
-    await runTTS(
-      ttsText: ttsText,
-      instructionText: instructionText,
-      promptWavPath: promptWavPath,
-      outputWavPath: outputWavPath,
-    );
-
-    int count = 2000;
-    while (!ttsDone.v) {
-      await HF.wait(50);
-      count--;
-      if (count <= 0) {
-        qqw("TTS done timeout");
-        break;
-      }
-    }
-
-    final result = await Share.shareXFiles([XFile(outputWavPath)], text: '''ttsText: $ttsText
-instructionText: $instructionText
-promptWavPath: $promptWavPath
-outputWavPath: $outputWavPath''');
-
-    if (result.status == ShareResultStatus.success) {
-      qqr("Share success");
-    } else {
-      qqw("Share failed");
-    }
-  }
-
-  FV runTTS({
+  FV _runTTS({
     required String ttsText,
     required String instructionText,
     required String promptWavPath,
     required String outputWavPath,
+    required String promptSpeechText,
   }) async {
     qq;
     final sendPort = P.rwkv._sendPort;
@@ -164,47 +82,24 @@ outputWavPath: $outputWavPath''');
         "instructionText": instructionText,
         "promptWavPath": promptWavPath,
         "outputWavPath": outputWavPath,
+        "promptSpeechText": promptSpeechText,
       }
     ));
   }
+}
 
-  FV runTTSWithPredefinedSpk({
-    required String ttsText,
-    required String instructionText,
-    required String spkName,
-    required String outputWavPath,
-  }) async {
-    qq;
-    final sendPort = P.rwkv._sendPort;
-    if (sendPort == null) {
-      qqe("sendPort is null");
-      return;
-    }
-
-    if (!ttsDone.v) {
-      qqe("ttsDone is true");
-      Alert.warning("TTS is running, please wait for it to finish");
-      return;
-    }
-
-    ttsDone.u(false);
-
-    sendPort.send((
-      "runTTSWithPredefinedSpk",
-      {
-        "ttsText": ttsText,
-        "instructionText": instructionText,
-        "spkName": spkName,
-        "outputWavPath": outputWavPath,
-      }
-    ));
-  }
-
+/// Public methods
+extension $TTS on _TTS {
   FV getTTSSpkNames() async {
     qq;
-    final data = await rootBundle.loadString("assets/config/tts/spk_names.json");
-    final spkNames = await compute(_parseSpkNames, data);
-    this.spkNames.u(spkNames);
+    try {
+      final data = await rootBundle.loadString("assets/lib/tts/pairs.json");
+      final spkPairs = await compute(_parseSpkNames, data);
+      this.spkPairs.u(spkPairs);
+    } catch (e) {
+      qqe("$e");
+      Sentry.captureException(e);
+    }
   }
 
   FV onAudioInteractorButtonPressed() async {
@@ -245,18 +140,37 @@ outputWavPath: $outputWavPath''');
 
   String safe(String input) {
     const replaceMap = {
-      "(PRC)": ")",
-      "_": " (",
-      "Japanese": "Japanese)",
-      "Korean": "Korean)",
-      "English": "English)",
+      // "(PRC)": ")",
+      // "_": " (",
+      // "Japanese": "Japanese)",
+      // "Korean": "Korean)",
+      // "English": "English)",
     };
 
     String name = input;
     replaceMap.forEach((key, value) {
       name = name.replaceAll(key, value);
     });
+
+    name = name.split("_").first;
+
     return name;
+  }
+
+  Future<String> getPrebuiltSpkAudioPathFromTemp(String spkName) async {
+    qq;
+    final fileName = "Chinese(PRC)_$spkName.wav";
+    final path = "assets/lib/tts/$fileName";
+    final localPath = await fromAssetsToTemp(path);
+    return localPath;
+  }
+
+  Future<String> getPromptSpeechText(String spkName) async {
+    qq;
+    final fileName = "Chinese(PRC)_$spkName.json";
+    final data = await rootBundle.loadString("assets/lib/tts/$fileName");
+    final json = HF.json(jsonDecode(data));
+    return json["transcription"];
   }
 
   FV gen() async {
@@ -271,8 +185,15 @@ outputWavPath: $outputWavPath''');
     late final Message? msg;
     final id = HF.milliseconds;
     final receiveId = HF.milliseconds + 1;
-    final selectSourceAudioPath = this.selectSourceAudioPath.q;
     final spkName = selectSpkName.q;
+
+    if (spkName == null && this.selectSourceAudioPath.q == null) {
+      Alert.warning("Please select a spk or a wav file");
+      return;
+    }
+
+    final promptSpeechText = spkName == null ? "" : await getPromptSpeechText(spkName);
+    final selectSourceAudioPath = this.selectSourceAudioPath.q ?? await getPrebuiltSpkAudioPathFromTemp(spkName!);
     final ttsText = P.chat.textEditingController.text;
 
     final instructionText = textInInput.q;
@@ -292,11 +213,6 @@ outputWavPath: $outputWavPath''');
     spkShown.u(false);
 
     P.chat.textEditingController.clear();
-
-    if (spkName == null && selectSourceAudioPath == null) {
-      Alert.warning("Please select a spk or a wav file");
-      return;
-    }
 
     msg = Message(
       id: id,
@@ -332,23 +248,20 @@ outputWavPath: $outputWavPath''');
     P.chat.receiveId.u(receiveId);
     P.chat.messages.ua(receiveMsg);
 
-    if (spkName != null) {
-      await runTTSWithPredefinedSpk(
-        ttsText: ttsText,
-        instructionText: instructionText,
-        spkName: spkName,
-        outputWavPath: outputWavPath,
-      );
-    }
+    qqq("""
+ttsText: $ttsText
+instructionText: $instructionText
+promptWavPath: $selectSourceAudioPath
+promptSpeechText: $promptSpeechText
+outputWavPath: $outputWavPath""");
 
-    if (selectSourceAudioPath != null) {
-      await runTTS(
-        ttsText: ttsText,
-        instructionText: instructionText,
-        promptWavPath: selectSourceAudioPath,
-        outputWavPath: outputWavPath,
-      );
-    }
+    await _runTTS(
+      ttsText: ttsText,
+      instructionText: instructionText,
+      promptWavPath: selectSourceAudioPath!,
+      promptSpeechText: promptSpeechText,
+      outputWavPath: outputWavPath,
+    );
   }
 
   void dismissAllShown() {
@@ -395,7 +308,6 @@ outputWavPath: $outputWavPath''');
   }
 }
 
-List<String> _parseSpkNames(String message) {
-  final list = HF.list(jsonDecode(message));
-  return list.map((e) => e.toString()).toList();
+JSON _parseSpkNames(String message) {
+  return HF.json(jsonDecode(message));
 }

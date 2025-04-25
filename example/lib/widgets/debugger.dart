@@ -32,7 +32,7 @@ class Debugger extends ConsumerWidget {
     final branchesCountList = ref.watch(P.chat.branchesCountList);
     final receiveId = ref.watch(P.chat.receiveId);
     final ttsDone = ref.watch(P.tts.ttsDone);
-    final spkNames = ref.watch(P.tts.spkNames);
+    final spkNames = ref.watch(P.tts.spkPairs);
 
     final spkShown = ref.watch(P.tts.spkShown);
     final audioInteractorShown = ref.watch(P.tts.audioInteractorShown);
@@ -48,6 +48,8 @@ class Debugger extends ConsumerWidget {
 
     final selectedIndex = ref.watch(P.tts.instructions(interactingInstruction));
     final selectedInstruction = selectedIndex != null ? interactingInstruction.options[selectedIndex] : null;
+
+    final recording = ref.watch(P.world.recording);
 
     return Positioned(
       left: 0,
@@ -123,6 +125,8 @@ class Debugger extends ConsumerWidget {
                     T(interactingInstruction.toString()),
                     T("selectedInstruction".codeToName),
                     T(selectedInstruction.toString()),
+                    T("recording".codeToName),
+                    T(recording.toString()),
                   ]
                 ].indexMap((index, e) {
                   return C(
