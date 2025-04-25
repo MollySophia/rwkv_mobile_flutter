@@ -95,7 +95,7 @@ extension $Chat on _Chat {
     if (_editingBotMessage) {
       // final currentMessages = [...messages.v];
       final _editingIndex = editingIndex.v!;
-      final id = HF.milliseconds;
+      final id = HF.microseconds;
       final newBotMessage = Message(
         id: id,
         content: textToSend,
@@ -248,7 +248,9 @@ extension $Chat on _Chat {
 
     late final Message? msg;
 
-    final id = HF.milliseconds;
+    final id = HF.microseconds;
+    final receiveId = HF.microseconds + 1;
+
     if (!isRegenerate) {
       msg = Message(
         id: id,
@@ -302,7 +304,6 @@ extension $Chat on _Chat {
     receivedTokens.uc();
     receivingTokens.u(true);
 
-    final receiveId = HF.milliseconds;
     this.receiveId.u(receiveId);
     final receiveMsg = Message(
       id: receiveId,
