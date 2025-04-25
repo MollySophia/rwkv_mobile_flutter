@@ -77,6 +77,10 @@ class ModelSelector extends ConsumerWidget {
                 return a.fileSize.compareTo(b.fileSize);
               }).sorted((a, b) {
                 return (a.isDebug ? 1 : 0).compareTo((b.isDebug ? 1 : 0));
+              }).sorted((a, b) {
+                final aIsDownloaded = P.fileManager.locals(a).q.hasFile ? 1 : 0;
+                final bIsDownloaded = P.fileManager.locals(b).q.hasFile ? 1 : 0;
+                return bIsDownloaded.compareTo(aIsDownloaded);
               }))
                 ModelItem(fileInfo),
             16.h,
