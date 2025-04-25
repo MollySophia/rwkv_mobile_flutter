@@ -370,6 +370,7 @@ extension $Chat on _Chat {
       id: id,
       changing: true,
       paused: false,
+      callingFunction: "resumeMessageById",
     );
   }
 
@@ -420,7 +421,7 @@ extension $Chat on _Chat {
     }
 
     qqe("No target chain found");
-    if (!kDebugMode) Sentry.captureException(Exception("No target chain found"));
+    if (!kDebugMode) Sentry.captureException(Exception("No target chain found"), stackTrace: StackTrace.current);
   }
 }
 
@@ -485,7 +486,7 @@ extension _$Chat on _Chat {
     qq;
     if (previous == null) {
       qqe("previous is null");
-      if (!kDebugMode) Sentry.captureException(Exception("previous is null"));
+      if (!kDebugMode) Sentry.captureException(Exception("previous is null"), stackTrace: StackTrace.current);
       return;
     }
 
@@ -513,7 +514,7 @@ extension _$Chat on _Chat {
 
     if (!chains.contains(currentChain)) {
       qqe("currentChain not found in chains");
-      if (!kDebugMode) Sentry.captureException(Exception("currentChain not found in chains"));
+      if (!kDebugMode) Sentry.captureException(Exception("currentChain not found in chains"), stackTrace: StackTrace.current);
       return;
     }
 
@@ -522,7 +523,7 @@ extension _$Chat on _Chat {
     if (nextIds.isEmpty) {
       qqe("nextIds is empty");
       qqe("next: $next");
-      if (!kDebugMode) Sentry.captureException(Exception("nextIds is empty"));
+      if (!kDebugMode) Sentry.captureException(Exception("nextIds is empty"), stackTrace: StackTrace.current);
       debugger();
       return;
     }
@@ -677,6 +678,7 @@ extension _$Chat on _Chat {
       id: id,
       content: receivedTokens.v,
       changing: false,
+      callingFunction: callingFunction,
     );
   }
 
@@ -717,12 +719,9 @@ extension _$Chat on _Chat {
       }
     }
 
-    if (!found) qqe("message not found");
-    if (!kDebugMode) {
-      Sentry.captureException(
-        Exception("message not found, callingFunction: $callingFunction"),
-        stackTrace: StackTrace.current,
-      );
+    if (!found) {
+      qqe("message not found");
+      if (!kDebugMode) Sentry.captureException(Exception("message not found, callingFunction: $callingFunction"), stackTrace: StackTrace.current);
     }
     messages.u(currentMessages);
     P.conversation.updateMessages(currentMessages);
@@ -750,7 +749,6 @@ extension _$Chat on _Chat {
 
     switch (event.type) {
       case _RWKVMessageType.ttsDone:
-        qq;
         _fullyReceived(callingFunction: "_onStreamEvent:ttsDone");
         break;
       case _RWKVMessageType.responseBufferIds:

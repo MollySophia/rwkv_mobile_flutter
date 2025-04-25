@@ -83,7 +83,7 @@ extension $App on _App {
     } catch (e) {
       qe;
       qqe("e: $e");
-      if (!kDebugMode) Sentry.captureException(e);
+      if (!kDebugMode) Sentry.captureException(e, stackTrace: StackTrace.current);
     }
   }
 }
@@ -174,7 +174,7 @@ extension _$App on _App {
     if (Platform.isAndroid) {
       if (androidUrl == null) {
         qqe("androidUrl is null");
-        if (!kDebugMode) Sentry.captureException(Exception("androidUrl is null"));
+        if (!kDebugMode) Sentry.captureException(Exception("androidUrl is null"), stackTrace: StackTrace.current);
         return;
       }
       launchUrl(Uri.parse(androidUrl), mode: LaunchMode.externalApplication);
@@ -183,7 +183,7 @@ extension _$App on _App {
     if (Platform.isIOS) {
       if (iosUrl == null) {
         qqe("iosUrl is null");
-        if (!kDebugMode) Sentry.captureException(Exception("iosUrl is null"));
+        if (!kDebugMode) Sentry.captureException(Exception("iosUrl is null"), stackTrace: StackTrace.current);
         return;
       }
       launchUrl(Uri.parse(iosUrl), mode: LaunchMode.externalApplication);

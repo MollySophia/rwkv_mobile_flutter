@@ -98,7 +98,7 @@ extension $TTS on _TTS {
       this.spkPairs.u(spkPairs);
     } catch (e) {
       qqe("$e");
-      Sentry.captureException(e);
+      Sentry.captureException(e, stackTrace: StackTrace.current);
     }
   }
 

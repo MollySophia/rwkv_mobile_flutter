@@ -35,7 +35,7 @@ FV _loadEnv() async {
     Config.xApiKey = dotenv.env["x-api-key"] ?? "";
   } catch (e) {
     qqe(e);
-    if (!kDebugMode) Sentry.captureException(e);
+    if (!kDebugMode) Sentry.captureException(e, stackTrace: StackTrace.current);
   }
 }
 

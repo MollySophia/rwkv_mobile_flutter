@@ -137,7 +137,7 @@ extension $FileManager on _FileManager {
     } catch (e) {
       qe;
       qqe(e);
-      if (!kDebugMode) Sentry.captureException(e);
+      if (!kDebugMode) Sentry.captureException(e, stackTrace: StackTrace.current);
     }
     final path = paths(fileInfo).v;
     await File(path).delete();

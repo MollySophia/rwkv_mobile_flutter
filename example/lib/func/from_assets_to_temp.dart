@@ -19,7 +19,7 @@ Future<String> fromAssetsToTemp(String assetsPath, {String? targetPath}) async {
     return tempFile.path;
   } catch (e) {
     qqe("$e");
-    if (!kDebugMode) Sentry.captureException(e);
+    if (!kDebugMode) Sentry.captureException(e, stackTrace: StackTrace.current);
     return "";
   }
 }

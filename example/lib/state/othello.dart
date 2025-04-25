@@ -297,7 +297,7 @@ extension _$ on _Othello {
       if (placing == null) {
         if (token != _kPsToken) {
           qqe("Placing is null:${token.toString()}");
-          if (!kDebugMode) Sentry.captureException(Exception("Placing is null:${token.toString()}"));
+          if (!kDebugMode) Sentry.captureException(Exception("Placing is null:${token.toString()}"), stackTrace: StackTrace.current);
         } else {
           qqq("Game over!");
         }
