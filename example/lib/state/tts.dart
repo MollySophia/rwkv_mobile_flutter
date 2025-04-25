@@ -258,7 +258,7 @@ outputWavPath: $outputWavPath""");
     await _runTTS(
       ttsText: ttsText,
       instructionText: instructionText,
-      promptWavPath: selectSourceAudioPath!,
+      promptWavPath: selectSourceAudioPath,
       promptSpeechText: promptSpeechText,
       outputWavPath: outputWavPath,
     );

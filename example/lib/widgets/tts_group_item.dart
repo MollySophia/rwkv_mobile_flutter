@@ -50,7 +50,6 @@ class TTSGroupItem extends ConsumerWidget {
     final flowDecoderEstimatorParamFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("flow.decoder.estimator.param"));
     final hiftGeneratorFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("hift"));
     final speechTokenizerFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("speech.tokenizer"));
-    final spksInfoFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("spk_info"));
 
     if (campPlusFileKey == null) {
       Alert.error("Campplus file not found");
@@ -82,11 +81,6 @@ class TTSGroupItem extends ConsumerWidget {
       return;
     }
 
-    if (spksInfoFileKey == null) {
-      Alert.error("Speaker info file not found");
-      return;
-    }
-
     final modelLocalFile = P.fileManager.locals(fileInfo).v;
     final localCampPlusFile = P.fileManager.locals(campPlusFileKey).v;
     final localFlowEncoderFile = P.fileManager.locals(flowEncoderFileKey).v;
@@ -94,7 +88,6 @@ class TTSGroupItem extends ConsumerWidget {
     final _ = P.fileManager.locals(flowDecoderEstimatorParamFileKey).v;
     final localHiftGeneratorFile = P.fileManager.locals(hiftGeneratorFileKey).v;
     final localSpeechTokenizerFile = P.fileManager.locals(speechTokenizerFileKey).v;
-    final localSpksInfoFile = P.fileManager.locals(spksInfoFileKey).v;
     P.rwkv.currentGroupInfo.u(GroupInfo(displayName: fileInfo.name));
 
     P.rwkv.clearStates();
@@ -110,7 +103,6 @@ class TTSGroupItem extends ConsumerWidget {
         flowDecoderEstimatorPath: localFlowDecoderEstimatorBinFile.targetPath,
         hiftGeneratorPath: localHiftGeneratorFile.targetPath,
         speechTokenizerPath: localSpeechTokenizerFile.targetPath,
-        spksInfoPath: localSpksInfoFile.targetPath,
       );
       P.tts.getTTSSpkNames();
       Navigator.pop(getContext()!);

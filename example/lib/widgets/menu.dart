@@ -7,7 +7,6 @@ import 'package:halo/halo.dart';
 import 'package:zone/config.dart';
 import 'package:zone/state/p.dart';
 import 'package:zone/widgets/app_info.dart';
-import 'package:zone/widgets/chat/conversation_list.dart';
 import 'package:zone/widgets/settings.dart';
 
 class Menu extends ConsumerWidget {
@@ -15,12 +14,12 @@ class Menu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Material(
+    return const Material(
       color: kW,
       child: Co(
         m: MAA.center,
         children: [
-          const Exp(child: Settings()),
+          Exp(child: Settings()),
         ],
       ),
     );

@@ -120,17 +120,5 @@
     "platforms": ["android"],
     "backends": ["onnxruntime"],
     "tags": ["speech.tokenizer"]
-  },
-  {
-    "name": "Speaker Info",
-    "type": "gguf",
-    "fileName": "spk_info.msgpack",
-    "fileSize": 5269741,
-    "sha256": "339fa826d32bf548dbe8d599198bb10242592744816e8312853c68c6c498cb14",
-    "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/cosyvoice/spk_info.msgpack",
-    "quantization": "",
-    "platforms": ["android"],
-    "backends": ["onnxruntime"],
-    "tags": ["spk_info"]
   }
 ]

@@ -13,7 +13,6 @@ import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/demo_type.dart';
 import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
-import 'package:zone/widgets/app_info.dart';
 import 'package:zone/widgets/arguments_panel.dart';
 import 'package:zone/widgets/pager.dart';
 
@@ -149,9 +148,9 @@ class _MenuButton extends ConsumerWidget {
     final childOpacity = ref.watch(Pager.childOpacity);
     return Opacity(
       opacity: childOpacity,
-      child: IconButton(
+      child: const IconButton(
         onPressed: Pager.toggle,
-        icon: const Icon(Icons.menu),
+        icon: Icon(Icons.menu),
       ),
     );
   }

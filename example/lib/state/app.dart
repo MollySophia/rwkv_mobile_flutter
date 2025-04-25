@@ -44,6 +44,7 @@ extension $App on _App {
   }
 
   FV getConfig() async {
+    return;
     qq;
     if (Args.disableRemoteConfig) {
       qqw("Remote config is disabled");

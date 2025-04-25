@@ -7,7 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:gaimon/gaimon.dart';
 import 'package:halo_state/halo_state.dart';
-import 'package:zone/func/from_assets_to_temp.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:halo_alert/halo_alert.dart';
 import 'package:flutter/material.dart';
@@ -304,9 +303,9 @@ class _Actions extends ConsumerWidget {
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               const _AudioButton(),
-              _SpkButton(),
-              _IntonationButton(),
-              if (!audioInteractorShown && !intonationShown && !spkShown && interactingInstruction == TTSInstruction.none) _PerformanceInfo(),
+              const _SpkButton(),
+              const _IntonationButton(),
+              if (!audioInteractorShown && !intonationShown && !spkShown && interactingInstruction == TTSInstruction.none) const _PerformanceInfo(),
             ],
           ),
         ),
@@ -437,8 +436,8 @@ class _SpkPanel extends ConsumerWidget {
                         await P.world.play(path: path);
                       },
                       child: C(
-                        padding: EI.a(6.5),
-                        decoration: BD(color: kC),
+                        padding: const EI.a(6.5),
+                        decoration: const BD(color: kC),
                         child: Icon(
                           Icons.volume_up,
                           color: primary,

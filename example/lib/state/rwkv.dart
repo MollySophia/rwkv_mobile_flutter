@@ -366,7 +366,6 @@ extension $RWKV on _RWKV {
     required String flowDecoderEstimatorPath,
     required String hiftGeneratorPath,
     required String speechTokenizerPath,
-    required String spksInfoPath,
   }) async {
     qq;
     _loading.u(true);
@@ -428,7 +427,6 @@ extension $RWKV on _RWKV {
         "hiftGeneratorPath": hiftGeneratorPath,
         "speechTokenizerPath": speechTokenizerPath,
         "ttsTokenizerPath": ttsTokenizerPath,
-        "spksInfoPath": spksInfoPath,
       }
     ));
 
