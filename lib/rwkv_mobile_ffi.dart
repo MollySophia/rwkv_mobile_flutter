@@ -534,7 +534,6 @@ class rwkv_mobile {
     ffi.Pointer<ffi.Char> flow_decoder_estimator_path,
     ffi.Pointer<ffi.Char> hift_generator_path,
     ffi.Pointer<ffi.Char> tts_tokenizer_path,
-    ffi.Pointer<ffi.Char> spk_info_path,
   ) {
     return _rwkvmobile_runtime_cosyvoice_load_models(
       runtime,
@@ -544,12 +543,11 @@ class rwkv_mobile {
       flow_decoder_estimator_path,
       hift_generator_path,
       tts_tokenizer_path,
-      spk_info_path,
     );
   }
 
-  late final _rwkvmobile_runtime_cosyvoice_load_modelsPtr = _lookup<ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>>('rwkvmobile_runtime_cosyvoice_load_models');
-  late final _rwkvmobile_runtime_cosyvoice_load_models = _rwkvmobile_runtime_cosyvoice_load_modelsPtr.asFunction<int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
+  late final _rwkvmobile_runtime_cosyvoice_load_modelsPtr = _lookup<ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>>('rwkvmobile_runtime_cosyvoice_load_models');
+  late final _rwkvmobile_runtime_cosyvoice_load_models = _rwkvmobile_runtime_cosyvoice_load_modelsPtr.asFunction<int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
 
   int rwkvmobile_runtime_cosyvoice_release_models(
     rwkvmobile_runtime_t runtime,

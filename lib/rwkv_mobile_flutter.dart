@@ -408,8 +408,7 @@ class RWKVMobile {
         final hiftGeneratorPath = args['hiftGeneratorPath'] as String;
         final speechTokenizerPath = args['speechTokenizerPath'] as String;
         final ttsTokenizerPath = args['ttsTokenizerPath'] as String;
-        final spksInfoPath = args['spksInfoPath'] as String;
-        retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_load_models(runtime, speechTokenizerPath.toNativeUtf8().cast<ffi.Char>(), campPlusPath.toNativeUtf8().cast<ffi.Char>(), flowEncoderPath.toNativeUtf8().cast<ffi.Char>(), flowDecoderEstimatorPath.toNativeUtf8().cast<ffi.Char>(), hiftGeneratorPath.toNativeUtf8().cast<ffi.Char>(), ttsTokenizerPath.toNativeUtf8().cast<ffi.Char>(), spksInfoPath.toNativeUtf8().cast<ffi.Char>());
+        retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_load_models(runtime, speechTokenizerPath.toNativeUtf8().cast<ffi.Char>(), campPlusPath.toNativeUtf8().cast<ffi.Char>(), flowEncoderPath.toNativeUtf8().cast<ffi.Char>(), flowDecoderEstimatorPath.toNativeUtf8().cast<ffi.Char>(), hiftGeneratorPath.toNativeUtf8().cast<ffi.Char>(), ttsTokenizerPath.toNativeUtf8().cast<ffi.Char>());
         if (retVal != 0) {
           sendPort.send({'error': 'Failed to load TTS models'});
         }
