@@ -13,7 +13,7 @@ const _toRight = 80.0;
 PageController? _controller;
 
 class Pager extends ConsumerStatefulWidget {
-  static final page = qs<double>(1.0); 
+  static final page = qs<double>(1.0);
   static final mainPageNotIgnoring = qs(true);
   static final childOpacity = qs(1.0);
   static final drawerOpacity = qs(0.0);
@@ -117,6 +117,7 @@ class _PagerState extends ConsumerState<Pager> {
     if (notification is ScrollStartNotification) {
       if (notification.depth == 0) {
         if (P.chat.focusNode.hasFocus) P.chat.focusNode.unfocus();
+        if (P.tts.focusNode.hasFocus) P.tts.dismissAllShown();
       }
     }
     return false;

@@ -175,9 +175,7 @@ class _TextField extends ConsumerWidget {
 
   void _onAppPrivateCommand(String action, Map<String, dynamic> data) {}
 
-  void _onTapOutside(PointerDownEvent event) {
-    qq;
-  }
+  void _onTapOutside(PointerDownEvent event) {}
 
   void _onKeyEvent(KeyEvent event) {
     final character = event.character;

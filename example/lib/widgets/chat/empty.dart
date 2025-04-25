@@ -44,6 +44,7 @@ class Empty extends ConsumerWidget {
         child: GD(
           onTap: () {
             P.chat.focusNode.unfocus();
+            P.tts.dismissAllShown();
           },
           child: Stack(
             children: [

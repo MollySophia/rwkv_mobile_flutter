@@ -105,7 +105,7 @@ outputWavPath: $outputWavPath''');
     final outputWavPath = P.app.cacheDir.v!.path + "/output.wav";
     final ttsText = "奇怪奇怪真奇怪";
     final instructionText = "";
-    final promptWavPath = await fromAssetsToTemp("assets/lib/chat/Trump.wav");
+    final promptWavPath = await fromAssetsToTemp("assets/lib/tts/Trump.wav");
     qqr(outputWavPath);
     qqr(ttsText);
     qqr(instructionText);
@@ -202,7 +202,7 @@ outputWavPath: $outputWavPath''');
 
   FV getTTSSpkNames() async {
     qq;
-    final data = await rootBundle.loadString("assets/config/chat/spk_names.json");
+    final data = await rootBundle.loadString("assets/config/tts/spk_names.json");
     final spkNames = await compute(_parseSpkNames, data);
     this.spkNames.u(spkNames);
   }
