@@ -72,7 +72,7 @@ class PageOthello extends ConsumerWidget {
                         if (settingsAndPlayersShouldAtDifferentColumnIsHorizontal)
                           ConstrainedBox(
                             constraints: BoxConstraints(
-                              maxWidth: screenWidth * 0.33,
+                              maxWidth: screenWidth * .33,
                             ),
                             child: const Co(
                               c: CAA.center,
@@ -106,12 +106,12 @@ class _Title extends ConsumerWidget {
       m: MAA.center,
       children: [
         12.w,
-        T("$version($buildNumber)", s: TS(c: kB.wo(0.0), s: 10)),
+        T("$version($buildNumber)", s: TS(c: kB.q(.0), s: 10)),
         if (usePortrait) const Spacer(),
         T(S.current.rwkv_othello, s: const TS(c: kB, s: 20, w: FW.w700)),
         if (usePortrait) const Spacer(),
         if (!usePortrait) 32.w,
-        T("$version($buildNumber)", s: TS(c: kB.wo(0.5), s: 10)),
+        T("$version($buildNumber)", s: TS(c: kB.q(.5), s: 10)),
         if (!usePortrait) 32.w,
         12.w,
       ],
@@ -211,15 +211,15 @@ class _ModelSettings extends ConsumerWidget {
     ]);
 
     return Material(
-      color: kB.wo(0.0),
+      color: kB.q(.0),
       textStyle: const TS(ff: "monospace", c: kB, s: 10),
       child: C(
         padding: const EI.a(4),
         margin: const EI.a(4),
         decoration: BD(
-          color: kB.wo(0.0),
+          color: kB.q(.0),
           borderRadius: 4.r,
-          border: Border.all(color: kB.wo(0.5), width: 0.5),
+          border: Border.all(color: kB.q(.5), width: .5),
         ),
         child: Co(
           c: CAA.start,
@@ -230,7 +230,7 @@ class _ModelSettings extends ConsumerWidget {
               s: TS(w: FW.w700),
             ),
             8.h,
-            T("In-context search will be activated when both breadth and depth are greater than 2", s: TS(c: kB.wo(0.5), s: 10)),
+            T("In-context search will be activated when both breadth and depth are greater than 2", s: TS(c: kB.q(.5), s: 10)),
             8.h,
             usePortrait
                 ? Co(
@@ -278,7 +278,7 @@ class _Players extends ConsumerWidget {
     final usePortrait = ref.watch(P.othello.usePortrait);
 
     final blackOptions = C(
-      decoration: BD(color: kC, borderRadius: 4.r, border: Border.all(color: kB.wo(0.5), width: 0.5)),
+      decoration: BD(color: kC, borderRadius: 4.r, border: Border.all(color: kB.q(.5), width: .5)),
       padding: const EI.o(l: 8, r: 8, t: 8),
       child: Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
@@ -319,7 +319,7 @@ class _Players extends ConsumerWidget {
     );
 
     final whiteOptions = C(
-      decoration: BD(color: kC, borderRadius: 4.r, border: Border.all(color: kB.wo(0.5), width: 0.5)),
+      decoration: BD(color: kC, borderRadius: 4.r, border: Border.all(color: kB.q(.5), width: .5)),
       padding: const EI.o(l: 8, r: 8, t: 8),
       child: Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
@@ -360,15 +360,15 @@ class _Players extends ConsumerWidget {
     );
 
     return Material(
-      color: kB.wo(0.0),
+      color: kB.q(.0),
       textStyle: const TS(ff: "monospace", c: kB, s: 10),
       child: C(
         margin: const EI.a(4),
         padding: const EI.a(4),
         decoration: BD(
-          color: kB.wo(0.0),
+          color: kB.q(.0),
           borderRadius: 4.r,
-          border: Border.all(color: kB.wo(0.5), width: 0.5),
+          border: Border.all(color: kB.q(.5), width: .5),
         ),
         child: Co(
           c: CAA.start,
@@ -436,7 +436,7 @@ class _Score extends ConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         AnimatedOpacity(
-          opacity: thinking ? 1.0 : 0.5,
+          opacity: thinking ? 1.0 : .5,
           duration: const Duration(milliseconds: 150),
           child: T("Thinking", s: TS(c: kB, s: 10, w: thinking ? FW.w400 : FW.w400)),
         ),
@@ -470,7 +470,7 @@ class _Score extends ConsumerWidget {
           decoration: BD(
             color: kC,
             borderRadius: 8.r,
-            border: Border.all(color: kB.wo(0.5), width: 0.5),
+            border: Border.all(color: kB.q(.5), width: .5),
           ),
           child: Co(
             children: [
@@ -505,8 +505,8 @@ class _Othello extends ConsumerWidget {
       children: [
         ConstrainedBox(
           constraints: BoxConstraints(
-            maxWidth: screenWidth * 0.65,
-            maxHeight: screenHeight * 0.65,
+            maxWidth: screenWidth * .65,
+            maxHeight: screenHeight * .65,
           ),
           child: const _Grid(),
         ),
@@ -560,7 +560,7 @@ class _Grid extends ConsumerWidget {
                       _onCellTap(row: row, col: col);
                     },
                     child: C(
-                      decoration: BD(color: const Color(0xFF808080).wo(0.5)),
+                      decoration: BD(color: const Color(0xFF808080).q(.5)),
                       child: _Cell(
                         row: row,
                         col: col,
@@ -630,10 +630,10 @@ class _Cell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      final maxSize = min(constraints.maxWidth, constraints.maxHeight) * 0.7;
+      final maxSize = min(constraints.maxWidth, constraints.maxHeight) * .7;
       final minSize = 5.0;
 
-      final maxAvailableSize = min(constraints.maxWidth, constraints.maxHeight) * 0.2;
+      final maxAvailableSize = min(constraints.maxWidth, constraints.maxHeight) * .2;
       final minAvailableSize = minSize - 2;
 
       if (available) {
@@ -693,13 +693,13 @@ class _White extends StatelessWidget {
       decoration: BD(
         boxShadow: [
           BoxShadow(
-            color: kB.wo(0.3),
+            color: kB.q(.3),
             offset: const Offset(1, 1),
             blurRadius: 3,
           ),
         ],
         gradient: RadialGradient(
-          center: const Alignment(-0.5, -0.5),
+          center: const Alignment(-.5, -.5),
           colors: [
             Colors.white,
             Colors.grey[300]!,
@@ -732,13 +732,13 @@ class _Black extends StatelessWidget {
       decoration: BD(
         boxShadow: [
           BoxShadow(
-            color: kB.wo(0.3),
+            color: kB.q(.3),
             offset: const Offset(1, 1),
             blurRadius: 3,
           ),
         ],
         gradient: RadialGradient(
-          center: const Alignment(-0.5, -0.5),
+          center: const Alignment(-.5, -.5),
           colors: [
             Colors.grey[700]!,
             Colors.black,
@@ -846,7 +846,7 @@ class _ConsoleCell extends StatelessWidget {
       height: 12,
       width: 12,
       margin: const EI.s(h: 1),
-      decoration: BD(color: kW.wo(0.33)),
+      decoration: BD(color: kW.q(.33)),
       child: Center(
         child: Icon(
           Icons.circle,

@@ -53,7 +53,7 @@ class BottomBar extends ConsumerWidget {
               decoration: BD(
                 color: primaryContainer,
                 border: Border.all(
-                  color: color.wo(0.5),
+                  color: color.q(.5),
                 ),
                 borderRadius: 12.r,
               ),
@@ -72,8 +72,8 @@ class BottomBar extends ConsumerWidget {
         Co(
           c: CAA.start,
           children: [
-            T("Prefill: ${prefillSpeed.toStringAsFixed(2)} t/s", s: TS(c: kB.wo(0.6), s: 10)),
-            T("Decode: ${decodeSpeed.toStringAsFixed(2)} t/s", s: TS(c: kB.wo(0.6), s: 10)),
+            T("Prefill: ${prefillSpeed.toStringAsFixed(2)} t/s", s: TS(c: kB.q(.6), s: 10)),
+            T("Decode: ${decodeSpeed.toStringAsFixed(2)} t/s", s: TS(c: kB.q(.6), s: 10)),
           ],
         ),
         const Spacer(),
@@ -103,7 +103,7 @@ class BottomBar extends ConsumerWidget {
                         width: 24,
                         height: 24,
                         child: CircularProgressIndicator(
-                          color: color.wo(0.5),
+                          color: color.q(.5),
                           strokeWidth: 3,
                           strokeCap: StrokeCap.round,
                         ),
@@ -116,7 +116,7 @@ class BottomBar extends ConsumerWidget {
           ),
         if (!receiving)
           AnimatedOpacity(
-            opacity: canSend ? 1 : 0.333,
+            opacity: canSend ? 1 : .333,
             duration: 250.ms,
             child: GD(
               onTap: _onRightButtonPressed,

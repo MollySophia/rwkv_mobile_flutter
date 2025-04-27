@@ -131,7 +131,7 @@ class Debugger extends ConsumerWidget {
                 ].indexMap((index, e) {
                   return C(
                     margin: EI.o(t: index % 2 == 0 ? 0 : 1),
-                    decoration: BD(color: kB.wo(0.33)),
+                    decoration: BD(color: kB.q(.33)),
                     child: e,
                   );
                 }),

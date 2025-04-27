@@ -41,22 +41,22 @@ enum Argument {
       };
 
   double? get step => switch (this) {
-        temperature => 0.1,
+        temperature => .1,
         topK => null,
-        topP => 0.05,
+        topP => .05,
         presencePenalty => null,
         frequencyPenalty => null,
-        penaltyDecay => 0.001,
+        penaltyDecay => .001,
         maxLength => 100,
       };
 
   double get min => switch (this) {
-        temperature => 0.2,
+        temperature => .2,
         topK => 0,
-        topP => 0.0,
-        presencePenalty => 0.0,
-        frequencyPenalty => 0.0,
-        penaltyDecay => 0.99,
+        topP => .0,
+        presencePenalty => .0,
+        frequencyPenalty => .0,
+        penaltyDecay => .99,
         maxLength => 100,
       };
 
@@ -66,27 +66,27 @@ enum Argument {
         topP => 1.0,
         presencePenalty => 1.0,
         frequencyPenalty => 1.0,
-        penaltyDecay => 0.999,
+        penaltyDecay => .999,
         maxLength => 10000,
       };
 
   double get reasonDefaults => switch (this) {
         temperature => 1.0,
         topK => 500,
-        topP => 0.3,
-        presencePenalty => 0.5,
-        frequencyPenalty => 0.5,
-        penaltyDecay => 0.996,
+        topP => .3,
+        presencePenalty => .5,
+        frequencyPenalty => .5,
+        penaltyDecay => .996,
         maxLength => Args.maxTokens > 0 ? Args.maxTokens.toDouble() : 4000,
       };
 
   double get defaults => switch (this) {
         temperature => 1.0,
         topK => 500,
-        topP => 0.3,
-        presencePenalty => 0.5,
-        frequencyPenalty => 0.5,
-        penaltyDecay => 0.996,
+        topP => .3,
+        presencePenalty => .5,
+        frequencyPenalty => .5,
+        penaltyDecay => .996,
         maxLength => Args.maxTokens > 0 ? Args.maxTokens.toDouble() : 2000,
       };
 }

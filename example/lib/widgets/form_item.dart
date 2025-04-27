@@ -46,8 +46,8 @@ class FormItem extends ConsumerWidget {
           border: Border(
             bottom: (autoShowBottomBorder && !isSectionEnd)
                 ? BorderSide(
-                    color: kB.wo(0.1),
-                    width: 0.5,
+                    color: kB.q(.1),
+                    width: .5,
                   )
                 : BorderSide.none,
           ),
@@ -69,7 +69,7 @@ class FormItem extends ConsumerWidget {
                   if (subtitle != null)
                     T(
                       subtitle!,
-                      s: TS(w: FW.w500, s: 12, c: kB.wo(0.6)),
+                      s: TS(w: FW.w500, s: 12, c: kB.q(.6)),
                     ),
                 ],
               ),
@@ -79,7 +79,7 @@ class FormItem extends ConsumerWidget {
               Exp(
                 child: T(
                   info,
-                  s: TS(w: FW.w500, s: 12, c: kB.wo(0.6)),
+                  s: TS(w: FW.w500, s: 12, c: kB.q(.6)),
                   textAlign: TextAlign.right,
                 ),
               ),
@@ -88,7 +88,7 @@ class FormItem extends ConsumerWidget {
             if (showArrow)
               Icon(
                 Icons.chevron_right,
-                color: kB.wo(0.4),
+                color: kB.q(.4),
               ),
           ],
         ),

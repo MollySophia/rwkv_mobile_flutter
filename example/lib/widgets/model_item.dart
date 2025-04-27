@@ -92,7 +92,7 @@ class ModelItem extends ConsumerWidget {
                   onTap: _onStartTap,
                   child: C(
                     decoration: BD(
-                      color: loading ? kCG.wo(0.5) : kCG,
+                      color: loading ? kCG.q(.5) : kCG,
                       borderRadius: 8.r,
                     ),
                     padding: const EI.a(8),
@@ -104,7 +104,7 @@ class ModelItem extends ConsumerWidget {
                   onTap: null,
                   child: C(
                     decoration: BD(
-                      color: kG.wo(0.5),
+                      color: kG.q(.5),
                       borderRadius: 8.r,
                     ),
                     padding: const EI.a(8),
@@ -163,7 +163,7 @@ class _DownloadIndicator extends ConsumerWidget {
               child: Icon(
                 Icons.stop,
                 size: 16,
-                color: kB.wo(0.7),
+                color: kB.q(.7),
               ),
             ),
           ],
@@ -197,7 +197,7 @@ class _Delete extends ConsumerWidget {
     return GD(
       onTap: _onTap,
       child: C(
-        decoration: BD(color: kCR.wo(0.8), borderRadius: 8.r, border: Border.all(color: kC)),
+        decoration: BD(color: kCR.q(.8), borderRadius: 8.r, border: Border.all(color: kC)),
         padding: const EI.a(5),
         child: const Icon(Icons.delete_forever_outlined, color: kW),
       ),
@@ -236,7 +236,7 @@ class FileKeyItem extends ConsumerWidget {
               fileInfo.name,
               s: const TS(c: kB, w: FW.w600),
             ),
-            T(gbDisplay(fileSize), s: TS(c: kB.wo(0.7), w: FW.w500)),
+            T(gbDisplay(fileSize), s: TS(c: kB.q(.7), w: FW.w500)),
             if (showDownloaded && localFile.hasFile)
               Icon(
                 Icons.download_done,
@@ -255,7 +255,7 @@ class FileKeyItem extends ConsumerWidget {
               return C(
                 decoration: BD(
                   borderRadius: 4.r,
-                  color: showHighlight ? kCG : kG.wo(0.2),
+                  color: showHighlight ? kCG : kG.q(.2),
                 ),
                 padding: const EI.s(h: 4),
                 child: T(
@@ -268,19 +268,19 @@ class FileKeyItem extends ConsumerWidget {
               );
             }),
             C(
-              decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
+              decoration: BD(color: kG.q(.2), borderRadius: 4.r),
               padding: const EI.s(h: 4),
               child: T(fileInfo.backend?.asArgument ?? ""),
             ),
             if (modelSize > 0)
               C(
-                decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
+                decoration: BD(color: kG.q(.2), borderRadius: 4.r),
                 padding: const EI.s(h: 4),
                 child: T("${modelSize}B"),
               ),
             if (quantization != null && quantization.isNotEmpty)
               C(
-                decoration: BD(color: kG.wo(0.2), borderRadius: 4.r),
+                decoration: BD(color: kG.q(.2), borderRadius: 4.r),
                 padding: const EI.s(h: 4),
                 child: T(quantization),
               ),
@@ -310,7 +310,7 @@ class FileKeyItem extends ConsumerWidget {
                       child: C(
                         decoration: BD(
                           borderRadius: BorderRadius.only(topRight: 8.rr, bottomRight: 8.rr),
-                          color: kG.wo(0.5),
+                          color: kG.q(.5),
                         ),
                         height: 4,
                       ),

@@ -75,9 +75,9 @@ class Message extends ConsumerWidget {
     final isMine = msg.isMine;
     final alignment = isMine ? Alignment.centerRight : Alignment.centerLeft;
     const marginHorizontal = 12.0;
-    const marginVertical = 0.0;
+    const marginVertical = .0;
     const kBubbleMinHeight = 44.0;
-    const kBubbleMaxWidthAdjust = 0.0;
+    const kBubbleMaxWidthAdjust = .0;
 
     final content = msg.content;
     final changing = msg.changing;
@@ -143,9 +143,9 @@ class Message extends ConsumerWidget {
     double opacity = 1;
 
     if (isHistoryForEditing) {
-      opacity = 0.667;
+      opacity = .667;
     } else if (isFutureForEditing) {
-      opacity = 0.333;
+      opacity = .333;
     } else if (isEditing) {
       opacity = 1;
     } else {
@@ -159,14 +159,14 @@ class Message extends ConsumerWidget {
     final textScaleFactorForCotContent = TextScaler.linear(MediaQuery.textScalerOf(context).scale(_kTextScaleFactorForCotContent));
 
     final markdownStyleSheetForCotContent = MarkdownStyleSheet(
-      p: TS(c: kB.wo(0.5)),
-      h1: TS(c: kB.wo(0.5)),
-      h2: TS(c: kB.wo(0.5)),
-      h3: TS(c: kB.wo(0.5)),
-      h4: TS(c: kB.wo(0.5)),
-      h5: TS(c: kB.wo(0.5)),
-      h6: TS(c: kB.wo(0.5)),
-      listBullet: TS(c: kB.wo(0.5)),
+      p: TS(c: kB.q(.5)),
+      h1: TS(c: kB.q(.5)),
+      h2: TS(c: kB.q(.5)),
+      h3: TS(c: kB.q(.5)),
+      h4: TS(c: kB.q(.5)),
+      h5: TS(c: kB.q(.5)),
+      h6: TS(c: kB.q(.5)),
+      listBullet: TS(c: kB.q(.5)),
       listBulletPadding: const EI.o(l: 0),
       listIndent: 20,
       textScaler: textScaleFactorForCotContent,
@@ -179,9 +179,9 @@ class Message extends ConsumerWidget {
       listIndent: 20,
       textScaler: textScaleFactor,
       horizontalRuleDecoration: BoxDecoration(
-        color: kB.wo(0.1),
+        color: kB.q(.1),
         border: Border(
-          top: BorderSide(color: kB.wo(0.1), width: 1),
+          top: BorderSide(color: kB.q(.1), width: 1),
         ),
       ),
     );
@@ -249,7 +249,7 @@ class Message extends ConsumerWidget {
       // b: 12,
     );
 
-    Border border = Border.all(color: primaryColor.wo(0.2));
+    Border border = Border.all(color: primaryColor.q(.2));
 
     if (isUserImage) {
       padding = EI.zero;
@@ -300,8 +300,8 @@ class Message extends ConsumerWidget {
                 if (isUserImage)
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxWidth: rawMaxWidth * 0.8,
-                      maxHeight: rawMaxWidth * 0.8,
+                      maxWidth: rawMaxWidth * .8,
+                      maxHeight: rawMaxWidth * .8,
                     ),
                     child: PhotoViewerImage(
                       borderRadius: 24,
@@ -323,7 +323,7 @@ class Message extends ConsumerWidget {
                   T(
                     worldDemoMessageHeader,
                     s: TS(
-                      c: kB.wo(0.5),
+                      c: kB.q(.5),
                       w: FW.w700,
                       s: 10,
                     ),
@@ -352,8 +352,8 @@ class Message extends ConsumerWidget {
                       decoration: const BD(color: kC),
                       child: Ro(
                         children: [
-                          T(thisMessageIsReceiving ? S.current.thinking : S.current.thought_result, s: TS(c: kB.wo(0.5), w: FW.w600)),
-                          showingCotContent ? Icon(Icons.expand_more, color: kB.wo(0.5)) : Icon(Icons.expand_less, color: kB.wo(0.5)),
+                          T(thisMessageIsReceiving ? S.current.thinking : S.current.thought_result, s: TS(c: kB.q(.5), w: FW.w600)),
+                          showingCotContent ? Icon(Icons.expand_more, color: kB.q(.5)) : Icon(Icons.expand_less, color: kB.q(.5)),
                         ],
                       ),
                     ),

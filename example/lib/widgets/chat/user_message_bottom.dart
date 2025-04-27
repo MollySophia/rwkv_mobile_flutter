@@ -1,6 +1,5 @@
 // ignore: unused_import
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -72,7 +71,7 @@ class UserMessageBottom extends ConsumerWidget {
               padding: const EI.o(v: 12, l: 4, r: 4),
               child: Icon(
                 Icons.edit,
-                color: primaryColor.wo(0.8),
+                color: primaryColor.q(.8),
                 size: 20,
               ),
             ),
@@ -82,7 +81,7 @@ class UserMessageBottom extends ConsumerWidget {
             onTap: _onTTSPlayPressed,
             child: Padding(
               padding: const EI.o(v: 12, l: 4, r: 4),
-              child: Icon(Icons.play_arrow, color: primaryColor.wo(0.8), size: 20),
+              child: Icon(Icons.play_arrow, color: primaryColor.q(.8), size: 20),
             ),
           ),
         if (showUserTTSPlayButton && (playing && isCurrentMessage))
@@ -90,7 +89,7 @@ class UserMessageBottom extends ConsumerWidget {
             onTap: _onTTSPausePressed,
             child: Padding(
               padding: const EI.o(v: 12, l: 4, r: 4),
-              child: Icon(Icons.pause, color: primaryColor.wo(0.8), size: 20),
+              child: Icon(Icons.pause, color: primaryColor.q(.8), size: 20),
             ),
           ),
         if (showUserCopyButton)
@@ -100,7 +99,7 @@ class UserMessageBottom extends ConsumerWidget {
               padding: const EI.o(v: 12, l: 4, r: 4),
               child: Icon(
                 Icons.copy,
-                color: primaryColor.wo(0.8),
+                color: primaryColor.q(.8),
                 size: 20,
               ),
             ),

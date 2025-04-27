@@ -66,14 +66,14 @@ class VisualEmpty extends ConsumerWidget {
                 onTap: _onTapImageSelector,
                 child: C(
                     decoration: BD(
-                      color: primaryContainer.wo(0.5),
+                      color: primaryContainer.q(.5),
                       border: Border.all(
-                        color: primary.wo(0.5),
+                        color: primary.q(.5),
                       ),
                       borderRadius: 12.r,
                     ),
                     width: math.min(maxW, maxH) - 16,
-                    height: math.min(maxW, maxH) * 0.75,
+                    height: math.min(maxW, maxH) * .75,
                     child: Co(
                       c: CAA.center,
                       m: MAA.center,

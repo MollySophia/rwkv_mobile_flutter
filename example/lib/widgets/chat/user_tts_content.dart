@@ -21,11 +21,11 @@ class UserTtsContent extends ConsumerWidget {
       children: [
         C(
           decoration: BD(
-            color: kW.wo(0.5),
+            color: kW.q(.5),
             borderRadius: 10.r,
             border: Border.all(
               color: primary,
-              width: 0.5,
+              width: .5,
             ),
           ),
           padding: const EI.s(h: 6, v: 4),

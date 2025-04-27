@@ -43,7 +43,7 @@ class LanguageButton extends ConsumerWidget {
     final preferChinese = ref.watch(P.rwkv.preferChinese);
     final loading = ref.watch(P.rwkv.loading);
     return AnimatedOpacity(
-      opacity: loading ? 0.33 : 1,
+      opacity: loading ? .33 : 1,
       duration: 250.ms,
       child: GD(
         onTap: _onTap,
@@ -51,7 +51,7 @@ class LanguageButton extends ConsumerWidget {
           decoration: BD(
             color: preferChinese ? color : kC,
             border: Border.all(
-              color: color.wo(0.5),
+              color: color.q(.5),
             ),
             borderRadius: 12.r,
           ),

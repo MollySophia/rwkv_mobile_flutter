@@ -60,11 +60,11 @@ class ModelSelector extends ConsumerWidget {
             if (!hasDownloadedModels) 4.h,
             if (!hasDownloadedModels) T(S.current.chat_you_need_download_model_if_you_want_to_use_it),
             4.h,
-            T(S.current.ensure_you_have_enough_memory_to_load_the_model, s: TS(c: kB.wo(0.7), s: 12)),
+            T(S.current.ensure_you_have_enough_memory_to_load_the_model, s: TS(c: kB.q(.7), s: 12)),
             4.h,
-            T(S.current.memory_used(memUsedString, memFreeString), s: TS(c: kB.wo(0.7), s: 12)),
+            T(S.current.memory_used(memUsedString, memFreeString), s: TS(c: kB.q(.7), s: 12)),
             4.h,
-            T(S.current.download_source, s: TS(c: kB.wo(0.7), s: 14, w: FW.w600)),
+            T(S.current.download_source, s: TS(c: kB.q(.7), s: 14, w: FW.w600)),
             4.h,
             const _DownloadSource(),
             4.h,
@@ -118,7 +118,7 @@ class _DownloadSource extends ConsumerWidget {
             padding: const EI.s(h: 6, v: 4),
             child: T(
               e.name,
-              s: TS(c: e == currentSource ? kW : kB.wo(0.7), s: 14),
+              s: TS(c: e == currentSource ? kW : kB.q(.7), s: 14),
             ),
           ),
         );

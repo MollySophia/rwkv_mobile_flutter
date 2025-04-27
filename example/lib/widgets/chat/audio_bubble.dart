@@ -62,7 +62,7 @@ class _AudioBubbleState extends ConsumerState<AudioBubble> {
         children: [
           T(
             (length / 1000).toStringAsFixed(0) + "s",
-            s: TS(c: kB.wo(0.8), w: FW.w600),
+            s: TS(c: kB.q(.8), w: FW.w600),
           ),
           8.w,
           if (_tick % 3 == 0 || !isPlaying || !isLatestClickedMessage)

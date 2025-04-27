@@ -24,9 +24,9 @@ class AppInfo extends ConsumerWidget {
       isScrollControlled: true,
       builder: (context) {
         return DraggableScrollableSheet(
-          initialChildSize: 0.75,
-          maxChildSize: 0.85,
-          minChildSize: 0.5,
+          initialChildSize: .75,
+          maxChildSize: .85,
+          minChildSize: .5,
           expand: false,
           snap: false,
           builder: (BuildContext context, ScrollController scrollController) {

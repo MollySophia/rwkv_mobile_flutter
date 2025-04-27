@@ -53,11 +53,11 @@ class Input extends ConsumerWidget {
             filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
             child: C(
               decoration: BD(
-                color: kW.wo(0.8),
+                color: kW.q(.8),
                 border: Border(
                   top: BorderSide(
-                    color: primary.wo(0.33),
-                    width: 0.5,
+                    color: primary.q(.33),
+                    width: .5,
                   ),
                 ),
               ),
@@ -144,19 +144,19 @@ class _TextField extends ConsumerWidget {
             iconColor: kW,
             border: OutlineInputBorder(
               borderRadius: borderRadius,
-              borderSide: BorderSide(color: primary.wo(0.33)),
+              borderSide: BorderSide(color: primary.q(.33)),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: borderRadius,
-              borderSide: BorderSide(color: primary.wo(0.33)),
+              borderSide: BorderSide(color: primary.q(.33)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: borderRadius,
-              borderSide: BorderSide(color: primary.wo(0.33)),
+              borderSide: BorderSide(color: primary.q(.33)),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: borderRadius,
-              borderSide: BorderSide(color: primary.wo(0.33)),
+              borderSide: BorderSide(color: primary.q(.33)),
             ),
             hintText: hintText,
           ),

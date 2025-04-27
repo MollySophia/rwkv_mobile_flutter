@@ -189,7 +189,7 @@ extension _$ on _Othello {
 
     final ratio = availableWidth / availableHeight;
 
-    playerShouldAtSameColumnWithSettings.u(ratio > 0.7);
+    playerShouldAtSameColumnWithSettings.u(ratio > .7);
     final settingsAndPlayersShouldAtDifferentColumnIsHorizontal = ratio > 1.4;
     this.settingsAndPlayersShouldAtDifferentColumnIsHorizontal.u(settingsAndPlayersShouldAtDifferentColumnIsHorizontal);
   }

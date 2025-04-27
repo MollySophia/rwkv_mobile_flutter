@@ -99,7 +99,7 @@ class _BotTtsContentState extends ConsumerState<BotTtsContent> {
               m: MAA.start,
               children: [
                 TweenAnimationBuilder(
-                  tween: Tween(begin: 0.0, end: 1.0),
+                  tween: Tween(begin: .0, end: 1.0),
                   duration: const Duration(milliseconds: 1000000000),
                   builder: (context, value, child) => Transform.rotate(
                     angle: value * 2 * math.pi * 1000000,
@@ -112,7 +112,7 @@ class _BotTtsContentState extends ConsumerState<BotTtsContent> {
                   ),
                 ),
                 8.w,
-                T("Generating...", s: TS(c: kB.wo(0.8), w: FW.w500)),
+                T("Generating...", s: TS(c: kB.q(.8), w: FW.w500)),
               ],
             ),
           if (!changing)
@@ -137,7 +137,7 @@ class _BotTtsContentState extends ConsumerState<BotTtsContent> {
                 8.w,
                 T(
                   (length / 1000).toStringAsFixed(0) + "s",
-                  s: TS(c: kB.wo(0.8), w: FW.w600),
+                  s: TS(c: kB.q(.8), w: FW.w600),
                 ),
               ],
             ),

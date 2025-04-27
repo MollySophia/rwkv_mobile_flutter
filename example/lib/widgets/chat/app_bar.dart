@@ -61,7 +61,7 @@ class ChatAppBar extends ConsumerWidget {
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
           child: AppBar(
-            backgroundColor: kW.wo(0.6),
+            backgroundColor: kW.q(.6),
             elevation: 0,
             centerTitle: true,
             title: GD(
@@ -81,7 +81,7 @@ class ChatAppBar extends ConsumerWidget {
                     C(
                       padding: const EI.o(l: 4, r: 4, t: 1, b: 1),
                       decoration: BD(
-                        color: kB.wo(0.1),
+                        color: kB.q(.1),
                         borderRadius: 10.r,
                       ),
                       child: Ro(
@@ -160,7 +160,7 @@ class _TrianglePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.black.wo(0.667)
+      ..color = Colors.black.q(.667)
       ..style = PaintingStyle.fill;
 
     final path = Path()

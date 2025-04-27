@@ -12,7 +12,7 @@ class _Preference {
   late final preferredTextScaleFactor = qs<double>(-1.0);
 
   final textScaleFactorSystem = -1.0;
-  // late final availableTextScaleFactors = [_textScaleFactorSystem, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4];
+  // late final availableTextScaleFactors = [_textScaleFactorSystem, .8, .9, 1.0, 1.1, 1.2, 1.3, 1.4];
   // late final availableTextScaleNames = [
   //   "跟随系统",
   //   "很小（80%）",
@@ -25,8 +25,8 @@ class _Preference {
   // ];
   Map<double, String> get textScalePairs => {
         textScaleFactorSystem: S.current.follow_system,
-        0.8: S.current.very_small,
-        0.9: S.current.small,
+        .8: S.current.very_small,
+        .9: S.current.small,
         1.0: S.current.font_size_default,
         1.1: S.current.medium,
         1.2: S.current.large,
@@ -48,7 +48,6 @@ extension _$Preference on _Preference {
     } else {
       preferredLanguage.u(Language.none);
     }
-    
 
     final textScaleFactor = sp.getDouble("halo_state.textScaleFactor");
     if (textScaleFactor != null) {

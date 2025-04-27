@@ -60,7 +60,7 @@ class _Empty extends ConsumerWidget {
             children: [
               const Icon(Icons.add),
               T(S.current.new_chat, s: const TS(s: 20)),
-              T(S.current.create_a_new_one_by_clicking_the_button_above, s: TS(s: 10, c: kB.wo(0.5))),
+              T(S.current.create_a_new_one_by_clicking_the_button_above, s: TS(s: 10, c: kB.q(.5))),
             ],
           ),
         ),

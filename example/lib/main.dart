@@ -51,8 +51,8 @@ FV _debugAppRunner() async {
 
 FutureOr<void> _configureSentry(SentryFlutterOptions options) {
   options.dsn = 'https://320015d75031601a48829d02f17a8394@o4506895545597952.ingest.us.sentry.io/4508996340482048';
-  options.tracesSampleRate = kDebugMode ? 1.0 : 0.05;
-  options.profilesSampleRate = kDebugMode ? 1.0 : 0.05;
+  options.tracesSampleRate = kDebugMode ? 1.0 : .05;
+  options.profilesSampleRate = kDebugMode ? 1.0 : .05;
   options.debug = kDebugMode;
   options.diagnosticLevel = SentryLevel.warning;
   if (kReleaseMode) {

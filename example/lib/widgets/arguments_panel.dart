@@ -20,8 +20,8 @@ class ArgumentsPanel extends ConsumerWidget {
       isScrollControlled: true,
       builder: (context) {
         return DraggableScrollableSheet(
-          initialChildSize: 0.8,
-          maxChildSize: 0.9,
+          initialChildSize: .8,
+          maxChildSize: .9,
           expand: false,
           snap: false,
           builder: (BuildContext context, ScrollController scrollController) {
@@ -120,7 +120,7 @@ class _SamplerOptions extends ConsumerWidget {
     final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
     return C(
       margin: const EI.s(h: 12),
-      decoration: BD(color: kB.wo(0.1), borderRadius: 8.r),
+      decoration: BD(color: kB.q(.1), borderRadius: 8.r),
       child: Ro(
         children: [
           12.w,
@@ -149,7 +149,7 @@ class _CompletionOptions extends ConsumerWidget {
     final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
     return C(
       margin: const EI.s(h: 12),
-      decoration: BD(color: kB.wo(0.1), borderRadius: 8.r),
+      decoration: BD(color: kB.q(.1), borderRadius: 8.r),
       child: Ro(
         children: [
           12.w,
@@ -237,7 +237,7 @@ class _Value extends ConsumerWidget {
             12.w,
             T(
               argument.min.toStringAsFixed(argument.fixedDecimals),
-              s: TS(s: 12, c: kB.wo(0.5)),
+              s: TS(s: 12, c: kB.q(.5)),
             ),
             14.w,
             Exp(
@@ -252,7 +252,7 @@ class _Value extends ConsumerWidget {
             14.w,
             T(
               argument.max.toStringAsFixed(argument.fixedDecimals),
-              s: TS(s: 12, c: kB.wo(0.5)),
+              s: TS(s: 12, c: kB.q(.5)),
             ),
             12.w,
           ],

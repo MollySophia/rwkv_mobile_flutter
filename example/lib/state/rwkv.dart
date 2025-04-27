@@ -18,8 +18,8 @@ class _RWKV {
 
   late Completer<void> _initRuntimeCompleter = Completer<void>();
 
-  late final prefillSpeed = qs<double>(0.0);
-  late final decodeSpeed = qs<double>(0.0);
+  late final prefillSpeed = qs<double>(.0);
+  late final decodeSpeed = qs<double>(.0);
   late final argumentsPanelShown = qs(false);
 
   // TODO: @wangce 或许, 默认参数应该和 weights 绑定, 比如, Othello model 的 topK 应该始终是 1
@@ -104,8 +104,8 @@ extension $RWKV on _RWKV {
 
     _getTokensTimer = Timer.periodic(const Duration(milliseconds: 20), (timer) async {
       sendPort.send(("getResponseBufferContent", null));
-      if (HF.randomBool(truePercentage: 0.5)) sendPort.send(("getIsGenerating", null));
-      if (HF.randomBool(truePercentage: 0.5)) sendPort.send(("getPrefillAndDecodeSpeed", null));
+      if (HF.randomBool(truePercentage: .5)) sendPort.send(("getIsGenerating", null));
+      if (HF.randomBool(truePercentage: .5)) sendPort.send(("getPrefillAndDecodeSpeed", null));
     });
   }
 
@@ -529,7 +529,7 @@ extension $RWKV on _RWKV {
     P.app.demoType.u(DemoType.othello);
 
     _sendPort!.send(("setMaxLength", 64000));
-    _sendPort!.send(("setSamplerParams", {"temperature": 1.0, "top_k": 1, "top_p": 1.0, "presence_penalty": 0.0, "frequency_penalty": 0.0, "penalty_decay": 0.0}));
+    _sendPort!.send(("setSamplerParams", {"temperature": 1.0, "top_k": 1, "top_p": 1.0, "presence_penalty": .0, "frequency_penalty": .0, "penalty_decay": .0}));
     _sendPort!.send(("getSamplerParams", null));
     _sendPort!.send(("setGenerationStopToken", 0));
     _sendPort!.send(("clearStates", null));

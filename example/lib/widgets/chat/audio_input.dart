@@ -106,7 +106,7 @@ class AudioInput extends ConsumerWidget {
                     gradient: showGradient
                         ? LinearGradient(
                             colors: [
-                              kBG.wo(0),
+                              kBG.q(0),
                               kBG,
                               kBG,
                             ],
@@ -134,8 +134,8 @@ class AudioInput extends ConsumerWidget {
                             height: _kButtonSize,
                             width: _kButtonSize,
                             decoration: BD(
-                              color: primary.wo(0.2),
-                              border: Border.all(color: primary.wo(0.5)),
+                              color: primary.q(.2),
+                              border: Border.all(color: primary.q(.5)),
                               borderRadius: 1000.r,
                             ),
                             child: Center(
@@ -143,7 +143,7 @@ class AudioInput extends ConsumerWidget {
                                   ? CircularProgressIndicator(
                                       color: primary,
                                       strokeWidth: 3,
-                                      backgroundColor: primary.wo(0.1),
+                                      backgroundColor: primary.q(.1),
                                       strokeCap: StrokeCap.round,
                                     )
                                   : Icon(
@@ -161,7 +161,7 @@ class AudioInput extends ConsumerWidget {
                       bottomMessage,
                       s: TS(
                         s: 12,
-                        c: primary.wo(0.5),
+                        c: primary.q(.5),
                       ),
                       textAlign: TextAlign.center,
                     ),

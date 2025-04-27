@@ -70,7 +70,7 @@ class BotMessageBottom extends ConsumerWidget {
           Padding(
             padding: const EI.o(v: 12, r: 4),
             child: TweenAnimationBuilder(
-              tween: Tween(begin: 0.0, end: 1.0),
+              tween: Tween(begin: .0, end: 1.0),
               duration: const Duration(milliseconds: 1000000000),
               builder: (context, value, child) => Transform.rotate(
                 angle: value * 2 * math.pi * 1000000,
@@ -90,7 +90,7 @@ class BotMessageBottom extends ConsumerWidget {
               padding: const EI.o(v: 12, r: 4, l: 4),
               child: Icon(
                 Icons.copy,
-                color: primaryColor.wo(0.8),
+                color: primaryColor.q(.8),
                 size: 20,
               ),
             ),
@@ -102,7 +102,7 @@ class BotMessageBottom extends ConsumerWidget {
               padding: const EI.o(v: 12, r: 4, l: 4),
               child: Icon(
                 Icons.refresh,
-                color: primaryColor.wo(0.8),
+                color: primaryColor.q(.8),
                 size: 20,
               ),
             ),
@@ -114,7 +114,7 @@ class BotMessageBottom extends ConsumerWidget {
               padding: const EI.o(v: 12, r: 4, l: 4),
               child: Icon(
                 Icons.edit,
-                color: primaryColor.wo(0.8),
+                color: primaryColor.q(.8),
                 size: 20,
               ),
             ),
@@ -129,7 +129,7 @@ class BotMessageBottom extends ConsumerWidget {
                 padding: const EI.s(v: 1, h: 8),
                 decoration: BD(
                   color: kC,
-                  border: Border.all(color: primaryColor.wo(0.67)),
+                  border: Border.all(color: primaryColor.q(.67)),
                   borderRadius: 4.r,
                 ),
                 child: T(

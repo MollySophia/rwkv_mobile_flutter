@@ -30,7 +30,7 @@ class LayoutDebugger extends ConsumerWidget {
       const Color(0xFF000000),
     ];
 
-    final frameColor = colors[HF.randomInt(min: 0, max: colors.length - 1)].wo(0.33);
+    final frameColor = colors[HF.randomInt(min: 0, max: colors.length - 1)].q(.33);
 
     // 注意这里不能写这句话, 否则会影响手势事件
     // if (!showFrame) return child;
@@ -55,7 +55,7 @@ class LayoutDebugger extends ConsumerWidget {
           Positioned(
             bottom: 0,
             child: Material(
-              color: kB.wo(0.5),
+              color: kB.q(.5),
               textStyle: const TS(c: kW, s: 8),
               child: C(
                 child: debugWidget!,

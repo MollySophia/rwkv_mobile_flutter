@@ -49,7 +49,7 @@ class ReasonButton extends ConsumerWidget {
         decoration: BD(
           color: usingReasoningModel ? color : kC,
           border: Border.all(
-            color: color.wo(0.5),
+            color: color.q(.5),
           ),
           borderRadius: 12.r,
         ),

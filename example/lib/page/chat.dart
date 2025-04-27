@@ -63,8 +63,8 @@ class _PageChatState extends State<PageChat> {
       context: context,
       builder: (context) {
         return DraggableScrollableSheet(
-          initialChildSize: 0.8,
-          maxChildSize: 0.9,
+          initialChildSize: .8,
+          maxChildSize: .9,
           expand: false,
           snap: false,
           builder: (BuildContext context, ScrollController scrollController) {
@@ -97,8 +97,8 @@ class _PageChatState extends State<PageChat> {
       context: context,
       builder: (context) {
         return DraggableScrollableSheet(
-          initialChildSize: 0.8,
-          maxChildSize: 0.9,
+          initialChildSize: .8,
+          maxChildSize: .9,
           expand: false,
           snap: false,
           builder: (BuildContext context, ScrollController scrollController) {
@@ -198,7 +198,7 @@ class _RoleSelector extends ConsumerWidget {
                           },
                           child: C(
                             decoration: BD(
-                              color: loading ? kCG.wo(0.5) : kCG,
+                              color: loading ? kCG.q(.5) : kCG,
                               borderRadius: 8.r,
                             ),
                             padding: const EI.a(8),
@@ -246,10 +246,10 @@ class _NavigationBarBottomLine extends ConsumerWidget {
       top: paddingTop + kToolbarHeight,
       left: 0,
       right: 0,
-      height: 0.5,
+      height: .5,
       child: C(
         height: kToolbarHeight,
-        color: kB.wo(0.1),
+        color: kB.q(.1),
       ),
     );
   }
@@ -302,7 +302,7 @@ class List extends ConsumerWidget {
         child: RawScrollbar(
           radius: 100.rr,
           thickness: 4,
-          thumbColor: kB.wo(0.4),
+          thumbColor: kB.q(.4),
           padding: EI.o(
             r: 4,
             b: inputHeight + 4,

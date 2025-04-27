@@ -16,7 +16,7 @@ class Pager extends ConsumerStatefulWidget {
   static final page = qs<double>(1.0);
   static final mainPageNotIgnoring = qs(true);
   static final childOpacity = qs(1.0);
-  static final drawerOpacity = qs(0.0);
+  static final drawerOpacity = qs(.0);
 
   static FV toggle() async {
     final currentPage = Pager.page.v;
@@ -50,7 +50,7 @@ class _PagerState extends ConsumerState<Pager> {
 
   void _onPageChanged() async {
     final rawString = (_controller!.page ?? 0).toStringAsFixed(2);
-    final v = double.tryParse(rawString) ?? 0.0;
+    final v = double.tryParse(rawString) ?? .0;
     Pager.page.u(v);
     Pager.mainPageNotIgnoring.u(v == 1);
     Pager.childOpacity.u(v);
@@ -151,7 +151,7 @@ class _Dim extends ConsumerWidget {
             child: C(
               width: screenWidth,
               height: screenHeight,
-              decoration: BD(color: kB.wo(0.3)),
+              decoration: BD(color: kB.q(.3)),
             ),
           ),
         ),
@@ -181,10 +181,10 @@ class _CustomPageScrollPhysics extends PageScrollPhysics {
     // 根据速度和当前位置计算目标页面
     if (velocity.abs() >= minFlingVelocity) {
       // 如果有足够的甩动速度，则根据方向确定目标页
-      return velocity > 0.0 ? currentPage.ceil() : currentPage.floor();
+      return velocity > .0 ? currentPage.ceil() : currentPage.floor();
     } else {
       // 如果速度较小，则看当前位置是否超过一半决定目标页
-      return (currentPage - currentPage.floor() >= 0.5) ? currentPage.ceil() : currentPage.floor();
+      return (currentPage - currentPage.floor() >= .5) ? currentPage.ceil() : currentPage.floor();
     }
   }
 

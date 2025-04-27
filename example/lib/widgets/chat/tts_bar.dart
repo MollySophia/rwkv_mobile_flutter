@@ -176,7 +176,7 @@ class _Intonation extends ConsumerWidget {
               child: C(
                 decoration: BD(
                   color: kC,
-                  border: Border.all(color: kB.wo(0.5), width: 0.5),
+                  border: Border.all(color: kB.q(.5), width: .5),
                   borderRadius: 4.r,
                 ),
                 padding: const EI.o(l: 8, r: 8, t: 4, b: 4),
@@ -206,7 +206,7 @@ class _AudioButton extends ConsumerWidget {
         child: C(
           padding: const EI.o(l: 8, r: 8, t: 6, b: 6),
           decoration: BD(
-            color: primary.wo(audioInteractorShown ? 1 : 0.1),
+            color: primary.q(audioInteractorShown ? 1 : .1),
             borderRadius: borderRadius,
           ),
           child: T(
@@ -238,7 +238,7 @@ class _SpkButton extends ConsumerWidget {
         child: C(
           padding: const EI.o(l: 8, r: 8, t: 6, b: 6),
           decoration: BD(
-            color: primary.wo(spkShown ? 1 : 0.1),
+            color: primary.q(spkShown ? 1 : .1),
             borderRadius: borderRadius,
           ),
           child: T(
@@ -267,7 +267,7 @@ class _IntonationButton extends ConsumerWidget {
         child: C(
           padding: const EI.o(l: 8, r: 8, t: 6, b: 6),
           decoration: BD(
-            color: primary.wo(intonationShown ? 1 : 0.1),
+            color: primary.q(intonationShown ? 1 : .1),
             borderRadius: borderRadius,
           ),
           child: T(
@@ -333,7 +333,7 @@ class _Actions extends ConsumerWidget {
                       width: 24,
                       height: 24,
                       child: CircularProgressIndicator(
-                        color: color.wo(0.5),
+                        color: color.q(.5),
                         strokeWidth: 3,
                         strokeCap: StrokeCap.round,
                       ),
@@ -345,7 +345,7 @@ class _Actions extends ConsumerWidget {
           ),
         if (ttsDone)
           AnimatedOpacity(
-            opacity: (canSend && loaded) ? 1 : 0.333,
+            opacity: (canSend && loaded) ? 1 : .333,
             duration: 250.ms,
             child: GD(
               onTap: _onRightButtonPressed,
@@ -408,7 +408,7 @@ class _SpkPanel extends ConsumerWidget {
                       child: C(
                         padding: const EI.o(t: 4, b: 4, l: 8, r: 8),
                         decoration: BD(
-                          color: selected ? primary.wo(0.1) : kC,
+                          color: selected ? primary.q(.1) : kC,
                           borderRadius: 6.r,
                         ),
                         child: Ro(
@@ -416,7 +416,7 @@ class _SpkPanel extends ConsumerWidget {
                             Exp(
                               child: T(
                                 P.tts.safe(k) + " " + P.tts.safe(v),
-                                s: TS(c: selected ? primary : primary.wo(0.8), w: selected ? FW.w600 : FW.w400),
+                                s: TS(c: selected ? primary : primary.q(.8), w: selected ? FW.w600 : FW.w400),
                               ),
                             ),
                             if (selected)
@@ -534,14 +534,14 @@ class _InstructTabs extends ConsumerWidget {
                   _onTap(e);
                 },
                 child: AnimatedOpacity(
-                  opacity: enabled ? 1 : 0.333,
+                  opacity: enabled ? 1 : .333,
                   duration: 250.ms,
                   child: C(
                     margin: const EI.o(t: 4),
                     padding: const EI.o(l: 8, r: 8, t: 4, b: 4),
                     decoration: BD(
-                      color: isSelected ? primary.wo(0.2) : kC,
-                      border: Border.all(color: kB.wo(0.5), width: 0.5),
+                      color: isSelected ? primary.q(.2) : kC,
+                      border: Border.all(color: kB.q(.5), width: .5),
                       borderRadius: 4.r,
                     ),
                     child: Ro(
@@ -598,7 +598,7 @@ class _InstructOptions extends ConsumerWidget {
         duration: 250.ms,
         height: interactingInstruction == TTSInstruction.none ? 0 : 150,
         margin: const EI.o(t: 4),
-        decoration: BD(border: Border(top: BorderSide(color: kB.wo(0.5), width: 0.5))),
+        decoration: BD(border: Border(top: BorderSide(color: kB.q(.5), width: .5))),
         child: Wrap(
           alignment: WrapAlignment.start,
           spacing: 4,
@@ -616,8 +616,8 @@ class _InstructOptions extends ConsumerWidget {
                 padding: const EI.o(l: 8, r: 8, t: 4, b: 4),
                 margin: const EI.o(t: 4),
                 decoration: BD(
-                  color: selected ? primary.wo(0.2) : kC,
-                  border: Border.all(color: kB.wo(0.5), width: 0.5),
+                  color: selected ? primary.q(.2) : kC,
+                  border: Border.all(color: kB.q(.5), width: .5),
                   borderRadius: 4.r,
                 ),
                 child: T(e + (selected ? " ×" : "")),
@@ -684,7 +684,7 @@ class _TextField extends ConsumerWidget {
                 GD(
                   onTap: P.tts.onClearButtonPressed,
                   child: AnimatedOpacity(
-                    opacity: textInInput.trim().isNotEmpty ? 1 : 0.5,
+                    opacity: textInInput.trim().isNotEmpty ? 1 : .5,
                     duration: 250.ms,
                     child: C(
                       padding: const EI.s(v: 6, h: 4),
@@ -713,19 +713,19 @@ class _TextField extends ConsumerWidget {
             iconColor: kW,
             border: OutlineInputBorder(
               borderRadius: borderRadius,
-              borderSide: BorderSide(color: primary.wo(0.33)),
+              borderSide: BorderSide(color: primary.q(.33)),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: borderRadius,
-              borderSide: BorderSide(color: primary.wo(0.33)),
+              borderSide: BorderSide(color: primary.q(.33)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: borderRadius,
-              borderSide: BorderSide(color: primary.wo(0.33)),
+              borderSide: BorderSide(color: primary.q(.33)),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: borderRadius,
-              borderSide: BorderSide(color: primary.wo(0.33)),
+              borderSide: BorderSide(color: primary.q(.33)),
             ),
             hintText: hintText,
           ),
@@ -791,8 +791,8 @@ class _PerformanceInfo extends ConsumerWidget {
       c: CAA.start,
       m: MAA.center,
       children: [
-        T("Prefill: ${prefillSpeed.toStringAsFixed(2)} t/s", s: TS(c: kB.wo(0.6), s: 10)),
-        T("Decode: ${decodeSpeed.toStringAsFixed(2)} t/s", s: TS(c: kB.wo(0.6), s: 10)),
+        T("Prefill: ${prefillSpeed.toStringAsFixed(2)} t/s", s: TS(c: kB.q(.6), s: 10)),
+        T("Decode: ${decodeSpeed.toStringAsFixed(2)} t/s", s: TS(c: kB.q(.6), s: 10)),
         6.h,
       ],
     );

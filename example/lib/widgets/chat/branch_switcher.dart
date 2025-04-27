@@ -36,18 +36,18 @@ class BranchSwitcher extends ConsumerWidget {
     qqq("message: $msg, index: $index");
 
     return C(
-      decoration: BD(color: primary.wo(0.0)),
+      decoration: BD(color: primary.q(.0)),
       child: Stack(
         children: [
           Ro(
             children: [
               44.h,
-              Icon(CupertinoIcons.chevron_back, color: primary.wo(isFirst ? 0.4 : 0.8)),
+              Icon(CupertinoIcons.chevron_back, color: primary.q(isFirst ? .4 : .8)),
               T(
                 "${indexInBranches + 1} / ${branches.length}",
-                s: TS(c: primary.wo(0.8), w: FW.w600),
+                s: TS(c: primary.q(.8), w: FW.w600),
               ),
-              Icon(CupertinoIcons.chevron_forward, color: primary.wo(isLast ? 0.4 : 0.8)),
+              Icon(CupertinoIcons.chevron_forward, color: primary.q(isLast ? .4 : .8)),
             ],
           ),
           Positioned.fill(
@@ -56,13 +56,13 @@ class BranchSwitcher extends ConsumerWidget {
                 Exp(
                   child: GD(
                     onTap: isFirst ? null : _onBackPressed,
-                    child: C(decoration: BD(color: kDebugMode ? kCR.wo(0.1) : kC)),
+                    child: C(decoration: BD(color: kDebugMode ? kCR.q(.1) : kC)),
                   ),
                 ),
                 Exp(
                   child: GD(
                     onTap: isLast ? null : _onForwardPressed,
-                    child: C(decoration: BD(color: kDebugMode ? kCB.wo(0.1) : kC)),
+                    child: C(decoration: BD(color: kDebugMode ? kCB.q(.1) : kC)),
                   ),
                 ),
               ],

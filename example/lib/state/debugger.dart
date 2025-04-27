@@ -1,7 +1,7 @@
 part of 'p.dart';
 
 class _Debugger {
-  late final showFrame = qs(HF.randomBool(truePercentage: 0.3));
+  late final showFrame = qs(HF.randomBool(truePercentage: .3));
 }
 
 /// Public methods

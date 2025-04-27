@@ -70,11 +70,11 @@ class Suggestions extends ConsumerWidget {
             },
             child: C(
               decoration: BD(
-                color: Platform.isIOS ? kW.wo(0.9) : kW,
+                color: Platform.isIOS ? kW.q(.9) : kW,
                 borderRadius: 6.r,
                 border: Border.all(
                   color: primary,
-                  width: 0.5,
+                  width: .5,
                 ),
                 boxShadow: const [
                   BoxShadow(
