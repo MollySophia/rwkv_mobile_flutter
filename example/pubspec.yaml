@@ -70,10 +70,10 @@ flutter:
 
   assets:
     # TODO: @wangce 需要在编译脚本中决定是否打包这些为 Chat 准备的高通加速库
-    - assets/lib/tts/
-    - assets/model/tts/
-    - assets/config/tts/
-    - assets/img/tts/
+    - assets/lib/chat/
+    - assets/model/chat/
+    - assets/config/chat/
+    - assets/img/chat/
     - assets/lib/qnn/
     - .env
 

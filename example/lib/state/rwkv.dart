@@ -257,7 +257,7 @@ extension $RWKV on _RWKV {
     prefillSpeed.u(0);
     decodeSpeed.u(0);
 
-    final tokenizerPath = await fromAssetsToTemp("assets/config/tts/b_rwkv_vocab_v20230424.txt");
+    final tokenizerPath = await fromAssetsToTemp("assets/config/chat/b_rwkv_vocab_v20230424.txt");
 
     final rootIsolateToken = RootIsolateToken.instance;
 
@@ -315,7 +315,7 @@ extension $RWKV on _RWKV {
     prefillSpeed.u(0);
     decodeSpeed.u(0);
 
-    final tokenizerPath = await fromAssetsToTemp("assets/config/tts/b_rwkv_vocab_v20230424.txt");
+    final tokenizerPath = await fromAssetsToTemp("assets/config/chat/b_rwkv_vocab_v20230424.txt");
 
     final rootIsolateToken = RootIsolateToken.instance;
 
@@ -372,7 +372,7 @@ extension $RWKV on _RWKV {
     prefillSpeed.u(0);
     decodeSpeed.u(0);
 
-    final tokenizerPath = await fromAssetsToTemp("assets/config/tts/b_rwkv_vocab_v20230424.txt");
+    final tokenizerPath = await fromAssetsToTemp("assets/config/chat/b_rwkv_vocab_v20230424.txt");
 
     await _ensureQNNCopied();
 
@@ -416,7 +416,7 @@ extension $RWKV on _RWKV {
       _sendPort!.send(("getPrefillAndDecodeSpeed", null));
     });
 
-    final ttsTokenizerPath = await fromAssetsToTemp("assets/config/tts/b_rwkv_vocab_v20230424_tts.txt");
+    final ttsTokenizerPath = await fromAssetsToTemp("assets/config/chat/b_rwkv_vocab_v20230424_tts.txt");
 
     _sendPort!.send((
       "loadTTSModels",
