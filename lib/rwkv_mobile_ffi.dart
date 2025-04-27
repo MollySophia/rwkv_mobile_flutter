@@ -658,6 +658,17 @@ class rwkv_mobile {
 
   late final _rwkvmobile_dump_logPtr = _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('rwkvmobile_dump_log');
   late final _rwkvmobile_dump_log = _rwkvmobile_dump_logPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  void rwkvmobile_set_loglevel(
+    int loglevel,
+  ) {
+    return _rwkvmobile_set_loglevel(
+      loglevel,
+    );
+  }
+
+  late final _rwkvmobile_set_loglevelPtr = _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>('rwkvmobile_set_loglevel');
+  late final _rwkvmobile_set_loglevel = _rwkvmobile_set_loglevelPtr.asFunction<void Function(int)>();
 }
 
 final class sampler_params extends ffi.Struct {
@@ -697,3 +708,11 @@ final class response_buffer extends ffi.Struct {
 }
 
 typedef rwkvmobile_runtime_t = ffi.Pointer<ffi.Void>;
+
+const int RWKV_LOG_LEVEL_DEBUG = 0;
+
+const int RWKV_LOG_LEVEL_INFO = 1;
+
+const int RWKV_LOG_LEVEL_WARN = 2;
+
+const int RWKV_LOG_LEVEL_ERROR = 3;

@@ -94,6 +94,9 @@ class RWKVMobile {
     // TODO: We can load the runtime in the future. Only Apple cannot.
     final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
 
+    // uncomment this to enable runtime debug logs
+    // rwkvMobile.rwkvmobile_set_loglevel(RWKV_LOG_LEVEL_DEBUG);
+
     // definitions
     int maxLength = 2000;
     int maxMessages = 1000;
