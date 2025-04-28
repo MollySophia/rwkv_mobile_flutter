@@ -18,7 +18,7 @@ class _FileManager {
 
   late final availableModels = qs<Set<FileInfo>>({});
 
-  late final downloadSource = qs(P.app.demoType.v == DemoType.tts ? FileDownloadSource.huggingface : FileDownloadSource.hfmirror);
+  late final downloadSource = qs(FileDownloadSource.hfmirror);
 
   late final hasDownloadedModels = qs(false);
 

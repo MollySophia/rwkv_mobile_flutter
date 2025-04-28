@@ -333,11 +333,13 @@ extension $Chat on _Chat {
   FV loadSuggestions() async {
     final demoType = P.app.demoType.v;
     if (demoType != DemoType.chat && demoType != DemoType.tts) return;
-    final currentLocale = Intl.getCurrentLocale();
-    bool useEn = currentLocale.startsWith("en");
+    final shouldUseEn = P.preference.preferredLanguage.v.resolved.locale.languageCode != "zh";
 
-    final assetPath = useEn ? "assets/config/chat/suggestions.en-US${kDebugMode ? ".debug" : ""}.json" : "assets/config/chat/suggestions.zh-hans${kDebugMode ? ".debug" : ""}.json";
-    final anotherAssetPath = !useEn ? "assets/config/chat/suggestions.en-US${kDebugMode ? ".debug" : ""}.json" : "assets/config/chat/suggestions.zh-hans${kDebugMode ? ".debug" : ""}.json";
+    const head = "assets/config/chat/suggestions";
+    final lang = shouldUseEn ? "en-US" : "zh-hans";
+    final suffix = kDebugMode ? "debug" : "";
+
+    final assetPath = "$head.$lang.$suffix.json";
 
     final jsonString = await rootBundle.loadString(assetPath);
     final list = HF.list(jsonDecode(jsonString));
@@ -346,6 +348,7 @@ extension $Chat on _Chat {
 
     if (kDebugMode) {
       // Merge suggestions
+      final anotherAssetPath = "$head.$lang.$suffix.json";
       final anotherJsonString = await rootBundle.loadString(anotherAssetPath);
       final anotherList = HF.list(jsonDecode(anotherJsonString));
       final anotherSuggestions = anotherList.map((e) => e.toString()).toList();
