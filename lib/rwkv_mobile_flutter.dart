@@ -12,10 +12,15 @@ import 'package:rwkv_mobile_flutter/to_rwkv.dart';
 import 'package:rwkv_mobile_flutter/types.dart';
 import 'package:rwkv_mobile_flutter/rwkv_mobile_ffi.dart';
 
+typedef _FromFrontend = ToRWKV;
+
+// TODO: Use it, depends on "options.sendPort"
+typedef _ToFrontend = FromRWKV;
+
+const _codec = Utf8Codec(allowMalformed: true);
+
 class RWKVMobile {
   Isolate? _isolate;
-
-  static const _codec = Utf8Codec(allowMalformed: true);
 
   // TODO: 对 Frontend 隐藏 sendPort
   Future<void> runIsolate(StartOptions options) async {
@@ -127,31 +132,31 @@ class RWKVMobile {
     await for (final (String, dynamic) message in receivePort) {
       // message: (String command, Dynamic args)
       final command = message.$1;
-      final fromFrontend = ToRWKV.values.byName(command);
+      final fromFrontend = _FromFrontend.values.byName(command);
       switch (fromFrontend) {
         // 🟥 setMaxLength
-        case ToRWKV.setMaxLength:
+        case _FromFrontend.setMaxLength:
           final arg = message.$2 as int;
           if (arg > 0) maxLength = arg;
 
         // 🟥 clearStates
-        case ToRWKV.clearStates:
+        case _FromFrontend.clearStates:
           rwkvMobile.rwkvmobile_runtime_clear_state(runtime);
 
         // 🟥 setGenerationStopToken
-        case ToRWKV.setGenerationStopToken:
+        case _FromFrontend.setGenerationStopToken:
           final arg = message.$2 as int;
           if (arg >= 0) generationStopToken = arg;
 
         // 🟥 setPrompt
-        case ToRWKV.setPrompt:
+        case _FromFrontend.setPrompt:
           final prompt = message.$2 as String;
           final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_set_prompt(runtime, promptPtr);
           if (retVal != 0) sendPort.send({'error': 'Failed to set prompt: return value: $retVal'});
 
         // 🟥 getPrompt
-        case ToRWKV.getPrompt:
+        case _FromFrontend.getPrompt:
           final stringBuffer = calloc.allocate<ffi.Char>(maxLength);
           rwkvMobile.rwkvmobile_runtime_get_prompt(runtime, stringBuffer, maxLength);
           final prompt = stringBuffer.cast<Utf8>().toDartString();
@@ -159,7 +164,7 @@ class RWKVMobile {
           calloc.free(stringBuffer);
 
         // 🟥 setSamplerParams
-        case ToRWKV.setSamplerParams:
+        case _FromFrontend.setSamplerParams:
           final args = message.$2 as Map<String, dynamic>;
           final samplerParams = ffi.Struct.create<sampler_params>();
           final penaltyParams = ffi.Struct.create<penalty_params>();
@@ -173,7 +178,7 @@ class RWKVMobile {
           rwkvMobile.rwkvmobile_runtime_set_penalty_params(runtime, penaltyParams);
 
         // 🟥 getSamplerParams
-        case ToRWKV.getSamplerParams:
+        case _FromFrontend.getSamplerParams:
           final samplerParams = rwkvMobile.rwkvmobile_runtime_get_sampler_params(runtime);
           final penaltyParams = rwkvMobile.rwkvmobile_runtime_get_penalty_params(runtime);
           sendPort.send({
@@ -188,42 +193,42 @@ class RWKVMobile {
           });
 
         // 🟥 setEnableReasoning
-        case ToRWKV.setEnableReasoning:
+        case _FromFrontend.setEnableReasoning:
           enableReasoning = message.$2 as bool ? 1 : 0;
 
         // 🟥 getEnableReasoning
-        case ToRWKV.getEnableReasoning:
+        case _FromFrontend.getEnableReasoning:
           bool enableReasoningBool = (enableReasoning != 0);
           sendPort.send({'enableReasoning': enableReasoningBool});
 
         // 🟥 getIsGenerating
-        case ToRWKV.getIsGenerating:
+        case _FromFrontend.getIsGenerating:
           bool isGeneratingBool = (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) != 0);
           sendPort.send({'isGenerating': isGeneratingBool});
 
         // 🟥 setThinkingToken
-        case ToRWKV.setThinkingToken:
+        case _FromFrontend.setThinkingToken:
           final arg = message.$2 as String;
           final thinkingTokenPtr = arg.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_set_thinking_token(runtime, thinkingTokenPtr);
           if (retVal != 0) sendPort.send({'error': 'Failed to set thinking token'});
 
         // 🟥 setEosToken
-        case ToRWKV.setEosToken:
+        case _FromFrontend.setEosToken:
           final arg = message.$2 as String;
           final eosTokenPtr = arg.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_set_eos_token(runtime, eosTokenPtr);
           if (retVal != 0) sendPort.send({'error': 'Failed to set eos token'});
 
         // 🟥 setBosToken
-        case ToRWKV.setBosToken:
+        case _FromFrontend.setBosToken:
           final arg = message.$2 as String;
           final bosTokenPtr = arg.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_set_bos_token(runtime, bosTokenPtr);
           if (retVal != 0) sendPort.send({'error': 'Failed to set bos token'});
 
         // 🟥 setTokenBanned
-        case ToRWKV.setTokenBanned:
+        case _FromFrontend.setTokenBanned:
           final arg = message.$2 as List<int>;
           final tokenBannedPtr = calloc.allocate<ffi.Int>(arg.length);
           for (var i = 0; i < arg.length; i++) {
@@ -234,52 +239,52 @@ class RWKVMobile {
           if (retVal != 0) sendPort.send({'error': 'Failed to set token banned'});
 
         // 🟥 setUserRole
-        case ToRWKV.setUserRole:
+        case _FromFrontend.setUserRole:
           final arg = message.$2 as String;
           final userRolePtr = arg.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_set_user_role(runtime, userRolePtr);
           if (retVal != 0) sendPort.send({'error': 'Failed to set user role'});
 
         // 🟥 loadVisionEncoder
-        case ToRWKV.loadVisionEncoder:
+        case _FromFrontend.loadVisionEncoder:
           final arg = message.$2 as String;
           final encoderPathPtr = arg.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_load_vision_encoder(runtime, encoderPathPtr);
           if (retVal != 0) sendPort.send({'error': 'Failed to load vision encoder'});
 
         // 🟥 releaseVisionEncoder
-        case ToRWKV.releaseVisionEncoder:
+        case _FromFrontend.releaseVisionEncoder:
           retVal = rwkvMobile.rwkvmobile_runtime_release_vision_encoder(runtime);
           if (retVal != 0) sendPort.send({'error': 'Failed to release vision encoder'});
 
         // 🟥 setVisionPrompt
-        case ToRWKV.setVisionPrompt:
+        case _FromFrontend.setVisionPrompt:
           final arg = message.$2 as String;
           final imagePathPtr = arg.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_set_image_prompt(runtime, imagePathPtr);
           if (retVal != 0) sendPort.send({'error': 'Failed to set image prompt'});
 
         // 🟥 loadWhisperEncoder
-        case ToRWKV.loadWhisperEncoder:
+        case _FromFrontend.loadWhisperEncoder:
           final arg = message.$2 as String;
           final encoderPathPtr = arg.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_load_whisper_encoder(runtime, encoderPathPtr);
           if (retVal != 0) sendPort.send({'error': 'Failed to load whisper encoder'});
 
         // 🟥 releaseWhisperEncoder
-        case ToRWKV.releaseWhisperEncoder:
+        case _FromFrontend.releaseWhisperEncoder:
           retVal = rwkvMobile.rwkvmobile_runtime_release_whisper_encoder(runtime);
           if (retVal != 0) sendPort.send({'error': 'Failed to release whisper encoder'});
 
         // 🟥 setAudioPrompt
-        case ToRWKV.setAudioPrompt:
+        case _FromFrontend.setAudioPrompt:
           final arg = message.$2 as String;
           final audioPathPtr = arg.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_set_audio_prompt(runtime, audioPathPtr);
           if (retVal != 0) sendPort.send({'error': 'Failed to set audio prompt'});
 
         // 🟥 message
-        case ToRWKV.message:
+        case _FromFrontend.message:
           final messages = message.$2 as List<String>;
           for (var i = 0; i < messages.length; i++) {
             inputsPtr[i] = messages[i].toNativeUtf8().cast<ffi.Char>();
@@ -297,7 +302,7 @@ class RWKVMobile {
           }
 
         // 🟥 generate
-        case ToRWKV.generate:
+        case _FromFrontend.generate:
           final prompt = message.$2 as String;
           final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
 
@@ -312,7 +317,7 @@ class RWKVMobile {
           }
 
         // 🟥 generateBlocking
-        case ToRWKV.generateBlocking:
+        case _FromFrontend.generateBlocking:
           final prompt = message.$2 as String;
           final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
           String responseStr = prompt;
@@ -335,13 +340,13 @@ class RWKVMobile {
           sendPort.send({'generateStop': true});
 
         // 🟥 releaseModel
-        case ToRWKV.releaseModel:
+        case _FromFrontend.releaseModel:
           if (kDebugMode) print("💬 Releasing model");
           rwkvMobile.rwkvmobile_runtime_release(runtime);
           runtime = ffi.nullptr;
 
         // 🟥 initRuntime
-        case ToRWKV.initRuntime:
+        case _FromFrontend.initRuntime:
           final args = message.$2 as Map<String, dynamic>;
           modelPath = args['modelPath'] as String;
           modelBackend = args['backend'].asArgument;
@@ -374,7 +379,7 @@ class RWKVMobile {
           }
 
         // 🟥 stop
-        case ToRWKV.stop:
+        case _FromFrontend.stop:
           bool generating = rwkvMobile.rwkvmobile_runtime_is_generating(runtime) == 1;
           while (generating) {
             rwkvMobile.rwkvmobile_runtime_stop_generation(runtime);
@@ -385,7 +390,7 @@ class RWKVMobile {
           }
 
         // 🟥 getResponseBufferContent
-        case ToRWKV.getResponseBufferContent:
+        case _FromFrontend.getResponseBufferContent:
           final responseBufferContent = rwkvMobile.rwkvmobile_runtime_get_response_buffer_content(runtime);
           int length = responseBufferContent.length;
           // TODO: @molly 有没有可能有一个回调函数, 每次只返回一个字符?
@@ -394,20 +399,20 @@ class RWKVMobile {
           sendPort.send({'responseBufferContent': str});
 
         // 🟥 getPrefillAndDecodeSpeed
-        case ToRWKV.getPrefillAndDecodeSpeed:
+        case _FromFrontend.getPrefillAndDecodeSpeed:
           final prefillSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime);
           final decodeSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime);
           sendPort.send({'prefillSpeed': prefillSpeed, 'decodeSpeed': decodeSpeed});
 
         // 🟥 getResponseBufferIds
-        case ToRWKV.getResponseBufferIds:
+        case _FromFrontend.getResponseBufferIds:
           final responseBufferIds = rwkvMobile.rwkvmobile_runtime_get_response_buffer_ids(runtime);
           final responseBufferIdsList = responseBufferIds.ids.asTypedList(responseBufferIds.len).toList();
           rwkvMobile.rwkvmobile_runtime_free_token_ids(responseBufferIds);
           sendPort.send({'responseBufferIds': responseBufferIdsList});
 
         // 🟥 loadTTSModels
-        case ToRWKV.loadTTSModels:
+        case _FromFrontend.loadTTSModels:
           final args = message.$2 as Map<String, dynamic>;
           final campPlusPath = args['campPlusPath'] as String;
           final flowDecoderEstimatorPath = args['flowDecoderEstimatorPath'] as String;
@@ -420,12 +425,12 @@ class RWKVMobile {
           rwkvMobile.rwkvmobile_runtime_cosyvoice_set_cfm_steps(runtime, 5);
 
         // 🟥 releaseTTSModels
-        case ToRWKV.releaseTTSModels:
+        case _FromFrontend.releaseTTSModels:
           retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_release_models(runtime);
           if (retVal != 0) sendPort.send({'error': 'Failed to release TTS models'});
 
         // 🟥 getTTSSpkNames
-        case ToRWKV.getTTSSpkNames:
+        case _FromFrontend.getTTSSpkNames:
           final spksNames = rwkvMobile.rwkvmobile_runtime_cosyvoice_get_spk_names(runtime);
           // names is a list of strings, separated by ','
           final names = spksNames.cast<Utf8>().toDartString().split(',');
@@ -435,7 +440,7 @@ class RWKVMobile {
           sendPort.send({'spksNames': namesList});
 
         // 🟥 runTTS
-        case ToRWKV.runTTS:
+        case _FromFrontend.runTTS:
           final args = message.$2 as Map<String, dynamic>;
           final ttsText = args['ttsText'] as String;
           final instructionText = args['instructionText'] as String;
@@ -457,7 +462,7 @@ class RWKVMobile {
           }
 
         // 🟥 runTTSWithPredefinedSpk
-        case ToRWKV.runTTSWithPredefinedSpk:
+        case _FromFrontend.runTTSWithPredefinedSpk:
           final args = message.$2 as Map<String, dynamic>;
           final ttsText = args['ttsText'] as String;
           final instructionText = args['instructionText'] as String;
@@ -477,14 +482,14 @@ class RWKVMobile {
           }
 
         // 🟥 setTTSCFMSteps
-        case ToRWKV.setTTSCFMSteps:
+        case _FromFrontend.setTTSCFMSteps:
           final args = message.$2 as Map<String, dynamic>;
           final cfmSteps = args['cfmSteps'] as int;
           retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_set_cfm_steps(runtime, cfmSteps);
           if (retVal != 0) sendPort.send({'error': 'Failed to set TTS CFM steps'});
 
         // 🟥 dumpLog
-        case ToRWKV.dumpLog:
+        case _FromFrontend.dumpLog:
           final log = rwkvMobile.rwkvmobile_dump_log();
           sendPort.send({'runtimeLog': log.cast<Utf8>().toDartString()});
       }
