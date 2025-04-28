@@ -36,7 +36,12 @@ extension _$TTS on _TTS {
     textEditingController.addListener(_onTextEditingControllerValueChanged);
     textInInput.l(_onTextChanged);
     await getTTSSpkNames();
-    selectSpkName.u(spkPairs.q.keys.random);
+    const defaultKey = "March 7th_6";
+    if (spkPairs.q.containsKey(defaultKey)) {
+      selectSpkName.u(defaultKey);
+    } else {
+      selectSpkName.u(spkPairs.q.keys.random);
+    }
     selectSourceAudioPath.u(null);
 
     focusNode.addListener(() {

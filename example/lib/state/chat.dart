@@ -336,10 +336,10 @@ extension $Chat on _Chat {
     final shouldUseEn = P.preference.preferredLanguage.v.resolved.locale.languageCode != "zh";
 
     const head = "assets/config/chat/suggestions";
-    final lang = shouldUseEn ? "en-US" : "zh-hans";
-    final suffix = kDebugMode ? "debug" : "";
+    final lang = shouldUseEn ? ".en-US" : ".zh-hans";
+    final suffix = kDebugMode ? ".debug" : "";
 
-    final assetPath = "$head.$lang.$suffix.json";
+    final assetPath = "$head$lang$suffix.json";
 
     final jsonString = await rootBundle.loadString(assetPath);
     final list = HF.list(jsonDecode(jsonString));
@@ -348,7 +348,7 @@ extension $Chat on _Chat {
 
     if (kDebugMode) {
       // Merge suggestions
-      final anotherAssetPath = "$head.$lang.$suffix.json";
+      final anotherAssetPath = "$head$lang$suffix.json";
       final anotherJsonString = await rootBundle.loadString(anotherAssetPath);
       final anotherList = HF.list(jsonDecode(anotherJsonString));
       final anotherSuggestions = anotherList.map((e) => e.toString()).toList();
@@ -459,6 +459,8 @@ extension _$Chat on _Chat {
     if (Config.enableChain) messages.lb(_onMessagesChanged);
     if (Config.enableChain) chains.lv(_syncBranchesCountList);
     if (Config.enableChain) currentChain.lv(_syncBranchesCountList);
+
+    P.preference.preferredLanguage.lv(loadSuggestions);
   }
 
   void _onMessagesChanged(List<Message>? previous, List<Message> next) {

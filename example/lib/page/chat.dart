@@ -79,6 +79,7 @@ class _PageChatState extends State<PageChat> {
   void _onShowingModelSelectorChanged(bool showing) async {
     if (!showing) return;
     P.fileManager.checkLocal();
+    P.chat.loadSuggestions();
 
     if (!Args.disableRemoteConfig) {
       P.app.getConfig().then((_) async {

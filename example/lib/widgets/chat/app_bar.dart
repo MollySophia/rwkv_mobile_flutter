@@ -128,10 +128,11 @@ class ChatAppBar extends ConsumerWidget {
                       : null,
                   icon: (Platform.isIOS || Platform.isMacOS) ? const Icon(CupertinoIcons.bubble_left_bubble_right) : const Icon(Icons.message_outlined),
                 ),
-              IconButton(
-                onPressed: _onTunePressed,
-                icon: const Icon(Icons.tune),
-              ),
+              if (demoType != DemoType.tts)
+                IconButton(
+                  onPressed: _onTunePressed,
+                  icon: const Icon(Icons.tune),
+                ),
             ],
           ),
         ),

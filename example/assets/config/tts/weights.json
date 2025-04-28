@@ -7,7 +7,7 @@
     "fileSize": 1597115648,
     "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/model/CosyVoice2-0.5B-RWKV-7-1.5B-Instruct-CHENJPKO-8gen3-a16w8_combined.bin",
     "quantization": "a16w8",
-    "platforms": [],
+    "platforms": ["android"],
     "backends": ["qnn"],
     "tags": ["npu", "core"],
     "socLimitations": ["8 Gen 3"]
@@ -45,7 +45,7 @@
     "fileSize": 1009165600,
     "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/model/CosyVoice2-0.5B-RWKV-7-1.5B-Instruct-CHENJPKO-q4_k_m.gguf",
     "quantization": "q4_k_m",
-    "platforms": [],
+    "platforms": ["android"],
     "backends": ["llamacpp"],
     "tags": ["core"]
   },
