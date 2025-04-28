@@ -332,7 +332,7 @@ extension $Chat on _Chat {
 
   FV loadSuggestions() async {
     final demoType = P.app.demoType.v;
-    if (demoType != DemoType.chat) return;
+    if (demoType != DemoType.chat && demoType != DemoType.tts) return;
     final currentLocale = Intl.getCurrentLocale();
     bool useEn = currentLocale.startsWith("en");
 
