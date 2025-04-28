@@ -69,27 +69,19 @@ extension _$TTS on _TTS {
     required String promptSpeechText,
   }) async {
     qq;
-    final sendPort = P.rwkv._sendPort;
-    if (sendPort == null) {
-      qqe("sendPort is null");
-      return;
-    }
     if (!ttsDone.v) {
       qqe("ttsDone is true");
       Alert.warning("TTS is running, please wait for it to finish");
       return;
     }
     ttsDone.u(false);
-    sendPort.send((
-      "runTTS",
-      {
-        "ttsText": ttsText,
-        "instructionText": instructionText,
-        "promptWavPath": promptWavPath,
-        "outputWavPath": outputWavPath,
-        "promptSpeechText": promptSpeechText,
-      }
-    ));
+    P.rwkv.send(ToRWKV.runTTS, {
+      "ttsText": ttsText,
+      "instructionText": instructionText,
+      "promptWavPath": promptWavPath,
+      "outputWavPath": outputWavPath,
+      "promptSpeechText": promptSpeechText,
+    });
   }
 }
 

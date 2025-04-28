@@ -305,7 +305,7 @@ extension $Chat on _Chat {
 
     final history = withHistory ? historyMessage : [message];
 
-    P.rwkv.send(history);
+    P.rwkv.sendMessages(history);
     editingIndex.u(null);
 
     receivedTokens.uc();
@@ -376,7 +376,7 @@ extension $Chat on _Chat {
   FV resumeMessageById({required int id, bool withHaptic = true}) async {
     qq;
     if (withHaptic) Gaimon.light();
-    P.rwkv.send(_history());
+    P.rwkv.sendMessages(_history());
     _updateMessageById(
       id: id,
       changing: true,
