@@ -2,6 +2,7 @@
 
 ## 技术架构
 
+- [DeepWiki](https://deepwiki.com/MollySophia/rwkv_mobile_flutter)
 - 前端: [flutter](https://github.com/MollySophia/rwkv_mobile_flutter/tree/master/example)
 - adapter (dart ffi): [本项目](https://github.com/MollySophia/rwkv_mobile_flutter)
 - 后端 (C++): [rwkv-mobile](https://github.com/MollySophia/rwkv-mobile)
