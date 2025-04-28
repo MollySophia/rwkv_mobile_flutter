@@ -784,6 +784,7 @@ enum _RWKVMessageType {
   ;
 }
 
+// TODO: 使用 Backend 定义的 `FromRWKV`
 @immutable
 final class LLMEvent {
   final _RWKVMessageType type;

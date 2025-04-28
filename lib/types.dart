@@ -66,41 +66,6 @@ enum FromRWKV {
   ;
 }
 
-// TODO: Use it in the future
-enum ToRWKV {
-  clearStates,
-  generate,
-  generateBlocking,
-  getEnableReasoning,
-  getIsGenerating,
-  getPrefillAndDecodeSpeed,
-  getPrompt,
-  getResponseBufferContent,
-  getResponseBufferIds,
-  getSamplerParams,
-  initRuntime,
-  loadVisionEncoder,
-  loadWhisperEncoder,
-  message,
-  releaseModel,
-  releaseVisionEncoder,
-  releaseWhisperEncoder,
-  setAudioPrompt,
-  setBosToken,
-  setEnableReasoning,
-  setEosToken,
-  setGenerationStopToken,
-  setMaxLength,
-  setPrompt,
-  setSamplerParams,
-  setThinkingToken,
-  setTokenBanned,
-  setUserRole,
-  setVisionPrompt,
-  stop,
-  ;
-}
-
 class StartOptions {
   final String modelPath;
   final String tokenizerPath;
