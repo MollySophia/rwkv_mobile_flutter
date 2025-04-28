@@ -126,6 +126,13 @@ extension $Chat on _Chat {
   FV onSubmitted(String aString) async {
     qqq(aString);
 
+    final receivingTokens = P.chat.receivingTokens.q;
+
+    if (receivingTokens) {
+      Alert.info("Please wait for the previous message to be generated");
+      return;
+    }
+
     if (P.app.demoType.v == DemoType.tts) {
       await P.tts.gen();
       return;
