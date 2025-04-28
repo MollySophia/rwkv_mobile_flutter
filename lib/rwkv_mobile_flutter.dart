@@ -412,7 +412,7 @@ class RWKVMobile {
         if (retVal != 0) {
           sendPort.send({'error': 'Failed to load TTS models'});
         }
-        rwkvMobile.rwkvmobile_runtime_cosyvoice_set_cfm_steps(runtime, 4);
+        rwkvMobile.rwkvmobile_runtime_cosyvoice_set_cfm_steps(runtime, 5);
       } else if (command == 'releaseTTSModels') {
         retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_release_models(runtime);
         if (retVal != 0) {
