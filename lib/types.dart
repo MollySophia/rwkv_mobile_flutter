@@ -36,19 +36,12 @@ enum Backend {
 
   static Backend fromString(String value) {
     final toLower = value.toLowerCase();
-    if (toLower.contains('ncnn')) {
-      return Backend.ncnn;
-    } else if (toLower.contains('web') && toLower.contains('rwkv')) {
-      return Backend.webRwkv;
-    } else if (toLower.contains('llama')) {
-      return Backend.llamacpp;
-    } else if (toLower.contains('qnn')) {
-      return Backend.qnn;
-    } else if (toLower.contains('onnxruntime')) {
-      return Backend.onnxruntime;
-    } else {
-      throw Exception('Unknown backend: $value');
-    }
+    if (toLower.contains('ncnn')) return Backend.ncnn;
+    if (toLower.contains('web') && toLower.contains('rwkv')) return Backend.webRwkv;
+    if (toLower.contains('llama')) return Backend.llamacpp;
+    if (toLower.contains('qnn')) return Backend.qnn;
+    if (toLower.contains('onnxruntime')) return Backend.onnxruntime;
+    throw Exception('Unknown backend: $value');
   }
 }
 
@@ -56,13 +49,18 @@ enum Backend {
 enum FromRWKV {
   currentPrompt,
   enableReasoning,
+  error,
   generateStart,
   generateStop,
+  getResponseBufferIds,
   initRuntimeDone,
   prefillSpeed,
   response,
+  responseBufferContent,
   samplerParams,
+  spksNames,
   streamResponse,
+  ttsDone,
   ;
 }
 
