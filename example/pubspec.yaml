@@ -1,7 +1,7 @@
 name: zone
 description: 'A new Flutter project.'
 publish_to: 'none'
-version: 1.5.5+321
+version: 1.5.5+322
 
 environment:
   sdk: ^3.6.0
@@ -74,6 +74,7 @@ flutter:
     - assets/model/chat/
     - assets/config/chat/
     - assets/img/chat/
+    # TODO: @wangce world 到 tts/chat 的互转还有问题
     - assets/lib/qnn/
     - .env
 
