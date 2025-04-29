@@ -64,7 +64,7 @@ extension $App on _App {
       if (data is! Map) {
         throw "data is not a Map, data: ${data.runtimeType}";
       }
-      final config = data[demoType.v.name];
+      final config = data[demoType.q.name];
       if (config is! Map) {
         throw "config is not a Map, config: ${config.runtimeType}";
       }
@@ -126,20 +126,20 @@ extension _$App on _App {
 
   FV _showNewVersionDialogIfNeeded() async {
     qq;
-    if (latestBuild.v <= int.parse(buildNumber.v)) return;
+    if (latestBuild.q <= int.parse(buildNumber.q)) return;
 
     if (!kDebugMode) {
-      if (P.app.demoType.v == DemoType.chat && !(Platform.isIOS || Platform.isAndroid)) {
+      if (P.app.demoType.q == DemoType.chat && !(Platform.isIOS || Platform.isAndroid)) {
         return;
       }
 
-      if (P.app.demoType.v == DemoType.othello && !Platform.isAndroid) {
+      if (P.app.demoType.q == DemoType.othello && !Platform.isAndroid) {
         return;
       }
     }
 
-    final androidUrl = this.androidUrl.v;
-    final iosUrl = this.iosUrl.v;
+    final androidUrl = this.androidUrl.q;
+    final iosUrl = this.iosUrl.q;
 
     if (Platform.isAndroid && (androidUrl == null || androidUrl.isEmpty)) {
       return;
@@ -151,8 +151,8 @@ extension _$App on _App {
 
     await HF.wait(1);
 
-    final noteZh = this.noteZh.v;
-    final noteEn = this.noteEn.v;
+    final noteZh = this.noteZh.q;
+    final noteEn = this.noteEn.q;
 
     final currentLocale = Intl.getCurrentLocale();
     final useEn = currentLocale.startsWith("en");

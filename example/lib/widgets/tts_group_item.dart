@@ -24,24 +24,24 @@ class TTSGroupItem extends ConsumerWidget {
   }) : assert(fileInfo.tags.contains("core"), "fileInfo must be a core model");
 
   void _onDownloadAllTap() async {
-    final helperModels = P.fileManager.availableModels.v.where((e) => !e.tags.contains("core")).toList();
+    final helperModels = P.fileManager.availableModels.q.where((e) => !e.tags.contains("core")).toList();
     final core = fileInfo;
-    final missingFileInfos = [...helperModels, core].where((e) => P.fileManager.locals(e).v.hasFile == false).toList();
+    final missingFileInfos = [...helperModels, core].where((e) => P.fileManager.locals(e).q.hasFile == false).toList();
     missingFileInfos.forEach((e) => P.fileManager.getFile(fileInfo: e));
   }
 
   void _onDeleteAllTap() async {
-    final helperModels = P.fileManager.availableModels.v.where((e) => !e.tags.contains("core")).toList();
+    final helperModels = P.fileManager.availableModels.q.where((e) => !e.tags.contains("core")).toList();
     final core = fileInfo;
     [...helperModels, core].forEach((e) => P.fileManager.deleteFile(fileInfo: e));
   }
 
   void _onStartToChatTap() async {
-    if (P.rwkv.loading.v) {
+    if (P.rwkv.loading.q) {
       Alert.warning("Please wait for the model to load...");
       return;
     }
-    final availableModels = P.fileManager.availableModels.v;
+    final availableModels = P.fileManager.availableModels.q;
     final fileInfos = availableModels.toList();
 
     final campPlusFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("campplus"));
@@ -81,13 +81,13 @@ class TTSGroupItem extends ConsumerWidget {
       return;
     }
 
-    final modelLocalFile = P.fileManager.locals(fileInfo).v;
-    final localCampPlusFile = P.fileManager.locals(campPlusFileKey).v;
-    final localFlowEncoderFile = P.fileManager.locals(flowEncoderFileKey).v;
-    final localFlowDecoderEstimatorBinFile = P.fileManager.locals(flowDecoderEstimatorBinFileKey).v;
-    final _ = P.fileManager.locals(flowDecoderEstimatorParamFileKey).v;
-    final localHiftGeneratorFile = P.fileManager.locals(hiftGeneratorFileKey).v;
-    final localSpeechTokenizerFile = P.fileManager.locals(speechTokenizerFileKey).v;
+    final modelLocalFile = P.fileManager.locals(fileInfo).q;
+    final localCampPlusFile = P.fileManager.locals(campPlusFileKey).q;
+    final localFlowEncoderFile = P.fileManager.locals(flowEncoderFileKey).q;
+    final localFlowDecoderEstimatorBinFile = P.fileManager.locals(flowDecoderEstimatorBinFileKey).q;
+    final _ = P.fileManager.locals(flowDecoderEstimatorParamFileKey).q;
+    final localHiftGeneratorFile = P.fileManager.locals(hiftGeneratorFileKey).q;
+    final localSpeechTokenizerFile = P.fileManager.locals(speechTokenizerFileKey).q;
     P.rwkv.currentGroupInfo.u(GroupInfo(displayName: fileInfo.name));
 
     P.rwkv.clearStates();
@@ -104,6 +104,7 @@ class TTSGroupItem extends ConsumerWidget {
         hiftGeneratorPath: localHiftGeneratorFile.targetPath,
         speechTokenizerPath: localSpeechTokenizerFile.targetPath,
       );
+      P.tts.setTTSCFMSteps(P.tts.cfmSteps.q);
       P.tts.getTTSSpkNames();
       Navigator.pop(getContext()!);
     } catch (e) {
@@ -126,7 +127,7 @@ class TTSGroupItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final availableModels = P.fileManager.availableModels.v;
+    final availableModels = P.fileManager.availableModels.q;
     final fileInfos = availableModels.toList().where((e) => !e.tags.contains("core")).toList();
     fileInfos.insert(0, fileInfo);
     if (fileInfos.isEmpty) return const SizedBox.shrink();

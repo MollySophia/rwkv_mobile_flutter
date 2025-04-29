@@ -39,7 +39,7 @@ class _PageChatState extends State<PageChat> {
     P.fileManager.modelSelectorShown.l(_onShowingModelSelectorChanged);
     P.chat.showingCharacterSelector.l(_onShowingCharacterSelectorChanged);
     HF.wait(1000).then((_) {
-      final loaded = P.rwkv.loaded.v;
+      final loaded = P.rwkv.loaded.q;
       if (!loaded) {
         P.fileManager.modelSelectorShown.u(true);
       }
@@ -57,7 +57,7 @@ class _PageChatState extends State<PageChat> {
   void _onShowingCharacterSelectorChanged(bool showing) async {
     if (!showing) return;
     HF.wait(1).then((_) {
-      P.chat.roles.u(P.chat.roles.v.shuffled);
+      P.chat.roles.u(P.chat.roles.q.shuffled);
     });
     await showModalBottomSheet(
       isScrollControlled: true,

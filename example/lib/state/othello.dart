@@ -61,11 +61,11 @@ extension $Othello on _Othello {
   }
 
   void onCellTap({required int row, required int col}) {
-    final thinking = receivingTokens.v;
+    final thinking = receivingTokens.q;
     if (thinking) return;
-    final eatCountMatrixForBlack = this.eatCountMatrixForBlack.v;
-    final eatCountMatrixForWhite = this.eatCountMatrixForWhite.v;
-    bool blackTurn = this.blackTurn.v;
+    final eatCountMatrixForBlack = this.eatCountMatrixForBlack.q;
+    final eatCountMatrixForWhite = this.eatCountMatrixForWhite.q;
+    bool blackTurn = this.blackTurn.q;
     final eatCount = blackTurn ? eatCountMatrixForBlack[row][col] : eatCountMatrixForWhite[row][col];
     if (eatCount == 0) {
       return;
@@ -73,10 +73,10 @@ extension $Othello on _Othello {
 
     _eat(row: row, col: col, dryRun: false, forBlack: blackTurn);
 
-    blackTurn = this.blackTurn.v;
+    blackTurn = this.blackTurn.q;
 
-    final allZeroForBlack = this.eatCountMatrixForBlack.v.every((row) => row.every((col) => col == 0));
-    final allZeroForWhite = this.eatCountMatrixForWhite.v.every((row) => row.every((col) => col == 0));
+    final allZeroForBlack = this.eatCountMatrixForBlack.q.every((row) => row.every((col) => col == 0));
+    final allZeroForWhite = this.eatCountMatrixForWhite.q.every((row) => row.every((col) => col == 0));
     final allZero = allZeroForBlack && allZeroForWhite;
 
     if (allZero) {
@@ -90,8 +90,8 @@ extension $Othello on _Othello {
       if (allZeroForWhite) this.blackTurn.u(true);
     }
 
-    final blackAuto = blackIsAI.v && (this.blackTurn.v);
-    final whiteAuto = whiteIsAI.v && !(this.blackTurn.v);
+    final blackAuto = blackIsAI.q && (this.blackTurn.q);
+    final whiteAuto = whiteIsAI.q && !(this.blackTurn.q);
 
     if (blackAuto || whiteAuto) {
       receivingTokens.u(true);
@@ -107,7 +107,7 @@ extension $Othello on _Othello {
 /// Private methods
 extension _$ on _Othello {
   FV _init() async {
-    if (P.app.demoType.v != DemoType.othello) return;
+    if (P.app.demoType.q != DemoType.othello) return;
     qq;
 
     P.app.pageKey.lb((_, next) {
@@ -117,15 +117,15 @@ extension _$ on _Othello {
     }, fireImmediately: true);
 
     P.rwkv.broadcastStream.listen((event) {
-      final demoType = P.app.demoType.v;
+      final demoType = P.app.demoType.q;
       if (demoType != DemoType.othello) return;
       _onStreamEvent(event: event);
     }, onDone: () {
-      final demoType = P.app.demoType.v;
+      final demoType = P.app.demoType.q;
       if (demoType != DemoType.othello) return;
       _onStreamDone();
     }, onError: (error, stackTrace) {
-      final demoType = P.app.demoType.v;
+      final demoType = P.app.demoType.q;
       if (demoType != DemoType.othello) return;
       _onStreamError(error: error, stackTrace: stackTrace);
     });
@@ -152,9 +152,9 @@ extension _$ on _Othello {
   void _onPlacingEventReceived((int row, int col) event) async {
     latestPlacing.u(event);
 
-    final isBlackTurn = blackTurn.v;
-    final blackIsAI = this.blackIsAI.v;
-    final whiteIsAI = this.whiteIsAI.v;
+    final isBlackTurn = blackTurn.q;
+    final blackIsAI = this.blackIsAI.q;
+    final whiteIsAI = this.whiteIsAI.q;
 
     if (isBlackTurn && !blackIsAI) {
       return;
@@ -166,21 +166,21 @@ extension _$ on _Othello {
 
     for (var i = 0; i < 1000; i++) {
       await HF.wait(10);
-      final thinking = receivingTokens.v;
+      final thinking = receivingTokens.q;
       if (!thinking) break;
     }
 
-    qqq("Placing event received: $event, thinking: ${receivingTokens.v}");
+    qqq("Placing event received: $event, thinking: ${receivingTokens.q}");
     onCellTap(row: event.$1, col: event.$2);
   }
 
   void _syncLayout() {
-    final screenWidth = P.app.screenWidth.v;
-    final screenHeight = P.app.screenHeight.v;
-    final paddingTop = P.app.paddingTop.v;
-    final paddingBottom = P.app.paddingBottom.v;
-    final paddingLeft = P.app.paddingLeft.v;
-    final paddingRight = P.app.paddingRight.v;
+    final screenWidth = P.app.screenWidth.q;
+    final screenHeight = P.app.screenHeight.q;
+    final paddingTop = P.app.paddingTop.q;
+    final paddingBottom = P.app.paddingBottom.q;
+    final paddingLeft = P.app.paddingLeft.q;
+    final paddingRight = P.app.paddingRight.q;
 
     final availableWidth = screenWidth - paddingLeft - paddingRight;
     final availableHeight = screenHeight - paddingTop - paddingBottom;
@@ -227,7 +227,7 @@ extension _$ on _Othello {
   }
 
   FV _onStreamEvent({required LLMEvent event}) async {
-    final pageKey = P.app.pageKey.v;
+    final pageKey = P.app.pageKey.q;
     if (pageKey != PageKey.othello) return;
 
     switch (event.type) {
@@ -311,8 +311,8 @@ extension _$ on _Othello {
   }
 
   FV _showGameOverDialog() async {
-    final blackScore = this.blackScore.v;
-    final whiteScore = this.whiteScore.v;
+    final blackScore = this.blackScore.q;
+    final whiteScore = this.whiteScore.q;
 
     late final String winnerMessage;
 
@@ -333,7 +333,7 @@ extension _$ on _Othello {
   }
 
   FV _onStreamDone() async {
-    final pageKey = P.app.pageKey.v;
+    final pageKey = P.app.pageKey.q;
     if (pageKey != PageKey.othello) return;
     qqq("_onStreamDone");
     receivingTokens.u(false);
@@ -343,7 +343,7 @@ extension _$ on _Othello {
     required Object error,
     required StackTrace stackTrace,
   }) async {
-    final pageKey = P.app.pageKey.v;
+    final pageKey = P.app.pageKey.q;
     if (pageKey != PageKey.othello) return;
     qqq("_onStreamError");
     qqe("error: $error");
@@ -362,8 +362,8 @@ extension _$ on _Othello {
   void _calculateAvailableCells() async {
     qq;
 
-    final state = this.state.v;
-    final blackTurn = this.blackTurn.v;
+    final state = this.state.q;
+    final blackTurn = this.blackTurn.q;
 
     late final CellType targetCellType;
     late final CellType currentCellType;
@@ -422,7 +422,7 @@ extension _$ on _Othello {
     assert(col >= 0 && col < 8);
     assert(dryRun == true || dryRun == false);
 
-    final state = this.state.v;
+    final state = this.state.q;
     late final CellType targetCellType;
     late final CellType currentCellType;
 
@@ -719,10 +719,10 @@ extension _$ on _Othello {
   }
 
   String _generatePrompt() {
-    final state = this.state.v;
-    final blackTurn = this.blackTurn.v;
-    final searchDepth = this.searchDepth.v;
-    final searchBreadth = this.searchBreadth.v;
+    final state = this.state.q;
+    final blackTurn = this.blackTurn.q;
+    final searchDepth = this.searchDepth.q;
+    final searchBreadth = this.searchBreadth.q;
     final prompt = """<input>
 ${state.map((e) => e.map((f) => f.prompt).join()).join("\n")}
 NEXT ${blackTurn ? CellType.black.prompt : CellType.white.prompt}

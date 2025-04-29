@@ -13,7 +13,7 @@ import 'package:zone/state/p.dart';
 
 class ArgumentsPanel extends ConsumerWidget {
   static Future<void> show(BuildContext context) async {
-    if (P.rwkv.argumentsPanelShown.v) return;
+    if (P.rwkv.argumentsPanelShown.q) return;
     P.rwkv.argumentsPanelShown.u(true);
     await showModalBottomSheet(
       context: context,
@@ -192,7 +192,7 @@ class _Value extends ConsumerWidget {
     if (argument.step != null) {
       rawNewValue = (rawNewValue / argument.step!).round() * argument.step!;
     }
-    final currentValue = P.rwkv.arguments(argument).v;
+    final currentValue = P.rwkv.arguments(argument).q;
     if (currentValue == rawNewValue) return;
     if (argument.enableGaimon) Gaimon.light();
     P.rwkv.arguments(argument).u(rawNewValue);

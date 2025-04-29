@@ -515,7 +515,7 @@ class _InstructTabs extends ConsumerWidget {
             // runSpacing: 4,
             spacing: 4,
             children: TTSInstruction.values.where((e) => e.forInstruction).indexMap((index, e) {
-              final isSelected = P.tts.interactingInstruction.v == e;
+              final isSelected = P.tts.interactingInstruction.q == e;
               String displayText = isZh ? e.nameCN : e.nameEN;
               if (isSelected) displayText += " ×";
 
@@ -610,7 +610,7 @@ class _InstructOptions extends ConsumerWidget {
           children: options.indexMap((index, e) {
             bool selected = false;
             if (interactingInstruction != TTSInstruction.none) {
-              selected = P.tts.instructions(interactingInstruction).v == index;
+              selected = P.tts.instructions(interactingInstruction).q == index;
             }
 
             return GD(
@@ -776,7 +776,7 @@ class _TextField extends ConsumerWidget {
 
   void _onTapTextFieldWhenItsDisabled() {
     qq;
-    final loaded = P.rwkv.loaded.v;
+    final loaded = P.rwkv.loaded.q;
     if (!loaded) {
       Alert.info("Please load model first");
       P.fileManager.modelSelectorShown.u(true);

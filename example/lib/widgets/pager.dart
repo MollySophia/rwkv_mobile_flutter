@@ -19,7 +19,7 @@ class Pager extends ConsumerStatefulWidget {
   static final drawerOpacity = qs(.0);
 
   static FV toggle() async {
-    final currentPage = Pager.page.v;
+    final currentPage = Pager.page.q;
     final targetPage = currentPage == 0 ? 1 : 0;
     qqq("currentPage: $currentPage, targetPage: $targetPage");
     _CustomPageScrollPhysics.disableGaimon = true;

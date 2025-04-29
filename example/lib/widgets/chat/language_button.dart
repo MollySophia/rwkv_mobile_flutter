@@ -13,23 +13,23 @@ class LanguageButton extends ConsumerWidget {
   const LanguageButton({super.key});
 
   void _onTap() async {
-    final loading = P.rwkv.loading.v;
+    final loading = P.rwkv.loading.q;
     if (loading) {
       Alert.info(S.current.please_wait_for_the_model_to_load);
       return;
     }
-    final receiving = P.chat.receivingTokens.v;
+    final receiving = P.chat.receivingTokens.q;
     if (receiving) {
       Alert.info(S.current.please_wait_for_the_model_to_finish_generating);
       return;
     }
-    final currentModel = P.rwkv.currentModel.v;
+    final currentModel = P.rwkv.currentModel.q;
     if (currentModel == null) {
-      if (P.fileManager.modelSelectorShown.v) return;
+      if (P.fileManager.modelSelectorShown.q) return;
       P.fileManager.modelSelectorShown.u(true);
       return;
     }
-    final newValue = !P.rwkv.preferChinese.v;
+    final newValue = !P.rwkv.preferChinese.q;
     await P.rwkv.setModelConfig(preferChinese: newValue);
 
     if (newValue) Alert.success(S.current.prefer_chinese);

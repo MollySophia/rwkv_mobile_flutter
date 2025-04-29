@@ -39,7 +39,7 @@ class Input extends ConsumerWidget {
     }
 
     return Positioned(
-      bottom: show ? 0 : -P.chat.inputHeight.v,
+      bottom: show ? 0 : -P.chat.inputHeight.q,
       left: 0,
       right: 0,
       child: MeasureSize(
@@ -206,7 +206,7 @@ class _TextField extends ConsumerWidget {
 
   void _onTapTextFieldWhenItsDisabled() {
     qq;
-    final loaded = P.rwkv.loaded.v;
+    final loaded = P.rwkv.loaded.q;
     if (!loaded) {
       Alert.info("Please load model first");
       P.fileManager.modelSelectorShown.u(true);

@@ -344,8 +344,8 @@ Future<Object?> _delete(
 
 Map<String, String> _buildHeaders() {
   final Map<String, String> header = {};
-  header["Application-Build-Number"] = P.app.buildNumber.v;
-  header["Application-Version"] = P.app.version.v;
+  header["Application-Build-Number"] = P.app.buildNumber.q;
+  header["Application-Version"] = P.app.version.q;
   header["Operating-System"] = Platform.operatingSystem;
   header["Operating-System-Version"] = Platform.operatingSystemVersion;
   header["x-api-key"] = Config.xApiKey;

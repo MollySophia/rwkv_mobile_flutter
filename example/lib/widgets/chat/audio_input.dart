@@ -176,21 +176,21 @@ class AudioInput extends ConsumerWidget {
   }
 
   FV _onTapDown(TapDownDetails details) async {
-    final receiving = P.chat.receivingTokens.v;
+    final receiving = P.chat.receivingTokens.q;
     if (receiving) return;
     Gaimon.light();
     await P.world.startRecord();
   }
 
   FV _onTapCancel() async {
-    final receiving = P.chat.receivingTokens.v;
+    final receiving = P.chat.receivingTokens.q;
     if (receiving) return;
     Gaimon.light();
     await P.world.stopRecord(isCancel: true);
   }
 
   FV _onTapUp(TapUpDetails details) async {
-    final receiving = P.chat.receivingTokens.v;
+    final receiving = P.chat.receivingTokens.q;
     if (receiving) return;
     Gaimon.medium();
     await P.world.stopRecord();

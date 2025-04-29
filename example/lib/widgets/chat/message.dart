@@ -43,7 +43,7 @@ class Message extends ConsumerWidget {
   void _onTap() async {
     qq;
 
-    if (P.rwkv.currentWorldType.v != null) {
+    if (P.rwkv.currentWorldType.q != null) {
       Focus.of(getContext()!).unfocus();
     }
 

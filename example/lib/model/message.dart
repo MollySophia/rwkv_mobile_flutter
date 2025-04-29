@@ -26,6 +26,7 @@ final class Message extends Equatable {
   final String? ttsSpeakerName;
   final String? ttsSourceAudioPath;
   final String? ttsInstruction;
+  final int? ttsCFMSteps;
 
   const Message({
     required this.id,
@@ -42,6 +43,7 @@ final class Message extends Equatable {
     this.ttsSpeakerName,
     this.ttsSourceAudioPath,
     this.ttsInstruction,
+    this.ttsCFMSteps,
   });
 
   @override
@@ -60,6 +62,7 @@ final class Message extends Equatable {
         ttsSpeakerName,
         ttsSourceAudioPath,
         ttsInstruction,
+        ttsCFMSteps,
       ];
 
   factory Message.fromJson(Map<String, dynamic> json) {
@@ -78,6 +81,7 @@ final class Message extends Equatable {
       ttsSpeakerName: json["ttsSpeakerName"] as String?,
       ttsSourceAudioPath: json["ttsSourceAudioPath"] as String?,
       ttsInstruction: json["ttsInstruction"] as String?,
+      ttsCFMSteps: json["ttsCFMSteps"] as int?,
     );
   }
 
@@ -97,6 +101,7 @@ final class Message extends Equatable {
       "ttsSpeakerName": ttsSpeakerName,
       "ttsSourceAudioPath": ttsSourceAudioPath,
       "ttsInstruction": ttsInstruction,
+      "ttsCFMSteps": ttsCFMSteps,
     };
   }
 
@@ -115,6 +120,7 @@ final class Message extends Equatable {
     String? ttsSpeakerName,
     String? ttsSourceAudioPath,
     String? ttsInstruction,
+    int? ttsCFMSteps,
   }) {
     return Message(
       id: id ?? this.id,
@@ -131,6 +137,7 @@ final class Message extends Equatable {
       ttsSpeakerName: ttsSpeakerName ?? this.ttsSpeakerName,
       ttsSourceAudioPath: ttsSourceAudioPath ?? this.ttsSourceAudioPath,
       ttsInstruction: ttsInstruction ?? this.ttsInstruction,
+      ttsCFMSteps: ttsCFMSteps ?? this.ttsCFMSteps,
     );
   }
 
@@ -152,6 +159,7 @@ Message(
   ttsSpeakerName: $ttsSpeakerName,
   ttsSourceAudioPath: $ttsSourceAudioPath,
   ttsInstruction: $ttsInstruction,
+  ttsCFMSteps: $ttsCFMSteps,
 )""";
   }
 

@@ -37,7 +37,7 @@ class _Chat {
   late final editingBotMessage = qp<bool>((ref) {
     final editingIndex = ref.watch(this.editingIndex);
     if (editingIndex == null) return false;
-    return messages.v[editingIndex].isMine == false;
+    return messages.q[editingIndex].isMine == false;
   });
 
   late final showingCharacterSelector = qs(false);
@@ -80,33 +80,33 @@ extension $Chat on _Chat {
   }
 
   FV onInputRightButtonPressed() async {
-    if (P.rwkv.currentModel.v == null) {
+    if (P.rwkv.currentModel.q == null) {
       P.fileManager.modelSelectorShown.u(true);
       return;
     }
 
-    if (!canSend.v) return;
+    if (!canSend.q) return;
 
     focusNode.unfocus();
-    final textToSend = textInInput.v.trim();
+    final textToSend = textInInput.q.trim();
     textInInput.uc();
 
-    final _editingBotMessage = editingBotMessage.v;
+    final _editingBotMessage = editingBotMessage.q;
     if (_editingBotMessage) {
-      // final currentMessages = [...messages.v];
-      final _editingIndex = editingIndex.v!;
+      // final currentMessages = [...messages.q];
+      final _editingIndex = editingIndex.q!;
       final id = HF.microseconds;
       final newBotMessage = Message(
         id: id,
         content: textToSend,
         isMine: false,
         changing: false,
-        isReasoning: messages.v[_editingIndex].isReasoning,
-        paused: messages.v[_editingIndex].paused,
+        isReasoning: messages.q[_editingIndex].isReasoning,
+        paused: messages.q[_editingIndex].paused,
       );
       // currentMessages.replaceRange(_editingIndex, _editingIndex + 1, [newBotMessage]);
       final newMessages = [
-        ...messages.v.sublist(0, _editingIndex),
+        ...messages.q.sublist(0, _editingIndex),
         newBotMessage,
       ];
       messages.u(newMessages);
@@ -133,13 +133,13 @@ extension $Chat on _Chat {
       return;
     }
 
-    if (P.app.demoType.v == DemoType.tts) {
+    if (P.app.demoType.q == DemoType.tts) {
       await P.tts.gen();
       P.chat.loadSuggestions();
       return;
     }
 
-    final textToSend = textInInput.v.trim();
+    final textToSend = textInInput.q.trim();
     if (textToSend.isEmpty) return;
     textInInput.uc();
     focusNode.unfocus();
@@ -149,20 +149,20 @@ extension $Chat on _Chat {
   FV onTapMessageList() async {
     P.chat.focusNode.unfocus();
     P.tts.dismissAllShown();
-    final _editingIndex = P.chat.editingIndex.v;
+    final _editingIndex = P.chat.editingIndex.q;
     if (_editingIndex == null) return;
     editingIndex.u(null);
     textEditingController.value = const TextEditingValue(text: "");
   }
 
   FV onTapEditInUserMessageBubble({required int index}) async {
-    final loaded = P.rwkv.loaded.v;
+    final loaded = P.rwkv.loaded.q;
     if (!loaded) {
       Alert.info("Please load model first");
       P.fileManager.modelSelectorShown.u(true);
       return;
     }
-    final content = messages.v[index].content;
+    final content = messages.q[index].content;
     textEditingController.value = TextEditingValue(text: content);
     focusNode.requestFocus();
     editingIndex.u(index);
@@ -170,13 +170,13 @@ extension $Chat on _Chat {
 
   FV onTapEditInBotMessageBubble({required int index}) async {
     // TODO: 这里也要消息分叉
-    final loaded = P.rwkv.loaded.v;
+    final loaded = P.rwkv.loaded.q;
     if (!loaded) {
       Alert.info("Please load model first");
       P.fileManager.modelSelectorShown.u(true);
       return;
     }
-    final content = messages.v[index].content;
+    final content = messages.q[index].content;
     textEditingController.value = TextEditingValue(text: content);
     focusNode.requestFocus();
     editingIndex.u(index);
@@ -184,14 +184,14 @@ extension $Chat on _Chat {
 
   FV onRegeneratePressed({required int index}) async {
     qqq("index: $index");
-    final loaded = P.rwkv.loaded.v;
+    final loaded = P.rwkv.loaded.q;
     if (!loaded) {
       Alert.info("Please load model first");
       P.fileManager.modelSelectorShown.u(true);
       return;
     }
 
-    final userMessage = messages.v[index - 1];
+    final userMessage = messages.q[index - 1];
     editingIndex.u(index);
     textInInput.uc();
     focusNode.unfocus();
@@ -243,11 +243,11 @@ extension $Chat on _Chat {
   }) async {
     qqq("message: $message");
 
-    final _editingIndex = editingIndex.v;
+    final _editingIndex = editingIndex.q;
     if (_editingIndex != null) {
       qqq("editingIndex: $_editingIndex");
-      assert(_editingIndex >= 0 && _editingIndex < messages.v.length);
-      final messagesWithoutEditing = messages.v.sublist(0, _editingIndex);
+      assert(_editingIndex >= 0 && _editingIndex < messages.q.length);
+      final messagesWithoutEditing = messages.q.sublist(0, _editingIndex);
       // 将 editingIndex, 及 editingIndex 之后的消息都删掉
       // TODO: 分叉
       messages.u(messagesWithoutEditing);
@@ -272,7 +272,7 @@ extension $Chat on _Chat {
         paused: false,
       );
       messages.ua(msg);
-      // if (Config.enableConversation) P.conversation.updateMessages([...messages.v, msg]);
+      // if (Config.enableConversation) P.conversation.updateMessages([...messages.q, msg]);
     } else {
       msg = null;
     }
@@ -294,7 +294,7 @@ extension $Chat on _Chat {
     //   }
     // }
 
-    final historyMessage = messages.v.where((e) {
+    final historyMessage = messages.q.where((e) {
       return e.type != MessageType.userImage;
     }).m((e) {
       if (!e.isReasoning) return e.content;
@@ -318,19 +318,19 @@ extension $Chat on _Chat {
       content: "",
       isMine: false,
       changing: true,
-      isReasoning: P.rwkv.usingReasoningModel.v,
+      isReasoning: P.rwkv.usingReasoningModel.q,
       paused: false,
     );
 
     messages.ua(receiveMsg);
-    P.conversation.updateMessages([...messages.v, receiveMsg]);
+    P.conversation.updateMessages([...messages.q, receiveMsg]);
   }
 
   FV onStopButtonPressed() async {
-    qqq("receiveId: ${receiveId.v}");
+    qqq("receiveId: ${receiveId.q}");
     Gaimon.light();
     await Future.delayed(1.ms);
-    final id = receiveId.v;
+    final id = receiveId.q;
     if (id == null) {
       qqw("message id is null");
       return;
@@ -339,9 +339,9 @@ extension $Chat on _Chat {
   }
 
   FV loadSuggestions() async {
-    final demoType = P.app.demoType.v;
+    final demoType = P.app.demoType.q;
     if (demoType != DemoType.chat && demoType != DemoType.tts) return;
-    final shouldUseEn = P.preference.preferredLanguage.v.resolved.locale.languageCode != "zh";
+    final shouldUseEn = P.preference.preferredLanguage.q.resolved.locale.languageCode != "zh";
 
     const head = "assets/config/tts/suggestions";
     final lang = shouldUseEn ? ".en-US" : ".zh-hans";
@@ -363,7 +363,7 @@ extension $Chat on _Chat {
       suggestions.ul(anotherSuggestions);
     }
 
-    suggestions.u(suggestions.v.shuffled.take(3).toList());
+    suggestions.u(suggestions.q.shuffled.take(3).toList());
   }
 
   FV loadConversation(Conversation? conversation) async {
@@ -388,15 +388,15 @@ extension $Chat on _Chat {
 
   void onTapSwitchAtIndex(int index, {required bool isBack, required Message msg}) {
     qq;
-    final branches = P.chat.branchesCountList.v[index];
+    final branches = P.chat.branchesCountList.q[index];
     if (branches.length <= 1) {
       qqw("No branches to switch");
       return;
     }
     final isFirstMessageSwitching = index == 0;
-    final currentChain = this.currentChain.v;
+    final currentChain = this.currentChain.q;
     final previousMessageId = isFirstMessageSwitching ? null : currentChain.ids[index - 1];
-    final history = chainSwitchingHistory.v.reversed;
+    final history = chainSwitchingHistory.q.reversed;
 
     MessageChain? targetChain;
 
@@ -422,7 +422,7 @@ extension $Chat on _Chat {
     }
 
     // 如果找不到, 则从 chains 中找
-    targetChain = chains.v.firstWhereOrNull((e) => e.ids[index - 1] == previousMessageId && e != currentChain);
+    targetChain = chains.q.firstWhereOrNull((e) => e.ids[index - 1] == previousMessageId && e != currentChain);
     if (targetChain != null) {
       qqr("Found target chain in chains");
       this.currentChain.u(targetChain);
@@ -476,8 +476,8 @@ extension _$Chat on _Chat {
   }
 
   void _syncBranchesCountList() {
-    final chains = this.chains.v;
-    final currentChain = this.currentChain.v;
+    final chains = this.chains.q;
+    final currentChain = this.currentChain.q;
     final List<List<int>> newValue = [];
     final currentMessageIds = currentChain.ids;
     for (var i = 0; i < currentMessageIds.length; i++) {
@@ -492,7 +492,7 @@ extension _$Chat on _Chat {
       final branchIds = chains.where((e) => e.ids[i - 1] == previousMessageId).map((e) => e.ids[i]).sorted((a, b) => a.compareTo(b)).toList();
       newValue.add(branchIds);
     }
-    if (listEquals(branchesCountList.v, newValue)) return;
+    if (listEquals(branchesCountList.q, newValue)) return;
     branchesCountList.u(newValue);
   }
 
@@ -523,8 +523,8 @@ extension _$Chat on _Chat {
     // 是否应该消息分叉?
     final shouldCreateNewBranch = nextLength <= previousLength;
 
-    final chains = this.chains.v;
-    final currentChain = this.currentChain.v;
+    final chains = this.chains.q;
+    final currentChain = this.currentChain.q;
 
     if (!chains.contains(currentChain)) {
       qqe("currentChain not found in chains");
@@ -553,30 +553,30 @@ extension _$Chat on _Chat {
     if (!shouldCreateNewBranch) chains.remove(currentChain);
     chains.add(newChain);
 
-    if (!setEquals(this.chains.v, chains)) this.chains.u(chains);
+    if (!setEquals(this.chains.q, chains)) this.chains.u(chains);
     this.currentChain.u(newChain);
 
-    qqq("chains count: ${this.chains.v.length}, currentChain length: ${this.currentChain.v.ids.length}");
+    qqq("chains count: ${this.chains.q.length}, currentChain length: ${this.currentChain.q.ids.length}");
   }
 
   void _onLifecycleStateChanged(AppLifecycleState? previous, AppLifecycleState next) {
     final isToBackground = next == AppLifecycleState.paused || next == AppLifecycleState.hidden;
     if (isToBackground) {
-      if (receiveId.v != null && autoPauseId.v == null && receivingTokens.v == true) {
-        autoPauseId.u(receiveId.v!);
-        _pauseMessageById(id: receiveId.v!);
+      if (receiveId.q != null && autoPauseId.q == null && receivingTokens.q == true) {
+        autoPauseId.u(receiveId.q!);
+        _pauseMessageById(id: receiveId.q!);
       }
     } else {
-      if (autoPauseId.v != null) {
-        resumeMessageById(id: autoPauseId.v!, withHaptic: false);
+      if (autoPauseId.q != null) {
+        resumeMessageById(id: autoPauseId.q!, withHaptic: false);
         autoPauseId.uc();
       }
     }
-    qqq("autoPauseId: ${autoPauseId.v}, receiveId: ${receiveId.v}, state: $next");
+    qqq("autoPauseId: ${autoPauseId.q}, receiveId: ${receiveId.q}, state: $next");
   }
 
   List<String> _history() {
-    final history = messages.v.where((msg) => msg.type == MessageType.text).m((e) {
+    final history = messages.q.where((msg) => msg.type == MessageType.text).m((e) {
       if (!e.isReasoning) return e.content;
       if (!e.isCotFormat) return e.content;
       if (!e.containsCotEndMark) return e.content;
@@ -594,7 +594,7 @@ extension _$Chat on _Chat {
 
     P.rwkv.stop();
 
-    final msg = messages.v.firstWhereOrNull((e) => e.id == id);
+    final msg = messages.q.firstWhereOrNull((e) => e.id == id);
     if (msg == null) {
       qqw("message not found");
       return;
@@ -605,7 +605,7 @@ extension _$Chat on _Chat {
       return;
     }
 
-    final newMessages = messages.v.map((e) {
+    final newMessages = messages.q.map((e) {
       if (e.id == id) {
         return e.copyWith(paused: true);
       }
@@ -619,7 +619,7 @@ extension _$Chat on _Chat {
   }
 
   FV _onNewFileReceived((File, int) event) async {
-    final demoType = P.app.demoType.v;
+    final demoType = P.app.demoType.q;
     if (demoType == DemoType.world) {
       final (file, length) = event;
       final path = file.path;
@@ -645,7 +645,7 @@ extension _$Chat on _Chat {
   }
 
   FV _loadRoles() async {
-    final demoType = P.app.demoType.v;
+    final demoType = P.app.demoType.q;
     if (demoType != DemoType.chat) return;
     final currentLocale = Intl.getCurrentLocale();
     final useEn = currentLocale.startsWith("en");
@@ -661,7 +661,7 @@ extension _$Chat on _Chat {
       messages.uc();
     });
 
-    if (!P.rwkv.loaded.v) {
+    if (!P.rwkv.loaded.q) {
       P.fileManager.modelSelectorShown.u(true);
     }
   }
@@ -669,7 +669,7 @@ extension _$Chat on _Chat {
   void _onTextEditingControllerValueChanged() {
     // qqq("_onTextEditingControllerValueChanged");
     final textInController = textEditingController.text;
-    if (textInInput.v != textInController) textInInput.u(textInController);
+    if (textInInput.q != textInController) textInInput.u(textInController);
   }
 
   void _onTextChanged(String next) {
@@ -681,7 +681,7 @@ extension _$Chat on _Chat {
   void _fullyReceived({String? callingFunction}) {
     qqq("callingFunction: $callingFunction");
 
-    final id = receiveId.v;
+    final id = receiveId.q;
 
     if (id == null) {
       qqe("receiveId is null");
@@ -690,7 +690,7 @@ extension _$Chat on _Chat {
 
     _updateMessageById(
       id: id,
-      content: receivedTokens.v,
+      content: receivedTokens.q,
       changing: false,
       callingFunction: callingFunction,
     );
@@ -709,7 +709,7 @@ extension _$Chat on _Chat {
     bool? paused,
     String? callingFunction,
   }) {
-    final currentMessages = [...messages.v];
+    final currentMessages = [...messages.q];
     bool found = false;
 
     for (var i = 0; i < currentMessages.length; i++) {
@@ -742,7 +742,7 @@ extension _$Chat on _Chat {
   }
 
   FV _onStreamEvent(LLMEvent event) async {
-    final demoType = P.app.demoType.v;
+    final demoType = P.app.demoType.q;
     // if (demoType != DemoType.chat && demoType != DemoType.world) return;
     switch (demoType) {
       case DemoType.chat:
@@ -803,7 +803,7 @@ extension _$Chat on _Chat {
 
   FV _onStreamDone() async {
     qq;
-    final demoType = P.app.demoType.v;
+    final demoType = P.app.demoType.q;
     if (demoType != DemoType.chat && demoType != DemoType.world) return;
     receivingTokens.u(false);
   }
@@ -811,7 +811,7 @@ extension _$Chat on _Chat {
   FV _onStreamError(Object error, StackTrace stackTrace) async {
     qqe("error: $error");
     if (!kDebugMode) Sentry.captureException(error, stackTrace: stackTrace);
-    final demoType = P.app.demoType.v;
+    final demoType = P.app.demoType.q;
     if (demoType != DemoType.chat && demoType != DemoType.world) return;
     receivingTokens.u(false);
   }

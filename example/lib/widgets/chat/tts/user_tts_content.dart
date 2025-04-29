@@ -42,6 +42,9 @@ class UserTtsContent extends ConsumerWidget {
               if (msg.ttsSpeakerName == null && msg.ttsInstruction != null) ...[
                 T(msg.ttsInstruction!),
               ],
+              if (msg.ttsCFMSteps != null) ...[
+                T("CFM Steps: ${msg.ttsCFMSteps!}"),
+              ],
             ],
           ),
         ),

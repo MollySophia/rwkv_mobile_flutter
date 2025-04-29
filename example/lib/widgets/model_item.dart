@@ -23,17 +23,17 @@ class ModelItem extends ConsumerWidget {
   void _onStartTap() async {
     qq;
 
-    if (P.chat.receivingTokens.v) {
+    if (P.chat.receivingTokens.q) {
       Alert.warning("Please wait for the model to generate");
       return;
     }
 
-    if (P.rwkv.loading.v) {
+    if (P.rwkv.loading.q) {
       Alert.info("Please wait for the model to load");
       return;
     }
 
-    final localFile = P.fileManager.locals(fileInfo).v;
+    final localFile = P.fileManager.locals(fileInfo).q;
     final modelPath = localFile.targetPath;
     final backend = fileInfo.backend;
 

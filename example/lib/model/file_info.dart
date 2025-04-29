@@ -135,7 +135,7 @@ class FileInfo extends Equatable {
 
   bool get socSupported {
     if (socLimitations.isEmpty) return true;
-    final soc = P.rwkv.soc.v;
+    final soc = P.rwkv.soc.q;
     return socLimitations.contains(soc);
   }
 

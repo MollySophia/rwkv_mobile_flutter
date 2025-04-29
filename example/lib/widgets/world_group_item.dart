@@ -19,29 +19,29 @@ class WorldGroupItem extends ConsumerWidget {
   const WorldGroupItem(this.worldType, {super.key});
 
   void _onDownloadAllTap() async {
-    final availableModels = P.fileManager.availableModels.v;
+    final availableModels = P.fileManager.availableModels.q;
     final fileInfos = availableModels.where((e) => e.worldType == worldType).toList();
-    final missingFileInfos = fileInfos.where((e) => P.fileManager.locals(e).v.hasFile == false).toList();
+    final missingFileInfos = fileInfos.where((e) => P.fileManager.locals(e).q.hasFile == false).toList();
     missingFileInfos.forEach((e) => P.fileManager.getFile(fileInfo: e));
   }
 
   void _onDeleteAllTap() async {
-    final availableModels = P.fileManager.availableModels.v;
+    final availableModels = P.fileManager.availableModels.q;
     final fileInfos = availableModels.where((e) => e.worldType == worldType).toList();
     fileInfos.forEach((e) => P.fileManager.deleteFile(fileInfo: e));
   }
 
   void _onStartToChatTap() async {
-    if (P.rwkv.loading.v) {
+    if (P.rwkv.loading.q) {
       Alert.warning("Please wait for the model to load...");
       return;
     }
-    final availableModels = P.fileManager.availableModels.v;
+    final availableModels = P.fileManager.availableModels.q;
     final fileInfos = availableModels.where((e) => e.worldType == worldType).toList();
     final encoderFileKey = fileInfos.firstWhere((e) => e.isEncoder);
     final modelFileKey = fileInfos.firstWhere((e) => !e.isEncoder);
-    final encoderLocalFile = P.fileManager.locals(encoderFileKey).v;
-    final modelLocalFile = P.fileManager.locals(modelFileKey).v;
+    final encoderLocalFile = P.fileManager.locals(encoderFileKey).q;
+    final modelLocalFile = P.fileManager.locals(modelFileKey).q;
 
     P.rwkv.currentWorldType.u(worldType);
 
@@ -90,7 +90,7 @@ class WorldGroupItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final availableModels = P.fileManager.availableModels.v;
+    final availableModels = P.fileManager.availableModels.q;
     final fileInfos = availableModels.where((e) => e.worldType == worldType).toList();
     if (fileInfos.isEmpty) return const SizedBox.shrink();
     final primaryColor = Theme.of(context).colorScheme.primaryContainer;

@@ -232,13 +232,13 @@ extension $RWKV on _RWKV {
 
     late final String finalPrompt;
 
-    finalPrompt = _preferChinese.v ? Config.promptCN : Config.prompt;
+    finalPrompt = _preferChinese.q ? Config.promptCN : Config.prompt;
 
     if (setPrompt) qqq("setPrompt: $finalPrompt");
 
-    send(ToRWKV.setEnableReasoning, _usingReasoningModel.v);
-    if (setPrompt) send(ToRWKV.setPrompt, _usingReasoningModel.v ? "<EOD>" : finalPrompt);
-    send(ToRWKV.setThinkingToken, _preferChinese.v ? "<think>嗯" : "<think");
+    send(ToRWKV.setEnableReasoning, _usingReasoningModel.q);
+    if (setPrompt) send(ToRWKV.setPrompt, _usingReasoningModel.q ? "<EOD>" : finalPrompt);
+    send(ToRWKV.setThinkingToken, _preferChinese.q ? "<think>嗯" : "<think");
   }
 
   FV loadWorldVision({
@@ -540,14 +540,14 @@ extension _$RWKV on _RWKV {
 
   num _intIfFixedDecimalsIsZero(Argument argument) {
     if (argument.fixedDecimals == 0) {
-      return arguments(argument).v.toInt();
+      return arguments(argument).q.toInt();
     } else {
-      return double.parse(arguments(argument).v.toStringAsFixed(argument.fixedDecimals));
+      return double.parse(arguments(argument).q.toStringAsFixed(argument.fixedDecimals));
     }
   }
 
   FV _onPageKeyChanged() async {
-    final pageKey = P.app.pageKey.v;
+    final pageKey = P.app.pageKey.q;
     switch (pageKey) {
       case PageKey.othello:
         await loadOthello();
@@ -713,7 +713,7 @@ extension _$RWKV on _RWKV {
   }
 
   FV _ensureQNNCopied() async {
-    if (Platform.isAndroid && !_qnnLibsCopied.v) {
+    if (Platform.isAndroid && !_qnnLibsCopied.q) {
       // TODO: @Molly better solution here
       // TODO: @wangce Ask Molly why there are "better" solution here
       final qnnLibList = {

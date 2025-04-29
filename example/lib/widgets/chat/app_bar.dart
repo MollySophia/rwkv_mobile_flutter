@@ -20,13 +20,20 @@ class ChatAppBar extends ConsumerWidget {
   const ChatAppBar({super.key});
 
   void _onTunePressed() async {
-    final loaded = P.rwkv.loaded.v;
+    final loaded = P.rwkv.loaded.q;
 
     if (!loaded) {
       P.fileManager.modelSelectorShown.u(false);
       P.fileManager.modelSelectorShown.u(true);
       return;
     }
+
+    final demoType = P.app.demoType.q;
+    if (demoType == DemoType.tts) {
+      await P.tts.showTTSCFMStepsSelector();
+      return;
+    }
+
     await ArgumentsPanel.show(getContext()!);
     return;
   }
@@ -128,11 +135,10 @@ class ChatAppBar extends ConsumerWidget {
                       : null,
                   icon: (Platform.isIOS || Platform.isMacOS) ? const Icon(CupertinoIcons.bubble_left_bubble_right) : const Icon(Icons.message_outlined),
                 ),
-              if (demoType != DemoType.tts)
-                IconButton(
-                  onPressed: _onTunePressed,
-                  icon: const Icon(Icons.tune),
-                ),
+              IconButton(
+                onPressed: _onTunePressed,
+                icon: const Icon(Icons.tune),
+              ),
             ],
           ),
         ),

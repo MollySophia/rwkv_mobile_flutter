@@ -13,23 +13,23 @@ class ReasonButton extends ConsumerWidget {
   const ReasonButton({super.key});
 
   void _onTap() async {
-    final loading = P.rwkv.loading.v;
+    final loading = P.rwkv.loading.q;
     if (loading) {
       Alert.info("Please wait for the model to load");
       return;
     }
-    final receiving = P.chat.receivingTokens.v;
+    final receiving = P.chat.receivingTokens.q;
     if (receiving) {
       Alert.info("Please wait for the model to finish generating");
       return;
     }
-    final currentModel = P.rwkv.currentModel.v;
+    final currentModel = P.rwkv.currentModel.q;
     if (currentModel == null) {
-      if (P.fileManager.modelSelectorShown.v) return;
+      if (P.fileManager.modelSelectorShown.q) return;
       P.fileManager.modelSelectorShown.u(true);
       return;
     }
-    final newValue = !P.rwkv.usingReasoningModel.v;
+    final newValue = !P.rwkv.usingReasoningModel.q;
     await P.rwkv.setModelConfig(usingReasoningModel: newValue);
 
     if (newValue) Alert.success(S.current.reasoning_enabled);

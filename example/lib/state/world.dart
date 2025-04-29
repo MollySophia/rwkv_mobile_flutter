@@ -78,7 +78,7 @@ extension $World on _World {
     final t = HF.microseconds;
     endTime.u(t);
 
-    final audioLengthInMilliseconds = endTime.v - startTime.v;
+    final audioLengthInMilliseconds = endTime.q - startTime.q;
 
     if (audioLengthInMilliseconds < 1000) {
       Alert.warning("Your voice is too short, please press the button longer to retrieve your voice.");
@@ -87,7 +87,7 @@ extension $World on _World {
 
     if (_audioData.isEmpty) throw Exception("😡 audioData is empty");
 
-    final cacheDir = P.app.cacheDir.v;
+    final cacheDir = P.app.cacheDir.q;
     if (cacheDir == null) throw Exception("😡 cacheDir is null");
 
     final path = "${cacheDir.path}/${HF.microseconds}.wav";
@@ -212,9 +212,9 @@ extension _$World on _World {
   void _onWorldTypeChanged() async {
     qq;
 
-    final demoType = P.app.demoType.v;
+    final demoType = P.app.demoType.q;
     final isWorldDemo = demoType == DemoType.world;
-    final currentWorldType = P.rwkv.currentWorldType.v;
+    final currentWorldType = P.rwkv.currentWorldType.q;
     final isAudioDemo = currentWorldType == WorldType.engAudioQA || currentWorldType == WorldType.chineseASR || currentWorldType == WorldType.engASR;
 
     P.chat.clearMessages();

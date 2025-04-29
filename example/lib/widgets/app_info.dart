@@ -16,8 +16,8 @@ class AppInfo extends ConsumerWidget {
   static final _shown = qs(false);
 
   static Future<void> show(BuildContext context) async {
-    qqq(_shown.v);
-    if (_shown.v) return;
+    qqq(_shown.q);
+    if (_shown.q) return;
     _shown.u(true);
     await showModalBottomSheet(
       context: context,

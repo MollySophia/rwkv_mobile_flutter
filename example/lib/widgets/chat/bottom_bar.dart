@@ -18,8 +18,8 @@ class BottomBar extends ConsumerWidget {
   void _onRightButtonPressed() async {
     qq;
 
-    final currentWorldType = P.rwkv.currentWorldType.v;
-    final imagePath = P.world.imagePath.v;
+    final currentWorldType = P.rwkv.currentWorldType.q;
+    final imagePath = P.world.imagePath.q;
 
     if (currentWorldType != null && imagePath == null) {
       await showImageSelector();

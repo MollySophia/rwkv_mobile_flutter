@@ -33,21 +33,21 @@ extension $FileManager on _FileManager {
     qq;
     late final List<JSON> json;
 
-    if (P.app.modelConfig.v.isEmpty) {
-      final demoType = P.app.demoType.v;
+    if (P.app.modelConfig.q.isEmpty) {
+      final demoType = P.app.demoType.q;
       final jsonPath = "assets/config/${demoType.name}/weights.json";
       qqq("jsonPath: $jsonPath");
       final jsonString = await rootBundle.loadString(jsonPath);
       json = HF.listJSON(jsonDecode(jsonString));
     } else {
-      json = P.app.modelConfig.v;
+      json = P.app.modelConfig.q;
     }
 
     try {
       final weights = json.map((e) => FileInfo.fromJSON(e)).toSet();
       _all.u(weights);
       availableModels.u(weights.where((e) => e.available).toSet());
-      if (P.app.demoType.v == DemoType.tts) {
+      if (P.app.demoType.q == DemoType.tts) {
         ttsCores.u(availableModels.q.where((e) => e.tags.contains("core")).toSet());
       }
     } catch (e) {
@@ -58,12 +58,12 @@ extension $FileManager on _FileManager {
   FV checkLocal() async {
     qq;
     await HF.wait(17);
-    final all = _all.v;
+    final all = _all.q;
     final _fileInfos = all.where((e) => e.available).toList();
 
     for (final fileInfo in _fileInfos) {
       // debugger();
-      final path = paths(fileInfo).v;
+      final path = paths(fileInfo).q;
       final pathExists = await File(path).exists();
       bool fileSizeVerified = false;
       if (pathExists) {
@@ -75,20 +75,20 @@ extension $FileManager on _FileManager {
         }
       }
       final state = locals(fileInfo);
-      state.u(state.v.copyWith(hasFile: fileSizeVerified));
+      state.u(state.q.copyWith(hasFile: fileSizeVerified));
     }
   }
 
   FV getFile({required FileInfo fileInfo}) async {
     final fileName = fileInfo.fileName;
-    final url = downloadSource.v.prefix + fileInfo.raw + downloadSource.v.suffix;
+    final url = downloadSource.q.prefix + fileInfo.raw + downloadSource.q.suffix;
     final state = locals(fileInfo);
     qqq("fileKey: $fileInfo\nfileName: $fileName\nurl: $url");
 
     // TODO: Handle resume after relaunch app
 
     try {
-      state.u(state.v.copyWith(downloading: true));
+      state.u(state.q.copyWith(downloading: true));
 
       final task = bd.DownloadTask(
         url: url,
@@ -101,7 +101,7 @@ extension $FileManager on _FileManager {
         httpRequestMethod: "GET",
       );
 
-      state.u(state.v.copyWith(downloadTaskId: task.taskId));
+      state.u(state.q.copyWith(downloadTaskId: task.taskId));
 
       final success = await bd.FileDownloader().enqueue(task);
 
@@ -110,13 +110,13 @@ extension $FileManager on _FileManager {
       }
     } catch (e) {
       qqe("getFile error: $e");
-      state.u(state.v.copyWith(downloading: false));
+      state.u(state.q.copyWith(downloading: false));
     }
   }
 
   FV cancelDownload({required FileInfo fileInfo}) async {
     final state = locals(fileInfo);
-    final value = state.v;
+    final value = state.q;
 
     if (!value.downloading) throw Exception("😡 Download not in progress");
 
@@ -130,7 +130,7 @@ extension $FileManager on _FileManager {
 
   FV deleteFile({required FileInfo fileInfo}) async {
     final state = locals(fileInfo);
-    final value = state.v;
+    final value = state.q;
 
     try {
       await cancelDownload(fileInfo: fileInfo);
@@ -139,7 +139,7 @@ extension $FileManager on _FileManager {
       qqe(e);
       if (!kDebugMode) Sentry.captureException(e, stackTrace: StackTrace.current);
     }
-    final path = paths(fileInfo).v;
+    final path = paths(fileInfo).q;
     await File(path).delete();
     state.u(value.copyWith(hasFile: false));
   }
@@ -160,7 +160,7 @@ extension _$FileManager on _FileManager {
     final task = _taskUpdate.task;
     final taskId = task.taskId;
 
-    final pairs = _all.v.where((e) => locals(e).v.downloading).map((e) => (e, locals(e).v));
+    final pairs = _all.q.where((e) => locals(e).q.downloading).map((e) => (e, locals(e).q));
     final pair = pairs.firstWhereOrNull((e) => e.$2.downloadTaskId == taskId);
 
     if (pair == null) {
@@ -180,10 +180,10 @@ extension _$FileManager on _FileManager {
         final expectedFileSize = progressUpdate.expectedFileSize;
         qqq("$progress $networkSpeed $timeRemaining $expectedFileSize");
         final done = progress >= 1.0;
-        state.u(state.v.copyWith(
+        state.u(state.q.copyWith(
           progress: progress,
-          networkSpeed: done ? state.v.networkSpeed : networkSpeed,
-          timeRemaining: done ? state.v.timeRemaining : timeRemaining,
+          networkSpeed: done ? state.q.networkSpeed : networkSpeed,
+          timeRemaining: done ? state.q.timeRemaining : timeRemaining,
         ));
         return;
       case bd.TaskStatusUpdate statusUpdate:
@@ -196,7 +196,7 @@ extension _$FileManager on _FileManager {
     final task = statusUpdate.task;
     final taskId = task.taskId;
 
-    final pairs = _all.v.where((e) => locals(e).v.downloading).map((e) => (e, locals(e).v));
+    final pairs = _all.q.where((e) => locals(e).q.downloading).map((e) => (e, locals(e).q));
     final pair = pairs.firstWhereOrNull((e) => e.$2.downloadTaskId == taskId);
 
     if (pair == null) {
@@ -237,7 +237,7 @@ extension _$FileManager on _FileManager {
         downloading = false;
     }
 
-    state.u(state.v.copyWith(downloading: downloading));
+    state.u(state.q.copyWith(downloading: downloading));
     checkLocal();
   }
 }

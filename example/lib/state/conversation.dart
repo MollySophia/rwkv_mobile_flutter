@@ -21,7 +21,7 @@ extension _$Conversation on _Conversation {
 
   String _getConversationPath(Conversation conversation) {
     if (!Config.enableConversation) return "";
-    final dirPath = P.app.documentsDir.v?.path;
+    final dirPath = P.app.documentsDir.q?.path;
     if (dirPath == null) return "";
     return "$dirPath/conversation_${conversation.id}.json";
   }
@@ -31,7 +31,7 @@ extension _$Conversation on _Conversation {
 extension $Conversation on _Conversation {
   FV load() async {
     if (!Config.enableConversation) return;
-    final dir = P.app.documentsDir.v;
+    final dir = P.app.documentsDir.q;
     if (dir == null) {
       qqe("Failed to load conversations: No documents directory found");
       return;
@@ -66,8 +66,8 @@ extension $Conversation on _Conversation {
   FV delete(Conversation conversation) async {
     if (!Config.enableConversation) return;
     // Remove from memory
-    conversations.u(conversations.v.where((c) => c.id != conversation.id).toList());
-    if (current.v?.id == conversation.id) {
+    conversations.u(conversations.q.where((c) => c.id != conversation.id).toList());
+    if (current.q?.id == conversation.id) {
       current.u(null);
     }
 
@@ -83,7 +83,7 @@ extension $Conversation on _Conversation {
     final now = HF.microseconds;
     if (conversation == null) {
       // Create new conversation
-      final newId = conversations.v.isEmpty ? 1 : (conversations.v.firstOrNull?.id ?? 0) + 1;
+      final newId = conversations.q.isEmpty ? 1 : (conversations.q.firstOrNull?.id ?? 0) + 1;
       conversation = Conversation(
         id: newId,
         name: message.content.substring(0, message.content.length.clamp(0, 30)) + (message.content.length > 30 ? "..." : ""),
@@ -103,8 +103,8 @@ extension $Conversation on _Conversation {
     }
 
     // Update memory
-    if (conversations.v.any((c) => c.id == conversation!.id)) {
-      final updatedConversations = conversations.v.map((c) {
+    if (conversations.q.any((c) => c.id == conversation!.id)) {
+      final updatedConversations = conversations.q.map((c) {
         if (c.id == conversation!.id) {
           return conversation;
         }
@@ -112,7 +112,7 @@ extension $Conversation on _Conversation {
       }).toList();
       conversations.u(updatedConversations);
     } else {
-      conversations.u([conversation, ...conversations.v]);
+      conversations.u([conversation, ...conversations.q]);
     }
     current.u(conversation);
 
@@ -135,7 +135,7 @@ extension $Conversation on _Conversation {
 
   FV updateMessages(List<Message> messages) async {
     if (!Config.enableConversation) return;
-    final conversation = current.v;
+    final conversation = current.q;
     if (conversation == null) return;
     final updatedConversation = Conversation(
       id: conversation.id,
@@ -146,7 +146,7 @@ extension $Conversation on _Conversation {
     );
 
     conversations.u([
-      ...conversations.v.where((c) => c.id != conversation.id),
+      ...conversations.q.where((c) => c.id != conversation.id),
       updatedConversation,
     ]);
 

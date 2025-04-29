@@ -21,12 +21,17 @@ class _TTS {
   late final intonationShown = qs(false);
 
   late final selectSourceAudioPath = qsn<String>();
+
+  late final cfmSteps = qs(_defaultCfmSteps);
+
+  static const _cfmStepsKey = "cfmSteps";
+  static const _defaultCfmSteps = 5;
 }
 
 /// Private methods
 extension _$TTS on _TTS {
   FV _init() async {
-    if (P.app.demoType.v != DemoType.tts) return;
+    if (P.app.demoType.q != DemoType.tts) return;
     qq;
     P.chat.focusNode.addListener(() {
       if (P.chat.focusNode.hasFocus) {
@@ -36,6 +41,15 @@ extension _$TTS on _TTS {
     textEditingController.addListener(_onTextEditingControllerValueChanged);
     textInInput.l(_onTextChanged);
     await getTTSSpkNames();
+
+    final prefs = await SharedPreferences.getInstance();
+    final cfmSteps = prefs.getInt(_TTS._cfmStepsKey);
+    if (cfmSteps == null) {
+      this.cfmSteps.q = _TTS._defaultCfmSteps;
+    } else {
+      this.cfmSteps.q = cfmSteps;
+    }
+
     const defaultKey = "March 7th_6";
     if (spkPairs.q.containsKey(defaultKey)) {
       selectSpkName.u(defaultKey);
@@ -58,7 +72,7 @@ extension _$TTS on _TTS {
   void _onTextEditingControllerValueChanged() {
     // qqq("_onTextEditingControllerValueChanged");
     final textInController = textEditingController.text;
-    if (textInInput.v != textInController) textInInput.u(textInController);
+    if (textInInput.q != textInController) textInInput.u(textInController);
   }
 
   FV _runTTS({
@@ -69,7 +83,7 @@ extension _$TTS on _TTS {
     required String promptSpeechText,
   }) async {
     qq;
-    if (!ttsDone.v) {
+    if (!ttsDone.q) {
       qqe("ttsDone is true");
       Alert.warning("TTS is running, please wait for it to finish");
       return;
@@ -104,8 +118,8 @@ extension $TTS on _TTS {
     Gaimon.light();
     if (focusNode.hasFocus) focusNode.unfocus();
     if (P.chat.focusNode.hasFocus) P.chat.focusNode.unfocus();
-    audioInteractorShown.u(!audioInteractorShown.v);
-    if (audioInteractorShown.v) {
+    audioInteractorShown.u(!audioInteractorShown.q);
+    if (audioInteractorShown.q) {
       intonationShown.u(false);
       spkShown.u(false);
     }
@@ -116,8 +130,8 @@ extension $TTS on _TTS {
     Gaimon.light();
     if (focusNode.hasFocus) focusNode.unfocus();
     if (P.chat.focusNode.hasFocus) P.chat.focusNode.unfocus();
-    spkShown.u(!spkShown.v);
-    if (spkShown.v) {
+    spkShown.u(!spkShown.q);
+    if (spkShown.q) {
       audioInteractorShown.u(false);
       intonationShown.u(false);
     }
@@ -128,8 +142,8 @@ extension $TTS on _TTS {
     Gaimon.light();
     if (focusNode.hasFocus) focusNode.unfocus();
     if (P.chat.focusNode.hasFocus) P.chat.focusNode.unfocus();
-    intonationShown.u(!intonationShown.v);
-    if (intonationShown.v) {
+    intonationShown.u(!intonationShown.q);
+    if (intonationShown.q) {
       audioInteractorShown.u(false);
       spkShown.u(false);
     }
@@ -172,12 +186,12 @@ extension $TTS on _TTS {
 
   FV gen() async {
     qq;
-    if (P.rwkv.currentModel.v == null) {
+    if (P.rwkv.currentModel.q == null) {
       P.fileManager.modelSelectorShown.u(true);
       return;
     }
 
-    if (!P.chat.canSend.v) return;
+    if (!P.chat.canSend.q) return;
 
     late final Message? msg;
     final id = HF.microseconds;
@@ -195,7 +209,7 @@ extension $TTS on _TTS {
 
     final instructionText = textInInput.q;
 
-    final outputWavPath = P.app.cacheDir.v!.path + "/$receiveId.output.wav";
+    final outputWavPath = P.app.cacheDir.q!.path + "/$receiveId.output.wav";
 
     if (ttsText.isEmpty) {
       Alert.warning("Please enter text to generate TTS");
@@ -223,6 +237,7 @@ extension $TTS on _TTS {
       ttsSourceAudioPath: selectSourceAudioPath,
       ttsInstruction: instructionText,
       audioUrl: selectSourceAudioPath,
+      ttsCFMSteps: cfmSteps.q,
     );
 
     P.chat.messages.ua(msg);
@@ -236,7 +251,7 @@ extension $TTS on _TTS {
       content: "",
       isMine: false,
       changing: true,
-      isReasoning: P.rwkv.usingReasoningModel.v,
+      isReasoning: P.rwkv.usingReasoningModel.q,
       paused: false,
       type: MessageType.ttsGeneration,
       audioUrl: outputWavPath,
@@ -262,7 +277,7 @@ outputWavPath: $outputWavPath""");
   }
 
   void dismissAllShown() {
-    if (P.app.demoType.v != DemoType.tts) return;
+    if (P.app.demoType.q != DemoType.tts) return;
     qq;
     audioInteractorShown.q = false;
     spkShown.q = false;
@@ -302,6 +317,37 @@ outputWavPath: $outputWavPath""");
     instruction = instruction.replaceAll("用模仿", "模仿");
     textInInput.u(instruction);
     textEditingController.text = instruction;
+  }
+
+  FV setTTSCFMSteps(int steps) async {
+    qq;
+    cfmSteps.u(steps);
+    P.rwkv.send(ToRWKV.setTTSCFMSteps, {"cfmSteps": steps});
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setInt(_TTS._cfmStepsKey, steps);
+  }
+
+  FV showTTSCFMStepsSelector() async {
+    qq;
+    final context = getContext();
+    if (context == null) return;
+    if (!context.mounted) return;
+    final currentQ = cfmSteps.q;
+    final res = await showConfirmationDialog<int?>(
+      context: context,
+      title: "TTS CFM Steps",
+      message: "范围3～10吧，越高越慢越精细",
+      initialSelectedActionKey: currentQ,
+      actions: [3, 4, 5, 6, 7, 8, 9, 10].m((value) => AlertDialogAction<int>(label: value.toString(), key: value)),
+    );
+    qqq("$res");
+
+    if (res == null) return;
+
+    cfmSteps.q = res;
+    final sp = await SharedPreferences.getInstance();
+    await sp.setInt(_TTS._cfmStepsKey, res);
+    setTTSCFMSteps(res);
   }
 }
 
