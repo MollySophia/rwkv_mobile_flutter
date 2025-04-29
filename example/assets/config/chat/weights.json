@@ -26,13 +26,13 @@
     "tags": ["reason", "cpu"]
   },
   {
-    "name": "RWKV7-G1 1.5B 80% trained",
+    "name": "RWKV7-G1 1.5B",
     "type": "gguf",
     "modelSize": 1.5,
-    "fileName": "RWKV7-G1-1.5B-80%25trained-20250419-ctx4k-Q6_K.gguf",
-    "fileSize": 1336081376,
-    "sha256": "e4fb470c4f426db136df00f9dd20679ac237706a237aa635587a5c638282d926",
-    "url": "mollysama/rwkv-mobile-models/resolve/main/gguf/RWKV7-G1-1.5B-80%25trained-20250419-ctx4k-Q6_K.gguf",
+    "fileName": "rwkv7-g1-1.5b-20250429-ctx4096-Q6_K.gguf",
+    "fileSize": 1336081344,
+    "sha256": "9493ada6457372d85fee11720e7ea1e45f97921e0011d389993d5b272c248073",
+    "url": "mollysama/rwkv-mobile-models/resolve/main/gguf/rwkv7-g1-1.5b-20250429-ctx4096-Q6_K.gguf",
     "quantization": "Q6_K",
     "platforms": ["macos", "windows", "linux", "android"],
     "backends": ["llamacpp"],
@@ -78,13 +78,13 @@
     "tags": ["reason", "gpu"]
   },
   {
-    "name": "RWKV7-G1 1.5B 80% trained",
+    "name": "RWKV7-G1 1.5B",
     "type": "st",
     "modelSize": 1.5,
-    "fileName": "RWKV7-G1-1.5B-80%25trained-20250419-ctx4k-nf4.prefab",
+    "fileName": "rwkv7-g1-1.5b-20250429-ctx4096-nf4.prefab",
     "fileSize": 1355373866,
-    "sha256": "f8732209bf08eccea29e44f87b1e3ac1e1b7730e1d33606a3e7515eea30fad5b",
-    "url": "mollysama/rwkv-mobile-models/resolve/main/WebRWKV/RWKV7-G1-1.5B-80%25trained-20250419-ctx4k-nf4.prefab",
+    "sha256": "29f21ea1dea4d41eb633c54ada4c1a05e815b7b2ee0a2bd33ddfcb9cae980d56",
+    "url": "mollysama/rwkv-mobile-models/resolve/main/WebRWKV/rwkv7-g1-1.5b-20250429-ctx4096-nf4.prefab",
     "quantization": "NF4",
     "platforms": ["ios", "macos", "web"],
     "backends": ["webRwkv"],
@@ -209,45 +209,6 @@
     "socLimitations": ["8+ Gen 1"]
   },
   {
-    "name": "RWKV7-G1 1.5B 80% trained (8 Gen 3)",
-    "type": "bin",
-    "modelSize": 1.5,
-    "fileName": "rwkv7-g1-1.5b-80%25-a16w8-8gen3_combined.bin",
-    "fileSize": 1693101408,
-    "url": "mollysama/rwkv-mobile-models/resolve/main/qnn/rwkv7-g1-1.5b-80%25-a16w8-8gen3_combined.bin",
-    "quantization": "a16w8",
-    "platforms": ["android"],
-    "backends": ["qnn"],
-    "tags": ["reason", "npu"],
-    "socLimitations": ["8 Gen 3"]
-  },
-  {
-    "name": "RWKV7-G1 1.5B 80% trained (8s Gen 3)",
-    "type": "bin",
-    "modelSize": 1.5,
-    "fileName": "rwkv7-g1-1.5b-80%25-a16w8-8sgen3_combined.bin",
-    "fileSize": 1694612752,
-    "url": "mollysama/rwkv-mobile-models/resolve/main/qnn/rwkv7-g1-1.5b-80%25-a16w8-8sgen3_combined.bin",
-    "quantization": "a16w8",
-    "platforms": ["android"],
-    "backends": ["qnn"],
-    "tags": ["reason", "npu"],
-    "socLimitations": ["8s Gen 3"]
-  },
-  {
-    "name": "RWKV v7 World 1.5B",
-    "type": "prefab",
-    "modelSize": 1.5,
-    "fileName": "RWKV-x070-World-1.5B-v3-NF4-20250127-ctx4096.prefab",
-    "fileSize": 1355373866,
-    "sha256": "1899ec1c9339b80c2fc35a3c67180c98a628f8f2fbb481961c48311dc507db28",
-    "url": "mollysama/rwkv-mobile-models/resolve/main/WebRWKV/RWKV-x070-World-1.5B-v3-NF4-20250127-ctx4096.prefab",
-    "quantization": "NF4",
-    "platforms": ["ios", "macos", "web"],
-    "backends": ["webRwkv"],
-    "tags": ["gpu"]
-  },
-  {
     "name": "RWKV v7 World 2.9B",
     "type": "prefab",
     "modelSize": 2.9,
@@ -260,19 +221,6 @@
     "backends": ["webRwkv"],
     "tags": ["gpu"],
     "isDebug": true
-  },
-  {
-    "name": "RWKV v7 World 1.5B",
-    "type": "gguf",
-    "modelSize": 1.5,
-    "fileName": "rwkv7-world-1.5B-Q5_K_M.gguf",
-    "fileSize": 1157823456,
-    "sha256": "bc688f0f80d80568ef5f0db539ee8a94621f413d29d9a5308fae87b4531018e7",
-    "url": "mollysama/rwkv-mobile-models/resolve/main/gguf/rwkv7-world-1.5B-Q5_K_M.gguf",
-    "quantization": "Q5_K_M",
-    "platforms": ["macos", "windows", "linux", "android"],
-    "backends": ["llamacpp"],
-    "tags": ["cpu"]
   },
   {
     "name": "RWKV v7 World 2.9B",
