@@ -161,20 +161,12 @@ class _TextField extends ConsumerWidget {
             hintText: hintText,
             suffixIcon: textInInput.isEmpty
                 ? null
-                : Ro(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      GD(
-                        onTap: () {
-                          P.chat.textEditingController.clear();
-                          P.chat.textInInput.uc();
-                        },
-                        child: C(
-                          padding: const EI.s(v: 6, h: 4),
-                          child: const Icon(Icons.clear),
-                        ),
-                      ),
-                    ],
+                : GD(
+                    onTap: () {
+                      P.chat.textEditingController.clear();
+                      P.chat.textInInput.uc();
+                    },
+                    child: const Icon(Icons.clear),
                   ),
           ),
         ),
