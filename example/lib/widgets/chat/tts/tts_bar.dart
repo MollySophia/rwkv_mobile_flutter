@@ -61,7 +61,7 @@ class TTSBar extends ConsumerWidget {
             const _Actions(),
             if (audioInteractorShown) const _AudioInteractor(),
             if (spkShown) const _SpkPanel(),
-            if (intonationShown) const _Intonation(),
+            if (intonationShown) const _IntonationPanel(),
             if (!audioInteractorShown && !intonationShown && !spkShown && selectSpkName == null) const _Instruction(),
           ],
         ),
@@ -149,13 +149,26 @@ class _AudioInteractor extends ConsumerWidget {
   }
 }
 
-class _Intonation extends ConsumerWidget {
-  const _Intonation();
+class _IntonationPanel extends ConsumerWidget {
+  const _IntonationPanel();
 
   void _onTap(String e) {
-    qqq(e);
-    P.chat.textEditingController.text += e;
+    qq;
+    final controller = P.chat.textEditingController;
+    final selection = controller.selection;
+    final text = controller.text;
+    if (!selection.isValid) {
+      controller.text += e;
+      controller.selection = TextSelection.collapsed(offset: controller.text.length);
+      Gaimon.light();
+      return;
+    }
+    final newText = text.replaceRange(selection.start, selection.end, e);
+    final newOffset = selection.start + e.length;
+    controller.text = newText;
+    controller.selection = TextSelection.collapsed(offset: newOffset);
     Gaimon.light();
+    return;
   }
 
   @override

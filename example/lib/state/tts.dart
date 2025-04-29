@@ -33,11 +33,8 @@ extension _$TTS on _TTS {
   FV _init() async {
     if (P.app.demoType.q != DemoType.tts) return;
     qq;
-    P.chat.focusNode.addListener(() {
-      if (P.chat.focusNode.hasFocus) {
-        dismissAllShown();
-      }
-    });
+    P.chat.focusNode.addListener(_onChatFocusNodeChanged);
+
     textEditingController.addListener(_onTextEditingControllerValueChanged);
     textInInput.l(_onTextChanged);
     await getTTSSpkNames();
@@ -61,6 +58,13 @@ extension _$TTS on _TTS {
     focusNode.addListener(() {
       hasFocus.q = focusNode.hasFocus;
     });
+  }
+
+  void _onChatFocusNodeChanged() {
+    qqq("P.chat.focusNode.hasFocus: ${P.chat.focusNode.hasFocus}");
+    if (P.chat.focusNode.hasFocus) {
+      dismissAllShown(intonationShown: intonationShown.q);
+    }
   }
 
   void _onTextChanged(String next) {
@@ -146,6 +150,14 @@ extension $TTS on _TTS {
     if (intonationShown.q) {
       audioInteractorShown.q = false;
       spkShown.q = false;
+    }
+
+    if (intonationShown.q) {
+      P.chat.focusNode.unfocus();
+      await Future.delayed(300.ms);
+      P.chat.focusNode.requestFocus();
+    } else {
+      if (P.chat.focusNode.hasFocus) P.chat.focusNode.unfocus();
     }
   }
 
@@ -276,12 +288,15 @@ outputWavPath: $outputWavPath""");
     );
   }
 
-  void dismissAllShown() {
+  void dismissAllShown({bool intonationShown = false}) {
+    qqq("intonationShown: $intonationShown");
+
     if (P.app.demoType.q != DemoType.tts) return;
-    qq;
+
     audioInteractorShown.q = false;
     spkShown.q = false;
-    intonationShown.q = false;
+    this.intonationShown.q = intonationShown;
+
     focusNode.unfocus();
     interactingInstruction.q = TTSInstruction.none;
   }

@@ -111,64 +111,65 @@ class _TextField extends ConsumerWidget {
     final borderRadius = demoType != DemoType.tts ? 12.r : 6.r;
 
     final textInInput = ref.watch(P.chat.textInInput);
+    final intonationShown = ref.watch(P.tts.intonationShown);
+    final keyboardType = intonationShown ? TextInputType.none : TextInputType.multiline;
+
+    qqq("intonationShown: $intonationShown, keyboardType: $keyboardType");
 
     return GD(
       onTap: textFieldEnabled ? null : _onTapTextFieldWhenItsDisabled,
-      child: KeyboardListener(
-        onKeyEvent: _onKeyEvent,
+      child: TextField(
         focusNode: P.chat.focusNode,
-        child: TextField(
-          enabled: textFieldEnabled,
-          controller: P.chat.textEditingController,
-          onSubmitted: P.chat.onSubmitted,
-          onChanged: _onChanged,
-          onEditingComplete: P.chat.onEditingComplete,
-          onAppPrivateCommand: _onAppPrivateCommand,
-          onTap: _onTap,
-          onTapOutside: _onTapOutside,
-          keyboardType: TextInputType.multiline,
-          enableSuggestions: true,
-          textInputAction: TextInputAction.send,
-          maxLines: 10,
-          minLines: 1,
-          decoration: InputDecoration(
-            contentPadding: const EI.o(
-              l: 12,
-              r: 12,
-              t: 4,
-              b: 4,
-            ),
-            fillColor: kW,
-            focusColor: kW,
-            hoverColor: kW,
-            iconColor: kW,
-            border: OutlineInputBorder(
-              borderRadius: borderRadius,
-              borderSide: BorderSide(color: primary.q(.33)),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: borderRadius,
-              borderSide: BorderSide(color: primary.q(.33)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: borderRadius,
-              borderSide: BorderSide(color: primary.q(.33)),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: borderRadius,
-              borderSide: BorderSide(color: primary.q(.33)),
-            ),
-            hintText: hintText,
-            suffixIcon: textInInput.isEmpty
-                ? null
-                : GD(
-                    onTap: () {
-                      P.chat.textEditingController.clear();
-                      P.chat.textInInput.uc();
-                    },
-                    child: const Icon(Icons.clear),
-                  ),
+        enabled: textFieldEnabled,
+        controller: P.chat.textEditingController,
+        onSubmitted: P.chat.onSubmitted,
+        onChanged: _onChanged,
+        onEditingComplete: P.chat.onEditingComplete,
+        onAppPrivateCommand: _onAppPrivateCommand,
+        onTap: _onTap,
+        onTapOutside: _onTapOutside,
+        keyboardType: keyboardType,
+        enableSuggestions: true,
+        textInputAction: TextInputAction.send,
+        maxLines: 10,
+        minLines: 1,
+        decoration: InputDecoration(
+          contentPadding: const EI.o(
+            l: 12,
+            r: 12,
+            t: 4,
+            b: 4,
           ),
+          fillColor: kW,
+          focusColor: kW,
+          hoverColor: kW,
+          iconColor: kW,
+          border: OutlineInputBorder(
+            borderRadius: borderRadius,
+            borderSide: BorderSide(color: primary.q(.33)),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: borderRadius,
+            borderSide: BorderSide(color: primary.q(.33)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: borderRadius,
+            borderSide: BorderSide(color: primary.q(.33)),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: borderRadius,
+            borderSide: BorderSide(color: primary.q(.33)),
+          ),
+          hintText: hintText,
+          suffixIcon: textInInput.isEmpty
+              ? null
+              : GD(
+                  onTap: () {
+                    P.chat.textEditingController.clear();
+                    P.chat.textInInput.uc();
+                  },
+                  child: const Icon(Icons.clear),
+                ),
         ),
       ),
     );

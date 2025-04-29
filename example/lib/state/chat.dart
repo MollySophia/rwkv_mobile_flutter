@@ -80,6 +80,7 @@ extension $Chat on _Chat {
   }
 
   FV onInputRightButtonPressed() async {
+    qq;
     if (P.rwkv.currentModel.q == null) {
       P.fileManager.modelSelectorShown.q = true;
       return;
@@ -147,6 +148,7 @@ extension $Chat on _Chat {
   }
 
   FV onTapMessageList() async {
+    qq;
     P.chat.focusNode.unfocus();
     P.tts.dismissAllShown();
     final _editingIndex = P.chat.editingIndex.q;
