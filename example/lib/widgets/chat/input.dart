@@ -13,7 +13,7 @@ import 'package:zone/model/demo_type.dart';
 import 'package:zone/model/world_type.dart';
 import 'package:zone/state/p.dart';
 import 'package:zone/widgets/chat/bottom_bar.dart';
-import 'package:zone/widgets/chat/tts_bar.dart';
+import 'package:zone/widgets/chat/tts/tts_bar.dart';
 
 class Input extends ConsumerWidget {
   const Input({super.key});

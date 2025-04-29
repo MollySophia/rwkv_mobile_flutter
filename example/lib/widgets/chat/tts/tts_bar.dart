@@ -34,7 +34,7 @@ class TTSBar extends ConsumerWidget {
 
     String target = "";
     if (selectSpkName != null) {
-      target = "Target: " + (P.tts.safe(selectSpkName));
+      target = S.current.imitate_target + ": " + (P.tts.safe(selectSpkName));
       target += " " + pairs[selectSpkName];
       if (kDebugMode) {
         target += " (" + selectSpkName + ")";
@@ -56,13 +56,13 @@ class TTSBar extends ConsumerWidget {
             if (selectSourceAudioPath != null)
               C(
                 padding: const EI.s(v: 4),
-                child: T("Source: " + (sourceWavName ?? ""), s: TS(c: primary, w: FW.w600)),
+                child: T(S.current.imitate_target + ": " + (sourceWavName ?? ""), s: TS(c: primary, w: FW.w600)),
               ),
             const _Actions(),
             if (audioInteractorShown) const _AudioInteractor(),
             if (spkShown) const _SpkPanel(),
             if (intonationShown) const _Intonation(),
-            if (!audioInteractorShown && !intonationShown && !spkShown) const _Instruction(),
+            if (!audioInteractorShown && !intonationShown && !spkShown && selectSpkName == null) const _Instruction(),
           ],
         ),
       ),
@@ -461,12 +461,19 @@ class _Instruction extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final hasFocus = ref.watch(P.tts.hasFocus);
     final interactingInstruction = ref.watch(P.tts.interactingInstruction);
-    return Co(
-      c: CAA.stretch,
+    final primary = Theme.of(context).colorScheme.primary;
+    final selectSpkName = ref.watch(P.tts.selectSpkName);
+    return Stack(
       children: [
-        const _TextField(),
-        if (!hasFocus) const _InstructTabs(),
-        if (!hasFocus && interactingInstruction != TTSInstruction.none) const _InstructOptions(),
+        if (selectSpkName == null)
+          Co(
+            c: CAA.stretch,
+            children: [
+              const _TextField(),
+              if (!hasFocus) const _InstructTabs(),
+              if (!hasFocus && interactingInstruction != TTSInstruction.none) const _InstructOptions(),
+            ],
+          ),
       ],
     );
   }
@@ -501,8 +508,6 @@ class _InstructTabs extends ConsumerWidget {
     final _ = ref.watch(P.tts.interactingInstruction);
 
     final isZh = Localizations.localeOf(context).languageCode == "zh";
-    qqq("isZh: $isZh");
-
     return Ro(
       children: [
         Exp(
@@ -787,6 +792,7 @@ class _PerformanceInfo extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final prefillSpeed = ref.watch(P.rwkv.prefillSpeed);
     final decodeSpeed = ref.watch(P.rwkv.decodeSpeed);
+    if (prefillSpeed == 0 && decodeSpeed == 0) return const SizedBox.shrink();
     return Co(
       c: CAA.start,
       m: MAA.center,

@@ -39,7 +39,9 @@ class UserTtsContent extends ConsumerWidget {
               if (msg.ttsSpeakerName != null) ...[
                 T("模仿 ${P.tts.safe(msg.ttsSpeakerName!)} 的声音"),
               ],
-              T(msg.ttsInstruction),
+              if (msg.ttsSpeakerName == null && msg.ttsInstruction != null) ...[
+                T(msg.ttsInstruction!),
+              ],
             ],
           ),
         ),

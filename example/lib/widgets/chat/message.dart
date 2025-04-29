@@ -17,10 +17,10 @@ import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
 import 'package:zone/widgets/chat/audio_bubble.dart';
 import 'package:zone/widgets/chat/bot_message_bottom.dart';
-import 'package:zone/widgets/chat/bot_tts_content.dart';
+import 'package:zone/widgets/chat/tts/bot_tts_content.dart';
 import 'package:zone/widgets/chat/photo_viewer_overlay.dart';
 import 'package:zone/widgets/chat/user_message_bottom.dart';
-import 'package:zone/widgets/chat/user_tts_content.dart';
+import 'package:zone/widgets/chat/tts/user_tts_content.dart';
 
 const double _kTextScaleFactor = 1.1;
 const double _kTextScaleFactorForCotContent = 1;

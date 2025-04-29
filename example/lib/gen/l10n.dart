@@ -784,6 +784,11 @@ class S {
   String get about {
     return Intl.message('About', name: 'about', desc: '', args: []);
   }
+
+  /// `Target`
+  String get imitate_target {
+    return Intl.message('Target', name: 'imitate_target', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
