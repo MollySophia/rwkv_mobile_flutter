@@ -33,12 +33,13 @@ enum ToRWKV {
   setPrompt,
   setSamplerParams,
 
+  // @Molly: Logic: Please update the doc, thx.
   /// decoder steps的api
   ///
   /// 范围3～10吧，越高越慢越精细，可以做成参数
   ///
   /// 默认值现在是5
-  /// 
+  ///
   /// args['cfmSteps'] as int
   setTTSCFMSteps,
   setThinkingToken,

@@ -347,6 +347,7 @@ outputWavPath: $outputWavPath""");
     cfmSteps.q = res;
     final sp = await SharedPreferences.getInstance();
     await sp.setInt(_TTS._cfmStepsKey, res);
+    // @Molly: Logic: 根据用户选择设置
     setTTSCFMSteps(res);
   }
 }

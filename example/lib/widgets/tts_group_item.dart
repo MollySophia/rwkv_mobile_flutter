@@ -104,6 +104,7 @@ class TTSGroupItem extends ConsumerWidget {
         hiftGeneratorPath: localHiftGeneratorFile.targetPath,
         speechTokenizerPath: localSpeechTokenizerFile.targetPath,
       );
+      // @Molly: Logic: 加载 TTS 模型后，立即设置 CFM Steps
       P.tts.setTTSCFMSteps(P.tts.cfmSteps.q);
       P.tts.getTTSSpkNames();
       Navigator.pop(getContext()!);
