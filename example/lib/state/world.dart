@@ -33,7 +33,7 @@ class _World {
 extension $World on _World {
   FV startRecord() async {
     qq;
-    recording.u(true);
+    recording.q = true;
     await stopPlaying();
     final hasPermission = await _recorder.hasPermission();
     if (!hasPermission) {
@@ -42,7 +42,7 @@ extension $World on _World {
     }
 
     final t = HF.microseconds;
-    startTime.u(t);
+    startTime.q = t;
     _currentStreamController = StreamController<Uint8List>();
     final rawAudioStream = _currentStreamController!.stream;
     final audioStream = rawAudioStream.asBroadcastStream();
@@ -64,7 +64,7 @@ extension $World on _World {
 
   FV stopRecord({bool isCancel = false}) async {
     qq;
-    recording.u(false);
+    recording.q = false;
 
     final cc = _currentStreamController;
     cc?.close();
@@ -76,7 +76,7 @@ extension $World on _World {
     }
 
     final t = HF.microseconds;
-    endTime.u(t);
+    endTime.q = t;
 
     final audioLengthInMilliseconds = endTime.q - startTime.q;
 
@@ -110,13 +110,13 @@ extension $World on _World {
     if (path.isEmpty) return;
     await stopPlaying();
     ap.Source source = ap.DeviceFileSource(path);
-    playing.u(true);
+    playing.q = true;
     Gaimon.light();
     await _audioPlayer.play(source);
   }
 
   FV stopPlaying() async {
-    playing.u(false);
+    playing.q = false;
     await _audioPlayer.stop();
   }
 }
@@ -136,7 +136,7 @@ extension _$World on _World {
     final eventType = event.eventType;
     switch (eventType) {
       case ap.AudioEventType.complete:
-        playing.u(false);
+        playing.q = false;
       case ap.AudioEventType.log:
         break;
       case ap.AudioEventType.prepared:
@@ -149,22 +149,22 @@ extension _$World on _World {
   void _onAudioInteractorShown() async {
     qq;
 
-    imagePath.u(null);
+    imagePath.q = null;
     imageHeight.uc();
     visualFloatHeight.uc();
-    startTime.u(0);
-    endTime.u(0);
-    audioDuration.u(0);
-    recording.u(false);
-    playing.u(false);
-    audioPath.u("");
+    startTime.q = 0;
+    endTime.q = 0;
+    audioDuration.q = 0;
+    recording.q = false;
+    playing.q = false;
+    audioPath.q = "";
 
     if (!P.tts.audioInteractorShown.q) {
       await _recorder.pause();
       await _recorder.stop();
       await _audioPlayer.stop();
       _currentRecorderStream = null;
-      streaming.u(false);
+      streaming.q = false;
       return;
     }
 
@@ -183,7 +183,7 @@ extension _$World on _World {
       await _recorder.stop();
       await _audioPlayer.stop();
       _currentRecorderStream = null;
-      streaming.u(false);
+      streaming.q = false;
       return;
     }
 
@@ -193,11 +193,11 @@ extension _$World on _World {
       numChannels: 1,
     );
 
-    streaming.u(true);
+    streaming.q = true;
     try {
       _currentRecorderStream = await _recorder.startStream(config);
     } catch (e) {
-      streaming.u(false);
+      streaming.q = false;
       qqe("Failed to start recording stream");
       qqq(e);
     }
@@ -218,22 +218,22 @@ extension _$World on _World {
     final isAudioDemo = currentWorldType == WorldType.engAudioQA || currentWorldType == WorldType.chineseASR || currentWorldType == WorldType.engASR;
 
     P.chat.clearMessages();
-    imagePath.u(null);
+    imagePath.q = null;
     imageHeight.uc();
     visualFloatHeight.uc();
-    startTime.u(0);
-    endTime.u(0);
-    audioDuration.u(0);
-    recording.u(false);
-    playing.u(false);
-    audioPath.u("");
+    startTime.q = 0;
+    endTime.q = 0;
+    audioDuration.q = 0;
+    recording.q = false;
+    playing.q = false;
+    audioPath.q = "";
 
     if (!isAudioDemo || !isWorldDemo) {
       await _recorder.pause();
       await _recorder.stop();
       await _audioPlayer.stop();
       _currentRecorderStream = null;
-      streaming.u(false);
+      streaming.q = false;
       return;
     }
 

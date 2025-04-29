@@ -50,7 +50,7 @@ class Message extends ConsumerWidget {
     P.chat.focusNode.unfocus();
     P.tts.dismissAllShown();
 
-    P.chat.latestClickedMessage.u(msg);
+    P.chat.latestClickedMessage.q = msg;
     final isMine = msg.isMine;
 
     if (msg.type == model.MessageType.userAudio) {

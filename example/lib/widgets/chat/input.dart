@@ -44,7 +44,7 @@ class Input extends ConsumerWidget {
       right: 0,
       child: MeasureSize(
         onChange: (size) {
-          P.chat.inputHeight.u(size.height);
+          P.chat.inputHeight.q = size.height;
         },
         child: ClipRRect(
           child: BackdropFilter(
@@ -209,7 +209,7 @@ class _TextField extends ConsumerWidget {
     final loaded = P.rwkv.loaded.q;
     if (!loaded) {
       Alert.info("Please load model first");
-      P.fileManager.modelSelectorShown.u(true);
+      P.fileManager.modelSelectorShown.q = true;
       return;
     }
   }

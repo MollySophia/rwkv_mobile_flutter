@@ -48,7 +48,7 @@ Future<void> showImageSelector() async {
   } else {
     throw Exception("Invalid result: $result");
   }
-  P.world.imagePath.u(image.path);
+  P.world.imagePath.q = image.path;
   P.chat.clearMessages();
   P.rwkv.clearStates();
   P.rwkv.setImagePath(path: image.path);

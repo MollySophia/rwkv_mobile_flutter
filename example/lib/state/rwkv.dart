@@ -76,8 +76,8 @@ extension $RWKV on _RWKV {
   }
 
   FV sendMessages(List<String> messages) async {
-    prefillSpeed.u(0);
-    decodeSpeed.u(0);
+    prefillSpeed.q = 0;
+    decodeSpeed.q = 0;
 
     qqq("message lengths: ${messages.m((e) => e.length)}");
 
@@ -110,8 +110,8 @@ extension $RWKV on _RWKV {
   }
 
   FV generate(String prompt) async {
-    prefillSpeed.u(0);
-    decodeSpeed.u(0);
+    prefillSpeed.q = 0;
+    decodeSpeed.q = 0;
     final sendPort = _sendPort;
     if (sendPort == null) {
       qqw("sendPort is null");
@@ -137,8 +137,8 @@ extension $RWKV on _RWKV {
   }
 
   FV clearStates() async {
-    prefillSpeed.u(0);
-    decodeSpeed.u(0);
+    prefillSpeed.q = 0;
+    decodeSpeed.q = 0;
     final sendPort = _sendPort;
     if (sendPort == null) {
       qqw("sendPort is null");
@@ -164,8 +164,8 @@ extension $RWKV on _RWKV {
     required Backend backend,
     required String tokenizerPath,
   }) async {
-    prefillSpeed.u(0);
-    decodeSpeed.u(0);
+    prefillSpeed.q = 0;
+    decodeSpeed.q = 0;
     _initRuntimeCompleter = Completer<void>();
     send(ToRWKV.initRuntime, {"modelPath": modelPath, "backend": backend, "tokenizerPath": tokenizerPath});
     return _initRuntimeCompleter.future;
@@ -177,9 +177,9 @@ extension $RWKV on _RWKV {
     required bool usingReasoningModel,
   }) async {
     qq;
-    _loading.u(true);
-    prefillSpeed.u(0);
-    decodeSpeed.u(0);
+    _loading.q = true;
+    prefillSpeed.q = 0;
+    decodeSpeed.q = 0;
     final tokenizerPath = await fromAssetsToTemp(Assets.config.chat.bRwkvVocabV20230424);
 
     await _ensureQNNCopied();
@@ -214,12 +214,12 @@ extension $RWKV on _RWKV {
       await Future.delayed(const Duration(milliseconds: 50));
     }
 
-    P.app.demoType.u(DemoType.chat);
+    P.app.demoType.q = DemoType.chat;
     await setModelConfig(usingReasoningModel: usingReasoningModel);
     await resetSamplerParams(usingReasoningModel: usingReasoningModel);
     await resetMaxLength(usingReasoningModel: usingReasoningModel);
     send(ToRWKV.getSamplerParams);
-    _loading.u(false);
+    _loading.q = false;
   }
 
   FV setModelConfig({
@@ -227,8 +227,8 @@ extension $RWKV on _RWKV {
     bool? preferChinese,
     bool setPrompt = true,
   }) async {
-    if (usingReasoningModel != null) _usingReasoningModel.u(usingReasoningModel);
-    if (preferChinese != null) _preferChinese.u(preferChinese);
+    if (usingReasoningModel != null) _usingReasoningModel.q = usingReasoningModel;
+    if (preferChinese != null) _preferChinese.q = preferChinese;
 
     late final String finalPrompt;
 
@@ -248,9 +248,9 @@ extension $RWKV on _RWKV {
     required bool usingReasoningModel,
   }) async {
     qq;
-    _loading.u(true);
-    prefillSpeed.u(0);
-    decodeSpeed.u(0);
+    _loading.q = true;
+    prefillSpeed.q = 0;
+    decodeSpeed.q = 0;
 
     final tokenizerPath = await fromAssetsToTemp("assets/config/tts/b_rwkv_vocab_v20230424.txt");
 
@@ -297,7 +297,7 @@ extension $RWKV on _RWKV {
     send(ToRWKV.setEosToken, "\x17");
     send(ToRWKV.setBosToken, "\x16");
     send(ToRWKV.setTokenBanned, [0]);
-    _loading.u(false);
+    _loading.q = false;
   }
 
   FV loadWorldEngAudioQA({
@@ -306,9 +306,9 @@ extension $RWKV on _RWKV {
     required Backend backend,
   }) async {
     qq;
-    _loading.u(true);
-    prefillSpeed.u(0);
-    decodeSpeed.u(0);
+    _loading.q = true;
+    prefillSpeed.q = 0;
+    decodeSpeed.q = 0;
 
     final tokenizerPath = await fromAssetsToTemp("assets/config/tts/b_rwkv_vocab_v20230424.txt");
 
@@ -349,7 +349,7 @@ extension $RWKV on _RWKV {
     send(ToRWKV.setBosToken, "\x16");
     send(ToRWKV.setTokenBanned, [0]);
     send(ToRWKV.setUserRole, "");
-    _loading.u(false);
+    _loading.q = false;
   }
 
   FV loadTTSModels({
@@ -363,9 +363,9 @@ extension $RWKV on _RWKV {
     required String speechTokenizerPath,
   }) async {
     qq;
-    _loading.u(true);
-    prefillSpeed.u(0);
-    decodeSpeed.u(0);
+    _loading.q = true;
+    prefillSpeed.q = 0;
+    decodeSpeed.q = 0;
 
     final tokenizerPath = await fromAssetsToTemp("assets/config/tts/b_rwkv_vocab_v20230424.txt");
 
@@ -422,7 +422,7 @@ extension $RWKV on _RWKV {
       "ttsTokenizerPath": ttsTokenizerPath,
     });
 
-    _loading.u(false);
+    _loading.q = false;
   }
 
   FV resetSamplerParams({required bool usingReasoningModel}) async {
@@ -444,12 +444,12 @@ extension $RWKV on _RWKV {
     double? frequencyPenalty,
     double? penaltyDecay,
   }) async {
-    if (temperature != null) arguments(Argument.temperature).u(temperature);
-    if (topK != null) arguments(Argument.topK).u(topK);
-    if (topP != null) arguments(Argument.topP).u(topP);
-    if (presencePenalty != null) arguments(Argument.presencePenalty).u(presencePenalty);
-    if (frequencyPenalty != null) arguments(Argument.frequencyPenalty).u(frequencyPenalty);
-    if (penaltyDecay != null) arguments(Argument.penaltyDecay).u(penaltyDecay);
+    if (temperature != null) arguments(Argument.temperature).q = temperature;
+    if (topK != null) arguments(Argument.topK).q = topK;
+    if (topP != null) arguments(Argument.topP).q = topP;
+    if (presencePenalty != null) arguments(Argument.presencePenalty).q = presencePenalty;
+    if (frequencyPenalty != null) arguments(Argument.frequencyPenalty).q = frequencyPenalty;
+    if (penaltyDecay != null) arguments(Argument.penaltyDecay).q = penaltyDecay;
 
     send(ToRWKV.setSamplerParams, {
       "temperature": _intIfFixedDecimalsIsZero(Argument.temperature),
@@ -470,13 +470,13 @@ extension $RWKV on _RWKV {
   }
 
   FV syncMaxLength({num? maxLength}) async {
-    if (maxLength != null) arguments(Argument.maxLength).u(maxLength.toDouble());
+    if (maxLength != null) arguments(Argument.maxLength).q = maxLength.toDouble();
     send(ToRWKV.setMaxLength, _intIfFixedDecimalsIsZero(Argument.maxLength));
   }
 
   FV loadOthello() async {
-    prefillSpeed.u(0);
-    decodeSpeed.u(0);
+    prefillSpeed.q = 0;
+    decodeSpeed.q = 0;
 
     late final String modelPath;
     late final Backend backend;
@@ -512,7 +512,7 @@ extension $RWKV on _RWKV {
       await Future.delayed(const Duration(milliseconds: 50));
     }
 
-    P.app.demoType.u(DemoType.othello);
+    P.app.demoType.q = DemoType.othello;
 
     send(ToRWKV.setMaxLength, 64000);
     send(ToRWKV.setSamplerParams, {"temperature": 1.0, "top_k": 1, "top_p": 1.0, "presence_penalty": .0, "frequency_penalty": .0, "penalty_decay": .0});
@@ -530,11 +530,11 @@ extension _$RWKV on _RWKV {
     final r = await compute((_) {
       return RWKVMobile.getSocName();
     }, []);
-    soc.u(r);
+    soc.q = r;
 
     Future.delayed(const Duration(milliseconds: 1000)).then((_) {
       final currentLocale = Intl.getCurrentLocale().toLowerCase();
-      _preferChinese.u(currentLocale.contains("zh") || currentLocale.contains("cn"));
+      _preferChinese.q = currentLocale.contains("zh") || currentLocale.contains("cn");
     });
   }
 
@@ -652,10 +652,10 @@ extension _$RWKV on _RWKV {
         type: _RWKVMessageType.streamResponse,
       ));
       if (message["prefillSpeed"] != null) {
-        prefillSpeed.u(message["prefillSpeed"]);
+        prefillSpeed.q = message["prefillSpeed"];
       }
       if (message["decodeSpeed"] != null) {
-        decodeSpeed.u(message["decodeSpeed"]);
+        decodeSpeed.q = message["decodeSpeed"];
       }
       return;
     }
@@ -684,8 +684,8 @@ extension _$RWKV on _RWKV {
     }
 
     if (message["prefillSpeed"] != null && message["decodeSpeed"] != null) {
-      prefillSpeed.u(message["prefillSpeed"]);
-      decodeSpeed.u(message["decodeSpeed"]);
+      prefillSpeed.q = message["prefillSpeed"];
+      decodeSpeed.q = message["decodeSpeed"];
       return;
     }
 
@@ -697,7 +697,7 @@ extension _$RWKV on _RWKV {
 
     if (message["ttsDone"] != null) {
       qqr("ttsDone");
-      P.tts.ttsDone.u(true);
+      P.tts.ttsDone.q = true;
       final ttsDoneWithSuccess = message["ttsDone"] == true;
       _messagesController.add(LLMEvent(
         ttsDoneWithSuccess: ttsDoneWithSuccess,
@@ -739,7 +739,7 @@ extension _$RWKV on _RWKV {
       for (final lib in qnnLibList) {
         await fromAssetsToTemp("assets/lib/qnn/$lib", targetPath: "assets/lib/$lib");
       }
-      _qnnLibsCopied.u(true);
+      _qnnLibsCopied.q = true;
     }
   }
 }

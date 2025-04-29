@@ -89,7 +89,7 @@ class AudioInput extends ConsumerWidget {
           if (currentWorldType != WorldType.chineseASR && currentWorldType != WorldType.engASR) {
             return;
           }
-          P.chat.inputHeight.u(size.height + 30);
+          P.chat.inputHeight.q = size.height + 30;
         },
         child: SB(
           height: _kWidgetSize + bottomAdjust,

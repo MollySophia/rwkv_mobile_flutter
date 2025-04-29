@@ -14,7 +14,7 @@ import 'package:zone/state/p.dart';
 class ArgumentsPanel extends ConsumerWidget {
   static Future<void> show(BuildContext context) async {
     if (P.rwkv.argumentsPanelShown.q) return;
-    P.rwkv.argumentsPanelShown.u(true);
+    P.rwkv.argumentsPanelShown.q = true;
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -30,7 +30,7 @@ class ArgumentsPanel extends ConsumerWidget {
         );
       },
     );
-    P.rwkv.argumentsPanelShown.u(false);
+    P.rwkv.argumentsPanelShown.q = false;
   }
 
   const ArgumentsPanel({super.key, required this.scrollController});
@@ -195,7 +195,7 @@ class _Value extends ConsumerWidget {
     final currentValue = P.rwkv.arguments(argument).q;
     if (currentValue == rawNewValue) return;
     if (argument.enableGaimon) Gaimon.light();
-    P.rwkv.arguments(argument).u(rawNewValue);
+    P.rwkv.arguments(argument).q = rawNewValue;
     if (argument == Argument.maxLength) {
       P.rwkv.argumentUpdatingDebouncer.call(() {
         P.rwkv.syncMaxLength();

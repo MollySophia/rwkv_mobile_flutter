@@ -51,10 +51,10 @@ class _PagerState extends ConsumerState<Pager> {
   void _onPageChanged() async {
     final rawString = (_controller!.page ?? 0).toStringAsFixed(2);
     final v = double.tryParse(rawString) ?? .0;
-    Pager.page.u(v);
-    Pager.mainPageNotIgnoring.u(v == 1);
-    Pager.childOpacity.u(v);
-    Pager.drawerOpacity.u(1 - v);
+    Pager.page.q = v;
+    Pager.mainPageNotIgnoring.q = v == 1;
+    Pager.childOpacity.q = v;
+    Pager.drawerOpacity.q = 1 - v;
   }
 
   void _onPopInvokedWithResult(bool didPop, dynamic result) async {
@@ -202,7 +202,7 @@ class _CustomPageScrollPhysics extends PageScrollPhysics {
     _latestTargetPage = targetPage;
 
     // 您可以通过全局状态管理或回调将目标页面暴露给外部
-    // 例如：Pager.targetPage.u(targetPage);
+    // 例如：Pager.targetPage.q = targetPage;
 
     // 返回原始模拟
     return super.createBallisticSimulation(position, velocity);

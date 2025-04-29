@@ -18,7 +18,7 @@ class AppInfo extends ConsumerWidget {
   static Future<void> show(BuildContext context) async {
     qqq(_shown.q);
     if (_shown.q) return;
-    _shown.u(true);
+    _shown.q = true;
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -35,7 +35,7 @@ class AppInfo extends ConsumerWidget {
         );
       },
     );
-    _shown.u(false);
+    _shown.q = false;
   }
 
   final ScrollController? scrollController;

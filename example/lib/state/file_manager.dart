@@ -45,10 +45,10 @@ extension $FileManager on _FileManager {
 
     try {
       final weights = json.map((e) => FileInfo.fromJSON(e)).toSet();
-      _all.u(weights);
-      availableModels.u(weights.where((e) => e.available).toSet());
+      _all.q = weights;
+      availableModels.q = weights.where((e) => e.available).toSet();
       if (P.app.demoType.q == DemoType.tts) {
-        ttsCores.u(availableModels.q.where((e) => e.tags.contains("core")).toSet());
+        ttsCores.q = availableModels.q.where((e) => e.tags.contains("core")).toSet();
       }
     } catch (e) {
       qqe(e);
@@ -75,7 +75,7 @@ extension $FileManager on _FileManager {
         }
       }
       final state = locals(fileInfo);
-      state.u(state.q.copyWith(hasFile: fileSizeVerified));
+      state.q = state.q.copyWith(hasFile: fileSizeVerified);
     }
   }
 
@@ -88,7 +88,7 @@ extension $FileManager on _FileManager {
     // TODO: Handle resume after relaunch app
 
     try {
-      state.u(state.q.copyWith(downloading: true));
+      state.q = state.q.copyWith(downloading: true);
 
       final task = bd.DownloadTask(
         url: url,
@@ -101,7 +101,7 @@ extension $FileManager on _FileManager {
         httpRequestMethod: "GET",
       );
 
-      state.u(state.q.copyWith(downloadTaskId: task.taskId));
+      state.q = state.q.copyWith(downloadTaskId: task.taskId);
 
       final success = await bd.FileDownloader().enqueue(task);
 
@@ -110,7 +110,7 @@ extension $FileManager on _FileManager {
       }
     } catch (e) {
       qqe("getFile error: $e");
-      state.u(state.q.copyWith(downloading: false));
+      state.q = state.q.copyWith(downloading: false);
     }
   }
 
@@ -125,7 +125,7 @@ extension $FileManager on _FileManager {
     if (taskId == null) throw Exception("😡 Task ID not found");
 
     await bd.FileDownloader().cancelTaskWithId(taskId);
-    state.u(value.copyWith(downloading: false, downloadTaskId: null));
+    state.q = value.copyWith(downloading: false, downloadTaskId: null);
   }
 
   FV deleteFile({required FileInfo fileInfo}) async {
@@ -141,7 +141,7 @@ extension $FileManager on _FileManager {
     }
     final path = paths(fileInfo).q;
     await File(path).delete();
-    state.u(value.copyWith(hasFile: false));
+    state.q = value.copyWith(hasFile: false);
   }
 }
 
@@ -180,11 +180,11 @@ extension _$FileManager on _FileManager {
         final expectedFileSize = progressUpdate.expectedFileSize;
         qqq("$progress $networkSpeed $timeRemaining $expectedFileSize");
         final done = progress >= 1.0;
-        state.u(state.q.copyWith(
+        state.q = state.q.copyWith(
           progress: progress,
           networkSpeed: done ? state.q.networkSpeed : networkSpeed,
           timeRemaining: done ? state.q.timeRemaining : timeRemaining,
-        ));
+        );
         return;
       case bd.TaskStatusUpdate statusUpdate:
         _onStatusUpdate(statusUpdate);
@@ -237,7 +237,7 @@ extension _$FileManager on _FileManager {
         downloading = false;
     }
 
-    state.u(state.q.copyWith(downloading: downloading));
+    state.q = state.q.copyWith(downloading: downloading);
     checkLocal();
   }
 }

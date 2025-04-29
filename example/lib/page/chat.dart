@@ -41,7 +41,7 @@ class _PageChatState extends State<PageChat> {
     HF.wait(1000).then((_) {
       final loaded = P.rwkv.loaded.q;
       if (!loaded) {
-        P.fileManager.modelSelectorShown.u(true);
+        P.fileManager.modelSelectorShown.q = true;
       }
     });
   }
@@ -57,7 +57,7 @@ class _PageChatState extends State<PageChat> {
   void _onShowingCharacterSelectorChanged(bool showing) async {
     if (!showing) return;
     HF.wait(1).then((_) {
-      P.chat.roles.u(P.chat.roles.q.shuffled);
+      P.chat.roles.q = P.chat.roles.q.shuffled;
     });
     await showModalBottomSheet(
       isScrollControlled: true,
@@ -74,7 +74,7 @@ class _PageChatState extends State<PageChat> {
         );
       },
     );
-    P.chat.showingCharacterSelector.u(false);
+    P.chat.showingCharacterSelector.q = false;
   }
 
   void _onShowingModelSelectorChanged(bool showing) async {
@@ -111,7 +111,7 @@ class _PageChatState extends State<PageChat> {
         );
       },
     );
-    P.fileManager.modelSelectorShown.u(false);
+    P.fileManager.modelSelectorShown.q = false;
   }
 }
 
@@ -268,7 +268,6 @@ class List extends ConsumerWidget {
     final paddingLeft = ref.watch(P.app.paddingLeft);
     final paddingRight = ref.watch(P.app.paddingRight);
     final inputHeight = ref.watch(P.chat.inputHeight);
-    final loaded = ref.watch(P.rwkv.loaded);
     final demoType = ref.watch(P.app.demoType);
 
     double top = paddingTop + kToolbarHeight + 4;

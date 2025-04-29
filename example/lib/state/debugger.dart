@@ -12,7 +12,7 @@ extension _$Debugger on _Debugger {
   FV _init() async {
     qq;
     Timer.periodic(const Duration(seconds: 1), (timer) {
-      showFrame.u(!showFrame.q);
+      showFrame.q = !showFrame.q;
     });
   }
 }

@@ -75,13 +75,13 @@ extension $Chat on _Chat {
     messages.uc();
     branchesCountList.uc();
     chainSwitchingHistory.uc();
-    currentChain.u(const MessageChain(ids: []));
-    chains.u({const MessageChain(ids: [])});
+    currentChain.q = const MessageChain(ids: []);
+    chains.q = {const MessageChain(ids: [])};
   }
 
   FV onInputRightButtonPressed() async {
     if (P.rwkv.currentModel.q == null) {
-      P.fileManager.modelSelectorShown.u(true);
+      P.fileManager.modelSelectorShown.q = true;
       return;
     }
 
@@ -109,9 +109,9 @@ extension $Chat on _Chat {
         ...messages.q.sublist(0, _editingIndex),
         newBotMessage,
       ];
-      messages.u(newMessages);
+      messages.q = newMessages;
       P.conversation.updateMessages(newMessages);
-      editingIndex.u(null);
+      editingIndex.q = null;
       Alert.success(S.current.bot_message_edited);
       return;
     }
@@ -151,7 +151,7 @@ extension $Chat on _Chat {
     P.tts.dismissAllShown();
     final _editingIndex = P.chat.editingIndex.q;
     if (_editingIndex == null) return;
-    editingIndex.u(null);
+    editingIndex.q = null;
     textEditingController.value = const TextEditingValue(text: "");
   }
 
@@ -159,13 +159,13 @@ extension $Chat on _Chat {
     final loaded = P.rwkv.loaded.q;
     if (!loaded) {
       Alert.info("Please load model first");
-      P.fileManager.modelSelectorShown.u(true);
+      P.fileManager.modelSelectorShown.q = true;
       return;
     }
     final content = messages.q[index].content;
     textEditingController.value = TextEditingValue(text: content);
     focusNode.requestFocus();
-    editingIndex.u(index);
+    editingIndex.q = index;
   }
 
   FV onTapEditInBotMessageBubble({required int index}) async {
@@ -173,13 +173,13 @@ extension $Chat on _Chat {
     final loaded = P.rwkv.loaded.q;
     if (!loaded) {
       Alert.info("Please load model first");
-      P.fileManager.modelSelectorShown.u(true);
+      P.fileManager.modelSelectorShown.q = true;
       return;
     }
     final content = messages.q[index].content;
     textEditingController.value = TextEditingValue(text: content);
     focusNode.requestFocus();
-    editingIndex.u(index);
+    editingIndex.q = index;
   }
 
   FV onRegeneratePressed({required int index}) async {
@@ -187,12 +187,12 @@ extension $Chat on _Chat {
     final loaded = P.rwkv.loaded.q;
     if (!loaded) {
       Alert.info("Please load model first");
-      P.fileManager.modelSelectorShown.u(true);
+      P.fileManager.modelSelectorShown.q = true;
       return;
     }
 
     final userMessage = messages.q[index - 1];
-    editingIndex.u(index);
+    editingIndex.q = index;
     textInInput.uc();
     focusNode.unfocus();
     if (userMessage.type == MessageType.userAudio) {
@@ -250,7 +250,7 @@ extension $Chat on _Chat {
       final messagesWithoutEditing = messages.q.sublist(0, _editingIndex);
       // 将 editingIndex, 及 editingIndex 之后的消息都删掉
       // TODO: 分叉
-      messages.u(messagesWithoutEditing);
+      messages.q = messagesWithoutEditing;
       if (Config.enableConversation) P.conversation.updateMessages(messagesWithoutEditing);
     }
 
@@ -307,12 +307,12 @@ extension $Chat on _Chat {
     final history = withHistory ? historyMessage : [message];
 
     P.rwkv.sendMessages(history);
-    editingIndex.u(null);
+    editingIndex.q = null;
 
     receivedTokens.uc();
-    receivingTokens.u(true);
+    receivingTokens.q = true;
 
-    this.receiveId.u(receiveId);
+    this.receiveId.q = receiveId;
     final receiveMsg = Message(
       id: receiveId,
       content: "",
@@ -352,7 +352,7 @@ extension $Chat on _Chat {
     final jsonString = await rootBundle.loadString(assetPath);
     final list = HF.list(jsonDecode(jsonString));
     final s = list.map((e) => e.toString()).shuffled().take(3).toList();
-    suggestions.u(s);
+    suggestions.q = s;
 
     if (kDebugMode) {
       // Merge suggestions
@@ -363,7 +363,7 @@ extension $Chat on _Chat {
       suggestions.ul(anotherSuggestions);
     }
 
-    suggestions.u(suggestions.q.shuffled.take(3).toList());
+    suggestions.q = suggestions.q.shuffled.take(3).toList();
   }
 
   FV loadConversation(Conversation? conversation) async {
@@ -371,7 +371,7 @@ extension $Chat on _Chat {
       messages.uc();
       return;
     }
-    messages.u(conversation.messages);
+    messages.q = conversation.messages;
   }
 
   FV resumeMessageById({required int id, bool withHaptic = true}) async {
@@ -406,7 +406,7 @@ extension $Chat on _Chat {
         qqw("When switching the first message, no target chain found in history");
         return;
       }
-      this.currentChain.u(targetChain);
+      this.currentChain.q = targetChain;
       chainSwitchingHistory.ua(targetChain);
       return;
     }
@@ -414,7 +414,7 @@ extension $Chat on _Chat {
     targetChain = history.firstWhereOrNull((e) => e.ids[index - 1] == previousMessageId && e != currentChain);
     if (targetChain != null) {
       qqr("Found target chain in history");
-      this.currentChain.u(targetChain);
+      this.currentChain.q = targetChain;
       chainSwitchingHistory.ua(targetChain);
       return;
     } else {
@@ -425,7 +425,7 @@ extension $Chat on _Chat {
     targetChain = chains.q.firstWhereOrNull((e) => e.ids[index - 1] == previousMessageId && e != currentChain);
     if (targetChain != null) {
       qqr("Found target chain in chains");
-      this.currentChain.u(targetChain);
+      this.currentChain.q = targetChain;
       chainSwitchingHistory.ua(targetChain);
       return;
     } else {
@@ -457,7 +457,7 @@ extension _$Chat on _Chat {
 
     P.world.audioFileStreamController.stream.listen(_onNewFileReceived);
     focusNode.addListener(_onFocusNodeChanged);
-    hasFocus.u(focusNode.hasFocus);
+    hasFocus.q = focusNode.hasFocus;
     loadSuggestions();
 
     receivingTokens.l(_onReceivingTokensChanged);
@@ -493,7 +493,7 @@ extension _$Chat on _Chat {
       newValue.add(branchIds);
     }
     if (listEquals(branchesCountList.q, newValue)) return;
-    branchesCountList.u(newValue);
+    branchesCountList.q = newValue;
   }
 
   void _syncChains(List<Message>? previous, List<Message> next) {
@@ -515,8 +515,8 @@ extension _$Chat on _Chat {
     if (previousLength == 0 && nextLength == 1) {
       final firstId = nextIds.first;
       final chain = MessageChain(ids: [firstId]);
-      this.chains.u({chain});
-      this.currentChain.u(chain);
+      this.chains.q = {chain};
+      this.currentChain.q = chain;
       return;
     }
 
@@ -553,8 +553,8 @@ extension _$Chat on _Chat {
     if (!shouldCreateNewBranch) chains.remove(currentChain);
     chains.add(newChain);
 
-    if (!setEquals(this.chains.q, chains)) this.chains.u(chains);
-    this.currentChain.u(newChain);
+    if (!setEquals(this.chains.q, chains)) this.chains.q = chains;
+    this.currentChain.q = newChain;
 
     qqq("chains count: ${this.chains.q.length}, currentChain length: ${this.currentChain.q.ids.length}");
   }
@@ -563,7 +563,7 @@ extension _$Chat on _Chat {
     final isToBackground = next == AppLifecycleState.paused || next == AppLifecycleState.hidden;
     if (isToBackground) {
       if (receiveId.q != null && autoPauseId.q == null && receivingTokens.q == true) {
-        autoPauseId.u(receiveId.q!);
+        autoPauseId.q = receiveId.q!;
         _pauseMessageById(id: receiveId.q!);
       }
     } else {
@@ -611,11 +611,11 @@ extension _$Chat on _Chat {
       }
       return e;
     }).toList();
-    messages.u(newMessages);
+    messages.q = newMessages;
   }
 
   FV _onFocusNodeChanged() async {
-    hasFocus.u(focusNode.hasFocus);
+    hasFocus.q = focusNode.hasFocus;
   }
 
   FV _onNewFileReceived((File, int) event) async {
@@ -639,7 +639,7 @@ extension _$Chat on _Chat {
       final (file, length) = event;
       final path = file.path;
       qqq("new file received: $path, length: $length");
-      P.tts.selectSourceAudioPath.u(path);
+      P.tts.selectSourceAudioPath.q = path;
       P.tts.selectSpkName.uc();
     }
   }
@@ -652,7 +652,7 @@ extension _$Chat on _Chat {
     final jsonString = await rootBundle.loadString(useEn ? Assets.config.chat.promptsEnUS : Assets.config.chat.promptsZhHans);
     final json = HF.listJSON(jsonDecode(jsonString));
     final roles = json.map((e) => Role.fromJson(e)).toList().shuffled;
-    this.roles.u(roles);
+    this.roles.q = roles;
   }
 
   void _onPageKeyChanged(PageKey pageKey) {
@@ -662,14 +662,14 @@ extension _$Chat on _Chat {
     });
 
     if (!P.rwkv.loaded.q) {
-      P.fileManager.modelSelectorShown.u(true);
+      P.fileManager.modelSelectorShown.q = true;
     }
   }
 
   void _onTextEditingControllerValueChanged() {
     // qqq("_onTextEditingControllerValueChanged");
     final textInController = textEditingController.text;
-    if (textInInput.q != textInController) textInInput.u(textInController);
+    if (textInInput.q != textInController) textInInput.q = textInController;
   }
 
   void _onTextChanged(String next) {
@@ -737,7 +737,7 @@ extension _$Chat on _Chat {
       qqe("message not found");
       if (!kDebugMode) Sentry.captureException(Exception("message not found, callingFunction: $callingFunction"), stackTrace: StackTrace.current);
     }
-    messages.u(currentMessages);
+    messages.q = currentMessages;
     P.conversation.updateMessages(currentMessages);
   }
 
@@ -769,34 +769,34 @@ extension _$Chat on _Chat {
         break;
       case _RWKVMessageType.isGenerating:
         final isGenerating = event.content == "true";
-        receivingTokens.u(isGenerating);
+        receivingTokens.q = isGenerating;
         if (!isGenerating) _fullyReceived(callingFunction: "_onStreamEvent:isGenerating");
         break;
       case _RWKVMessageType.responseBufferContent:
-        receivedTokens.u(event.content);
+        receivedTokens.q = event.content;
         break;
       case _RWKVMessageType.response:
-        receivedTokens.u(event.content);
-        receivingTokens.u(false);
+        receivedTokens.q = event.content;
+        receivingTokens.q = false;
         _fullyReceived(callingFunction: "_onStreamEvent:response");
         break;
       case _RWKVMessageType.generateStart:
-        receivedTokens.u("");
-        receivingTokens.u(true);
+        receivedTokens.q = "";
+        receivingTokens.q = true;
         break;
       case _RWKVMessageType.streamResponse:
-        receivedTokens.u(event.content);
-        receivingTokens.u(true);
+        receivedTokens.q = event.content;
+        receivingTokens.q = true;
         break;
       case _RWKVMessageType.currentPrompt:
-        receivedTokens.u(event.content);
+        receivedTokens.q = event.content;
         break;
       case _RWKVMessageType.samplerParams:
-        receivedTokens.u(event.content);
+        receivedTokens.q = event.content;
         break;
       case _RWKVMessageType.generateStop:
-        receivedTokens.u("");
-        receivingTokens.u(false);
+        receivedTokens.q = "";
+        receivingTokens.q = false;
         break;
     }
   }
@@ -805,7 +805,7 @@ extension _$Chat on _Chat {
     qq;
     final demoType = P.app.demoType.q;
     if (demoType != DemoType.chat && demoType != DemoType.world) return;
-    receivingTokens.u(false);
+    receivingTokens.q = false;
   }
 
   FV _onStreamError(Object error, StackTrace stackTrace) async {
@@ -813,6 +813,6 @@ extension _$Chat on _Chat {
     if (!kDebugMode) Sentry.captureException(error, stackTrace: stackTrace);
     final demoType = P.app.demoType.q;
     if (demoType != DemoType.chat && demoType != DemoType.world) return;
-    receivingTokens.u(false);
+    receivingTokens.q = false;
   }
 }

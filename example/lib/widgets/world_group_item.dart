@@ -43,7 +43,7 @@ class WorldGroupItem extends ConsumerWidget {
     final encoderLocalFile = P.fileManager.locals(encoderFileKey).q;
     final modelLocalFile = P.fileManager.locals(modelFileKey).q;
 
-    P.rwkv.currentWorldType.u(worldType);
+    P.rwkv.currentWorldType.q = worldType;
 
     qqq("worldType: $worldType");
 
@@ -74,11 +74,11 @@ class WorldGroupItem extends ConsumerWidget {
     } catch (e) {
       qqe("$e");
       Alert.error(e.toString());
-      P.rwkv.currentWorldType.u(null);
+      P.rwkv.currentWorldType.q = null;
       return;
     }
 
-    P.rwkv.currentModel.u(modelFileKey);
+    P.rwkv.currentModel.q = modelFileKey;
     Alert.success(S.current.you_can_now_start_to_chat_with_rwkv);
     pop();
   }

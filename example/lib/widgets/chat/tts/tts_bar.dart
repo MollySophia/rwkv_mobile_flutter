@@ -95,8 +95,8 @@ class _AudioInteractor extends ConsumerWidget {
       return;
     }
 
-    P.tts.selectSourceAudioPath.u(path);
-    P.tts.selectSpkName.u(null);
+    P.tts.selectSourceAudioPath.q = path;
+    P.tts.selectSpkName.q = null;
     Gaimon.light();
   }
 
@@ -398,8 +398,8 @@ class _SpkPanel extends ConsumerWidget {
             return GD(
                 onTap: () {
                   qq;
-                  P.tts.selectSpkName.u(k);
-                  P.tts.selectSourceAudioPath.u(null);
+                  P.tts.selectSpkName.q = k;
+                  P.tts.selectSourceAudioPath.q = null;
                   Gaimon.light();
                 },
                 child: Ro(
@@ -432,7 +432,7 @@ class _SpkPanel extends ConsumerWidget {
                     GD(
                       onTap: () async {
                         final path = await P.tts.getPrebuiltSpkAudioPathFromTemp(k);
-                        P.chat.latestClickedMessage.u(null);
+                        P.chat.latestClickedMessage.q = null;
                         await P.world.play(path: path);
                       },
                       child: C(
@@ -485,9 +485,9 @@ class _InstructTabs extends ConsumerWidget {
   void _onTap(TTSInstruction e) {
     qq;
     if (P.tts.interactingInstruction.q == e) {
-      P.tts.interactingInstruction.u(TTSInstruction.none);
+      P.tts.interactingInstruction.q = TTSInstruction.none;
     } else {
-      P.tts.interactingInstruction.u(e);
+      P.tts.interactingInstruction.q = e;
     }
 
     Gaimon.light();
@@ -583,9 +583,9 @@ class _InstructOptions extends ConsumerWidget {
     final interactingInstruction = P.tts.interactingInstruction.q;
     if (interactingInstruction == TTSInstruction.none) return;
     if (P.tts.instructions(interactingInstruction).q == index) {
-      P.tts.instructions(interactingInstruction).u(null);
+      P.tts.instructions(interactingInstruction).q = null;
     } else {
-      P.tts.instructions(interactingInstruction).u(index);
+      P.tts.instructions(interactingInstruction).q = index;
     }
     P.tts.syncInstruction();
   }
@@ -779,7 +779,7 @@ class _TextField extends ConsumerWidget {
     final loaded = P.rwkv.loaded.q;
     if (!loaded) {
       Alert.info("Please load model first");
-      P.fileManager.modelSelectorShown.u(true);
+      P.fileManager.modelSelectorShown.q = true;
       return;
     }
   }

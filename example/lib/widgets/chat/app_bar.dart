@@ -23,8 +23,8 @@ class ChatAppBar extends ConsumerWidget {
     final loaded = P.rwkv.loaded.q;
 
     if (!loaded) {
-      P.fileManager.modelSelectorShown.u(false);
-      P.fileManager.modelSelectorShown.u(true);
+      P.fileManager.modelSelectorShown.q = false;
+      P.fileManager.modelSelectorShown.q = true;
       return;
     }
 
@@ -39,8 +39,8 @@ class ChatAppBar extends ConsumerWidget {
   }
 
   void _onTitlePressed() async {
-    P.fileManager.modelSelectorShown.u(false);
-    P.fileManager.modelSelectorShown.u(true);
+    P.fileManager.modelSelectorShown.q = false;
+    P.fileManager.modelSelectorShown.q = true;
   }
 
   @override
@@ -128,8 +128,8 @@ class ChatAppBar extends ConsumerWidget {
                 IconButton(
                   onPressed: loaded
                       ? () {
-                          P.chat.showingCharacterSelector.u(false);
-                          P.chat.showingCharacterSelector.u(true);
+                          P.chat.showingCharacterSelector.q = false;
+                          P.chat.showingCharacterSelector.q = true;
                           P.chat.loadSuggestions();
                         }
                       : null,

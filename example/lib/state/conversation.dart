@@ -60,15 +60,15 @@ extension $Conversation on _Conversation {
 
     // Sort conversations by id in descending order (newest first)
     loadedConversations.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
-    conversations.u(loadedConversations);
+    conversations.q = loadedConversations;
   }
 
   FV delete(Conversation conversation) async {
     if (!Config.enableConversation) return;
     // Remove from memory
-    conversations.u(conversations.q.where((c) => c.id != conversation.id).toList());
+    conversations.q = conversations.q.where((c) => c.id != conversation.id).toList();
     if (current.q?.id == conversation.id) {
-      current.u(null);
+      current.q = null;
     }
 
     // Delete file
@@ -110,11 +110,11 @@ extension $Conversation on _Conversation {
         }
         return c;
       }).toList();
-      conversations.u(updatedConversations);
+      conversations.q = updatedConversations;
     } else {
-      conversations.u([conversation, ...conversations.q]);
+      conversations.q = [conversation, ...conversations.q];
     }
-    current.u(conversation);
+    current.q = conversation;
 
     // Save to file
     final file = File(_getConversationPath(conversation));
@@ -128,7 +128,7 @@ extension $Conversation on _Conversation {
 
   FV onTapInList(Conversation conversation) async {
     if (!Config.enableConversation) return;
-    current.u(conversation);
+    current.q = conversation;
     Pager.toggle();
     P.chat.loadConversation(conversation);
   }
@@ -145,10 +145,10 @@ extension $Conversation on _Conversation {
       updatedAt: HF.microseconds,
     );
 
-    conversations.u([
+    conversations.q = [
       ...conversations.q.where((c) => c.id != conversation.id),
       updatedConversation,
-    ]);
+    ];
 
     // Save to file
     final file = File(_getConversationPath(conversation));

@@ -44,16 +44,16 @@ extension _$Preference on _Preference {
     if (language != null) {
       final r = Language.values.firstWhereOrNull((e) => e.name == language) ?? Language.none;
       qqq("language: $language, r: $r");
-      preferredLanguage.u(r);
+      preferredLanguage.q = r;
     } else {
-      preferredLanguage.u(Language.none);
+      preferredLanguage.q = Language.none;
     }
 
     final textScaleFactor = sp.getDouble("halo_state.textScaleFactor");
     if (textScaleFactor != null) {
-      preferredTextScaleFactor.u(textScaleFactor);
+      preferredTextScaleFactor.q = textScaleFactor;
     } else {
-      preferredTextScaleFactor.u(-1);
+      preferredTextScaleFactor.q = -1;
     }
   }
 }

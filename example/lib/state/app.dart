@@ -31,7 +31,7 @@ class _App extends RawApp with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    lifecycleState.u(state);
+    lifecycleState.q = state;
   }
 }
 
@@ -72,12 +72,12 @@ extension $App on _App {
       if (build is! num) {
         throw "build is not an num, build: $build";
       }
-      latestBuild.u(build.toInt());
-      noteZh.u((config["note_zh"] as List<dynamic>).m((e) => e.toString()));
-      noteEn.u((config["note_en"] as List<dynamic>).m((e) => e.toString()));
-      modelConfig.u(HF.listJSON(config["model_config"]));
-      androidUrl.u(config["android_url"].toString());
-      iosUrl.u(config["ios_url"].toString());
+      latestBuild.q = build.toInt();
+      noteZh.q = (config["note_zh"] as List<dynamic>).m((e) => e.toString());
+      noteEn.q = (config["note_en"] as List<dynamic>).m((e) => e.toString());
+      modelConfig.q = HF.listJSON(config["model_config"]);
+      androidUrl.q = config["android_url"].toString();
+      iosUrl.q = config["ios_url"].toString();
       await P.fileManager.syncAvailableModels();
       await P.fileManager.checkLocal();
     } catch (e) {
@@ -101,7 +101,7 @@ extension _$App on _App {
     } else {
       name = "__tts__".replaceAll("__", "");
     }
-    demoType.u(DemoType.values.byName(name));
+    demoType.q = DemoType.values.byName(name);
 
     kRouter.routerDelegate.addListener(_routerListener);
 
@@ -159,7 +159,7 @@ extension _$App on _App {
 
     final message = useEn ? noteEn.join("\n") : noteZh.join("\n");
 
-    newVersionDialogShown.u(true);
+    newVersionDialogShown.q = true;
     final res = await showOkCancelAlertDialog(
       context: getContext()!,
       title: S.current.new_version_found,
@@ -167,7 +167,7 @@ extension _$App on _App {
       okLabel: S.current.update_now,
       cancelLabel: S.current.cancel_update,
     );
-    newVersionDialogShown.u(false);
+    newVersionDialogShown.q = false;
 
     if (res != OkCancelResult.ok) return;
 
@@ -196,7 +196,7 @@ extension _$App on _App {
     final pageKey = PageKey.values.byName(matchedLocation.replaceAll("/", ""));
     qqr("navigate to page: ${pageKey.toString().split(".").last}");
     HF.wait(0).then((_) {
-      _pageKey.u(pageKey);
+      _pageKey.q = pageKey;
     });
   }
 }

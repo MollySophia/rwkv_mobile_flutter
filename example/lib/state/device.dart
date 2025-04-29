@@ -15,8 +15,8 @@ extension $Device on _Device {
       qqq("$result");
       final memUsed = result[0];
       final memFree = result[1];
-      this.memUsed.u(memUsed);
-      this.memFree.u(memFree);
+      this.memUsed.q = memUsed;
+      this.memFree.q = memFree;
     } else {
       await HF.wait(200);
       final result = await compute((message) async {
@@ -28,8 +28,8 @@ extension $Device on _Device {
       qqq("result: $result");
       final memFree = result[0];
       final memTotal = result[1];
-      memUsed.u(memTotal - memFree);
-      this.memFree.u(memFree);
+      memUsed.q = memTotal - memFree;
+      this.memFree.q = memFree;
     }
   }
 }

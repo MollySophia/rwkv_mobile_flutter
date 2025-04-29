@@ -85,21 +85,21 @@ extension $Othello on _Othello {
     }
 
     if (blackTurn) {
-      if (allZeroForBlack) this.blackTurn.u(false);
+      if (allZeroForBlack) this.blackTurn.q = false;
     } else {
-      if (allZeroForWhite) this.blackTurn.u(true);
+      if (allZeroForWhite) this.blackTurn.q = true;
     }
 
     final blackAuto = blackIsAI.q && (this.blackTurn.q);
     final whiteAuto = whiteIsAI.q && !(this.blackTurn.q);
 
     if (blackAuto || whiteAuto) {
-      receivingTokens.u(true);
+      receivingTokens.q = true;
 
       final prompt = _generatePrompt();
 
       P.rwkv.generate(prompt);
-      receivingTokens.u(false);
+      receivingTokens.q = false;
     }
   }
 }
@@ -150,7 +150,7 @@ extension _$ on _Othello {
   }
 
   void _onPlacingEventReceived((int row, int col) event) async {
-    latestPlacing.u(event);
+    latestPlacing.q = event;
 
     final isBlackTurn = blackTurn.q;
     final blackIsAI = this.blackIsAI.q;
@@ -185,26 +185,26 @@ extension _$ on _Othello {
     final availableWidth = screenWidth - paddingLeft - paddingRight;
     final availableHeight = screenHeight - paddingTop - paddingBottom;
     final usePortrait = availableWidth < availableHeight;
-    this.usePortrait.u(usePortrait);
+    this.usePortrait.q = usePortrait;
 
     final ratio = availableWidth / availableHeight;
 
-    playerShouldAtSameColumnWithSettings.u(ratio > .7);
+    playerShouldAtSameColumnWithSettings.q = ratio > .7;
     final settingsAndPlayersShouldAtDifferentColumnIsHorizontal = ratio > 1.4;
-    this.settingsAndPlayersShouldAtDifferentColumnIsHorizontal.u(settingsAndPlayersShouldAtDifferentColumnIsHorizontal);
+    this.settingsAndPlayersShouldAtDifferentColumnIsHorizontal.q = settingsAndPlayersShouldAtDifferentColumnIsHorizontal;
   }
 
   void _clear() {
-    eatCountMatrixForBlack.u(List.generate(8, (_) => List.filled(8, 0)));
-    eatCountMatrixForWhite.u(List.generate(8, (_) => List.filled(8, 0)));
+    eatCountMatrixForBlack.q = List.generate(8, (_) => List.filled(8, 0));
+    eatCountMatrixForWhite.q = List.generate(8, (_) => List.filled(8, 0));
     final state = List.generate(8, (_) => List.filled(8, CellType.empty));
 
     state[3][3] = CellType.white;
     state[3][4] = CellType.black;
     state[4][3] = CellType.black;
     state[4][4] = CellType.white;
-    blackTurn.u(_Othello._blackFirst);
-    this.state.u([...state]);
+    blackTurn.q = _Othello._blackFirst;
+    this.state.q = [...state];
 
     switch (Args.othelloTestCase) {
       case 0:
@@ -217,13 +217,13 @@ extension _$ on _Othello {
         break;
     }
 
-    blackIsAI.u(false);
-    whiteIsAI.u(true);
-    receivingTokens.u(false);
-    received.u("");
-    searchDepth.u(1);
-    searchBreadth.u(1);
-    latestPlacing.u(null);
+    blackIsAI.q = false;
+    whiteIsAI.q = true;
+    receivingTokens.q = false;
+    received.q = "";
+    searchDepth.q = 1;
+    searchBreadth.q = 1;
+    latestPlacing.q = null;
   }
 
   FV _onStreamEvent({required LLMEvent event}) async {
@@ -244,32 +244,32 @@ extension _$ on _Othello {
         break;
       case _RWKVMessageType.isGenerating:
         final isGenerating = event.content == "true";
-        receivingTokens.u(isGenerating);
+        receivingTokens.q = isGenerating;
         break;
       case _RWKVMessageType.responseBufferContent:
-        received.u(event.content);
+        received.q = event.content;
         break;
       case _RWKVMessageType.response:
-        received.u(event.content);
+        received.q = event.content;
         break;
       case _RWKVMessageType.generateStart:
-        receivingTokens.u(true);
-        received.u("");
+        receivingTokens.q = true;
+        received.q = "";
         break;
       case _RWKVMessageType.streamResponse:
-        received.u(event.content);
+        received.q = event.content;
         final token = event.token;
         _onStreamingToken(token);
         break;
       case _RWKVMessageType.currentPrompt:
-        received.u(event.content);
-        receivingTokens.u(false);
+        received.q = event.content;
+        receivingTokens.q = false;
         break;
       case _RWKVMessageType.samplerParams:
-        received.u(event.content);
+        received.q = event.content;
         break;
       case _RWKVMessageType.generateStop:
-        receivingTokens.u(false);
+        receivingTokens.q = false;
         break;
     }
 
@@ -336,7 +336,7 @@ extension _$ on _Othello {
     final pageKey = P.app.pageKey.q;
     if (pageKey != PageKey.othello) return;
     qqq("_onStreamDone");
-    receivingTokens.u(false);
+    receivingTokens.q = false;
   }
 
   FV _onStreamError({
@@ -348,7 +348,7 @@ extension _$ on _Othello {
     qqq("_onStreamError");
     qqe("error: $error");
     if (!kDebugMode) Sentry.captureException(error, stackTrace: stackTrace);
-    receivingTokens.u(false);
+    receivingTokens.q = false;
   }
 
   void _onBlackTurnChanged() {
@@ -407,8 +407,8 @@ extension _$ on _Othello {
       }
     }
 
-    this.eatCountMatrixForBlack.u(eatCountMatrixForBlack);
-    this.eatCountMatrixForWhite.u(eatCountMatrixForWhite);
+    this.eatCountMatrixForBlack.q = eatCountMatrixForBlack;
+    this.eatCountMatrixForWhite.q = eatCountMatrixForWhite;
   }
 
   /// top-left, top, top-right, left, right, bottom-left, bottom, bottom-right
@@ -711,8 +711,8 @@ extension _$ on _Othello {
 
     if (!dryRun) {
       final newState = state.map((e) => e.map((f) => f).toList()).toList();
-      this.state.u(newState);
-      blackTurn.u(!forBlack);
+      this.state.q = newState;
+      blackTurn.q = !forBlack;
     }
 
     return result;
@@ -758,8 +758,8 @@ MAX_DEPTH-$searchDepth
     state[3][4] = CellType.black;
     state[4][3] = CellType.black;
     state[4][4] = CellType.white;
-    blackTurn.u(_Othello._blackFirst);
-    this.state.u([...state]);
+    blackTurn.q = _Othello._blackFirst;
+    this.state.q = [...state];
   }
 
   void _testCase1() {
@@ -806,8 +806,8 @@ MAX_DEPTH-$searchDepth
     // state[5][2] = CellType.white;
     // state[5][4] = CellType.black;
 
-    blackTurn.u(true);
-    this.state.u([...state]);
+    blackTurn.q = true;
+    this.state.q = [...state];
   }
 }
 

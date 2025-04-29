@@ -88,7 +88,7 @@ class TTSGroupItem extends ConsumerWidget {
     final _ = P.fileManager.locals(flowDecoderEstimatorParamFileKey).q;
     final localHiftGeneratorFile = P.fileManager.locals(hiftGeneratorFileKey).q;
     final localSpeechTokenizerFile = P.fileManager.locals(speechTokenizerFileKey).q;
-    P.rwkv.currentGroupInfo.u(GroupInfo(displayName: fileInfo.name));
+    P.rwkv.currentGroupInfo.q = GroupInfo(displayName: fileInfo.name);
 
     P.rwkv.clearStates();
     P.chat.clearMessages();
@@ -111,12 +111,12 @@ class TTSGroupItem extends ConsumerWidget {
     } catch (e) {
       qqe("$e");
       Alert.error(e.toString());
-      P.rwkv.currentGroupInfo.u(null);
+      P.rwkv.currentGroupInfo.q = null;
       return;
     }
 
-    P.rwkv.currentGroupInfo.u(GroupInfo(displayName: fileInfo.name));
-    P.rwkv.currentModel.u(fileInfo);
+    P.rwkv.currentGroupInfo.q = GroupInfo(displayName: fileInfo.name);
+    P.rwkv.currentModel.q = fileInfo;
     Alert.success(S.current.you_can_now_start_to_chat_with_rwkv);
     pop();
   }

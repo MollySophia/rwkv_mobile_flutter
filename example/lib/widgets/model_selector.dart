@@ -105,7 +105,7 @@ class _DownloadSource extends ConsumerWidget {
       children: FileDownloadSource.values.where((e) => kDebugMode ? true : !e.isDebug).map((e) {
         return GD(
           onTap: () {
-            P.fileManager.downloadSource.u(e);
+            P.fileManager.downloadSource.q = e;
           },
           child: C(
             decoration: BD(

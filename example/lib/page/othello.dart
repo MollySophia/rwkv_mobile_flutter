@@ -293,7 +293,7 @@ class _Players extends ConsumerWidget {
                     value: false,
                     groupValue: blackIsAI,
                     onChanged: (value) {
-                      P.othello.blackIsAI.u(false);
+                      P.othello.blackIsAI.q = false;
                     },
                   ),
                   const T("Human"),
@@ -306,7 +306,7 @@ class _Players extends ConsumerWidget {
                     value: true,
                     groupValue: blackIsAI,
                     onChanged: (value) {
-                      P.othello.blackIsAI.u(true);
+                      P.othello.blackIsAI.q = true;
                     },
                   ),
                   const T("AI"),
@@ -334,7 +334,7 @@ class _Players extends ConsumerWidget {
                     value: false,
                     groupValue: whiteIsAI,
                     onChanged: (value) {
-                      P.othello.whiteIsAI.u(false);
+                      P.othello.whiteIsAI.q = false;
                     },
                   ),
                   const T("Human"),
@@ -347,7 +347,7 @@ class _Players extends ConsumerWidget {
                     value: true,
                     groupValue: whiteIsAI,
                     onChanged: (value) {
-                      P.othello.whiteIsAI.u(true);
+                      P.othello.whiteIsAI.q = true;
                     },
                   ),
                   const T("AI"),

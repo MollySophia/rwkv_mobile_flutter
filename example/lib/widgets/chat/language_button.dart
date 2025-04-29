@@ -26,7 +26,7 @@ class LanguageButton extends ConsumerWidget {
     final currentModel = P.rwkv.currentModel.q;
     if (currentModel == null) {
       if (P.fileManager.modelSelectorShown.q) return;
-      P.fileManager.modelSelectorShown.u(true);
+      P.fileManager.modelSelectorShown.q = true;
       return;
     }
     final newValue = !P.rwkv.preferChinese.q;

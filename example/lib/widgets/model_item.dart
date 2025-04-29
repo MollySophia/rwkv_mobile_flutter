@@ -50,7 +50,7 @@ class ModelItem extends ConsumerWidget {
       return;
     }
 
-    P.rwkv.currentModel.u(fileInfo);
+    P.rwkv.currentModel.q = fileInfo;
     Alert.success(S.current.you_can_now_start_to_chat_with_rwkv);
     pop();
   }

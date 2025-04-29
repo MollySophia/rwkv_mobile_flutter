@@ -52,14 +52,14 @@ extension _$TTS on _TTS {
 
     const defaultKey = "March 7th_6";
     if (spkPairs.q.containsKey(defaultKey)) {
-      selectSpkName.u(defaultKey);
+      selectSpkName.q = defaultKey;
     } else {
-      selectSpkName.u(spkPairs.q.keys.random);
+      selectSpkName.q = spkPairs.q.keys.random;
     }
-    selectSourceAudioPath.u(null);
+    selectSourceAudioPath.q = null;
 
     focusNode.addListener(() {
-      hasFocus.u(focusNode.hasFocus);
+      hasFocus.q = focusNode.hasFocus;
     });
   }
 
@@ -72,7 +72,7 @@ extension _$TTS on _TTS {
   void _onTextEditingControllerValueChanged() {
     // qqq("_onTextEditingControllerValueChanged");
     final textInController = textEditingController.text;
-    if (textInInput.q != textInController) textInInput.u(textInController);
+    if (textInInput.q != textInController) textInInput.q = textInController;
   }
 
   FV _runTTS({
@@ -88,7 +88,7 @@ extension _$TTS on _TTS {
       Alert.warning("TTS is running, please wait for it to finish");
       return;
     }
-    ttsDone.u(false);
+    ttsDone.q = false;
     P.rwkv.send(ToRWKV.runTTS, {
       "ttsText": ttsText,
       "instructionText": instructionText,
@@ -106,7 +106,7 @@ extension $TTS on _TTS {
     try {
       final data = await rootBundle.loadString("assets/lib/tts/pairs.json");
       final spkPairs = await compute(_parseSpkNames, data);
-      this.spkPairs.u(spkPairs);
+      this.spkPairs.q = spkPairs;
     } catch (e) {
       qqe("$e");
       Sentry.captureException(e, stackTrace: StackTrace.current);
@@ -118,10 +118,10 @@ extension $TTS on _TTS {
     Gaimon.light();
     if (focusNode.hasFocus) focusNode.unfocus();
     if (P.chat.focusNode.hasFocus) P.chat.focusNode.unfocus();
-    audioInteractorShown.u(!audioInteractorShown.q);
+    audioInteractorShown.q = !audioInteractorShown.q;
     if (audioInteractorShown.q) {
-      intonationShown.u(false);
-      spkShown.u(false);
+      intonationShown.q = false;
+      spkShown.q = false;
     }
   }
 
@@ -130,10 +130,10 @@ extension $TTS on _TTS {
     Gaimon.light();
     if (focusNode.hasFocus) focusNode.unfocus();
     if (P.chat.focusNode.hasFocus) P.chat.focusNode.unfocus();
-    spkShown.u(!spkShown.q);
+    spkShown.q = !spkShown.q;
     if (spkShown.q) {
-      audioInteractorShown.u(false);
-      intonationShown.u(false);
+      audioInteractorShown.q = false;
+      intonationShown.q = false;
     }
   }
 
@@ -142,10 +142,10 @@ extension $TTS on _TTS {
     Gaimon.light();
     if (focusNode.hasFocus) focusNode.unfocus();
     if (P.chat.focusNode.hasFocus) P.chat.focusNode.unfocus();
-    intonationShown.u(!intonationShown.q);
+    intonationShown.q = !intonationShown.q;
     if (intonationShown.q) {
-      audioInteractorShown.u(false);
-      spkShown.u(false);
+      audioInteractorShown.q = false;
+      spkShown.q = false;
     }
   }
 
@@ -187,7 +187,7 @@ extension $TTS on _TTS {
   FV gen() async {
     qq;
     if (P.rwkv.currentModel.q == null) {
-      P.fileManager.modelSelectorShown.u(true);
+      P.fileManager.modelSelectorShown.q = true;
       return;
     }
 
@@ -219,9 +219,9 @@ extension $TTS on _TTS {
     P.chat.textEditingController.text = "";
     P.chat.focusNode.unfocus();
 
-    audioInteractorShown.u(false);
-    intonationShown.u(false);
-    spkShown.u(false);
+    audioInteractorShown.q = false;
+    intonationShown.q = false;
+    spkShown.q = false;
 
     P.chat.textEditingController.clear();
 
@@ -257,7 +257,7 @@ extension $TTS on _TTS {
       audioUrl: outputWavPath,
     );
 
-    P.chat.receiveId.u(receiveId);
+    P.chat.receiveId.q = receiveId;
     P.chat.messages.ua(receiveMsg);
 
     qqq("""
@@ -288,7 +288,7 @@ outputWavPath: $outputWavPath""");
 
   void onRefreshButtonPressed() {
     qq;
-    textInInput.u(defaultTextInInput);
+    textInInput.q = defaultTextInInput;
     TTSInstruction.values.forEach((action) {
       instructions(action).q = null;
     });
@@ -296,7 +296,7 @@ outputWavPath: $outputWavPath""");
 
   void onClearButtonPressed() {
     qq;
-    textInInput.u("");
+    textInInput.q = "";
     TTSInstruction.values.forEach((action) {
       instructions(action).q = null;
     });
@@ -315,13 +315,13 @@ outputWavPath: $outputWavPath""");
     instruction = instruction.replaceAll("用用", "用");
     instruction = instruction.replaceAll("用以", "以");
     instruction = instruction.replaceAll("用模仿", "模仿");
-    textInInput.u(instruction);
+    textInInput.q = instruction;
     textEditingController.text = instruction;
   }
 
   FV setTTSCFMSteps(int steps) async {
     qq;
-    cfmSteps.u(steps);
+    cfmSteps.q = steps;
     P.rwkv.send(ToRWKV.setTTSCFMSteps, {"cfmSteps": steps});
     final prefs = await SharedPreferences.getInstance();
     prefs.setInt(_TTS._cfmStepsKey, steps);

@@ -124,7 +124,7 @@ class UserMessageBottom extends ConsumerWidget {
   }
 
   void _onTTSPlayPressed() {
-    P.chat.latestClickedMessage.u(msg);
+    P.chat.latestClickedMessage.q = msg;
     P.world.play(path: msg.audioUrl!);
   }
 
