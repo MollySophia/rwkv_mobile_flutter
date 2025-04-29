@@ -7,13 +7,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/config.dart';
+import 'package:zone/func/is_chinese.dart';
 import 'package:zone/model/demo_type.dart';
 import 'package:zone/model/world_type.dart';
 import 'package:zone/state/p.dart';
 
-const _height = 46.0;
-
 class Suggestions extends ConsumerWidget {
+  static const defaultHeight = 46.0;
+
   const Suggestions({super.key});
 
   void _onSuggestionTap(String suggestion) {
@@ -25,7 +26,22 @@ class Suggestions extends ConsumerWidget {
       case DemoType.world:
         P.chat.send(suggestion);
       case DemoType.tts:
-        P.chat.textEditingController.text = suggestion;
+        final current = P.chat.textEditingController.text;
+        if (current.isEmpty) {
+          P.chat.textEditingController.text = suggestion;
+        } else {
+          final last = current.characters.last;
+          final lastIsChinese = containsChineseCharacters(last);
+          final lastIsEnglish = isEnglish(last);
+          P.chat.loadSuggestions();
+          if (lastIsChinese) {
+            P.chat.textEditingController.text = "$current。$suggestion";
+          } else if (lastIsEnglish) {
+            P.chat.textEditingController.text = "$current. $suggestion";
+          } else {
+            P.chat.textEditingController.text = "$current$suggestion";
+          }
+        }
     }
   }
 
@@ -72,10 +88,10 @@ class Suggestions extends ConsumerWidget {
       case DemoType.sudoku:
       case DemoType.tts:
         suggestions = ref.watch(P.chat.suggestions);
-        show = true && !canSend && messages.isEmpty;
+        show = true;
     }
 
-    double bottom = show ? paddingBottom + 114 : -paddingBottom - _height;
+    double bottom = show ? paddingBottom + 114 : -paddingBottom - defaultHeight;
 
     if (show && demoType == DemoType.tts) {
       bottom += inputHeight - 114 - paddingBottom;
@@ -85,7 +101,7 @@ class Suggestions extends ConsumerWidget {
       bottom: bottom,
       left: 0,
       right: 0,
-      height: _height,
+      height: defaultHeight,
       child: ListView(
         padding: const EI.o(l: 8),
         scrollDirection: Axis.horizontal,

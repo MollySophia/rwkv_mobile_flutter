@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/args.dart';
 import 'package:zone/gen/l10n.dart';
+import 'package:zone/model/demo_type.dart';
 import 'package:zone/model/message.dart' as model;
 import 'package:zone/model/role.dart';
 import 'package:zone/model/world_type.dart';
@@ -268,9 +269,11 @@ class List extends ConsumerWidget {
     final paddingRight = ref.watch(P.app.paddingRight);
     final inputHeight = ref.watch(P.chat.inputHeight);
     final loaded = ref.watch(P.rwkv.loaded);
+    final demoType = ref.watch(P.app.demoType);
 
     double top = paddingTop + kToolbarHeight + 4;
     double bottom = inputHeight + 12;
+    double scrollBarBottom = inputHeight + 4;
 
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
 
@@ -279,10 +282,6 @@ class List extends ConsumerWidget {
         break;
       case WorldType.engVisualQA:
       case WorldType.engVisualQAReason:
-        // final visualFloatHeight = ref.watch(P.world.visualFloatHeight);
-        // if (visualFloatHeight != null) {
-        //   top += visualFloatHeight;
-        // }
         if (messages.length == 1 && messages.first.type == model.MessageType.userImage) {
           bottom += 46;
         }
@@ -297,6 +296,18 @@ class List extends ConsumerWidget {
         break;
     }
 
+    switch (demoType) {
+      case DemoType.chat:
+      case DemoType.fifthteenPuzzle:
+      case DemoType.othello:
+      case DemoType.sudoku:
+      case DemoType.world:
+        break;
+      case DemoType.tts:
+        bottom += Suggestions.defaultHeight;
+        scrollBarBottom += Suggestions.defaultHeight;
+    }
+
     return Positioned.fill(
       child: GD(
         onTap: P.chat.onTapMessageList,
@@ -306,7 +317,7 @@ class List extends ConsumerWidget {
           thumbColor: kB.q(.4),
           padding: EI.o(
             r: 4,
-            b: inputHeight + 4,
+            b: scrollBarBottom,
             t: top,
           ),
           controller: P.chat.scrollController,

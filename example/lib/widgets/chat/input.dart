@@ -22,9 +22,7 @@ class Input extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final paddingBottom = ref.watch(P.app.quantizedIntPaddingBottom);
     final primary = Theme.of(context).colorScheme.primary;
-
     final worldType = ref.watch(P.rwkv.currentWorldType);
-
     final demoType = ref.watch(P.app.demoType);
 
     bool show = true;
@@ -112,6 +110,8 @@ class _TextField extends ConsumerWidget {
 
     final borderRadius = demoType != DemoType.tts ? 12.r : 6.r;
 
+    final textInInput = ref.watch(P.chat.textInInput);
+
     return GD(
       onTap: textFieldEnabled ? null : _onTapTextFieldWhenItsDisabled,
       child: KeyboardListener(
@@ -159,6 +159,23 @@ class _TextField extends ConsumerWidget {
               borderSide: BorderSide(color: primary.q(.33)),
             ),
             hintText: hintText,
+            suffixIcon: textInInput.isEmpty
+                ? null
+                : Ro(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GD(
+                        onTap: () {
+                          P.chat.textEditingController.clear();
+                          P.chat.textInInput.uc();
+                        },
+                        child: C(
+                          padding: const EI.s(v: 6, h: 4),
+                          child: const Icon(Icons.clear),
+                        ),
+                      ),
+                    ],
+                  ),
           ),
         ),
       ),

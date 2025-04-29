@@ -13,10 +13,10 @@ class _Chat {
   /// The focus node of the chat page input
   late final focusNode = FocusNode();
 
-  late final _textInInput = qs("");
+  late final textInInput = qs("");
 
   late final canSend = qp((ref) {
-    final textInInput = ref.watch(_textInInput);
+    final textInInput = ref.watch(this.textInInput);
     return textInInput.trim().isNotEmpty;
   });
 
@@ -88,8 +88,8 @@ extension $Chat on _Chat {
     if (!canSend.v) return;
 
     focusNode.unfocus();
-    final textToSend = _textInInput.v.trim();
-    _textInInput.uc();
+    final textToSend = textInInput.v.trim();
+    textInInput.uc();
 
     final _editingBotMessage = editingBotMessage.v;
     if (_editingBotMessage) {
@@ -135,12 +135,13 @@ extension $Chat on _Chat {
 
     if (P.app.demoType.v == DemoType.tts) {
       await P.tts.gen();
+      P.chat.loadSuggestions();
       return;
     }
 
-    final textToSend = _textInInput.v.trim();
+    final textToSend = textInInput.v.trim();
     if (textToSend.isEmpty) return;
-    _textInInput.uc();
+    textInInput.uc();
     focusNode.unfocus();
     await send(textToSend);
   }
@@ -192,7 +193,7 @@ extension $Chat on _Chat {
 
     final userMessage = messages.v[index - 1];
     editingIndex.u(index);
-    _textInInput.uc();
+    textInInput.uc();
     focusNode.unfocus();
     if (userMessage.type == MessageType.userAudio) {
       await send(
@@ -442,7 +443,7 @@ extension _$Chat on _Chat {
     qq;
 
     textEditingController.addListener(_onTextEditingControllerValueChanged);
-    _textInInput.l(_onTextChanged);
+    textInInput.l(_onTextChanged);
 
     P.app.pageKey.l(_onPageKeyChanged);
 
@@ -668,7 +669,7 @@ extension _$Chat on _Chat {
   void _onTextEditingControllerValueChanged() {
     // qqq("_onTextEditingControllerValueChanged");
     final textInController = textEditingController.text;
-    if (_textInInput.v != textInController) _textInInput.u(textInController);
+    if (textInInput.v != textInController) textInInput.u(textInController);
   }
 
   void _onTextChanged(String next) {
