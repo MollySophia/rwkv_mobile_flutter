@@ -108,7 +108,7 @@ extension $TTS on _TTS {
   FV getTTSSpkNames() async {
     qq;
     try {
-      final data = await rootBundle.loadString("assets/lib/tts/pairs.json");
+      final data = await rootBundle.loadString("assets/lib/chat/pairs.json");
       final spkPairs = await compute(_parseSpkNames, data);
       this.spkPairs.q = spkPairs;
     } catch (e) {
@@ -183,7 +183,7 @@ extension $TTS on _TTS {
   Future<String> getPrebuiltSpkAudioPathFromTemp(String spkName) async {
     qq;
     final fileName = "Chinese(PRC)_$spkName.wav";
-    final path = "assets/lib/tts/$fileName";
+    final path = "assets/lib/chat/$fileName";
     final localPath = await fromAssetsToTemp(path);
     return localPath;
   }
@@ -191,7 +191,7 @@ extension $TTS on _TTS {
   Future<String> getPromptSpeechText(String spkName) async {
     qq;
     final fileName = "Chinese(PRC)_$spkName.json";
-    final data = await rootBundle.loadString("assets/lib/tts/$fileName");
+    final data = await rootBundle.loadString("assets/lib/chat/$fileName");
     final json = HF.json(jsonDecode(data));
     return json["transcription"];
   }

@@ -99,7 +99,7 @@ extension _$App on _App {
     if (kDebugMode) {
       name = (Args.demoType).replaceAll("__", "");
     } else {
-      name = "__tts__".replaceAll("__", "");
+      name = "__chat__".replaceAll("__", "");
     }
     demoType.q = DemoType.values.byName(name);
 
