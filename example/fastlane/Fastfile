@@ -26,7 +26,6 @@ lane :all do |params|
 
   if envString == 'chat'
     git_reset()
-    git_pull()
   end
 end
 
