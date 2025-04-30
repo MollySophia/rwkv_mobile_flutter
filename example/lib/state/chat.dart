@@ -68,7 +68,6 @@ class _Chat {
 
   late final branchesCountList = qs<List<List<int>>>([]);
 
-  late final _throttler = Throttler(milliseconds: 100, trailing: true);
   late final _sensitiveThrottler = Throttler(milliseconds: 333, trailing: true);
 }
 
@@ -797,9 +796,7 @@ extension _$Chat on _Chat {
         break;
 
       case _RWKVMessageType.responseBufferContent:
-        _throttler.call(() {
-          receivedTokens.q = event.content;
-        });
+        receivedTokens.q = event.content;
         _sensitiveThrottler.call(() {
           _checkSensitive(event.content);
         });
