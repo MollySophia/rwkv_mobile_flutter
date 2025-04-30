@@ -14,13 +14,11 @@ extension $Guard on _Guard {
       final (text, blockedWords) = args;
       for (final word in blockedWords) {
         final contains = text.contains(word);
-        if (contains) qqw("命中敏感词: $word");
         if (contains) return true;
       }
       return false;
     }, (text, blockedWords));
     final end = HF.milliseconds;
-    qqw("检查敏感词耗时: ${end - start}ms");
     return res;
   }
 }
