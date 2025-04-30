@@ -34,7 +34,6 @@ Future<T?> Function<T extends http.BaseResponse>(
   required List<_EA> ea,
   Encoding? encoding,
 }) async {
-  qqq("uri: $uri");
   try {
     return await response;
   } catch (e) {
@@ -274,11 +273,6 @@ Future<Object?> _get(
         headers["Content-Type"] = "application/x-www-form-urlencoded; charset=utf-8";
         headers["Accept"] = "application/x-www-form-urlencoded; charset=utf-8";
     }
-
-    qqq("uri: $uri");
-    qqq("url: $url");
-    qqq("r[0]: ${r[0]}");
-    qqq("r[1]: ${r[1]}");
 
     final res = await _errorWrapper(
       _httpClient.get(uri, headers: headers).timeout(timeout),

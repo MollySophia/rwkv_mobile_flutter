@@ -21,6 +21,8 @@ class _App extends RawApp with WidgetsBindingObserver {
 
   late final newVersionDialogShown = qs(false);
 
+  static const String _remoteDemoConfigKey = "demo-config.json";
+
   @override
   void didChangeMetrics() {
     final context = getContext();
@@ -45,15 +47,27 @@ extension $App on _App {
 
   FV getConfig() async {
     qq;
+
     if (Args.disableRemoteConfig) {
       qqw("Remote config is disabled");
       return;
     }
+
+    final sp = await SharedPreferences.getInstance();
+
+    if (sp.containsKey(_App._remoteDemoConfigKey)) {
+      qqr("Load cached remote config from local");
+      await _parseConfig(jsonDecode(sp.getString(_App._remoteDemoConfigKey)!));
+      return;
+    }
+
     await HF.wait(17);
+
     try {
       final res = await _get("get-demo-config", timeout: 10000.ms);
       if (res is! Map) {
-        throw "res is not a Map, res: ${res.runtimeType}";
+        qqe("res is not a Map, res: ${res.runtimeType}");
+        return;
       }
       final success = res["success"];
       final message = res["message"];
@@ -61,18 +75,11 @@ extension $App on _App {
       if (success != true) throw "success is false, success: $success, message: $message";
       if (data is! Map) throw "data is not a Map, data: ${data.runtimeType}";
       final config = data[demoType.q.name];
-      if (config is! Map) throw "config is not a Map, config: ${config.runtimeType}";
-      final build = config["latest_build"];
-      if (build is! num) throw "build is not an num, build: $build";
+      await _parseConfig(config);
 
-      latestBuild.q = build.toInt();
-      noteZh.q = (config["note_zh"] as List<dynamic>).m((e) => e.toString());
-      noteEn.q = (config["note_en"] as List<dynamic>).m((e) => e.toString());
-      modelConfig.q = HF.listJSON(config["model_config"]);
-      androidUrl.q = config["android_url"].toString();
-      iosUrl.q = config["ios_url"].toString();
-      await P.fileManager.syncAvailableModels();
-      await P.fileManager.checkLocal();
+      // 将 res 写入本地沙盒文件
+
+      sp.setString(_App._remoteDemoConfigKey, jsonEncode(config));
     } catch (e) {
       qe;
       qqe("e: $e");
@@ -181,6 +188,31 @@ extension _$App on _App {
       }
       launchUrl(Uri.parse(iosUrl), mode: LaunchMode.externalApplication);
     }
+  }
+
+  FV _parseConfig(dynamic config) async {
+    if (config is! Map) {
+      qqe("config is not a Map, config: ${config.runtimeType}");
+      Sentry.captureException(Exception("config is not a Map, config: ${config.runtimeType}"), stackTrace: StackTrace.current);
+      return;
+    }
+
+    final build = config["latest_build"];
+
+    if (build is! num) {
+      qqe("build is not an num, build: $build");
+      Sentry.captureException(Exception("build is not an num, build: $build"), stackTrace: StackTrace.current);
+      return;
+    }
+
+    latestBuild.q = build.toInt();
+    noteZh.q = (config["note_zh"] as List<dynamic>).m((e) => e.toString());
+    noteEn.q = (config["note_en"] as List<dynamic>).m((e) => e.toString());
+    modelConfig.q = HF.listJSON(config["model_config"]);
+    androidUrl.q = config["android_url"].toString();
+    iosUrl.q = config["ios_url"].toString();
+    await P.fileManager.syncAvailableModels();
+    await P.fileManager.checkLocal();
   }
 
   void _routerListener() {
