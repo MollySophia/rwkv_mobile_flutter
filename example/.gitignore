@@ -51,3 +51,4 @@ sentry.properties
 .env
 /ignore
 *.log
+assets/filter.txt

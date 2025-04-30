@@ -377,7 +377,6 @@ dynamic _deal(
       }
       if (kDebugMode) if (res.body.isNotEmpty) print("😡 ${res.body}");
     }
-    // debugger();
     if (ea.contains(_EA.alert)) _networkingErrorAlert.call();
     throw Exception("Network error");
   }

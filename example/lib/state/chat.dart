@@ -326,6 +326,15 @@ extension $Chat on _Chat {
 
     messages.ua(receiveMsg);
     P.conversation.updateMessages([...messages.q, receiveMsg]);
+
+    P.guard.isSensitive(message).then((isSensitive) async {
+      if (!isSensitive) return;
+      await Future.delayed(1.ms);
+      _pauseMessageById(
+        id: receiveId,
+        isSensitive: true,
+      );
+    });
   }
 
   FV onStopButtonPressed() async {
@@ -466,7 +475,7 @@ extension _$Chat on _Chat {
 
     P.app.lifecycleState.lb(_onLifecycleStateChanged);
 
-    if (Config.enableChain) messages.lb(_onMessagesChanged);
+    messages.lb(_onMessagesChanged);
     if (Config.enableChain) chains.lv(_syncBranchesCountList);
     if (Config.enableChain) currentChain.lv(_syncBranchesCountList);
 
@@ -474,7 +483,7 @@ extension _$Chat on _Chat {
   }
 
   void _onMessagesChanged(List<Message>? previous, List<Message> next) {
-    _syncChains(previous, next);
+    if (Config.enableChain) _syncChains(previous, next);
   }
 
   void _syncBranchesCountList() {
@@ -591,7 +600,7 @@ extension _$Chat on _Chat {
 
   void _onReceivingTokensChanged(bool next) async {}
 
-  FV _pauseMessageById({required int id}) async {
+  FV _pauseMessageById({required int id, bool isSensitive = false}) async {
     qq;
 
     P.rwkv.stop();
@@ -609,7 +618,7 @@ extension _$Chat on _Chat {
 
     final newMessages = messages.q.map((e) {
       if (e.id == id) {
-        return e.copyWith(paused: true);
+        return e.copyWith(paused: true, isSensitive: isSensitive);
       }
       return e;
     }).toList();
@@ -717,8 +726,7 @@ extension _$Chat on _Chat {
     for (var i = 0; i < currentMessages.length; i++) {
       final msg = currentMessages[i];
       if (msg.id == id) {
-        final newMsg = Message(
-          id: msg.id,
+        final newMsg = msg.copyWith(
           content: content ?? msg.content,
           isMine: isMine ?? msg.isMine,
           changing: changing ?? msg.changing,

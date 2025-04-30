@@ -789,6 +789,16 @@ class S {
   String get imitate_target {
     return Intl.message('Target', name: 'imitate_target', desc: '', args: []);
   }
+
+  /// `Sorry, I haven't learned how to discuss this question yet, I'm good at math, code, logic, welcome to discuss with me`
+  String get filter {
+    return Intl.message(
+      'Sorry, I haven\'t learned how to discuss this question yet, I\'m good at math, code, logic, welcome to discuss with me',
+      name: 'filter',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

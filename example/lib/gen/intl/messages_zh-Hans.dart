@@ -74,6 +74,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "exploring": MessageLookupByLibrary.simpleMessage("探索中..."),
     "extra_large": MessageLookupByLibrary.simpleMessage("特大 (130%)"),
     "feedback": MessageLookupByLibrary.simpleMessage("反馈问题"),
+    "filter": MessageLookupByLibrary.simpleMessage(
+      "对不起，我还没学会如何讨论这类问题，我擅长数学、程式码、逻辑类的题目，欢迎与我交流",
+    ),
     "follow_system": MessageLookupByLibrary.simpleMessage("跟随系统"),
     "font_setting": MessageLookupByLibrary.simpleMessage("字体设置"),
     "font_size": MessageLookupByLibrary.simpleMessage("字体大小"),

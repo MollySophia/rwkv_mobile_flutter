@@ -780,8 +780,6 @@ class _Console extends ConsumerWidget {
           final line = received[index];
           final chars = line.split("");
 
-          // debugger();
-
           for (var i = 0; i < chars.length; i++) {
             final e = chars[i];
             if (e == "●") {

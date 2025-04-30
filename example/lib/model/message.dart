@@ -27,6 +27,7 @@ final class Message extends Equatable {
   final String? ttsSourceAudioPath;
   final String? ttsInstruction;
   final int? ttsCFMSteps;
+  final bool isSensitive;
 
   const Message({
     required this.id,
@@ -44,6 +45,7 @@ final class Message extends Equatable {
     this.ttsSourceAudioPath,
     this.ttsInstruction,
     this.ttsCFMSteps,
+    this.isSensitive = false,
   });
 
   @override
@@ -63,6 +65,7 @@ final class Message extends Equatable {
         ttsSourceAudioPath,
         ttsInstruction,
         ttsCFMSteps,
+        isSensitive,
       ];
 
   factory Message.fromJson(Map<String, dynamic> json) {
@@ -82,6 +85,7 @@ final class Message extends Equatable {
       ttsSourceAudioPath: json["ttsSourceAudioPath"] as String?,
       ttsInstruction: json["ttsInstruction"] as String?,
       ttsCFMSteps: json["ttsCFMSteps"] as int?,
+      isSensitive: json["isSensitive"] as bool,
     );
   }
 
@@ -102,6 +106,7 @@ final class Message extends Equatable {
       "ttsSourceAudioPath": ttsSourceAudioPath,
       "ttsInstruction": ttsInstruction,
       "ttsCFMSteps": ttsCFMSteps,
+      "isSensitive": isSensitive,
     };
   }
 
@@ -121,6 +126,7 @@ final class Message extends Equatable {
     String? ttsSourceAudioPath,
     String? ttsInstruction,
     int? ttsCFMSteps,
+    bool? isSensitive,
   }) {
     return Message(
       id: id ?? this.id,
@@ -138,6 +144,7 @@ final class Message extends Equatable {
       ttsSourceAudioPath: ttsSourceAudioPath ?? this.ttsSourceAudioPath,
       ttsInstruction: ttsInstruction ?? this.ttsInstruction,
       ttsCFMSteps: ttsCFMSteps ?? this.ttsCFMSteps,
+      isSensitive: isSensitive ?? this.isSensitive,
     );
   }
 
@@ -160,6 +167,7 @@ Message(
   ttsSourceAudioPath: $ttsSourceAudioPath,
   ttsInstruction: $ttsInstruction,
   ttsCFMSteps: $ttsCFMSteps,
+  isSensitive: $isSensitive,
 )""";
   }
 

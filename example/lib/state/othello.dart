@@ -381,8 +381,6 @@ extension _$ on _Othello {
 
     for (var row = 0; row < 8; row++) {
       for (var col = 0; col < 8; col++) {
-        // debugger();
-
         if (state[row][col] != CellType.empty) {
           eatCountMatrixForBlack[row][col] = 0;
           eatCountMatrixForWhite[row][col] = 0;

@@ -64,7 +64,6 @@ extension $FileManager on _FileManager {
     final _fileInfos = all.where((e) => e.available).toList();
 
     for (final fileInfo in _fileInfos) {
-      // debugger();
       final path = paths(fileInfo).q;
       final pathExists = await File(path).exists();
       bool fileSizeVerified = false;

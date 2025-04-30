@@ -60,7 +60,11 @@ class BotMessageBottom extends ConsumerWidget {
         break;
     }
 
-    // debugger();
+    if (msg.isSensitive) {
+      showResumeButton = false;
+      showBotCopyButton = false;
+      showBotEditButton = false;
+    }
 
     return Ro(
       m: MAA.start,

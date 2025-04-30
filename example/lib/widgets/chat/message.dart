@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'dart:async';
+import 'dart:developer';
 import 'dart:math' as math;
 
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -85,6 +86,7 @@ class Message extends ConsumerWidget {
     final received = ref.watch(P.chat.receivedTokens.select((v) => msg.changing ? v : ""));
 
     String finalContent = changing ? (received.isEmpty ? content : received) : content;
+    if (msg.isSensitive) finalContent = S.current.filter;
 
     finalContent = finalContent.replaceAll("\n", "\n\n");
     while (finalContent.contains("\n\n\n")) {
@@ -97,7 +99,7 @@ class Message extends ConsumerWidget {
 
     final cotDisplayState = ref.watch(P.chat.cotDisplayState(msg.id));
 
-    final usingReasoningModel = msg.isReasoning;
+    final usingReasoningModel = msg.isReasoning && !msg.isSensitive;
 
     String cotContent = "";
     String cotResult = "";

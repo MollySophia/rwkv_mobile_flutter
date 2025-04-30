@@ -62,6 +62,7 @@ part "conversation.dart";
 part "networking.dart";
 part "tts.dart";
 part "preference.dart";
+part "guard.dart";
 
 abstract class P {
   static final app = _App();
@@ -76,7 +77,8 @@ abstract class P {
   static final conversation = _Conversation();
   static final tts = _TTS();
   static final preference = _Preference();
-
+  static final guard = _Guard();
+  
   static FV init() async {
     WidgetsFlutterBinding.ensureInitialized();
     await preference._init();
@@ -96,6 +98,7 @@ abstract class P {
       world._init(),
       conversation._init(),
       tts._init(),
+      guard._init(),
     ]);
   }
 }
