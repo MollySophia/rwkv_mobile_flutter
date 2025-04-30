@@ -790,10 +790,10 @@ class S {
     return Intl.message('Target', name: 'imitate_target', desc: '', args: []);
   }
 
-  /// `Sorry, I haven't learned how to discuss this question yet, I'm good at math, code, logic, welcome to discuss with me`
+  /// `Hello, I can't answer this question yet, let's talk about something else.`
   String get filter {
     return Intl.message(
-      'Sorry, I haven\'t learned how to discuss this question yet, I\'m good at math, code, logic, welcome to discuss with me',
+      'Hello, I can\'t answer this question yet, let\'s talk about something else.',
       name: 'filter',
       desc: '',
       args: [],

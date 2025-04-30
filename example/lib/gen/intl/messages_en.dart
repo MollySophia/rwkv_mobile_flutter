@@ -96,7 +96,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "extra_large": MessageLookupByLibrary.simpleMessage("Extra large (130%)"),
     "feedback": MessageLookupByLibrary.simpleMessage("Feedback"),
     "filter": MessageLookupByLibrary.simpleMessage(
-      "Sorry, I haven\'t learned how to discuss this question yet, I\'m good at math, code, logic, welcome to discuss with me",
+      "Hello, I can\'t answer this question yet, let\'s talk about something else.",
     ),
     "follow_system": MessageLookupByLibrary.simpleMessage("System"),
     "font_setting": MessageLookupByLibrary.simpleMessage("Font setting"),

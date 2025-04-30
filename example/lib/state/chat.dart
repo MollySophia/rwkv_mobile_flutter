@@ -67,6 +67,9 @@ class _Chat {
   late final chainSwitchingHistory = qs<List<MessageChain>>([]);
 
   late final branchesCountList = qs<List<List<int>>>([]);
+
+  late final _throttler = Throttler(milliseconds: 100, trailing: true);
+  late final _sensitiveThrottler = Throttler(milliseconds: 333, trailing: true);
 }
 
 /// Public methods
@@ -327,14 +330,7 @@ extension $Chat on _Chat {
     messages.ua(receiveMsg);
     P.conversation.updateMessages([...messages.q, receiveMsg]);
 
-    P.guard.isSensitive(message).then((isSensitive) async {
-      if (!isSensitive) return;
-      await Future.delayed(1.ms);
-      _pauseMessageById(
-        id: receiveId,
-        isSensitive: true,
-      );
-    });
+    _checkSensitive(message);
   }
 
   FV onStopButtonPressed() async {
@@ -480,6 +476,21 @@ extension _$Chat on _Chat {
     if (Config.enableChain) currentChain.lv(_syncBranchesCountList);
 
     P.preference.preferredLanguage.lv(loadSuggestions);
+  }
+
+  FV _checkSensitive(String content) async {
+    final isSensitive = await P.guard.isSensitive(content);
+    if (!isSensitive) return;
+
+    final id = receiveId.q;
+    if (id == null) {
+      qqe("receiveId is null");
+      return;
+    }
+
+    await Future.delayed(1.ms);
+
+    _pauseMessageById(id: id, isSensitive: true);
   }
 
   void _onMessagesChanged(List<Message>? previous, List<Message> next) {
@@ -775,35 +786,49 @@ extension _$Chat on _Chat {
       case _RWKVMessageType.ttsDone:
         _fullyReceived(callingFunction: "_onStreamEvent:ttsDone");
         break;
+
       case _RWKVMessageType.responseBufferIds:
         break;
+
       case _RWKVMessageType.isGenerating:
         final isGenerating = event.content == "true";
         receivingTokens.q = isGenerating;
         if (!isGenerating) _fullyReceived(callingFunction: "_onStreamEvent:isGenerating");
         break;
+
       case _RWKVMessageType.responseBufferContent:
-        receivedTokens.q = event.content;
+        _throttler.call(() {
+          receivedTokens.q = event.content;
+        });
+        _sensitiveThrottler.call(() {
+          _checkSensitive(event.content);
+        });
         break;
+
       case _RWKVMessageType.response:
         receivedTokens.q = event.content;
         receivingTokens.q = false;
         _fullyReceived(callingFunction: "_onStreamEvent:response");
         break;
+
       case _RWKVMessageType.generateStart:
         receivedTokens.q = "";
         receivingTokens.q = true;
         break;
+
       case _RWKVMessageType.streamResponse:
         receivedTokens.q = event.content;
         receivingTokens.q = true;
         break;
+
       case _RWKVMessageType.currentPrompt:
         receivedTokens.q = event.content;
         break;
+
       case _RWKVMessageType.samplerParams:
         receivedTokens.q = event.content;
         break;
+
       case _RWKVMessageType.generateStop:
         receivedTokens.q = "";
         receivingTokens.q = false;
