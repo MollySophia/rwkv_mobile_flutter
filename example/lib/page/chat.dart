@@ -93,7 +93,9 @@ class _PageChatState extends State<PageChat> {
       });
     }
 
-    P.device.sync();
+    HF.wait(250).then((_) {
+      P.device.sync();
+    });
     await showModalBottomSheet(
       isScrollControlled: true,
       context: context,

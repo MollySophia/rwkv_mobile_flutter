@@ -77,6 +77,7 @@ flutter:
     # TODO: @wangce world 到 tts/chat 的互转还有问题
     - assets/lib/qnn/
     - .env
+    - demo-config.json
 
 flutter_intl:
   enabled: true # Required. Must be set to true to activate the package. Default: false

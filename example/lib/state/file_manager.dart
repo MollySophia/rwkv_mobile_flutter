@@ -35,10 +35,12 @@ extension $FileManager on _FileManager {
 
     if (P.app.modelConfig.q.isEmpty) {
       final demoType = P.app.demoType.q;
-      final jsonPath = "assets/config/${demoType.name}/weights.json";
+      final jsonPath = "demo-config.json";
       qqq("jsonPath: $jsonPath");
       final jsonString = await rootBundle.loadString(jsonPath);
-      json = HF.listJSON(jsonDecode(jsonString));
+      final rawJSON = jsonDecode(jsonString);
+      final data = rawJSON[demoType.name]["model_config"];
+      json = HF.listJSON(data);
     } else {
       json = P.app.modelConfig.q;
     }

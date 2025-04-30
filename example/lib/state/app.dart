@@ -58,20 +58,13 @@ extension $App on _App {
       final success = res["success"];
       final message = res["message"];
       final data = res["data"];
-      if (success != true) {
-        throw "success is false, success: $success, message: $message";
-      }
-      if (data is! Map) {
-        throw "data is not a Map, data: ${data.runtimeType}";
-      }
+      if (success != true) throw "success is false, success: $success, message: $message";
+      if (data is! Map) throw "data is not a Map, data: ${data.runtimeType}";
       final config = data[demoType.q.name];
-      if (config is! Map) {
-        throw "config is not a Map, config: ${config.runtimeType}";
-      }
+      if (config is! Map) throw "config is not a Map, config: ${config.runtimeType}";
       final build = config["latest_build"];
-      if (build is! num) {
-        throw "build is not an num, build: $build";
-      }
+      if (build is! num) throw "build is not an num, build: $build";
+
       latestBuild.q = build.toInt();
       noteZh.q = (config["note_zh"] as List<dynamic>).m((e) => e.toString());
       noteEn.q = (config["note_en"] as List<dynamic>).m((e) => e.toString());
