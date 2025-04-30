@@ -1,6 +1,6 @@
 {
   "chat": {
-    "latest_build": 316,
+    "latest_build": 324,
     "note_zh": ["提升应用程序的稳定性", "修复了已知问题"],
     "note_en": ["Improve application stability", "Fix known issues"],
     "android_url": "https://www.pgyer.com/rwkvchat",
@@ -315,7 +315,7 @@
     ]
   },
   "world": {
-    "latest_build": 293,
+    "latest_build": 322,
     "note_zh": ["提升应用程序的稳定性", "修复了已知问题"],
     "note_en": ["Improve application stability", "Fix known issues"],
     "android_url": "https://www.pgyer.com/worldrwkv",
@@ -432,7 +432,7 @@
     ]
   },
   "tts": {
-    "latest_build": 317,
+    "latest_build": 323,
     "note_zh": ["提升应用程序的稳定性", "修复了已知问题"],
     "note_en": ["Improve application stability", "Fix known issues"],
     "android_url": "https://www.pgyer.com/rwkvtts",
