@@ -1,6 +1,5 @@
 // ignore: unused_import
 import 'dart:async';
-import 'dart:developer';
 import 'dart:math' as math;
 
 import 'package:flutter_markdown/flutter_markdown.dart';
