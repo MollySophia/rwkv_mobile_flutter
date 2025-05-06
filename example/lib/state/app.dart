@@ -58,7 +58,6 @@ extension $App on _App {
     if (sp.containsKey(_App._remoteDemoConfigKey)) {
       qqr("Load cached remote config from local");
       await _parseConfig(jsonDecode(sp.getString(_App._remoteDemoConfigKey)!));
-      return;
     }
 
     await HF.wait(17);
