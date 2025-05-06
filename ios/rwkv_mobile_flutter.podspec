@@ -12,6 +12,7 @@ Pod::Spec.new do |s|
     s.homepage         = 'http://example.com'
     s.license          = { :file => '../LICENSE' }
     s.author           = { 'Your Company' => 'email@example.com' }
+    s.frameworks       = 'Accelerate'
   
     # This will ensure the source files in Classes/ are included in the native
     # builds of apps using this FFI plugin. Podspec does not support relative
@@ -23,11 +24,11 @@ Pod::Spec.new do |s|
     s.preserve_paths = '*.a'
 
     s.xcconfig = {
-      'OTHER_LDFLAGS' => '-all_load -lrwkv_mobile',
+      'OTHER_LDFLAGS' => '-all_load -lrwkv_mobile -lncnn -lonnxruntime',
       'DEAD_CODE_STRIPPING' => 'NO',
       "STRIP_INSTALLED_PRODUCT" => "NO",
     }
-    s.vendored_libraries = 'librwkv_mobile.a'
+    s.vendored_libraries = 'librwkv_mobile.a', 'libncnn.a', 'libonnxruntime.a'
     # s.vendored_frameworks = 'librwkv_mobile.xcframework', 'libweb_rwkv_ffi.xcframework'
     s.platform = :ios, '11.0'
     s.static_framework = true

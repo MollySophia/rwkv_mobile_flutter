@@ -146,7 +146,7 @@ SPEC CHECKSUMS:
   package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
   path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
   record_ios: fee1c924aa4879b882ebca2b4bce6011bcfc3d8b
-  rwkv_mobile_flutter: 396c45e958110273ee8990b3a4d04bad55952083
+  rwkv_mobile_flutter: 9479a6954a79c9bdf630227a4a87b56afda2143b
   SDWebImage: f84b0feeb08d2d11e6a9b843cb06d75ebf5b8868
   Sentry: da60d980b197a46db0b35ea12cb8f39af48d8854
   sentry_flutter: 27892878729f42701297c628eb90e7c6529f3684
