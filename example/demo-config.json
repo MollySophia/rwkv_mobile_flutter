@@ -329,7 +329,7 @@
         "fileName": "rwkv7-g1-0.4B-siglip_vision_encoder-F16.gguf",
         "fileSize": 197526912,
         "quantization": "fp16",
-        "platforms": ["macos", "windows", "linux", "android"],
+        "platforms": ["macos", "windows", "linux", "android", "ios"],
         "backends": ["llamacpp"],
         "tags": ["encoder"]
       },
@@ -341,7 +341,7 @@
         "fileName": "rwkv7-g1-0.4B-siglip-F16.gguf",
         "fileSize": 910441408,
         "quantization": "fp16",
-        "platforms": ["macos", "windows", "linux", "android"],
+        "platforms": ["macos", "windows", "linux", "android", "ios"],
         "backends": ["llamacpp"]
       },
       {
@@ -352,7 +352,7 @@
         "fileName": "rwkv7_0.4B_siglip_vision_encoder-f16.gguf",
         "fileSize": 179794688,
         "quantization": "fp16",
-        "platforms": ["macos", "windows", "linux", "android"],
+        "platforms": ["macos", "windows", "linux", "android", "ios"],
         "backends": ["llamacpp"],
         "tags": ["encoder"]
       },
@@ -364,7 +364,7 @@
         "fileName": "rwkv7_0.4B_vision_siglip-Q8_0.gguf",
         "fileSize": 501496768,
         "quantization": "Q8_0",
-        "platforms": ["macos", "windows", "linux", "android"],
+        "platforms": ["macos", "windows", "linux", "android", "ios"],
         "backends": ["llamacpp"]
       },
       {
@@ -375,7 +375,7 @@
         "fileName": "whisper-small-rwkv-0b4-enqa-adapter.gguf",
         "fileSize": 201461832,
         "quantization": "fp16",
-        "platforms": ["macos", "windows", "linux", "android"],
+        "platforms": ["macos", "windows", "linux", "android", "ios"],
         "backends": ["llamacpp"],
         "tags": ["encoder"]
       },
@@ -387,7 +387,7 @@
         "fileName": "RWKV7-0.4B-WhisperS-ENQA-DEMO-Q8_0.gguf",
         "fileSize": 501496864,
         "quantization": "Q8_0",
-        "platforms": ["macos", "windows", "linux", "android"],
+        "platforms": ["macos", "windows", "linux", "android", "ios"],
         "backends": ["llamacpp"]
       },
       {
@@ -398,7 +398,7 @@
         "fileName": "whisper-base-rwkv-0b1-enasr-adapter.gguf",
         "fileSize": 55184202,
         "quantization": "fp16",
-        "platforms": ["macos", "windows", "linux", "android"],
+        "platforms": ["macos", "windows", "linux", "android", "ios"],
         "backends": ["llamacpp"],
         "tags": ["encoder"]
       },
@@ -410,7 +410,7 @@
         "fileName": "RWKV7-0.1B-WhisperB-ENASR-DEMO-F16.gguf",
         "fileSize": 386369760,
         "quantization": "fp16",
-        "platforms": ["macos", "windows", "linux", "android"],
+        "platforms": ["macos", "windows", "linux", "android", "ios"],
         "backends": ["llamacpp"]
       },
       {
@@ -472,7 +472,7 @@
         "fileName": "CosyVoice2-0.5B-RWKV-7-0.4B-Instruct-CHENJPKO-q8_0.gguf",
         "fileSize": 516297248,
         "quantization": "q8_0",
-        "platforms": ["macos", "windows", "linux", "android"],
+        "platforms": ["macos", "windows", "linux", "android", "ios"],
         "backends": ["llamacpp"],
         "tags": ["core"]
       },
@@ -484,7 +484,7 @@
         "fileName": "CosyVoice2-0.5B-RWKV-7-1.5B-Instruct-CHENJPKO-q4_k_m.gguf",
         "fileSize": 1009165600,
         "quantization": "q4_k_m",
-        "platforms": ["android"],
+        "platforms": ["android", "ios"],
         "backends": ["llamacpp"],
         "tags": ["core"]
       },
@@ -496,7 +496,7 @@
         "fileSize": 28303423,
         "sha256": "ba82eb5c87f08e73fa40c0d81e5a5cde002e32f975157de139d853000a79531e",
         "quantization": "",
-        "platforms": ["android"],
+        "platforms": ["android", "ios"],
         "backends": ["onnxruntime"],
         "tags": ["campplus"]
       },
@@ -508,7 +508,7 @@
         "fileSize": 143159224,
         "sha256": "075cdfb68e3b97a94bef9348d472fa6fe9632805d86e6e580f544c55a48c1886",
         "quantization": "fp16",
-        "platforms": ["android"],
+        "platforms": ["android", "ios"],
         "backends": ["ncnn"],
         "tags": ["flow.decoder.estimator.bin"]
       },
@@ -520,7 +520,7 @@
         "fileSize": 74111,
         "sha256": "7bba047892dab7a9c4cd1f6481a4dba3c13a8f933a66037011fa84e85ac40ea3",
         "quantization": "fp16",
-        "platforms": ["android"],
+        "platforms": ["android", "ios"],
         "backends": ["ncnn"],
         "tags": ["flow.decoder.estimator.param"]
       },
@@ -532,7 +532,7 @@
         "fileSize": 93055040,
         "sha256": "5364de30bf52b80c7d986ceab5cb4ae7ddba588f3017ba61ac9c8c8dd164a94d",
         "quantization": "fp16",
-        "platforms": ["android"],
+        "platforms": ["android", "ios"],
         "backends": ["onnxruntime"],
         "tags": ["flow.encoder"]
       },
@@ -544,7 +544,7 @@
         "fileSize": 83390012,
         "sha256": "2e14d42dde9994b2c9df2a7bdfaf2182e5c0d61fbcb373f3d4f505e3ec48597b",
         "quantization": "",
-        "platforms": ["android"],
+        "platforms": ["android", "ios"],
         "backends": ["onnxruntime"],
         "tags": ["hift"]
       },
@@ -556,7 +556,7 @@
         "fileSize": 496082973,
         "sha256": "ba82eb5c87f08e73fa40c0d81e5a5cde002e32f975157de139d853000a79531e",
         "quantization": "",
-        "platforms": ["android"],
+        "platforms": ["android", "ios"],
         "backends": ["onnxruntime"],
         "tags": ["speech.tokenizer"]
       }
