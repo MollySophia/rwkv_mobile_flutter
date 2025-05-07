@@ -1,4 +1,5 @@
 // ignore: unused_import
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -20,6 +21,8 @@ class Suggestions extends ConsumerWidget {
   void _onSuggestionTap(String suggestion) {
     switch (P.app.demoType.q) {
       case DemoType.chat:
+        final text = jsonDecode(suggestion)["prompt"];
+        P.chat.send(text);
       case DemoType.fifthteenPuzzle:
       case DemoType.othello:
       case DemoType.sudoku:
@@ -106,6 +109,10 @@ class Suggestions extends ConsumerWidget {
         padding: const EI.o(l: 8),
         scrollDirection: Axis.horizontal,
         children: suggestions.map((e) {
+          String displayText = e;
+          if (demoType == DemoType.chat) {
+            displayText = jsonDecode(e)["display"];
+          }
           return GD(
             onTap: () {
               _onSuggestionTap(e);
@@ -128,7 +135,7 @@ class Suggestions extends ConsumerWidget {
               ),
               margin: const EI.o(r: 8, t: 4, b: 8),
               padding: const EI.s(v: 4, h: 8),
-              child: T(e, s: const TS(c: kB, s: 16)),
+              child: T(displayText, s: const TS(c: kB, s: 16)),
             ),
           );
         }).toList(),

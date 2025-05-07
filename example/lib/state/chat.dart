@@ -346,7 +346,8 @@ extension $Chat on _Chat {
 
   FV loadSuggestions() async {
     final demoType = P.app.demoType.q;
-    if (demoType != DemoType.chat && demoType != DemoType.tts) return;
+    final isChat = demoType == DemoType.chat;
+    if (!isChat && demoType != DemoType.tts) return;
     final shouldUseEn = P.preference.preferredLanguage.q.resolved.locale.languageCode != "zh";
 
     const head = "assets/config/chat/suggestions";
@@ -357,7 +358,17 @@ extension $Chat on _Chat {
 
     final jsonString = await rootBundle.loadString(assetPath);
     final list = HF.list(jsonDecode(jsonString));
-    final s = list.map((e) => e.toString()).shuffled().take(3).toList();
+    final s = list
+        .map((e) {
+          if (isChat) {
+            return jsonEncode(e);
+          } else {
+            return e.toString().replaceAll("🚧", "");
+          }
+        })
+        .shuffled()
+        .take(3)
+        .toList();
     suggestions.q = s;
 
     if (kDebugMode) {
@@ -365,7 +376,13 @@ extension $Chat on _Chat {
       final anotherAssetPath = "$head$lang$suffix.json";
       final anotherJsonString = await rootBundle.loadString(anotherAssetPath);
       final anotherList = HF.list(jsonDecode(anotherJsonString));
-      final anotherSuggestions = anotherList.map((e) => e.toString()).toList();
+      final anotherSuggestions = anotherList.map((e) {
+        if (isChat) {
+          return jsonEncode(e);
+        } else {
+          return e.toString().replaceAll("🚧", "");
+        }
+      }).toList();
       suggestions.ul(anotherSuggestions);
     }
 
