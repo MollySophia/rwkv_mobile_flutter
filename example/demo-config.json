@@ -381,6 +381,29 @@
         "backends": ["llamacpp"]
       },
       {
+        "name": "RWKV7-V Vision Encoder",
+        "type": "gguf",
+        "modelSize": 0.4,
+        "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/model/rwkv7-v-0.4B-siglip_vision_encoder-f16.gguf",
+        "fileName": "rwkv7-v-0.4B-siglip_vision_encoder-f16.gguf",
+        "fileSize": 197526912,
+        "quantization": "fp16",
+        "platforms": ["macos", "windows", "linux", "android", "ios"],
+        "backends": ["llamacpp"],
+        "tags": ["encoder"]
+      },
+      {
+        "name": "RWKV7-V Vision 0.4B",
+        "type": "gguf",
+        "modelSize": 0.4,
+        "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/model/rwkv7-v-0.4B-Q8_0.gguf",
+        "fileName": "rwkv7-v-0.4B-Q8_0.gguf",
+        "fileSize": 501496768,
+        "quantization": "Q8_0",
+        "platforms": ["macos", "windows", "linux", "android", "ios"],
+        "backends": ["llamacpp"]
+      },
+      {
         "name": "RWKV7 Whisper Small adapter For 0.4B ENQA",
         "type": "gguf",
         "modelSize": 0.4,
