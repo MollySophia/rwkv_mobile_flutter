@@ -20,7 +20,7 @@ lane :all do |params|
   android_pgyer()
 
   # 🔥 上传到 TestFlight
-  if envString == 'chat'
+  if envString == 'chat' || envString == 'tts'
     ios_upload(groups: ['External'])
   end
 
