@@ -35,6 +35,7 @@ class AudioInput extends ConsumerWidget {
       switch (currentWorldType) {
         case null:
         case WorldType.engVisualQA:
+        case WorldType.visualQA:
         case WorldType.engVisualQAReason:
           shouldShow = false;
         case WorldType.engAudioQA:
@@ -50,6 +51,7 @@ class AudioInput extends ConsumerWidget {
       switch (currentWorldType) {
         case null:
         case WorldType.engVisualQA:
+        case WorldType.visualQA:
         case WorldType.engVisualQAReason:
           bottomMessage = "";
         case WorldType.engAudioQA:

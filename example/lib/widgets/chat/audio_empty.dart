@@ -31,6 +31,7 @@ class AudioEmpty extends ConsumerWidget {
       case WorldType.engAudioQA:
         break;
       case WorldType.engVisualQA:
+      case WorldType.visualQA:
       case WorldType.engVisualQAReason:
       case null:
         return Positioned(child: IgnorePointer(child: C()));
@@ -47,6 +48,7 @@ class AudioEmpty extends ConsumerWidget {
     switch (currentWorldType) {
       case null:
       case WorldType.engVisualQA:
+      case WorldType.visualQA:
       case WorldType.engVisualQAReason:
         message = "";
       case WorldType.engAudioQA:

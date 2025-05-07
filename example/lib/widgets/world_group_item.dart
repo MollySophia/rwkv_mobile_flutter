@@ -61,6 +61,7 @@ class WorldGroupItem extends ConsumerWidget {
             backend: modelFileKey.backend!,
           );
         case WorldType.engVisualQA:
+        case WorldType.visualQA:
         case WorldType.engVisualQAReason:
           await P.rwkv.loadWorldVision(
             modelPath: modelLocalFile.targetPath,

@@ -227,6 +227,7 @@ class Message extends ConsumerWidget {
         }
       case null:
       case WorldType.engVisualQA:
+      case WorldType.visualQA:
       case WorldType.engVisualQAReason:
       case WorldType.engAudioQA:
         break;

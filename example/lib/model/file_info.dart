@@ -156,6 +156,8 @@ class FileInfo extends Equatable {
         "RWKV7-0.1B-WhisperB-ENASR-DEMO-F16.gguf" => WorldType.engASR,
         "rwkv7-g1-0.4B-siglip_vision_encoder-F16.gguf" => WorldType.engVisualQAReason,
         "rwkv7-g1-0.4B-siglip-F16.gguf" => WorldType.engVisualQAReason,
+        "rwkv7-v-0.4B-siglip_vision_encoder-f16.gguf" => WorldType.visualQA,
+        "rwkv7-v-0.4B-Q8_0.gguf" => WorldType.visualQA,
         _ => null,
       };
 

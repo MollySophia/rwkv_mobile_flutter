@@ -33,6 +33,7 @@ class Input extends ConsumerWidget {
       case WorldType.engASR:
         show = false;
       case WorldType.engVisualQA:
+      case WorldType.visualQA:
       case WorldType.engVisualQAReason:
       case null:
         show = true;

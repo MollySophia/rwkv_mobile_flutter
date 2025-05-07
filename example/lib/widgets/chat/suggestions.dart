@@ -79,6 +79,13 @@ class Suggestions extends ConsumerWidget {
               "Please describe this image for me~",
             ];
             break;
+          case WorldType.visualQA:
+            show = imagePath != null && imagePath.isNotEmpty && messages.length == 1;
+            suggestions = [
+              "请向我描述这张图片",
+              "Please describe this image for me~",
+            ];
+            break;
           case WorldType.engAudioQA:
           case WorldType.chineseASR:
           case WorldType.engASR:
