@@ -735,6 +735,7 @@ extension _$RWKV on _RWKV {
         "libQnnRwkvWkvOpPackageV69.so",
         "libQnnRwkvWkvOpPackageV73.so",
         "libQnnRwkvWkvOpPackageV75.so",
+        "libQnnRwkvWkvOpPackageV79.so",
       };
       for (final lib in qnnLibList) {
         await fromAssetsToTemp("assets/lib/qnn/$lib", targetPath: "assets/lib/$lib");
