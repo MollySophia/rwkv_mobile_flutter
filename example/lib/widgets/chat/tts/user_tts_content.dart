@@ -34,7 +34,7 @@ class UserTtsContent extends ConsumerWidget {
             children: [
               if (msg.ttsSourceAudioPath != null) ...[
                 const T("根据下面的音频文件"),
-                T(msg.ttsSourceAudioPath!.split("/").last.replaceAll("Chinese(PRC)_", "")),
+                T(P.tts.flagChange(msg.ttsSourceAudioPath!.split("/").last).replaceAll("_", " ")),
               ],
               if (msg.ttsSpeakerName != null) ...[
                 T("模仿 ${P.tts.safe(msg.ttsSpeakerName!)} 的声音"),

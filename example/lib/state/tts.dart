@@ -162,12 +162,26 @@ extension $TTS on _TTS {
   }
 
   String safe(String input) {
+    const replaceMap = {};
+
+    String name = input;
+    replaceMap.forEach((key, value) {
+      name = name.replaceAll(key, value);
+    });
+
+    name = name.replaceAll(name.split("_").first + "_", "");
+
+    name = name.replaceAll(RegExp(r"_[0-9]+"), "");
+
+    return name;
+  }
+
+  String flagChange(String input) {
     const replaceMap = {
-      // "(PRC)": ")",
-      // "_": " (",
-      // "Japanese": "Japanese)",
-      // "Korean": "Korean)",
-      // "English": "English)",
+      "English": "🇺🇸",
+      "Japanese": "🇯🇵",
+      "Korean": "🇰🇷",
+      "Chinese(RPC)": "🇨🇳",
     };
 
     String name = input;
@@ -175,14 +189,12 @@ extension $TTS on _TTS {
       name = name.replaceAll(key, value);
     });
 
-    name = name.split("_").first;
-
     return name;
   }
 
   Future<String> getPrebuiltSpkAudioPathFromTemp(String spkName) async {
     qq;
-    final fileName = "Chinese(PRC)_$spkName.wav";
+    final fileName = "$spkName.wav";
     final path = "assets/lib/chat/$fileName";
     final localPath = await fromAssetsToTemp(path);
     return localPath;
@@ -190,7 +202,7 @@ extension $TTS on _TTS {
 
   Future<String> getPromptSpeechText(String spkName) async {
     qq;
-    final fileName = "Chinese(PRC)_$spkName.json";
+    final fileName = "$spkName.json";
     final data = await rootBundle.loadString("assets/lib/chat/$fileName");
     final json = HF.json(jsonDecode(data));
     return json["transcription"];

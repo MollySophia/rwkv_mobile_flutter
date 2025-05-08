@@ -2,6 +2,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:zone/model/demo_type.dart';
+import 'package:zone/model/language.dart';
 import 'package:zone/model/tts_instruction.dart';
 import 'package:zone/state/p.dart';
 import 'package:file_picker/file_picker.dart';
@@ -37,7 +39,7 @@ class TTSBar extends ConsumerWidget {
       target = S.current.imitate_target + ": " + (P.tts.safe(selectSpkName));
       target += " " + pairs[selectSpkName];
       if (kDebugMode) {
-        target += " (" + selectSpkName + ")";
+        target += " (" + P.tts.safe(selectSpkName) + ")";
       }
     }
 
@@ -396,11 +398,14 @@ class _SpkPanel extends ConsumerWidget {
     final spkNames = spkPairs.keys;
     final selectSpkName = ref.watch(P.tts.selectSpkName);
     final primary = Theme.of(context).colorScheme.primary;
+    final controller = ScrollController();
     return SB(
       height: 250,
       child: RawScrollbar(
+        controller: controller,
         padding: const EI.o(t: 12, b: 12),
         child: ListView.builder(
+          controller: controller,
           padding: const EI.o(t: 12, b: 12),
           itemCount: spkNames.length,
           itemBuilder: (context, index) {
@@ -408,6 +413,11 @@ class _SpkPanel extends ConsumerWidget {
             final v = spkPairs[k];
 
             final selected = selectSpkName == k;
+
+            final language = Language.values.where((e) => e.enName != null).firstWhereOrNull((e) => k.contains(e.enName!));
+
+            final display = P.tts.safe(k) + " " + P.tts.safe(v) + " " + (language?.flag ?? "");
+
             return GD(
                 onTap: () {
                   qq;
@@ -428,7 +438,7 @@ class _SpkPanel extends ConsumerWidget {
                           children: [
                             Exp(
                               child: T(
-                                P.tts.safe(k) + " " + P.tts.safe(v),
+                                display,
                                 s: TS(c: selected ? primary : primary.q(.8), w: selected ? FW.w600 : FW.w400),
                               ),
                             ),

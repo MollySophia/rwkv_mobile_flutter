@@ -35,7 +35,7 @@ lane :ios_upload do |params|
     archive_path: './build/ios/archive/Runner.xcarchive',
   )
   upload_to_testflight(
-    skip_submission: false,
+    skip_submission: true,
     distribute_external: params[:groups].include?('External'),
     changelog: 'Bug fixes and UI improvements',
     groups: params[:groups],

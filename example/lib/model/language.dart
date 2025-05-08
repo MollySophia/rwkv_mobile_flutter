@@ -31,10 +31,27 @@ enum Language {
         zh_Hant => "繁體中文",
       };
 
+  String? get flag => switch (this) {
+        none => null,
+        en => "🇺🇸",
+        ja => "🇯🇵",
+        ko => "🇰🇷",
+        zh_Hans => "🇨🇳",
+        zh_Hant => null,
+      };
+
+  String? get enName => switch (this) {
+        none => null,
+        en => "English",
+        ja => "Japanese",
+        ko => "Korean",
+        zh_Hans => "Chinese",
+        zh_Hant => null,
+      };
+
   bool get isCJK {
     return name.startsWith('zh') || this == ja || this == ko;
   }
-
 
   Language get resolved => switch (this) {
         none => fromSystemLocale(),
