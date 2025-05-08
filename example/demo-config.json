@@ -1,6 +1,6 @@
 {
   "chat": {
-    "latest_build": 326,
+    "latest_build": 331,
     "note_zh": ["提升应用程序的稳定性", "修复了已知问题"],
     "note_en": ["Improve application stability", "Fix known issues"],
     "android_url": "https://www.pgyer.com/rwkvchat",
@@ -328,7 +328,7 @@
     ]
   },
   "world": {
-    "latest_build": 322,
+    "latest_build": 334,
     "note_zh": ["提升应用程序的稳定性", "修复了已知问题"],
     "note_en": ["Improve application stability", "Fix known issues"],
     "android_url": "https://www.pgyer.com/worldrwkv",
@@ -468,14 +468,14 @@
     ]
   },
   "tts": {
-    "latest_build": 323,
+    "latest_build": 329,
     "note_zh": ["提升应用程序的稳定性", "修复了已知问题"],
     "note_en": ["Improve application stability", "Fix known issues"],
     "android_url": "https://www.pgyer.com/rwkvtts",
     "ios_url": "",
     "model_config": [
       {
-        "name": "RWKV7 TTS 1.5B (8 Gen 3) CH/EN/JP/KO",
+        "name": "RWKV7 TTS 1.5B (8 Gen 3) 🇨🇳/🇺🇸/🇯🇵/🇰🇷",
         "type": "gguf",
         "modelSize": 1.5,
         "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/model/CosyVoice2-0.5B-RWKV-7-1.5B-Instruct-CHENJPKO-8gen3-a16w8_combined.bin",
@@ -488,7 +488,7 @@
         "socLimitations": ["8 Gen 3"]
       },
       {
-        "name": "RWKV7 TTS 0.4B (8 Gen 3) CH/EN/JP/KO",
+        "name": "RWKV7 TTS 0.4B (8 Gen 3) 🇨🇳🇺🇸🇯🇵🇰🇷",
         "type": "gguf",
         "modelSize": 0.4,
         "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/model/CosyVoice2-0.5B-RWKV-7-0.4B-Instruct-CHENJPKO-8gen3-a16w8_combined.bin",
@@ -501,7 +501,7 @@
         "socLimitations": ["8 Gen 3"]
       },
       {
-        "name": "RWKV7 TTS 0.4B CH/EN/JP/KO",
+        "name": "RWKV7 TTS 0.4B 🇨🇳/🇺🇸/🇯🇵/🇰🇷",
         "type": "gguf",
         "modelSize": 0.4,
         "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/model/CosyVoice2-0.5B-RWKV-7-0.4B-Instruct-CHENJPKO-q8_0.gguf",
@@ -513,7 +513,7 @@
         "tags": ["core"]
       },
       {
-        "name": "RWKV7 TTS 1.5B CH/EN/JP/KO",
+        "name": "RWKV7 TTS 1.5B 🇨🇳/🇺🇸/🇯🇵/🇰🇷",
         "type": "gguf",
         "modelSize": 1.5,
         "url": "mollysama/rwkv-mobile-models/resolve/main/multimodal/model/CosyVoice2-0.5B-RWKV-7-1.5B-Instruct-CHENJPKO-q4_k_m.gguf",
