@@ -536,7 +536,7 @@
         "platforms": ["android"],
         "backends": ["qnn"],
         "tags": ["npu", "core"],
-        "socLimitations": ["8 Gen 3"]
+        "socLimitations": ["8s Gen 3"]
       },
       {
         "name": "RWKV7 TTS 0.4B (8s Gen 3) 🇨🇳🇺🇸🇯🇵🇰🇷",
@@ -549,7 +549,7 @@
         "platforms": ["android"],
         "backends": ["qnn"],
         "tags": ["npu", "core"],
-        "socLimitations": ["8 Gen 3"]
+        "socLimitations": ["8s Gen 3"]
       },
       {
         "name": "RWKV7 TTS 0.4B 🇨🇳/🇺🇸/🇯🇵/🇰🇷",
