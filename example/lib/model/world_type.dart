@@ -1,19 +1,19 @@
 enum WorldType {
   engVisualQAReason,
-  engVisualQA,
   visualQA,
+  engVisualQA,
   engAudioQA,
   chineseASR,
   engASR,
   ;
 
   String get displayName => switch (this) {
-        WorldType.engVisualQA => "English Visual QA",
-        WorldType.visualQA => "Visual QA (Chinese & English)",
-        WorldType.engVisualQAReason => "English Visual QA Reasoning",
-        WorldType.engAudioQA => "English Audio QA",
-        WorldType.chineseASR => "Chinese ASR",
-        WorldType.engASR => "English ASR",
+        WorldType.engVisualQAReason => "🇺🇸 English Visual QA Reasoning",
+        WorldType.visualQA => "Visual QA (🇨🇳 Chinese & 🇺🇸 English)",
+        WorldType.engVisualQA => "Visual QA (🇺🇸 English)",
+        WorldType.engAudioQA => "Audio QA (🇺🇸 English)",
+        WorldType.chineseASR => "ASR (🇨🇳 Chinese)",
+        WorldType.engASR => "ASR (🇺🇸 English)",
       };
 
   String get taskDescription => switch (this) {
@@ -37,6 +37,11 @@ enum WorldType {
 
   bool get isReasoning => switch (this) {
         WorldType.engVisualQAReason => true,
+        _ => false,
+      };
+
+  bool get isVisual => switch (this) {
+        WorldType.engVisualQA || WorldType.engVisualQAReason || WorldType.visualQA => true,
         _ => false,
       };
 }

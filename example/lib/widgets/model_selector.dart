@@ -69,7 +69,7 @@ class ModelSelector extends ConsumerWidget {
             const _DownloadSource(),
             4.h,
             if (demoType == DemoType.world)
-              for (final worldType in WorldType.values) WorldGroupItem(worldType),
+              for (final worldType in WorldType.values.where((e) => e.isVisual)) WorldGroupItem(worldType),
             if (demoType == DemoType.tts)
               for (final fileInfo in ttsCores) TTSGroupItem(fileInfo),
             if (demoType == DemoType.chat)
