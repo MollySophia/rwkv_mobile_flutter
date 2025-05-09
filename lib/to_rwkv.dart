@@ -12,8 +12,6 @@ enum ToRWKV {
   getResponseBufferContent,
   getResponseBufferIds,
   getSamplerParams,
-  @Deprecated("")
-  getTTSSpkNames,
   initRuntime,
   loadTTSModels,
   loadVisionEncoder,
@@ -24,8 +22,6 @@ enum ToRWKV {
   releaseVisionEncoder,
   releaseWhisperEncoder,
   runTTS,
-  @Deprecated('Use runTTS instead')
-  runTTSWithPredefinedSpk,
   setAudioPrompt,
   setBosToken,
   setEnableReasoning,
