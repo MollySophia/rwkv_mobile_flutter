@@ -429,16 +429,6 @@ class RWKVMobile {
           retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_release_models(runtime);
           if (retVal != 0) sendPort.send({'error': 'Failed to release TTS models'});
 
-        // 🟥 getTTSSpkNames
-        case _FromFrontend.getTTSSpkNames:
-          final spksNames = rwkvMobile.rwkvmobile_runtime_cosyvoice_get_spk_names(runtime);
-          // names is a list of strings, separated by ','
-          final names = spksNames.cast<Utf8>().toDartString().split(',');
-          final namesList = names.map((name) => name.replaceAll("'", "")).toList();
-          // remove the last empty string
-          namesList.removeLast();
-          sendPort.send({'spksNames': namesList});
-
         // 🟥 runTTS
         case _FromFrontend.runTTS:
           final args = message.$2 as Map<String, dynamic>;
@@ -457,26 +447,6 @@ class RWKVMobile {
           );
           if (retVal != 0) {
             sendPort.send({'error': 'Failed to run TTS'});
-          } else {
-            sendPort.send({'ttsDone': true, 'outputWavPath': outputWavPath});
-          }
-
-        // 🟥 runTTSWithPredefinedSpk
-        case _FromFrontend.runTTSWithPredefinedSpk:
-          final args = message.$2 as Map<String, dynamic>;
-          final ttsText = args['ttsText'] as String;
-          final instructionText = args['instructionText'] as String;
-          final spkName = args['spkName'] as String;
-          final outputWavPath = args['outputWavPath'] as String;
-          retVal = rwkvMobile.rwkvmobile_runtime_run_tts_with_predefined_spks(
-            runtime,
-            ttsText.toNativeUtf8().cast<ffi.Char>(),
-            instructionText.toNativeUtf8().cast<ffi.Char>(),
-            spkName.toNativeUtf8().cast<ffi.Char>(),
-            outputWavPath.toNativeUtf8().cast<ffi.Char>(),
-          );
-          if (retVal != 0) {
-            sendPort.send({'error': 'Failed to run TTS with predefined speech embedding'});
           } else {
             sendPort.send({'ttsDone': true, 'outputWavPath': outputWavPath});
           }

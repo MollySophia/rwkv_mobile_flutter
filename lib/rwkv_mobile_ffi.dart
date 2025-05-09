@@ -581,36 +581,6 @@ class rwkv_mobile {
   late final _rwkvmobile_runtime_run_ttsPtr = _lookup<ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>>('rwkvmobile_runtime_run_tts');
   late final _rwkvmobile_runtime_run_tts = _rwkvmobile_runtime_run_ttsPtr.asFunction<int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
 
-  int rwkvmobile_runtime_run_tts_with_predefined_spks(
-    rwkvmobile_runtime_t runtime,
-    ffi.Pointer<ffi.Char> tts_text,
-    ffi.Pointer<ffi.Char> instruction_text,
-    ffi.Pointer<ffi.Char> spk_name,
-    ffi.Pointer<ffi.Char> output_wav_path,
-  ) {
-    return _rwkvmobile_runtime_run_tts_with_predefined_spks(
-      runtime,
-      tts_text,
-      instruction_text,
-      spk_name,
-      output_wav_path,
-    );
-  }
-
-  late final _rwkvmobile_runtime_run_tts_with_predefined_spksPtr = _lookup<ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>>('rwkvmobile_runtime_run_tts_with_predefined_spks');
-  late final _rwkvmobile_runtime_run_tts_with_predefined_spks = _rwkvmobile_runtime_run_tts_with_predefined_spksPtr.asFunction<int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
-
-  ffi.Pointer<ffi.Char> rwkvmobile_runtime_cosyvoice_get_spk_names(
-    rwkvmobile_runtime_t runtime,
-  ) {
-    return _rwkvmobile_runtime_cosyvoice_get_spk_names(
-      runtime,
-    );
-  }
-
-  late final _rwkvmobile_runtime_cosyvoice_get_spk_namesPtr = _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function(rwkvmobile_runtime_t)>>('rwkvmobile_runtime_cosyvoice_get_spk_names');
-  late final _rwkvmobile_runtime_cosyvoice_get_spk_names = _rwkvmobile_runtime_cosyvoice_get_spk_namesPtr.asFunction<ffi.Pointer<ffi.Char> Function(rwkvmobile_runtime_t)>();
-
   int rwkvmobile_runtime_cosyvoice_set_cfm_steps(
     rwkvmobile_runtime_t runtime,
     int cfm_steps,
