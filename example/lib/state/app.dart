@@ -13,6 +13,7 @@ class _App extends RawApp with WidgetsBindingObserver {
   late final demoType = qs(DemoType.chat);
 
   late final latestBuild = qs(-1);
+  late final latestBuildIos = qs(-1);
   late final noteZh = qs<List<String>>([]);
   late final noteEn = qs<List<String>>([]);
   late final modelConfig = qs<List<JSON>>([]);
@@ -125,28 +126,22 @@ extension _$App on _App {
 
   FV _showNewVersionDialogIfNeeded() async {
     qq;
-    if (latestBuild.q <= int.parse(buildNumber.q)) return;
 
-    if (!kDebugMode) {
-      if (P.app.demoType.q == DemoType.chat && !(Platform.isIOS || Platform.isAndroid)) {
-        return;
-      }
+    if (Platform.isAndroid && latestBuild.q <= int.parse(buildNumber.q)) return;
+    if (Platform.isIOS && latestBuildIos.q <= int.parse(buildNumber.q)) return;
 
-      if (P.app.demoType.q == DemoType.othello && !Platform.isAndroid) {
-        return;
-      }
+    if (!Platform.isIOS && !Platform.isAndroid) {
+      if (kDebugMode) Alert.warning("DEBUG: This feature is not supported on this platform");
+      qqw("This feature is not supported on this platform");
+      return;
     }
 
     final androidUrl = this.androidUrl.q;
     final iosUrl = this.iosUrl.q;
 
-    if (Platform.isAndroid && (androidUrl == null || androidUrl.isEmpty)) {
-      return;
-    }
+    if (Platform.isAndroid && (androidUrl == null || androidUrl.isEmpty)) return;
 
-    if (Platform.isIOS && (iosUrl == null || iosUrl.isEmpty)) {
-      return;
-    }
+    if (Platform.isIOS && (iosUrl == null || iosUrl.isEmpty)) return;
 
     await HF.wait(1);
 
@@ -173,7 +168,6 @@ extension _$App on _App {
     if (Platform.isAndroid) {
       if (androidUrl == null) {
         qqe("androidUrl is null");
-        if (!kDebugMode) Sentry.captureException(Exception("androidUrl is null"), stackTrace: StackTrace.current);
         return;
       }
       launchUrl(Uri.parse(androidUrl), mode: LaunchMode.externalApplication);
@@ -182,7 +176,6 @@ extension _$App on _App {
     if (Platform.isIOS) {
       if (iosUrl == null) {
         qqe("iosUrl is null");
-        if (!kDebugMode) Sentry.captureException(Exception("iosUrl is null"), stackTrace: StackTrace.current);
         return;
       }
       launchUrl(Uri.parse(iosUrl), mode: LaunchMode.externalApplication);
@@ -197,7 +190,7 @@ extension _$App on _App {
     }
 
     final build = config["latest_build"];
-
+    final buildIos = config["latest_build_ios"];
     if (build is! num) {
       qqe("build is not an num, build: $build");
       Sentry.captureException(Exception("build is not an num, build: $build"), stackTrace: StackTrace.current);
@@ -205,6 +198,7 @@ extension _$App on _App {
     }
 
     latestBuild.q = build.toInt();
+    latestBuildIos.q = buildIos.toInt();
     noteZh.q = (config["note_zh"] as List<dynamic>).m((e) => e.toString());
     noteEn.q = (config["note_en"] as List<dynamic>).m((e) => e.toString());
     modelConfig.q = HF.listJSON(config["model_config"]);
