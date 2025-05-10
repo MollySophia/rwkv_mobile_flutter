@@ -49,6 +49,43 @@ enum Language {
         zh_Hant => null,
       };
 
+  String? get jaName => switch (this) {
+        none => null,
+        en => "英語",
+        ja => "日本語",
+        ko => "韓国語",
+        zh_Hans => "簡体中国語",
+        zh_Hant => "繁体中国語",
+      };
+
+// 영어 / 간체 중국어 / 번체 중국어 / 일본어 / 한국어
+  String? get koName => switch (this) {
+        none => null,
+        en => "영어",
+        ja => "일본어",
+        ko => "한국어",
+        zh_Hans => "간체 중국어",
+        zh_Hant => "번체 중국어",
+      };
+
+  String? localizedName(Locale locale) {
+    switch (locale.languageCode) {
+      case 'en':
+        return enName;
+      case 'ja':
+        return jaName;
+      case 'ko':
+        return koName;
+      case 'zh':
+        if (locale.scriptCode == 'Hans') {
+          return zh_Hans.name;
+        }
+        return zh_Hant.name;
+      default:
+        return null;
+    }
+  }
+
   bool get isCJK {
     return name.startsWith('zh') || this == ja || this == ko;
   }

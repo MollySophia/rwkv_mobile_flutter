@@ -395,83 +395,134 @@ class _SpkPanel extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final spkPairs = ref.watch(P.tts.spkPairs);
-    final spkNames = spkPairs.keys;
+    var spkNames = spkPairs.keys;
     final selectSpkName = ref.watch(P.tts.selectSpkName);
     final primary = Theme.of(context).colorScheme.primary;
     final controller = ScrollController();
+    final currentLocale = Localizations.localeOf(context);
+    final selectedLanguage = ref.watch(P.tts.selectedLanguage);
+
+    switch (selectedLanguage) {
+      case Language.none:
+      case Language.en:
+        spkNames = spkPairs.keys.where((e) => e.contains(Language.en.enName!));
+      case Language.ja:
+        spkNames = spkPairs.keys.where((e) => e.contains(Language.ja.enName!));
+      case Language.ko:
+        spkNames = spkPairs.keys.where((e) => e.contains(Language.ko.enName!));
+      case Language.zh_Hans:
+        spkNames = spkPairs.keys.where((e) => e.contains(Language.zh_Hans.enName!));
+      case Language.zh_Hant:
+        spkNames = spkPairs.keys.where((e) => e.contains(Language.zh_Hans.enName!));
+    }
+
     return SB(
       height: 250,
-      child: RawScrollbar(
-        controller: controller,
-        padding: const EI.o(t: 12, b: 12),
-        child: ListView.builder(
-          controller: controller,
-          padding: const EI.o(t: 12, b: 12),
-          itemCount: spkNames.length,
-          itemBuilder: (context, index) {
-            final k = spkNames.elementAt(index);
-            final v = spkPairs[k];
+      child: Co(
+        c: CAA.stretch,
+        children: [
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Ro(
+              children: [Language.zh_Hans, Language.en, Language.ja, Language.ko].m((e) {
+                final flag = e.flag;
+                final localizedName = e.localizedName(currentLocale);
+                final selected = selectedLanguage == e;
+                return GD(
+                  onTap: () {
+                    P.tts.selectedLanguage.q = e;
+                    Gaimon.light();
+                  },
+                  child: C(
+                    padding: EI.s(h: 4, v: 2),
+                    margin: EI.o(r: 4),
+                    decoration: BD(
+                      color: selected ? primary.q(.1) : kC,
+                      borderRadius: 4.r,
+                      border: Border.all(color: kB.q(.5), width: .5),
+                    ),
+                    child: T((flag ?? "") + " " + (localizedName ?? "")),
+                  ),
+                );
+              }),
+            ),
+          ),
+          Exp(
+            child: RawScrollbar(
+              controller: controller,
+              padding: const EI.o(t: 12, b: 12),
+              child: ListView.builder(
+                controller: controller,
+                padding: const EI.o(t: 12, b: 12),
+                itemCount: spkNames.length,
+                itemBuilder: (context, index) {
+                  final k = spkNames.elementAt(index);
+                  final v = spkPairs[k];
 
-            final selected = selectSpkName == k;
+                  final selected = selectSpkName == k;
 
-            final language = Language.values.where((e) => e.enName != null).firstWhereOrNull((e) => k.contains(e.enName!));
+                  final language = Language.values.where((e) => e.enName != null).firstWhereOrNull((e) => k.contains(e.enName!));
 
-            final display = P.tts.safe(k) + " " + P.tts.safe(v) + " " + (language?.flag ?? "");
+                  final display = P.tts.safe(k) + " " + P.tts.safe(v) + " " + (language?.flag ?? "");
 
-            return GD(
-                onTap: () {
-                  qq;
-                  P.tts.selectSpkName.q = k;
-                  P.tts.selectSourceAudioPath.q = null;
-                  Gaimon.light();
-                },
-                child: Ro(
-                  children: [
-                    Exp(
-                      child: C(
-                        padding: const EI.o(t: 4, b: 4, l: 8, r: 8),
-                        decoration: BD(
-                          color: selected ? primary.q(.1) : kC,
-                          borderRadius: 6.r,
-                        ),
-                        child: Ro(
-                          children: [
-                            Exp(
-                              child: T(
-                                display,
-                                s: TS(c: selected ? primary : primary.q(.8), w: selected ? FW.w600 : FW.w400),
+                  return GD(
+                      onTap: () {
+                        qq;
+                        P.tts.selectSpkName.q = k;
+                        P.tts.selectSourceAudioPath.q = null;
+                        Gaimon.light();
+                      },
+                      child: Ro(
+                        children: [
+                          Exp(
+                            child: C(
+                              padding: const EI.o(t: 4, b: 4, l: 8, r: 8),
+                              decoration: BD(
+                                color: selected ? primary.q(.1) : kC,
+                                borderRadius: 6.r,
+                              ),
+                              child: Ro(
+                                children: [
+                                  Exp(
+                                    child: T(
+                                      display,
+                                      s: TS(c: selected ? primary : primary.q(.8), w: selected ? FW.w600 : FW.w400),
+                                    ),
+                                  ),
+                                  if (selected)
+                                    Icon(
+                                      Icons.check,
+                                      color: primary,
+                                      size: 14,
+                                    ),
+                                ],
                               ),
                             ),
-                            if (selected)
-                              Icon(
-                                Icons.check,
+                          ),
+                          GD(
+                            onTap: () async {
+                              final path = await P.tts.getPrebuiltSpkAudioPathFromTemp(k);
+                              P.chat.latestClickedMessage.q = null;
+                              await P.world.play(path: path);
+                            },
+                            child: C(
+                              padding: const EI.a(6.5),
+                              decoration: const BD(color: kC),
+                              child: Icon(
+                                Icons.volume_up,
                                 color: primary,
                                 size: 14,
                               ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    GD(
-                      onTap: () async {
-                        final path = await P.tts.getPrebuiltSpkAudioPathFromTemp(k);
-                        P.chat.latestClickedMessage.q = null;
-                        await P.world.play(path: path);
-                      },
-                      child: C(
-                        padding: const EI.a(6.5),
-                        decoration: const BD(color: kC),
-                        child: Icon(
-                          Icons.volume_up,
-                          color: primary,
-                          size: 14,
-                        ),
-                      ),
-                    ),
-                  ],
-                ));
-          },
-        ),
+                            ),
+                          ),
+                        ],
+                      ));
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

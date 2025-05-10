@@ -1,5 +1,16 @@
 part of 'p.dart';
 
+extension _Instruction on Language {
+  String get _instruct => switch (this) {
+        Language.none => "",
+        Language.en => "",
+        Language.ja => "日本語で話してください。",
+        Language.ko => "한국어로 말씀해주세요.",
+        Language.zh_Hans => "",
+        Language.zh_Hant => "",
+      };
+}
+
 class _TTS {
   late final spkPairs = qs<JSON>({});
   late final selectSpkName = qsn<String>();
@@ -21,6 +32,8 @@ class _TTS {
   late final intonationShown = qs(false);
 
   late final selectSourceAudioPath = qsn<String>();
+
+  late final selectedLanguage = qs(Language.none);
 
   late final cfmSteps = qs(_defaultCfmSteps);
 
@@ -92,14 +105,17 @@ extension _$TTS on _TTS {
       Alert.warning("TTS is running, please wait for it to finish");
       return;
     }
-    ttsDone.q = false;
-    P.rwkv.send(ToRWKV.runTTS, {
+
+    final options = {
       "ttsText": ttsText,
       "instructionText": instructionText,
       "promptWavPath": promptWavPath,
       "outputWavPath": outputWavPath,
       "promptSpeechText": promptSpeechText,
-    });
+    };
+
+    ttsDone.q = false;
+    P.rwkv.send(ToRWKV.runTTS, options);
   }
 }
 
@@ -284,8 +300,7 @@ extension $TTS on _TTS {
     P.chat.receiveId.q = receiveId;
     P.chat.messages.ua(receiveMsg);
 
-    qqq("""
-ttsText: $ttsText
+    qqr("""ttsText: $ttsText
 instructionText: $instructionText
 promptWavPath: $selectSourceAudioPath
 promptSpeechText: $promptSpeechText
