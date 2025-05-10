@@ -639,6 +639,19 @@ class rwkv_mobile {
 
   late final _rwkvmobile_set_loglevelPtr = _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>('rwkvmobile_set_loglevel');
   late final _rwkvmobile_set_loglevel = _rwkvmobile_set_loglevelPtr.asFunction<void Function(int)>();
+
+  void rwkvmobile_set_cache_dir(
+    rwkvmobile_runtime_t runtime,
+    ffi.Pointer<ffi.Char> cache_dir,
+  ) {
+    return _rwkvmobile_set_cache_dir(
+      runtime,
+      cache_dir,
+    );
+  }
+
+  late final _rwkvmobile_set_cache_dirPtr = _lookup<ffi.NativeFunction<ffi.Void Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>)>>('rwkvmobile_set_cache_dir');
+  late final _rwkvmobile_set_cache_dir = _rwkvmobile_set_cache_dirPtr.asFunction<void Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>)>();
 }
 
 final class sampler_params extends ffi.Struct {
