@@ -91,7 +91,7 @@ class RWKVMobile {
     final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
 
     // uncomment this to enable runtime debug logs
-    // rwkvMobile.rwkvmobile_set_loglevel(RWKV_LOG_LEVEL_DEBUG);
+    rwkvMobile.rwkvmobile_set_loglevel(RWKV_LOG_LEVEL_DEBUG);
 
     // definitions
     int maxLength = 2000;
@@ -128,6 +128,9 @@ class RWKVMobile {
 
     retVal = rwkvMobile.rwkvmobile_runtime_load_model(runtime, modelPath.toNativeUtf8().cast<ffi.Char>());
     if (retVal != 0) throw Exception('😡 Failed to load model, model path: $modelPath');
+
+    final tempDir = await getTemporaryDirectory();
+    rwkvMobile.rwkvmobile_set_cache_dir(runtime, tempDir.path.toNativeUtf8().cast<ffi.Char>());
 
     await for (final (String, dynamic) message in receivePort) {
       // message: (String command, Dynamic args)
