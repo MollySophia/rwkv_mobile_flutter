@@ -422,6 +422,14 @@ extension $RWKV on _RWKV {
       "ttsTokenizerPath": ttsTokenizerPath,
     });
 
+    final ttsTextNormalizerDatePath = await fromAssetsToTemp("assets/config/chat/date-zh.fst");
+    final ttsTextNormalizerNumberPath = await fromAssetsToTemp("assets/config/chat/number-zh.fst");
+    final ttsTextNormalizerPhonePath = await fromAssetsToTemp("assets/config/chat/phone-zh.fst");
+    // note: order matters here
+    send(ToRWKV.loadTTSTextNormalizer, {"fstPath": ttsTextNormalizerDatePath});
+    send(ToRWKV.loadTTSTextNormalizer, {"fstPath": ttsTextNormalizerNumberPath});
+    send(ToRWKV.loadTTSTextNormalizer, {"fstPath": ttsTextNormalizerPhonePath});
+
     _loading.q = false;
   }
 

@@ -7,6 +7,8 @@ enum ToRWKV {
   getIsGenerating,
   getPrefillAndDecodeSpeed,
   getPrompt,
+  getTTSGenerationProgress,
+  getTTSOutputFileList,
 
   /// 获取responseBufferContentstop之后responseBufferContent还保留着，然后resume之后responseBufferContent会先短暂清空，然后变成stop前已经生成了的内容并接着生成
   getResponseBufferContent,
@@ -14,6 +16,7 @@ enum ToRWKV {
   getSamplerParams,
   initRuntime,
   loadTTSModels,
+  loadTTSTextNormalizer,
   loadVisionEncoder,
   loadWhisperEncoder,
   message,

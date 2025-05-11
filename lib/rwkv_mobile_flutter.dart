@@ -298,7 +298,7 @@ class RWKVMobile {
           } else {
             sendPort.send({'generateStart': true});
             if (kDebugMode) print("💬 Starting LLM generation thread (chat mode)");
-            retVal = rwkvMobile.rwkvmobile_runtime_eval_chat_with_history(runtime, inputsPtr, numInputs, maxLength, ffi.nullptr, enableReasoning);
+            retVal = rwkvMobile.rwkvmobile_runtime_eval_chat_with_history_async(runtime, inputsPtr, numInputs, maxLength, ffi.nullptr, enableReasoning);
             if (kDebugMode) print("💬 Started LLM generation thread (chat mode)");
             if (retVal != 0) sendPort.send({'generateStop': true, 'error': 'Failed to start generation thread: retVal: $retVal'});
           }
@@ -313,7 +313,7 @@ class RWKVMobile {
           } else {
             sendPort.send({'generateStart': true});
             if (kDebugMode) print("🔥 Starting LLM generation thread (gen mode), maxlength = $maxLength");
-            retVal = rwkvMobile.rwkvmobile_runtime_gen_completion(runtime, promptPtr, maxLength, generationStopToken, ffi.nullptr);
+            retVal = rwkvMobile.rwkvmobile_runtime_gen_completion_async(runtime, promptPtr, maxLength, generationStopToken, ffi.nullptr);
             if (kDebugMode) print("🔥 Started LLM generation thread (gen mode)");
             if (retVal != 0) sendPort.send({'generateStop': true, 'error': 'Failed to start generation'});
           }
@@ -334,7 +334,7 @@ class RWKVMobile {
           final nativeCallable = ffi.NativeCallable<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int)>.isolateLocal(callbackFunction);
           sendPort.send({'generateStart': true});
           if (kDebugMode) print("🔥 Start to call LLM (gen mode), maxlength = $maxLength");
-          retVal = rwkvMobile.rwkvmobile_runtime_gen_completion_blocking(runtime, promptPtr, maxLength, generationStopToken, nativeCallable.nativeFunction);
+          retVal = rwkvMobile.rwkvmobile_runtime_gen_completion(runtime, promptPtr, maxLength, generationStopToken, nativeCallable.nativeFunction);
           if (kDebugMode) print("🔥 Call LLM done (gen mode)");
           if (retVal != 0) sendPort.send({'generateStop': true, 'error': 'Failed to start generation'});
 
@@ -395,7 +395,6 @@ class RWKVMobile {
         case _FromFrontend.getResponseBufferContent:
           final responseBufferContent = rwkvMobile.rwkvmobile_runtime_get_response_buffer_content(runtime);
           int length = responseBufferContent.length;
-          // TODO: @molly 有没有可能有一个回调函数, 每次只返回一个字符?
           final Uint8List byteList = responseBufferContent.content.cast<ffi.Uint8>().asTypedList(length);
           final String str = _codec.decode(byteList);
           sendPort.send({'responseBufferContent': str});
@@ -426,6 +425,13 @@ class RWKVMobile {
           if (retVal != 0) sendPort.send({'error': 'Failed to load TTS models'});
           rwkvMobile.rwkvmobile_runtime_cosyvoice_set_cfm_steps(runtime, 5);
 
+        // 🟥 loadTTSTextNormalizer
+        case _FromFrontend.loadTTSTextNormalizer:
+          final args = message.$2 as Map<String, dynamic>;
+          final fstPath = args['fstPath'] as String;
+          retVal = rwkvMobile.rwkvmobile_runtime_tts_register_text_normalizer(runtime, fstPath.toNativeUtf8().cast<ffi.Char>());
+          if (retVal != 0) sendPort.send({'error': 'Failed to load TTS Text Normalizer file $fstPath'});
+
         // 🟥 releaseTTSModels
         case _FromFrontend.releaseTTSModels:
           retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_release_models(runtime);
@@ -439,6 +445,7 @@ class RWKVMobile {
           final promptSpeechText = args['promptSpeechText'] as String;
           final promptWavPath = args['promptWavPath'] as String;
           final outputWavPath = args['outputWavPath'] as String;
+          // TODO: use rwkvmobile_runtime_run_tts_async instead
           retVal = rwkvMobile.rwkvmobile_runtime_run_tts(
             runtime,
             ttsText.toNativeUtf8().cast<ffi.Char>(),
@@ -452,6 +459,20 @@ class RWKVMobile {
           } else {
             sendPort.send({'ttsDone': true, 'outputWavPath': outputWavPath});
           }
+
+        // 🟥 getTTSGenerationProgress
+        case _FromFrontend.getTTSGenerationProgress:
+          final ttsProgress = rwkvMobile.rwkvmobile_runtime_tts_get_generation_progress(runtime);
+          // Range from 0.0 to 1.0
+          sendPort.send({'ttsProgress': ttsProgress});
+
+        // 🟥 getTTSOutputFileList
+        case _FromFrontend.getTTSOutputFileList:
+          final ttsOutputFiles = rwkvMobile.rwkvmobile_runtime_tts_get_last_output_files(runtime);
+          final outputFiles = ttsOutputFiles.cast<Utf8>().toDartString();
+          final fileList = outputFiles.split(',').map((f) => '"$f"').toList();
+          // TODO: check if the string parsing is correct
+          sendPort.send({'ttsOutputFiles': fileList});
 
         // 🟥 setTTSCFMSteps
         case _FromFrontend.setTTSCFMSteps:

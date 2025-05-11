@@ -249,7 +249,9 @@ extension $TTS on _TTS {
 
     final instructionText = textInInput.q;
 
-    final outputWavPath = P.app.cacheDir.q!.path + "/$receiveId.output.wav";
+    final outputWavPrefix = P.app.cacheDir.q!.path + "/$receiveId.output";
+    // TODO: handle multiple wav output via getTTSOutputFileList
+    final outputWavPath = P.app.cacheDir.q!.path + "/$receiveId.output.0.wav";
 
     if (ttsText.isEmpty) {
       Alert.warning("Please enter text to generate TTS");
@@ -311,7 +313,7 @@ outputWavPath: $outputWavPath""");
       instructionText: instructionText,
       promptWavPath: selectSourceAudioPath,
       promptSpeechText: promptSpeechText,
-      outputWavPath: outputWavPath,
+      outputWavPath: outputWavPrefix,
     );
   }
 
