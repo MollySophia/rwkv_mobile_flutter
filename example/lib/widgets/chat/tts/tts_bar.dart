@@ -426,7 +426,7 @@ class _SpkPanel extends ConsumerWidget {
             scrollDirection: Axis.horizontal,
             physics: const AlwaysScrollableScrollPhysics(),
             child: Ro(
-              children: [Language.zh_Hans, Language.en, Language.ja, Language.ko].m((e) {
+              children: [Language.zh_Hans, Language.en, Language.ja].m((e) {
                 final flag = e.flag;
                 final localizedName = e.localizedName(currentLocale);
                 final selected = selectedLanguage == e;
