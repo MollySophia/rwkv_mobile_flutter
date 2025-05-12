@@ -1,3 +1,5 @@
+/// Send request from frontend isolate to rwkv isolate
+///
 /// 可以使用 switch case 来处理各个 response
 ///
 /// 每个 request 可以携带自己需要的响应参数

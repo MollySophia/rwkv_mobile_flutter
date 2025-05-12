@@ -35,7 +35,11 @@
 
 ### Frontend to RWKV
 
-```ToRWKV
+Frontend isolate 和 RWKV isolate 通过 sendPort 进行通讯, sendPort 发送两种类型的消息
+
+```dart
+/// Send request from frontend isolate to rwkv isolate
+///
 /// 可以使用 switch case 来处理各个 response
 ///
 /// 每个 request 可以携带自己需要的响应参数
@@ -48,7 +52,9 @@ sealed class ToRWKV {}
 
 ### RWKV to frontend
 
-```FromRWKV
+```dart
+/// Send response from rwkv isolate to frontend isolate
+///
 /// 可以使用 switch case 来处理各个 response
 ///
 /// 每个 response 可以携带自己需要的响应参数
@@ -58,3 +64,5 @@ sealed class ToRWKV {}
 /// 建议同时打开 lib/rwkv_mobile_flutter.dart 文件以获得快速智能提示
 sealed class FromRWKV {}
 ```
+
+- [Dart lang: class modifiers > sealed](https://dart.dev/language/class-modifiers-for-apis#the-sealed-modifier) How to use the class modifiers added in Dart 3.0 to make your package's API more robust and maintainable.
