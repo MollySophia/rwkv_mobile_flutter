@@ -36,11 +36,25 @@
 ### Frontend to RWKV
 
 ```ToRWKV
-
+/// 可以使用 switch case 来处理各个 response
+///
+/// 每个 request 可以携带自己需要的响应参数
+///
+/// 可以在该文件中使用 cursor tab 来快速生成各个 request
+///
+/// 建议同时打开 lib/rwkv_mobile_flutter.dart 文件以获得快速智能提示
+sealed class ToRWKV {}
 ```
 
 ### RWKV to frontend
 
 ```FromRWKV
-
+/// 可以使用 switch case 来处理各个 response
+///
+/// 每个 response 可以携带自己需要的响应参数
+///
+/// 可以在该文件中使用 cursor tab 来快速生成各个 request
+///
+/// 建议同时打开 lib/rwkv_mobile_flutter.dart 文件以获得快速智能提示
+sealed class FromRWKV {}
 ```
