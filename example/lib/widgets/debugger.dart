@@ -37,7 +37,7 @@ class Debugger extends ConsumerWidget {
     final spkShown = ref.watch(P.tts.spkShown);
     final audioInteractorShown = ref.watch(P.tts.audioInteractorShown);
     final intonationShown = ref.watch(P.tts.intonationShown);
-    final selectSpkName = ref.watch(P.tts.selectSpkName);
+    final selectSpkName = ref.watch(P.tts.selectedSpkName);
     final selectSourceAudioPath = ref.watch(P.tts.selectSourceAudioPath);
 
     final textInInput = ref.watch(P.tts.textInInput);

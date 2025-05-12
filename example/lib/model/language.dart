@@ -31,6 +31,15 @@ enum Language {
         zh_Hant => "繁體中文",
       };
 
+  String? get soundDisplay => switch (this) {
+        none => null,
+        en => "English",
+        ja => "日本語",
+        ko => "한국어",
+        zh_Hans => "普通话",
+        zh_Hant => "普通话",
+      };
+
   String? get flag => switch (this) {
         none => null,
         en => "🇺🇸",

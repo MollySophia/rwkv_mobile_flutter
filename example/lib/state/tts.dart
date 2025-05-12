@@ -12,34 +12,42 @@ extension _Instruction on Language {
 }
 
 class _TTS {
-  late final spkPairs = qs<JSON>({});
-  late final selectSpkName = qsn<String>();
-  late final selectedFlag = qsn<String>();
-
-  late final ttsDone = qs(true);
-
+  late final audioInteractorShown = qs(false);
+  late final cfmSteps = qs(_defaultCfmSteps);
   late final focusNode = FocusNode();
   late final hasFocus = qs(false);
-
-  late final defaultTextInInput = "请用正常的语气说";
-  late final textEditingController = TextEditingController(text: defaultTextInInput);
-  late final textInInput = qs(defaultTextInInput);
-
-  late final interactingInstruction = qs(TTSInstruction.none);
   late final instructions = qsf<int?, TTSInstruction>(null);
-
-  late final audioInteractorShown = qs(false);
-  late final spkShown = qs(false);
+  late final interactingInstruction = qs(TTSInstruction.none);
   late final intonationShown = qs(false);
-
   late final selectSourceAudioPath = qsn<String>();
-
   late final selectedLanguage = qs(Language.none);
 
-  late final cfmSteps = qs(_defaultCfmSteps);
+  /// 若用户选择自己的声音作为源声音, 则该 value 为 null
+  late final selectedSpkName = qsn<String>();
 
+  late final selectedSpkPanelFilter = qs(Language.none);
+  late final spkPairs = qs<JSON>({});
+  late final spkShown = qs(false);
+  late final textEditingController = TextEditingController(text: _defaultTextInInput);
+  late final textInInput = qs(_defaultTextInInput);
+  late final ttsDone = qs(true);
+
+  static const _defaultTextInInput = "请用正常的语气说";
   static const _cfmStepsKey = "cfmSteps";
   static const _defaultCfmSteps = 5;
+  static const _replaceMap = {
+    "English": "🇺🇸",
+    "Japanese": "🇯🇵",
+    "Korean": "🇰🇷",
+    "Chinese(PRC)": "🇨🇳",
+  };
+
+  static const _spkNameToLanguageMap = {
+    "English": Language.en,
+    "Japanese": Language.ja,
+    "Korean": Language.ko,
+    "Chinese(PRC)": Language.zh_Hans,
+  };
 }
 
 /// Private methods
@@ -61,17 +69,38 @@ extension _$TTS on _TTS {
       this.cfmSteps.q = cfmSteps;
     }
 
-    const defaultKey = "March 7th_6";
-    if (spkPairs.q.containsKey(defaultKey)) {
-      selectSpkName.q = defaultKey;
-    } else {
-      selectSpkName.q = spkPairs.q.keys.random;
-    }
+    final spkPairs = this.spkPairs.q;
+
+    selectedSpkName.q = spkPairs.keys.where((e) => e.contains("Chinese")).random;
+
     selectSourceAudioPath.q = null;
 
     focusNode.addListener(() {
       hasFocus.q = focusNode.hasFocus;
     });
+
+    selectedSpkName.l(_onSelectSpkNameChanged, fireImmediately: true);
+    spkShown.l(_onSpkShownChanged, fireImmediately: true);
+  }
+
+  void _onSpkShownChanged(bool next) {
+    selectedSpkPanelFilter.q = selectedLanguage.q;
+  }
+
+  void _onSelectSpkNameChanged(String? next) {
+    qq;
+    if (next == null) {
+      selectedLanguage.q = Language.none;
+      return;
+    }
+
+    for (final key in _TTS._spkNameToLanguageMap.keys) {
+      final contains = next.contains(key);
+      if (contains) {
+        selectedLanguage.q = _TTS._spkNameToLanguageMap[key]!;
+        return;
+      }
+    }
   }
 
   void _onChatFocusNodeChanged() {
@@ -178,6 +207,7 @@ extension $TTS on _TTS {
     }
   }
 
+  @Deprecated("想想更面向状态的方法")
   String safe(String input) {
     const replaceMap = {};
 
@@ -193,16 +223,10 @@ extension $TTS on _TTS {
     return name;
   }
 
+  @Deprecated("想想更面向状态的方法")
   String flagChange(String input) {
-    const replaceMap = {
-      "English": "🇺🇸",
-      "Japanese": "🇯🇵",
-      "Korean": "🇰🇷",
-      "Chinese(RPC)": "🇨🇳",
-    };
-
     String name = input;
-    replaceMap.forEach((key, value) {
+    _TTS._replaceMap.forEach((key, value) {
       name = name.replaceAll(key, value);
     });
 
@@ -237,7 +261,7 @@ extension $TTS on _TTS {
     late final Message? msg;
     final id = HF.microseconds;
     final receiveId = HF.microseconds + 1;
-    final spkName = selectSpkName.q;
+    final spkName = selectedSpkName.q;
 
     if (spkName == null && this.selectSourceAudioPath.q == null) {
       Alert.warning("Please select a spk or a wav file");
@@ -333,7 +357,7 @@ outputWavPath: $outputWavPath""");
 
   void onRefreshButtonPressed() {
     qq;
-    textInInput.q = defaultTextInInput;
+    textInInput.q = _TTS._defaultTextInInput;
     TTSInstruction.values.forEach((action) {
       instructions(action).q = null;
     });

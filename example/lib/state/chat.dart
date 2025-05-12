@@ -678,7 +678,7 @@ extension _$Chat on _Chat {
       final path = file.path;
       qqq("new file received: $path, length: $length");
       P.tts.selectSourceAudioPath.q = path;
-      P.tts.selectSpkName.uc();
+      P.tts.selectedSpkName.uc();
     }
   }
 

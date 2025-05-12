@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:gaimon/gaimon.dart';
 import 'package:halo_state/halo_state.dart';
@@ -28,7 +27,8 @@ class TTSBar extends ConsumerWidget {
     final audioInteractorShown = ref.watch(P.tts.audioInteractorShown);
     final intonationShown = ref.watch(P.tts.intonationShown);
     final spkShown = ref.watch(P.tts.spkShown);
-    final selectSpkName = ref.watch(P.tts.selectSpkName);
+    final selectedSpkName = ref.watch(P.tts.selectedSpkName);
+    final selectedLanguage = ref.watch(P.tts.selectedLanguage);
     final primary = Theme.of(context).colorScheme.primary;
     final selectSourceAudioPath = ref.watch(P.tts.selectSourceAudioPath);
     final sourceWavName = selectSourceAudioPath?.split("/").last;
@@ -36,12 +36,11 @@ class TTSBar extends ConsumerWidget {
 
     String target = "";
 
-    if (selectSpkName != null) {
-      target = S.current.imitate_target + ": " + (P.tts.safe(selectSpkName));
-      target += " " + pairs[selectSpkName];
-      if (kDebugMode) {
-        target += " (" + P.tts.safe(selectSpkName) + ")";
-      }
+    if (selectedSpkName != null) {
+      target = S.current.imitate_target + ": " + (P.tts.safe(selectedSpkName));
+      target += " " + pairs[selectedSpkName];
+      final flag = selectedLanguage.flag;
+      if (flag != null) target += " " + flag;
     }
 
     return GD(
@@ -51,7 +50,7 @@ class TTSBar extends ConsumerWidget {
         child: Co(
           c: CAA.stretch,
           children: [
-            if (selectSpkName != null)
+            if (selectedSpkName != null)
               C(
                 padding: const EI.s(v: 4),
                 child: T(target, s: TS(c: primary, w: FW.w600)),
@@ -65,7 +64,7 @@ class TTSBar extends ConsumerWidget {
             if (audioInteractorShown) const _AudioInteractor(),
             if (spkShown) const _SpkPanel(),
             if (intonationShown) const _IntonationPanel(),
-            if (!audioInteractorShown && !intonationShown && !spkShown && selectSpkName == null) const _Instruction(),
+            if (!audioInteractorShown && !intonationShown && !spkShown && selectedSpkName == null) const _Instruction(),
           ],
         ),
       ),
@@ -99,7 +98,7 @@ class _AudioInteractor extends ConsumerWidget {
     }
 
     P.tts.selectSourceAudioPath.q = path;
-    P.tts.selectSpkName.q = null;
+    P.tts.selectedSpkName.q = null;
     Gaimon.light();
   }
 
@@ -397,13 +396,14 @@ class _SpkPanel extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final spkPairs = ref.watch(P.tts.spkPairs);
     var spkNames = spkPairs.keys;
-    final selectSpkName = ref.watch(P.tts.selectSpkName);
+    final selectSpkName = ref.watch(P.tts.selectedSpkName);
     final primary = Theme.of(context).colorScheme.primary;
     final controller = ScrollController();
-    final currentLocale = Localizations.localeOf(context);
-    final selectedLanguage = ref.watch(P.tts.selectedLanguage);
 
-    switch (selectedLanguage) {
+    final selectedLanguage = ref.watch(P.tts.selectedLanguage);
+    final selectedSpkPanelFilter = ref.watch(P.tts.selectedSpkPanelFilter);
+
+    switch (selectedSpkPanelFilter) {
       case Language.none:
       case Language.en:
         spkNames = spkPairs.keys.where((e) => e.contains(Language.en.enName!));
@@ -428,22 +428,30 @@ class _SpkPanel extends ConsumerWidget {
             child: Ro(
               children: [Language.zh_Hans, Language.en, Language.ja].m((e) {
                 final flag = e.flag;
-                final localizedName = e.localizedName(currentLocale);
+                final localizedName = e.soundDisplay;
                 final selected = selectedLanguage == e;
+                final filtered = selectedSpkPanelFilter == e;
+
                 return GD(
                   onTap: () {
-                    P.tts.selectedLanguage.q = e;
+                    P.tts.selectedSpkPanelFilter.q = e;
                     Gaimon.light();
                   },
                   child: C(
                     padding: EI.s(h: 4, v: 2),
                     margin: EI.o(r: 4),
                     decoration: BD(
-                      color: selected ? primary.q(.1) : kC,
+                      color: filtered ? primary.q(.1) : kC,
                       borderRadius: 4.r,
                       border: Border.all(color: kB.q(.5), width: .5),
                     ),
-                    child: T((flag ?? "") + " " + (localizedName ?? "")),
+                    child: Ro(
+                      children: [
+                        T((flag ?? "") + " " + (localizedName ?? "")),
+                        if (selected) 4.w,
+                        if (selected) Icon(Icons.circle, color: primary, size: 8),
+                      ],
+                    ),
                   ),
                 );
               }),
@@ -470,7 +478,7 @@ class _SpkPanel extends ConsumerWidget {
                   return GD(
                       onTap: () {
                         qq;
-                        P.tts.selectSpkName.q = k;
+                        P.tts.selectedSpkName.q = k;
                         P.tts.selectSourceAudioPath.q = null;
                         Gaimon.light();
                       },
@@ -537,7 +545,7 @@ class _Instruction extends ConsumerWidget {
     final hasFocus = ref.watch(P.tts.hasFocus);
     final interactingInstruction = ref.watch(P.tts.interactingInstruction);
     final primary = Theme.of(context).colorScheme.primary;
-    final selectSpkName = ref.watch(P.tts.selectSpkName);
+    final selectSpkName = ref.watch(P.tts.selectedSpkName);
     return Stack(
       children: [
         if (selectSpkName == null)
