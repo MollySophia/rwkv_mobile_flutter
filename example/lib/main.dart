@@ -19,6 +19,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 void main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   await _loadEnv();
+  HF.init();
   await P.init();
   if (kDebugMode) {
     await _debugAppRunner();

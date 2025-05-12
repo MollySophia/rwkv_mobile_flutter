@@ -16,7 +16,7 @@ class _TTS {
   late final cfmSteps = qs(_defaultCfmSteps);
   late final focusNode = FocusNode();
   late final hasFocus = qs(false);
-  late final instructions = qsf<int?, TTSInstruction>(null);
+  late final instructions = qsf<TTSInstruction, int?>(null);
   late final interactingInstruction = qs(TTSInstruction.none);
   late final intonationShown = qs(false);
   late final selectSourceAudioPath = qsn<String>();
@@ -257,8 +257,8 @@ extension $TTS on _TTS {
     if (!P.chat.canSend.q) return;
 
     late final Message? msg;
-    final id = HF.microseconds;
-    final receiveId = HF.microseconds + 1;
+    final id = HF.shorterUS;
+    final receiveId = HF.shorterUS + 1;
     final spkName = selectedSpkName.q;
 
     if (spkName == null && this.selectSourceAudioPath.q == null) {

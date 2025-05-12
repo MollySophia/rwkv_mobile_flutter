@@ -23,7 +23,7 @@ class _RWKV {
   late final argumentsPanelShown = qs(false);
 
   // TODO: @wangce 或许, 默认参数应该和 weights 绑定, 比如, Othello model 的 topK 应该始终是 1
-  late final arguments = qsff<double, Argument>((ref, argument) {
+  late final arguments = qsff<Argument, double>((ref, argument) {
     return argument.defaults;
   });
 
@@ -188,9 +188,9 @@ extension $RWKV on _RWKV {
 
     if (_sendPort != null) {
       try {
-        final startMS = HF.microseconds;
+        final startMS = HF.shorterUS;
         await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
-        final endMS = HF.microseconds;
+        final endMS = HF.shorterUS;
         qqr("initRuntime done in ${endMS - startMS}ms");
       } catch (e) {
         qqe("initRuntime failed: $e");
@@ -260,9 +260,9 @@ extension $RWKV on _RWKV {
       try {
         send(to_rwkv.ReleaseWhisperEncoder());
         send(to_rwkv.ReleaseModel());
-        final startMS = HF.microseconds;
+        final startMS = HF.shorterUS;
         await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
-        final endMS = HF.microseconds;
+        final endMS = HF.shorterUS;
         qqr("initRuntime done in ${endMS - startMS}ms");
       } catch (e) {
         qqe("initRuntime failed: $e");
@@ -317,9 +317,9 @@ extension $RWKV on _RWKV {
     if (_sendPort != null) {
       send(to_rwkv.ReleaseVisionEncoder());
       send(to_rwkv.ReleaseModel());
-      final startMS = HF.microseconds;
+      final startMS = HF.shorterUS;
       await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
-      final endMS = HF.microseconds;
+      final endMS = HF.shorterUS;
       qqr("initRuntime done in ${endMS - startMS}ms");
     } else {
       final options = StartOptions(
@@ -376,9 +376,9 @@ extension $RWKV on _RWKV {
     if (_sendPort != null) {
       try {
         send(to_rwkv.ReleaseTTSModels());
-        final startMS = HF.microseconds;
+        final startMS = HF.shorterUS;
         await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
-        final endMS = HF.microseconds;
+        final endMS = HF.shorterUS;
         qqr("initRuntime done in ${endMS - startMS}ms");
       } catch (e) {
         qqe("initRuntime failed: $e");
@@ -702,12 +702,6 @@ extension _$RWKV on _RWKV {
       return;
     }
 
-    if (message["error"] != null) {
-      Alert.error(message["error"]);
-      qqq("error: ${message["error"]}");
-      return;
-    }
-
     if (message["ttsDone"] != null) {
       qqr("ttsDone");
       P.tts.ttsDone.q = true;
@@ -728,7 +722,14 @@ extension _$RWKV on _RWKV {
   void _handleFromRWKV(from_rwkv.FromRWKV message) {
     switch (message) {
       case from_rwkv.Error response:
+        if (kDebugMode) {
+          String errorLog = "error: ${response.message}";
+          if (message.to != null) errorLog += " in ${message.to.runtimeType}";
+          if (message.to?.requestId != null) errorLog += " requestId: ${message.to?.requestId}";
+          qqe(errorLog);
+        }
         Alert.error(response.message);
+
       case from_rwkv.CurrentPrompt response:
       case from_rwkv.EnableReasoning response:
       case from_rwkv.GenerateStart response:

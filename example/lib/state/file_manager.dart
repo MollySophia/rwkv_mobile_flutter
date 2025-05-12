@@ -3,11 +3,11 @@
 part of 'p.dart';
 
 class _FileManager {
-  late final locals = qsff<LocalFile, FileInfo>((ref, key) {
+  late final locals = qsff<FileInfo, LocalFile>((ref, key) {
     return LocalFile(fileInfo: key, targetPath: ref.watch(paths(key)));
   });
 
-  late final paths = qsff<String, FileInfo>((ref, key) {
+  late final paths = qsff<FileInfo, String>((ref, key) {
     final dir = ref.watch(P.app.documentsDir);
     final fileName = key.fileName;
     final dirPath = dir!.path;

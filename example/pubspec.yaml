@@ -36,7 +36,7 @@ dependencies:
   freezed_annotation: # https://pub.dev/packages/freezed_annotation/
   gaimon: # https://pub.dev/packages/gaimon/
   go_router: # https://pub.dev/packages/go_router/
-  halo: ^0.6.0 # https://pub.dev/packages/halo/
+  halo: ^0.7.2 # https://pub.dev/packages/halo/
   halo_alert: # https://pub.dev/packages/halo_alert/
   halo_state: # https://pub.dev/packages/halo_state/
   http: # https://pub.dev/packages/http/

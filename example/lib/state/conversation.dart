@@ -80,7 +80,7 @@ extension $Conversation on _Conversation {
 
   FV addMessage(Message message, [Conversation? conversation]) async {
     if (!Config.enableConversation) return;
-    final now = HF.microseconds;
+    final now = HF.shorterUS;
     if (conversation == null) {
       // Create new conversation
       final newId = conversations.q.isEmpty ? 1 : (conversations.q.firstOrNull?.id ?? 0) + 1;
@@ -142,7 +142,7 @@ extension $Conversation on _Conversation {
       name: conversation.name,
       messages: messages,
       createdAt: conversation.createdAt,
-      updatedAt: HF.microseconds,
+      updatedAt: HF.shorterUS,
     );
 
     conversations.q = [
