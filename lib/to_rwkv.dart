@@ -1,3 +1,5 @@
+import 'package:rwkv_mobile_flutter/from_rwkv.dart';
+
 /// Send request from frontend isolate to rwkv isolate
 ///
 /// 可以使用 switch case 来处理各个 response
@@ -29,9 +31,18 @@ class GetPrefillAndDecodeSpeed extends ToRWKV {}
 
 class GetPrompt extends ToRWKV {}
 
-class GetTTSGenerationProgress extends ToRWKV {}
+class GetTTSGenerationProgress extends ToRWKV {
+  static const responseType = TTSGenerationProgress;
+}
 
-class GetTTSOutputFileList extends ToRWKV {}
+/// 查询本次"已经"生成的wav文件名列表
+///
+/// - 每次重新调用生成语音会置空吗?
+/// - 在单次生成中会不断变化吗?
+class GetTTSOutputFileList extends ToRWKV {
+  // TODO: 其实改成类似于 protoBuffer 那种形式也行
+  static const responseType = TTSOutputFileList;
+}
 
 /// stop之后responseBufferContent还保留着，然后resume之后responseBufferContent会先短暂清空，然后变成stop前已经生成了的内容并接着生成
 class GetResponseBufferContent extends ToRWKV {}
@@ -42,9 +53,29 @@ class GetSamplerParams extends ToRWKV {}
 
 class InitRuntime extends ToRWKV {}
 
-class LoadTTSModels extends ToRWKV {}
+class LoadTTSModels extends ToRWKV {
+  final String campPlusPath;
+  final String flowDecoderEstimatorPath;
+  final String flowEncoderPath;
+  final String hiftGeneratorPath;
+  final String speechTokenizerPath;
+  final String ttsTokenizerPath;
 
-class LoadTTSTextNormalizer extends ToRWKV {}
+  LoadTTSModels({
+    required this.campPlusPath,
+    required this.flowDecoderEstimatorPath,
+    required this.flowEncoderPath,
+    required this.hiftGeneratorPath,
+    required this.speechTokenizerPath,
+    required this.ttsTokenizerPath,
+  });
+}
+
+class LoadTTSTextNormalizer extends ToRWKV {
+  final String fstPath;
+
+  LoadTTSTextNormalizer({required this.fstPath});
+}
 
 class LoadVisionEncoder extends ToRWKV {}
 

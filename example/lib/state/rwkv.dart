@@ -413,22 +413,22 @@ extension $RWKV on _RWKV {
 
     final ttsTokenizerPath = await fromAssetsToTemp("assets/config/tts/b_rwkv_vocab_v20230424_tts.txt");
 
-    send(to_rwkv.LoadTTSModels(), {
-      "campPlusPath": campPlusPath,
-      "flowDecoderEstimatorPath": flowDecoderEstimatorPath,
-      "flowEncoderPath": flowEncoderPath,
-      "hiftGeneratorPath": hiftGeneratorPath,
-      "speechTokenizerPath": speechTokenizerPath,
-      "ttsTokenizerPath": ttsTokenizerPath,
-    });
+    send(to_rwkv.LoadTTSModels(
+      campPlusPath: campPlusPath,
+      flowDecoderEstimatorPath: flowDecoderEstimatorPath,
+      flowEncoderPath: flowEncoderPath,
+      hiftGeneratorPath: hiftGeneratorPath,
+      speechTokenizerPath: speechTokenizerPath,
+      ttsTokenizerPath: ttsTokenizerPath,
+    ));
 
     final ttsTextNormalizerDatePath = await fromAssetsToTemp("assets/config/tts/date-zh.fst");
     final ttsTextNormalizerNumberPath = await fromAssetsToTemp("assets/config/tts/number-zh.fst");
     final ttsTextNormalizerPhonePath = await fromAssetsToTemp("assets/config/tts/phone-zh.fst");
     // note: order matters here
-    send(to_rwkv.LoadTTSTextNormalizer(), {"fstPath": ttsTextNormalizerDatePath});
-    send(to_rwkv.LoadTTSTextNormalizer(), {"fstPath": ttsTextNormalizerNumberPath});
-    send(to_rwkv.LoadTTSTextNormalizer(), {"fstPath": ttsTextNormalizerPhonePath});
+    send(to_rwkv.LoadTTSTextNormalizer(fstPath: ttsTextNormalizerDatePath));
+    send(to_rwkv.LoadTTSTextNormalizer(fstPath: ttsTextNormalizerNumberPath));
+    send(to_rwkv.LoadTTSTextNormalizer(fstPath: ttsTextNormalizerPhonePath));
 
     _loading.q = false;
   }

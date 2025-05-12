@@ -65,7 +65,7 @@ class TTSGenerationProgress extends FromRWKV {
 class TTSOutputFileList extends FromRWKV {
   final List<String> outputFileList;
 
-  TTSOutputFileList({required this.outputFileList});
+  TTSOutputFileList({required this.outputFileList, super.toRWKV});
 }
 
 class TTSCFMSteps extends FromRWKV {}

@@ -16,9 +16,6 @@ import 'package:rwkv_mobile_flutter/rwkv_mobile_ffi.dart';
 
 typedef _FromFrontend = ToRWKV;
 
-// TODO: Use it, depends on "options.sendPort"
-typedef _ToFrontend = FromRWKV;
-
 const _codec = Utf8Codec(allowMalformed: true);
 
 class RWKVMobile {
@@ -310,13 +307,14 @@ class RWKVMobile {
 
           if (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) != 0) {
             sendPort.send(Error('LLM is already generating', req));
-          } else {
-            sendPort.send({'generateStart': true});
-            if (kDebugMode) print("🔥 Starting LLM generation thread (gen mode), maxlength = $maxLength");
-            retVal = rwkvMobile.rwkvmobile_runtime_gen_completion_async(runtime, promptPtr, maxLength, generationStopToken, ffi.nullptr);
-            if (kDebugMode) print("🔥 Started LLM generation thread (gen mode)");
-            if (retVal != 0) sendPort.send({'generateStop': true, 'error': 'Failed to start generation'});
+            break;
           }
+
+          sendPort.send({'generateStart': true});
+          if (kDebugMode) print("🔥 Starting LLM generation thread (gen mode), maxlength = $maxLength");
+          retVal = rwkvMobile.rwkvmobile_runtime_gen_completion_async(runtime, promptPtr, maxLength, generationStopToken, ffi.nullptr);
+          if (kDebugMode) print("🔥 Started LLM generation thread (gen mode)");
+          if (retVal != 0) sendPort.send({'generateStop': true, 'error': 'Failed to start generation'});
 
         // 🟥 generate
         case Generate req:
@@ -366,19 +364,21 @@ class RWKVMobile {
           }
           if (runtime.address == 0) {
             sendPort.send({'initRuntimeDone': false, 'error': 'Failed to initialize runtime'});
-          } else {
-            retVal = rwkvMobile.rwkvmobile_runtime_load_tokenizer(runtime, tokenizerPath.toNativeUtf8().cast<ffi.Char>());
-            if (retVal != 0) {
-              sendPort.send({'initRuntimeDone': false, 'error': 'Failed to load tokenizer, tokenizer path: $tokenizerPath'});
-            } else {
-              retVal = rwkvMobile.rwkvmobile_runtime_load_model(runtime, modelPath.toNativeUtf8().cast<ffi.Char>());
-              if (retVal != 0) {
-                sendPort.send({'initRuntimeDone': false, 'error': 'Failed to load model, model path: $modelPath'});
-              } else {
-                sendPort.send({'initRuntimeDone': true});
-              }
-            }
+            break;
           }
+
+          retVal = rwkvMobile.rwkvmobile_runtime_load_tokenizer(runtime, tokenizerPath.toNativeUtf8().cast<ffi.Char>());
+          if (retVal != 0) {
+            sendPort.send({'initRuntimeDone': false, 'error': 'Failed to load tokenizer, tokenizer path: $tokenizerPath'});
+            break;
+          }
+
+          retVal = rwkvMobile.rwkvmobile_runtime_load_model(runtime, modelPath.toNativeUtf8().cast<ffi.Char>());
+          if (retVal != 0) {
+            sendPort.send({'initRuntimeDone': false, 'error': 'Failed to load model, model path: $modelPath'});
+            break;
+          }
+          sendPort.send({'initRuntimeDone': true});
 
         // 🟥 stop
         case Stop req:
@@ -414,21 +414,27 @@ class RWKVMobile {
 
         // 🟥 loadTTSModels
         case LoadTTSModels req:
-          final args = message.$2 as Map<String, dynamic>;
-          final campPlusPath = args['campPlusPath'] as String;
-          final flowDecoderEstimatorPath = args['flowDecoderEstimatorPath'] as String;
-          final flowEncoderPath = args['flowEncoderPath'] as String;
-          final hiftGeneratorPath = args['hiftGeneratorPath'] as String;
-          final speechTokenizerPath = args['speechTokenizerPath'] as String;
-          final ttsTokenizerPath = args['ttsTokenizerPath'] as String;
-          retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_load_models(runtime, speechTokenizerPath.toNativeUtf8().cast<ffi.Char>(), campPlusPath.toNativeUtf8().cast<ffi.Char>(), flowEncoderPath.toNativeUtf8().cast<ffi.Char>(), flowDecoderEstimatorPath.toNativeUtf8().cast<ffi.Char>(), hiftGeneratorPath.toNativeUtf8().cast<ffi.Char>(), ttsTokenizerPath.toNativeUtf8().cast<ffi.Char>());
+          final campPlusPath = req.campPlusPath;
+          final flowDecoderEstimatorPath = req.flowDecoderEstimatorPath;
+          final flowEncoderPath = req.flowEncoderPath;
+          final hiftGeneratorPath = req.hiftGeneratorPath;
+          final speechTokenizerPath = req.speechTokenizerPath;
+          final ttsTokenizerPath = req.ttsTokenizerPath;
+          retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_load_models(
+            runtime,
+            speechTokenizerPath.toNativeUtf8().cast<ffi.Char>(),
+            campPlusPath.toNativeUtf8().cast<ffi.Char>(),
+            flowEncoderPath.toNativeUtf8().cast<ffi.Char>(),
+            flowDecoderEstimatorPath.toNativeUtf8().cast<ffi.Char>(),
+            hiftGeneratorPath.toNativeUtf8().cast<ffi.Char>(),
+            ttsTokenizerPath.toNativeUtf8().cast<ffi.Char>(),
+          );
           if (retVal != 0) sendPort.send(Error('Failed to load TTS models', req));
           rwkvMobile.rwkvmobile_runtime_cosyvoice_set_cfm_steps(runtime, 5);
 
         // 🟥 loadTTSTextNormalizer
         case LoadTTSTextNormalizer req:
-          final args = message.$2 as Map<String, dynamic>;
-          final fstPath = args['fstPath'] as String;
+          final fstPath = req.fstPath;
           retVal = rwkvMobile.rwkvmobile_runtime_tts_register_text_normalizer(runtime, fstPath.toNativeUtf8().cast<ffi.Char>());
           if (retVal != 0) sendPort.send(Error('Failed to load TTS Text Normalizer file $fstPath', req));
 
@@ -474,12 +480,11 @@ class RWKVMobile {
             promptWavPath.toNativeUtf8().cast<ffi.Char>(),
             outputWavPath.toNativeUtf8().cast<ffi.Char>(),
           );
-          if (retVal != 0) {
-            sendPort.send(Error('Failed to run TTS', req));
-            break;
-          } else {
-            sendPort.send(TTSGenerationStart(start: true, toRWKV: req));
-          }
+
+          if (retVal != 0) sendPort.send(Error('Failed to run TTS', req));
+          if (retVal != 0) break;
+
+          sendPort.send(TTSGenerationStart(start: true, toRWKV: req));
 
         // 🟥 getTTSGenerationProgress
         case GetTTSGenerationProgress req:
@@ -503,7 +508,7 @@ class RWKVMobile {
           final ttsOutputFiles = rwkvMobile.rwkvmobile_runtime_tts_get_current_output_files(runtime);
           final outputFiles = ttsOutputFiles.cast<Utf8>().toDartString();
           final fileList = outputFiles.split(',').map((f) => f.replaceAll('"', '').trim()).toList();
-          sendPort.send(TTSOutputFileList(outputFileList: fileList));
+          sendPort.send(TTSOutputFileList(outputFileList: fileList, toRWKV: req));
 
         // 🟥 setTTSCFMSteps
         case SetTTSCFMSteps req:

@@ -86,8 +86,6 @@ class Debugger extends ConsumerWidget {
                   T(inputHeight.toString()),
                   if (!isOthello) T("hasFocus".codeToName),
                   T(hasFocus.toString()),
-                  T("page".codeToName),
-                  T(page.toString()),
                   if (Config.enableConversation) T("mainPageNotIgnoring".codeToName),
                   if (Config.enableConversation) T(mainPageNotIgnoring.toString()),
                   if (Config.enableConversation) T("conversation".codeToName),
