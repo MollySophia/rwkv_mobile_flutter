@@ -98,7 +98,6 @@ class RWKVMobile {
     int generationStopToken = 0; // Takes effect in 'generation' mode; not used in 'chat' mode
     int retVal = 0;
     int enableReasoning = 0;
-    // bool isGenerating = false;
 
     final inputsPtr = calloc.allocate<ffi.Pointer<ffi.Char>>(maxMessages);
 
@@ -483,16 +482,26 @@ class RWKVMobile {
 
         // 🟥 getTTSGenerationProgress
         case _FromFrontend.getTTSGenerationProgress:
-          final ttsProgress = rwkvMobile.rwkvmobile_runtime_tts_get_generation_progress(runtime);
-          // Range from 0.0 to 1.0
-          sendPort.send({'ttsProgress': ttsProgress});
+          bool isGeneratingBool = (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) != 0);
+          if (!isGeneratingBool)
+            sendPort.send({'ttsOverallProgress': -1, 'ttsPerWavProgress': -1});
+          else {
+            final ttsOutputFiles = rwkvMobile.rwkvmobile_runtime_tts_get_current_output_files(runtime);
+            final outputFiles = ttsOutputFiles.cast<Utf8>().toDartString();
+            final fileList = outputFiles.split(',').map((f) => f.replaceAll('"', '').trim()).toList();
+            final numCurrentGeneratedWavs = fileList.length;
+            final numTotalWavs = rwkvMobile.rwkvmobile_runtime_tts_get_num_total_output_wavs(runtime);
+            final ttsPerWavProgress = rwkvMobile.rwkvmobile_runtime_tts_get_generation_progress(runtime);
+            final ttsOverallProgress = (numCurrentGeneratedWavs + ttsPerWavProgress) / numTotalWavs;
+            // Range from 0.0 to 1.0
+            sendPort.send({'ttsOverallProgress': ttsOverallProgress, 'ttsPerWavProgress': ttsPerWavProgress});
+          }
 
         // 🟥 getTTSOutputFileList
         case _FromFrontend.getTTSOutputFileList:
-          final ttsOutputFiles = rwkvMobile.rwkvmobile_runtime_tts_get_last_output_files(runtime);
+          final ttsOutputFiles = rwkvMobile.rwkvmobile_runtime_tts_get_current_output_files(runtime);
           final outputFiles = ttsOutputFiles.cast<Utf8>().toDartString();
-          final fileList = outputFiles.split(',').map((f) => '"$f"').toList();
-          // TODO: check if the string parsing is correct
+          final fileList = outputFiles.split(',').map((f) => f.replaceAll('"', '').trim()).toList();
           sendPort.send({'ttsOutputFiles': fileList});
 
         // 🟥 setTTSCFMSteps

@@ -628,16 +628,27 @@ class rwkv_mobile {
   late final _rwkvmobile_runtime_tts_register_text_normalizerPtr = _lookup<ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>)>>('rwkvmobile_runtime_tts_register_text_normalizer');
   late final _rwkvmobile_runtime_tts_register_text_normalizer = _rwkvmobile_runtime_tts_register_text_normalizerPtr.asFunction<int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>)>();
 
-  ffi.Pointer<ffi.Char> rwkvmobile_runtime_tts_get_last_output_files(
+  ffi.Pointer<ffi.Char> rwkvmobile_runtime_tts_get_current_output_files(
     rwkvmobile_runtime_t runtime,
   ) {
-    return _rwkvmobile_runtime_tts_get_last_output_files(
+    return _rwkvmobile_runtime_tts_get_current_output_files(
       runtime,
     );
   }
 
-  late final _rwkvmobile_runtime_tts_get_last_output_filesPtr = _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function(rwkvmobile_runtime_t)>>('rwkvmobile_runtime_tts_get_last_output_files');
-  late final _rwkvmobile_runtime_tts_get_last_output_files = _rwkvmobile_runtime_tts_get_last_output_filesPtr.asFunction<ffi.Pointer<ffi.Char> Function(rwkvmobile_runtime_t)>();
+  late final _rwkvmobile_runtime_tts_get_current_output_filesPtr = _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function(rwkvmobile_runtime_t)>>('rwkvmobile_runtime_tts_get_current_output_files');
+  late final _rwkvmobile_runtime_tts_get_current_output_files = _rwkvmobile_runtime_tts_get_current_output_filesPtr.asFunction<ffi.Pointer<ffi.Char> Function(rwkvmobile_runtime_t)>();
+
+  int rwkvmobile_runtime_tts_get_num_total_output_wavs(
+    rwkvmobile_runtime_t runtime,
+  ) {
+    return _rwkvmobile_runtime_tts_get_num_total_output_wavs(
+      runtime,
+    );
+  }
+
+  late final _rwkvmobile_runtime_tts_get_num_total_output_wavsPtr = _lookup<ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t)>>('rwkvmobile_runtime_tts_get_num_total_output_wavs');
+  late final _rwkvmobile_runtime_tts_get_num_total_output_wavs = _rwkvmobile_runtime_tts_get_num_total_output_wavsPtr.asFunction<int Function(rwkvmobile_runtime_t)>();
 
   double rwkvmobile_runtime_tts_get_generation_progress(
     rwkvmobile_runtime_t runtime,
