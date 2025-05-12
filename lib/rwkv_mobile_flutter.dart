@@ -443,25 +443,7 @@ class RWKVMobile {
 
         // 🟥 runTTS
         case RunTTS req:
-          final args = message.$2 as Map<String, dynamic>;
-          final ttsText = args['ttsText'] as String;
-          final instructionText = args['instructionText'] as String;
-          final promptSpeechText = args['promptSpeechText'] as String;
-          final promptWavPath = args['promptWavPath'] as String;
-          final outputWavPath = args['outputWavPath'] as String;
-          retVal = rwkvMobile.rwkvmobile_runtime_run_tts(
-            runtime,
-            ttsText.toNativeUtf8().cast<ffi.Char>(),
-            instructionText.toNativeUtf8().cast<ffi.Char>(),
-            promptSpeechText.toNativeUtf8().cast<ffi.Char>(),
-            promptWavPath.toNativeUtf8().cast<ffi.Char>(),
-            outputWavPath.toNativeUtf8().cast<ffi.Char>(),
-          );
-          if (retVal != 0) {
-            sendPort.send(Error('Failed to run TTS', req));
-          } else {
-            sendPort.send({'ttsDone': true, 'outputWavPath': outputWavPath});
-          }
+          sendPort.send(Error('RunTTS method is deprecated, please use RunTTSAsync instead', req));
 
         // 🟥 runTTSAsync
         case RunTTSAsync req:

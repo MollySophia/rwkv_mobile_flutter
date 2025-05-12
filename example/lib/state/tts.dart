@@ -11,9 +11,34 @@ extension _Instruction on Language {
       };
 }
 
+Stream<T> _randomGenerator<T>(T Function() generator, Duration spacing) async* {
+  while (true) {
+    yield generator();
+    await Future.delayed(spacing);
+  }
+}
+
+extension _TTSStatic on _TTS {
+  static const _defaultTextInInput = "请用正常的语气说";
+  static const _cfmStepsKey = "cfmSteps";
+  static const _defaultCfmSteps = 5;
+  static const _replaceMap = {
+    "English": "🇺🇸",
+    "Japanese": "🇯🇵",
+    "Korean": "🇰🇷",
+    "Chinese(PRC)": "🇨🇳",
+  };
+  static const _spkNameToLanguageMap = {
+    "English": Language.en,
+    "Japanese": Language.ja,
+    "Korean": Language.ko,
+    "Chinese(PRC)": Language.zh_Hans,
+  };
+}
+
 class _TTS {
   late final audioInteractorShown = qs(false);
-  late final cfmSteps = qs(_defaultCfmSteps);
+  late final cfmSteps = qs(_TTSStatic._defaultCfmSteps);
   late final focusNode = FocusNode();
   late final hasFocus = qs(false);
   late final instructions = qsf<TTSInstruction, int?>(null);
@@ -28,26 +53,9 @@ class _TTS {
   late final selectedSpkPanelFilter = qs(Language.none);
   late final spkPairs = qs<JSON>({});
   late final spkShown = qs(false);
-  late final textEditingController = TextEditingController(text: _defaultTextInInput);
-  late final textInInput = qs(_defaultTextInInput);
+  late final textEditingController = TextEditingController(text: _TTSStatic._defaultTextInInput);
+  late final textInInput = qs(_TTSStatic._defaultTextInInput);
   late final ttsDone = qs(true);
-
-  static const _defaultTextInInput = "请用正常的语气说";
-  static const _cfmStepsKey = "cfmSteps";
-  static const _defaultCfmSteps = 5;
-  static const _replaceMap = {
-    "English": "🇺🇸",
-    "Japanese": "🇯🇵",
-    "Korean": "🇰🇷",
-    "Chinese(PRC)": "🇨🇳",
-  };
-
-  static const _spkNameToLanguageMap = {
-    "English": Language.en,
-    "Japanese": Language.ja,
-    "Korean": Language.ko,
-    "Chinese(PRC)": Language.zh_Hans,
-  };
 }
 
 /// Private methods
@@ -62,9 +70,9 @@ extension _$TTS on _TTS {
     await getTTSSpkNames();
 
     final prefs = await SharedPreferences.getInstance();
-    final cfmSteps = prefs.getInt(_TTS._cfmStepsKey);
+    final cfmSteps = prefs.getInt(_TTSStatic._cfmStepsKey);
     if (cfmSteps == null) {
-      this.cfmSteps.q = _TTS._defaultCfmSteps;
+      this.cfmSteps.q = _TTSStatic._defaultCfmSteps;
     } else {
       this.cfmSteps.q = cfmSteps;
     }
@@ -94,10 +102,10 @@ extension _$TTS on _TTS {
       return;
     }
 
-    for (final key in _TTS._spkNameToLanguageMap.keys) {
+    for (final key in _TTSStatic._spkNameToLanguageMap.keys) {
       final contains = next.contains(key);
       if (contains) {
-        selectedLanguage.q = _TTS._spkNameToLanguageMap[key]!;
+        selectedLanguage.q = _TTSStatic._spkNameToLanguageMap[key]!;
         return;
       }
     }
@@ -137,6 +145,7 @@ extension _$TTS on _TTS {
     }
 
     ttsDone.q = false;
+
     P.rwkv.send(to_rwkv.RunTTSAsync(
       ttsText: ttsText,
       instructionText: instructionText,
@@ -149,6 +158,16 @@ extension _$TTS on _TTS {
 
 /// Public methods
 extension $TTS on _TTS {
+  FV startStateSync() async {
+    Timer.periodic(500.ms, (timer) {
+      //
+    });
+  }
+
+  FV stopStateSync() async {
+    // timer.cancel();
+  }
+
   FV getTTSSpkNames() async {
     qq;
     try {
@@ -224,7 +243,7 @@ extension $TTS on _TTS {
   @Deprecated("想想更面向状态的方法")
   String flagChange(String input) {
     String name = input;
-    _TTS._replaceMap.forEach((key, value) {
+    _TTSStatic._replaceMap.forEach((key, value) {
       name = name.replaceAll(key, value);
     });
 
@@ -355,7 +374,7 @@ outputWavPath: $outputWavPath""");
 
   void onRefreshButtonPressed() {
     qq;
-    textInInput.q = _TTS._defaultTextInInput;
+    textInInput.q = _TTSStatic._defaultTextInInput;
     TTSInstruction.values.forEach((action) {
       instructions(action).q = null;
     });
@@ -391,7 +410,7 @@ outputWavPath: $outputWavPath""");
     cfmSteps.q = steps;
     P.rwkv.send(to_rwkv.SetTTSCFMSteps(cfmSteps: steps));
     final prefs = await SharedPreferences.getInstance();
-    prefs.setInt(_TTS._cfmStepsKey, steps);
+    prefs.setInt(_TTSStatic._cfmStepsKey, steps);
   }
 
   FV showTTSCFMStepsSelector() async {
@@ -413,7 +432,7 @@ outputWavPath: $outputWavPath""");
 
     cfmSteps.q = res;
     final sp = await SharedPreferences.getInstance();
-    await sp.setInt(_TTS._cfmStepsKey, res);
+    await sp.setInt(_TTSStatic._cfmStepsKey, res);
     setTTSCFMSteps(res);
   }
 }

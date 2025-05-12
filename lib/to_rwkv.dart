@@ -37,8 +37,8 @@ class GetTTSGenerationProgress extends ToRWKV {
 
 /// 查询本次"已经"生成的wav文件名列表
 ///
-/// - 每次重新调用生成语音会置空吗?
-/// - 在单次生成中会不断变化吗?
+/// - TODO: 每次重新调用生成语音会置空吗? @WangCe
+/// - TODO: 在单次生成中会不断变化吗? @WangCe
 class GetTTSOutputFileList extends ToRWKV {
   // TODO: 其实改成类似于 protoBuffer 那种形式也行
   static const responseType = TTSOutputFileList;
