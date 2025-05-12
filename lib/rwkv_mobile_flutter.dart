@@ -163,15 +163,14 @@ class RWKVMobile {
 
         // 🟥 setSamplerParams
         case SetSamplerParams req:
-          final args = message.$2 as Map<String, dynamic>;
           final samplerParams = ffi.Struct.create<sampler_params>();
           final penaltyParams = ffi.Struct.create<penalty_params>();
-          samplerParams.temperature = args['temperature'] as double;
-          samplerParams.top_k = args['top_k'] as int;
-          samplerParams.top_p = args['top_p'] as double;
-          penaltyParams.presence_penalty = args['presence_penalty'] as double;
-          penaltyParams.frequency_penalty = args['frequency_penalty'] as double;
-          penaltyParams.penalty_decay = args['penalty_decay'] as double;
+          samplerParams.temperature = req.temperature.toDouble();
+          samplerParams.top_k = req.topK.toInt();
+          samplerParams.top_p = req.topP.toDouble();
+          penaltyParams.presence_penalty = req.presencePenalty.toDouble();
+          penaltyParams.frequency_penalty = req.frequencyPenalty.toDouble();
+          penaltyParams.penalty_decay = req.penaltyDecay.toDouble();
           rwkvMobile.rwkvmobile_runtime_set_sampler_params(runtime, samplerParams);
           rwkvMobile.rwkvmobile_runtime_set_penalty_params(runtime, penaltyParams);
 
@@ -179,16 +178,15 @@ class RWKVMobile {
         case GetSamplerParams req:
           final samplerParams = rwkvMobile.rwkvmobile_runtime_get_sampler_params(runtime);
           final penaltyParams = rwkvMobile.rwkvmobile_runtime_get_penalty_params(runtime);
-          sendPort.send({
-            'samplerParams': {
-              'temperature': samplerParams.temperature,
-              'top_k': samplerParams.top_k,
-              'top_p': samplerParams.top_p,
-              'presence_penalty': penaltyParams.presence_penalty,
-              'frequency_penalty': penaltyParams.frequency_penalty,
-              'penalty_decay': penaltyParams.penalty_decay,
-            }
-          });
+          sendPort.send(SamplerParams(
+            temperature: samplerParams.temperature,
+            topK: samplerParams.top_k,
+            topP: samplerParams.top_p,
+            presencePenalty: penaltyParams.presence_penalty,
+            frequencyPenalty: penaltyParams.frequency_penalty,
+            penaltyDecay: penaltyParams.penalty_decay,
+            toRWKV: req,
+          ));
 
         // 🟥 setEnableReasoning
         case SetEnableReasoning req:

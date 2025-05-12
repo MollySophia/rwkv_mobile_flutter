@@ -131,13 +131,27 @@ class SetMaxLength extends ToRWKV {}
 
 class SetPrompt extends ToRWKV {}
 
-class SetSamplerParams extends ToRWKV {}
+class SetSamplerParams extends ToRWKV {
+  final num temperature;
+  final num topK;
+  final num topP;
+  final num presencePenalty;
+  final num frequencyPenalty;
+  final num penaltyDecay;
+
+  SetSamplerParams({
+    required this.temperature,
+    required this.topK,
+    required this.topP,
+    required this.presencePenalty,
+    required this.frequencyPenalty,
+    required this.penaltyDecay,
+  });
+}
 
 /// decoder steps 的 api
 ///
 /// 范围3～10吧，越高越慢越精细，可以做成参数
-///
-/// 默认值现在是5
 ///
 /// args['cfmSteps'] as int
 class SetTTSCFMSteps extends ToRWKV {

@@ -39,7 +39,24 @@ class PrefillSpeed extends FromRWKV {}
 
 class ResponseBufferContent extends FromRWKV {}
 
-class SamplerParams extends FromRWKV {}
+class SamplerParams extends FromRWKV {
+  final num temperature;
+  final num topK;
+  final num topP;
+  final num presencePenalty;
+  final num frequencyPenalty;
+  final num penaltyDecay;
+
+  SamplerParams({
+    required this.temperature,
+    required this.topK,
+    required this.topP,
+    required this.presencePenalty,
+    required this.frequencyPenalty,
+    required this.penaltyDecay,
+    super.toRWKV,
+  });
+}
 
 class SpksNames extends FromRWKV {}
 

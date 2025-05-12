@@ -265,9 +265,6 @@ extension _$ on _Othello {
         received.q = event.content;
         receivingTokens.q = false;
         break;
-      case _RWKVMessageType.samplerParams:
-        received.q = event.content;
-        break;
       case _RWKVMessageType.generateStop:
         receivingTokens.q = false;
         break;

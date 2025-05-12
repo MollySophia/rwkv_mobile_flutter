@@ -839,10 +839,6 @@ extension _$Chat on _Chat {
         receivedTokens.q = event.content;
         break;
 
-      case _RWKVMessageType.samplerParams:
-        receivedTokens.q = event.content;
-        break;
-
       case _RWKVMessageType.generateStop:
         receivedTokens.q = "";
         receivingTokens.q = false;

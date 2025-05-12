@@ -459,14 +459,14 @@ extension $RWKV on _RWKV {
     if (frequencyPenalty != null) arguments(Argument.frequencyPenalty).q = frequencyPenalty;
     if (penaltyDecay != null) arguments(Argument.penaltyDecay).q = penaltyDecay;
 
-    send(to_rwkv.SetSamplerParams(), {
-      "temperature": _intIfFixedDecimalsIsZero(Argument.temperature),
-      "top_k": _intIfFixedDecimalsIsZero(Argument.topK),
-      "top_p": _intIfFixedDecimalsIsZero(Argument.topP),
-      "presence_penalty": _intIfFixedDecimalsIsZero(Argument.presencePenalty),
-      "frequency_penalty": _intIfFixedDecimalsIsZero(Argument.frequencyPenalty),
-      "penalty_decay": _intIfFixedDecimalsIsZero(Argument.penaltyDecay),
-    });
+    send(to_rwkv.SetSamplerParams(
+      temperature: _intIfFixedDecimalsIsZero(Argument.temperature),
+      topK: _intIfFixedDecimalsIsZero(Argument.topK),
+      topP: _intIfFixedDecimalsIsZero(Argument.topP),
+      presencePenalty: _intIfFixedDecimalsIsZero(Argument.presencePenalty),
+      frequencyPenalty: _intIfFixedDecimalsIsZero(Argument.frequencyPenalty),
+      penaltyDecay: _intIfFixedDecimalsIsZero(Argument.penaltyDecay),
+    ));
 
     if (kDebugMode) send(to_rwkv.GetSamplerParams());
   }
@@ -523,8 +523,14 @@ extension $RWKV on _RWKV {
     P.app.demoType.q = DemoType.othello;
 
     send(to_rwkv.SetMaxLength(), 64000);
-    send(to_rwkv.SetSamplerParams(), {"temperature": 1.0, "top_k": 1, "top_p": 1.0, "presence_penalty": .0, "frequency_penalty": .0, "penalty_decay": .0});
-    send(to_rwkv.SetSamplerParams());
+    send(to_rwkv.SetSamplerParams(
+      temperature: 1.0,
+      topK: 1,
+      topP: 1.0,
+      presencePenalty: .0,
+      frequencyPenalty: .0,
+      penaltyDecay: .0,
+    ));
     send(to_rwkv.SetGenerationStopToken(), 0);
     send(to_rwkv.ClearStates());
   }
@@ -619,15 +625,6 @@ extension _$RWKV on _RWKV {
         _getTokensTimer?.cancel();
         _getTokensTimer = null;
       }
-      return;
-    }
-
-    if (message["samplerParams"] != null) {
-      qqq("Got samplerParams: ${message["samplerParams"]}");
-      _messagesController.add(LLMEvent(
-        content: message["samplerParams"].toString(),
-        type: _RWKVMessageType.samplerParams,
-      ));
       return;
     }
 
@@ -730,6 +727,7 @@ extension _$RWKV on _RWKV {
         }
         Alert.error(response.message);
 
+      case from_rwkv.SamplerParams response:
       case from_rwkv.CurrentPrompt response:
       case from_rwkv.EnableReasoning response:
       case from_rwkv.GenerateStart response:
@@ -737,7 +735,6 @@ extension _$RWKV on _RWKV {
       case from_rwkv.InitRuntimeDone response:
       case from_rwkv.PrefillSpeed response:
       case from_rwkv.ResponseBufferContent response:
-      case from_rwkv.SamplerParams response:
       case from_rwkv.SpksNames response:
       case from_rwkv.StreamResponse response:
       case from_rwkv.TTSCFMSteps response:
@@ -792,7 +789,6 @@ enum _RWKVMessageType {
   streamResponse,
 
   currentPrompt,
-  samplerParams,
 
   generateStart,
 
