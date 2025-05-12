@@ -22,6 +22,12 @@
 
 ## 开发
 
+### 设置环境
+
 - 使用 `fastlane switch_env env:chat` 切换至 chat app
 - 使用 `fastlane switch_env env:tts` 切换至 tts app
 - 使用 `fastlane switch_env env:world` 切换至 world app
+
+### 运行
+
+- 在 vscode / cursor 中运行 "Debug: Start Debugging" (`workbench.action.debug.start`)
