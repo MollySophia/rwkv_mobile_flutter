@@ -727,9 +727,10 @@ extension _$RWKV on _RWKV {
 
   void _handleFromRWKV(from_rwkv.FromRWKV message) {
     switch (message) {
+      case from_rwkv.Error response:
+        Alert.error(response.message);
       case from_rwkv.CurrentPrompt response:
       case from_rwkv.EnableReasoning response:
-      case from_rwkv.Error response:
       case from_rwkv.GenerateStart response:
       case from_rwkv.GenerateStop response:
       case from_rwkv.InitRuntimeDone response:

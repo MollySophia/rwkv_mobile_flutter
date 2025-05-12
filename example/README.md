@@ -12,8 +12,7 @@
 ```
 
 ```
-[✓] Flutter (Channel stable, 3.29.3, on macOS 15.4.1 24E263 darwin-arm64, locale
-    en-CN)
+[✓] Flutter (Channel stable, 3.29.3, on macOS 15.4.1 24E263 darwin-arm64, locale en-CN)
 [✓] Android toolchain - develop for Android devices (Android SDK version 35.0.0)
 [✓] Xcode - develop for iOS and macOS (Xcode 16.3)
 [✓] Chrome - develop for the web
