@@ -483,9 +483,9 @@ class RWKVMobile {
         // 🟥 getTTSGenerationProgress
         case _FromFrontend.getTTSGenerationProgress:
           bool isGeneratingBool = (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) != 0);
-          if (!isGeneratingBool)
+          if (!isGeneratingBool) {
             sendPort.send({'ttsOverallProgress': -1, 'ttsPerWavProgress': -1});
-          else {
+          } else {
             final ttsOutputFiles = rwkvMobile.rwkvmobile_runtime_tts_get_current_output_files(runtime);
             final outputFiles = ttsOutputFiles.cast<Utf8>().toDartString();
             final fileList = outputFiles.split(',').map((f) => f.replaceAll('"', '').trim()).toList();
