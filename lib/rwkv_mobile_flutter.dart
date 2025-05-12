@@ -286,7 +286,7 @@ class RWKVMobile {
           if (retVal != 0) sendPort.send({'error': 'Failed to set audio prompt'});
 
         // 🟥 message
-        case _FromFrontend.message:
+        case _FromFrontend.runChatAsync:
           final messages = message.$2 as List<String>;
           for (var i = 0; i < messages.length; i++) {
             inputsPtr[i] = messages[i].toNativeUtf8().cast<ffi.Char>();
@@ -304,7 +304,7 @@ class RWKVMobile {
           }
 
         // 🟥 generate
-        case _FromFrontend.generate:
+        case _FromFrontend.generateAsync:
           final prompt = message.$2 as String;
           final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
 
@@ -319,7 +319,7 @@ class RWKVMobile {
           }
 
         // 🟥 generateBlocking
-        case _FromFrontend.generateBlocking:
+        case _FromFrontend.generate:
           final prompt = message.$2 as String;
           final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
           String responseStr = prompt;
@@ -445,7 +445,6 @@ class RWKVMobile {
           final promptSpeechText = args['promptSpeechText'] as String;
           final promptWavPath = args['promptWavPath'] as String;
           final outputWavPath = args['outputWavPath'] as String;
-          // TODO: use rwkvmobile_runtime_run_tts_async instead
           retVal = rwkvMobile.rwkvmobile_runtime_run_tts(
             runtime,
             ttsText.toNativeUtf8().cast<ffi.Char>(),
@@ -458,6 +457,28 @@ class RWKVMobile {
             sendPort.send({'error': 'Failed to run TTS'});
           } else {
             sendPort.send({'ttsDone': true, 'outputWavPath': outputWavPath});
+          }
+
+        // 🟥 runTTSAsync
+        case _FromFrontend.runTTSAsync:
+          final args = message.$2 as Map<String, dynamic>;
+          final ttsText = args['ttsText'] as String;
+          final instructionText = args['instructionText'] as String;
+          final promptSpeechText = args['promptSpeechText'] as String;
+          final promptWavPath = args['promptWavPath'] as String;
+          final outputWavPath = args['outputWavPath'] as String;
+          retVal = rwkvMobile.rwkvmobile_runtime_run_tts_async(
+            runtime,
+            ttsText.toNativeUtf8().cast<ffi.Char>(),
+            instructionText.toNativeUtf8().cast<ffi.Char>(),
+            promptSpeechText.toNativeUtf8().cast<ffi.Char>(),
+            promptWavPath.toNativeUtf8().cast<ffi.Char>(),
+            outputWavPath.toNativeUtf8().cast<ffi.Char>(),
+          );
+          if (retVal != 0) {
+            sendPort.send({'error': 'Failed to run TTS'});
+          } else {
+            sendPort.send({'ttsGenerationStart': true});
           }
 
         // 🟥 getTTSGenerationProgress

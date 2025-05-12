@@ -96,7 +96,7 @@ extension $RWKV on _RWKV {
       return;
     }
 
-    send(ToRWKV.message, messages);
+    send(ToRWKV.runChatAsync, messages);
 
     if (_getTokensTimer != null) {
       _getTokensTimer!.cancel();
@@ -117,7 +117,7 @@ extension $RWKV on _RWKV {
       qqw("sendPort is null");
       return;
     }
-    send(ToRWKV.generateBlocking, prompt);
+    send(ToRWKV.generate, prompt);
 
     if (_getTokensTimer != null) {
       _getTokensTimer!.cancel();
