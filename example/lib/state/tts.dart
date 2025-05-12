@@ -136,16 +136,14 @@ extension _$TTS on _TTS {
       return;
     }
 
-    final options = {
-      "ttsText": ttsText,
-      "instructionText": instructionText,
-      "promptWavPath": promptWavPath,
-      "outputWavPath": outputWavPath,
-      "promptSpeechText": promptSpeechText,
-    };
-
     ttsDone.q = false;
-    P.rwkv.send(ToRWKV.runTTSAsync, options);
+    P.rwkv.send(to_rwkv.RunTTSAsync(
+      ttsText: ttsText,
+      instructionText: instructionText,
+      promptWavPath: promptWavPath,
+      outputWavPath: outputWavPath,
+      promptSpeechText: promptSpeechText,
+    ));
   }
 }
 
@@ -391,7 +389,7 @@ outputWavPath: $outputWavPath""");
   FV setTTSCFMSteps(int steps) async {
     qq;
     cfmSteps.q = steps;
-    P.rwkv.send(ToRWKV.setTTSCFMSteps, {"cfmSteps": steps});
+    P.rwkv.send(to_rwkv.SetTTSCFMSteps(cfmSteps: steps));
     final prefs = await SharedPreferences.getInstance();
     prefs.setInt(_TTS._cfmStepsKey, steps);
   }

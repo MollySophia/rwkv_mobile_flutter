@@ -45,25 +45,6 @@ enum Backend {
   }
 }
 
-// TODO: Use it in the future
-enum FromRWKV {
-  currentPrompt,
-  enableReasoning,
-  error,
-  generateStart,
-  generateStop,
-  getResponseBufferIds,
-  initRuntimeDone,
-  prefillSpeed,
-  response,
-  responseBufferContent,
-  samplerParams,
-  spksNames,
-  streamResponse,
-  ttsDone,
-  ;
-}
-
 class StartOptions {
   final String modelPath;
   final String tokenizerPath;

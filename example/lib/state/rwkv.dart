@@ -72,7 +72,7 @@ class _RWKV {
 /// Public methods
 extension $RWKV on _RWKV {
   FV setAudioPrompt({required String path}) async {
-    send(ToRWKV.setAudioPrompt, path);
+    send(to_rwkv.SetAudioPrompt(), path);
   }
 
   FV sendMessages(List<String> messages) async {
@@ -96,16 +96,16 @@ extension $RWKV on _RWKV {
       return;
     }
 
-    send(ToRWKV.runChatAsync, messages);
+    send(to_rwkv.RunChatAsync(), messages);
 
     if (_getTokensTimer != null) {
       _getTokensTimer!.cancel();
     }
 
     _getTokensTimer = Timer.periodic(const Duration(milliseconds: 20), (timer) async {
-      send(ToRWKV.getResponseBufferContent);
-      if (HF.randomBool(truePercentage: .5)) send(ToRWKV.getIsGenerating);
-      if (HF.randomBool(truePercentage: .5)) send(ToRWKV.getPrefillAndDecodeSpeed);
+      send(to_rwkv.GetResponseBufferContent());
+      if (HF.randomBool(truePercentage: .5)) send(to_rwkv.GetIsGenerating());
+      if (HF.randomBool(truePercentage: .5)) send(to_rwkv.GetPrefillAndDecodeSpeed());
     });
   }
 
@@ -117,23 +117,23 @@ extension $RWKV on _RWKV {
       qqw("sendPort is null");
       return;
     }
-    send(ToRWKV.generate, prompt);
+    send(to_rwkv.Generate(), prompt);
 
     if (_getTokensTimer != null) {
       _getTokensTimer!.cancel();
     }
 
     _getTokensTimer = Timer.periodic(const Duration(milliseconds: 20), (timer) async {
-      send(ToRWKV.getResponseBufferIds);
-      send(ToRWKV.getPrefillAndDecodeSpeed);
-      send(ToRWKV.getResponseBufferContent);
+      send(to_rwkv.GetResponseBufferIds());
+      send(to_rwkv.GetPrefillAndDecodeSpeed());
+      send(to_rwkv.GetResponseBufferContent());
       await Future.delayed(const Duration(milliseconds: 1000));
-      send(ToRWKV.getIsGenerating);
+      send(to_rwkv.GetIsGenerating());
     });
   }
 
   FV setImagePath({required String path}) async {
-    send(ToRWKV.setVisionPrompt, path);
+    send(to_rwkv.SetVisionPrompt(), path);
   }
 
   FV clearStates() async {
@@ -144,20 +144,20 @@ extension $RWKV on _RWKV {
       qqw("sendPort is null");
       return;
     }
-    send(ToRWKV.clearStates);
+    send(to_rwkv.ClearStates());
   }
 
-  void send<T>(ToRWKV method, [dynamic args]) {
+  void send<T>(to_rwkv.ToRWKV method, [dynamic args]) {
     final sendPort = _sendPort;
     if (sendPort == null) {
       qqw("sendPort is null");
       return;
     }
-    sendPort.send((method.name, args));
+    sendPort.send((method, args));
     return;
   }
 
-  FV stop() async => send(ToRWKV.stop);
+  FV stop() async => send(to_rwkv.Stop());
 
   FV initRuntime({
     required String modelPath,
@@ -167,7 +167,7 @@ extension $RWKV on _RWKV {
     prefillSpeed.q = 0;
     decodeSpeed.q = 0;
     _initRuntimeCompleter = Completer<void>();
-    send(ToRWKV.initRuntime, {"modelPath": modelPath, "backend": backend, "tokenizerPath": tokenizerPath});
+    send(to_rwkv.InitRuntime(), {"modelPath": modelPath, "backend": backend, "tokenizerPath": tokenizerPath});
     return _initRuntimeCompleter.future;
   }
 
@@ -218,7 +218,7 @@ extension $RWKV on _RWKV {
     await setModelConfig(usingReasoningModel: usingReasoningModel);
     await resetSamplerParams(usingReasoningModel: usingReasoningModel);
     await resetMaxLength(usingReasoningModel: usingReasoningModel);
-    send(ToRWKV.getSamplerParams);
+    send(to_rwkv.GetSamplerParams());
     _loading.q = false;
   }
 
@@ -236,9 +236,9 @@ extension $RWKV on _RWKV {
 
     if (setPrompt) qqq("setPrompt: $finalPrompt");
 
-    send(ToRWKV.setEnableReasoning, _usingReasoningModel.q);
-    if (setPrompt) send(ToRWKV.setPrompt, _usingReasoningModel.q ? "<EOD>" : finalPrompt);
-    send(ToRWKV.setThinkingToken, _preferChinese.q ? "<think>嗯" : "<think");
+    send(to_rwkv.SetEnableReasoning(), _usingReasoningModel.q);
+    if (setPrompt) send(to_rwkv.SetPrompt(), _usingReasoningModel.q ? "<EOD>" : finalPrompt);
+    send(to_rwkv.SetThinkingToken(), _preferChinese.q ? "<think>嗯" : "<think");
   }
 
   FV loadWorldVision({
@@ -258,8 +258,8 @@ extension $RWKV on _RWKV {
 
     if (_sendPort != null) {
       try {
-        send(ToRWKV.releaseWhisperEncoder);
-        send(ToRWKV.releaseModel);
+        send(to_rwkv.ReleaseWhisperEncoder());
+        send(to_rwkv.ReleaseModel());
         final startMS = HF.microseconds;
         await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
         final endMS = HF.microseconds;
@@ -286,7 +286,7 @@ extension $RWKV on _RWKV {
       await Future.delayed(const Duration(milliseconds: 50));
     }
 
-    send(ToRWKV.loadVisionEncoder, encoderPath);
+    send(to_rwkv.LoadVisionEncoder(), encoderPath);
     await setModelConfig(
       usingReasoningModel: usingReasoningModel,
       preferChinese: false,
@@ -294,9 +294,9 @@ extension $RWKV on _RWKV {
     );
     await resetSamplerParams(usingReasoningModel: usingReasoningModel);
     await resetMaxLength(usingReasoningModel: usingReasoningModel);
-    send(ToRWKV.setEosToken, "\x17");
-    send(ToRWKV.setBosToken, "\x16");
-    send(ToRWKV.setTokenBanned, [0]);
+    send(to_rwkv.SetEosToken(), "\x17");
+    send(to_rwkv.SetBosToken(), "\x16");
+    send(to_rwkv.SetTokenBanned(), [0]);
     _loading.q = false;
   }
 
@@ -315,8 +315,8 @@ extension $RWKV on _RWKV {
     final rootIsolateToken = RootIsolateToken.instance;
 
     if (_sendPort != null) {
-      send(ToRWKV.releaseVisionEncoder);
-      send(ToRWKV.releaseModel);
+      send(to_rwkv.ReleaseVisionEncoder());
+      send(to_rwkv.ReleaseModel());
       final startMS = HF.microseconds;
       await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
       final endMS = HF.microseconds;
@@ -337,7 +337,7 @@ extension $RWKV on _RWKV {
       await Future.delayed(const Duration(milliseconds: 50));
     }
 
-    send(ToRWKV.loadWhisperEncoder, encoderPath);
+    send(to_rwkv.LoadWhisperEncoder(), encoderPath);
     await setModelConfig(
       usingReasoningModel: false,
       preferChinese: false,
@@ -345,10 +345,10 @@ extension $RWKV on _RWKV {
     );
     await resetSamplerParams(usingReasoningModel: false);
     await resetMaxLength(usingReasoningModel: false);
-    send(ToRWKV.setEosToken, "\x17");
-    send(ToRWKV.setBosToken, "\x16");
-    send(ToRWKV.setTokenBanned, [0]);
-    send(ToRWKV.setUserRole, "");
+    send(to_rwkv.SetEosToken(), "\x17");
+    send(to_rwkv.SetBosToken(), "\x16");
+    send(to_rwkv.SetTokenBanned(), [0]);
+    send(to_rwkv.SetUserRole(), "");
     _loading.q = false;
   }
 
@@ -375,7 +375,7 @@ extension $RWKV on _RWKV {
 
     if (_sendPort != null) {
       try {
-        send(ToRWKV.releaseTTSModels);
+        send(to_rwkv.ReleaseTTSModels());
         final startMS = HF.microseconds;
         await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
         final endMS = HF.microseconds;
@@ -408,12 +408,12 @@ extension $RWKV on _RWKV {
     }
 
     _ttsPerformanceTimer = Timer.periodic(Duration(milliseconds: HF.randomInt(min: 150, max: 300)), (timer) async {
-      send(ToRWKV.getPrefillAndDecodeSpeed);
+      send(to_rwkv.GetPrefillAndDecodeSpeed());
     });
 
     final ttsTokenizerPath = await fromAssetsToTemp("assets/config/tts/b_rwkv_vocab_v20230424_tts.txt");
 
-    send(ToRWKV.loadTTSModels, {
+    send(to_rwkv.LoadTTSModels(), {
       "campPlusPath": campPlusPath,
       "flowDecoderEstimatorPath": flowDecoderEstimatorPath,
       "flowEncoderPath": flowEncoderPath,
@@ -426,9 +426,9 @@ extension $RWKV on _RWKV {
     final ttsTextNormalizerNumberPath = await fromAssetsToTemp("assets/config/tts/number-zh.fst");
     final ttsTextNormalizerPhonePath = await fromAssetsToTemp("assets/config/tts/phone-zh.fst");
     // note: order matters here
-    send(ToRWKV.loadTTSTextNormalizer, {"fstPath": ttsTextNormalizerDatePath});
-    send(ToRWKV.loadTTSTextNormalizer, {"fstPath": ttsTextNormalizerNumberPath});
-    send(ToRWKV.loadTTSTextNormalizer, {"fstPath": ttsTextNormalizerPhonePath});
+    send(to_rwkv.LoadTTSTextNormalizer(), {"fstPath": ttsTextNormalizerDatePath});
+    send(to_rwkv.LoadTTSTextNormalizer(), {"fstPath": ttsTextNormalizerNumberPath});
+    send(to_rwkv.LoadTTSTextNormalizer(), {"fstPath": ttsTextNormalizerPhonePath});
 
     _loading.q = false;
   }
@@ -459,7 +459,7 @@ extension $RWKV on _RWKV {
     if (frequencyPenalty != null) arguments(Argument.frequencyPenalty).q = frequencyPenalty;
     if (penaltyDecay != null) arguments(Argument.penaltyDecay).q = penaltyDecay;
 
-    send(ToRWKV.setSamplerParams, {
+    send(to_rwkv.SetSamplerParams(), {
       "temperature": _intIfFixedDecimalsIsZero(Argument.temperature),
       "top_k": _intIfFixedDecimalsIsZero(Argument.topK),
       "top_p": _intIfFixedDecimalsIsZero(Argument.topP),
@@ -468,7 +468,7 @@ extension $RWKV on _RWKV {
       "penalty_decay": _intIfFixedDecimalsIsZero(Argument.penaltyDecay),
     });
 
-    if (kDebugMode) send(ToRWKV.getSamplerParams);
+    if (kDebugMode) send(to_rwkv.GetSamplerParams());
   }
 
   FV resetMaxLength({required bool usingReasoningModel}) async {
@@ -479,7 +479,7 @@ extension $RWKV on _RWKV {
 
   FV syncMaxLength({num? maxLength}) async {
     if (maxLength != null) arguments(Argument.maxLength).q = maxLength.toDouble();
-    send(ToRWKV.setMaxLength, _intIfFixedDecimalsIsZero(Argument.maxLength));
+    send(to_rwkv.SetMaxLength(), _intIfFixedDecimalsIsZero(Argument.maxLength));
   }
 
   FV loadOthello() async {
@@ -503,7 +503,7 @@ extension $RWKV on _RWKV {
     final rootIsolateToken = RootIsolateToken.instance;
 
     if (_sendPort != null) {
-      send(ToRWKV.initRuntime, {"modelPath": modelPath, "backend": backend, "tokenizerPath": tokenizerPath});
+      send(to_rwkv.InitRuntime(), {"modelPath": modelPath, "backend": backend, "tokenizerPath": tokenizerPath});
     } else {
       final options = StartOptions(
         modelPath,
@@ -522,11 +522,11 @@ extension $RWKV on _RWKV {
 
     P.app.demoType.q = DemoType.othello;
 
-    send(ToRWKV.setMaxLength, 64000);
-    send(ToRWKV.setSamplerParams, {"temperature": 1.0, "top_k": 1, "top_p": 1.0, "presence_penalty": .0, "frequency_penalty": .0, "penalty_decay": .0});
-    send(ToRWKV.getSamplerParams);
-    send(ToRWKV.setGenerationStopToken, 0);
-    send(ToRWKV.clearStates);
+    send(to_rwkv.SetMaxLength(), 64000);
+    send(to_rwkv.SetSamplerParams(), {"temperature": 1.0, "top_k": 1, "top_p": 1.0, "presence_penalty": .0, "frequency_penalty": .0, "penalty_decay": .0});
+    send(to_rwkv.SetSamplerParams());
+    send(to_rwkv.SetGenerationStopToken(), 0);
+    send(to_rwkv.ClearStates());
   }
 }
 
@@ -583,6 +583,11 @@ extension _$RWKV on _RWKV {
   void _onMessage(message) {
     if (message is SendPort) {
       _sendPort = message;
+      return;
+    }
+
+    if (message is from_rwkv.FromRWKV) {
+      _handleFromRWKV(message);
       return;
     }
 
@@ -718,6 +723,27 @@ extension _$RWKV on _RWKV {
 
     qqe("unknown message: $message");
     if (!kDebugMode) Sentry.captureException(Exception("unknown message: $message"), stackTrace: StackTrace.current);
+  }
+
+  void _handleFromRWKV(from_rwkv.FromRWKV message) {
+    switch (message) {
+      case from_rwkv.CurrentPrompt response:
+      case from_rwkv.EnableReasoning response:
+      case from_rwkv.Error response:
+      case from_rwkv.GenerateStart response:
+      case from_rwkv.GenerateStop response:
+      case from_rwkv.InitRuntimeDone response:
+      case from_rwkv.PrefillSpeed response:
+      case from_rwkv.ResponseBufferContent response:
+      case from_rwkv.SamplerParams response:
+      case from_rwkv.SpksNames response:
+      case from_rwkv.StreamResponse response:
+      case from_rwkv.TTSCFMSteps response:
+      case from_rwkv.TTSDone response:
+      case from_rwkv.TTSGenerationProgress response:
+      case from_rwkv.TTSGenerationStart response:
+      case from_rwkv.TTSOutputFileList response:
+    }
   }
 
   FV _ensureQNNCopied() async {

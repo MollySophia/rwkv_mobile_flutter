@@ -30,3 +30,17 @@
 ### iOS
 
 - [TestFlight](https://testflight.apple.com/join/DaMqCNKh)
+
+## 前后端通讯方式
+
+### Frontend to RWKV
+
+```ToRWKV
+
+```
+
+### RWKV to frontend
+
+```FromRWKV
+
+```

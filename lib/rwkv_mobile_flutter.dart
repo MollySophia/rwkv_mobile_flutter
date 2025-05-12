@@ -7,7 +7,9 @@ import 'dart:ffi' as ffi;
 import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+// TODO: 由前端提供各个路径 @WangCe @Molly
 import 'package:path_provider/path_provider.dart';
+import 'package:rwkv_mobile_flutter/from_rwkv.dart';
 import 'package:rwkv_mobile_flutter/to_rwkv.dart';
 import 'package:rwkv_mobile_flutter/types.dart';
 import 'package:rwkv_mobile_flutter/rwkv_mobile_ffi.dart';
@@ -130,34 +132,32 @@ class RWKVMobile {
     final tempDir = await getTemporaryDirectory();
     rwkvMobile.rwkvmobile_set_cache_dir(runtime, tempDir.path.toNativeUtf8().cast<ffi.Char>());
 
-    await for (final (String, dynamic) message in receivePort) {
-      // message: (String command, Dynamic args)
-      final command = message.$1;
-      final fromFrontend = _FromFrontend.values.byName(command);
-      switch (fromFrontend) {
+    // TODO: @WangCe 逐渐地迁移到 handler 方法中, 最好不要在该方法声明局部变量
+    await for (final (_FromFrontend, dynamic) message in receivePort) {
+      switch (message.$1) {
         // 🟥 setMaxLength
-        case _FromFrontend.setMaxLength:
+        case SetMaxLength req:
           final arg = message.$2 as int;
           if (arg > 0) maxLength = arg;
 
         // 🟥 clearStates
-        case _FromFrontend.clearStates:
+        case ClearStates req:
           rwkvMobile.rwkvmobile_runtime_clear_state(runtime);
 
         // 🟥 setGenerationStopToken
-        case _FromFrontend.setGenerationStopToken:
+        case SetGenerationStopToken req:
           final arg = message.$2 as int;
           if (arg >= 0) generationStopToken = arg;
 
         // 🟥 setPrompt
-        case _FromFrontend.setPrompt:
+        case SetPrompt req:
           final prompt = message.$2 as String;
           final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_set_prompt(runtime, promptPtr);
-          if (retVal != 0) sendPort.send({'error': 'Failed to set prompt: return value: $retVal'});
+          if (retVal != 0) sendPort.send(Error('Failed to set prompt: return value: $retVal', req));
 
         // 🟥 getPrompt
-        case _FromFrontend.getPrompt:
+        case GetPrompt req:
           final stringBuffer = calloc.allocate<ffi.Char>(maxLength);
           rwkvMobile.rwkvmobile_runtime_get_prompt(runtime, stringBuffer, maxLength);
           final prompt = stringBuffer.cast<Utf8>().toDartString();
@@ -165,7 +165,7 @@ class RWKVMobile {
           calloc.free(stringBuffer);
 
         // 🟥 setSamplerParams
-        case _FromFrontend.setSamplerParams:
+        case SetSamplerParams req:
           final args = message.$2 as Map<String, dynamic>;
           final samplerParams = ffi.Struct.create<sampler_params>();
           final penaltyParams = ffi.Struct.create<penalty_params>();
@@ -179,7 +179,7 @@ class RWKVMobile {
           rwkvMobile.rwkvmobile_runtime_set_penalty_params(runtime, penaltyParams);
 
         // 🟥 getSamplerParams
-        case _FromFrontend.getSamplerParams:
+        case GetSamplerParams req:
           final samplerParams = rwkvMobile.rwkvmobile_runtime_get_sampler_params(runtime);
           final penaltyParams = rwkvMobile.rwkvmobile_runtime_get_penalty_params(runtime);
           sendPort.send({
@@ -194,42 +194,43 @@ class RWKVMobile {
           });
 
         // 🟥 setEnableReasoning
-        case _FromFrontend.setEnableReasoning:
+        case SetEnableReasoning req:
+          // TODO: 这里不应该使用这个变量, 因为无法保证值同步至 cpp 的内存
           enableReasoning = message.$2 as bool ? 1 : 0;
 
         // 🟥 getEnableReasoning
-        case _FromFrontend.getEnableReasoning:
+        case GetEnableReasoning req:
           bool enableReasoningBool = (enableReasoning != 0);
           sendPort.send({'enableReasoning': enableReasoningBool});
 
         // 🟥 getIsGenerating
-        case _FromFrontend.getIsGenerating:
+        case GetIsGenerating req:
           bool isGeneratingBool = (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) != 0);
           sendPort.send({'isGenerating': isGeneratingBool});
 
         // 🟥 setThinkingToken
-        case _FromFrontend.setThinkingToken:
+        case SetThinkingToken req:
           final arg = message.$2 as String;
           final thinkingTokenPtr = arg.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_set_thinking_token(runtime, thinkingTokenPtr);
-          if (retVal != 0) sendPort.send({'error': 'Failed to set thinking token'});
+          if (retVal != 0) sendPort.send(Error('Failed to set thinking token', req));
 
         // 🟥 setEosToken
-        case _FromFrontend.setEosToken:
+        case SetEosToken req:
           final arg = message.$2 as String;
           final eosTokenPtr = arg.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_set_eos_token(runtime, eosTokenPtr);
-          if (retVal != 0) sendPort.send({'error': 'Failed to set eos token'});
+          if (retVal != 0) sendPort.send(Error('Failed to set eos token', req));
 
         // 🟥 setBosToken
-        case _FromFrontend.setBosToken:
+        case SetBosToken req:
           final arg = message.$2 as String;
           final bosTokenPtr = arg.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_set_bos_token(runtime, bosTokenPtr);
-          if (retVal != 0) sendPort.send({'error': 'Failed to set bos token'});
+          if (retVal != 0) sendPort.send(Error('Failed to set bos token', req));
 
         // 🟥 setTokenBanned
-        case _FromFrontend.setTokenBanned:
+        case SetTokenBanned req:
           final arg = message.$2 as List<int>;
           final tokenBannedPtr = calloc.allocate<ffi.Int>(arg.length);
           for (var i = 0; i < arg.length; i++) {
@@ -237,55 +238,55 @@ class RWKVMobile {
           }
           retVal = rwkvMobile.rwkvmobile_runtime_set_token_banned(runtime, tokenBannedPtr, arg.length);
           calloc.free(tokenBannedPtr);
-          if (retVal != 0) sendPort.send({'error': 'Failed to set token banned'});
+          if (retVal != 0) sendPort.send(Error('Failed to set token banned', req));
 
         // 🟥 setUserRole
-        case _FromFrontend.setUserRole:
+        case SetUserRole req:
           final arg = message.$2 as String;
           final userRolePtr = arg.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_set_user_role(runtime, userRolePtr);
-          if (retVal != 0) sendPort.send({'error': 'Failed to set user role'});
+          if (retVal != 0) sendPort.send(Error('Failed to set user role', req));
 
         // 🟥 loadVisionEncoder
-        case _FromFrontend.loadVisionEncoder:
+        case LoadVisionEncoder req:
           final arg = message.$2 as String;
           final encoderPathPtr = arg.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_load_vision_encoder(runtime, encoderPathPtr);
-          if (retVal != 0) sendPort.send({'error': 'Failed to load vision encoder'});
+          if (retVal != 0) sendPort.send(Error('Failed to load vision encoder', req));
 
         // 🟥 releaseVisionEncoder
-        case _FromFrontend.releaseVisionEncoder:
+        case ReleaseVisionEncoder req:
           retVal = rwkvMobile.rwkvmobile_runtime_release_vision_encoder(runtime);
-          if (retVal != 0) sendPort.send({'error': 'Failed to release vision encoder'});
+          if (retVal != 0) sendPort.send(Error('Failed to release vision encoder', req));
 
         // 🟥 setVisionPrompt
-        case _FromFrontend.setVisionPrompt:
+        case SetVisionPrompt req:
           final arg = message.$2 as String;
           final imagePathPtr = arg.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_set_image_prompt(runtime, imagePathPtr);
-          if (retVal != 0) sendPort.send({'error': 'Failed to set image prompt'});
+          if (retVal != 0) sendPort.send(Error('Failed to set image prompt', req));
 
         // 🟥 loadWhisperEncoder
-        case _FromFrontend.loadWhisperEncoder:
+        case LoadWhisperEncoder req:
           final arg = message.$2 as String;
           final encoderPathPtr = arg.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_load_whisper_encoder(runtime, encoderPathPtr);
-          if (retVal != 0) sendPort.send({'error': 'Failed to load whisper encoder'});
+          if (retVal != 0) sendPort.send(Error('Failed to load whisper encoder', req));
 
         // 🟥 releaseWhisperEncoder
-        case _FromFrontend.releaseWhisperEncoder:
+        case ReleaseWhisperEncoder req:
           retVal = rwkvMobile.rwkvmobile_runtime_release_whisper_encoder(runtime);
-          if (retVal != 0) sendPort.send({'error': 'Failed to release whisper encoder'});
+          if (retVal != 0) sendPort.send(Error('Failed to release whisper encoder', req));
 
         // 🟥 setAudioPrompt
-        case _FromFrontend.setAudioPrompt:
+        case SetAudioPrompt req:
           final arg = message.$2 as String;
           final audioPathPtr = arg.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_set_audio_prompt(runtime, audioPathPtr);
-          if (retVal != 0) sendPort.send({'error': 'Failed to set audio prompt'});
+          if (retVal != 0) sendPort.send(Error('Failed to set audio prompt', req));
 
         // 🟥 message
-        case _FromFrontend.runChatAsync:
+        case RunChatAsync req:
           final messages = message.$2 as List<String>;
           for (var i = 0; i < messages.length; i++) {
             inputsPtr[i] = messages[i].toNativeUtf8().cast<ffi.Char>();
@@ -293,7 +294,7 @@ class RWKVMobile {
           final numInputs = messages.length;
 
           if (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) != 0) {
-            sendPort.send({'error': 'LLM is already generating'});
+            sendPort.send(Error('LLM is already generating', req));
           } else {
             sendPort.send({'generateStart': true});
             if (kDebugMode) print("💬 Starting LLM generation thread (chat mode)");
@@ -303,12 +304,12 @@ class RWKVMobile {
           }
 
         // 🟥 generateAsync
-        case _FromFrontend.generateAsync:
+        case GenerateAsync req:
           final prompt = message.$2 as String;
           final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
 
           if (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) != 0) {
-            sendPort.send({'error': 'LLM is already generating'});
+            sendPort.send(Error('LLM is already generating', req));
           } else {
             sendPort.send({'generateStart': true});
             if (kDebugMode) print("🔥 Starting LLM generation thread (gen mode), maxlength = $maxLength");
@@ -318,7 +319,7 @@ class RWKVMobile {
           }
 
         // 🟥 generate
-        case _FromFrontend.generate:
+        case Generate req:
           final prompt = message.$2 as String;
           final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
           String responseStr = prompt;
@@ -341,13 +342,13 @@ class RWKVMobile {
           sendPort.send({'generateStop': true});
 
         // 🟥 releaseModel
-        case _FromFrontend.releaseModel:
+        case ReleaseModel req:
           if (kDebugMode) print("💬 Releasing model");
           rwkvMobile.rwkvmobile_runtime_release(runtime);
           runtime = ffi.nullptr;
 
         // 🟥 initRuntime
-        case _FromFrontend.initRuntime:
+        case InitRuntime req:
           final args = message.$2 as Map<String, dynamic>;
           modelPath = args['modelPath'] as String;
           modelBackend = args['backend'].asArgument;
@@ -380,7 +381,7 @@ class RWKVMobile {
           }
 
         // 🟥 stop
-        case _FromFrontend.stop:
+        case Stop req:
           bool generating = rwkvMobile.rwkvmobile_runtime_is_generating(runtime) == 1;
           while (generating) {
             rwkvMobile.rwkvmobile_runtime_stop_generation(runtime);
@@ -391,7 +392,7 @@ class RWKVMobile {
           }
 
         // 🟥 getResponseBufferContent
-        case _FromFrontend.getResponseBufferContent:
+        case GetResponseBufferContent req:
           final responseBufferContent = rwkvMobile.rwkvmobile_runtime_get_response_buffer_content(runtime);
           int length = responseBufferContent.length;
           final Uint8List byteList = responseBufferContent.content.cast<ffi.Uint8>().asTypedList(length);
@@ -399,20 +400,20 @@ class RWKVMobile {
           sendPort.send({'responseBufferContent': str});
 
         // 🟥 getPrefillAndDecodeSpeed
-        case _FromFrontend.getPrefillAndDecodeSpeed:
+        case GetPrefillAndDecodeSpeed req:
           final prefillSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime);
           final decodeSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime);
           sendPort.send({'prefillSpeed': prefillSpeed, 'decodeSpeed': decodeSpeed});
 
         // 🟥 getResponseBufferIds
-        case _FromFrontend.getResponseBufferIds:
+        case GetResponseBufferIds req:
           final responseBufferIds = rwkvMobile.rwkvmobile_runtime_get_response_buffer_ids(runtime);
           final responseBufferIdsList = responseBufferIds.ids.asTypedList(responseBufferIds.len).toList();
           rwkvMobile.rwkvmobile_runtime_free_token_ids(responseBufferIds);
           sendPort.send({'responseBufferIds': responseBufferIdsList});
 
         // 🟥 loadTTSModels
-        case _FromFrontend.loadTTSModels:
+        case LoadTTSModels req:
           final args = message.$2 as Map<String, dynamic>;
           final campPlusPath = args['campPlusPath'] as String;
           final flowDecoderEstimatorPath = args['flowDecoderEstimatorPath'] as String;
@@ -421,23 +422,23 @@ class RWKVMobile {
           final speechTokenizerPath = args['speechTokenizerPath'] as String;
           final ttsTokenizerPath = args['ttsTokenizerPath'] as String;
           retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_load_models(runtime, speechTokenizerPath.toNativeUtf8().cast<ffi.Char>(), campPlusPath.toNativeUtf8().cast<ffi.Char>(), flowEncoderPath.toNativeUtf8().cast<ffi.Char>(), flowDecoderEstimatorPath.toNativeUtf8().cast<ffi.Char>(), hiftGeneratorPath.toNativeUtf8().cast<ffi.Char>(), ttsTokenizerPath.toNativeUtf8().cast<ffi.Char>());
-          if (retVal != 0) sendPort.send({'error': 'Failed to load TTS models'});
+          if (retVal != 0) sendPort.send(Error('Failed to load TTS models', req));
           rwkvMobile.rwkvmobile_runtime_cosyvoice_set_cfm_steps(runtime, 5);
 
         // 🟥 loadTTSTextNormalizer
-        case _FromFrontend.loadTTSTextNormalizer:
+        case LoadTTSTextNormalizer req:
           final args = message.$2 as Map<String, dynamic>;
           final fstPath = args['fstPath'] as String;
           retVal = rwkvMobile.rwkvmobile_runtime_tts_register_text_normalizer(runtime, fstPath.toNativeUtf8().cast<ffi.Char>());
-          if (retVal != 0) sendPort.send({'error': 'Failed to load TTS Text Normalizer file $fstPath'});
+          if (retVal != 0) sendPort.send(Error('Failed to load TTS Text Normalizer file $fstPath', req));
 
         // 🟥 releaseTTSModels
-        case _FromFrontend.releaseTTSModels:
+        case ReleaseTTSModels req:
           retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_release_models(runtime);
-          if (retVal != 0) sendPort.send({'error': 'Failed to release TTS models'});
+          if (retVal != 0) sendPort.send(Error('Failed to release TTS models', req));
 
         // 🟥 runTTS
-        case _FromFrontend.runTTS:
+        case RunTTS req:
           final args = message.$2 as Map<String, dynamic>;
           final ttsText = args['ttsText'] as String;
           final instructionText = args['instructionText'] as String;
@@ -453,19 +454,18 @@ class RWKVMobile {
             outputWavPath.toNativeUtf8().cast<ffi.Char>(),
           );
           if (retVal != 0) {
-            sendPort.send({'error': 'Failed to run TTS'});
+            sendPort.send(Error('Failed to run TTS', req));
           } else {
             sendPort.send({'ttsDone': true, 'outputWavPath': outputWavPath});
           }
 
         // 🟥 runTTSAsync
-        case _FromFrontend.runTTSAsync:
-          final args = message.$2 as Map<String, dynamic>;
-          final ttsText = args['ttsText'] as String;
-          final instructionText = args['instructionText'] as String;
-          final promptSpeechText = args['promptSpeechText'] as String;
-          final promptWavPath = args['promptWavPath'] as String;
-          final outputWavPath = args['outputWavPath'] as String;
+        case RunTTSAsync req:
+          final ttsText = req.ttsText;
+          final instructionText = req.instructionText;
+          final promptSpeechText = req.promptSpeechText;
+          final promptWavPath = req.promptWavPath;
+          final outputWavPath = req.outputWavPath;
           retVal = rwkvMobile.rwkvmobile_runtime_run_tts_async(
             runtime,
             ttsText.toNativeUtf8().cast<ffi.Char>(),
@@ -475,44 +475,44 @@ class RWKVMobile {
             outputWavPath.toNativeUtf8().cast<ffi.Char>(),
           );
           if (retVal != 0) {
-            sendPort.send({'error': 'Failed to run TTS'});
+            sendPort.send(Error('Failed to run TTS', req));
+            break;
           } else {
-            sendPort.send({'ttsGenerationStart': true});
+            sendPort.send(TTSGenerationStart(start: true, toRWKV: req));
           }
 
         // 🟥 getTTSGenerationProgress
-        case _FromFrontend.getTTSGenerationProgress:
+        case GetTTSGenerationProgress req:
           bool isGeneratingBool = (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) != 0);
           if (!isGeneratingBool) {
-            sendPort.send({'ttsOverallProgress': -1, 'ttsPerWavProgress': -1});
-          } else {
-            final ttsOutputFiles = rwkvMobile.rwkvmobile_runtime_tts_get_current_output_files(runtime);
-            final outputFiles = ttsOutputFiles.cast<Utf8>().toDartString();
-            final fileList = outputFiles.split(',').map((f) => f.replaceAll('"', '').trim()).toList();
-            final numCurrentGeneratedWavs = fileList.length;
-            final numTotalWavs = rwkvMobile.rwkvmobile_runtime_tts_get_num_total_output_wavs(runtime);
-            final ttsPerWavProgress = rwkvMobile.rwkvmobile_runtime_tts_get_generation_progress(runtime);
-            final ttsOverallProgress = (numCurrentGeneratedWavs + ttsPerWavProgress) / numTotalWavs;
-            // Range from 0.0 to 1.0
-            sendPort.send({'ttsOverallProgress': ttsOverallProgress, 'ttsPerWavProgress': ttsPerWavProgress});
+            sendPort.send(TTSGenerationProgress(overallProgress: -1, perWavProgress: -1, toRWKV: req));
+            break;
           }
-
-        // 🟥 getTTSOutputFileList
-        case _FromFrontend.getTTSOutputFileList:
           final ttsOutputFiles = rwkvMobile.rwkvmobile_runtime_tts_get_current_output_files(runtime);
           final outputFiles = ttsOutputFiles.cast<Utf8>().toDartString();
           final fileList = outputFiles.split(',').map((f) => f.replaceAll('"', '').trim()).toList();
-          sendPort.send({'ttsOutputFiles': fileList});
+          final numCurrentGeneratedWavs = fileList.length;
+          final numTotalWavs = rwkvMobile.rwkvmobile_runtime_tts_get_num_total_output_wavs(runtime);
+          final ttsPerWavProgress = rwkvMobile.rwkvmobile_runtime_tts_get_generation_progress(runtime);
+          final ttsOverallProgress = (numCurrentGeneratedWavs + ttsPerWavProgress) / numTotalWavs;
+          // Range from 0.0 to 1.0
+          sendPort.send(TTSGenerationProgress(overallProgress: ttsOverallProgress, perWavProgress: ttsPerWavProgress, toRWKV: req));
+
+        // 🟥 getTTSOutputFileList
+        case GetTTSOutputFileList req:
+          final ttsOutputFiles = rwkvMobile.rwkvmobile_runtime_tts_get_current_output_files(runtime);
+          final outputFiles = ttsOutputFiles.cast<Utf8>().toDartString();
+          final fileList = outputFiles.split(',').map((f) => f.replaceAll('"', '').trim()).toList();
+          sendPort.send(TTSOutputFileList(outputFileList: fileList));
 
         // 🟥 setTTSCFMSteps
-        case _FromFrontend.setTTSCFMSteps:
-          final args = message.$2 as Map<String, dynamic>;
-          final cfmSteps = args['cfmSteps'] as int;
+        case SetTTSCFMSteps req:
+          final cfmSteps = req.cfmSteps;
           retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_set_cfm_steps(runtime, cfmSteps);
-          if (retVal != 0) sendPort.send({'error': 'Failed to set TTS CFM steps'});
+          if (retVal != 0) sendPort.send(Error('Failed to set TTS CFM steps', req));
 
         // 🟥 dumpLog
-        case _FromFrontend.dumpLog:
+        case DumpLog req:
           final log = rwkvMobile.rwkvmobile_dump_log();
           sendPort.send({'runtimeLog': log.cast<Utf8>().toDartString()});
       }
