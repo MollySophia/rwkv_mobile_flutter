@@ -35,6 +35,7 @@ class TTSBar extends ConsumerWidget {
     final pairs = ref.watch(P.tts.spkPairs);
 
     String target = "";
+
     if (selectSpkName != null) {
       target = S.current.imitate_target + ": " + (P.tts.safe(selectSpkName));
       target += " " + pairs[selectSpkName];

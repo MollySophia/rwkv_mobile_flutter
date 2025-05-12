@@ -14,6 +14,7 @@ extension _Instruction on Language {
 class _TTS {
   late final spkPairs = qs<JSON>({});
   late final selectSpkName = qsn<String>();
+  late final selectedFlag = qsn<String>();
 
   late final ttsDone = qs(true);
 
@@ -115,7 +116,7 @@ extension _$TTS on _TTS {
     };
 
     ttsDone.q = false;
-    P.rwkv.send(ToRWKV.runTTS, options);
+    P.rwkv.send(ToRWKV.runTTSAsync, options);
   }
 }
 

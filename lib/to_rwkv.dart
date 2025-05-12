@@ -24,7 +24,17 @@ enum ToRWKV {
   releaseVisionEncoder,
   releaseWhisperEncoder,
   runChatAsync,
+
+  @Deprecated("use runTTSAsync instead")
   runTTS,
+
+  /// 执行 TTS 任务
+  ///
+  /// 发送消息给 ffi thread
+  ///
+  /// 在 cpp side 开启新线程
+  ///
+  /// 通过轮训的方式获取 response
   runTTSAsync,
   setAudioPrompt,
   setBosToken,

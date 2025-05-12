@@ -302,7 +302,7 @@ class RWKVMobile {
             if (retVal != 0) sendPort.send({'generateStop': true, 'error': 'Failed to start generation thread: retVal: $retVal'});
           }
 
-        // 🟥 generate
+        // 🟥 generateAsync
         case _FromFrontend.generateAsync:
           final prompt = message.$2 as String;
           final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
@@ -317,7 +317,7 @@ class RWKVMobile {
             if (retVal != 0) sendPort.send({'generateStop': true, 'error': 'Failed to start generation'});
           }
 
-        // 🟥 generateBlocking
+        // 🟥 generate
         case _FromFrontend.generate:
           final prompt = message.$2 as String;
           final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
@@ -518,43 +518,4 @@ class RWKVMobile {
       }
     }
   }
-
-  // TODO: Use them in the future
-  // void _setMaxLength([dynamic args]) {}
-  // void _clearStates([dynamic args]) {}
-  // void _setGenerationStopToken([dynamic args]) {}
-  // void _setPrompt([dynamic args]) {}
-  // void _getPrompt([dynamic args]) {}
-  // void _setSamplerParams([dynamic args]) {}
-  // void _getSamplerParams([dynamic args]) {}
-  // void _setEnableReasoning([dynamic args]) {}
-  // void _getEnableReasoning([dynamic args]) {}
-  // void _getIsGenerating([dynamic args]) {}
-  // void _setThinkingToken([dynamic args]) {}
-  // void _setEosToken([dynamic args]) {}
-  // void _setBosToken([dynamic args]) {}
-  // void _setTokenBanned([dynamic args]) {}
-  // void _setUserRole([dynamic args]) {}
-  // void _loadVisionEncoder([dynamic args]) {}
-  // void _releaseVisionEncoder([dynamic args]) {}
-  // void _setVisionPrompt([dynamic args]) {}
-  // void _loadWhisperEncoder([dynamic args]) {}
-  // void _releaseWhisperEncoder([dynamic args]) {}
-  // void _setAudioPrompt([dynamic args]) {}
-  // void _message([dynamic args]) {}
-  // void _generate([dynamic args]) {}
-  // void _generateBlocking([dynamic args]) {}
-  // void _releaseModel([dynamic args]) {}
-  // void _initRuntime([dynamic args]) {}
-  // void _stop([dynamic args]) {}
-  // void _getResponseBufferContent([dynamic args]) {}
-  // void _getPrefillAndDecodeSpeed([dynamic args]) {}
-  // void _getResponseBufferIds([dynamic args]) {}
-  // void _loadTTSModels([dynamic args]) {}
-  // void _releaseTTSModels([dynamic args]) {}
-  // void _getTTSSpkNames([dynamic args]) {}
-  // void _runTTS([dynamic args]) {}
-  // void _runTTSWithPredefinedSpk([dynamic args]) {}
-  // void _setTTSCFMSteps([dynamic args]) {}
-  // void _dumpLog([dynamic args]) {}
 }
