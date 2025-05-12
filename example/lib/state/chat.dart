@@ -350,7 +350,7 @@ extension $Chat on _Chat {
     if (!isChat && demoType != DemoType.tts) return;
     final shouldUseEn = P.preference.preferredLanguage.q.resolved.locale.languageCode != "zh";
 
-    const head = "assets/config/chat/suggestions";
+    const head = "assets/config/tts/suggestions";
     final lang = shouldUseEn ? ".en-US" : ".zh-hans";
     final suffix = kDebugMode ? ".debug" : "";
 
