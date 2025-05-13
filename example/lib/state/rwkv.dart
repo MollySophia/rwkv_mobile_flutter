@@ -789,23 +789,31 @@ extension _$RWKV on _RWKV {
 @Deprecated("Use FromRWKV instead")
 enum _RWKVMessageType {
   /// 模型每吐一个token，调用一次, 调用内容为该次 generate 已经吐出的文本
+  @Deprecated("Use FromRWKV instead")
   responseBufferContent,
 
   /// 模型吐完 token 了会被调用, 调用内容该次 generate 吐出的总文本
+  @Deprecated("Use FromRWKV instead")
   response,
 
   /// 模型每吐一个token，调用一次, 调用内容为该次 generate 已经吐出的文本
+  @Deprecated("Use FromRWKV instead")
   streamResponse,
 
+  @Deprecated("Use FromRWKV instead")
   currentPrompt,
 
+  @Deprecated("Use FromRWKV instead")
   generateStart,
 
   /// 模型是否正在生成
+  @Deprecated("Use FromRWKV instead")
   isGenerating,
 
+  @Deprecated("Use FromRWKV instead")
   responseBufferIds,
 
+  @Deprecated("Use FromRWKV instead")
   generateStop,
   ;
 }

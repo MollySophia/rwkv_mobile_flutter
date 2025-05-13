@@ -47,10 +47,10 @@ class PageSudoku extends ConsumerWidget {
                   const Exp(child: Terminal()),
                 ],
               )
-            : Ro(
+            : const Ro(
                 children: [
                   Exp(child: Terminal()),
-                  const _UI(),
+                  _UI(),
                 ],
               ),
       ),

@@ -438,8 +438,8 @@ class _SpkPanel extends ConsumerWidget {
                     Gaimon.light();
                   },
                   child: C(
-                    padding: EI.s(h: 4, v: 2),
-                    margin: EI.o(r: 4),
+                    padding: const EI.s(h: 4, v: 2),
+                    margin: const EI.o(r: 4),
                     decoration: BD(
                       color: filtered ? primary.q(.1) : kC,
                       borderRadius: 4.r,
