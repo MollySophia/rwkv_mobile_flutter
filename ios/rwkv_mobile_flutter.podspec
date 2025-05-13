@@ -24,11 +24,11 @@ Pod::Spec.new do |s|
     s.preserve_paths = '*.a'
 
     s.xcconfig = {
-      'OTHER_LDFLAGS' => '-all_load -lrwkv_mobile -lncnn -lonnxruntime',
+      'OTHER_LDFLAGS' => '-all_load -lrwkv_mobile -lncnn',
       'DEAD_CODE_STRIPPING' => 'NO',
       "STRIP_INSTALLED_PRODUCT" => "NO",
     }
-    s.vendored_libraries = 'librwkv_mobile.a', 'libncnn.a', 'libonnxruntime.a'
+    s.vendored_libraries = 'librwkv_mobile.a', 'libncnn.a'
     # s.vendored_frameworks = 'librwkv_mobile.xcframework', 'libweb_rwkv_ffi.xcframework'
     s.platform = :ios, '11.0'
     s.static_framework = true
