@@ -84,7 +84,7 @@ class _RWKV {
 /// Public methods
 extension $RWKV on _RWKV {
   FV setAudioPrompt({required String path}) async {
-    send(to_rwkv.SetAudioPrompt(), path);
+    send(to_rwkv.SetAudioPrompt(audioPathPtr: path));
   }
 
   FV sendMessages(List<String> messages) async {
@@ -108,7 +108,7 @@ extension $RWKV on _RWKV {
       return;
     }
 
-    send(to_rwkv.ChatAsync(), messages);
+    send(to_rwkv.ChatAsync(messages: messages));
 
     if (_getTokensTimer != null) {
       _getTokensTimer!.cancel();
@@ -129,7 +129,7 @@ extension $RWKV on _RWKV {
       qqw("sendPort is null");
       return;
     }
-    send(to_rwkv.Generate(), prompt);
+    send(to_rwkv.Generate(prompt: prompt));
 
     if (_getTokensTimer != null) {
       _getTokensTimer!.cancel();
@@ -145,7 +145,7 @@ extension $RWKV on _RWKV {
   }
 
   FV setImagePath({required String path}) async {
-    send(to_rwkv.SetVisionPrompt(), path);
+    send(to_rwkv.SetVisionPrompt(imagePathPtr: path));
   }
 
   FV clearStates() async {
@@ -159,13 +159,13 @@ extension $RWKV on _RWKV {
     send(to_rwkv.ClearStates());
   }
 
-  void send<T>(to_rwkv.ToRWKV method, [dynamic args]) {
+  void send(to_rwkv.ToRWKV toRwkv) {
     final sendPort = _sendPort;
     if (sendPort == null) {
       qqw("sendPort is null");
       return;
     }
-    sendPort.send((method, args));
+    sendPort.send(toRwkv);
     return;
   }
 
@@ -179,7 +179,11 @@ extension $RWKV on _RWKV {
     prefillSpeed.q = 0;
     decodeSpeed.q = 0;
     _initRuntimeCompleter = Completer<void>();
-    send(to_rwkv.InitRuntime(), {"modelPath": modelPath, "backend": backend, "tokenizerPath": tokenizerPath});
+    send(to_rwkv.InitRuntime(
+      modelPath: modelPath,
+      backend: backend,
+      tokenizerPath: tokenizerPath,
+    ));
     return _initRuntimeCompleter.future;
   }
 
@@ -248,9 +252,9 @@ extension $RWKV on _RWKV {
 
     if (setPrompt) qqq("setPrompt: $finalPrompt");
 
-    send(to_rwkv.SetEnableReasoning(), _usingReasoningModel.q);
-    if (setPrompt) send(to_rwkv.SetPrompt(), _usingReasoningModel.q ? "<EOD>" : finalPrompt);
-    send(to_rwkv.SetThinkingToken(), _preferChinese.q ? "<think>嗯" : "<think");
+    send(to_rwkv.SetEnableReasoning(enableReasoning: _usingReasoningModel.q));
+    if (setPrompt) send(to_rwkv.SetPrompt(prompt: _usingReasoningModel.q ? "<EOD>" : finalPrompt));
+    send(to_rwkv.SetThinkingToken(thinkingToken: _preferChinese.q ? "<think>嗯" : "<think"));
   }
 
   FV loadWorldVision({
@@ -298,7 +302,7 @@ extension $RWKV on _RWKV {
       await Future.delayed(const Duration(milliseconds: 50));
     }
 
-    send(to_rwkv.LoadVisionEncoder(), encoderPath);
+    send(to_rwkv.LoadVisionEncoder(encoderPath: encoderPath));
     await setModelConfig(
       usingReasoningModel: usingReasoningModel,
       preferChinese: false,
@@ -306,9 +310,9 @@ extension $RWKV on _RWKV {
     );
     await resetSamplerParams(usingReasoningModel: usingReasoningModel);
     await resetMaxLength(usingReasoningModel: usingReasoningModel);
-    send(to_rwkv.SetEosToken(), "\x17");
-    send(to_rwkv.SetBosToken(), "\x16");
-    send(to_rwkv.SetTokenBanned(), [0]);
+    send(to_rwkv.SetEosToken(eosToken: "\x17"));
+    send(to_rwkv.SetBosToken(bosToken: "\x16"));
+    send(to_rwkv.SetTokenBanned(tokenBanned: [0]));
     _loading.q = false;
   }
 
@@ -349,7 +353,7 @@ extension $RWKV on _RWKV {
       await Future.delayed(const Duration(milliseconds: 50));
     }
 
-    send(to_rwkv.LoadWhisperEncoder(), encoderPath);
+    send(to_rwkv.LoadWhisperEncoder(encoderPath: encoderPath));
     await setModelConfig(
       usingReasoningModel: false,
       preferChinese: false,
@@ -357,10 +361,10 @@ extension $RWKV on _RWKV {
     );
     await resetSamplerParams(usingReasoningModel: false);
     await resetMaxLength(usingReasoningModel: false);
-    send(to_rwkv.SetEosToken(), "\x17");
-    send(to_rwkv.SetBosToken(), "\x16");
-    send(to_rwkv.SetTokenBanned(), [0]);
-    send(to_rwkv.SetUserRole(), "");
+    send(to_rwkv.SetEosToken(eosToken: "\x17"));
+    send(to_rwkv.SetBosToken(bosToken: "\x16"));
+    send(to_rwkv.SetTokenBanned(tokenBanned: [0]));
+    send(to_rwkv.SetUserRole(userRole: ""));
     _loading.q = false;
   }
 
@@ -491,7 +495,7 @@ extension $RWKV on _RWKV {
 
   FV syncMaxLength({num? maxLength}) async {
     if (maxLength != null) arguments(Argument.maxLength).q = maxLength.toDouble();
-    send(to_rwkv.SetMaxLength(), _intIfFixedDecimalsIsZero(Argument.maxLength));
+    send(to_rwkv.SetMaxLength(maxLength: _intIfFixedDecimalsIsZero(Argument.maxLength).toInt()));
   }
 
   FV loadOthello() async {
@@ -515,7 +519,11 @@ extension $RWKV on _RWKV {
     final rootIsolateToken = RootIsolateToken.instance;
 
     if (_sendPort != null) {
-      send(to_rwkv.InitRuntime(), {"modelPath": modelPath, "backend": backend, "tokenizerPath": tokenizerPath});
+      send(to_rwkv.InitRuntime(
+        modelPath: modelPath,
+        backend: backend,
+        tokenizerPath: tokenizerPath,
+      ));
     } else {
       final options = StartOptions(
         modelPath,
@@ -534,7 +542,7 @@ extension $RWKV on _RWKV {
 
     P.app.demoType.q = DemoType.othello;
 
-    send(to_rwkv.SetMaxLength(), 64000);
+    send(to_rwkv.SetMaxLength(maxLength: 64000));
     send(to_rwkv.SetSamplerParams(
       temperature: 1.0,
       topK: 1,
@@ -543,7 +551,7 @@ extension $RWKV on _RWKV {
       frequencyPenalty: .0,
       penaltyDecay: .0,
     ));
-    send(to_rwkv.SetGenerationStopToken(), 0);
+    send(to_rwkv.SetGenerationStopToken(stopToken: 0));
     send(to_rwkv.ClearStates());
   }
 }

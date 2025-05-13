@@ -26,6 +26,7 @@ class Settings extends ConsumerWidget {
     final buildNumber = ref.watch(P.app.buildNumber);
     final preferredTextScaleFactor = ref.watch(P.preference.preferredTextScaleFactor);
     final preferredLanguage = ref.watch(P.preference.preferredLanguage);
+    final paddingLeft = ref.watch(P.app.paddingLeft);
 
     final iconWidget = SB(
       width: 64,
@@ -38,7 +39,12 @@ class Settings extends ConsumerWidget {
 
     return Scaffold(
       body: ListView(
-        padding: EI.o(t: paddingTop, b: paddingBottom, l: 12, r: 12),
+        padding: EI.o(
+          t: paddingTop,
+          b: paddingBottom,
+          l: 12 + paddingLeft,
+          r: 12,
+        ),
         controller: scrollController,
         children: [
           12.h,

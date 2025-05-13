@@ -67,6 +67,7 @@ class _PagerState extends ConsumerState<Pager> {
     final drawerToRight = widget.drawerToRight;
     final screenWidth = ref.watch(P.app.screenWidth);
     final screenHeight = ref.watch(P.app.screenHeight);
+    final paddingLeft = ref.watch(P.app.paddingLeft);
     if (screenWidth == 0) return const SB();
 
     if (_controller == null) {
@@ -145,7 +146,7 @@ class _Dim extends ConsumerWidget {
       child: GD(
         onTap: _onTap,
         child: Opacity(
-          opacity: drawerOpacity,
+          opacity: drawerOpacity.clamp(0, 1),
           child: Material(
             color: kC,
             child: C(

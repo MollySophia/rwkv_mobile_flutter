@@ -10,6 +10,8 @@ import 'package:halo_state/halo_state.dart';
 import 'dart:math' as math;
 
 import 'package:zone/state/p.dart';
+import 'package:zone/widgets/menu.dart';
+import 'package:zone/widgets/pager.dart';
 
 const _kStaticGridColor = Color.fromARGB(255, 159, 255, 121);
 const _kDynamicGridColor = Color.fromARGB(255, 190, 158, 255);
@@ -33,18 +35,25 @@ class PageSudoku extends ConsumerWidget {
     final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
     final padding = MediaQuery.of(context).padding;
 
-    return Scaffold(
-      backgroundColor: kW,
-      body: isPortrait
-          ? Co(children: [
-              padding.top.h,
-              const _UI(),
-              const Exp(child: Terminal()),
-            ])
-          : const Ro(children: [
-              Exp(child: Terminal()),
-              _UI(),
-            ]),
+    return Pager(
+      drawer: const Menu(),
+      child: Scaffold(
+        backgroundColor: kW,
+        body: isPortrait
+            ? Co(
+                children: [
+                  padding.top.h,
+                  const _UI(),
+                  const Exp(child: Terminal()),
+                ],
+              )
+            : Ro(
+                children: [
+                  Exp(child: Terminal()),
+                  const _UI(),
+                ],
+              ),
+      ),
     );
   }
 }
