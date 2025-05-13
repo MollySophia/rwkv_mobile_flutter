@@ -456,26 +456,37 @@ class RWKVMobile {
 
         // 🟥 getTTSGenerationProgress
         case GetTTSGenerationProgress req:
-          bool isGeneratingBool = (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) != 0);
-          if (!isGeneratingBool) {
-            sendPort.send(TTSGenerationProgress(overallProgress: -1, perWavProgress: -1, toRWKV: req));
+          int numCurrentGeneratedWavs = 0;
+          List<double> perWavProgress = [];
+          List<String> fileList = [];
+          try {
+            final ttsOutputFiles = rwkvMobile.rwkvmobile_runtime_tts_get_current_output_files(runtime);
+            final outputFiles = ttsOutputFiles.cast<Utf8>().toDartString();
+            if (kDebugMode) print("💬 TTS output files: $outputFiles");
+            fileList = outputFiles.split(',').map((f) => f.replaceAll('"', '').trim()).toList();
+            numCurrentGeneratedWavs = fileList.length;
+          } catch (_) {
+            sendPort.send(TTSResult(filePaths: [], perWavProgress: [], overallProgress: 0.0, toRWKV: req));
             break;
           }
-          final ttsOutputFiles = rwkvMobile.rwkvmobile_runtime_tts_get_current_output_files(runtime);
-          final outputFiles = ttsOutputFiles.cast<Utf8>().toDartString();
-          final fileList = outputFiles.split(',').map((f) => f.replaceAll('"', '').trim()).toList();
-          final numCurrentGeneratedWavs = fileList.length;
+          perWavProgress = List.filled(numCurrentGeneratedWavs, 1.0).toList();
           final numTotalWavs = rwkvMobile.rwkvmobile_runtime_tts_get_num_total_output_wavs(runtime);
           final ttsPerWavProgress = rwkvMobile.rwkvmobile_runtime_tts_get_generation_progress(runtime);
-          final ttsOverallProgress = (numCurrentGeneratedWavs + ttsPerWavProgress) / numTotalWavs;
+          perWavProgress.add(ttsPerWavProgress);
+          final ttsOverallProgress = (numCurrentGeneratedWavs + ttsPerWavProgress) / numTotalWavs.toDouble();
           // Range from 0.0 to 1.0
-          sendPort.send(TTSGenerationProgress(overallProgress: ttsOverallProgress, perWavProgress: ttsPerWavProgress, toRWKV: req));
+          sendPort.send(TTSResult(filePaths: fileList, perWavProgress: perWavProgress, overallProgress: ttsOverallProgress, toRWKV: req));
 
         // 🟥 getTTSOutputFileList
         case GetTTSOutputFileList req:
-          final ttsOutputFiles = rwkvMobile.rwkvmobile_runtime_tts_get_current_output_files(runtime);
-          final outputFiles = ttsOutputFiles.cast<Utf8>().toDartString();
-          final fileList = outputFiles.split(',').map((f) => f.replaceAll('"', '').trim()).toList();
+          List<String> fileList = [];
+          try {
+            final ttsOutputFiles = rwkvMobile.rwkvmobile_runtime_tts_get_current_output_files(runtime);
+            final outputFiles = ttsOutputFiles.cast<Utf8>().toDartString();
+            fileList = outputFiles.split(',').map((f) => f.replaceAll('"', '').trim()).toList();
+          } catch (_) {
+            fileList = [];
+          }
           sendPort.send(TTSOutputFileList(outputFileList: fileList, toRWKV: req));
 
         // 🟥 setTTSCFMSteps
