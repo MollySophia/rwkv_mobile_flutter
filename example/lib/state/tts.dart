@@ -56,6 +56,8 @@ class _TTS {
   late final textEditingController = TextEditingController(text: _TTSStatic._defaultTextInInput);
   late final textInInput = qs(_TTSStatic._defaultTextInInput);
   late final ttsDone = qs(true);
+
+  Timer? _queryTimer;
 }
 
 /// Private methods
@@ -89,6 +91,8 @@ extension _$TTS on _TTS {
 
     selectedSpkName.l(_onSelectSpkNameChanged, fireImmediately: true);
     spkShown.l(_onSpkShownChanged, fireImmediately: true);
+
+    P.rwkv.broadcastStream.listen(_onStreamEvent, onDone: _onStreamDone, onError: _onStreamError);
   }
 
   void _onSpkShownChanged(bool next) {
@@ -130,6 +134,20 @@ extension _$TTS on _TTS {
     if (textInInput.q != textInController) textInInput.q = textInController;
   }
 
+  void _startQueryTimer() {
+    _queryTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      P.rwkv.send(to_rwkv.GetTTSGenerationProgress());
+      P.rwkv.send(to_rwkv.GetIsGenerating());
+      P.rwkv.send(to_rwkv.GetPrefillAndDecodeSpeed());
+      P.rwkv.send(to_rwkv.GetTTSOutputFileList());
+    });
+  }
+
+  void _stopQueryTimer() {
+    _queryTimer?.cancel();
+    _queryTimer = null;
+  }
+
   FV _runTTS({
     required String ttsText,
     required String instructionText,
@@ -153,6 +171,44 @@ extension _$TTS on _TTS {
       outputWavPath: outputWavPath,
       promptSpeechText: promptSpeechText,
     ));
+
+    _startQueryTimer();
+  }
+
+  void _onStreamEvent(from_rwkv.FromRWKV event) {
+    switch (event) {
+      case from_rwkv.CurrentPrompt res:
+      case from_rwkv.EnableReasoning res:
+      case from_rwkv.Error res:
+      case from_rwkv.GenerateStart res:
+      case from_rwkv.GenerateStop res:
+      case from_rwkv.InitRuntimeDone res:
+      case from_rwkv.ResponseBufferContent res:
+      case from_rwkv.SamplerParams res:
+      case from_rwkv.Speed res:
+      case from_rwkv.SpksNames res:
+      case from_rwkv.StreamResponse res:
+        break;
+      case from_rwkv.TTSCFMSteps res:
+        qqq(res);
+      case from_rwkv.TTSDone res:
+        qqq(res);
+      case from_rwkv.TTSGenerationProgress res:
+        qqq(res);
+      case from_rwkv.TTSGenerationStart res:
+        qqq(res);
+      case from_rwkv.TTSOutputFileList res:
+        qqq(res);
+    }
+  }
+
+  void _onStreamDone() {
+    qq;
+  }
+
+  void _onStreamError(Object error, StackTrace stackTrace) {
+    qqe("error: $error");
+    if (!kDebugMode) Sentry.captureException(error, stackTrace: stackTrace);
   }
 }
 

@@ -35,7 +35,12 @@ class GenerateStop extends FromRWKV {}
 
 class InitRuntimeDone extends FromRWKV {}
 
-class PrefillSpeed extends FromRWKV {}
+class Speed extends FromRWKV {
+  final double prefillSpeed;
+  final double decodeSpeed;
+
+  Speed({required this.prefillSpeed, required this.decodeSpeed, super.toRWKV});
+}
 
 class ResponseBufferContent extends FromRWKV {}
 

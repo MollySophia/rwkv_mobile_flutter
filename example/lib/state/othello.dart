@@ -116,7 +116,7 @@ extension _$ on _Othello {
       }
     }, fireImmediately: true);
 
-    P.rwkv.broadcastStream.listen((event) {
+    P.rwkv.oldBroadcastStream.listen((event) {
       final demoType = P.app.demoType.q;
       if (demoType != DemoType.othello) return;
       _onStreamEvent(event: event);

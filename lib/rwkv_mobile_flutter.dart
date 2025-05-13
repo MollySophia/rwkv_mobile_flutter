@@ -21,7 +21,7 @@ const _codec = Utf8Codec(allowMalformed: true);
 class RWKVMobile {
   Isolate? _isolate;
 
-  // TODO: 对 Frontend 隐藏 sendPort
+  // TODO: 对 Frontend 隐藏 sendPort477
   Future<void> runIsolate(StartOptions options) async {
     if (_isolate != null) throw Exception('😡 Isolate already running');
     _isolate = await Isolate.spawn(_isolateMain, options);
@@ -401,7 +401,7 @@ class RWKVMobile {
         case GetPrefillAndDecodeSpeed req:
           final prefillSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime);
           final decodeSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime);
-          sendPort.send({'prefillSpeed': prefillSpeed, 'decodeSpeed': decodeSpeed});
+          sendPort.send(Speed(prefillSpeed: prefillSpeed, decodeSpeed: decodeSpeed, toRWKV: req));
 
         // 🟥 getResponseBufferIds
         case GetResponseBufferIds req:

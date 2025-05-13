@@ -7,11 +7,23 @@ class _RWKV {
   /// Receive message from RWKV isolate
   late final _receivePort = ReceivePort();
 
-  late final _messagesController = StreamController<LLMEvent>();
+  @Deprecated("Use _streamController instead")
+  late final _oldMessagesController = StreamController<LLMEvent>();
 
-  static Stream<LLMEvent>? _broadcastStream;
+  @Deprecated("Use _broadcastStream instead")
+  static Stream<LLMEvent>? _oldBroadcastStream;
 
-  Stream<LLMEvent> get broadcastStream {
+  @Deprecated("Use broadcastStream instead")
+  Stream<LLMEvent> get oldBroadcastStream {
+    _oldBroadcastStream ??= _oldMessagesController.stream.asBroadcastStream();
+    return _oldBroadcastStream!;
+  }
+
+  late final _messagesController = StreamController<from_rwkv.FromRWKV>();
+
+  static Stream<from_rwkv.FromRWKV>? _broadcastStream;
+
+  Stream<from_rwkv.FromRWKV> get broadcastStream {
     _broadcastStream ??= _messagesController.stream.asBroadcastStream();
     return _broadcastStream!;
   }
@@ -596,7 +608,7 @@ extension _$RWKV on _RWKV {
 
     if (message["responseBufferContent"] != null) {
       final responseBufferContent = message["responseBufferContent"];
-      _messagesController.add(LLMEvent(
+      _oldMessagesController.add(LLMEvent(
         content: responseBufferContent,
         type: _RWKVMessageType.responseBufferContent,
       ));
@@ -605,7 +617,7 @@ extension _$RWKV on _RWKV {
 
     if (message["responseBufferIds"] != null) {
       final responseBufferIdsList = message["responseBufferIds"];
-      _messagesController.add(LLMEvent(
+      _oldMessagesController.add(LLMEvent(
         responseBufferIds: (responseBufferIdsList as List).map((e) => e as int).toList(),
         type: _RWKVMessageType.responseBufferIds,
       ));
@@ -614,7 +626,7 @@ extension _$RWKV on _RWKV {
 
     if (message["isGenerating"] != null) {
       final isGenerating = message["isGenerating"];
-      _messagesController.add(LLMEvent(
+      _oldMessagesController.add(LLMEvent(
         content: isGenerating.toString(),
         type: _RWKVMessageType.isGenerating,
       ));
@@ -627,7 +639,7 @@ extension _$RWKV on _RWKV {
 
     if (message["currentPrompt"] != null) {
       qqq("Got currentPrompt: \"${message["currentPrompt"]}\"");
-      _messagesController.add(LLMEvent(
+      _oldMessagesController.add(LLMEvent(
         content: message["currentPrompt"].toString(),
         type: _RWKVMessageType.currentPrompt,
       ));
@@ -635,7 +647,7 @@ extension _$RWKV on _RWKV {
     }
 
     if (message["generateStart"] == true) {
-      _messagesController.add(const LLMEvent(
+      _oldMessagesController.add(const LLMEvent(
         content: "",
         type: _RWKVMessageType.generateStart,
       ));
@@ -644,7 +656,7 @@ extension _$RWKV on _RWKV {
 
     if (message["response"] != null) {
       final responseText = message["response"].toString();
-      _messagesController.add(LLMEvent(
+      _oldMessagesController.add(LLMEvent(
         content: responseText,
         type: _RWKVMessageType.response,
       ));
@@ -653,7 +665,7 @@ extension _$RWKV on _RWKV {
 
     if (message["streamResponse"] != null) {
       final responseText = message["streamResponse"].toString();
-      _messagesController.add(LLMEvent(
+      _oldMessagesController.add(LLMEvent(
         content: responseText,
         token: message["streamResponseToken"],
         type: _RWKVMessageType.streamResponse,
@@ -668,7 +680,7 @@ extension _$RWKV on _RWKV {
     }
 
     if (message["generateStop"] != null) {
-      _messagesController.add(const LLMEvent(
+      _oldMessagesController.add(const LLMEvent(
         content: "",
         type: _RWKVMessageType.generateStop,
       ));
@@ -690,17 +702,11 @@ extension _$RWKV on _RWKV {
       return;
     }
 
-    if (message["prefillSpeed"] != null && message["decodeSpeed"] != null) {
-      prefillSpeed.q = message["prefillSpeed"];
-      decodeSpeed.q = message["decodeSpeed"];
-      return;
-    }
-
     if (message["ttsDone"] != null) {
       qqr("ttsDone");
       P.tts.ttsDone.q = true;
       final ttsDoneWithSuccess = message["ttsDone"] == true;
-      _messagesController.add(LLMEvent(
+      _oldMessagesController.add(LLMEvent(
         ttsDoneWithSuccess: ttsDoneWithSuccess,
         type: _RWKVMessageType.ttsDone,
       ));
@@ -724,13 +730,16 @@ extension _$RWKV on _RWKV {
         }
         Alert.error(response.message);
 
+      case from_rwkv.Speed response:
+        prefillSpeed.q = response.prefillSpeed;
+        decodeSpeed.q = response.decodeSpeed;
+
       case from_rwkv.SamplerParams response:
       case from_rwkv.CurrentPrompt response:
       case from_rwkv.EnableReasoning response:
       case from_rwkv.GenerateStart response:
       case from_rwkv.GenerateStop response:
       case from_rwkv.InitRuntimeDone response:
-      case from_rwkv.PrefillSpeed response:
       case from_rwkv.ResponseBufferContent response:
       case from_rwkv.SpksNames response:
       case from_rwkv.StreamResponse response:
@@ -775,6 +784,7 @@ extension _$RWKV on _RWKV {
   }
 }
 
+@Deprecated("Use FromRWKV instead")
 enum _RWKVMessageType {
   /// 模型每吐一个token，调用一次, 调用内容为该次 generate 已经吐出的文本
   responseBufferContent,
@@ -800,7 +810,7 @@ enum _RWKVMessageType {
   ;
 }
 
-// TODO: 使用 Backend 定义的 `FromRWKV`
+@Deprecated("Use FromRWKV instead")
 @immutable
 final class LLMEvent {
   final _RWKVMessageType type;

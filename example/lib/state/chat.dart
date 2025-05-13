@@ -470,7 +470,7 @@ extension _$Chat on _Chat {
 
     P.app.pageKey.l(_onPageKeyChanged);
 
-    P.rwkv.broadcastStream.listen(
+    P.rwkv.oldBroadcastStream.listen(
       _onStreamEvent,
       onDone: _onStreamDone,
       onError: _onStreamError,
