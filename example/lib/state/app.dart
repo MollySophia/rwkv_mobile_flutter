@@ -24,6 +24,8 @@ class _App extends RawApp with WidgetsBindingObserver {
 
   static const String _remoteDemoConfigKey = "demo-config.json";
 
+  late final isDesktop = qs(false);
+
   @override
   void didChangeMetrics() {
     final context = getContext();
@@ -92,6 +94,8 @@ extension $App on _App {
 extension _$App on _App {
   FV _init() async {
     qq;
+
+    isDesktop.q = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
 
     await init();
 

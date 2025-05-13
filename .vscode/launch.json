@@ -10,7 +10,10 @@
       "type": "dart",
       "program": "example/lib/main.dart",
       "flutterMode": "debug",
-      "args": []
+      "args": [
+        "--dart-define=disableRemoteConfig=true",
+        // "--dart-define=maxTokens=100"
+      ]
     },
     {
       "name": "debug (halo)",
@@ -19,6 +22,7 @@
       "program": "example/lib/main.dart",
       "flutterMode": "debug",
       "args": [
+        // "--dart-define=disableRemoteConfig=true",
         "--dart-define=maxTokens=100"
       ]
     },

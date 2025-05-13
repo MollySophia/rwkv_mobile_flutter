@@ -18,6 +18,7 @@ import 'package:halo_alert/halo_alert.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart' as ar;
 import 'package:rwkv_mobile_flutter/from_rwkv.dart' as from_rwkv;
 import 'package:rwkv_mobile_flutter/to_rwkv.dart' as to_rwkv;
@@ -50,6 +51,7 @@ import 'package:zone/model/world_type.dart';
 import 'package:zone/route/page_key.dart';
 import 'package:zone/route/router.dart';
 import 'package:zone/widgets/pager.dart';
+import 'package:zone/func/sudoku.dart' as func_sudoku;
 
 part "app.dart";
 part "chat.dart";
@@ -65,6 +67,7 @@ part "networking.dart";
 part "tts.dart";
 part "preference.dart";
 part "guard.dart";
+part "sudoku.dart";
 
 abstract class P {
   static final app = _App();
@@ -80,6 +83,7 @@ abstract class P {
   static final tts = _TTS();
   static final preference = _Preference();
   static final guard = _Guard();
+  static final sudoku = _Sudoku();
 
   static FV init() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -101,6 +105,7 @@ abstract class P {
       conversation._init(),
       tts._init(),
       guard._init(),
+      sudoku._init(),
     ]);
   }
 }

@@ -1,0 +1,651 @@
+// ignore: unused_import
+import 'dart:developer';
+import 'dart:math';
+
+import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:halo/halo.dart';
+import 'package:halo_state/halo_state.dart';
+import 'dart:math' as math;
+
+import 'package:zone/state/p.dart';
+
+const _kStaticGridColor = Color.fromARGB(255, 159, 255, 121);
+const _kDynamicGridColor = Color.fromARGB(255, 190, 158, 255);
+const _kEmptyGridColor = Color.fromARGB(255, 150, 150, 150);
+const _kGridBGColor = Color.fromARGB(255, 50, 50, 50);
+const _kStackColor = Color.fromARGB(200, 255, 100, 86);
+const _kStackPointSize = 2.0;
+const _kStackPointOffsetX = 20.0;
+const _kStackPointOffsetY = 20.0;
+const _kStackPointerStrokeWidth = 2.0;
+
+const _kButtonHeight = 32.0;
+const _kButtomSizeHeight = 32.0;
+const _kButtonPadding = 2.0;
+
+class PageSudoku extends ConsumerWidget {
+  const PageSudoku({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+    final padding = MediaQuery.of(context).padding;
+
+    return Scaffold(
+      backgroundColor: kW,
+      body: isPortrait
+          ? Co(children: [
+              padding.top.h,
+              const _UI(),
+              const Exp(child: Terminal()),
+            ])
+          : const Ro(children: [
+              Exp(child: Terminal()),
+              _UI(),
+            ]),
+    );
+  }
+}
+
+class _ButtonGenerate extends ConsumerWidget {
+  const _ButtonGenerate();
+
+  void _onPressed(BuildContext context, WidgetRef ref) async {
+    await P.sudoku.onGeneratePressed(context);
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final running = ref.watch(P.sudoku.running);
+    return C(
+      padding: const EI.o(b: _kButtonPadding),
+      child: SB(
+        height: _kButtonHeight,
+        child: FilledButton(
+          style: ButtonStyle(
+            maximumSize: WidgetStateProperty.all(const Size(double.infinity, _kButtomSizeHeight)),
+            minimumSize: WidgetStateProperty.all(const Size(double.infinity, _kButtomSizeHeight)),
+            shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0))),
+            padding: WidgetStateProperty.all(const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0.0)),
+            textStyle: WidgetStateProperty.all(const TextStyle(fontSize: 10, fontWeight: FontWeight.w600)),
+          ),
+          onPressed: running ? null : () => _onPressed(context, ref),
+          child: const T("Generate"),
+        ),
+      ),
+    );
+  }
+}
+
+class _ButtonGenerateHardest extends ConsumerWidget {
+  const _ButtonGenerateHardest();
+
+  void _onPressed(BuildContext context, WidgetRef ref) async {
+    if (P.sudoku.running.v) {
+      await showOkAlertDialog(
+        context: context,
+        title: "Inference is running",
+        message: "Please wait for it to finish",
+      );
+      return;
+    }
+
+    P.sudoku.loadHardestSudoku();
+    await showOkAlertDialog(
+      context: context,
+      title: "😎 Just watch me!",
+      message: "This is the hardest Sudoku in the world",
+      okLabel: "It's your turn~",
+    );
+    if (context.mounted) await P.sudoku.onInferencePressed(context);
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final running = ref.watch(P.sudoku.running);
+    return C(
+      padding: const EI.o(b: _kButtonPadding),
+      child: SB(
+        height: 48,
+        child: FilledButton(
+          style: ButtonStyle(
+            maximumSize: WidgetStateProperty.all(const Size(double.infinity, 48)),
+            minimumSize: WidgetStateProperty.all(const Size(double.infinity, 48)),
+            shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0))),
+            padding: WidgetStateProperty.all(const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0.0)),
+            textStyle: WidgetStateProperty.all(const TextStyle(fontSize: 10, fontWeight: FontWeight.w600)),
+          ),
+          onPressed: running ? null : () => _onPressed(context, ref),
+          child: const T("Generate Hardest Sudoku in the world"),
+        ),
+      ),
+    );
+  }
+}
+
+class _ButtonInference extends ConsumerWidget {
+  const _ButtonInference();
+
+  void _onPressed(BuildContext context, WidgetRef ref) async {
+    await P.sudoku.onInferencePressed(context);
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final running = ref.watch(P.sudoku.running);
+    final hasPuzzle = ref.watch(P.sudoku.hasPuzzle);
+    return C(
+      padding: const EI.o(b: _kButtonPadding),
+      child: SB(
+        height: _kButtonHeight,
+        child: FilledButton(
+          style: ButtonStyle(
+            maximumSize: WidgetStateProperty.all(const Size(double.infinity, _kButtomSizeHeight)),
+            minimumSize: WidgetStateProperty.all(const Size(double.infinity, _kButtomSizeHeight)),
+            shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0))),
+            padding: WidgetStateProperty.all(const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0)),
+            textStyle: WidgetStateProperty.all(const TextStyle(fontSize: 10, fontWeight: FontWeight.w600)),
+          ),
+          onPressed: !hasPuzzle || running ? null : () => _onPressed(context, ref),
+          child: running
+              ? Ro(
+                  m: MAA.center,
+                  children: [
+                    SB(
+                      width: 12,
+                      height: 12,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    const SB(width: 8, height: 8),
+                    const T("Thinking"),
+                  ],
+                )
+              : hasPuzzle
+                  ? const T("Inference")
+                  : const T("No puzzle"),
+        ),
+      ),
+    );
+  }
+}
+
+class _ButtonClear extends ConsumerWidget {
+  const _ButtonClear();
+
+  void _onPressed(BuildContext context, WidgetRef ref) async {
+    P.sudoku.onClearPressed(context);
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final running = ref.watch(P.sudoku.running);
+    return C(
+      padding: const EI.o(b: _kButtonPadding),
+      child: SB(
+        height: _kButtonHeight,
+        child: FilledButton(
+          style: ButtonStyle(
+            maximumSize: WidgetStateProperty.all(const Size(double.infinity, _kButtomSizeHeight)),
+            minimumSize: WidgetStateProperty.all(const Size(double.infinity, _kButtomSizeHeight)),
+            shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0))),
+            padding: WidgetStateProperty.all(const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0)),
+            textStyle: WidgetStateProperty.all(const TextStyle(fontSize: 10, fontWeight: FontWeight.w600)),
+          ),
+          onPressed: running ? null : () => _onPressed(context, ref),
+          child: const T("Clear"),
+        ),
+      ),
+    );
+  }
+}
+
+class _ButtonShowStack extends ConsumerWidget {
+  const _ButtonShowStack();
+
+  void _onPressed(BuildContext context, WidgetRef ref) async {
+    // P.sudoku.onShowStackPressed(context);
+    P.sudoku.onToggleShowStack(context);
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final showStack = ref.watch(P.sudoku.showStack);
+    final currentStack = ref.watch(P.sudoku.currentStack);
+    final enable = currentStack.isNotEmpty;
+    return C(
+      padding: const EI.o(b: _kButtonPadding),
+      child: SB(
+        height: _kButtonHeight,
+        child: FilledButton(
+          style: ButtonStyle(
+            maximumSize: WidgetStateProperty.all(const Size(double.infinity, _kButtomSizeHeight)),
+            minimumSize: WidgetStateProperty.all(const Size(double.infinity, _kButtomSizeHeight)),
+            shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0))),
+            padding: WidgetStateProperty.all(const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0)),
+            textStyle: WidgetStateProperty.all(const TextStyle(fontSize: 10, fontWeight: FontWeight.w600)),
+          ),
+          onPressed: !enable ? null : () => _onPressed(context, ref),
+          child: showStack ? const T("Hide Stack") : const T("Show Stack"),
+        ),
+      ),
+    );
+  }
+}
+
+class _UI extends ConsumerWidget {
+  const _UI();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final RenderBox renderBox = context.findRenderObject() as RenderBox;
+      final Offset position = renderBox.localToGlobal(Offset.zero);
+      P.sudoku.uiOffset.q = Offset(position.dx, 0);
+    });
+
+    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    final padding = MediaQuery.of(context).padding;
+    final min = math.min(screenWidth, screenHeight - padding.bottom - padding.top);
+
+    final version = ref.watch(P.app.version);
+    final buildNumber = ref.watch(P.app.buildNumber);
+
+    final ratio = screenWidth / screenHeight;
+    final isDesktop = ref.watch(P.app.isDesktop);
+    final double magnification = isDesktop ? 2 : 1;
+
+    final shouldUseVerticalLayout = isDesktop && ratio < 1.9 && !isPortrait;
+
+    final List<Widget> buttons = [
+      const SB(width: 12, height: 12),
+      T(
+        "RWKV Sudoku",
+        textAlign: TextAlign.center,
+        s: TS(s: 14 * magnification, w: FontWeight.w500),
+      ),
+      T("$version ($buildNumber)", textAlign: TextAlign.center, s: const TS(s: 10, c: Color(0xFF888888))),
+      C(
+        height: 1,
+        width: 1,
+        decoration: BD(color: const Color(0xFF888888).wo(0.33)),
+        margin: const EI.s(v: 4, h: 4),
+      ),
+      const _TokensInfo(),
+      4.h,
+      if (shouldUseVerticalLayout)
+        Co(
+          children: [
+            Ro(children: [
+              8.w,
+              const Exp(child: _ButtonGenerate()),
+              4.w,
+              const Exp(child: _ButtonGenerateHardest()),
+              8.w,
+              const Exp(child: _ButtonInference()),
+              8.w,
+            ]),
+            4.h,
+            Ro(children: [
+              8.w,
+              const Exp(child: _ButtonClear()),
+              4.w,
+              const Exp(child: _ButtonShowStack()),
+              8.w,
+            ]),
+          ],
+        ),
+      if (!shouldUseVerticalLayout) ...[
+        const Padding(padding: EI.o(h: 12, v: 0), child: _ButtonGenerate()),
+        if (isDesktop) const SB(width: 6, height: 6),
+        const Padding(padding: EI.o(h: 12, v: 0), child: _ButtonGenerateHardest()),
+        if (isDesktop) const SB(width: 6, height: 6),
+        const Padding(padding: EI.s(h: 12, v: 0), child: _ButtonInference()),
+        if (isDesktop) const SB(width: 6, height: 6),
+        const Padding(padding: EI.s(h: 12, v: 0), child: _ButtonClear()),
+        if (isDesktop) const SB(width: 6, height: 6),
+        const Padding(padding: EI.s(h: 12, v: 0), child: _ButtonShowStack()),
+      ],
+    ];
+
+    // debugger();
+    return C(
+      width: shouldUseVerticalLayout ? min / 1.428 : min * (isPortrait ? 1 : 1.428),
+      height: shouldUseVerticalLayout ? min : min * (isPortrait ? 0.7 : 1),
+      decoration: const BD(color: kW),
+      margin: !isPortrait ? EI.o(t: padding.top) : null,
+      child: shouldUseVerticalLayout
+          ? Co(
+              children: [
+                const Exp(flex: 7, child: _Sudoku()),
+                Exp(
+                  flex: 3,
+                  child: Co(c: CAA.stretch, children: buttons),
+                ),
+              ],
+            )
+          : Ro(
+              c: CAA.stretch,
+              children: [
+                const Exp(flex: 7, child: _Sudoku()),
+                Exp(
+                  flex: 3,
+                  child: Co(c: CAA.stretch, children: buttons),
+                ),
+              ],
+            ),
+    );
+  }
+}
+
+class _Sudoku extends ConsumerWidget {
+  const _Sudoku();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isDesktop = ref.watch(P.app.isDesktop);
+    final double magnification = isDesktop ? 4 : 1;
+    return C(
+      decoration: const BD(color: _kGridBGColor),
+      padding: EI.a(4 * magnification.toDouble()),
+      child: const Stack(
+        children: [
+          _Board(),
+          Positioned.fill(child: _Stack()),
+        ],
+      ),
+    );
+  }
+}
+
+class _Board extends ConsumerWidget {
+  const _Board();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final staticData = ref.watch(P.sudoku.staticData);
+    final dynamicData = ref.watch(P.sudoku.dynamicData);
+    final isDesktop = ref.watch(P.app.isDesktop);
+    final double magnification = isDesktop ? 2 : 1;
+    return Co(
+      children: List.generate(9, (rowIndex) {
+        return Exp(
+          child: Ro(
+            children: List.generate(9, (colIndex) {
+              final staticValue = staticData[rowIndex][colIndex];
+              final dynamicValue = dynamicData[rowIndex][colIndex];
+              final isStatic = dynamicValue == 0 || dynamicValue == staticValue;
+              final value = isStatic ? staticValue : dynamicValue;
+              return Exp(
+                child: _Grid(
+                  value: value,
+                  isStatic: isStatic,
+                  col: colIndex,
+                  row: rowIndex,
+                ),
+              );
+            }).widgetJoin((e) {
+              return e % 3 == 2 ? (4 * magnification).w : (2 * magnification).w;
+            }),
+          ),
+        );
+      }).widgetJoin((e) {
+        return e % 3 == 2 ? (4 * magnification).h : (2 * magnification).h;
+      }),
+    );
+  }
+}
+
+class _Stack extends ConsumerWidget {
+  const _Stack();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final showStack = ref.watch(P.sudoku.showStack);
+    if (!showStack) {
+      return const IgnorePointer(
+        child: Stack(children: []),
+      );
+    }
+
+    final widgetPosition = ref.watch(P.sudoku.widgetPosition);
+    final uiOffset = ref.watch(P.sudoku.uiOffset);
+    final padding = MediaQuery.of(context).padding;
+    final _ = MediaQuery.of(context).orientation == Orientation.portrait;
+    final currentStack = ref.watch(P.sudoku.currentStack);
+
+    // debugger();
+    return IgnorePointer(
+      child: Stack(
+        children: [
+          ...currentStack.m((e) {
+            final col = e.$2;
+            final row = e.$1;
+            final position = widgetPosition["$col-$row"];
+            if (position == null) return C();
+            return Positioned(
+              left: _kStackPointOffsetX + position.dx - uiOffset.dx,
+              top: _kStackPointOffsetY + position.dy - uiOffset.dy - padding.top,
+              child: C(
+                height: _kStackPointSize,
+                width: _kStackPointSize,
+                decoration: BD(
+                  color: _kStackColor,
+                  borderRadius: 100.r,
+                ),
+              ),
+            );
+          }).widgetJoin((e) {
+            final start = currentStack[e];
+            final end = currentStack[e + 1];
+            final colStart = start.$2;
+            final rowStart = start.$1;
+            final startOffset = widgetPosition["$colStart-$rowStart"];
+            final colEnd = end.$2;
+            final rowEnd = end.$1;
+            final endOffset = widgetPosition["$colEnd-$rowEnd"];
+            if (startOffset == null || endOffset == null) return C();
+
+            return AnimatedOpacity(
+              opacity: 1,
+              duration: const Duration(milliseconds: 300),
+              child: CustomPaint(
+                painter: _ArrowPainter(
+                  start: (startOffset - uiOffset).translate(
+                    _kStackPointOffsetX + _kStackPointSize / 2,
+                    _kStackPointOffsetY + _kStackPointSize / 2 - padding.top,
+                  ),
+                  end: (endOffset - uiOffset).translate(
+                    _kStackPointOffsetX + _kStackPointSize / 2,
+                    _kStackPointOffsetY + _kStackPointSize / 2 - padding.top,
+                  ),
+                ),
+              ),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+}
+
+class _TokensInfo extends ConsumerWidget {
+  const _TokensInfo();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tokenCount = ref.watch(P.sudoku.tokensCount);
+    final tokensPerSecond = ref.watch(P.sudoku.tokensPerSecond);
+    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final ratio = screenWidth / screenHeight;
+    final isDesktop = ref.watch(P.app.isDesktop);
+    final shouldUseVerticalLayout = isDesktop && ratio < 2.2 && !isPortrait;
+    return shouldUseVerticalLayout
+        ? Ro(
+            m: MAA.center,
+            children: [
+              T("$tokenCount ${tokenCount > 1 ? "tokens" : "token"}", textAlign: TextAlign.center, s: const TS(s: 10, c: Color(0xFF888888))),
+              const SB(width: 4, height: 4),
+              T("${tokensPerSecond.toStringAsFixed(2)} tokens/s", textAlign: TextAlign.center, s: const TS(s: 10, c: Color(0xFF888888))),
+            ],
+          )
+        : Co(
+            children: [
+              T("$tokenCount ${tokenCount > 1 ? "tokens" : "token"}", textAlign: TextAlign.center, s: const TS(s: 10, c: Color(0xFF888888))),
+              T("${tokensPerSecond.toStringAsFixed(2)} tokens/s", textAlign: TextAlign.center, s: const TS(s: 10, c: Color(0xFF888888))),
+            ],
+          );
+  }
+}
+
+class _Grid extends ConsumerWidget {
+  final int value;
+  final bool isStatic;
+  final int col;
+  final int row;
+
+  const _Grid({
+    required this.value,
+    required this.isStatic,
+    required this.col,
+    required this.row,
+  });
+
+  void _onPressed(BuildContext context, WidgetRef ref) async {
+    P.sudoku.onGridPressed(context, col, row);
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    late final Color bg;
+
+    if (value == 0) {
+      bg = _kEmptyGridColor;
+    } else {
+      if (isStatic) {
+        bg = _kStaticGridColor;
+      } else {
+        bg = _kDynamicGridColor;
+      }
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final RenderBox renderBox = context.findRenderObject() as RenderBox;
+      // final Size size = renderBox.size;
+      final Offset position = renderBox.localToGlobal(Offset.zero);
+      // if (kDebugMode) print("💬 grid size: ${size.width} x ${size.height} \n position: ${position.dx}, ${position.dy}");
+      P.sudoku.widgetPosition.q = {"$col-$row": position, ...P.sudoku.widgetPosition.q};
+    });
+
+    final isDesktop = ref.watch(P.app.isDesktop);
+
+    final double magnification = isDesktop ? 2 : 1;
+    return GD(
+      onTap: () => _onPressed(context, ref),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        decoration: BD(color: bg, borderRadius: (2 * magnification).r),
+        child: Center(
+          child: T(
+            value != 0 ? value.toString() : "",
+            s: TS(
+              s: isDesktop ? 30 : 18,
+              w: isDesktop ? FontWeight.w600 : null,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class Terminal extends ConsumerWidget {
+  const Terminal({super.key});
+
+  static final scrollController = ScrollController();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final logs = ref.watch(P.sudoku.logs);
+    final padding = MediaQuery.of(context).padding;
+    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+    final isDesktop = ref.watch(P.app.isDesktop);
+    return SelectionArea(
+      child: C(
+        decoration: const BD(color: _kGridBGColor),
+        child: ListView.builder(
+          controller: scrollController,
+          padding: EI.o(
+            t: !isPortrait ? padding.top + 8 : 8,
+            l: isDesktop ? 16 : 8,
+            r: isDesktop ? 16 : 8,
+            b: padding.bottom + 16,
+          ),
+          itemCount: logs.length,
+          itemBuilder: (context, index) {
+            return T(
+              logs[index],
+              s: TS(
+                ff: "monospace",
+                s: isDesktop ? 16 : 10,
+                letterSpacing: 0,
+                height: 1.2,
+                c: kW.wo(0.8),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _ArrowPainter extends CustomPainter {
+  final Offset start;
+  final Offset end;
+
+  _ArrowPainter({required this.start, required this.end});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = _kStackColor
+      ..strokeWidth = _kStackPointerStrokeWidth
+      ..style = PaintingStyle.stroke;
+
+    // 画箭头线
+    canvas.drawLine(start, end, paint);
+
+    // 计算箭头的方向
+    const arrowLength = 10.0;
+    const arrowAngle = 0.33; // 弧度
+
+    final angle = (end - start).direction;
+    final arrow1 = Offset(
+      end.dx - arrowLength * cos(angle - arrowAngle),
+      end.dy - arrowLength * sin(angle - arrowAngle),
+    );
+    final arrow2 = Offset(
+      end.dx - arrowLength * cos(angle + arrowAngle),
+      end.dy - arrowLength * sin(angle + arrowAngle),
+    );
+
+    // 画箭头
+    canvas.drawLine(end, arrow1, paint);
+    canvas.drawLine(end, arrow2, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
+}

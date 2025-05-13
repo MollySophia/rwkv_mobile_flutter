@@ -567,11 +567,8 @@ extension _$RWKV on _RWKV {
         await loadOthello();
         break;
       case PageKey.chat:
-        // await _loadChat();
-        break;
-      case PageKey.home:
-      case PageKey.file:
       case PageKey.test:
+      case PageKey.sudoku:
         break;
     }
   }
