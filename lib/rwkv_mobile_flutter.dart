@@ -21,7 +21,7 @@ const _codec = Utf8Codec(allowMalformed: true);
 class RWKVMobile {
   Isolate? _isolate;
 
-  // TODO: 对 Frontend 隐藏 sendPort477
+  // TODO: 对 Frontend 隐藏 sendPort
   Future<void> runIsolate(StartOptions options) async {
     if (_isolate != null) throw Exception('😡 Isolate already running');
     _isolate = await Isolate.spawn(_isolateMain, options);
@@ -130,11 +130,11 @@ class RWKVMobile {
     rwkvMobile.rwkvmobile_set_cache_dir(runtime, tempDir.path.toNativeUtf8().cast<ffi.Char>());
 
     // TODO: @WangCe 逐渐地迁移到 handler 方法中, 最好不要在该方法声明局部变量
-    await for (final (_FromFrontend, dynamic) message in receivePort) {
-      switch (message.$1) {
+    await for (final _FromFrontend message in receivePort) {
+      switch (message) {
         // 🟥 setMaxLength
         case SetMaxLength req:
-          final arg = message.$2 as int;
+          final arg = req.maxLength;
           if (arg > 0) maxLength = arg;
 
         // 🟥 clearStates
@@ -143,13 +143,12 @@ class RWKVMobile {
 
         // 🟥 setGenerationStopToken
         case SetGenerationStopToken req:
-          final arg = message.$2 as int;
+          final arg = req.stopToken;
           if (arg >= 0) generationStopToken = arg;
 
         // 🟥 setPrompt
         case SetPrompt req:
-          final prompt = message.$2 as String;
-          final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
+          final promptPtr = req.prompt.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_set_prompt(runtime, promptPtr);
           if (retVal != 0) sendPort.send(Error('Failed to set prompt: return value: $retVal', req));
 
@@ -191,7 +190,7 @@ class RWKVMobile {
         // 🟥 setEnableReasoning
         case SetEnableReasoning req:
           // TODO: 这里不应该使用这个变量, 因为无法保证值同步至 cpp 的内存
-          enableReasoning = message.$2 as bool ? 1 : 0;
+          enableReasoning = req.enableReasoning ? 1 : 0;
 
         // 🟥 getEnableReasoning
         case GetEnableReasoning req:
@@ -205,47 +204,41 @@ class RWKVMobile {
 
         // 🟥 setThinkingToken
         case SetThinkingToken req:
-          final arg = message.$2 as String;
-          final thinkingTokenPtr = arg.toNativeUtf8().cast<ffi.Char>();
+          final thinkingTokenPtr = req.thinkingToken.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_set_thinking_token(runtime, thinkingTokenPtr);
           if (retVal != 0) sendPort.send(Error('Failed to set thinking token', req));
 
         // 🟥 setEosToken
         case SetEosToken req:
-          final arg = message.$2 as String;
-          final eosTokenPtr = arg.toNativeUtf8().cast<ffi.Char>();
+          final eosTokenPtr = req.eosToken.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_set_eos_token(runtime, eosTokenPtr);
           if (retVal != 0) sendPort.send(Error('Failed to set eos token', req));
 
         // 🟥 setBosToken
         case SetBosToken req:
-          final arg = message.$2 as String;
-          final bosTokenPtr = arg.toNativeUtf8().cast<ffi.Char>();
+          final bosTokenPtr = req.bosToken.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_set_bos_token(runtime, bosTokenPtr);
           if (retVal != 0) sendPort.send(Error('Failed to set bos token', req));
 
         // 🟥 setTokenBanned
         case SetTokenBanned req:
-          final arg = message.$2 as List<int>;
-          final tokenBannedPtr = calloc.allocate<ffi.Int>(arg.length);
-          for (var i = 0; i < arg.length; i++) {
-            tokenBannedPtr[i] = arg[i];
+          final tokenBannedPtr = calloc.allocate<ffi.Int>(req.tokenBanned.length);
+          for (var i = 0; i < req.tokenBanned.length; i++) {
+            tokenBannedPtr[i] = req.tokenBanned[i];
           }
-          retVal = rwkvMobile.rwkvmobile_runtime_set_token_banned(runtime, tokenBannedPtr, arg.length);
+          retVal = rwkvMobile.rwkvmobile_runtime_set_token_banned(runtime, tokenBannedPtr, req.tokenBanned.length);
           calloc.free(tokenBannedPtr);
           if (retVal != 0) sendPort.send(Error('Failed to set token banned', req));
 
         // 🟥 setUserRole
         case SetUserRole req:
-          final arg = message.$2 as String;
-          final userRolePtr = arg.toNativeUtf8().cast<ffi.Char>();
+          final userRolePtr = req.userRole.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_set_user_role(runtime, userRolePtr);
           if (retVal != 0) sendPort.send(Error('Failed to set user role', req));
 
         // 🟥 loadVisionEncoder
         case LoadVisionEncoder req:
-          final arg = message.$2 as String;
-          final encoderPathPtr = arg.toNativeUtf8().cast<ffi.Char>();
+          final encoderPathPtr = req.encoderPath.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_load_vision_encoder(runtime, encoderPathPtr);
           if (retVal != 0) sendPort.send(Error('Failed to load vision encoder', req));
 
@@ -256,15 +249,13 @@ class RWKVMobile {
 
         // 🟥 setVisionPrompt
         case SetVisionPrompt req:
-          final arg = message.$2 as String;
-          final imagePathPtr = arg.toNativeUtf8().cast<ffi.Char>();
+          final imagePathPtr = req.imagePathPtr.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_set_image_prompt(runtime, imagePathPtr);
           if (retVal != 0) sendPort.send(Error('Failed to set image prompt', req));
 
         // 🟥 loadWhisperEncoder
         case LoadWhisperEncoder req:
-          final arg = message.$2 as String;
-          final encoderPathPtr = arg.toNativeUtf8().cast<ffi.Char>();
+          final encoderPathPtr = req.encoderPath.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_load_whisper_encoder(runtime, encoderPathPtr);
           if (retVal != 0) sendPort.send(Error('Failed to load whisper encoder', req));
 
@@ -275,33 +266,31 @@ class RWKVMobile {
 
         // 🟥 setAudioPrompt
         case SetAudioPrompt req:
-          final arg = message.$2 as String;
-          final audioPathPtr = arg.toNativeUtf8().cast<ffi.Char>();
+          final audioPathPtr = req.audioPathPtr.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_set_audio_prompt(runtime, audioPathPtr);
           if (retVal != 0) sendPort.send(Error('Failed to set audio prompt', req));
 
         // 🟥 message
         case ChatAsync req:
-          final messages = message.$2 as List<String>;
-          for (var i = 0; i < messages.length; i++) {
-            inputsPtr[i] = messages[i].toNativeUtf8().cast<ffi.Char>();
+          for (var i = 0; i < req.messages.length; i++) {
+            inputsPtr[i] = req.messages[i].toNativeUtf8().cast<ffi.Char>();
           }
-          final numInputs = messages.length;
+          final numInputs = req.messages.length;
 
           if (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) != 0) {
             sendPort.send(Error('LLM is already generating', req));
-          } else {
-            sendPort.send({'generateStart': true});
-            if (kDebugMode) print("💬 Starting LLM generation thread (chat mode)");
-            retVal = rwkvMobile.rwkvmobile_runtime_eval_chat_with_history_async(runtime, inputsPtr, numInputs, maxLength, ffi.nullptr, enableReasoning);
-            if (kDebugMode) print("💬 Started LLM generation thread (chat mode)");
-            if (retVal != 0) sendPort.send({'generateStop': true, 'error': 'Failed to start generation thread: retVal: $retVal'});
+            break;
           }
+
+          sendPort.send({'generateStart': true});
+          if (kDebugMode) print("💬 Starting LLM generation thread (chat mode)");
+          retVal = rwkvMobile.rwkvmobile_runtime_eval_chat_with_history_async(runtime, inputsPtr, numInputs, maxLength, ffi.nullptr, enableReasoning);
+          if (kDebugMode) print("💬 Started LLM generation thread (chat mode)");
+          if (retVal != 0) sendPort.send({'generateStop': true, 'error': 'Failed to start generation thread: retVal: $retVal'});
 
         // 🟥 generateAsync
         case GenerateAsync req:
-          final prompt = message.$2 as String;
-          final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
+          final promptPtr = req.prompt.toNativeUtf8().cast<ffi.Char>();
 
           if (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) != 0) {
             sendPort.send(Error('LLM is already generating', req));
@@ -316,9 +305,8 @@ class RWKVMobile {
 
         // 🟥 generate
         case Generate req:
-          final prompt = message.$2 as String;
-          final promptPtr = prompt.toNativeUtf8().cast<ffi.Char>();
-          String responseStr = prompt;
+          final promptPtr = req.prompt.toNativeUtf8().cast<ffi.Char>();
+          String responseStr = req.prompt;
 
           callbackFunction(ffi.Pointer<ffi.Char> stream, int idx) {
             final prefillSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime);
@@ -345,10 +333,9 @@ class RWKVMobile {
 
         // 🟥 initRuntime
         case InitRuntime req:
-          final args = message.$2 as Map<String, dynamic>;
-          modelPath = args['modelPath'] as String;
-          modelBackend = args['backend'].asArgument;
-          tokenizerPath = args['tokenizerPath'] as String;
+          modelPath = req.modelPath;
+          modelBackend = req.backend.asArgument;
+          tokenizerPath = req.tokenizerPath;
           if (runtime.address != 0) rwkvMobile.rwkvmobile_runtime_release(runtime);
 
           if (modelBackend == 'qnn') {
@@ -360,6 +347,7 @@ class RWKVMobile {
           } else {
             runtime = rwkvMobile.rwkvmobile_runtime_init_with_name(modelBackend.toNativeUtf8().cast<ffi.Char>());
           }
+
           if (runtime.address == 0) {
             sendPort.send({'initRuntimeDone': false, 'error': 'Failed to initialize runtime'});
             break;

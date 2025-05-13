@@ -1,4 +1,5 @@
 import 'package:rwkv_mobile_flutter/from_rwkv.dart';
+import 'package:rwkv_mobile_flutter/types.dart';
 
 /// Send request from frontend isolate to rwkv isolate
 ///
@@ -19,9 +20,17 @@ class ClearStates extends ToRWKV {}
 
 class DumpLog extends ToRWKV {}
 
-class GenerateAsync extends ToRWKV {}
+class GenerateAsync extends ToRWKV {
+  final String prompt;
 
-class Generate extends ToRWKV {}
+  GenerateAsync({required this.prompt});
+}
+
+class Generate extends ToRWKV {
+  final String prompt;
+
+  Generate({required this.prompt});
+}
 
 class GetEnableReasoning extends ToRWKV {}
 
@@ -51,7 +60,13 @@ class GetResponseBufferIds extends ToRWKV {}
 
 class GetSamplerParams extends ToRWKV {}
 
-class InitRuntime extends ToRWKV {}
+class InitRuntime extends ToRWKV {
+  final String modelPath;
+  final Backend backend;
+  final String tokenizerPath;
+
+  InitRuntime({required this.modelPath, required this.backend, required this.tokenizerPath});
+}
 
 class LoadTTSModels extends ToRWKV {
   final String campPlusPath;
@@ -77,9 +92,17 @@ class LoadTTSTextNormalizer extends ToRWKV {
   LoadTTSTextNormalizer({required this.fstPath});
 }
 
-class LoadVisionEncoder extends ToRWKV {}
+class LoadVisionEncoder extends ToRWKV {
+  final String encoderPath;
 
-class LoadWhisperEncoder extends ToRWKV {}
+  LoadVisionEncoder({required this.encoderPath});
+}
+
+class LoadWhisperEncoder extends ToRWKV {
+  final String encoderPath;
+
+  LoadWhisperEncoder({required this.encoderPath});
+}
 
 class ReleaseModel extends ToRWKV {}
 
@@ -89,7 +112,11 @@ class ReleaseVisionEncoder extends ToRWKV {}
 
 class ReleaseWhisperEncoder extends ToRWKV {}
 
-class ChatAsync extends ToRWKV {}
+class ChatAsync extends ToRWKV {
+  final List<String> messages;
+
+  ChatAsync({required this.messages});
+}
 
 @Deprecated("use RequestRunTTSAsync instead")
 class RunTTS extends ToRWKV {}
@@ -117,19 +144,46 @@ class StartTTS extends ToRWKV {
   });
 }
 
-class SetAudioPrompt extends ToRWKV {}
+class SetAudioPrompt extends ToRWKV {
+  final String audioPathPtr;
 
-class SetBosToken extends ToRWKV {}
+  SetAudioPrompt({required this.audioPathPtr});
+}
 
-class SetEnableReasoning extends ToRWKV {}
+class SetBosToken extends ToRWKV {
+  final String bosToken;
 
-class SetEosToken extends ToRWKV {}
+  SetBosToken({required this.bosToken});
+}
 
-class SetGenerationStopToken extends ToRWKV {}
+class SetEnableReasoning extends ToRWKV {
+  final bool enableReasoning;
+  SetEnableReasoning({required this.enableReasoning});
+}
 
-class SetMaxLength extends ToRWKV {}
+class SetEosToken extends ToRWKV {
+  final String eosToken;
 
-class SetPrompt extends ToRWKV {}
+  SetEosToken({required this.eosToken});
+}
+
+class SetGenerationStopToken extends ToRWKV {
+  final int stopToken;
+
+  SetGenerationStopToken({required this.stopToken});
+}
+
+class SetMaxLength extends ToRWKV {
+  final int maxLength;
+
+  SetMaxLength({required this.maxLength});
+}
+
+class SetPrompt extends ToRWKV {
+  final String prompt;
+
+  SetPrompt({required this.prompt});
+}
 
 class SetSamplerParams extends ToRWKV {
   final num temperature;
@@ -160,13 +214,29 @@ class SetTTSCFMSteps extends ToRWKV {
   SetTTSCFMSteps({required this.cfmSteps});
 }
 
-class SetThinkingToken extends ToRWKV {}
+class SetThinkingToken extends ToRWKV {
+  final String thinkingToken;
 
-class SetTokenBanned extends ToRWKV {}
+  SetThinkingToken({required this.thinkingToken});
+}
 
-class SetUserRole extends ToRWKV {}
+class SetTokenBanned extends ToRWKV {
+  final List<int> tokenBanned;
 
-class SetVisionPrompt extends ToRWKV {}
+  SetTokenBanned({required this.tokenBanned});
+}
+
+class SetUserRole extends ToRWKV {
+  final String userRole;
+
+  SetUserRole({required this.userRole});
+}
+
+class SetVisionPrompt extends ToRWKV {
+  final String imagePathPtr;
+
+  SetVisionPrompt({required this.imagePathPtr});
+}
 
 /// stop之后responseBufferContent还保留着，然后resume之后responseBufferContent会先短暂清空，然后变成stop前已经生成了的内容并接着生成
 class Stop extends ToRWKV {}
