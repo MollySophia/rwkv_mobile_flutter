@@ -67,27 +67,66 @@ class SpksNames extends FromRWKV {}
 
 class StreamResponse extends FromRWKV {}
 
-class TTSDone extends FromRWKV {}
-
 class TTSGenerationStart extends FromRWKV {
   final bool start;
 
   TTSGenerationStart({required this.start, super.toRWKV});
 }
 
+@Deprecated("Use TTSResult instead")
 class TTSGenerationProgress extends FromRWKV {
   final double overallProgress;
   final double perWavProgress;
 
-  TTSGenerationProgress({required this.overallProgress, required this.perWavProgress, super.toRWKV})
-      : assert((overallProgress >= 0 && overallProgress <= 1) || overallProgress == -1, 'overallProgress must be between 0 and 1 or -1'),
-        assert((perWavProgress >= 0 && perWavProgress <= 1) || perWavProgress == -1, 'perWavProgress must be between 0 and 1 or -1');
+  TTSGenerationProgress({required this.overallProgress, required this.perWavProgress, super.toRWKV});
 }
 
+@Deprecated("Use TTSResult instead")
 class TTSOutputFileList extends FromRWKV {
   final List<String> outputFileList;
 
   TTSOutputFileList({required this.outputFileList, super.toRWKV});
+}
+
+/// 调用 [GetTTSGenerationProgress] 或 [GetTTSOutputFileList] 后，返回的结果
+///
+/// 调用 [StartTTS] 时，response 会被重置
+class TTSResult extends FromRWKV {
+  /// 每个文件的路径
+  ///
+  /// e.g. ["/path/to/file.0.wav", "/path/to/file.1.wav", ...]
+  ///
+  /// 每次重新调用 [StartTTS] 时，该值会重置为 `[""]` 或 `[]`
+  final List<String> filePaths;
+
+  /// 每个文件的进度
+  ///
+  /// 0.0 ~ 1.0
+  ///
+  /// e.g. [1.0, 1.0, 1.0, 0.65]
+  ///
+  /// 每次重新调用 [StartTTS] 时，该值会重置为 `[0.0]` 或 `[]`
+  final List<double> perWavProgress;
+
+  /// 整体进度
+  ///
+  /// 可能值 0.0 ~ 1.0
+  ///
+  /// - 0.0 表示次次最新的一次 [StartTTS] 还没有产出, 或者, 还没有调用过 [StartTTS]
+  /// - 1.0 表示次次最新的一次 [StartTTS] 已经完成了
+  ///
+  /// 每次重新调用 [StartTTS] 时，该值会重置为 0.0
+  final double overallProgress;
+
+  TTSResult({
+    required this.filePaths,
+    required this.perWavProgress,
+    required this.overallProgress,
+    super.toRWKV,
+  }) : assert(
+          filePaths.length == perWavProgress.length,
+          'filePaths and perWavProgress must have the same length',
+        );
 }
 
 class TTSCFMSteps extends FromRWKV {}

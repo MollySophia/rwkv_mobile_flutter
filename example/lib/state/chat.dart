@@ -799,10 +799,6 @@ extension _$Chat on _Chat {
     }
 
     switch (event.type) {
-      case _RWKVMessageType.ttsDone:
-        _fullyReceived(callingFunction: "_onStreamEvent:ttsDone");
-        break;
-
       case _RWKVMessageType.responseBufferIds:
         break;
 

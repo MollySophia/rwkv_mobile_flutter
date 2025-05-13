@@ -89,26 +89,26 @@ class ReleaseVisionEncoder extends ToRWKV {}
 
 class ReleaseWhisperEncoder extends ToRWKV {}
 
-class RunChatAsync extends ToRWKV {}
+class ChatAsync extends ToRWKV {}
 
 @Deprecated("use RequestRunTTSAsync instead")
 class RunTTS extends ToRWKV {}
 
-/// 执行 TTS 任务
+/// 开始 TTS 任务
 ///
 /// 发送消息给 ffi thread
 ///
 /// 在 cpp side 开启新线程
 ///
 /// 通过轮训的方式获取 response
-class RunTTSAsync extends ToRWKV {
+class StartTTS extends ToRWKV {
   final String ttsText;
   final String instructionText;
   final String promptWavPath;
   final String outputWavPath;
   final String promptSpeechText;
 
-  RunTTSAsync({
+  StartTTS({
     required this.ttsText,
     required this.instructionText,
     required this.promptWavPath,

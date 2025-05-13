@@ -135,12 +135,16 @@ extension _$TTS on _TTS {
   }
 
   void _startQueryTimer() {
-    _queryTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
-      P.rwkv.send(to_rwkv.GetTTSGenerationProgress());
-      P.rwkv.send(to_rwkv.GetIsGenerating());
-      P.rwkv.send(to_rwkv.GetPrefillAndDecodeSpeed());
-      P.rwkv.send(to_rwkv.GetTTSOutputFileList());
-    });
+    qq;
+    _queryTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) => _pulse());
+  }
+
+  void _pulse() {
+    qq;
+    P.rwkv.send(to_rwkv.GetTTSGenerationProgress());
+    // P.rwkv.send(to_rwkv.GetIsGenerating());
+    P.rwkv.send(to_rwkv.GetPrefillAndDecodeSpeed());
+    P.rwkv.send(to_rwkv.GetTTSOutputFileList());
   }
 
   void _stopQueryTimer() {
@@ -164,7 +168,7 @@ extension _$TTS on _TTS {
 
     ttsDone.q = false;
 
-    P.rwkv.send(to_rwkv.RunTTSAsync(
+    P.rwkv.send(to_rwkv.StartTTS(
       ttsText: ttsText,
       instructionText: instructionText,
       promptWavPath: promptWavPath,
@@ -177,6 +181,11 @@ extension _$TTS on _TTS {
 
   void _onStreamEvent(from_rwkv.FromRWKV event) {
     switch (event) {
+      case from_rwkv.TTSResult res:
+        qqq(res.filePaths);
+        qqq(res.perWavProgress);
+        qqq(res.overallProgress);
+        break;
       case from_rwkv.CurrentPrompt res:
       case from_rwkv.EnableReasoning res:
       case from_rwkv.Error res:
@@ -188,17 +197,15 @@ extension _$TTS on _TTS {
       case from_rwkv.Speed res:
       case from_rwkv.SpksNames res:
       case from_rwkv.StreamResponse res:
-        break;
       case from_rwkv.TTSCFMSteps res:
-        qqq(res);
-      case from_rwkv.TTSDone res:
-        qqq(res);
+        break;
       case from_rwkv.TTSGenerationProgress res:
-        qqq(res);
+        qqq("overallProgress: ${res.overallProgress}");
+        qqq("perWavProgress: ${res.perWavProgress}");
       case from_rwkv.TTSGenerationStart res:
         qqq(res);
       case from_rwkv.TTSOutputFileList res:
-        qqq(res);
+        qqq(res.outputFileList);
     }
   }
 

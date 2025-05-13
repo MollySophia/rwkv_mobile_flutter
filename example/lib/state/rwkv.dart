@@ -108,7 +108,7 @@ extension $RWKV on _RWKV {
       return;
     }
 
-    send(to_rwkv.RunChatAsync(), messages);
+    send(to_rwkv.ChatAsync(), messages);
 
     if (_getTokensTimer != null) {
       _getTokensTimer!.cancel();
@@ -702,24 +702,13 @@ extension _$RWKV on _RWKV {
       return;
     }
 
-    if (message["ttsDone"] != null) {
-      qqr("ttsDone");
-      P.tts.ttsDone.q = true;
-      final ttsDoneWithSuccess = message["ttsDone"] == true;
-      _oldMessagesController.add(LLMEvent(
-        ttsDoneWithSuccess: ttsDoneWithSuccess,
-        type: _RWKVMessageType.ttsDone,
-      ));
-      return;
-    }
-
-    // TODO: 需要更健壮的代码: method: "", data: ""
-
     qqe("unknown message: $message");
     if (!kDebugMode) Sentry.captureException(Exception("unknown message: $message"), stackTrace: StackTrace.current);
   }
 
   void _handleFromRWKV(from_rwkv.FromRWKV message) {
+    qq;
+    _messagesController.add(message);
     switch (message) {
       case from_rwkv.Error response:
         if (kDebugMode) {
@@ -734,6 +723,12 @@ extension _$RWKV on _RWKV {
         prefillSpeed.q = response.prefillSpeed;
         decodeSpeed.q = response.decodeSpeed;
 
+      case from_rwkv.TTSResult response:
+        qqq(response.filePaths);
+        qqq(response.perWavProgress);
+        qqq(response.overallProgress);
+        break;
+
       case from_rwkv.SamplerParams response:
       case from_rwkv.CurrentPrompt response:
       case from_rwkv.EnableReasoning response:
@@ -744,7 +739,6 @@ extension _$RWKV on _RWKV {
       case from_rwkv.SpksNames response:
       case from_rwkv.StreamResponse response:
       case from_rwkv.TTSCFMSteps response:
-      case from_rwkv.TTSDone response:
       case from_rwkv.TTSGenerationProgress response:
       case from_rwkv.TTSGenerationStart response:
       case from_rwkv.TTSOutputFileList response:
@@ -805,8 +799,6 @@ enum _RWKVMessageType {
   responseBufferIds,
 
   generateStop,
-
-  ttsDone,
   ;
 }
 
@@ -817,14 +809,12 @@ final class LLMEvent {
   final String content;
   final List<int>? responseBufferIds;
   final int? token;
-  final bool? ttsDoneWithSuccess;
 
   const LLMEvent({
     required this.type,
     this.content = "",
     this.responseBufferIds,
     this.token,
-    this.ttsDoneWithSuccess,
   });
 
   @override

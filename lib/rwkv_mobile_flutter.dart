@@ -281,7 +281,7 @@ class RWKVMobile {
           if (retVal != 0) sendPort.send(Error('Failed to set audio prompt', req));
 
         // 🟥 message
-        case RunChatAsync req:
+        case ChatAsync req:
           final messages = message.$2 as List<String>;
           for (var i = 0; i < messages.length; i++) {
             inputsPtr[i] = messages[i].toNativeUtf8().cast<ffi.Char>();
@@ -446,7 +446,7 @@ class RWKVMobile {
           sendPort.send(Error('RunTTS method is deprecated, please use RunTTSAsync instead', req));
 
         // 🟥 runTTSAsync
-        case RunTTSAsync req:
+        case StartTTS req:
           final ttsText = req.ttsText;
           final instructionText = req.instructionText;
           final promptSpeechText = req.promptSpeechText;
