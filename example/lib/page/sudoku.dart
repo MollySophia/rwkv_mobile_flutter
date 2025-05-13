@@ -267,7 +267,7 @@ class _UI extends ConsumerWidget {
     final List<Widget> buttons = [
       const SB(width: 12, height: 12),
       T(
-        "RWKV Sudoku",
+        "RWKV Talk",
         textAlign: TextAlign.center,
         s: TS(s: 14 * magnification, w: FontWeight.w500),
       ),
