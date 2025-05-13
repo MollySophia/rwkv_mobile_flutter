@@ -439,8 +439,8 @@ extension $RWKV on _RWKV {
     final ttsTextNormalizerPhonePath = await fromAssetsToTemp("assets/config/tts/phone-zh.fst");
     // note: order matters here
     send(to_rwkv.LoadTTSTextNormalizer(fstPath: ttsTextNormalizerDatePath));
-    send(to_rwkv.LoadTTSTextNormalizer(fstPath: ttsTextNormalizerNumberPath));
     send(to_rwkv.LoadTTSTextNormalizer(fstPath: ttsTextNormalizerPhonePath));
+    send(to_rwkv.LoadTTSTextNormalizer(fstPath: ttsTextNormalizerNumberPath));
 
     _loading.q = false;
   }
