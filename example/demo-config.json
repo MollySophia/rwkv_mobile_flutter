@@ -601,7 +601,7 @@
         "quantization": "fp16",
         "platforms": ["android", "ios"],
         "backends": ["mnn"],
-        "tags": ["flow.decoder.estimator.mnn"]
+        "tags": ["flow.decoder.estimator"]
       },
       {
         "name": "Flow Encoder",

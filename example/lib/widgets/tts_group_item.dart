@@ -46,46 +46,44 @@ class TTSGroupItem extends ConsumerWidget {
 
     final campPlusFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("campplus"));
     final flowEncoderFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("flow.encoder"));
-    final flowDecoderEstimatorBinFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("flow.decoder.estimator.bin"));
-    final flowDecoderEstimatorParamFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("flow.decoder.estimator.param"));
+    final flowDecoderEstimatorFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("flow.decoder.estimator"));
     final hiftGeneratorFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("hift"));
     final speechTokenizerFileKey = fileInfos.firstWhereOrNull((e) => e.tags.contains("speech.tokenizer"));
 
     if (campPlusFileKey == null) {
       Alert.error("Campplus file not found");
+      qqe;
       return;
     }
 
     if (flowEncoderFileKey == null) {
       Alert.error("Flow encoder file not found");
+      qqe;
       return;
     }
 
-    if (flowDecoderEstimatorBinFileKey == null) {
-      Alert.error("Flow decoder estimator bin file not found");
-      return;
-    }
-
-    if (flowDecoderEstimatorParamFileKey == null) {
-      Alert.error("Flow decoder estimator params file not found");
+    if (flowDecoderEstimatorFileKey == null) {
+      Alert.error("Flow decoder estimator file not found");
+      qqe;
       return;
     }
 
     if (hiftGeneratorFileKey == null) {
       Alert.error("Hift generator file not found");
+      qqe;
       return;
     }
 
     if (speechTokenizerFileKey == null) {
       Alert.error("TTS tokenizer file not found");
+      qqe;
       return;
     }
 
     final modelLocalFile = P.fileManager.locals(fileInfo).q;
     final localCampPlusFile = P.fileManager.locals(campPlusFileKey).q;
     final localFlowEncoderFile = P.fileManager.locals(flowEncoderFileKey).q;
-    final localFlowDecoderEstimatorBinFile = P.fileManager.locals(flowDecoderEstimatorBinFileKey).q;
-    final _ = P.fileManager.locals(flowDecoderEstimatorParamFileKey).q;
+    final localFlowDecoderEstimatorFile = P.fileManager.locals(flowDecoderEstimatorFileKey).q;
     final localHiftGeneratorFile = P.fileManager.locals(hiftGeneratorFileKey).q;
     final localSpeechTokenizerFile = P.fileManager.locals(speechTokenizerFileKey).q;
     P.rwkv.currentGroupInfo.q = GroupInfo(displayName: fileInfo.name);
@@ -100,7 +98,7 @@ class TTSGroupItem extends ConsumerWidget {
         usingReasoningModel: false,
         campPlusPath: localCampPlusFile.targetPath,
         flowEncoderPath: localFlowEncoderFile.targetPath,
-        flowDecoderEstimatorPath: localFlowDecoderEstimatorBinFile.targetPath,
+        flowDecoderEstimatorPath: localFlowDecoderEstimatorFile.targetPath,
         hiftGeneratorPath: localHiftGeneratorFile.targetPath,
         speechTokenizerPath: localSpeechTokenizerFile.targetPath,
       );
