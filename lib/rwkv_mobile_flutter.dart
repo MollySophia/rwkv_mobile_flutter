@@ -464,16 +464,22 @@ class RWKVMobile {
             final outputFiles = ttsOutputFiles.cast<Utf8>().toDartString();
             if (kDebugMode) print("💬 TTS output files: $outputFiles");
             fileList = outputFiles.split(',').map((f) => f.replaceAll('"', '').trim()).toList();
-            numCurrentGeneratedWavs = fileList.length;
           } catch (_) {
-            sendPort.send(TTSResult(filePaths: [], perWavProgress: [], overallProgress: 0.0, toRWKV: req));
-            break;
+            fileList = [];
           }
-          perWavProgress = List.filled(numCurrentGeneratedWavs, 1.0).toList();
+          // remove empty string from fileList
+          fileList = fileList.where((f) => f.isNotEmpty).toList();
+          numCurrentGeneratedWavs = fileList.length;
+          if (numCurrentGeneratedWavs > 0) perWavProgress = List.filled(numCurrentGeneratedWavs, 1.0).toList();
           final numTotalWavs = rwkvMobile.rwkvmobile_runtime_tts_get_num_total_output_wavs(runtime);
           final ttsPerWavProgress = rwkvMobile.rwkvmobile_runtime_tts_get_generation_progress(runtime);
-          perWavProgress.add(ttsPerWavProgress);
-          final ttsOverallProgress = (numCurrentGeneratedWavs + ttsPerWavProgress) / numTotalWavs.toDouble();
+          if (ttsPerWavProgress < 1.0) perWavProgress.add(ttsPerWavProgress);
+          double ttsOverallProgress = numCurrentGeneratedWavs.toDouble();
+          if (ttsPerWavProgress < 1.0) ttsOverallProgress += ttsPerWavProgress;
+          ttsOverallProgress = ttsOverallProgress / numTotalWavs.toDouble();
+          if (kDebugMode) print("💬 TTS overall progress: $ttsOverallProgress");
+          if (kDebugMode) print("💬 TTS per wav progress: $perWavProgress");
+          if (kDebugMode) print("💬 TTS file list: $fileList");
           // Range from 0.0 to 1.0
           sendPort.send(TTSResult(filePaths: fileList, perWavProgress: perWavProgress, overallProgress: ttsOverallProgress, toRWKV: req));
 
