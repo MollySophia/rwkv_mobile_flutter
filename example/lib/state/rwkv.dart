@@ -731,10 +731,10 @@ extension _$RWKV on _RWKV {
         token: message["streamResponseToken"],
         type: _RWKVMessageType.streamResponse,
       ));
-      if (message["prefillSpeed"] != null) {
+      if (message["prefillSpeed"] != null && message["prefillSpeed"] != -1.0) {
         prefillSpeed.q = message["prefillSpeed"];
       }
-      if (message["decodeSpeed"] != null) {
+      if (message["decodeSpeed"] != null && message["decodeSpeed"] != -1.0) {
         decodeSpeed.q = message["decodeSpeed"];
       }
       return;
@@ -768,7 +768,6 @@ extension _$RWKV on _RWKV {
   }
 
   void _handleFromRWKV(from_rwkv.FromRWKV message) {
-    qq;
     _messagesController.add(message);
     switch (message) {
       case from_rwkv.Error response:
@@ -791,8 +790,10 @@ extension _$RWKV on _RWKV {
         break;
 
       case from_rwkv.StreamResponse response:
-        decodeSpeed.q = response.decodeSpeed;
-        prefillSpeed.q = response.prefillSpeed;
+        final decodeSpeed = response.decodeSpeed;
+        final prefillSpeed = response.prefillSpeed;
+        if (decodeSpeed != -1.0) this.decodeSpeed.q = decodeSpeed;
+        if (prefillSpeed != -1.0) this.prefillSpeed.q = prefillSpeed;
         break;
 
       default:

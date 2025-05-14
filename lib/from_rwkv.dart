@@ -67,11 +67,16 @@ class SpksNames extends FromRWKV {}
 
 /// 在每次新生成 token 的时候, 都会被调用
 class StreamResponse extends FromRWKV {
-  /// 本次 generation 生成的 token, decode 了之后字符串
+  static const requestType = Generate;
+
+  /// 调用 [Generate] 后, 生成的所有解码后的字符串
   final String streamResponse;
 
   /// 新生成的 token
   final int streamResponseToken;
+
+  /// 新生成的 token, decode 了之后字符串
+  final String streamResponseNewText;
 
   /// 预填充速度
   final double prefillSpeed;
@@ -82,10 +87,21 @@ class StreamResponse extends FromRWKV {
   StreamResponse({
     required this.streamResponse,
     required this.streamResponseToken,
+    required this.streamResponseNewText,
     required this.prefillSpeed,
     required this.decodeSpeed,
     super.toRWKV,
   });
+}
+
+class StreamResponseSudoku extends FromRWKV {
+  /// 新生成的 token
+  final int streamResponseToken;
+
+  /// 新生成的 token, decode 了之后字符串
+  final String streamResponseNewText;
+
+  StreamResponseSudoku({required this.streamResponseToken, required this.streamResponseNewText, super.toRWKV});
 }
 
 class TTSGenerationStart extends FromRWKV {

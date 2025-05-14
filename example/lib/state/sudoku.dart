@@ -42,8 +42,8 @@ class _Sudoku {
 
   final currentStack = qs<List<(int, int)>>([]);
 
-  late final File _file;
-  late IOSink _fileSink;
+  // late final File _file;
+  // late IOSink _fileSink;
 
   late final scrollController = ScrollController();
 }
@@ -72,7 +72,7 @@ extension $Sudoku on _Sudoku {
       title: S.current.generate_random_sudoku_puzzle,
       message: S.current.please_enter_the_difficulty,
       textFields: [
-         DialogTextField(
+        DialogTextField(
           hintText: S.current.difficulty,
           initialText: kDebugMode ? "40" : "10",
           keyboardType: TextInputType.numberWithOptions(
@@ -130,7 +130,7 @@ extension $Sudoku on _Sudoku {
     tokensCount.q = 0;
     running.q = true;
 
-    func_sudoku.SudokuGrid grid = staticData.v;
+    func_sudoku.SudokuGrid grid = staticData.q;
     final prompt = _genPrompt(grid);
     P.rwkv.send(to_rwkv.ClearStates());
     P.rwkv.send(to_rwkv.Generate(prompt));
@@ -368,8 +368,8 @@ extension _$Sudoku on _Sudoku {
     await file.writeAsString('', mode: FileMode.write);
 
     // 然后再以追加模式打开文件流
-    _fileSink = file.openWrite(mode: FileMode.append);
-    _file = file;
+    // _fileSink = file.openWrite(mode: FileMode.append);
+    // _file = file;
 
     clear();
     _loadDefaultPuzzle();
@@ -387,12 +387,13 @@ extension _$Sudoku on _Sudoku {
   }
 
   void _handleStreamResponse(from_rwkv.StreamResponse res) {
-    final decoded = res.streamResponse;
+    qq;
+    final decoded = res.streamResponseNewText;
     final output = res.streamResponseToken;
     tokensCount.q += 1;
 
     if (output == _Sudoku.tokenStop) {
-      _closeFileSink();
+      // _closeFileSink();
 
       running.q = false;
 
@@ -409,7 +410,7 @@ extension _$Sudoku on _Sudoku {
       return;
     }
 
-    _fileSink.write(decoded);
+    // _fileSink.write(decoded);
 
     if (decoded == '\n') {
       logs.q = [...logs.q, _Sudoku.merged];
@@ -499,13 +500,13 @@ ${grid.map((row) => row.join(' ') + " \n").join("")}</input>
   }
 
   Future<void> _closeFileSink() async {
-    await _fileSink.flush();
-    await _fileSink.close();
+    // await _fileSink.flush();
+    // await _fileSink.close();
   }
 
   void _initializeFileSink() {
-    final file = File('your_fileqpath');
-    _fileSink = file.openWrite(mode: FileMode.append);
+    // final file = File('your_fileqpath');
+    // _fileSink = file.openWrite(mode: FileMode.append);
   }
 }
 

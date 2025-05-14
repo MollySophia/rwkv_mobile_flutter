@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ffi' as ffi;
+import 'dart:math';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -307,23 +308,58 @@ class RWKVMobile {
         case Generate req:
           final promptPtr = req.prompt.toNativeUtf8().cast<ffi.Char>();
           String responseStr = req.prompt;
+          final randon = Random();
 
-          callbackFunction(ffi.Pointer<ffi.Char> stream, int idx, ffi.Pointer<ffi.Char> new_text) {
-            final prefillSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime);
-            final decodeSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime);
-            responseStr += stream.cast<Utf8>().toDartString();
+          callbackFunction(ffi.Pointer<ffi.Char> stream, int idx, ffi.Pointer<ffi.Char> cppNewText) {
+            final showQuerySpeed = randon.nextDouble() * 100 > 1;
+            final prefillSpeed = showQuerySpeed ? rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime) : -1.0;
+            final decodeSpeed = showQuerySpeed ? rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime) : -1.0;
+            final source = stream.cast<Utf8>().toDartString();
+            final newText = cppNewText.cast<Utf8>().toDartString();
+            responseStr += source;
+
+            // TODO: @wangce 移除该调用
             sendPort.send({
-              'streamResponse': stream.cast<Utf8>().toDartString(),
+              'streamResponse': source,
               'streamResponseToken': idx,
-              'streamResponseNewText': new_text.cast<Utf8>().toDartString(),
+              'streamResponseNewText': newText,
               'prefillSpeed': prefillSpeed,
               'decodeSpeed': decodeSpeed,
             });
+
             sendPort.send(StreamResponse(
-              streamResponse: stream.cast<Utf8>().toDartString(),
+              streamResponse: source,
               streamResponseToken: idx,
+              streamResponseNewText: newText,
               prefillSpeed: prefillSpeed,
               decodeSpeed: decodeSpeed,
+              toRWKV: req,
+            ));
+          }
+
+          final nativeCallable = ffi.NativeCallable<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int, ffi.Pointer<ffi.Char>)>.isolateLocal(callbackFunction);
+          sendPort.send({'generateStart': true});
+          if (kDebugMode) print("🔥 Start to call LLM (gen mode), maxlength = $maxLength");
+          retVal = rwkvMobile.rwkvmobile_runtime_gen_completion(runtime, promptPtr, maxLength, generationStopToken, nativeCallable.nativeFunction);
+          if (kDebugMode) print("🔥 Call LLM done (gen mode)");
+          if (retVal != 0) sendPort.send({'generateStop': true, 'error': 'Failed to start generation'});
+
+          sendPort.send({'response': responseStr});
+          sendPort.send({'generateStop': true});
+
+        // 🟥 generateSudoku
+        case GenerateSudoku req:
+          final promptPtr = req.prompt.toNativeUtf8().cast<ffi.Char>();
+          String responseStr = req.prompt;
+
+          callbackFunction(ffi.Pointer<ffi.Char> stream, int idx, ffi.Pointer<ffi.Char> cppNewText) {
+            final source = stream.cast<Utf8>().toDartString();
+            final newText = cppNewText.cast<Utf8>().toDartString();
+            responseStr += source;
+
+            sendPort.send(StreamResponseSudoku(
+              streamResponseToken: idx,
+              streamResponseNewText: newText,
               toRWKV: req,
             ));
           }
