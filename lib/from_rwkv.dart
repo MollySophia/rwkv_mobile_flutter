@@ -65,10 +65,18 @@ class SamplerParams extends FromRWKV {
 
 class SpksNames extends FromRWKV {}
 
+/// 在每次新生成 token 的时候, 都会被调用
 class StreamResponse extends FromRWKV {
+  /// 本次 generation 生成的 token, decode 了之后字符串
   final String streamResponse;
+
+  /// 新生成的 token
   final int streamResponseToken;
+
+  /// 预填充速度
   final double prefillSpeed;
+
+  /// 解码速度
   final double decodeSpeed;
 
   StreamResponse({

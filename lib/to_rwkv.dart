@@ -30,6 +30,8 @@ class Generate extends ToRWKV {
   final String prompt;
 
   Generate(this.prompt);
+
+  static const responseType = StreamResponse;
 }
 
 class GetEnableReasoning extends ToRWKV {}

@@ -389,16 +389,15 @@ extension _$Sudoku on _Sudoku {
   void _handleStreamResponse(from_rwkv.StreamResponse res) {
     final decoded = res.streamResponse;
     final output = res.streamResponseToken;
-    final prefillSpeed = res.prefillSpeed;
-    final decodeSpeed = res.decodeSpeed;
+    tokensCount.q += 1;
 
     if (output == _Sudoku.tokenStop) {
       _closeFileSink();
 
-      running.u(false);
+      running.q = false;
 
       HF.wait(1000).then((_) {
-        logs.u([...logs.v, "✅ stop token got\n\n\n"]);
+        logs.q = [...logs.q, "✅ stop token got\n\n\n"];
         final c = scrollController;
         c.animateTo(
           c.position.maxScrollExtent,
@@ -413,7 +412,7 @@ extension _$Sudoku on _Sudoku {
     _fileSink.write(decoded);
 
     if (decoded == '\n') {
-      logs.u([...logs.v, _Sudoku.merged]);
+      logs.q = [...logs.q, _Sudoku.merged];
       _Sudoku.merged = '';
       final c = scrollController;
       c.animateTo(
@@ -422,9 +421,9 @@ extension _$Sudoku on _Sudoku {
         curve: Curves.linear,
       );
       return;
-    } else {
-      _Sudoku.merged += decoded;
     }
+
+    _Sudoku.merged += decoded;
 
     final isBoardStart = output == 108;
     final isBoardEnd = output == 109;

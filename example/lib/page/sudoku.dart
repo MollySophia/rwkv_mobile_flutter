@@ -575,7 +575,7 @@ class _Grid extends ConsumerWidget {
 }
 
 class _Terminal extends ConsumerWidget {
-  const _Terminal({super.key});
+  const _Terminal();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
