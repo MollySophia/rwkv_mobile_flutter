@@ -1191,6 +1191,56 @@ class S {
   String get ok {
     return Intl.message('OK', name: 'ok', desc: '', args: []);
   }
+
+  /// `According to the following audio file`
+  String get according_to_the_following_audio_file {
+    return Intl.message(
+      'According to the following audio file',
+      name: 'according_to_the_following_audio_file',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `QQ Group 1`
+  String get qq_group_1 {
+    return Intl.message('QQ Group 1', name: 'qq_group_1', desc: '', args: []);
+  }
+
+  /// `QQ Group 2`
+  String get qq_group_2 {
+    return Intl.message('QQ Group 2', name: 'qq_group_2', desc: '', args: []);
+  }
+
+  /// `Discord`
+  String get discord {
+    return Intl.message('Discord', name: 'discord', desc: '', args: []);
+  }
+
+  /// `Twitter`
+  String get twitter {
+    return Intl.message('Twitter', name: 'twitter', desc: '', args: []);
+  }
+
+  /// `Application Internal Test Group`
+  String get application_internal_test_group {
+    return Intl.message(
+      'Application Internal Test Group',
+      name: 'application_internal_test_group',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Technical Research Group`
+  String get technical_research_group {
+    return Intl.message(
+      'Technical Research Group',
+      name: 'technical_research_group',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

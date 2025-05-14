@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
+import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/demo_type.dart';
 import 'package:zone/model/message.dart' as model;
 import 'package:zone/state/p.dart';
@@ -33,7 +34,7 @@ class UserTtsContent extends ConsumerWidget {
             c: CAA.start,
             children: [
               if (msg.ttsSourceAudioPath != null) ...[
-                const T("根据下面的音频文件"),
+                T(S.current.according_to_the_following_audio_file),
                 T(P.tts.flagChange(msg.ttsSourceAudioPath!.split("/").last).replaceAll("_", " ")),
               ],
               if (msg.ttsSpeakerName != null) ...[

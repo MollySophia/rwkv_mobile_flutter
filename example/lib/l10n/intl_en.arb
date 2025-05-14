@@ -140,5 +140,12 @@
   "please_enter_the_difficulty": "Please enter the difficulty",
   "difficulty_must_be_less_than_81": "Difficulty must be less than 81",
   "number": "Number",
-  "ok": "OK"
+  "ok": "OK",
+  "according_to_the_following_audio_file": "According to the following audio file",
+  "qq_group_1": "QQ Group 1",
+  "qq_group_2": "QQ Group 2",
+  "discord": "Discord",
+  "twitter": "Twitter",
+  "application_internal_test_group": "Application Internal Test Group",
+  "technical_research_group": "Technical Research Group"
 }

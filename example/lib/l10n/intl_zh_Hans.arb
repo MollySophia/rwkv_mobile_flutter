@@ -140,5 +140,12 @@
   "please_enter_the_difficulty": "请输入难度",
   "difficulty_must_be_less_than_81": "难度必须小于 81",
   "number": "数字",
-  "ok": "确定"
+  "ok": "确定",
+  "according_to_the_following_audio_file": "根据下面的音频文件",
+  "qq_group_1": "QQ 群 1",
+  "qq_group_2": "QQ 群 2",
+  "discord": "Discord",
+  "twitter": "Twitter",
+  "application_internal_test_group": "应用内测群",
+  "technical_research_group": "技术研发群"
 }

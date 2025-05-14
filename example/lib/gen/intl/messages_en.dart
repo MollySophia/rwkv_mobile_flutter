@@ -30,6 +30,13 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "about": MessageLookupByLibrary.simpleMessage("About"),
+    "according_to_the_following_audio_file":
+        MessageLookupByLibrary.simpleMessage(
+          "According to the following audio file",
+        ),
+    "application_internal_test_group": MessageLookupByLibrary.simpleMessage(
+      "Application Internal Test Group",
+    ),
     "application_language": MessageLookupByLibrary.simpleMessage("Language"),
     "application_settings": MessageLookupByLibrary.simpleMessage(
       "Application settings",
@@ -103,6 +110,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "difficulty_must_be_less_than_81": MessageLookupByLibrary.simpleMessage(
       "Difficulty must be less than 81",
     ),
+    "discord": MessageLookupByLibrary.simpleMessage("Discord"),
     "download_missing": MessageLookupByLibrary.simpleMessage(
       "Download missing files",
     ),
@@ -218,6 +226,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "prefer": MessageLookupByLibrary.simpleMessage("Prefer"),
     "prefer_chinese": MessageLookupByLibrary.simpleMessage("Prefer Chinese"),
     "prefill": MessageLookupByLibrary.simpleMessage("Prefill"),
+    "qq_group_1": MessageLookupByLibrary.simpleMessage("QQ Group 1"),
+    "qq_group_2": MessageLookupByLibrary.simpleMessage("QQ Group 2"),
     "reason": MessageLookupByLibrary.simpleMessage("Reason"),
     "reasoning_enabled": MessageLookupByLibrary.simpleMessage(
       "Reasoning enabled",
@@ -255,6 +265,9 @@ class MessageLookup extends MessageLookupByLibrary {
         ),
     "start_a_new_game": MessageLookupByLibrary.simpleMessage("Start"),
     "start_to_chat": MessageLookupByLibrary.simpleMessage("Start to chat"),
+    "technical_research_group": MessageLookupByLibrary.simpleMessage(
+      "Technical Research Group",
+    ),
     "the_puzzle_is_not_valid": MessageLookupByLibrary.simpleMessage(
       "The puzzle is not valid",
     ),
@@ -264,6 +277,7 @@ class MessageLookup extends MessageLookupByLibrary {
           "This is the hardest Sudoku in the world",
         ),
     "thought_result": MessageLookupByLibrary.simpleMessage("Thought result"),
+    "twitter": MessageLookupByLibrary.simpleMessage("Twitter"),
     "ultra_large": MessageLookupByLibrary.simpleMessage("Ultra large (140%)"),
     "update_now": MessageLookupByLibrary.simpleMessage("Update now"),
     "use_it_now": MessageLookupByLibrary.simpleMessage("Use it now"),

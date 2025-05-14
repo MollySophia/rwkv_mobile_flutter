@@ -29,6 +29,11 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "about": MessageLookupByLibrary.simpleMessage("关于"),
+    "according_to_the_following_audio_file":
+        MessageLookupByLibrary.simpleMessage("根据下面的音频文件"),
+    "application_internal_test_group": MessageLookupByLibrary.simpleMessage(
+      "应用内测群",
+    ),
     "application_language": MessageLookupByLibrary.simpleMessage("应用语言"),
     "application_settings": MessageLookupByLibrary.simpleMessage("应用设置"),
     "apply": MessageLookupByLibrary.simpleMessage("应用"),
@@ -82,6 +87,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "difficulty_must_be_less_than_81": MessageLookupByLibrary.simpleMessage(
       "难度必须小于 81",
     ),
+    "discord": MessageLookupByLibrary.simpleMessage("Discord"),
     "download_missing": MessageLookupByLibrary.simpleMessage("下载缺失文件"),
     "download_model": MessageLookupByLibrary.simpleMessage("下载模型"),
     "download_source": MessageLookupByLibrary.simpleMessage("下载源"),
@@ -173,6 +179,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "prefer": MessageLookupByLibrary.simpleMessage("使用"),
     "prefer_chinese": MessageLookupByLibrary.simpleMessage("使用中文推理"),
     "prefill": MessageLookupByLibrary.simpleMessage("预填"),
+    "qq_group_1": MessageLookupByLibrary.simpleMessage("QQ 群 1"),
+    "qq_group_2": MessageLookupByLibrary.simpleMessage("QQ 群 2"),
     "reason": MessageLookupByLibrary.simpleMessage("推理"),
     "reasoning_enabled": MessageLookupByLibrary.simpleMessage("推理模式"),
     "remaining": MessageLookupByLibrary.simpleMessage("剩余时间："),
@@ -196,11 +204,13 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage("点击下方按钮开始新聊天"),
     "start_a_new_game": MessageLookupByLibrary.simpleMessage("开始对局"),
     "start_to_chat": MessageLookupByLibrary.simpleMessage("开始聊天"),
+    "technical_research_group": MessageLookupByLibrary.simpleMessage("技术研发群"),
     "the_puzzle_is_not_valid": MessageLookupByLibrary.simpleMessage("数独无效"),
     "thinking": MessageLookupByLibrary.simpleMessage("思考中..."),
     "this_is_the_hardest_sudoku_in_the_world":
         MessageLookupByLibrary.simpleMessage("这是世界上最难的数独"),
     "thought_result": MessageLookupByLibrary.simpleMessage("思考结果"),
+    "twitter": MessageLookupByLibrary.simpleMessage("Twitter"),
     "ultra_large": MessageLookupByLibrary.simpleMessage("超大 (140%)"),
     "update_now": MessageLookupByLibrary.simpleMessage("立即更新"),
     "use_it_now": MessageLookupByLibrary.simpleMessage("立即使用"),
