@@ -26,6 +26,15 @@ extension $Guard on _Guard {
 /// Private methods
 extension _$Guard on _Guard {
   FV _init() async {
+    switch (P.app.demoType.q) {
+      case DemoType.fifthteenPuzzle:
+      case DemoType.othello:
+      case DemoType.sudoku:
+        return;
+      case DemoType.chat:
+      case DemoType.tts:
+      case DemoType.world:
+    }
     qq;
     await _loadFilter();
   }

@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:halo_state/halo_state.dart';
+import 'package:zone/args.dart';
 import 'package:zone/config.dart';
 import 'package:zone/func/gb_display.dart';
 import 'package:zone/gen/l10n.dart';
@@ -13,12 +14,62 @@ import 'package:zone/route/method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
+import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
 import 'package:zone/widgets/tts_group_item.dart';
 import 'package:zone/widgets/world_group_item.dart';
 import 'package:zone/widgets/model_item.dart';
 
 class ModelSelector extends ConsumerWidget {
+  static FV show() async {
+    qq;
+    P.fileManager.checkLocal();
+
+    switch (P.app.demoType.q) {
+      case DemoType.fifthteenPuzzle:
+      case DemoType.othello:
+      case DemoType.sudoku:
+        break;
+      case DemoType.chat:
+      case DemoType.tts:
+      case DemoType.world:
+        P.chat.loadSuggestions();
+    }
+
+    if (!Args.disableRemoteConfig) {
+      P.app.getConfig().then((_) async {
+        await P.fileManager.syncAvailableModels();
+        await P.fileManager.checkLocal();
+      });
+    } else {
+      P.fileManager.syncAvailableModels().then((_) {
+        P.fileManager.checkLocal();
+      });
+    }
+
+    HF.wait(250).then((_) {
+      P.device.sync();
+    });
+    await showModalBottomSheet(
+      isScrollControlled: true,
+      context: getContext()!,
+      builder: (context) {
+        return DraggableScrollableSheet(
+          initialChildSize: .8,
+          maxChildSize: .9,
+          expand: false,
+          snap: false,
+          builder: (BuildContext context, ScrollController scrollController) {
+            return ModelSelector(
+              scrollController: scrollController,
+            );
+          },
+        );
+      },
+    );
+    P.fileManager.modelSelectorShown.q = false;
+  }
+
   final ScrollController scrollController;
 
   const ModelSelector({super.key, required this.scrollController});

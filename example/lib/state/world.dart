@@ -124,6 +124,15 @@ extension $World on _World {
 /// Private methods
 extension _$World on _World {
   FV _init() async {
+    switch (P.app.demoType.q) {
+      case DemoType.fifthteenPuzzle:
+      case DemoType.othello:
+      case DemoType.sudoku:
+        return;
+      case DemoType.chat:
+      case DemoType.tts:
+      case DemoType.world:
+    }
     qq;
     P.rwkv.currentWorldType.lv(_onWorldTypeChanged);
     P.tts.audioInteractorShown.lv(_onAudioInteractorShown);

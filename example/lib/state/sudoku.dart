@@ -291,6 +291,27 @@ extension $Sudoku on _Sudoku {
 /// Private methods
 extension _$Sudoku on _Sudoku {
   FV _init() async {
+    switch (P.app.demoType.q) {
+      case DemoType.sudoku:
+        break;
+      case DemoType.fifthteenPuzzle:
+      case DemoType.othello:
+      case DemoType.chat:
+      case DemoType.tts:
+      case DemoType.world:
+        return;
+    }
+
+    qq;
+
+    HF.wait(1000).then((_) {
+      final loaded = P.rwkv.loaded.q;
+      qr;
+      if (!loaded) {
+        P.fileManager.modelSelectorShown.q = true;
+      }
+    });
+
     final directory = await getApplicationDocumentsDirectory();
     final filePath = '${directory.path}/output_log.txt';
     final file = File(filePath);

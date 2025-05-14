@@ -463,6 +463,16 @@ extension $Chat on _Chat {
 /// Private methods
 extension _$Chat on _Chat {
   FV _init() async {
+    switch (P.app.demoType.q) {
+      case DemoType.fifthteenPuzzle:
+      case DemoType.othello:
+      case DemoType.sudoku:
+        return;
+      case DemoType.chat:
+      case DemoType.tts:
+      case DemoType.world:
+    }
+
     qq;
 
     textEditingController.addListener(_onTextEditingControllerValueChanged);

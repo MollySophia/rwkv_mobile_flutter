@@ -284,7 +284,7 @@ class _UI extends ConsumerWidget {
       C(
         height: 1,
         width: 1,
-        decoration: BD(color: const Color(0xFF888888).wo(0.33)),
+        decoration: BD(color: const Color(0xFF888888).q(0.33)),
         margin: const EI.s(v: 4, h: 4),
       ),
       const _TokensInfo(),
@@ -608,7 +608,7 @@ class Terminal extends ConsumerWidget {
                 s: isDesktop ? 16 : 10,
                 letterSpacing: 0,
                 height: 1.2,
-                c: kW.wo(0.8),
+                c: kW.q(0.8),
               ),
             );
           },

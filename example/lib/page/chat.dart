@@ -77,6 +77,7 @@ class _PageChatState extends State<PageChat> {
     P.chat.showingCharacterSelector.q = false;
   }
 
+  @Deprecated("Use ModelSelector.show in the future")
   void _onShowingModelSelectorChanged(bool showing) async {
     if (!showing) return;
     P.fileManager.checkLocal();

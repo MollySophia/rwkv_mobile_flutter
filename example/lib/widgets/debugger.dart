@@ -14,6 +14,18 @@ class Debugger extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // return const SizedBox.shrink();
     if (!kDebugMode) return const SizedBox.shrink();
+    final demoType = ref.watch(P.app.demoType);
+
+    switch (demoType) {
+      case DemoType.chat:
+      case DemoType.fifthteenPuzzle:
+      case DemoType.othello:
+      case DemoType.sudoku:
+        return const _SudokuDebugger();
+      case DemoType.tts:
+      case DemoType.world:
+    }
+
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
     final visualFloatHeight = ref.watch(P.world.visualFloatHeight);
     final loading = ref.watch(P.rwkv.loading);
@@ -21,7 +33,7 @@ class Debugger extends ConsumerWidget {
     final latestClickedMessage = ref.watch(P.chat.latestClickedMessage);
     final inputHeight = ref.watch(P.chat.inputHeight);
     final hasFocus = ref.watch(P.chat.hasFocus);
-    final isOthello = ref.watch(P.app.demoType) == DemoType.othello;
+    final isOthello = demoType == DemoType.othello;
     final paddingTop = ref.watch(P.app.paddingTop);
     final page = ref.watch(Pager.page);
     final mainPageNotIgnoring = ref.watch(Pager.mainPageNotIgnoring);
@@ -42,7 +54,6 @@ class Debugger extends ConsumerWidget {
 
     final textInInput = ref.watch(P.tts.textInInput);
     final ttsCores = ref.watch(P.fileManager.ttsCores);
-    final demoType = ref.watch(P.app.demoType);
 
     final interactingInstruction = ref.watch(P.tts.interactingInstruction);
 
@@ -130,6 +141,52 @@ class Debugger extends ConsumerWidget {
                   return C(
                     margin: EI.o(t: index % 2 == 0 ? 0 : 1),
                     decoration: BD(color: kB.q(.33)),
+                    child: e,
+                  );
+                }),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SudokuDebugger extends ConsumerWidget {
+  const _SudokuDebugger();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final paddingTop = ref.watch(P.app.paddingTop);
+
+    return Positioned(
+      left: 0,
+      top: 0,
+      right: 0,
+      bottom: 0,
+      child: IgnorePointer(
+        child: Material(
+          textStyle: const TS(
+            ff: "Monospace",
+            c: kW,
+            s: 8,
+          ),
+          color: kC,
+          child: SB(
+            child: C(
+              decoration: const BD(color: kC),
+              child: Co(
+                m: MAA.start,
+                c: CAA.end,
+                children: [
+                  paddingTop.h,
+                  T("paddingTop".codeToName),
+                  T(paddingTop.toString()),
+                ].indexMap((index, e) {
+                  return C(
+                    margin: EI.o(t: index % 2 == 0 ? 0 : 1),
+                    decoration: BD(color: kB.q(.66)),
                     child: e,
                   );
                 }),

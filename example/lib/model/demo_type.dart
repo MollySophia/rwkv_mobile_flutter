@@ -16,6 +16,6 @@ enum DemoType {
         DemoType.world => ColorScheme.fromSeed(seedColor: Colors.blue),
         DemoType.fifthteenPuzzle => ColorScheme.fromSeed(seedColor: Colors.blue),
         DemoType.othello => ColorScheme.fromSeed(seedColor: Colors.green),
-        DemoType.sudoku => ColorScheme.fromSeed(seedColor: Colors.yellow),
+        DemoType.sudoku => ColorScheme.fromSeed(seedColor: Colors.teal),
       };
 }
