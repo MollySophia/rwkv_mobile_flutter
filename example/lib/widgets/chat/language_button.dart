@@ -51,7 +51,7 @@ class LanguageButton extends ConsumerWidget {
           decoration: BD(
             color: preferChinese ? color : kC,
             border: Border.all(
-              color: color.q(.5),
+              color: preferChinese ? color.q(.5) : kB.q(.25),
             ),
             borderRadius: 12.r,
           ),
@@ -61,7 +61,7 @@ class LanguageButton extends ConsumerWidget {
             children: [
               Icon(
                 Icons.translate,
-                color: preferChinese ? kW : color,
+                color: preferChinese ? kW : kB.q(.25),
               ),
               2.w,
               Co(
@@ -70,7 +70,7 @@ class LanguageButton extends ConsumerWidget {
                 children: [
                   if (preferChinese) T(S.current.prefer, s: const TS(c: kW, s: 10, height: 1)),
                   if (preferChinese) T(S.current.chinese, s: const TS(c: kW, s: 10, height: 1)),
-                  if (!preferChinese) T(S.current.auto, s: TS(c: color, s: 10, height: 1)),
+                  if (!preferChinese) T(S.current.auto, s: TS(c: kB.q(.25), s: 10, height: 1)),
                 ],
               ),
             ],

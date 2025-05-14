@@ -390,7 +390,7 @@ extension $RWKVLoad on _RWKV {
     decodeSpeed.q = 0;
 
     final tokenizerPath = await fromAssetsToTemp("assets/config/sudoku/b_sudoku_vocab.txt");
-    final _ = await fromAssetsToTemp("assets/config/sudoku/sudoku_rwkv_20241120_ncnn.param");
+    final _ = await rootBundle.load("assets/config/sudoku/sudoku_rwkv_20241120_ncnn.param");
 
     await _ensureQNNCopied();
     final rootIsolateToken = RootIsolateToken.instance;

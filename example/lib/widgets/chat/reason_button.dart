@@ -49,7 +49,7 @@ class ReasonButton extends ConsumerWidget {
         decoration: BD(
           color: usingReasoningModel ? color : kC,
           border: Border.all(
-            color: color.q(.5),
+            color: usingReasoningModel ? color.q(.5) : kB.q(.25),
           ),
           borderRadius: 12.r,
         ),
@@ -60,7 +60,7 @@ class ReasonButton extends ConsumerWidget {
             if (!loading)
               Icon(
                 Icons.emoji_objects_outlined,
-                color: usingReasoningModel ? kW : color,
+                color: usingReasoningModel ? kW : kB.q(.25),
               ),
             if (loading)
               C(
@@ -75,7 +75,7 @@ class ReasonButton extends ConsumerWidget {
             if (!loading)
               T(
                 S.current.reason,
-                s: TS(c: usingReasoningModel ? kW : color),
+                s: TS(c: usingReasoningModel ? kW : kB.q(.25)),
               ),
             if (loading)
               T(

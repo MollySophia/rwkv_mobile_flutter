@@ -17,11 +17,11 @@ class Debugger extends ConsumerWidget {
     final demoType = ref.watch(P.app.demoType);
 
     switch (demoType) {
+      case DemoType.sudoku:
+        return const _SudokuDebugger();
       case DemoType.chat:
       case DemoType.fifthteenPuzzle:
       case DemoType.othello:
-      case DemoType.sudoku:
-        return const _SudokuDebugger();
       case DemoType.tts:
       case DemoType.world:
     }
