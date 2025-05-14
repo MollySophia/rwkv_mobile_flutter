@@ -193,7 +193,7 @@ class _ButtonInference extends ConsumerWidget {
                   ],
                 )
               : hasPuzzle
-                  ? T(S.current.inference)
+                  ? T(S.current.start_to_inference)
                   : T(S.current.no_puzzle),
         ),
       ),

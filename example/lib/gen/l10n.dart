@@ -1022,9 +1022,14 @@ class S {
     );
   }
 
-  /// `Inference`
-  String get inference {
-    return Intl.message('Inference', name: 'inference', desc: '', args: []);
+  /// `Start to Inference`
+  String get start_to_inference {
+    return Intl.message(
+      'Start to Inference',
+      name: 'start_to_inference',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `No puzzle`
@@ -1032,14 +1037,24 @@ class S {
     return Intl.message('No puzzle', name: 'no_puzzle', desc: '', args: []);
   }
 
-  /// `Hide Stack`
+  /// `Hide CoT Stack`
   String get hide_stack {
-    return Intl.message('Hide Stack', name: 'hide_stack', desc: '', args: []);
+    return Intl.message(
+      'Hide CoT Stack',
+      name: 'hide_stack',
+      desc: '',
+      args: [],
+    );
   }
 
-  /// `Show Stack`
+  /// `Show CoT Stack`
   String get show_stack {
-    return Intl.message('Show Stack', name: 'show_stack', desc: '', args: []);
+    return Intl.message(
+      'Show CoT Stack',
+      name: 'show_stack',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Clear`
@@ -1102,26 +1117,6 @@ class S {
     return Intl.message(
       'The puzzle is not valid',
       name: 'the_puzzle_is_not_valid',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Generate a hardest Sudoku`
-  String get generate_a_hardest_sudoku {
-    return Intl.message(
-      'Generate a hardest Sudoku',
-      name: 'generate_a_hardest_sudoku',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Generate a hardest Sudoku in the world`
-  String get generate_a_hardest_sudoku_in_the_world {
-    return Intl.message(
-      'Generate a hardest Sudoku in the world',
-      name: 'generate_a_hardest_sudoku_in_the_world',
       desc: '',
       args: [],
     );

@@ -107,23 +107,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "foo_bar": MessageLookupByLibrary.simpleMessage("foo bar"),
     "game_over": MessageLookupByLibrary.simpleMessage("游戏结束！"),
     "generate": MessageLookupByLibrary.simpleMessage("生成"),
-    "generate_a_hardest_sudoku": MessageLookupByLibrary.simpleMessage(
-      "生成一个最难的数独",
-    ),
-    "generate_a_hardest_sudoku_in_the_world":
-        MessageLookupByLibrary.simpleMessage("生成一个世界上最难的数独"),
     "generate_hardest_sudoku_in_the_world":
         MessageLookupByLibrary.simpleMessage("生成世界上最难的数独"),
     "generate_random_sudoku_puzzle": MessageLookupByLibrary.simpleMessage(
       "生成随机数独",
     ),
-    "hide_stack": MessageLookupByLibrary.simpleMessage("隐藏堆栈"),
+    "hide_stack": MessageLookupByLibrary.simpleMessage("隐藏 CoT 堆栈"),
     "human": MessageLookupByLibrary.simpleMessage("人类"),
     "i_want_rwkv_to_say": MessageLookupByLibrary.simpleMessage("我想让 RWKV 说..."),
     "imitate_target": MessageLookupByLibrary.simpleMessage("使用"),
     "in_context_search_will_be_activated_when_both_breadth_and_depth_are_greater_than_2":
         MessageLookupByLibrary.simpleMessage("当搜索深度和宽度都大于 2 时，将激活上下文搜索"),
-    "inference": MessageLookupByLibrary.simpleMessage("推理"),
     "inference_is_running": MessageLookupByLibrary.simpleMessage("推理中"),
     "intonations": MessageLookupByLibrary.simpleMessage("语气词"),
     "intro": MessageLookupByLibrary.simpleMessage(
@@ -196,7 +190,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "server_error": MessageLookupByLibrary.simpleMessage("服务器错误"),
     "session_configuration": MessageLookupByLibrary.simpleMessage("会话配置"),
     "set_the_value_of_grid": MessageLookupByLibrary.simpleMessage("设置网格值"),
-    "show_stack": MessageLookupByLibrary.simpleMessage("显示堆栈"),
+    "show_stack": MessageLookupByLibrary.simpleMessage("显示 CoT 堆栈"),
     "small": MessageLookupByLibrary.simpleMessage("小 (90%)"),
     "speed": MessageLookupByLibrary.simpleMessage("下载速度："),
     "start_a_new_chat": MessageLookupByLibrary.simpleMessage("开始新聊天"),
@@ -204,6 +198,7 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage("点击下方按钮开始新聊天"),
     "start_a_new_game": MessageLookupByLibrary.simpleMessage("开始对局"),
     "start_to_chat": MessageLookupByLibrary.simpleMessage("开始聊天"),
+    "start_to_inference": MessageLookupByLibrary.simpleMessage("开始推理"),
     "technical_research_group": MessageLookupByLibrary.simpleMessage("技术研发群"),
     "the_puzzle_is_not_valid": MessageLookupByLibrary.simpleMessage("数独无效"),
     "thinking": MessageLookupByLibrary.simpleMessage("思考中..."),

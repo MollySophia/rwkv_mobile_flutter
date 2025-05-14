@@ -134,13 +134,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "foo_bar": MessageLookupByLibrary.simpleMessage("foo bar"),
     "game_over": MessageLookupByLibrary.simpleMessage("Game over!"),
     "generate": MessageLookupByLibrary.simpleMessage("Generate"),
-    "generate_a_hardest_sudoku": MessageLookupByLibrary.simpleMessage(
-      "Generate a hardest Sudoku",
-    ),
-    "generate_a_hardest_sudoku_in_the_world":
-        MessageLookupByLibrary.simpleMessage(
-          "Generate a hardest Sudoku in the world",
-        ),
     "generate_hardest_sudoku_in_the_world":
         MessageLookupByLibrary.simpleMessage(
           "Generate Hardest Sudoku in the world",
@@ -148,7 +141,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "generate_random_sudoku_puzzle": MessageLookupByLibrary.simpleMessage(
       "Generate random Sudoku puzzle",
     ),
-    "hide_stack": MessageLookupByLibrary.simpleMessage("Hide Stack"),
+    "hide_stack": MessageLookupByLibrary.simpleMessage("Hide CoT Stack"),
     "human": MessageLookupByLibrary.simpleMessage("Human"),
     "i_want_rwkv_to_say": MessageLookupByLibrary.simpleMessage(
       "I want RWKV to say...",
@@ -158,7 +151,6 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "In-context search will be activated when both breadth and depth are greater than 2",
         ),
-    "inference": MessageLookupByLibrary.simpleMessage("Inference"),
     "inference_is_running": MessageLookupByLibrary.simpleMessage(
       "Inference is running",
     ),
@@ -253,7 +245,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "set_the_value_of_grid": MessageLookupByLibrary.simpleMessage(
       "Set the value of grid",
     ),
-    "show_stack": MessageLookupByLibrary.simpleMessage("Show Stack"),
+    "show_stack": MessageLookupByLibrary.simpleMessage("Show CoT Stack"),
     "small": MessageLookupByLibrary.simpleMessage("Small (90%)"),
     "speed": MessageLookupByLibrary.simpleMessage("Speed:"),
     "start_a_new_chat": MessageLookupByLibrary.simpleMessage(
@@ -265,6 +257,9 @@ class MessageLookup extends MessageLookupByLibrary {
         ),
     "start_a_new_game": MessageLookupByLibrary.simpleMessage("Start"),
     "start_to_chat": MessageLookupByLibrary.simpleMessage("Start to chat"),
+    "start_to_inference": MessageLookupByLibrary.simpleMessage(
+      "Start to Inference",
+    ),
     "technical_research_group": MessageLookupByLibrary.simpleMessage(
       "Technical Research Group",
     ),
