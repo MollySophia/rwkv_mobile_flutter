@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
@@ -8,9 +9,27 @@ import 'package:halo_state/halo_state.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/cell_type.dart';
 import 'package:zone/state/p.dart';
+import 'package:zone/widgets/menu.dart';
+import 'package:zone/widgets/pager.dart';
 
 class PageOthello extends ConsumerWidget {
   const PageOthello({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (kDebugMode) {
+      return const Pager(
+        drawer: Menu(),
+        child: _Page(),
+      );
+    }
+
+    return const _Page();
+  }
+}
+
+class _Page extends ConsumerWidget {
+  const _Page();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,6 +39,10 @@ class PageOthello extends ConsumerWidget {
     final settingsAndPlayersShouldAtDifferentColumnIsHorizontal = ref.watch(P.othello.settingsAndPlayersShouldAtDifferentColumnIsHorizontal);
     final screenWidth = ref.watch(P.app.screenWidth);
     final paddingRight = ref.watch(P.app.paddingRight);
+    final preferredLanguage = ref.watch(P.preference.preferredLanguage);
+
+    qqq("preferredLanguage: $preferredLanguage");
+
     return Scaffold(
       backgroundColor: kW,
       body: usePortrait
@@ -225,21 +248,21 @@ class _ModelSettings extends ConsumerWidget {
           c: CAA.start,
           m: MAA.center,
           children: [
-            const T(
-              "Model Settings",
+            T(
+              S.current.model_settings,
               s: TS(w: FW.w700),
             ),
             8.h,
-            T("In-context search will be activated when both breadth and depth are greater than 2", s: TS(c: kB.q(.5), s: 10)),
+            T(S.current.in_context_search_will_be_activated_when_both_breadth_and_depth_are_greater_than_2, s: TS(c: kB.q(.5), s: 10)),
             8.h,
             usePortrait
                 ? Co(
                     c: CAA.stretch,
                     children: [
-                      const T("Search Depth", textAlign: TextAlign.center),
+                      T(S.current.search_depth, textAlign: TextAlign.center),
                       searchDepthControls,
                       4.h,
-                      const T("Search Breadth", textAlign: TextAlign.center),
+                      T(S.current.search_breadth, textAlign: TextAlign.center),
                       searchBreadthControls,
                     ],
                   )
@@ -247,13 +270,13 @@ class _ModelSettings extends ConsumerWidget {
                     children: [
                       Ro(
                         children: [
-                          const T("Search Depth", textAlign: TextAlign.center),
+                          T(S.current.search_depth, textAlign: TextAlign.center),
                           searchDepthControls,
                         ],
                       ),
                       Ro(
                         children: [
-                          const T("Search Breadth", textAlign: TextAlign.center),
+                          T(S.current.search_breadth, textAlign: TextAlign.center),
                           searchBreadthControls,
                         ],
                       ),
@@ -283,7 +306,7 @@ class _Players extends ConsumerWidget {
       child: Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
-          const T("Black:", textAlign: TextAlign.center, s: TS(w: FW.w700)),
+          T(S.current.black + ":", textAlign: TextAlign.center, s: TS(w: FW.w700)),
           Wrap(
             children: [
               Ro(
@@ -296,7 +319,7 @@ class _Players extends ConsumerWidget {
                       P.othello.blackIsAI.q = false;
                     },
                   ),
-                  const T("Human"),
+                  T(S.current.human),
                 ],
               ),
               Ro(
@@ -309,7 +332,7 @@ class _Players extends ConsumerWidget {
                       P.othello.blackIsAI.q = true;
                     },
                   ),
-                  const T("AI"),
+                  T(S.current.rwkv),
                 ],
               ),
             ],
@@ -324,7 +347,7 @@ class _Players extends ConsumerWidget {
       child: Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
-          const T("White:", textAlign: TextAlign.center, s: TS(w: FW.w700)),
+          T(S.current.white + ":", textAlign: TextAlign.center, s: TS(w: FW.w700)),
           Wrap(
             children: [
               Ro(
@@ -337,7 +360,7 @@ class _Players extends ConsumerWidget {
                       P.othello.whiteIsAI.q = false;
                     },
                   ),
-                  const T("Human"),
+                  T(S.current.human),
                 ],
               ),
               Ro(
@@ -350,7 +373,7 @@ class _Players extends ConsumerWidget {
                       P.othello.whiteIsAI.q = true;
                     },
                   ),
-                  const T("AI"),
+                  T(S.current.rwkv),
                 ],
               ),
             ],
@@ -373,8 +396,8 @@ class _Players extends ConsumerWidget {
         child: Co(
           c: CAA.start,
           children: [
-            const T(
-              "Players",
+            T(
+              S.current.players,
               s: TS(w: FW.w700),
             ),
             12.h,
@@ -438,10 +461,10 @@ class _Score extends ConsumerWidget {
         AnimatedOpacity(
           opacity: thinking ? 1.0 : .5,
           duration: const Duration(milliseconds: 150),
-          child: T("Thinking", s: TS(c: kB, s: 10, w: thinking ? FW.w400 : FW.w400)),
+          child: T(S.current.thinking, s: TS(c: kB, s: 10, w: thinking ? FW.w400 : FW.w400)),
         ),
-        T("Prefill: ${prefillSpeed.toStringAsFixed(1)} t/s", s: const TS(c: kB, s: 10, w: FW.w400)),
-        T("Decode: ${decodeSpeed.toStringAsFixed(1)} t/s", s: const TS(c: kB, s: 10, w: FW.w400)),
+        T("${S.current.prefill}: ${prefillSpeed.toStringAsFixed(1)} t/s", s: const TS(c: kB, s: 10, w: FW.w400)),
+        T("${S.current.decode}: ${decodeSpeed.toStringAsFixed(1)} t/s", s: const TS(c: kB, s: 10, w: FW.w400)),
       ],
     );
 
@@ -451,7 +474,7 @@ class _Score extends ConsumerWidget {
           : () {
               P.othello.start();
             },
-      child: const T("New Game", s: TS(c: kB, s: 10, w: FW.w500)),
+      child: T(S.current.new_game, s: TS(c: kB, s: 10, w: FW.w500)),
     );
 
     return Ro(
@@ -461,7 +484,7 @@ class _Score extends ConsumerWidget {
         if (!usePortrait) thinkingWidget,
         if (!usePortrait) 16.w,
         T(
-          "Black\n$blackScore",
+          "${S.current.black}\n$blackScore",
           textAlign: TextAlign.center,
         ),
         16.w,
@@ -474,7 +497,7 @@ class _Score extends ConsumerWidget {
           ),
           child: Co(
             children: [
-              const T("Currnet"),
+              T(S.current.current_turn),
               4.h,
               if (blackTurn) const _Black(minSize: 5, maxSize: 25),
               if (!blackTurn) const _White(minSize: 5, maxSize: 25),
@@ -483,7 +506,7 @@ class _Score extends ConsumerWidget {
         ),
         16.w,
         T(
-          "White\n$whiteScore",
+          "${S.current.white}\n$whiteScore",
           textAlign: TextAlign.center,
         ),
         if (usePortrait) Exp(child: newGameButton),

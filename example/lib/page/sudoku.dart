@@ -3,10 +3,12 @@ import 'dart:developer';
 import 'dart:math';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:halo_state/halo_state.dart';
+import 'package:zone/gen/l10n.dart';
 import 'dart:math' as math;
 
 import 'package:zone/state/p.dart';
@@ -29,6 +31,22 @@ const _kButtonPadding = 2.0;
 
 class PageSudoku extends ConsumerWidget {
   const PageSudoku({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (kDebugMode) {
+      return const Pager(
+        drawer: Menu(),
+        child: _Page(),
+      );
+    }
+
+    return const _Page();
+  }
+}
+
+class _Page extends ConsumerWidget {
+  const _Page();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -78,7 +96,7 @@ class _ButtonGenerate extends ConsumerWidget {
             textStyle: WidgetStateProperty.all(const TextStyle(fontSize: 10, fontWeight: FontWeight.w600)),
           ),
           onPressed: running ? null : () => _onPressed(context, ref),
-          child: const T("Generate"),
+          child: T(S.current.generate),
         ),
       ),
     );
@@ -92,8 +110,8 @@ class _ButtonGenerateHardest extends ConsumerWidget {
     if (P.sudoku.running.v) {
       await showOkAlertDialog(
         context: context,
-        title: "Inference is running",
-        message: "Please wait for it to finish",
+        title: S.current.inference_is_running,
+        message: S.current.please_wait_for_it_to_finish,
       );
       return;
     }
@@ -101,9 +119,9 @@ class _ButtonGenerateHardest extends ConsumerWidget {
     P.sudoku.loadHardestSudoku();
     await showOkAlertDialog(
       context: context,
-      title: "😎 Just watch me!",
-      message: "This is the hardest Sudoku in the world",
-      okLabel: "It's your turn~",
+      title: S.current.just_watch_me,
+      message: S.current.this_is_the_hardest_sudoku_in_the_world,
+      okLabel: S.current.its_your_turn,
     );
     if (context.mounted) await P.sudoku.onInferencePressed(context);
   }
@@ -124,7 +142,10 @@ class _ButtonGenerateHardest extends ConsumerWidget {
             textStyle: WidgetStateProperty.all(const TextStyle(fontSize: 10, fontWeight: FontWeight.w600)),
           ),
           onPressed: running ? null : () => _onPressed(context, ref),
-          child: const T("Generate Hardest Sudoku in the world"),
+          child: T(
+            S.current.generate_hardest_sudoku_in_the_world,
+            textAlign: TextAlign.center,
+          ),
         ),
       ),
     );
@@ -168,12 +189,12 @@ class _ButtonInference extends ConsumerWidget {
                       ),
                     ),
                     const SB(width: 8, height: 8),
-                    const T("Thinking"),
+                    T(S.current.thinking),
                   ],
                 )
               : hasPuzzle
-                  ? const T("Inference")
-                  : const T("No puzzle"),
+                  ? T(S.current.inference)
+                  : T(S.current.no_puzzle),
         ),
       ),
     );
@@ -203,7 +224,7 @@ class _ButtonClear extends ConsumerWidget {
             textStyle: WidgetStateProperty.all(const TextStyle(fontSize: 10, fontWeight: FontWeight.w600)),
           ),
           onPressed: running ? null : () => _onPressed(context, ref),
-          child: const T("Clear"),
+          child: T(S.current.clear),
         ),
       ),
     );
@@ -236,7 +257,7 @@ class _ButtonShowStack extends ConsumerWidget {
             textStyle: WidgetStateProperty.all(const TextStyle(fontSize: 10, fontWeight: FontWeight.w600)),
           ),
           onPressed: !enable ? null : () => _onPressed(context, ref),
-          child: showStack ? const T("Hide Stack") : const T("Show Stack"),
+          child: showStack ? T(S.current.hide_stack) : T(S.current.show_stack),
         ),
       ),
     );

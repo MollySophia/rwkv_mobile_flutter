@@ -41,10 +41,14 @@ class MessageLookup extends MessageLookupByLibrary {
         ),
     "auto": MessageLookupByLibrary.simpleMessage("Auto"),
     "back_to_chat": MessageLookupByLibrary.simpleMessage("Back to Chat"),
+    "black": MessageLookupByLibrary.simpleMessage("Black"),
+    "black_score": MessageLookupByLibrary.simpleMessage("Black score"),
+    "black_wins": MessageLookupByLibrary.simpleMessage("Black wins!"),
     "bot_message_edited": MessageLookupByLibrary.simpleMessage(
       "Bot message edited, you can now send new message",
     ),
     "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+    "cancel_download": MessageLookupByLibrary.simpleMessage("Cancel Download"),
     "cancel_update": MessageLookupByLibrary.simpleMessage("Cancel update"),
     "chat_copied_to_clipboard": MessageLookupByLibrary.simpleMessage(
       "Copied to clipboard",
@@ -68,6 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "choose_prebuilt_character": MessageLookupByLibrary.simpleMessage(
       "Choose prebuilt character",
     ),
+    "clear": MessageLookupByLibrary.simpleMessage("Clear"),
     "click_here_to_select_a_new_model": MessageLookupByLibrary.simpleMessage(
       "Click here to select a new model.",
     ),
@@ -77,10 +82,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "click_to_select_model": MessageLookupByLibrary.simpleMessage(
       "Click to select a model",
     ),
+    "continue_download": MessageLookupByLibrary.simpleMessage(
+      "Continue Download",
+    ),
     "create_a_new_one_by_clicking_the_button_above":
         MessageLookupByLibrary.simpleMessage(
           "Create a new one by clicking the button above.",
         ),
+    "current_turn": MessageLookupByLibrary.simpleMessage("Current Turn"),
+    "decode": MessageLookupByLibrary.simpleMessage("Decode"),
     "delete": MessageLookupByLibrary.simpleMessage("Delete"),
     "delete_all": MessageLookupByLibrary.simpleMessage("Delete all"),
     "download_missing": MessageLookupByLibrary.simpleMessage(
@@ -88,6 +98,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "download_model": MessageLookupByLibrary.simpleMessage("Download model"),
     "download_source": MessageLookupByLibrary.simpleMessage("Download source"),
+    "draw": MessageLookupByLibrary.simpleMessage("Draw!"),
     "ensure_you_have_enough_memory_to_load_the_model":
         MessageLookupByLibrary.simpleMessage(
           "Please ensure you have enough memory to load the model, otherwise the application may crash.",
@@ -103,31 +114,53 @@ class MessageLookup extends MessageLookupByLibrary {
     "font_size": MessageLookupByLibrary.simpleMessage("Font size"),
     "font_size_default": MessageLookupByLibrary.simpleMessage("Default (100%)"),
     "foo_bar": MessageLookupByLibrary.simpleMessage("foo bar"),
+    "game_over": MessageLookupByLibrary.simpleMessage("Game over!"),
+    "generate": MessageLookupByLibrary.simpleMessage("Generate"),
+    "generate_hardest_sudoku_in_the_world":
+        MessageLookupByLibrary.simpleMessage(
+          "Generate Hardest Sudoku in the world",
+        ),
+    "hide_stack": MessageLookupByLibrary.simpleMessage("Hide Stack"),
+    "human": MessageLookupByLibrary.simpleMessage("Human"),
     "i_want_rwkv_to_say": MessageLookupByLibrary.simpleMessage(
       "I want RWKV to say...",
     ),
     "imitate_target": MessageLookupByLibrary.simpleMessage("Target"),
+    "in_context_search_will_be_activated_when_both_breadth_and_depth_are_greater_than_2":
+        MessageLookupByLibrary.simpleMessage(
+          "In-context search will be activated when both breadth and depth are greater than 2",
+        ),
+    "inference": MessageLookupByLibrary.simpleMessage("Inference"),
+    "inference_is_running": MessageLookupByLibrary.simpleMessage(
+      "Inference is running",
+    ),
     "intonations": MessageLookupByLibrary.simpleMessage("Intonations"),
     "intro": MessageLookupByLibrary.simpleMessage(
       "Get ready to experience RWKV v7, series of compact language models with 0.1, 0.4, 1.5, 2.9 billion parameters, optimized for seamless mobile devices inference. Once loaded, it functions offline without requiring any server communication.",
     ),
+    "its_your_turn": MessageLookupByLibrary.simpleMessage("It\'s your turn~"),
     "join_the_community": MessageLookupByLibrary.simpleMessage(
       "Join the community",
     ),
+    "just_watch_me": MessageLookupByLibrary.simpleMessage("😎 Just watch me!"),
     "large": MessageLookupByLibrary.simpleMessage("Large (120%)"),
     "license": MessageLookupByLibrary.simpleMessage("Open source license"),
     "loading": MessageLookupByLibrary.simpleMessage("Loading..."),
     "medium": MessageLookupByLibrary.simpleMessage("Medium (110%)"),
     "memory_used": m1,
+    "model_settings": MessageLookupByLibrary.simpleMessage("Model Settings"),
     "network_error": MessageLookupByLibrary.simpleMessage("Network error"),
     "new_chat": MessageLookupByLibrary.simpleMessage("New chat"),
+    "new_game": MessageLookupByLibrary.simpleMessage("New Game"),
     "new_version_found": MessageLookupByLibrary.simpleMessage(
       "New version found",
     ),
+    "no_puzzle": MessageLookupByLibrary.simpleMessage("No puzzle"),
     "or_you_can_start_a_new_empty_chat": MessageLookupByLibrary.simpleMessage(
       "Or you can start a new empty chat",
     ),
     "othello_title": MessageLookupByLibrary.simpleMessage("RWKV Othello"),
+    "players": MessageLookupByLibrary.simpleMessage("Players"),
     "please_select_a_world_type": MessageLookupByLibrary.simpleMessage(
       "Please select a world type",
     ),
@@ -137,9 +170,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_select_font_size": MessageLookupByLibrary.simpleMessage(
       "Please select font size",
     ),
+    "please_wait_for_it_to_finish": MessageLookupByLibrary.simpleMessage(
+      "Please wait for it to finish",
+    ),
     "please_wait_for_the_model_to_finish_generating":
         MessageLookupByLibrary.simpleMessage(
           "Please wait for the model to finish generating",
+        ),
+    "please_wait_for_the_model_to_generate":
+        MessageLookupByLibrary.simpleMessage(
+          "Please wait for the model to generate",
         ),
     "please_wait_for_the_model_to_load": MessageLookupByLibrary.simpleMessage(
       "Please wait for the model to load",
@@ -147,14 +187,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "prebuilt_voices": MessageLookupByLibrary.simpleMessage("Prebuilt voices"),
     "prefer": MessageLookupByLibrary.simpleMessage("Prefer"),
     "prefer_chinese": MessageLookupByLibrary.simpleMessage("Prefer Chinese"),
+    "prefill": MessageLookupByLibrary.simpleMessage("Prefill"),
     "reason": MessageLookupByLibrary.simpleMessage("Reason"),
     "reasoning_enabled": MessageLookupByLibrary.simpleMessage(
       "Reasoning enabled",
     ),
     "remaining": MessageLookupByLibrary.simpleMessage("Remaining:"),
     "reset": MessageLookupByLibrary.simpleMessage("Reset"),
+    "rwkv": MessageLookupByLibrary.simpleMessage("RWKV"),
     "rwkv_chat": MessageLookupByLibrary.simpleMessage("RWKV Chat"),
     "rwkv_othello": MessageLookupByLibrary.simpleMessage("RWKV Othello"),
+    "search_breadth": MessageLookupByLibrary.simpleMessage("Search Breadth"),
+    "search_depth": MessageLookupByLibrary.simpleMessage("Search Depth"),
     "select_a_model": MessageLookupByLibrary.simpleMessage("Select a model"),
     "select_a_world_type": MessageLookupByLibrary.simpleMessage(
       "Select a world type",
@@ -166,6 +210,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "session_configuration": MessageLookupByLibrary.simpleMessage(
       "Session Configuration",
     ),
+    "show_stack": MessageLookupByLibrary.simpleMessage("Show Stack"),
     "small": MessageLookupByLibrary.simpleMessage("Small (90%)"),
     "speed": MessageLookupByLibrary.simpleMessage("Speed:"),
     "start_a_new_chat": MessageLookupByLibrary.simpleMessage(
@@ -175,8 +220,13 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "You can start a new chat by clicking the button below.",
         ),
+    "start_a_new_game": MessageLookupByLibrary.simpleMessage("Start"),
     "start_to_chat": MessageLookupByLibrary.simpleMessage("Start to chat"),
     "thinking": MessageLookupByLibrary.simpleMessage("Thinking..."),
+    "this_is_the_hardest_sudoku_in_the_world":
+        MessageLookupByLibrary.simpleMessage(
+          "This is the hardest Sudoku in the world",
+        ),
     "thought_result": MessageLookupByLibrary.simpleMessage("Thought result"),
     "ultra_large": MessageLookupByLibrary.simpleMessage("Ultra large (140%)"),
     "update_now": MessageLookupByLibrary.simpleMessage("Update now"),
@@ -186,6 +236,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "welcome_to_use_rwkv": MessageLookupByLibrary.simpleMessage(
       "Welcome to use RWKV",
     ),
+    "white": MessageLookupByLibrary.simpleMessage("White"),
+    "white_score": MessageLookupByLibrary.simpleMessage("White score"),
+    "white_wins": MessageLookupByLibrary.simpleMessage("White wins!"),
     "you_are_now_using": m2,
     "you_can_now_start_to_chat_with_rwkv": MessageLookupByLibrary.simpleMessage(
       "You can now start to chat with RWKV",

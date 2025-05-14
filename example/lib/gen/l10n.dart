@@ -799,6 +799,253 @@ class S {
       args: [],
     );
   }
+
+  /// `Game over!`
+  String get game_over {
+    return Intl.message('Game over!', name: 'game_over', desc: '', args: []);
+  }
+
+  /// `Black wins!`
+  String get black_wins {
+    return Intl.message('Black wins!', name: 'black_wins', desc: '', args: []);
+  }
+
+  /// `White wins!`
+  String get white_wins {
+    return Intl.message('White wins!', name: 'white_wins', desc: '', args: []);
+  }
+
+  /// `Draw!`
+  String get draw {
+    return Intl.message('Draw!', name: 'draw', desc: '', args: []);
+  }
+
+  /// `Black score`
+  String get black_score {
+    return Intl.message('Black score', name: 'black_score', desc: '', args: []);
+  }
+
+  /// `White score`
+  String get white_score {
+    return Intl.message('White score', name: 'white_score', desc: '', args: []);
+  }
+
+  /// `Search Depth`
+  String get search_depth {
+    return Intl.message(
+      'Search Depth',
+      name: 'search_depth',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search Breadth`
+  String get search_breadth {
+    return Intl.message(
+      'Search Breadth',
+      name: 'search_breadth',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `White`
+  String get white {
+    return Intl.message('White', name: 'white', desc: '', args: []);
+  }
+
+  /// `Black`
+  String get black {
+    return Intl.message('Black', name: 'black', desc: '', args: []);
+  }
+
+  /// `Human`
+  String get human {
+    return Intl.message('Human', name: 'human', desc: '', args: []);
+  }
+
+  /// `Players`
+  String get players {
+    return Intl.message('Players', name: 'players', desc: '', args: []);
+  }
+
+  /// `Model Settings`
+  String get model_settings {
+    return Intl.message(
+      'Model Settings',
+      name: 'model_settings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `In-context search will be activated when both breadth and depth are greater than 2`
+  String
+  get in_context_search_will_be_activated_when_both_breadth_and_depth_are_greater_than_2 {
+    return Intl.message(
+      'In-context search will be activated when both breadth and depth are greater than 2',
+      name:
+          'in_context_search_will_be_activated_when_both_breadth_and_depth_are_greater_than_2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Game`
+  String get new_game {
+    return Intl.message('New Game', name: 'new_game', desc: '', args: []);
+  }
+
+  /// `RWKV`
+  String get rwkv {
+    return Intl.message('RWKV', name: 'rwkv', desc: '', args: []);
+  }
+
+  /// `Prefill`
+  String get prefill {
+    return Intl.message('Prefill', name: 'prefill', desc: '', args: []);
+  }
+
+  /// `Decode`
+  String get decode {
+    return Intl.message('Decode', name: 'decode', desc: '', args: []);
+  }
+
+  /// `Current Turn`
+  String get current_turn {
+    return Intl.message(
+      'Current Turn',
+      name: 'current_turn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start`
+  String get start_a_new_game {
+    return Intl.message('Start', name: 'start_a_new_game', desc: '', args: []);
+  }
+
+  /// `Please wait for the model to generate`
+  String get please_wait_for_the_model_to_generate {
+    return Intl.message(
+      'Please wait for the model to generate',
+      name: 'please_wait_for_the_model_to_generate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel Download`
+  String get cancel_download {
+    return Intl.message(
+      'Cancel Download',
+      name: 'cancel_download',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Continue Download`
+  String get continue_download {
+    return Intl.message(
+      'Continue Download',
+      name: 'continue_download',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Generate`
+  String get generate {
+    return Intl.message('Generate', name: 'generate', desc: '', args: []);
+  }
+
+  /// `Inference is running`
+  String get inference_is_running {
+    return Intl.message(
+      'Inference is running',
+      name: 'inference_is_running',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please wait for it to finish`
+  String get please_wait_for_it_to_finish {
+    return Intl.message(
+      'Please wait for it to finish',
+      name: 'please_wait_for_it_to_finish',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `😎 Just watch me!`
+  String get just_watch_me {
+    return Intl.message(
+      '😎 Just watch me!',
+      name: 'just_watch_me',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This is the hardest Sudoku in the world`
+  String get this_is_the_hardest_sudoku_in_the_world {
+    return Intl.message(
+      'This is the hardest Sudoku in the world',
+      name: 'this_is_the_hardest_sudoku_in_the_world',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `It's your turn~`
+  String get its_your_turn {
+    return Intl.message(
+      'It\'s your turn~',
+      name: 'its_your_turn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Generate Hardest Sudoku in the world`
+  String get generate_hardest_sudoku_in_the_world {
+    return Intl.message(
+      'Generate Hardest Sudoku in the world',
+      name: 'generate_hardest_sudoku_in_the_world',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Inference`
+  String get inference {
+    return Intl.message('Inference', name: 'inference', desc: '', args: []);
+  }
+
+  /// `No puzzle`
+  String get no_puzzle {
+    return Intl.message('No puzzle', name: 'no_puzzle', desc: '', args: []);
+  }
+
+  /// `Hide Stack`
+  String get hide_stack {
+    return Intl.message('Hide Stack', name: 'hide_stack', desc: '', args: []);
+  }
+
+  /// `Show Stack`
+  String get show_stack {
+    return Intl.message('Show Stack', name: 'show_stack', desc: '', args: []);
+  }
+
+  /// `Clear`
+  String get clear {
+    return Intl.message('Clear', name: 'clear', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

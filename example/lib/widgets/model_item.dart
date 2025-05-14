@@ -57,12 +57,12 @@ class ModelItem extends ConsumerWidget {
   FV _onStartTapInChat() async {
     qq;
     if (P.chat.receivingTokens.q) {
-      Alert.warning("Please wait for the model to generate");
+      Alert.warning(S.current.please_wait_for_the_model_to_generate);
       return;
     }
 
     if (P.rwkv.loading.q) {
-      Alert.info("Please wait for the model to load");
+      Alert.info(S.current.please_wait_for_the_model_to_load);
       return;
     }
 
@@ -100,6 +100,20 @@ class ModelItem extends ConsumerWidget {
     final currentModel = ref.watch(P.rwkv.currentModel);
     final isCurrentModel = currentModel == fileInfo;
     final loading = ref.watch(P.rwkv.loading);
+    final demoType = ref.watch(P.app.demoType);
+
+    late final String startTitle;
+
+    switch (demoType) {
+      case DemoType.fifthteenPuzzle:
+      case DemoType.othello:
+      case DemoType.sudoku:
+        startTitle = S.current.start_a_new_game;
+      case DemoType.chat:
+      case DemoType.tts:
+      case DemoType.world:
+        startTitle = S.current.start_to_chat;
+    }
 
     return ClipRRect(
       borderRadius: 8.r,
@@ -129,7 +143,10 @@ class ModelItem extends ConsumerWidget {
                       borderRadius: 8.r,
                     ),
                     padding: const EI.a(8),
-                    child: T(loading ? "Loading..." : S.current.start_to_chat, s: const TS(c: kW)),
+                    child: T(
+                      loading ? S.current.loading : startTitle,
+                      s: const TS(c: kW),
+                    ),
                   ),
                 ),
               if (isCurrentModel)
@@ -163,10 +180,10 @@ class _DownloadIndicator extends ConsumerWidget {
     qq;
     final result = await showOkCancelAlertDialog(
       context: getContext()!,
-      title: "Cancel Download?",
-      okLabel: "Cancel",
+      title: S.current.cancel_download + "?",
+      okLabel: S.current.cancel,
       isDestructiveAction: true,
-      cancelLabel: "Continue download",
+      cancelLabel: S.current.continue_download,
     );
     if (result == OkCancelResult.ok) {
       await P.fileManager.cancelDownload(fileInfo: fileInfo);

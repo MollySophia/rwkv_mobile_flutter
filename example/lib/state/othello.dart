@@ -312,16 +312,16 @@ extension _$ on _Othello {
     late final String winnerMessage;
 
     if (blackScore > whiteScore) {
-      winnerMessage = "Black wins!";
+      winnerMessage = S.current.black_wins;
     } else if (blackScore < whiteScore) {
-      winnerMessage = "White wins!";
+      winnerMessage = S.current.white_wins;
     } else {
-      winnerMessage = "Draw!";
+      winnerMessage = S.current.draw;
     }
 
     await showOkAlertDialog(
       context: getContext()!,
-      title: "Game Over!",
+      title: S.current.game_over,
       message: "Black: $blackScore\nWhite: $whiteScore\n$winnerMessage",
       okLabel: "OK",
     );

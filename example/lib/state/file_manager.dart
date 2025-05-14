@@ -30,6 +30,17 @@ class _FileManager {
 /// Public methods
 extension $FileManager on _FileManager {
   FV syncAvailableModels() async {
+    switch (P.app.demoType.q) {
+      case DemoType.othello:
+        qqw("othello game does not need to sync available models");
+        return;
+      case DemoType.chat:
+      case DemoType.fifthteenPuzzle:
+      case DemoType.sudoku:
+      case DemoType.tts:
+      case DemoType.world:
+    }
+
     qq;
     late final List<JSON> json;
 
