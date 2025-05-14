@@ -123,10 +123,7 @@ class TTSResult extends FromRWKV {
     required this.perWavProgress,
     required this.overallProgress,
     super.toRWKV,
-  }) : assert(
-          filePaths.length == perWavProgress.length,
-          'filePaths and perWavProgress must have the same length',
-        );
+  });
 }
 
 class TTSCFMSteps extends FromRWKV {}
