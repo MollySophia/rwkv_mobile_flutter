@@ -23,6 +23,8 @@ import 'package:zone/widgets/model_item.dart';
 class ModelSelector extends ConsumerWidget {
   static FV show() async {
     qq;
+
+    P.fileManager.modelSelectorShown.q = true;
     P.fileManager.checkLocal();
 
     switch (P.app.demoType.q) {
@@ -50,6 +52,7 @@ class ModelSelector extends ConsumerWidget {
     HF.wait(250).then((_) {
       P.device.sync();
     });
+
     await showModalBottomSheet(
       isScrollControlled: true,
       context: getContext()!,
@@ -123,7 +126,7 @@ class ModelSelector extends ConsumerWidget {
               for (final worldType in WorldType.values.where((e) => e.isVisual)) WorldGroupItem(worldType),
             if (demoType == DemoType.tts)
               for (final fileInfo in ttsCores) TTSGroupItem(fileInfo),
-            if (demoType == DemoType.chat)
+            if (demoType == DemoType.chat || demoType == DemoType.sudoku)
               for (final fileInfo in availableModels.sorted((a, b) {
                 return a.fileSize.compareTo(b.fileSize);
               }).sorted((a, b) {

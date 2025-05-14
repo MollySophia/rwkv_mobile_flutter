@@ -81,182 +81,7 @@ class _RWKV {
   Timer? _ttsPerformanceTimer;
 }
 
-/// Public methods
-extension $RWKV on _RWKV {
-  FV setAudioPrompt({required String path}) async {
-    send(to_rwkv.SetAudioPrompt(path));
-  }
-
-  FV sendMessages(List<String> messages) async {
-    prefillSpeed.q = 0;
-    decodeSpeed.q = 0;
-
-    qqq("message lengths: ${messages.m((e) => e.length)}");
-
-    if (kDebugMode) {
-      messages.forEach((message) {
-        if (message.contains("<think>")) {
-          qqw("message contains <think>");
-        }
-      });
-    }
-
-    final sendPort = _sendPort;
-
-    if (sendPort == null) {
-      qqw("sendPort is null");
-      return;
-    }
-
-    send(to_rwkv.ChatAsync(messages));
-
-    if (_getTokensTimer != null) {
-      _getTokensTimer!.cancel();
-    }
-
-    _getTokensTimer = Timer.periodic(const Duration(milliseconds: 20), (timer) async {
-      send(to_rwkv.GetResponseBufferContent());
-      if (HF.randomBool(truePercentage: .5)) send(to_rwkv.GetIsGenerating());
-      if (HF.randomBool(truePercentage: .5)) send(to_rwkv.GetPrefillAndDecodeSpeed());
-    });
-  }
-
-  FV generate(String prompt) async {
-    prefillSpeed.q = 0;
-    decodeSpeed.q = 0;
-    final sendPort = _sendPort;
-    if (sendPort == null) {
-      qqw("sendPort is null");
-      return;
-    }
-    send(to_rwkv.Generate(prompt));
-
-    if (_getTokensTimer != null) {
-      _getTokensTimer!.cancel();
-    }
-
-    _getTokensTimer = Timer.periodic(const Duration(milliseconds: 20), (timer) async {
-      send(to_rwkv.GetResponseBufferIds());
-      send(to_rwkv.GetPrefillAndDecodeSpeed());
-      send(to_rwkv.GetResponseBufferContent());
-      await Future.delayed(const Duration(milliseconds: 1000));
-      send(to_rwkv.GetIsGenerating());
-    });
-  }
-
-  FV setImagePath({required String path}) async {
-    send(to_rwkv.SetVisionPrompt(path));
-  }
-
-  FV clearStates() async {
-    prefillSpeed.q = 0;
-    decodeSpeed.q = 0;
-    final sendPort = _sendPort;
-    if (sendPort == null) {
-      qqw("sendPort is null");
-      return;
-    }
-    send(to_rwkv.ClearStates());
-  }
-
-  void send(to_rwkv.ToRWKV toRwkv) {
-    final sendPort = _sendPort;
-    if (sendPort == null) {
-      qqw("sendPort is null");
-      return;
-    }
-    sendPort.send(toRwkv);
-    return;
-  }
-
-  FV stop() async => send(to_rwkv.Stop());
-
-  FV initRuntime({
-    required String modelPath,
-    required Backend backend,
-    required String tokenizerPath,
-  }) async {
-    prefillSpeed.q = 0;
-    decodeSpeed.q = 0;
-    _initRuntimeCompleter = Completer<void>();
-    send(to_rwkv.InitRuntime(
-      modelPath: modelPath,
-      backend: backend,
-      tokenizerPath: tokenizerPath,
-    ));
-    return _initRuntimeCompleter.future;
-  }
-
-  FV loadChat({
-    required String modelPath,
-    required Backend backend,
-    required bool usingReasoningModel,
-  }) async {
-    qq;
-    _loading.q = true;
-    prefillSpeed.q = 0;
-    decodeSpeed.q = 0;
-    final tokenizerPath = await fromAssetsToTemp(Assets.config.chat.bRwkvVocabV20230424);
-
-    await _ensureQNNCopied();
-
-    final rootIsolateToken = RootIsolateToken.instance;
-
-    if (_sendPort != null) {
-      try {
-        final startMS = HF.shorterUS;
-        await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
-        final endMS = HF.shorterUS;
-        qqr("initRuntime done in ${endMS - startMS}ms");
-      } catch (e) {
-        qqe("initRuntime failed: $e");
-        if (!kDebugMode) Sentry.captureException(e, stackTrace: StackTrace.current);
-        Alert.error("Failed to load model: $e");
-        return;
-      }
-    } else {
-      final options = StartOptions(
-        modelPath,
-        tokenizerPath,
-        backend,
-        _receivePort.sendPort,
-        rootIsolateToken!,
-      );
-      await RWKVMobile().runIsolate(options);
-    }
-
-    while (_sendPort == null) {
-      qqq("waiting for sendPort...");
-      await Future.delayed(const Duration(milliseconds: 50));
-    }
-
-    P.app.demoType.q = DemoType.chat;
-    await setModelConfig(usingReasoningModel: usingReasoningModel);
-    await resetSamplerParams(usingReasoningModel: usingReasoningModel);
-    await resetMaxLength(usingReasoningModel: usingReasoningModel);
-    send(to_rwkv.GetSamplerParams());
-    _loading.q = false;
-  }
-
-  FV setModelConfig({
-    bool? usingReasoningModel,
-    bool? preferChinese,
-    bool setPrompt = true,
-  }) async {
-    if (usingReasoningModel != null) _usingReasoningModel.q = usingReasoningModel;
-    if (preferChinese != null) _preferChinese.q = preferChinese;
-
-    late final String finalPrompt;
-
-    finalPrompt = _preferChinese.q ? Config.promptCN : Config.prompt;
-
-    if (setPrompt) qqq("setPrompt: $finalPrompt");
-
-    send(to_rwkv.SetEnableReasoning(_usingReasoningModel.q));
-    if (setPrompt) send(to_rwkv.SetPrompt(_usingReasoningModel.q ? "<EOD>" : finalPrompt));
-    send(to_rwkv.SetThinkingToken(_preferChinese.q ? "<think>嗯" : "<think"));
-  }
-
+extension $RWKVLoad on _RWKV {
   FV loadWorldVision({
     required String modelPath,
     required String encoderPath,
@@ -449,53 +274,55 @@ extension $RWKV on _RWKV {
     _loading.q = false;
   }
 
-  FV resetSamplerParams({required bool usingReasoningModel}) async {
-    await syncSamplerParams(
-      temperature: usingReasoningModel ? Argument.temperature.reasonDefaults : Argument.temperature.defaults,
-      topK: usingReasoningModel ? Argument.topK.reasonDefaults : Argument.topK.defaults,
-      topP: usingReasoningModel ? Argument.topP.reasonDefaults : Argument.topP.defaults,
-      presencePenalty: usingReasoningModel ? Argument.presencePenalty.reasonDefaults : Argument.presencePenalty.defaults,
-      frequencyPenalty: usingReasoningModel ? Argument.frequencyPenalty.reasonDefaults : Argument.frequencyPenalty.defaults,
-      penaltyDecay: usingReasoningModel ? Argument.penaltyDecay.reasonDefaults : Argument.penaltyDecay.defaults,
-    );
-  }
-
-  FV syncSamplerParams({
-    double? temperature,
-    double? topK,
-    double? topP,
-    double? presencePenalty,
-    double? frequencyPenalty,
-    double? penaltyDecay,
+  FV loadChat({
+    required String modelPath,
+    required Backend backend,
+    required bool usingReasoningModel,
   }) async {
-    if (temperature != null) arguments(Argument.temperature).q = temperature;
-    if (topK != null) arguments(Argument.topK).q = topK;
-    if (topP != null) arguments(Argument.topP).q = topP;
-    if (presencePenalty != null) arguments(Argument.presencePenalty).q = presencePenalty;
-    if (frequencyPenalty != null) arguments(Argument.frequencyPenalty).q = frequencyPenalty;
-    if (penaltyDecay != null) arguments(Argument.penaltyDecay).q = penaltyDecay;
+    qq;
+    _loading.q = true;
+    prefillSpeed.q = 0;
+    decodeSpeed.q = 0;
+    final tokenizerPath = await fromAssetsToTemp(Assets.config.chat.bRwkvVocabV20230424);
 
-    send(to_rwkv.SetSamplerParams(
-      temperature: _intIfFixedDecimalsIsZero(Argument.temperature),
-      topK: _intIfFixedDecimalsIsZero(Argument.topK),
-      topP: _intIfFixedDecimalsIsZero(Argument.topP),
-      presencePenalty: _intIfFixedDecimalsIsZero(Argument.presencePenalty),
-      frequencyPenalty: _intIfFixedDecimalsIsZero(Argument.frequencyPenalty),
-      penaltyDecay: _intIfFixedDecimalsIsZero(Argument.penaltyDecay),
-    ));
+    await _ensureQNNCopied();
 
-    if (kDebugMode) send(to_rwkv.GetSamplerParams());
-  }
+    final rootIsolateToken = RootIsolateToken.instance;
 
-  FV resetMaxLength({required bool usingReasoningModel}) async {
-    await syncMaxLength(
-      maxLength: usingReasoningModel ? Argument.maxLength.reasonDefaults : Argument.maxLength.defaults,
-    );
-  }
+    if (_sendPort != null) {
+      try {
+        final startMS = HF.shorterUS;
+        await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
+        final endMS = HF.shorterUS;
+        qqr("initRuntime done in ${endMS - startMS}ms");
+      } catch (e) {
+        qqe("initRuntime failed: $e");
+        if (!kDebugMode) Sentry.captureException(e, stackTrace: StackTrace.current);
+        Alert.error("Failed to load model: $e");
+        return;
+      }
+    } else {
+      final options = StartOptions(
+        modelPath,
+        tokenizerPath,
+        backend,
+        _receivePort.sendPort,
+        rootIsolateToken!,
+      );
+      await RWKVMobile().runIsolate(options);
+    }
 
-  FV syncMaxLength({num? maxLength}) async {
-    if (maxLength != null) arguments(Argument.maxLength).q = maxLength.toDouble();
-    send(to_rwkv.SetMaxLength(_intIfFixedDecimalsIsZero(Argument.maxLength).toInt()));
+    while (_sendPort == null) {
+      qqq("waiting for sendPort...");
+      await Future.delayed(const Duration(milliseconds: 50));
+    }
+
+    P.app.demoType.q = DemoType.chat;
+    await setModelConfig(usingReasoningModel: usingReasoningModel);
+    await resetSamplerParams(usingReasoningModel: usingReasoningModel);
+    await resetMaxLength(usingReasoningModel: usingReasoningModel);
+    send(to_rwkv.GetSamplerParams());
+    _loading.q = false;
   }
 
   FV loadOthello() async {
@@ -553,6 +380,230 @@ extension $RWKV on _RWKV {
     ));
     send(to_rwkv.SetGenerationStopToken(0));
     send(to_rwkv.ClearStates());
+  }
+
+  FV loadSudoku({
+    required String modelPath,
+    required Backend backend,
+  }) async {
+    prefillSpeed.q = 0;
+    decodeSpeed.q = 0;
+
+    final tokenizerPath = await fromAssetsToTemp("assets/config/sudoku/b_sudoku_vocab.txt");
+
+    final rootIsolateToken = RootIsolateToken.instance;
+
+    if (_sendPort != null) {
+      send(to_rwkv.InitRuntime(
+        modelPath: modelPath,
+        backend: backend,
+        tokenizerPath: tokenizerPath,
+      ));
+    } else {
+      final options = StartOptions(
+        modelPath,
+        tokenizerPath,
+        backend,
+        _receivePort.sendPort,
+        rootIsolateToken!,
+      );
+      await RWKVMobile().runIsolate(options);
+    }
+
+    while (_sendPort == null) {
+      qqq("waiting for sendPort...");
+      await Future.delayed(const Duration(milliseconds: 50));
+    }
+
+    P.app.demoType.q = DemoType.sudoku;
+
+    send(to_rwkv.SetMaxLength(64000));
+    send(to_rwkv.SetSamplerParams(
+      temperature: 1.0,
+      topK: 1,
+      topP: 1.0,
+      presencePenalty: .0,
+      frequencyPenalty: .0,
+      penaltyDecay: .0,
+    ));
+    send(to_rwkv.SetGenerationStopToken(_Sudoku.tokenStop));
+    send(to_rwkv.ClearStates());
+    _loading.q = false;
+  }
+}
+
+/// Public methods
+extension $RWKV on _RWKV {
+  FV setAudioPrompt({required String path}) async {
+    send(to_rwkv.SetAudioPrompt(path));
+  }
+
+  FV sendMessages(List<String> messages) async {
+    prefillSpeed.q = 0;
+    decodeSpeed.q = 0;
+
+    qqq("message lengths: ${messages.m((e) => e.length)}");
+
+    if (kDebugMode) {
+      messages.forEach((message) {
+        if (message.contains("<think>")) {
+          qqw("message contains <think>");
+        }
+      });
+    }
+
+    final sendPort = _sendPort;
+
+    if (sendPort == null) {
+      qqw("sendPort is null");
+      return;
+    }
+
+    send(to_rwkv.ChatAsync(messages));
+
+    if (_getTokensTimer != null) {
+      _getTokensTimer!.cancel();
+    }
+
+    _getTokensTimer = Timer.periodic(const Duration(milliseconds: 20), (timer) async {
+      send(to_rwkv.GetResponseBufferContent());
+      if (HF.randomBool(truePercentage: .5)) send(to_rwkv.GetIsGenerating());
+      if (HF.randomBool(truePercentage: .5)) send(to_rwkv.GetPrefillAndDecodeSpeed());
+    });
+  }
+
+  FV generate(String prompt) async {
+    prefillSpeed.q = 0;
+    decodeSpeed.q = 0;
+    final sendPort = _sendPort;
+    if (sendPort == null) {
+      qqw("sendPort is null");
+      return;
+    }
+    send(to_rwkv.Generate(prompt));
+
+    if (_getTokensTimer != null) {
+      _getTokensTimer!.cancel();
+    }
+
+    _getTokensTimer = Timer.periodic(const Duration(milliseconds: 20), (timer) async {
+      send(to_rwkv.GetResponseBufferIds());
+      send(to_rwkv.GetPrefillAndDecodeSpeed());
+      send(to_rwkv.GetResponseBufferContent());
+      await Future.delayed(const Duration(milliseconds: 1000));
+      send(to_rwkv.GetIsGenerating());
+    });
+  }
+
+  FV setImagePath({required String path}) async {
+    send(to_rwkv.SetVisionPrompt(path));
+  }
+
+  FV clearStates() async {
+    prefillSpeed.q = 0;
+    decodeSpeed.q = 0;
+    final sendPort = _sendPort;
+    if (sendPort == null) {
+      qqw("sendPort is null");
+      return;
+    }
+    send(to_rwkv.ClearStates());
+  }
+
+  void send(to_rwkv.ToRWKV toRwkv) {
+    final sendPort = _sendPort;
+    if (sendPort == null) {
+      qqw("sendPort is null");
+      return;
+    }
+    sendPort.send(toRwkv);
+    return;
+  }
+
+  FV stop() async => send(to_rwkv.Stop());
+
+  FV initRuntime({
+    required String modelPath,
+    required Backend backend,
+    required String tokenizerPath,
+  }) async {
+    prefillSpeed.q = 0;
+    decodeSpeed.q = 0;
+    _initRuntimeCompleter = Completer<void>();
+    send(to_rwkv.InitRuntime(
+      modelPath: modelPath,
+      backend: backend,
+      tokenizerPath: tokenizerPath,
+    ));
+    return _initRuntimeCompleter.future;
+  }
+
+  FV setModelConfig({
+    bool? usingReasoningModel,
+    bool? preferChinese,
+    bool setPrompt = true,
+  }) async {
+    if (usingReasoningModel != null) _usingReasoningModel.q = usingReasoningModel;
+    if (preferChinese != null) _preferChinese.q = preferChinese;
+
+    late final String finalPrompt;
+
+    finalPrompt = _preferChinese.q ? Config.promptCN : Config.prompt;
+
+    if (setPrompt) qqq("setPrompt: $finalPrompt");
+
+    send(to_rwkv.SetEnableReasoning(_usingReasoningModel.q));
+    if (setPrompt) send(to_rwkv.SetPrompt(_usingReasoningModel.q ? "<EOD>" : finalPrompt));
+    send(to_rwkv.SetThinkingToken(_preferChinese.q ? "<think>嗯" : "<think"));
+  }
+
+  FV resetSamplerParams({required bool usingReasoningModel}) async {
+    await syncSamplerParams(
+      temperature: usingReasoningModel ? Argument.temperature.reasonDefaults : Argument.temperature.defaults,
+      topK: usingReasoningModel ? Argument.topK.reasonDefaults : Argument.topK.defaults,
+      topP: usingReasoningModel ? Argument.topP.reasonDefaults : Argument.topP.defaults,
+      presencePenalty: usingReasoningModel ? Argument.presencePenalty.reasonDefaults : Argument.presencePenalty.defaults,
+      frequencyPenalty: usingReasoningModel ? Argument.frequencyPenalty.reasonDefaults : Argument.frequencyPenalty.defaults,
+      penaltyDecay: usingReasoningModel ? Argument.penaltyDecay.reasonDefaults : Argument.penaltyDecay.defaults,
+    );
+  }
+
+  FV syncSamplerParams({
+    double? temperature,
+    double? topK,
+    double? topP,
+    double? presencePenalty,
+    double? frequencyPenalty,
+    double? penaltyDecay,
+  }) async {
+    if (temperature != null) arguments(Argument.temperature).q = temperature;
+    if (topK != null) arguments(Argument.topK).q = topK;
+    if (topP != null) arguments(Argument.topP).q = topP;
+    if (presencePenalty != null) arguments(Argument.presencePenalty).q = presencePenalty;
+    if (frequencyPenalty != null) arguments(Argument.frequencyPenalty).q = frequencyPenalty;
+    if (penaltyDecay != null) arguments(Argument.penaltyDecay).q = penaltyDecay;
+
+    send(to_rwkv.SetSamplerParams(
+      temperature: _intIfFixedDecimalsIsZero(Argument.temperature),
+      topK: _intIfFixedDecimalsIsZero(Argument.topK),
+      topP: _intIfFixedDecimalsIsZero(Argument.topP),
+      presencePenalty: _intIfFixedDecimalsIsZero(Argument.presencePenalty),
+      frequencyPenalty: _intIfFixedDecimalsIsZero(Argument.frequencyPenalty),
+      penaltyDecay: _intIfFixedDecimalsIsZero(Argument.penaltyDecay),
+    ));
+
+    if (kDebugMode) send(to_rwkv.GetSamplerParams());
+  }
+
+  FV resetMaxLength({required bool usingReasoningModel}) async {
+    await syncMaxLength(
+      maxLength: usingReasoningModel ? Argument.maxLength.reasonDefaults : Argument.maxLength.defaults,
+    );
+  }
+
+  FV syncMaxLength({num? maxLength}) async {
+    if (maxLength != null) arguments(Argument.maxLength).q = maxLength.toDouble();
+    send(to_rwkv.SetMaxLength(_intIfFixedDecimalsIsZero(Argument.maxLength).toInt()));
   }
 }
 
@@ -663,6 +714,7 @@ extension _$RWKV on _RWKV {
     }
 
     if (message["response"] != null) {
+      qqq("Got response: ${message["response"]}");
       final responseText = message["response"].toString();
       _oldMessagesController.add(LLMEvent(
         content: responseText,
@@ -672,6 +724,7 @@ extension _$RWKV on _RWKV {
     }
 
     if (message["streamResponse"] != null) {
+      qqq("Got streamResponse: ${message["streamResponse"]}");
       final responseText = message["streamResponse"].toString();
       _oldMessagesController.add(LLMEvent(
         content: responseText,
@@ -737,19 +790,13 @@ extension _$RWKV on _RWKV {
         qqq(response.overallProgress);
         break;
 
-      case from_rwkv.SamplerParams response:
-      case from_rwkv.CurrentPrompt response:
-      case from_rwkv.EnableReasoning response:
-      case from_rwkv.GenerateStart response:
-      case from_rwkv.GenerateStop response:
-      case from_rwkv.InitRuntimeDone response:
-      case from_rwkv.ResponseBufferContent response:
-      case from_rwkv.SpksNames response:
       case from_rwkv.StreamResponse response:
-      case from_rwkv.TTSCFMSteps response:
-      case from_rwkv.TTSGenerationProgress response:
-      case from_rwkv.TTSGenerationStart response:
-      case from_rwkv.TTSOutputFileList response:
+        decodeSpeed.q = response.decodeSpeed;
+        prefillSpeed.q = response.prefillSpeed;
+        break;
+
+      default:
+        break;
     }
   }
 

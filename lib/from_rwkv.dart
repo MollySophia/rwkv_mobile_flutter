@@ -65,7 +65,20 @@ class SamplerParams extends FromRWKV {
 
 class SpksNames extends FromRWKV {}
 
-class StreamResponse extends FromRWKV {}
+class StreamResponse extends FromRWKV {
+  final String streamResponse;
+  final int streamResponseToken;
+  final double prefillSpeed;
+  final double decodeSpeed;
+
+  StreamResponse({
+    required this.streamResponse,
+    required this.streamResponseToken,
+    required this.prefillSpeed,
+    required this.decodeSpeed,
+    super.toRWKV,
+  });
+}
 
 class TTSGenerationStart extends FromRWKV {
   final bool start;

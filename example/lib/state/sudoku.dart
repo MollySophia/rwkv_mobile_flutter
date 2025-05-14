@@ -35,7 +35,6 @@ class _Sudoku {
   final List<(int, String)> _tempStackEvents = [];
 
   final tokensCount = qs<int>(0);
-  final tokensPerSecond = qs<double>(0);
   final widgetPosition = qs<Map<String, Offset>>(const {});
   final uiOffset = qs<Offset>(Offset.zero);
 
@@ -45,6 +44,8 @@ class _Sudoku {
 
   late final File _file;
   late IOSink _fileSink;
+
+  late final scrollController = ScrollController();
 }
 
 /// Public methods
@@ -115,7 +116,8 @@ extension $Sudoku on _Sudoku {
   }
 
   FV onInferencePressed(BuildContext context) async {
-    final _running = running.v;
+    qq;
+    final _running = running.q;
     if (_running) {
       await showOkAlertDialog(
         context: context,
@@ -125,16 +127,13 @@ extension $Sudoku on _Sudoku {
       return;
     }
 
-    tokensCount.u(0);
-    running.u(true);
+    tokensCount.q = 0;
+    running.q = true;
 
     func_sudoku.SudokuGrid grid = staticData.v;
     final prompt = _genPrompt(grid);
-    // TODO: send
-    // final encodedPrompt = tokenizer.encode(prompt);
-    // while (modelSendPort == null) {}
-    // modelSendPort!.send('clearStates');
-    // modelSendPort!.send(encodedPrompt);
+    P.rwkv.send(to_rwkv.ClearStates());
+    P.rwkv.send(to_rwkv.Generate(prompt));
   }
 
   void clear() {
@@ -286,48 +285,8 @@ extension $Sudoku on _Sudoku {
 
     staticData.u(puzzle);
   }
-}
 
-/// Private methods
-extension _$Sudoku on _Sudoku {
-  FV _init() async {
-    switch (P.app.demoType.q) {
-      case DemoType.sudoku:
-        break;
-      case DemoType.fifthteenPuzzle:
-      case DemoType.othello:
-      case DemoType.chat:
-      case DemoType.tts:
-      case DemoType.world:
-        return;
-    }
-
-    qq;
-
-    HF.wait(1000).then((_) {
-      final loaded = P.rwkv.loaded.q;
-      qr;
-      if (!loaded) {
-        P.fileManager.modelSelectorShown.q = true;
-      }
-    });
-
-    final directory = await getApplicationDocumentsDirectory();
-    final filePath = '${directory.path}/output_log.txt';
-    final file = File(filePath);
-
-    // 先清除文件内容
-    await file.writeAsString('', mode: FileMode.write);
-
-    // 然后再以追加模式打开文件流
-    _fileSink = file.openWrite(mode: FileMode.append);
-    _file = file;
-
-    clear();
-    _loadDefaultPuzzle();
-  }
-
-  void parseStack() {
+  void _parseStack() {
     final events = _tempStackEvents;
     List<(int, int)> stack = events.where((e) {
       final token = e.$1;
@@ -347,7 +306,7 @@ extension _$Sudoku on _Sudoku {
     currentStack.u(stack);
   }
 
-  void qparseBoard() {
+  void _parseBoard() {
     final events = _tempBoardEvents;
     const gridValues = ["0 ", "1 ", "2 ", "3 ", "4 ", "5 ", "6 ", "7 ", "8 ", "9 "];
     final grids = events.map((e) => e.$2).toList().where((e) => gridValues.contains(e)).toList().map((e) => int.parse(e.replaceAll(" ", ""))).toList();
@@ -371,19 +330,157 @@ extension _$Sudoku on _Sudoku {
     }
   }
 
+  Future<void> copyToCache(String assetPath, String cachePath) async {
+    final rawAssetFile = await rootBundle.load(assetPath);
+    final bytes = rawAssetFile.buffer.asUint8List();
+    final libFile = File(cachePath);
+    await libFile.writeAsBytes(bytes);
+  }
+}
+
+/// Private methods
+extension _$Sudoku on _Sudoku {
+  FV _init() async {
+    switch (P.app.demoType.q) {
+      case DemoType.sudoku:
+        break;
+      case DemoType.fifthteenPuzzle:
+      case DemoType.othello:
+      case DemoType.chat:
+      case DemoType.tts:
+      case DemoType.world:
+        return;
+    }
+
+    qq;
+
+    HF.wait(2000).then((_) {
+      if (!P.fileManager.modelSelectorShown.q) {
+        ModelSelector.show();
+      }
+    });
+
+    final directory = await getApplicationDocumentsDirectory();
+    final filePath = '${directory.path}/output_log.txt';
+    final file = File(filePath);
+
+    // 先清除文件内容
+    await file.writeAsString('', mode: FileMode.write);
+
+    // 然后再以追加模式打开文件流
+    _fileSink = file.openWrite(mode: FileMode.append);
+    _file = file;
+
+    clear();
+    _loadDefaultPuzzle();
+
+    P.rwkv.broadcastStream.listen(_onStreamEvent, onDone: _onStreamDone, onError: _onStreamError);
+  }
+
+  void _onStreamEvent(from_rwkv.FromRWKV event) {
+    switch (event) {
+      case from_rwkv.StreamResponse res:
+        _handleStreamResponse(res);
+      default:
+        break;
+    }
+  }
+
+  void _handleStreamResponse(from_rwkv.StreamResponse res) {
+    final decoded = res.streamResponse;
+    final output = res.streamResponseToken;
+    final prefillSpeed = res.prefillSpeed;
+    final decodeSpeed = res.decodeSpeed;
+
+    if (output == _Sudoku.tokenStop) {
+      _closeFileSink();
+
+      running.u(false);
+
+      HF.wait(1000).then((_) {
+        logs.u([...logs.v, "✅ stop token got\n\n\n"]);
+        final c = scrollController;
+        c.animateTo(
+          c.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 50),
+          curve: Curves.linear,
+        );
+      });
+
+      return;
+    }
+
+    _fileSink.write(decoded);
+
+    if (decoded == '\n') {
+      logs.u([...logs.v, _Sudoku.merged]);
+      _Sudoku.merged = '';
+      final c = scrollController;
+      c.animateTo(
+        c.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 1),
+        curve: Curves.linear,
+      );
+      return;
+    } else {
+      _Sudoku.merged += decoded;
+    }
+
+    final isBoardStart = output == 108;
+    final isBoardEnd = output == 109;
+
+    final isStackStart = output == 110;
+    final isStackEnd = output == 111;
+
+    if (isBoardStart) {
+      _recordingTagBoard = true;
+      _tempBoardEvents.clear();
+      return;
+    }
+
+    if (isBoardEnd) {
+      _recordingTagBoard = false;
+      _parseBoard();
+      _tempBoardEvents.clear();
+      return;
+    }
+
+    if (isStackStart) {
+      _recordingTagStack = true;
+      _tempStackEvents.clear();
+      return;
+    }
+
+    if (isStackEnd) {
+      _recordingTagStack = false;
+      _parseStack();
+      _tempStackEvents.clear();
+      return;
+    }
+
+    if (_recordingTagBoard) {
+      _tempBoardEvents.add((output, decoded));
+    }
+
+    if (_recordingTagStack) {
+      _tempStackEvents.add((output, decoded));
+    }
+  }
+
+  void _onStreamDone() {
+    qq;
+  }
+
+  void _onStreamError(dynamic error, StackTrace stackTrace) {
+    qq;
+  }
+
   String _genPrompt(func_sudoku.SudokuGrid grid) {
     final newPrompt = '''<input>
 ${grid.map((row) => row.join(' ') + " \n").join("")}</input>
 
 ''';
     return newPrompt;
-  }
-
-  Future<void> copyToCache(String assetPath, String cachePath) async {
-    final rawAssetFile = await rootBundle.load(assetPath);
-    final bytes = rawAssetFile.buffer.asUint8List();
-    final libFile = File(cachePath);
-    await libFile.writeAsBytes(bytes);
   }
 
   void _loadDefaultPuzzle() {

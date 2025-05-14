@@ -35,25 +35,22 @@ class PageSudoku extends ConsumerWidget {
     final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
     final padding = MediaQuery.of(context).padding;
 
-    return Pager(
-      drawer: const Menu(),
-      child: Scaffold(
-        backgroundColor: kW,
-        body: isPortrait
-            ? Co(
-                children: [
-                  padding.top.h,
-                  const _UI(),
-                  const Exp(child: Terminal()),
-                ],
-              )
-            : const Ro(
-                children: [
-                  Exp(child: Terminal()),
-                  _UI(),
-                ],
-              ),
-      ),
+    return Scaffold(
+      backgroundColor: kW,
+      body: isPortrait
+          ? Co(
+              children: [
+                padding.top.h,
+                const _UI(),
+                const Exp(child: _Terminal()),
+              ],
+            )
+          : const Ro(
+              children: [
+                Exp(child: _Terminal()),
+                _UI(),
+              ],
+            ),
     );
   }
 }
@@ -491,7 +488,7 @@ class _TokensInfo extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tokenCount = ref.watch(P.sudoku.tokensCount);
-    final tokensPerSecond = ref.watch(P.sudoku.tokensPerSecond);
+    final tokensPerSecond = ref.watch(P.rwkv.decodeSpeed);
     final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -577,10 +574,8 @@ class _Grid extends ConsumerWidget {
   }
 }
 
-class Terminal extends ConsumerWidget {
-  const Terminal({super.key});
-
-  static final scrollController = ScrollController();
+class _Terminal extends ConsumerWidget {
+  const _Terminal({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -592,7 +587,7 @@ class Terminal extends ConsumerWidget {
       child: C(
         decoration: const BD(color: _kGridBGColor),
         child: ListView.builder(
-          controller: scrollController,
+          controller: P.sudoku.scrollController,
           padding: EI.o(
             t: !isPortrait ? padding.top + 8 : 8,
             l: isDesktop ? 16 : 8,

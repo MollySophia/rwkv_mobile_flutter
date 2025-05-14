@@ -6,6 +6,7 @@ import 'package:halo_state/halo_state.dart';
 import 'package:zone/config.dart';
 import 'package:zone/func/gb_display.dart';
 import 'package:zone/gen/l10n.dart';
+import 'package:zone/model/demo_type.dart';
 import 'package:zone/model/file_info.dart';
 import 'package:zone/route/method.dart';
 import 'package:zone/route/router.dart';
@@ -23,6 +24,38 @@ class ModelItem extends ConsumerWidget {
   void _onStartTap() async {
     qq;
 
+    switch (P.app.demoType.q) {
+      case DemoType.sudoku:
+        await _onStartTapInSudoku();
+      case DemoType.chat:
+      case DemoType.fifthteenPuzzle:
+      case DemoType.othello:
+      case DemoType.tts:
+      case DemoType.world:
+        await _onStartTapInChat();
+    }
+  }
+
+  FV _onStartTapInSudoku() async {
+    qq;
+    final localFile = P.fileManager.locals(fileInfo).q;
+    final modelPath = localFile.targetPath;
+    final backend = fileInfo.backend;
+
+    try {
+      P.rwkv.clearStates();
+      await P.rwkv.loadSudoku(modelPath: modelPath, backend: backend!);
+    } catch (e) {
+      Alert.error(e.toString());
+    }
+
+    P.rwkv.currentModel.q = fileInfo;
+    Alert.success(S.current.you_can_now_start_to_chat_with_rwkv);
+    pop();
+  }
+
+  FV _onStartTapInChat() async {
+    qq;
     if (P.chat.receivingTokens.q) {
       Alert.warning("Please wait for the model to generate");
       return;

@@ -312,7 +312,19 @@ class RWKVMobile {
             final prefillSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime);
             final decodeSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime);
             responseStr += stream.cast<Utf8>().toDartString();
-            sendPort.send({'streamResponse': stream.cast<Utf8>().toDartString(), 'streamResponseToken': idx, 'prefillSpeed': prefillSpeed, 'decodeSpeed': decodeSpeed});
+            sendPort.send({
+              'streamResponse': stream.cast<Utf8>().toDartString(),
+              'streamResponseToken': idx,
+              'prefillSpeed': prefillSpeed,
+              'decodeSpeed': decodeSpeed,
+            });
+            sendPort.send(StreamResponse(
+              streamResponse: stream.cast<Utf8>().toDartString(),
+              streamResponseToken: idx,
+              prefillSpeed: prefillSpeed,
+              decodeSpeed: decodeSpeed,
+              toRWKV: req,
+            ));
           }
 
           final nativeCallable = ffi.NativeCallable<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int)>.isolateLocal(callbackFunction);

@@ -184,19 +184,6 @@ extension _$TTS on _TTS {
         qqq(res.perWavProgress);
         qqq(res.overallProgress);
         break;
-      case from_rwkv.CurrentPrompt res:
-      case from_rwkv.EnableReasoning res:
-      case from_rwkv.Error res:
-      case from_rwkv.GenerateStart res:
-      case from_rwkv.GenerateStop res:
-      case from_rwkv.InitRuntimeDone res:
-      case from_rwkv.ResponseBufferContent res:
-      case from_rwkv.SamplerParams res:
-      case from_rwkv.Speed res:
-      case from_rwkv.SpksNames res:
-      case from_rwkv.StreamResponse res:
-      case from_rwkv.TTSCFMSteps res:
-        break;
       case from_rwkv.TTSGenerationProgress res:
         qqq("overallProgress: ${res.overallProgress}");
         qqq("perWavProgress: ${res.perWavProgress}");
@@ -204,6 +191,8 @@ extension _$TTS on _TTS {
         qqq(res);
       case from_rwkv.TTSOutputFileList res:
         qqq(res.outputFileList);
+      default:
+        break;
     }
   }
 
