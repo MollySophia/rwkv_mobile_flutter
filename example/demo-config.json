@@ -575,7 +575,7 @@
         "fileName": "CosyVoice2-0.5B-RWKV-7-1.5B-Instruct-CHENJPKO-q4_k_m.gguf",
         "fileSize": 1009165600,
         "quantization": "q4_k_m",
-        "platforms": ["android", "ios"],
+        "platforms": ["android", "ios", "macos", "windows", "linux"],
         "backends": ["llamacpp"],
         "tags": ["core"]
       },
@@ -587,7 +587,7 @@
         "fileSize": 14464468,
         "sha256": "9c8d56d8b37dbd7478951bccd6d04c56f5615e3f027bbe0bc7f42f6e0770fa12",
         "quantization": "",
-        "platforms": ["android", "ios"],
+        "platforms": ["android", "ios", "macos", "windows", "linux"],
         "backends": ["mnn"],
         "tags": ["campplus"]
       },
@@ -599,7 +599,7 @@
         "fileSize": 144510776,
         "sha256": "a87e01ef202ed7e6909aa927af822fc60f7d82cd4a5b724c9f10388b439787c4",
         "quantization": "fp16",
-        "platforms": ["android", "ios"],
+        "platforms": ["android", "ios", "macos", "windows", "linux"],
         "backends": ["mnn"],
         "tags": ["flow.decoder.estimator"]
       },
@@ -611,7 +611,7 @@
         "fileSize": 93237060,
         "sha256": "fb889f7174fe559b0bdeb974b68c79de7ee92d65a9924cfe8fb92c13d88f8085",
         "quantization": "fp16",
-        "platforms": ["android", "ios"],
+        "platforms": ["android", "ios", "macos", "windows", "linux"],
         "backends": ["mnn"],
         "tags": ["flow.encoder"]
       },
@@ -623,7 +623,7 @@
         "fileSize": 41805964,
         "sha256": "98d228ae0e7891cc2894c5965b30a682d8ccf0af1e16549cd3492e39600ad92b",
         "quantization": "",
-        "platforms": ["android", "ios"],
+        "platforms": ["android", "ios", "macos", "windows", "linux"],
         "backends": ["mnn"],
         "tags": ["hift"]
       },
@@ -635,7 +635,7 @@
         "fileSize": 496189792,
         "sha256": "d86ab5efd3d2d9e8f4df20b592eb5709658411ce4ce77d03e2ec0ab0272842ca",
         "quantization": "",
-        "platforms": ["android", "ios"],
+        "platforms": ["android", "ios", "macos", "windows", "linux"],
         "backends": ["mnn"],
         "tags": ["speech.tokenizer"]
       }
