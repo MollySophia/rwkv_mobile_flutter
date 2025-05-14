@@ -391,6 +391,7 @@ extension $RWKVLoad on _RWKV {
 
     final tokenizerPath = await fromAssetsToTemp("assets/config/sudoku/b_sudoku_vocab.txt");
 
+    await _ensureQNNCopied();
     final rootIsolateToken = RootIsolateToken.instance;
 
     if (_sendPort != null) {

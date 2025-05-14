@@ -316,7 +316,7 @@ class RWKVMobile {
             final decodeSpeed = showQuerySpeed ? rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime) : -1.0;
             final source = stream.cast<Utf8>().toDartString();
             final newText = cppNewText.cast<Utf8>().toDartString();
-            responseStr += source;
+            responseStr = source;
 
             // TODO: @wangce 移除该调用
             sendPort.send({
