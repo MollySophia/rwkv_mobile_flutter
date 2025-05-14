@@ -59,7 +59,7 @@ extension $Sudoku on _Sudoku {
   }
 
   FV onGeneratePressed(BuildContext context) async {
-    final _running = running.v;
+    final _running = running.q;
     if (_running) {
       await showOkAlertDialog(
         context: context,
@@ -136,7 +136,11 @@ extension $Sudoku on _Sudoku {
     func_sudoku.SudokuGrid grid = staticData.q;
     final prompt = _genPrompt(grid);
     P.rwkv.send(to_rwkv.ClearStates());
-    P.rwkv.send(to_rwkv.Generate(prompt));
+    P.rwkv.send(to_rwkv.Generate(
+      prompt,
+      decodeStream: false,
+      wantRawJSON: false,
+    ));
   }
 
   void clear() {
@@ -161,7 +165,7 @@ extension $Sudoku on _Sudoku {
 
   void onGridPressed(BuildContext context, int col, int row) async {
     if (kDebugMode) print("💬 onGridPressed: $col, $row");
-    final _running = running.v;
+    final _running = running.q;
     if (_running) {
       await showOkAlertDialog(
         context: context,
@@ -171,7 +175,7 @@ extension $Sudoku on _Sudoku {
       return;
     }
 
-    final currentPuzzle = staticData.v;
+    final currentPuzzle = staticData.q;
     final currentValue = currentPuzzle[row][col];
 
     final value = await showTextInputDialog(
@@ -225,7 +229,7 @@ extension $Sudoku on _Sudoku {
   }
 
   void onClearPressed(BuildContext context) async {
-    final _running = running.v;
+    final _running = running.q;
     if (_running) {
       await showOkAlertDialog(
         context: context,
@@ -238,7 +242,7 @@ extension $Sudoku on _Sudoku {
   }
 
   void onToggleShowStack(BuildContext context) {
-    showStack.q = !showStack.v;
+    showStack.q = !showStack.q;
   }
 
   void loadHardestSudoku() {
@@ -317,8 +321,8 @@ extension $Sudoku on _Sudoku {
     final grid = func_sudoku.genFromList(grids);
     dynamicData.q = grid;
     if (kDebugMode) {
-      final staticData = this.staticData.v;
-      final dynamicData = this.dynamicData.v;
+      final staticData = this.staticData.q;
+      final dynamicData = this.dynamicData.q;
       for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
           final staticValue = staticData[i][j];
@@ -396,7 +400,7 @@ extension _$Sudoku on _Sudoku {
 
     _hiddenCounter += 1;
 
-    if (_random.nextDouble() * 100 <= 1) {
+    if (_random.nextDouble() * 100 <= 3) {
       tokensCount.q = _hiddenCounter;
     }
 
@@ -408,11 +412,11 @@ extension _$Sudoku on _Sudoku {
       HF.wait(1000).then((_) {
         logs.q = [...logs.q, "✅ stop token got\n\n\n"];
         final c = scrollController;
-        // c.animateTo(
-        //   c.position.maxScrollExtent,
-        //   duration: const Duration(milliseconds: 50),
-        //   curve: Curves.linear,
-        // );
+        c.animateTo(
+          c.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 50),
+          curve: Curves.linear,
+        );
       });
 
       return;
@@ -424,11 +428,11 @@ extension _$Sudoku on _Sudoku {
       logs.q = [...logs.q, _Sudoku.merged];
       _Sudoku.merged = '';
       final c = scrollController;
-      // c.animateTo(
-      //   c.position.maxScrollExtent,
-      //   duration: const Duration(milliseconds: 1),
-      //   curve: Curves.linear,
-      // );
+      c.animateTo(
+        c.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 1),
+        curve: Curves.linear,
+      );
       return;
     }
 

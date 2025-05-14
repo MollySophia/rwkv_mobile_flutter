@@ -309,32 +309,49 @@ class RWKVMobile {
           final promptPtr = req.prompt.toNativeUtf8().cast<ffi.Char>();
           String responseStr = req.prompt;
           final randon = Random();
+          final wantRawJSON = req.wantRawJSON;
+          final decodeStream = req.decodeStream;
 
-          callbackFunction(ffi.Pointer<ffi.Char> stream, int idx, ffi.Pointer<ffi.Char> cppNewText) {
-            final showQuerySpeed = randon.nextDouble() * 100 <= 1;
+          callbackFunction(ffi.Pointer<ffi.Char> cppStream, int idx, ffi.Pointer<ffi.Char> cppNewText) {
+            // final start = DateTime.now().microsecondsSinceEpoch;
+            final showQuerySpeed = (randon.nextDouble() * 100) <= 3;
             final prefillSpeed = showQuerySpeed ? rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime) : -1.0;
             final decodeSpeed = showQuerySpeed ? rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime) : -1.0;
-            final source = stream.cast<Utf8>().toDartString();
+
             final newText = cppNewText.cast<Utf8>().toDartString();
-            responseStr = source;
+
+            late final String stream;
+
+            if (decodeStream) {
+              stream = cppStream.cast<Utf8>().toDartString();
+              responseStr = stream;
+            } else {
+              stream = "";
+            }
 
             // TODO: @wangce 移除该调用
-            sendPort.send({
-              'streamResponse': source,
-              'streamResponseToken': idx,
-              'streamResponseNewText': newText,
-              'prefillSpeed': prefillSpeed,
-              'decodeSpeed': decodeSpeed,
-            });
+            if (wantRawJSON) {
+              sendPort.send({
+                'streamResponse': stream,
+                'streamResponseToken': idx,
+                'streamResponseNewText': newText,
+                'prefillSpeed': prefillSpeed,
+                'decodeSpeed': decodeSpeed,
+              });
+            }
 
             sendPort.send(StreamResponse(
-              streamResponse: source,
+              streamResponse: stream,
               streamResponseToken: idx,
               streamResponseNewText: newText,
               prefillSpeed: prefillSpeed,
               decodeSpeed: decodeSpeed,
               toRWKV: req,
             ));
+
+            // final end = DateTime.now().microsecondsSinceEpoch;
+            // final duration = end - start;
+            // if (kDebugMode) print("🔥 duration: $duration");
           }
 
           final nativeCallable = ffi.NativeCallable<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int, ffi.Pointer<ffi.Char>)>.isolateLocal(callbackFunction);

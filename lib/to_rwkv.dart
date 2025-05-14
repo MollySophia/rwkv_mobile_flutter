@@ -28,8 +28,10 @@ class GenerateAsync extends ToRWKV {
 
 class Generate extends ToRWKV {
   final String prompt;
+  final bool decodeStream;
+  final bool wantRawJSON;
 
-  Generate(this.prompt);
+  Generate(this.prompt, {this.decodeStream = true, this.wantRawJSON = true});
 
   static const responseType = StreamResponse;
 }

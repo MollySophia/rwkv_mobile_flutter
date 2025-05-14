@@ -377,7 +377,6 @@ class _Sudoku extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (kDebugMode) return C();
     final isDesktop = ref.watch(P.app.isDesktop);
     final double magnification = isDesktop ? 4 : 1;
     return C(
@@ -398,7 +397,6 @@ class _Board extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (kDebugMode) return C();
     final staticData = ref.watch(P.sudoku.staticData);
     final dynamicData = ref.watch(P.sudoku.dynamicData);
     final isDesktop = ref.watch(P.app.isDesktop);
@@ -602,7 +600,6 @@ class _Terminal extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (kDebugMode) return C();
     final logs = ref.watch(P.sudoku.logs);
     final padding = MediaQuery.of(context).padding;
     final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
