@@ -232,7 +232,7 @@ extension $TTS on _TTS {
   FV getTTSSpkNames() async {
     qq;
     try {
-      final data = await rootBundle.loadString("assets/lib/tts/pairs.json");
+      final data = await rootBundle.loadString("assets/lib/sudoku/pairs.json");
       final spkPairs = await compute(_parseSpkNames, data);
       this.spkPairs.q = spkPairs;
     } catch (e) {
@@ -314,7 +314,7 @@ extension $TTS on _TTS {
   Future<String> getPrebuiltSpkAudioPathFromTemp(String spkName) async {
     qq;
     final fileName = "$spkName.wav";
-    final path = "assets/lib/tts/$fileName";
+    final path = "assets/lib/sudoku/$fileName";
     final localPath = await fromAssetsToTemp(path);
     return localPath;
   }
@@ -322,7 +322,7 @@ extension $TTS on _TTS {
   Future<String> getPromptSpeechText(String spkName) async {
     qq;
     final fileName = "$spkName.json";
-    final data = await rootBundle.loadString("assets/lib/tts/$fileName");
+    final data = await rootBundle.loadString("assets/lib/sudoku/$fileName");
     final json = HF.json(jsonDecode(data));
     return json["transcription"];
   }
@@ -469,7 +469,7 @@ outputWavPath: $outputWavPath""");
   FV setTTSCFMSteps(int steps) async {
     qq;
     cfmSteps.q = steps;
-    P.rwkv.send(to_rwkv.SetTTSCFMSteps(cfmSteps: steps));
+    P.rwkv.send(to_rwkv.SetTTSCFMSteps(steps));
     final prefs = await SharedPreferences.getInstance();
     prefs.setInt(_TTSStatic._cfmStepsKey, steps);
   }

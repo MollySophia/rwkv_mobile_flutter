@@ -23,13 +23,13 @@ class DumpLog extends ToRWKV {}
 class GenerateAsync extends ToRWKV {
   final String prompt;
 
-  GenerateAsync({required this.prompt});
+  GenerateAsync(this.prompt);
 }
 
 class Generate extends ToRWKV {
   final String prompt;
 
-  Generate({required this.prompt});
+  Generate(this.prompt);
 }
 
 class GetEnableReasoning extends ToRWKV {}
@@ -89,19 +89,19 @@ class LoadTTSModels extends ToRWKV {
 class LoadTTSTextNormalizer extends ToRWKV {
   final String fstPath;
 
-  LoadTTSTextNormalizer({required this.fstPath});
+  LoadTTSTextNormalizer(this.fstPath);
 }
 
 class LoadVisionEncoder extends ToRWKV {
   final String encoderPath;
 
-  LoadVisionEncoder({required this.encoderPath});
+  LoadVisionEncoder(this.encoderPath);
 }
 
 class LoadWhisperEncoder extends ToRWKV {
   final String encoderPath;
 
-  LoadWhisperEncoder({required this.encoderPath});
+  LoadWhisperEncoder(this.encoderPath);
 }
 
 class ReleaseModel extends ToRWKV {}
@@ -115,7 +115,7 @@ class ReleaseWhisperEncoder extends ToRWKV {}
 class ChatAsync extends ToRWKV {
   final List<String> messages;
 
-  ChatAsync({required this.messages});
+  ChatAsync(this.messages);
 }
 
 @Deprecated("use RequestRunTTSAsync instead")
@@ -147,42 +147,42 @@ class StartTTS extends ToRWKV {
 class SetAudioPrompt extends ToRWKV {
   final String audioPathPtr;
 
-  SetAudioPrompt({required this.audioPathPtr});
+  SetAudioPrompt(this.audioPathPtr);
 }
 
 class SetBosToken extends ToRWKV {
   final String bosToken;
 
-  SetBosToken({required this.bosToken});
+  SetBosToken(this.bosToken);
 }
 
 class SetEnableReasoning extends ToRWKV {
   final bool enableReasoning;
-  SetEnableReasoning({required this.enableReasoning});
+  SetEnableReasoning(this.enableReasoning);
 }
 
 class SetEosToken extends ToRWKV {
   final String eosToken;
 
-  SetEosToken({required this.eosToken});
+  SetEosToken(this.eosToken);
 }
 
 class SetGenerationStopToken extends ToRWKV {
   final int stopToken;
 
-  SetGenerationStopToken({required this.stopToken});
+  SetGenerationStopToken(this.stopToken);
 }
 
 class SetMaxLength extends ToRWKV {
   final int maxLength;
 
-  SetMaxLength({required this.maxLength});
+  SetMaxLength(this.maxLength);
 }
 
 class SetPrompt extends ToRWKV {
   final String prompt;
 
-  SetPrompt({required this.prompt});
+  SetPrompt(this.prompt);
 }
 
 class SetSamplerParams extends ToRWKV {
@@ -211,31 +211,31 @@ class SetSamplerParams extends ToRWKV {
 class SetTTSCFMSteps extends ToRWKV {
   final int cfmSteps;
 
-  SetTTSCFMSteps({required this.cfmSteps});
+  SetTTSCFMSteps(this.cfmSteps);
 }
 
 class SetThinkingToken extends ToRWKV {
   final String thinkingToken;
 
-  SetThinkingToken({required this.thinkingToken});
+  SetThinkingToken(this.thinkingToken);
 }
 
 class SetTokenBanned extends ToRWKV {
   final List<int> tokenBanned;
 
-  SetTokenBanned({required this.tokenBanned});
+  SetTokenBanned(this.tokenBanned);
 }
 
 class SetUserRole extends ToRWKV {
   final String userRole;
 
-  SetUserRole({required this.userRole});
+  SetUserRole(this.userRole);
 }
 
 class SetVisionPrompt extends ToRWKV {
   final String imagePathPtr;
 
-  SetVisionPrompt({required this.imagePathPtr});
+  SetVisionPrompt(this.imagePathPtr);
 }
 
 /// stop之后responseBufferContent还保留着，然后resume之后responseBufferContent会先短暂清空，然后变成stop前已经生成了的内容并接着生成

@@ -1,4 +1,4 @@
-package com.rwkv.tts
+package com.rwkv.sudoku
 
 import io.flutter.embedding.android.FlutterActivity
 

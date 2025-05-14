@@ -84,7 +84,7 @@ class _RWKV {
 /// Public methods
 extension $RWKV on _RWKV {
   FV setAudioPrompt({required String path}) async {
-    send(to_rwkv.SetAudioPrompt(audioPathPtr: path));
+    send(to_rwkv.SetAudioPrompt(path));
   }
 
   FV sendMessages(List<String> messages) async {
@@ -108,7 +108,7 @@ extension $RWKV on _RWKV {
       return;
     }
 
-    send(to_rwkv.ChatAsync(messages: messages));
+    send(to_rwkv.ChatAsync(messages));
 
     if (_getTokensTimer != null) {
       _getTokensTimer!.cancel();
@@ -129,7 +129,7 @@ extension $RWKV on _RWKV {
       qqw("sendPort is null");
       return;
     }
-    send(to_rwkv.Generate(prompt: prompt));
+    send(to_rwkv.Generate(prompt));
 
     if (_getTokensTimer != null) {
       _getTokensTimer!.cancel();
@@ -145,7 +145,7 @@ extension $RWKV on _RWKV {
   }
 
   FV setImagePath({required String path}) async {
-    send(to_rwkv.SetVisionPrompt(imagePathPtr: path));
+    send(to_rwkv.SetVisionPrompt(path));
   }
 
   FV clearStates() async {
@@ -252,9 +252,9 @@ extension $RWKV on _RWKV {
 
     if (setPrompt) qqq("setPrompt: $finalPrompt");
 
-    send(to_rwkv.SetEnableReasoning(enableReasoning: _usingReasoningModel.q));
-    if (setPrompt) send(to_rwkv.SetPrompt(prompt: _usingReasoningModel.q ? "<EOD>" : finalPrompt));
-    send(to_rwkv.SetThinkingToken(thinkingToken: _preferChinese.q ? "<think>嗯" : "<think"));
+    send(to_rwkv.SetEnableReasoning(_usingReasoningModel.q));
+    if (setPrompt) send(to_rwkv.SetPrompt(_usingReasoningModel.q ? "<EOD>" : finalPrompt));
+    send(to_rwkv.SetThinkingToken(_preferChinese.q ? "<think>嗯" : "<think"));
   }
 
   FV loadWorldVision({
@@ -268,7 +268,7 @@ extension $RWKV on _RWKV {
     prefillSpeed.q = 0;
     decodeSpeed.q = 0;
 
-    final tokenizerPath = await fromAssetsToTemp("assets/config/tts/b_rwkv_vocab_v20230424.txt");
+    final tokenizerPath = await fromAssetsToTemp("assets/config/sudoku/b_rwkv_vocab_v20230424.txt");
 
     final rootIsolateToken = RootIsolateToken.instance;
 
@@ -302,7 +302,7 @@ extension $RWKV on _RWKV {
       await Future.delayed(const Duration(milliseconds: 50));
     }
 
-    send(to_rwkv.LoadVisionEncoder(encoderPath: encoderPath));
+    send(to_rwkv.LoadVisionEncoder(encoderPath));
     await setModelConfig(
       usingReasoningModel: usingReasoningModel,
       preferChinese: false,
@@ -310,9 +310,9 @@ extension $RWKV on _RWKV {
     );
     await resetSamplerParams(usingReasoningModel: usingReasoningModel);
     await resetMaxLength(usingReasoningModel: usingReasoningModel);
-    send(to_rwkv.SetEosToken(eosToken: "\x17"));
-    send(to_rwkv.SetBosToken(bosToken: "\x16"));
-    send(to_rwkv.SetTokenBanned(tokenBanned: [0]));
+    send(to_rwkv.SetEosToken("\x17"));
+    send(to_rwkv.SetBosToken("\x16"));
+    send(to_rwkv.SetTokenBanned([0]));
     _loading.q = false;
   }
 
@@ -326,7 +326,7 @@ extension $RWKV on _RWKV {
     prefillSpeed.q = 0;
     decodeSpeed.q = 0;
 
-    final tokenizerPath = await fromAssetsToTemp("assets/config/tts/b_rwkv_vocab_v20230424.txt");
+    final tokenizerPath = await fromAssetsToTemp("assets/config/sudoku/b_rwkv_vocab_v20230424.txt");
 
     final rootIsolateToken = RootIsolateToken.instance;
 
@@ -353,7 +353,7 @@ extension $RWKV on _RWKV {
       await Future.delayed(const Duration(milliseconds: 50));
     }
 
-    send(to_rwkv.LoadWhisperEncoder(encoderPath: encoderPath));
+    send(to_rwkv.LoadWhisperEncoder(encoderPath));
     await setModelConfig(
       usingReasoningModel: false,
       preferChinese: false,
@@ -361,10 +361,10 @@ extension $RWKV on _RWKV {
     );
     await resetSamplerParams(usingReasoningModel: false);
     await resetMaxLength(usingReasoningModel: false);
-    send(to_rwkv.SetEosToken(eosToken: "\x17"));
-    send(to_rwkv.SetBosToken(bosToken: "\x16"));
-    send(to_rwkv.SetTokenBanned(tokenBanned: [0]));
-    send(to_rwkv.SetUserRole(userRole: ""));
+    send(to_rwkv.SetEosToken("\x17"));
+    send(to_rwkv.SetBosToken("\x16"));
+    send(to_rwkv.SetTokenBanned([0]));
+    send(to_rwkv.SetUserRole(""));
     _loading.q = false;
   }
 
@@ -383,7 +383,7 @@ extension $RWKV on _RWKV {
     prefillSpeed.q = 0;
     decodeSpeed.q = 0;
 
-    final tokenizerPath = await fromAssetsToTemp("assets/config/tts/b_rwkv_vocab_v20230424.txt");
+    final tokenizerPath = await fromAssetsToTemp("assets/config/sudoku/b_rwkv_vocab_v20230424.txt");
 
     await _ensureQNNCopied();
 
@@ -427,7 +427,7 @@ extension $RWKV on _RWKV {
       send(to_rwkv.GetPrefillAndDecodeSpeed());
     });
 
-    final ttsTokenizerPath = await fromAssetsToTemp("assets/config/tts/b_rwkv_vocab_v20230424_tts.txt");
+    final ttsTokenizerPath = await fromAssetsToTemp("assets/config/sudoku/b_rwkv_vocab_v20230424_tts.txt");
 
     send(to_rwkv.LoadTTSModels(
       campPlusPath: campPlusPath,
@@ -438,13 +438,13 @@ extension $RWKV on _RWKV {
       ttsTokenizerPath: ttsTokenizerPath,
     ));
 
-    final ttsTextNormalizerDatePath = await fromAssetsToTemp("assets/config/tts/date-zh.fst");
-    final ttsTextNormalizerNumberPath = await fromAssetsToTemp("assets/config/tts/number-zh.fst");
-    final ttsTextNormalizerPhonePath = await fromAssetsToTemp("assets/config/tts/phone-zh.fst");
+    final ttsTextNormalizerDatePath = await fromAssetsToTemp("assets/config/sudoku/date-zh.fst");
+    final ttsTextNormalizerNumberPath = await fromAssetsToTemp("assets/config/sudoku/number-zh.fst");
+    final ttsTextNormalizerPhonePath = await fromAssetsToTemp("assets/config/sudoku/phone-zh.fst");
     // note: order matters here
-    send(to_rwkv.LoadTTSTextNormalizer(fstPath: ttsTextNormalizerDatePath));
-    send(to_rwkv.LoadTTSTextNormalizer(fstPath: ttsTextNormalizerPhonePath));
-    send(to_rwkv.LoadTTSTextNormalizer(fstPath: ttsTextNormalizerNumberPath));
+    send(to_rwkv.LoadTTSTextNormalizer(ttsTextNormalizerDatePath));
+    send(to_rwkv.LoadTTSTextNormalizer(ttsTextNormalizerPhonePath));
+    send(to_rwkv.LoadTTSTextNormalizer(ttsTextNormalizerNumberPath));
 
     _loading.q = false;
   }
@@ -495,7 +495,7 @@ extension $RWKV on _RWKV {
 
   FV syncMaxLength({num? maxLength}) async {
     if (maxLength != null) arguments(Argument.maxLength).q = maxLength.toDouble();
-    send(to_rwkv.SetMaxLength(maxLength: _intIfFixedDecimalsIsZero(Argument.maxLength).toInt()));
+    send(to_rwkv.SetMaxLength(_intIfFixedDecimalsIsZero(Argument.maxLength).toInt()));
   }
 
   FV loadOthello() async {
@@ -542,7 +542,7 @@ extension $RWKV on _RWKV {
 
     P.app.demoType.q = DemoType.othello;
 
-    send(to_rwkv.SetMaxLength(maxLength: 64000));
+    send(to_rwkv.SetMaxLength(64000));
     send(to_rwkv.SetSamplerParams(
       temperature: 1.0,
       topK: 1,
@@ -551,7 +551,7 @@ extension $RWKV on _RWKV {
       frequencyPenalty: .0,
       penaltyDecay: .0,
     ));
-    send(to_rwkv.SetGenerationStopToken(stopToken: 0));
+    send(to_rwkv.SetGenerationStopToken(0));
     send(to_rwkv.ClearStates());
   }
 }
