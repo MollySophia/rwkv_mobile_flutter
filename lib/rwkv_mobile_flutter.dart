@@ -308,13 +308,14 @@ class RWKVMobile {
           final promptPtr = req.prompt.toNativeUtf8().cast<ffi.Char>();
           String responseStr = req.prompt;
 
-          callbackFunction(ffi.Pointer<ffi.Char> stream, int idx) {
+          callbackFunction(ffi.Pointer<ffi.Char> stream, int idx, ffi.Pointer<ffi.Char> new_text) {
             final prefillSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime);
             final decodeSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime);
             responseStr += stream.cast<Utf8>().toDartString();
             sendPort.send({
               'streamResponse': stream.cast<Utf8>().toDartString(),
               'streamResponseToken': idx,
+              'streamResponseNewText': new_text.cast<Utf8>().toDartString(),
               'prefillSpeed': prefillSpeed,
               'decodeSpeed': decodeSpeed,
             });
@@ -327,7 +328,7 @@ class RWKVMobile {
             ));
           }
 
-          final nativeCallable = ffi.NativeCallable<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int)>.isolateLocal(callbackFunction);
+          final nativeCallable = ffi.NativeCallable<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int, ffi.Pointer<ffi.Char>)>.isolateLocal(callbackFunction);
           sendPort.send({'generateStart': true});
           if (kDebugMode) print("🔥 Start to call LLM (gen mode), maxlength = $maxLength");
           retVal = rwkvMobile.rwkvmobile_runtime_gen_completion(runtime, promptPtr, maxLength, generationStopToken, nativeCallable.nativeFunction);
