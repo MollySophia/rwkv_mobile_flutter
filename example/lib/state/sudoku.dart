@@ -77,7 +77,7 @@ extension $Sudoku on _Sudoku {
         DialogTextField(
           hintText: S.current.difficulty,
           initialText: kDebugMode ? "40" : "10",
-          keyboardType: TextInputType.numberWithOptions(
+          keyboardType: const TextInputType.numberWithOptions(
             signed: false,
             decimal: false,
           ),

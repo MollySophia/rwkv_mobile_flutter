@@ -247,7 +247,7 @@ class _ModelSettings extends ConsumerWidget {
           children: [
             T(
               S.current.model_settings,
-              s: TS(w: FW.w700),
+              s: const TS(w: FW.w700),
             ),
             8.h,
             T(S.current.in_context_search_will_be_activated_when_both_breadth_and_depth_are_greater_than_2, s: TS(c: kB.q(.5), s: 10)),
@@ -303,7 +303,7 @@ class _Players extends ConsumerWidget {
       child: Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
-          T(S.current.black + ":", textAlign: TextAlign.center, s: TS(w: FW.w700)),
+          T(S.current.black + ":", textAlign: TextAlign.center, s: const TS(w: FW.w700)),
           Wrap(
             children: [
               Ro(
@@ -344,7 +344,7 @@ class _Players extends ConsumerWidget {
       child: Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
-          T(S.current.white + ":", textAlign: TextAlign.center, s: TS(w: FW.w700)),
+          T(S.current.white + ":", textAlign: TextAlign.center, s: const TS(w: FW.w700)),
           Wrap(
             children: [
               Ro(
@@ -395,7 +395,7 @@ class _Players extends ConsumerWidget {
           children: [
             T(
               S.current.players,
-              s: TS(w: FW.w700),
+              s: const TS(w: FW.w700),
             ),
             12.h,
             if (usePortrait && !playerShouldAtSameColumnWithSettings && !settingsAndPlayersShouldAtDifferentColumnIsHorizontal)
@@ -471,7 +471,7 @@ class _Score extends ConsumerWidget {
           : () {
               P.othello.start();
             },
-      child: T(S.current.new_game, s: TS(c: kB, s: 10, w: FW.w500)),
+      child: T(S.current.new_game, s: const TS(c: kB, s: 10, w: FW.w500)),
     );
 
     return Ro(
