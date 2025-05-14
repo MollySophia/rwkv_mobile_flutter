@@ -1046,6 +1046,151 @@ class S {
   String get clear {
     return Intl.message('Clear', name: 'clear', desc: '', args: []);
   }
+
+  /// `Set the value of grid`
+  String get set_the_value_of_grid {
+    return Intl.message(
+      'Set the value of grid',
+      name: 'set_the_value_of_grid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter a number. 0 means empty.`
+  String get please_enter_a_number_0_means_empty {
+    return Intl.message(
+      'Please enter a number. 0 means empty.',
+      name: 'please_enter_a_number_0_means_empty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid value`
+  String get invalid_value {
+    return Intl.message(
+      'Invalid value',
+      name: 'invalid_value',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Value must be between 0 and 9`
+  String get value_must_be_between_0_and_9 {
+    return Intl.message(
+      'Value must be between 0 and 9',
+      name: 'value_must_be_between_0_and_9',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid puzzle`
+  String get invalid_puzzle {
+    return Intl.message(
+      'Invalid puzzle',
+      name: 'invalid_puzzle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The puzzle is not valid`
+  String get the_puzzle_is_not_valid {
+    return Intl.message(
+      'The puzzle is not valid',
+      name: 'the_puzzle_is_not_valid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Generate a hardest Sudoku`
+  String get generate_a_hardest_sudoku {
+    return Intl.message(
+      'Generate a hardest Sudoku',
+      name: 'generate_a_hardest_sudoku',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Generate a hardest Sudoku in the world`
+  String get generate_a_hardest_sudoku_in_the_world {
+    return Intl.message(
+      'Generate a hardest Sudoku in the world',
+      name: 'generate_a_hardest_sudoku_in_the_world',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Difficulty`
+  String get difficulty {
+    return Intl.message('Difficulty', name: 'difficulty', desc: '', args: []);
+  }
+
+  /// `Can not generate`
+  String get can_not_generate {
+    return Intl.message(
+      'Can not generate',
+      name: 'can_not_generate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Difficulty must be greater than 0`
+  String get difficulty_must_be_greater_than_0 {
+    return Intl.message(
+      'Difficulty must be greater than 0',
+      name: 'difficulty_must_be_greater_than_0',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Generate random Sudoku puzzle`
+  String get generate_random_sudoku_puzzle {
+    return Intl.message(
+      'Generate random Sudoku puzzle',
+      name: 'generate_random_sudoku_puzzle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter the difficulty`
+  String get please_enter_the_difficulty {
+    return Intl.message(
+      'Please enter the difficulty',
+      name: 'please_enter_the_difficulty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Difficulty must be less than 81`
+  String get difficulty_must_be_less_than_81 {
+    return Intl.message(
+      'Difficulty must be less than 81',
+      name: 'difficulty_must_be_less_than_81',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Number`
+  String get number {
+    return Intl.message('Number', name: 'number', desc: '', args: []);
+  }
+
+  /// `OK`
+  String get ok {
+    return Intl.message('OK', name: 'ok', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

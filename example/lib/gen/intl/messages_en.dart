@@ -47,6 +47,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "bot_message_edited": MessageLookupByLibrary.simpleMessage(
       "Bot message edited, you can now send new message",
     ),
+    "can_not_generate": MessageLookupByLibrary.simpleMessage(
+      "Can not generate",
+    ),
     "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
     "cancel_download": MessageLookupByLibrary.simpleMessage("Cancel Download"),
     "cancel_update": MessageLookupByLibrary.simpleMessage("Cancel update"),
@@ -93,6 +96,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "decode": MessageLookupByLibrary.simpleMessage("Decode"),
     "delete": MessageLookupByLibrary.simpleMessage("Delete"),
     "delete_all": MessageLookupByLibrary.simpleMessage("Delete all"),
+    "difficulty": MessageLookupByLibrary.simpleMessage("Difficulty"),
+    "difficulty_must_be_greater_than_0": MessageLookupByLibrary.simpleMessage(
+      "Difficulty must be greater than 0",
+    ),
+    "difficulty_must_be_less_than_81": MessageLookupByLibrary.simpleMessage(
+      "Difficulty must be less than 81",
+    ),
     "download_missing": MessageLookupByLibrary.simpleMessage(
       "Download missing files",
     ),
@@ -116,10 +126,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "foo_bar": MessageLookupByLibrary.simpleMessage("foo bar"),
     "game_over": MessageLookupByLibrary.simpleMessage("Game over!"),
     "generate": MessageLookupByLibrary.simpleMessage("Generate"),
+    "generate_a_hardest_sudoku": MessageLookupByLibrary.simpleMessage(
+      "Generate a hardest Sudoku",
+    ),
+    "generate_a_hardest_sudoku_in_the_world":
+        MessageLookupByLibrary.simpleMessage(
+          "Generate a hardest Sudoku in the world",
+        ),
     "generate_hardest_sudoku_in_the_world":
         MessageLookupByLibrary.simpleMessage(
           "Generate Hardest Sudoku in the world",
         ),
+    "generate_random_sudoku_puzzle": MessageLookupByLibrary.simpleMessage(
+      "Generate random Sudoku puzzle",
+    ),
     "hide_stack": MessageLookupByLibrary.simpleMessage("Hide Stack"),
     "human": MessageLookupByLibrary.simpleMessage("Human"),
     "i_want_rwkv_to_say": MessageLookupByLibrary.simpleMessage(
@@ -138,6 +158,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "intro": MessageLookupByLibrary.simpleMessage(
       "Get ready to experience RWKV v7, series of compact language models with 0.1, 0.4, 1.5, 2.9 billion parameters, optimized for seamless mobile devices inference. Once loaded, it functions offline without requiring any server communication.",
     ),
+    "invalid_puzzle": MessageLookupByLibrary.simpleMessage("Invalid puzzle"),
+    "invalid_value": MessageLookupByLibrary.simpleMessage("Invalid value"),
     "its_your_turn": MessageLookupByLibrary.simpleMessage("It\'s your turn~"),
     "join_the_community": MessageLookupByLibrary.simpleMessage(
       "Join the community",
@@ -156,11 +178,19 @@ class MessageLookup extends MessageLookupByLibrary {
       "New version found",
     ),
     "no_puzzle": MessageLookupByLibrary.simpleMessage("No puzzle"),
+    "number": MessageLookupByLibrary.simpleMessage("Number"),
+    "ok": MessageLookupByLibrary.simpleMessage("OK"),
     "or_you_can_start_a_new_empty_chat": MessageLookupByLibrary.simpleMessage(
       "Or you can start a new empty chat",
     ),
     "othello_title": MessageLookupByLibrary.simpleMessage("RWKV Othello"),
     "players": MessageLookupByLibrary.simpleMessage("Players"),
+    "please_enter_a_number_0_means_empty": MessageLookupByLibrary.simpleMessage(
+      "Please enter a number. 0 means empty.",
+    ),
+    "please_enter_the_difficulty": MessageLookupByLibrary.simpleMessage(
+      "Please enter the difficulty",
+    ),
     "please_select_a_world_type": MessageLookupByLibrary.simpleMessage(
       "Please select a world type",
     ),
@@ -210,6 +240,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "session_configuration": MessageLookupByLibrary.simpleMessage(
       "Session Configuration",
     ),
+    "set_the_value_of_grid": MessageLookupByLibrary.simpleMessage(
+      "Set the value of grid",
+    ),
     "show_stack": MessageLookupByLibrary.simpleMessage("Show Stack"),
     "small": MessageLookupByLibrary.simpleMessage("Small (90%)"),
     "speed": MessageLookupByLibrary.simpleMessage("Speed:"),
@@ -222,6 +255,9 @@ class MessageLookup extends MessageLookupByLibrary {
         ),
     "start_a_new_game": MessageLookupByLibrary.simpleMessage("Start"),
     "start_to_chat": MessageLookupByLibrary.simpleMessage("Start to chat"),
+    "the_puzzle_is_not_valid": MessageLookupByLibrary.simpleMessage(
+      "The puzzle is not valid",
+    ),
     "thinking": MessageLookupByLibrary.simpleMessage("Thinking..."),
     "this_is_the_hardest_sudoku_in_the_world":
         MessageLookupByLibrary.simpleMessage(
@@ -231,6 +267,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "ultra_large": MessageLookupByLibrary.simpleMessage("Ultra large (140%)"),
     "update_now": MessageLookupByLibrary.simpleMessage("Update now"),
     "use_it_now": MessageLookupByLibrary.simpleMessage("Use it now"),
+    "value_must_be_between_0_and_9": MessageLookupByLibrary.simpleMessage(
+      "Value must be between 0 and 9",
+    ),
     "very_small": MessageLookupByLibrary.simpleMessage("Very small (80%)"),
     "voice_cloning": MessageLookupByLibrary.simpleMessage("Voice cloning"),
     "welcome_to_use_rwkv": MessageLookupByLibrary.simpleMessage(

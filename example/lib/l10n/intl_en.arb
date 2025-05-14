@@ -124,5 +124,21 @@
   "no_puzzle": "No puzzle",
   "hide_stack": "Hide Stack",
   "show_stack": "Show Stack",
-  "clear": "Clear"
+  "clear": "Clear",
+  "set_the_value_of_grid": "Set the value of grid",
+  "please_enter_a_number_0_means_empty": "Please enter a number. 0 means empty.",
+  "invalid_value": "Invalid value",
+  "value_must_be_between_0_and_9": "Value must be between 0 and 9",
+  "invalid_puzzle": "Invalid puzzle",
+  "the_puzzle_is_not_valid": "The puzzle is not valid",
+  "generate_a_hardest_sudoku": "Generate a hardest Sudoku",
+  "generate_a_hardest_sudoku_in_the_world": "Generate a hardest Sudoku in the world",
+  "difficulty": "Difficulty",
+  "can_not_generate": "Can not generate",
+  "difficulty_must_be_greater_than_0": "Difficulty must be greater than 0",
+  "generate_random_sudoku_puzzle": "Generate random Sudoku puzzle",
+  "please_enter_the_difficulty": "Please enter the difficulty",
+  "difficulty_must_be_less_than_81": "Difficulty must be less than 81",
+  "number": "Number",
+  "ok": "OK"
 }

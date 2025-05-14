@@ -61,19 +61,19 @@ extension $Sudoku on _Sudoku {
     if (_running) {
       await showOkAlertDialog(
         context: context,
-        title: "Inference is running",
-        message: "Please wait for it to finish",
+        title: S.current.inference_is_running,
+        message: S.current.please_wait_for_it_to_finish,
       );
       return;
     }
 
     final difficulty = await showTextInputDialog(
       context: context,
-      title: "Generate random Sudoku puzzle",
-      message: "Please enter the difficulty",
+      title: S.current.generate_random_sudoku_puzzle,
+      message: S.current.please_enter_the_difficulty,
       textFields: [
-        const DialogTextField(
-          hintText: "difficulty",
+         DialogTextField(
+          hintText: S.current.difficulty,
           initialText: kDebugMode ? "40" : "10",
           keyboardType: TextInputType.numberWithOptions(
             signed: false,
@@ -92,8 +92,8 @@ extension $Sudoku on _Sudoku {
       if (context.mounted) {
         await showOkAlertDialog(
           context: context,
-          title: "Can not generate",
-          message: "Difficulty must be greater than 0",
+          title: S.current.can_not_generate,
+          message: S.current.difficulty_must_be_greater_than_0,
         );
       }
       return;
@@ -103,8 +103,8 @@ extension $Sudoku on _Sudoku {
       if (context.mounted) {
         await showOkAlertDialog(
           context: context,
-          title: "Can not generate",
-          message: "Difficulty must be less than 81",
+          title: S.current.can_not_generate,
+          message: S.current.difficulty_must_be_less_than_81,
         );
       }
       return;
@@ -121,8 +121,8 @@ extension $Sudoku on _Sudoku {
     if (_running) {
       await showOkAlertDialog(
         context: context,
-        title: "Inference is running",
-        message: "Please wait for it to finish",
+        title: S.current.inference_is_running,
+        message: S.current.please_wait_for_it_to_finish,
       );
       return;
     }
@@ -161,8 +161,8 @@ extension $Sudoku on _Sudoku {
     if (_running) {
       await showOkAlertDialog(
         context: context,
-        title: "Inference is running",
-        message: "Please wait for it to finish",
+        title: S.current.inference_is_running,
+        message: S.current.please_wait_for_it_to_finish,
       );
       return;
     }
@@ -172,11 +172,11 @@ extension $Sudoku on _Sudoku {
 
     final value = await showTextInputDialog(
       context: context,
-      title: "Set the value of grid",
-      message: "Please enter a number. 0 means empty.",
+      title: S.current.set_the_value_of_grid,
+      message: S.current.please_enter_a_number_0_means_empty,
       textFields: [
         DialogTextField(
-          hintText: "number",
+          hintText: S.current.number,
           initialText: currentValue.toString(),
           keyboardType: const TextInputType.numberWithOptions(
             signed: false,
@@ -194,8 +194,8 @@ extension $Sudoku on _Sudoku {
       if (context.mounted) {
         await showOkAlertDialog(
           context: context,
-          title: "Invalid value",
-          message: "Value must be between 0 and 9",
+          title: S.current.invalid_value,
+          message: S.current.value_must_be_between_0_and_9,
         );
       }
       return;
@@ -209,8 +209,8 @@ extension $Sudoku on _Sudoku {
       if (context.mounted) {
         await showOkAlertDialog(
           context: context,
-          title: "Invalid puzzle",
-          message: "The puzzle is not valid",
+          title: S.current.invalid_puzzle,
+          message: S.current.the_puzzle_is_not_valid,
         );
       }
       return;
@@ -225,8 +225,8 @@ extension $Sudoku on _Sudoku {
     if (_running) {
       await showOkAlertDialog(
         context: context,
-        title: "Inference is running",
-        message: "Please wait for it to finish",
+        title: S.current.inference_is_running,
+        message: S.current.please_wait_for_it_to_finish,
       );
       return;
     }

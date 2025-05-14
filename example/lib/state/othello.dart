@@ -322,8 +322,8 @@ extension _$ on _Othello {
     await showOkAlertDialog(
       context: getContext()!,
       title: S.current.game_over,
-      message: "Black: $blackScore\nWhite: $whiteScore\n$winnerMessage",
-      okLabel: "OK",
+      message: "${S.current.black}: $blackScore\n${S.current.white}: $whiteScore\n$winnerMessage",
+      okLabel: S.current.ok,
     );
   }
 

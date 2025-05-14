@@ -124,5 +124,21 @@
   "no_puzzle": "没有数独",
   "hide_stack": "隐藏堆栈",
   "show_stack": "显示堆栈",
-  "clear": "清除"
+  "clear": "清除",
+  "set_the_value_of_grid": "设置网格值",
+  "please_enter_a_number_0_means_empty": "请输入一个数字。0 表示空。",
+  "invalid_value": "无效值",
+  "value_must_be_between_0_and_9": "值必须在 0 和 9 之间",
+  "invalid_puzzle": "无效数独",
+  "the_puzzle_is_not_valid": "数独无效",
+  "generate_a_hardest_sudoku": "生成一个最难的数独",
+  "generate_a_hardest_sudoku_in_the_world": "生成一个世界上最难的数独",
+  "difficulty": "难度",
+  "can_not_generate": "无法生成",
+  "difficulty_must_be_greater_than_0": "难度必须大于 0",
+  "generate_random_sudoku_puzzle": "生成随机数独",
+  "please_enter_the_difficulty": "请输入难度",
+  "difficulty_must_be_less_than_81": "难度必须小于 81",
+  "number": "数字",
+  "ok": "确定"
 }
