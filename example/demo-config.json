@@ -647,6 +647,71 @@
     "note_en": ["Improve application stability", "Fix known issues"],
     "android_url": "https://www.pgyer.com/rwkv-sudoku",
     "ios_url": "",
-    "model_config": []
+    "model_config": [
+      {
+        "name": "RWKV7 Sudoku (8 Elite)",
+        "type": "qnn",
+        "modelSize": 0.013,
+        "url": "mollysama/rwkv-mobile-models/resolve/main/demos/sudoku/sudoku_rwkv-v7-L10-D320_8elite.bin",
+        "fileName": "sudoku_rwkv-v7-L10-D320_8elite.bin",
+        "fileSize": 29890384,
+        "quantization": "fp16",
+        "platforms": ["android"],
+        "backends": ["qnn"],
+        "tags": ["npu"],
+        "socLimitations": ["8 Elite"]
+      },
+      {
+        "name": "RWKV7 Sudoku (8 Gen 3)",
+        "type": "qnn",
+        "modelSize": 0.013,
+        "url": "mollysama/rwkv-mobile-models/resolve/main/demos/sudoku/sudoku_rwkv-v7-L10-D320_8gen3.bin",
+        "fileName": "sudoku_rwkv-v7-L10-D320_8gen3.bin",
+        "fileSize": 29918992,
+        "quantization": "fp16",
+        "platforms": ["android"],
+        "backends": ["qnn"],
+        "tags": ["npu"],
+        "socLimitations": ["8 Gen 3"]
+      },
+      {
+        "name": "RWKV7 Sudoku (8 Gen 2)",
+        "type": "qnn",
+        "modelSize": 0.013,
+        "url": "mollysama/rwkv-mobile-models/resolve/main/demos/sudoku/sudoku_rwkv-v7-L10-D320_8gen2.bin",
+        "fileName": "sudoku_rwkv-v7-L10-D320_8gen2.bin",
+        "fileSize": 29923024,
+        "quantization": "fp16",
+        "platforms": ["android"],
+        "backends": ["qnn"],
+        "tags": ["npu"],
+        "socLimitations": ["8 Gen 2"]
+      },
+      {
+        "name": "RWKV7 Sudoku (8+ Gen 1)",
+        "type": "qnn",
+        "modelSize": 0.013,
+        "url": "mollysama/rwkv-mobile-models/resolve/main/demos/sudoku/sudoku_rwkv-v7-L10-D320_8plusgen1.bin",
+        "fileName": "sudoku_rwkv-v7-L10-D320_8plusgen1.bin",
+        "fileSize": 28755144,
+        "quantization": "fp16",
+        "platforms": ["android"],
+        "backends": ["qnn"],
+        "tags": ["npu"],
+        "socLimitations": ["8+ Gen 1"]
+      },
+      {
+        "name": "RWKV7 Sudoku (CPU)",
+        "type": "ncnn",
+        "modelSize": 0.013,
+        "url": "mollysama/rwkv-mobile-models/resolve/main/demos/sudoku/sudoku_rwkv_20241120_ncnn.bin",
+        "fileName": "sudoku_rwkv_20241120_ncnn.bin",
+        "fileSize": 23879004,
+        "quantization": "fp16",
+        "platforms": ["android"],
+        "backends": ["ncnn"],
+        "tags": ["cpu"]
+      }
+    ]
   }
 }
