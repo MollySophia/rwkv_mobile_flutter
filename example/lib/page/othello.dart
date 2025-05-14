@@ -39,9 +39,6 @@ class _Page extends ConsumerWidget {
     final settingsAndPlayersShouldAtDifferentColumnIsHorizontal = ref.watch(P.othello.settingsAndPlayersShouldAtDifferentColumnIsHorizontal);
     final screenWidth = ref.watch(P.app.screenWidth);
     final paddingRight = ref.watch(P.app.paddingRight);
-    final preferredLanguage = ref.watch(P.preference.preferredLanguage);
-
-    qqq("preferredLanguage: $preferredLanguage");
 
     return Scaffold(
       backgroundColor: kW,
