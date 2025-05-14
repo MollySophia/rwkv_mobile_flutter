@@ -94,16 +94,6 @@ class StreamResponse extends FromRWKV {
   });
 }
 
-class StreamResponseSudoku extends FromRWKV {
-  /// 新生成的 token
-  final int streamResponseToken;
-
-  /// 新生成的 token, decode 了之后字符串
-  final String streamResponseNewText;
-
-  StreamResponseSudoku({required this.streamResponseToken, required this.streamResponseNewText, super.toRWKV});
-}
-
 class TTSGenerationStart extends FromRWKV {
   final bool start;
 

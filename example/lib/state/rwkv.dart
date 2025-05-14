@@ -417,7 +417,7 @@ extension $RWKVLoad on _RWKV {
 
     P.app.demoType.q = DemoType.sudoku;
 
-    send(to_rwkv.SetMaxLength(64000));
+    send(to_rwkv.SetMaxLength(6000_000));
     send(to_rwkv.SetSamplerParams(
       temperature: 1.0,
       topK: 1,
@@ -714,7 +714,6 @@ extension _$RWKV on _RWKV {
     }
 
     if (message["response"] != null) {
-      qqq("Got response: ${message["response"]}");
       final responseText = message["response"].toString();
       _oldMessagesController.add(LLMEvent(
         content: responseText,
@@ -724,7 +723,6 @@ extension _$RWKV on _RWKV {
     }
 
     if (message["streamResponse"] != null) {
-      qqq("Got streamResponse: ${message["streamResponse"]}");
       final responseText = message["streamResponse"].toString();
       _oldMessagesController.add(LLMEvent(
         content: responseText,

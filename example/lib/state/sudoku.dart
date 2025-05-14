@@ -35,6 +35,8 @@ class _Sudoku {
   final List<(int, String)> _tempStackEvents = [];
 
   final tokensCount = qs<int>(0);
+  int _hiddenCounter = 0;
+  late final _random = Random();
   final widgetPosition = qs<Map<String, Offset>>(const {});
   final uiOffset = qs<Offset>(Offset.zero);
 
@@ -112,7 +114,7 @@ extension $Sudoku on _Sudoku {
 
     clear();
     final (solved, puzzle) = generate(difficulty: difficultyInt);
-    staticData.u(puzzle);
+    staticData.q = puzzle;
   }
 
   FV onInferencePressed(BuildContext context) async {
@@ -128,6 +130,7 @@ extension $Sudoku on _Sudoku {
     }
 
     tokensCount.q = 0;
+    _hiddenCounter = 0;
     running.q = true;
 
     func_sudoku.SudokuGrid grid = staticData.q;
@@ -138,11 +141,12 @@ extension $Sudoku on _Sudoku {
 
   void clear() {
     final newValue = func_sudoku.genEmpty();
-    staticData.u(func_sudoku.deepCopyList(newValue));
-    dynamicData.u(func_sudoku.deepCopyList(newValue));
-    logs.u([]);
-    tokensCount.u(0);
-    currentStack.u([]);
+    staticData.q = func_sudoku.deepCopyList(newValue);
+    dynamicData.q = func_sudoku.deepCopyList(newValue);
+    logs.q = [];
+    tokensCount.q = 0;
+    _hiddenCounter = 0;
+    currentStack.q = [];
     _recordingTagBoard = false;
     _recordingTagStack = false;
     _tempStackEvents.clear();
@@ -152,7 +156,7 @@ extension $Sudoku on _Sudoku {
     final solvedGrid = func_sudoku.genSolved();
     final difficulty = HF.randomInt(min: 1, max: 1);
     final newValue = func_sudoku.genPuzzle(solvedGrid, difficulty: difficulty);
-    staticData.u(newValue);
+    staticData.q = newValue;
   }
 
   void onGridPressed(BuildContext context, int col, int row) async {
@@ -216,7 +220,7 @@ extension $Sudoku on _Sudoku {
       return;
     }
 
-    staticData.u(newPuzzle);
+    staticData.q = newPuzzle;
     // debugger();
   }
 
@@ -234,7 +238,7 @@ extension $Sudoku on _Sudoku {
   }
 
   void onToggleShowStack(BuildContext context) {
-    showStack.u(!showStack.v);
+    showStack.q = !showStack.v;
   }
 
   void loadHardestSudoku() {
@@ -283,7 +287,7 @@ extension $Sudoku on _Sudoku {
     //   [8, 2, 3, 0, 0, 5, 0, 0, 6],
     // ];
 
-    staticData.u(puzzle);
+    staticData.q = puzzle;
   }
 
   void _parseStack() {
@@ -303,7 +307,7 @@ extension $Sudoku on _Sudoku {
       stack = stack.sublist(stack.length - _kMaxStackDepth);
     }
 
-    currentStack.u(stack);
+    currentStack.q = stack;
   }
 
   void _parseBoard() {
@@ -311,7 +315,7 @@ extension $Sudoku on _Sudoku {
     const gridValues = ["0 ", "1 ", "2 ", "3 ", "4 ", "5 ", "6 ", "7 ", "8 ", "9 "];
     final grids = events.map((e) => e.$2).toList().where((e) => gridValues.contains(e)).toList().map((e) => int.parse(e.replaceAll(" ", ""))).toList();
     final grid = func_sudoku.genFromList(grids);
-    dynamicData.u(grid);
+    dynamicData.q = grid;
     if (kDebugMode) {
       final staticData = this.staticData.v;
       final dynamicData = this.dynamicData.v;
@@ -387,10 +391,14 @@ extension _$Sudoku on _Sudoku {
   }
 
   void _handleStreamResponse(from_rwkv.StreamResponse res) {
-    qq;
     final decoded = res.streamResponseNewText;
     final output = res.streamResponseToken;
-    tokensCount.q += 1;
+
+    _hiddenCounter += 1;
+
+    if (_random.nextDouble() * 100 <= 1) {
+      tokensCount.q = _hiddenCounter;
+    }
 
     if (output == _Sudoku.tokenStop) {
       // _closeFileSink();
@@ -400,11 +408,11 @@ extension _$Sudoku on _Sudoku {
       HF.wait(1000).then((_) {
         logs.q = [...logs.q, "✅ stop token got\n\n\n"];
         final c = scrollController;
-        c.animateTo(
-          c.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 50),
-          curve: Curves.linear,
-        );
+        // c.animateTo(
+        //   c.position.maxScrollExtent,
+        //   duration: const Duration(milliseconds: 50),
+        //   curve: Curves.linear,
+        // );
       });
 
       return;
@@ -416,11 +424,11 @@ extension _$Sudoku on _Sudoku {
       logs.q = [...logs.q, _Sudoku.merged];
       _Sudoku.merged = '';
       final c = scrollController;
-      c.animateTo(
-        c.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 1),
-        curve: Curves.linear,
-      );
+      // c.animateTo(
+      //   c.position.maxScrollExtent,
+      //   duration: const Duration(milliseconds: 1),
+      //   curve: Curves.linear,
+      // );
       return;
     }
 
@@ -496,7 +504,7 @@ ${grid.map((row) => row.join(' ') + " \n").join("")}</input>
       [3, 1, 0, 8, 0, 6, 9, 0, 4],
     ];
 
-    staticData.u(defaultPuzzle);
+    staticData.q = defaultPuzzle;
   }
 
   Future<void> _closeFileSink() async {

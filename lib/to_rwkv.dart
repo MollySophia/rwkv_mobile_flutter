@@ -34,14 +34,6 @@ class Generate extends ToRWKV {
   static const responseType = StreamResponse;
 }
 
-class GenerateSudoku extends ToRWKV {
-  final String prompt;
-
-  GenerateSudoku(this.prompt);
-
-  static const responseType = StreamResponseSudoku;
-}
-
 class GetEnableReasoning extends ToRWKV {}
 
 class GetIsGenerating extends ToRWKV {}
