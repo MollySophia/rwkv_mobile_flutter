@@ -1,7 +1,7 @@
 othello:
   app_icon: assets/icon/icon.othello.png
-  bundle_id_android: com.rwkv.zone
-  bundle_id_ios: com.rwkv.othello.v7.ios
+  bundle_id_android: com.rwkv.othello
+  bundle_id_ios: com.rwkvothello.ios
   file_android_path: android/app/src/main/kotlin/com/rwkv/zone/MainActivity.kt
   app_name: RWKV Othello
   assets_config_0: assets/model/othello
@@ -76,8 +76,8 @@ app_icon:
     assets/icon/icon.tts.png,
     assets/icon/icon.sudoku.png,
   ]
-bundle_id_ios: [com.rwkv.othello.v7.ios, com.rwkv.chat.v7.100m, com.world.rwkv.ios, com.rwkvtts.ios, com.rwkvsudoku.ios]
-bundle_id_android: [com.rwkv.zone, com.rwkvzone.chat, com.worldrwkv.android, com.rwkv.tts, com.rwkv.sudoku]
+bundle_id_ios: [com.rwkvothello.ios, com.rwkv.chat.v7.100m, com.world.rwkv.ios, com.rwkvtts.ios, com.rwkvsudoku.ios]
+bundle_id_android: [com.rwkv.othello, com.rwkvzone.chat, com.worldrwkv.android, com.rwkv.tts, com.rwkv.sudoku]
 app_name: [RWKV Othello, RWKV Chat, RWKV See, RWKV Talk, RWKV Sudoku]
 file_android_path:
   [
