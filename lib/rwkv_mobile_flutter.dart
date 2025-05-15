@@ -32,7 +32,7 @@ class RWKVMobile {
     if (Platform.isAndroid) return ffi.DynamicLibrary.open('librwkv_mobile.so');
     if (Platform.isIOS) return ffi.DynamicLibrary.process();
     if (Platform.isMacOS) return ffi.DynamicLibrary.open('librwkv_mobile.dylib');
-    if (Platform.isWindows) return ffi.DynamicLibrary.open('librwkv_mobile.dll');
+    if (Platform.isWindows) return ffi.DynamicLibrary.open('rwkv_mobile.dll');
     if (Platform.isLinux) {
       final abi = ffi.Abi.current();
       if (abi == ffi.Abi.linuxX64) return ffi.DynamicLibrary.open('librwkv_mobile-linux-x86_64.so');
@@ -178,15 +178,7 @@ class RWKVMobile {
         case GetSamplerParams req:
           final samplerParams = rwkvMobile.rwkvmobile_runtime_get_sampler_params(runtime);
           final penaltyParams = rwkvMobile.rwkvmobile_runtime_get_penalty_params(runtime);
-          sendPort.send(SamplerParams(
-            temperature: samplerParams.temperature,
-            topK: samplerParams.top_k,
-            topP: samplerParams.top_p,
-            presencePenalty: penaltyParams.presence_penalty,
-            frequencyPenalty: penaltyParams.frequency_penalty,
-            penaltyDecay: penaltyParams.penalty_decay,
-            toRWKV: req,
-          ));
+          sendPort.send(SamplerParams(temperature: samplerParams.temperature, topK: samplerParams.top_k, topP: samplerParams.top_p, presencePenalty: penaltyParams.presence_penalty, frequencyPenalty: penaltyParams.frequency_penalty, penaltyDecay: penaltyParams.penalty_decay, toRWKV: req));
 
         // 🟥 setEnableReasoning
         case SetEnableReasoning req:
@@ -331,23 +323,10 @@ class RWKVMobile {
 
             // TODO: @wangce 移除该调用
             if (wantRawJSON) {
-              sendPort.send({
-                'streamResponse': stream,
-                'streamResponseToken': idx,
-                'streamResponseNewText': newText,
-                'prefillSpeed': prefillSpeed,
-                'decodeSpeed': decodeSpeed,
-              });
+              sendPort.send({'streamResponse': stream, 'streamResponseToken': idx, 'streamResponseNewText': newText, 'prefillSpeed': prefillSpeed, 'decodeSpeed': decodeSpeed});
             }
 
-            sendPort.send(StreamResponse(
-              streamResponse: stream,
-              streamResponseToken: idx,
-              streamResponseNewText: newText,
-              prefillSpeed: prefillSpeed,
-              decodeSpeed: decodeSpeed,
-              toRWKV: req,
-            ));
+            sendPort.send(StreamResponse(streamResponse: stream, streamResponseToken: idx, streamResponseNewText: newText, prefillSpeed: prefillSpeed, decodeSpeed: decodeSpeed, toRWKV: req));
 
             // final end = DateTime.now().microsecondsSinceEpoch;
             // final duration = end - start;
@@ -445,15 +424,7 @@ class RWKVMobile {
           final hiftGeneratorPath = req.hiftGeneratorPath;
           final speechTokenizerPath = req.speechTokenizerPath;
           final ttsTokenizerPath = req.ttsTokenizerPath;
-          retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_load_models(
-            runtime,
-            speechTokenizerPath.toNativeUtf8().cast<ffi.Char>(),
-            campPlusPath.toNativeUtf8().cast<ffi.Char>(),
-            flowEncoderPath.toNativeUtf8().cast<ffi.Char>(),
-            flowDecoderEstimatorPath.toNativeUtf8().cast<ffi.Char>(),
-            hiftGeneratorPath.toNativeUtf8().cast<ffi.Char>(),
-            ttsTokenizerPath.toNativeUtf8().cast<ffi.Char>(),
-          );
+          retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_load_models(runtime, speechTokenizerPath.toNativeUtf8().cast<ffi.Char>(), campPlusPath.toNativeUtf8().cast<ffi.Char>(), flowEncoderPath.toNativeUtf8().cast<ffi.Char>(), flowDecoderEstimatorPath.toNativeUtf8().cast<ffi.Char>(), hiftGeneratorPath.toNativeUtf8().cast<ffi.Char>(), ttsTokenizerPath.toNativeUtf8().cast<ffi.Char>());
           if (retVal != 0) sendPort.send(Error('Failed to load TTS models', req));
           rwkvMobile.rwkvmobile_runtime_cosyvoice_set_cfm_steps(runtime, 5);
 
@@ -479,14 +450,7 @@ class RWKVMobile {
           final promptSpeechText = req.promptSpeechText;
           final promptWavPath = req.promptWavPath;
           final outputWavPath = req.outputWavPath;
-          retVal = rwkvMobile.rwkvmobile_runtime_run_tts_async(
-            runtime,
-            ttsText.toNativeUtf8().cast<ffi.Char>(),
-            instructionText.toNativeUtf8().cast<ffi.Char>(),
-            promptSpeechText.toNativeUtf8().cast<ffi.Char>(),
-            promptWavPath.toNativeUtf8().cast<ffi.Char>(),
-            outputWavPath.toNativeUtf8().cast<ffi.Char>(),
-          );
+          retVal = rwkvMobile.rwkvmobile_runtime_run_tts_async(runtime, ttsText.toNativeUtf8().cast<ffi.Char>(), instructionText.toNativeUtf8().cast<ffi.Char>(), promptSpeechText.toNativeUtf8().cast<ffi.Char>(), promptWavPath.toNativeUtf8().cast<ffi.Char>(), outputWavPath.toNativeUtf8().cast<ffi.Char>());
 
           if (retVal != 0) sendPort.send(Error('Failed to run TTS', req));
           if (retVal != 0) break;
