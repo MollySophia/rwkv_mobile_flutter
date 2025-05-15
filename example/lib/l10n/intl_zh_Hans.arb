@@ -145,5 +145,10 @@
   "discord": "Discord",
   "twitter": "Twitter",
   "application_internal_test_group": "应用内测群",
-  "technical_research_group": "技术研发群"
+  "technical_research_group": "技术研发群",
+  "join_our_discord_server": "加入我们的 Discord 服务器",
+  "follow_us_on_twitter": "在 Twitter 上关注我们",
+  "please_load_model_first": "请先加载模型",
+  "inference_is_done": "🎉 推理完成",
+  "please_check_the_result": "请检查结果"
 }

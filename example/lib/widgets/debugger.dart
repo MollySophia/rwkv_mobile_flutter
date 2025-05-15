@@ -160,6 +160,10 @@ class _SudokuDebugger extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final paddingTop = ref.watch(P.app.paddingTop);
+    final loaded = ref.watch(P.rwkv.loaded);
+    final running = ref.watch(P.sudoku.running);
+    final page = ref.watch(Pager.page);
+    final mainPageNotIgnoring = ref.watch(Pager.mainPageNotIgnoring);
 
     return Positioned(
       left: 0,
@@ -184,6 +188,14 @@ class _SudokuDebugger extends ConsumerWidget {
                   paddingTop.h,
                   T("paddingTop".codeToName),
                   T(paddingTop.toString()),
+                  T("loaded".codeToName),
+                  T(loaded.toString()),
+                  T("running".codeToName),
+                  T(running.toString()),
+                  T("page".codeToName),
+                  T(page.toString()),
+                  T("mainPageNotIgnoring".codeToName),
+                  T(mainPageNotIgnoring.toString()),
                 ].indexMap((index, e) {
                   return C(
                     margin: EI.o(t: index % 2 == 0 ? 0 : 1),

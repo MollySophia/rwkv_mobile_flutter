@@ -136,8 +136,8 @@ class AppInfo extends ConsumerWidget {
                 ),
                 _buildCommunityLink(
                   icon: Icons.discord,
-                  title: "Discord",
-                  subtitle: "Join our Discord server",
+                  title: S.current.discord,
+                  subtitle: S.current.join_our_discord_server,
                   onTap: _openDiscord,
                 ),
                 _buildCommunityLink(

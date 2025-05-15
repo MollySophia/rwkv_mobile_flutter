@@ -1236,6 +1236,56 @@ class S {
       args: [],
     );
   }
+
+  /// `Join our Discord server`
+  String get join_our_discord_server {
+    return Intl.message(
+      'Join our Discord server',
+      name: 'join_our_discord_server',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Follow us on Twitter`
+  String get follow_us_on_twitter {
+    return Intl.message(
+      'Follow us on Twitter',
+      name: 'follow_us_on_twitter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please load model first`
+  String get please_load_model_first {
+    return Intl.message(
+      'Please load model first',
+      name: 'please_load_model_first',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `🎉 Inference is done`
+  String get inference_is_done {
+    return Intl.message(
+      '🎉 Inference is done',
+      name: 'inference_is_done',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please check the result`
+  String get please_check_the_result {
+    return Intl.message(
+      'Please check the result',
+      name: 'please_check_the_result',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -101,6 +101,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "你好，这个问题我暂时无法回答，让我们换个话题再聊聊吧。",
     ),
     "follow_system": MessageLookupByLibrary.simpleMessage("跟随系统"),
+    "follow_us_on_twitter": MessageLookupByLibrary.simpleMessage(
+      "在 Twitter 上关注我们",
+    ),
     "font_setting": MessageLookupByLibrary.simpleMessage("字体设置"),
     "font_size": MessageLookupByLibrary.simpleMessage("字体大小"),
     "font_size_default": MessageLookupByLibrary.simpleMessage("默认 (100%)"),
@@ -118,6 +121,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "imitate_target": MessageLookupByLibrary.simpleMessage("使用"),
     "in_context_search_will_be_activated_when_both_breadth_and_depth_are_greater_than_2":
         MessageLookupByLibrary.simpleMessage("当搜索深度和宽度都大于 2 时，将激活上下文搜索"),
+    "inference_is_done": MessageLookupByLibrary.simpleMessage("🎉 推理完成"),
     "inference_is_running": MessageLookupByLibrary.simpleMessage("推理中"),
     "intonations": MessageLookupByLibrary.simpleMessage("语气词"),
     "intro": MessageLookupByLibrary.simpleMessage(
@@ -126,6 +130,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "invalid_puzzle": MessageLookupByLibrary.simpleMessage("无效数独"),
     "invalid_value": MessageLookupByLibrary.simpleMessage("无效值"),
     "its_your_turn": MessageLookupByLibrary.simpleMessage("轮到你了~"),
+    "join_our_discord_server": MessageLookupByLibrary.simpleMessage(
+      "加入我们的 Discord 服务器",
+    ),
     "join_the_community": MessageLookupByLibrary.simpleMessage("加入社区"),
     "just_watch_me": MessageLookupByLibrary.simpleMessage("😎 看我表演！"),
     "large": MessageLookupByLibrary.simpleMessage("大 (120%)"),
@@ -146,12 +153,14 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "othello_title": MessageLookupByLibrary.simpleMessage("RWKV 黑白棋"),
     "players": MessageLookupByLibrary.simpleMessage("玩家"),
+    "please_check_the_result": MessageLookupByLibrary.simpleMessage("请检查结果"),
     "please_enter_a_number_0_means_empty": MessageLookupByLibrary.simpleMessage(
       "请输入一个数字。0 表示空。",
     ),
     "please_enter_the_difficulty": MessageLookupByLibrary.simpleMessage(
       "请输入难度",
     ),
+    "please_load_model_first": MessageLookupByLibrary.simpleMessage("请先加载模型"),
     "please_select_a_world_type": MessageLookupByLibrary.simpleMessage(
       "请选择 World 类型",
     ),

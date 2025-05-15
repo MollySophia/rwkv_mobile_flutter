@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gaimon/gaimon.dart';
 import 'package:halo/halo.dart';
 import 'package:halo_state/halo_state.dart';
+import 'package:zone/model/demo_type.dart';
 import 'package:zone/state/p.dart';
 
 const _toRight = 80.0;
@@ -36,7 +37,12 @@ class Pager extends ConsumerStatefulWidget {
   final Widget drawer;
   final double drawerToRight;
 
-  const Pager({super.key, required this.child, required this.drawer, this.drawerToRight = _toRight});
+  const Pager({
+    super.key,
+    required this.child,
+    required this.drawer,
+    this.drawerToRight = _toRight,
+  });
 
   @override
   ConsumerState<Pager> createState() => _PagerState();
@@ -67,10 +73,12 @@ class _PagerState extends ConsumerState<Pager> {
     final drawerToRight = widget.drawerToRight;
     final screenWidth = ref.watch(P.app.screenWidth);
     final screenHeight = ref.watch(P.app.screenHeight);
-    final paddingLeft = ref.watch(P.app.paddingLeft);
+
     if (screenWidth == 0) return const SB();
 
-    if (_controller == null) {
+    final demoType = ref.watch(P.app.demoType);
+
+    if (_controller == null || demoType == DemoType.sudoku || demoType == DemoType.fifthteenPuzzle || demoType == DemoType.othello) {
       _controller = PageController(viewportFraction: ((screenWidth - drawerToRight) / screenWidth), initialPage: 1);
       _controller!.addListener(_onPageChanged);
     }

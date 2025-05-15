@@ -128,7 +128,7 @@ class Settings extends ConsumerWidget {
           FormItem(
             icon: Icon(Icons.chat_bubble_outline, color: kB.q(.667), size: 16),
             title: S.current.discord,
-            subtitle: "Join our Discord server",
+            subtitle: S.current.join_our_discord_server,
             onTap: _openDiscord,
           ),
           FormItem(

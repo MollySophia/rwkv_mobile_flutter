@@ -330,7 +330,7 @@ extension $Sudoku on _Sudoku {
           if (staticValue != 0) {
             if (dynamicValue != staticValue) {
               if (kDebugMode) print("🔥 $i $j $staticValue $dynamicValue");
-              throw "";
+              throw "似乎是推理错误了, 生成的结果篡改了原始 puzzle";
             }
           }
         }
@@ -394,6 +394,14 @@ extension _$Sudoku on _Sudoku {
     }
   }
 
+  void _showInferenceDone() async {
+    await showOkAlertDialog(
+      context: getContext()!,
+      title: S.current.inference_is_done,
+      message: S.current.please_check_the_result,
+    );
+  }
+
   void _handleStreamResponse(from_rwkv.StreamResponse res) {
     final decoded = res.streamResponseNewText;
     final output = res.streamResponseToken;
@@ -406,6 +414,8 @@ extension _$Sudoku on _Sudoku {
 
     if (output == _Sudoku.tokenStop) {
       // _closeFileSink();
+
+      _showInferenceDone();
 
       running.q = false;
 

@@ -128,6 +128,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Hello, I can\'t answer this question yet, let\'s talk about something else.",
     ),
     "follow_system": MessageLookupByLibrary.simpleMessage("System"),
+    "follow_us_on_twitter": MessageLookupByLibrary.simpleMessage(
+      "Follow us on Twitter",
+    ),
     "font_setting": MessageLookupByLibrary.simpleMessage("Font setting"),
     "font_size": MessageLookupByLibrary.simpleMessage("Font size"),
     "font_size_default": MessageLookupByLibrary.simpleMessage("Default (100%)"),
@@ -151,6 +154,9 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "In-context search will be activated when both breadth and depth are greater than 2",
         ),
+    "inference_is_done": MessageLookupByLibrary.simpleMessage(
+      "🎉 Inference is done",
+    ),
     "inference_is_running": MessageLookupByLibrary.simpleMessage(
       "Inference is running",
     ),
@@ -161,6 +167,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "invalid_puzzle": MessageLookupByLibrary.simpleMessage("Invalid puzzle"),
     "invalid_value": MessageLookupByLibrary.simpleMessage("Invalid value"),
     "its_your_turn": MessageLookupByLibrary.simpleMessage("It\'s your turn~"),
+    "join_our_discord_server": MessageLookupByLibrary.simpleMessage(
+      "Join our Discord server",
+    ),
     "join_the_community": MessageLookupByLibrary.simpleMessage(
       "Join the community",
     ),
@@ -185,11 +194,17 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "othello_title": MessageLookupByLibrary.simpleMessage("RWKV Othello"),
     "players": MessageLookupByLibrary.simpleMessage("Players"),
+    "please_check_the_result": MessageLookupByLibrary.simpleMessage(
+      "Please check the result",
+    ),
     "please_enter_a_number_0_means_empty": MessageLookupByLibrary.simpleMessage(
       "Please enter a number. 0 means empty.",
     ),
     "please_enter_the_difficulty": MessageLookupByLibrary.simpleMessage(
       "Please enter the difficulty",
+    ),
+    "please_load_model_first": MessageLookupByLibrary.simpleMessage(
+      "Please load model first",
     ),
     "please_select_a_world_type": MessageLookupByLibrary.simpleMessage(
       "Please select a world type",

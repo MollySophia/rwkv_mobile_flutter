@@ -708,7 +708,7 @@
         "fileName": "sudoku_rwkv_20241120_ncnn.bin",
         "fileSize": 23879004,
         "quantization": "fp16",
-        "platforms": ["android"],
+        "platforms": ["android", "ios", "macos", "windows", "linux"],
         "backends": ["ncnn"],
         "tags": ["cpu"]
       }

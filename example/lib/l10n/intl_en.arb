@@ -145,5 +145,10 @@
   "discord": "Discord",
   "twitter": "Twitter",
   "application_internal_test_group": "Application Internal Test Group",
-  "technical_research_group": "Technical Research Group"
+  "technical_research_group": "Technical Research Group",
+  "join_our_discord_server": "Join our Discord server",
+  "follow_us_on_twitter": "Follow us on Twitter",
+  "please_load_model_first": "Please load model first",
+  "inference_is_done": "🎉 Inference is done",
+  "please_check_the_result": "Please check the result"
 }
