@@ -60,7 +60,7 @@ extension $Othello on _Othello {
     _clear();
   }
 
-  void onCellTap({required int row, required int col}) {
+  FV onCellTap({required int row, required int col}) async {
     final thinking = receivingTokens.q;
     if (thinking) return;
     final eatCountMatrixForBlack = this.eatCountMatrixForBlack.q;
@@ -84,16 +84,34 @@ extension $Othello on _Othello {
       return;
     }
 
-    if (blackTurn) {
-      if (allZeroForBlack) this.blackTurn.q = false;
-    } else {
-      if (allZeroForWhite) this.blackTurn.q = true;
+    bool noCellAvailable = false;
+
+    if (blackTurn && allZeroForBlack) {
+      this.blackTurn.q = false;
+      noCellAvailable = true;
+    }
+
+    if (!blackTurn && allZeroForWhite) {
+      this.blackTurn.q = true;
+      noCellAvailable = true;
+    }
+
+    if (noCellAvailable) {
+      final title = (allZeroForBlack ? S.current.black : S.current.white) + ": " + S.current.no_cell_available;
+      final message = S.current.turn_transfer + ": " + (allZeroForBlack ? S.current.white : S.current.black);
+      await showOkAlertDialog(
+        context: getContext()!,
+        title: title,
+        message: message,
+      );
     }
 
     final blackAuto = blackIsAI.q && (this.blackTurn.q);
     final whiteAuto = whiteIsAI.q && !(this.blackTurn.q);
 
     if (blackAuto || whiteAuto) {
+      qqr("Auto placing!");
+
       receivingTokens.q = true;
 
       final prompt = _generatePrompt();
@@ -171,7 +189,7 @@ extension _$ on _Othello {
     }
 
     qqq("Placing event received: $event, thinking: ${receivingTokens.q}");
-    onCellTap(row: event.$1, col: event.$2);
+    await onCellTap(row: event.$1, col: event.$2);
   }
 
   void _syncLayout() {
@@ -285,7 +303,6 @@ extension _$ on _Othello {
       final placing = _kTokenPair[token];
       // modelPlacingController.add((placing?[0] ?? 0, placing?[1] ?? 0));
       if (placing != null) {
-        qqr("Token: $token\nPlacing: (row: ${placing[0]}, col: ${placing[1]})");
         modelPlacingController.add((placing[0], placing[1]));
       }
 

@@ -12,11 +12,11 @@ import 'package:zone/state/p.dart';
 import 'package:zone/widgets/menu.dart';
 import 'package:zone/widgets/pager.dart';
 
-class PageOthello extends ConsumerWidget {
+class PageOthello extends StatelessWidget {
   const PageOthello({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     if (kDebugMode) {
       return const Pager(
         drawer: Menu(),
@@ -33,6 +33,7 @@ class _Page extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(P.preference.preferredLanguage);
     final paddingTop = ref.watch(P.app.paddingTop);
     final usePortrait = ref.watch(P.othello.usePortrait);
     final playerShouldAtSameColumnWithSettings = ref.watch(P.othello.playerShouldAtSameColumnWithSettings);
@@ -119,6 +120,7 @@ class _Title extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(P.preference.preferredLanguage);
     final version = ref.watch(P.app.version);
     final buildNumber = ref.watch(P.app.buildNumber);
     final usePortrait = ref.watch(P.othello.usePortrait);
@@ -144,6 +146,7 @@ class _ModelSettings extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(P.preference.preferredLanguage);
     final usePortrait = ref.watch(P.othello.usePortrait);
     final searchDepth = ref.watch(P.othello.searchDepth);
     final searchBreadth = ref.watch(P.othello.searchBreadth);
@@ -291,6 +294,7 @@ class _Players extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(P.preference.preferredLanguage);
     final blackIsAI = ref.watch(P.othello.blackIsAI);
     final whiteIsAI = ref.watch(P.othello.whiteIsAI);
     final playerShouldAtSameColumnWithSettings = ref.watch(P.othello.playerShouldAtSameColumnWithSettings);
@@ -444,6 +448,7 @@ class _Score extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(P.preference.preferredLanguage);
     final blackScore = ref.watch(P.othello.blackScore);
     final whiteScore = ref.watch(P.othello.whiteScore);
     final blackTurn = ref.watch(P.othello.blackTurn);
@@ -519,6 +524,7 @@ class _Othello extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(P.preference.preferredLanguage);
     final screenWidth = ref.watch(P.app.screenWidth);
     final screenHeight = ref.watch(P.app.screenHeight);
     return Ro(
@@ -543,11 +549,12 @@ class _Grid extends ConsumerWidget {
   static final int _sepPerLine = _cellPerLine - 1;
 
   void _onCellTap({required int row, required int col}) async {
-    P.othello.onCellTap(row: row, col: col);
+    await P.othello.onCellTap(row: row, col: col);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(P.preference.preferredLanguage);
     final state = ref.watch(P.othello.state);
     final blackTurn = ref.watch(P.othello.blackTurn);
     final eatCountMatrixForBlack = ref.watch(P.othello.eatCountMatrixForBlack);
@@ -775,6 +782,7 @@ class _Console extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(P.preference.preferredLanguage);
     final controller = P.othello.receivedScrollController;
     final received = (ref.watch(P.othello.received)).split("\n");
     final usePortrait = ref.watch(P.othello.usePortrait);

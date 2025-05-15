@@ -147,6 +147,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "new_chat": MessageLookupByLibrary.simpleMessage("新聊天"),
     "new_game": MessageLookupByLibrary.simpleMessage("新游戏"),
     "new_version_found": MessageLookupByLibrary.simpleMessage("发现新版本"),
+    "no_cell_available": MessageLookupByLibrary.simpleMessage("无子可下"),
     "no_puzzle": MessageLookupByLibrary.simpleMessage("没有数独"),
     "number": MessageLookupByLibrary.simpleMessage("数字"),
     "ok": MessageLookupByLibrary.simpleMessage("确定"),
@@ -219,6 +220,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "this_is_the_hardest_sudoku_in_the_world":
         MessageLookupByLibrary.simpleMessage("这是世界上最难的数独"),
     "thought_result": MessageLookupByLibrary.simpleMessage("思考结果"),
+    "turn_transfer": MessageLookupByLibrary.simpleMessage("落子权转移"),
     "twitter": MessageLookupByLibrary.simpleMessage("Twitter"),
     "ultra_large": MessageLookupByLibrary.simpleMessage("超大 (140%)"),
     "update_now": MessageLookupByLibrary.simpleMessage("立即更新"),

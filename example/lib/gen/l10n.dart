@@ -1311,6 +1311,26 @@ class S {
       args: [],
     );
   }
+
+  /// `No cell available`
+  String get no_cell_available {
+    return Intl.message(
+      'No cell available',
+      name: 'no_cell_available',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Turn transfer`
+  String get turn_transfer {
+    return Intl.message(
+      'Turn transfer',
+      name: 'turn_transfer',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

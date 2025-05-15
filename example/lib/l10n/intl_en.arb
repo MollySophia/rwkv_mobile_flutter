@@ -153,5 +153,7 @@
   "please_check_the_result": "Please check the result",
   "generating": "Generating...",
   "all_done": "All done",
-  "playing_partial_generated_audio": "Playing partial generated audio"
+  "playing_partial_generated_audio": "Playing partial generated audio",
+  "no_cell_available": "No cell available",
+  "turn_transfer": "Turn transfer"
 }

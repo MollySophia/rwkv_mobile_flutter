@@ -188,6 +188,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "new_version_found": MessageLookupByLibrary.simpleMessage(
       "New version found",
     ),
+    "no_cell_available": MessageLookupByLibrary.simpleMessage(
+      "No cell available",
+    ),
     "no_puzzle": MessageLookupByLibrary.simpleMessage("No puzzle"),
     "number": MessageLookupByLibrary.simpleMessage("Number"),
     "ok": MessageLookupByLibrary.simpleMessage("OK"),
@@ -292,6 +295,7 @@ class MessageLookup extends MessageLookupByLibrary {
           "This is the hardest Sudoku in the world",
         ),
     "thought_result": MessageLookupByLibrary.simpleMessage("Thought result"),
+    "turn_transfer": MessageLookupByLibrary.simpleMessage("Turn transfer"),
     "twitter": MessageLookupByLibrary.simpleMessage("Twitter"),
     "ultra_large": MessageLookupByLibrary.simpleMessage("Ultra large (140%)"),
     "update_now": MessageLookupByLibrary.simpleMessage("Update now"),
