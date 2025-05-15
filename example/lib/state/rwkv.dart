@@ -93,7 +93,7 @@ extension $RWKVLoad on _RWKV {
     prefillSpeed.q = 0;
     decodeSpeed.q = 0;
 
-    final tokenizerPath = await fromAssetsToTemp("assets/config/chat/b_rwkv_vocab_v20230424.txt");
+    final tokenizerPath = await fromAssetsToTemp("assets/config/tts/b_rwkv_vocab_v20230424.txt");
 
     final rootIsolateToken = RootIsolateToken.instance;
 
@@ -151,7 +151,7 @@ extension $RWKVLoad on _RWKV {
     prefillSpeed.q = 0;
     decodeSpeed.q = 0;
 
-    final tokenizerPath = await fromAssetsToTemp("assets/config/chat/b_rwkv_vocab_v20230424.txt");
+    final tokenizerPath = await fromAssetsToTemp("assets/config/tts/b_rwkv_vocab_v20230424.txt");
 
     final rootIsolateToken = RootIsolateToken.instance;
 
@@ -208,7 +208,7 @@ extension $RWKVLoad on _RWKV {
     prefillSpeed.q = 0;
     decodeSpeed.q = 0;
 
-    final tokenizerPath = await fromAssetsToTemp("assets/config/chat/b_rwkv_vocab_v20230424.txt");
+    final tokenizerPath = await fromAssetsToTemp("assets/config/tts/b_rwkv_vocab_v20230424.txt");
 
     await _ensureQNNCopied();
 
@@ -252,7 +252,7 @@ extension $RWKVLoad on _RWKV {
       send(to_rwkv.GetPrefillAndDecodeSpeed());
     });
 
-    final ttsTokenizerPath = await fromAssetsToTemp("assets/config/chat/b_rwkv_vocab_v20230424_tts.txt");
+    final ttsTokenizerPath = await fromAssetsToTemp("assets/config/tts/b_rwkv_vocab_v20230424_tts.txt");
 
     send(to_rwkv.LoadTTSModels(
       campPlusPath: campPlusPath,
@@ -263,9 +263,9 @@ extension $RWKVLoad on _RWKV {
       ttsTokenizerPath: ttsTokenizerPath,
     ));
 
-    final ttsTextNormalizerDatePath = await fromAssetsToTemp("assets/config/chat/date-zh.fst");
-    final ttsTextNormalizerNumberPath = await fromAssetsToTemp("assets/config/chat/number-zh.fst");
-    final ttsTextNormalizerPhonePath = await fromAssetsToTemp("assets/config/chat/phone-zh.fst");
+    final ttsTextNormalizerDatePath = await fromAssetsToTemp("assets/config/tts/date-zh.fst");
+    final ttsTextNormalizerNumberPath = await fromAssetsToTemp("assets/config/tts/number-zh.fst");
+    final ttsTextNormalizerPhonePath = await fromAssetsToTemp("assets/config/tts/phone-zh.fst");
     // note: order matters here
     send(to_rwkv.LoadTTSTextNormalizer(ttsTextNormalizerDatePath));
     send(to_rwkv.LoadTTSTextNormalizer(ttsTextNormalizerPhonePath));
@@ -389,8 +389,8 @@ extension $RWKVLoad on _RWKV {
     prefillSpeed.q = 0;
     decodeSpeed.q = 0;
 
-    final tokenizerPath = await fromAssetsToTemp("assets/config/chat/b_sudoku_vocab.txt");
-    final _ = await rootBundle.load("assets/config/chat/sudoku_rwkv_20241120_ncnn.param");
+    final tokenizerPath = await fromAssetsToTemp("assets/config/tts/b_sudoku_vocab.txt");
+    final _ = await rootBundle.load("assets/config/tts/sudoku_rwkv_20241120_ncnn.param");
 
     await _ensureQNNCopied();
     final rootIsolateToken = RootIsolateToken.instance;

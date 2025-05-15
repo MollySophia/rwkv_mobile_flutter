@@ -57,6 +57,10 @@ class _TTS {
   late final textInInput = qs(_TTSStatic._defaultTextInInput);
   late final ttsDone = qs(true);
 
+  late final overallProgress = qs(0.0);
+  late final perWavProgress = qs<List<double>>([]);
+  late final filePaths = qs<List<String>>([]);
+
   Timer? _queryTimer;
 }
 
@@ -136,7 +140,7 @@ extension _$TTS on _TTS {
 
   void _startQueryTimer() {
     qq;
-    _queryTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) => _pulse());
+    _queryTimer = Timer.periodic(const Duration(milliseconds: 200), (timer) => _pulse());
   }
 
   void _pulse() {
@@ -174,16 +178,28 @@ extension _$TTS on _TTS {
       promptSpeechText: promptSpeechText,
     ));
 
+    filePaths.q = [];
+    perWavProgress.q = [];
+    overallProgress.q = 0.0;
+    ttsDone.q = false;
+
+    final receiveId = P.chat.receiveId.q;
+
+    if (receiveId != null) {
+      P.chat._updateMessageById(
+        id: receiveId,
+        changing: false,
+      );
+    }
+
+    _stopQueryTimer();
     _startQueryTimer();
   }
 
   void _onStreamEvent(from_rwkv.FromRWKV event) {
     switch (event) {
       case from_rwkv.TTSResult res:
-        qqq(res.filePaths);
-        qqq(res.perWavProgress);
-        qqq(res.overallProgress);
-        break;
+        _onTTSResult(res);
       case from_rwkv.TTSGenerationProgress res:
         qqq("overallProgress: ${res.overallProgress}");
         qqq("perWavProgress: ${res.perWavProgress}");
@@ -193,6 +209,35 @@ extension _$TTS on _TTS {
         qqq(res.outputFileList);
       default:
         break;
+    }
+  }
+
+  void _onTTSResult(from_rwkv.TTSResult res) async {
+    final filePaths = res.filePaths;
+    final perWavProgress = res.perWavProgress;
+    final overallProgress = res.overallProgress;
+
+    this.filePaths.q = filePaths;
+    this.perWavProgress.q = perWavProgress;
+    this.overallProgress.q = overallProgress;
+
+    final allReceived = overallProgress >= 1.0;
+    final receiveId = P.chat.receiveId.q;
+
+    if (receiveId == null) {
+      qqw("receiveId is null");
+      return;
+    }
+
+    P.chat._updateMessageById(
+      id: receiveId,
+      changing: !allReceived,
+    );
+
+    if (allReceived) {
+      _stopQueryTimer();
+      ttsDone.q = true;
+      return;
     }
   }
 
@@ -221,7 +266,7 @@ extension $TTS on _TTS {
   FV getTTSSpkNames() async {
     qq;
     try {
-      final data = await rootBundle.loadString("assets/lib/chat/pairs.json");
+      final data = await rootBundle.loadString("assets/lib/tts/pairs.json");
       final spkPairs = await compute(_parseSpkNames, data);
       this.spkPairs.q = spkPairs;
     } catch (e) {
@@ -303,7 +348,7 @@ extension $TTS on _TTS {
   Future<String> getPrebuiltSpkAudioPathFromTemp(String spkName) async {
     qq;
     final fileName = "$spkName.wav";
-    final path = "assets/lib/chat/$fileName";
+    final path = "assets/lib/tts/$fileName";
     final localPath = await fromAssetsToTemp(path);
     return localPath;
   }
@@ -311,7 +356,7 @@ extension $TTS on _TTS {
   Future<String> getPromptSpeechText(String spkName) async {
     qq;
     final fileName = "$spkName.json";
-    final data = await rootBundle.loadString("assets/lib/chat/$fileName");
+    final data = await rootBundle.loadString("assets/lib/tts/$fileName");
     final json = HF.json(jsonDecode(data));
     return json["transcription"];
   }
@@ -385,7 +430,7 @@ extension $TTS on _TTS {
       content: "",
       isMine: false,
       changing: true,
-      isReasoning: P.rwkv.usingReasoningModel.q,
+      isReasoning: false,
       paused: false,
       type: MessageType.ttsGeneration,
       audioUrl: outputWavPath,

@@ -19,10 +19,11 @@ class Debugger extends ConsumerWidget {
     switch (demoType) {
       case DemoType.sudoku:
         return const _SudokuDebugger();
+      case DemoType.tts:
+        return const _TTSDebugger();
       case DemoType.chat:
       case DemoType.fifthteenPuzzle:
       case DemoType.othello:
-      case DemoType.tts:
       case DemoType.world:
     }
 
@@ -183,6 +184,65 @@ class _SudokuDebugger extends ConsumerWidget {
                   paddingTop.h,
                   T("paddingTop".codeToName),
                   T(paddingTop.toString()),
+                ].indexMap((index, e) {
+                  return C(
+                    margin: EI.o(t: index % 2 == 0 ? 0 : 1),
+                    decoration: BD(color: kB.q(.66)),
+                    child: e,
+                  );
+                }),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _TTSDebugger extends ConsumerWidget {
+  const _TTSDebugger();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final paddingTop = ref.watch(P.app.paddingTop);
+
+    final overallProgress = ref.watch(P.tts.overallProgress);
+    final perWavProgress = ref.watch(P.tts.perWavProgress);
+    final filePaths = ref.watch(P.tts.filePaths);
+    final receiveId = ref.watch(P.chat.receiveId);
+
+    return Positioned(
+      left: 0,
+      top: 0,
+      right: 0,
+      bottom: 0,
+      child: IgnorePointer(
+        child: Material(
+          textStyle: const TS(
+            ff: "Monospace",
+            c: kW,
+            s: 8,
+          ),
+          color: kC,
+          child: SB(
+            child: C(
+              decoration: const BD(color: kC),
+              child: Co(
+                m: MAA.start,
+                c: CAA.end,
+                children: [
+                  paddingTop.h,
+                  T("paddingTop".codeToName),
+                  T(paddingTop.toString()),
+                  T("overallProgress".codeToName),
+                  T(overallProgress.toString()),
+                  T("perWavProgress".codeToName),
+                  T(perWavProgress.toString()),
+                  T("filePaths".codeToName),
+                  T(filePaths.toString()),
+                  T("receiveId".codeToName),
+                  T(receiveId.toString()),
                 ].indexMap((index, e) {
                   return C(
                     margin: EI.o(t: index % 2 == 0 ? 0 : 1),
