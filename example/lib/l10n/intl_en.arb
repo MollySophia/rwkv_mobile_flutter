@@ -151,5 +151,7 @@
   "please_load_model_first": "Please load model first",
   "inference_is_done": "🎉 Inference is done",
   "please_check_the_result": "Please check the result",
-  "generating": "Generating..."
+  "generating": "Generating...",
+  "all_done": "All done",
+  "playing_partial_generated_audio": "Playing partial generated audio"
 }

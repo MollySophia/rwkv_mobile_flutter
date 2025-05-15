@@ -98,7 +98,7 @@ class _BotTtsContentState extends ConsumerState<BotTtsContent> {
     final primaryColor = Theme.of(context).colorScheme.primary;
     final length = _length;
     final base = 4000;
-    final width = 100 * (length / (length + base)) + 55;
+    final width = 80 * (length / (length + base)) + 55;
     final isPlaying = ref.watch(P.world.playing);
     final latestClickedMessage = ref.watch(P.chat.latestClickedMessage);
     final isLatestClickedMessage = latestClickedMessage?.id == widget.msg.id;
@@ -116,80 +116,94 @@ class _BotTtsContentState extends ConsumerState<BotTtsContent> {
         mainAxisSize: MainAxisSize.min,
         c: CAA.stretch,
         children: [
-          Ro(
+          if (overallProgress >= 1)
+            C(
+              padding: EI.s(v: 4),
+              child: T(S.current.all_done, s: TS(c: kB.q(.8), w: FW.w600)),
+            ),
+          Wrap(
             children: [
               ...perWavProgress.map((e) {
                 return Co(
                   children: [
                     Icon(Icons.audio_file, color: primaryColor),
-                    T(e.toStringAsFixed(2), s: TS(c: kB.q(.8), w: FW.w600, s: 10)),
+                    2.h,
+                    if (e < 1) T((e * 100).toStringAsFixed(0) + "%", s: TS(c: kB.q(.8), w: FW.w600, s: 10)),
+                    if (e >= 1) Icon(Icons.check, color: primaryColor, size: 12),
                   ],
                 );
               }),
             ],
           ),
           if (changing)
-            Ro(
-              m: MAA.start,
-              children: [
-                TweenAnimationBuilder(
-                  tween: Tween(begin: .0, end: 1.0),
-                  duration: const Duration(milliseconds: 1000000000),
-                  builder: (context, value, child) => Transform.rotate(
-                    angle: value * 2 * math.pi * 1000000,
-                    child: child,
-                  ),
-                  child: Icon(
-                    Icons.hourglass_top,
-                    color: primaryColor,
-                    size: 20,
-                  ),
-                ),
-                8.w,
-                T(S.current.generating, s: TS(c: kB.q(.8), w: FW.w500)),
-              ],
-            ),
-          if (!changing)
-            Ro(
-              m: MAA.start,
-              children: [
-                if (_tick % 3 == 0 || !isPlaying || !isLatestClickedMessage)
-                  Icon(
-                    Icons.volume_up,
-                    color: primaryColor,
-                  ),
-                if (_tick % 3 == 2 && isPlaying && isLatestClickedMessage)
-                  Icon(
-                    Icons.volume_down,
-                    color: primaryColor,
-                  ),
-                if (_tick % 3 == 1 && isPlaying && isLatestClickedMessage)
-                  Icon(
-                    Icons.volume_mute,
-                    color: primaryColor,
-                  ),
-                8.w,
-                T(
-                  (length / 1000).toStringAsFixed(0) + "s",
-                  s: TS(c: kB.q(.8), w: FW.w600),
-                ),
-              ],
-            ),
-          if (!changing)
-            C(
-              decoration: const BD(color: kC),
+            Padding(
+              padding: const EI.o(v: 4),
               child: Ro(
                 m: MAA.start,
                 children: [
-                  GD(
-                    onTap: _onSharePressed,
-                    child: C(
-                      padding: const EI.s(v: 12, h: 3),
-                      child: const Icon(Icons.share),
+                  TweenAnimationBuilder(
+                    tween: Tween(begin: .0, end: 1.0),
+                    duration: const Duration(milliseconds: 1000000000),
+                    builder: (context, value, child) => Transform.rotate(
+                      angle: value * 2 * math.pi * 1000000,
+                      child: child,
                     ),
+                    child: Icon(
+                      Icons.hourglass_top,
+                      color: primaryColor,
+                      size: 20,
+                    ),
+                  ),
+                  8.w,
+                  T(S.current.generating + " " + (overallProgress * 100).toStringAsFixed(0) + "%", s: TS(c: kB.q(.8), w: FW.w500)),
+                ],
+              ),
+            ),
+          if (!changing || widget.msg.ttsHasContent)
+            Padding(
+              padding: const EI.o(v: 4),
+              child: Ro(
+                m: MAA.start,
+                children: [
+                  if (_tick % 3 == 0 || !isPlaying || !isLatestClickedMessage)
+                    Icon(
+                      Icons.volume_up,
+                      color: primaryColor,
+                    ),
+                  if (_tick % 3 == 2 && isPlaying && isLatestClickedMessage)
+                    Icon(
+                      Icons.volume_down,
+                      color: primaryColor,
+                    ),
+                  if (_tick % 3 == 1 && isPlaying && isLatestClickedMessage)
+                    Icon(
+                      Icons.volume_mute,
+                      color: primaryColor,
+                    ),
+                  8.w,
+                  T(
+                    (length / 1000).toStringAsFixed(0) + "s",
+                    s: TS(c: kB.q(.8), w: FW.w600),
                   ),
                 ],
               ),
+            ),
+          if (!changing)
+            Ro(
+              m: MAA.start,
+              children: [
+                GD(
+                  onTap: _onSharePressed,
+                  child: C(
+                    decoration: const BD(color: kC),
+                    padding: const EI.s(
+                      v: 12,
+                      h: 3,
+                    ),
+                    child: const Icon(Icons.share),
+                  ),
+                ),
+              ],
             ),
         ],
       ),

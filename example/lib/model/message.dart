@@ -33,6 +33,9 @@ final class Message extends Equatable {
   final List<double>? ttsPerWavProgress;
   final List<String>? ttsFilePaths;
 
+  bool get ttsHasContent => ttsFilePaths?.isNotEmpty ?? false;
+  bool get ttsIsDone => (ttsOverallProgress ?? 0.0) >= 1.0;
+
   const Message({
     required this.id,
     required this.content,

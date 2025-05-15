@@ -31,6 +31,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "about": MessageLookupByLibrary.simpleMessage("关于"),
     "according_to_the_following_audio_file":
         MessageLookupByLibrary.simpleMessage("根据下面的音频文件"),
+    "all_done": MessageLookupByLibrary.simpleMessage("全部完成"),
     "application_internal_test_group": MessageLookupByLibrary.simpleMessage(
       "应用内测群",
     ),
@@ -154,6 +155,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "othello_title": MessageLookupByLibrary.simpleMessage("RWKV 黑白棋"),
     "players": MessageLookupByLibrary.simpleMessage("玩家"),
+    "playing_partial_generated_audio": MessageLookupByLibrary.simpleMessage(
+      "正在播放部分已生成的语音",
+    ),
     "please_check_the_result": MessageLookupByLibrary.simpleMessage("请检查结果"),
     "please_enter_a_number_0_means_empty": MessageLookupByLibrary.simpleMessage(
       "请输入一个数字。0 表示空。",

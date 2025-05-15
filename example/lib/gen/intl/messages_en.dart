@@ -34,6 +34,7 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "According to the following audio file",
         ),
+    "all_done": MessageLookupByLibrary.simpleMessage("All done"),
     "application_internal_test_group": MessageLookupByLibrary.simpleMessage(
       "Application Internal Test Group",
     ),
@@ -195,6 +196,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "othello_title": MessageLookupByLibrary.simpleMessage("RWKV Othello"),
     "players": MessageLookupByLibrary.simpleMessage("Players"),
+    "playing_partial_generated_audio": MessageLookupByLibrary.simpleMessage(
+      "Playing partial generated audio",
+    ),
     "please_check_the_result": MessageLookupByLibrary.simpleMessage(
       "Please check the result",
     ),

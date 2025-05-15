@@ -224,6 +224,9 @@ class _TTSDebugger extends ConsumerWidget {
     final filePaths = ref.watch(P.tts.filePaths);
     final receiveId = ref.watch(P.chat.receiveId);
 
+    final selectedSpkPanelFilter = ref.watch(P.tts.selectedSpkPanelFilter);
+    final selectedLanguage = ref.watch(P.tts.selectedLanguage);
+
     return Positioned(
       left: 0,
       top: 0,
@@ -257,6 +260,10 @@ class _TTSDebugger extends ConsumerWidget {
                   ),
                   T("receiveId".codeToName),
                   T(receiveId.toString()),
+                  T("selectedSpkPanelFilter".codeToName),
+                  T(selectedSpkPanelFilter.toString()),
+                  T("selectedLanguage".codeToName),
+                  T(selectedLanguage.toString()),
                 ].indexMap((index, e) {
                   return C(
                     margin: EI.o(t: index % 2 == 0 ? 0 : 1),

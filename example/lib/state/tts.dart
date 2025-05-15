@@ -1,7 +1,7 @@
 part of 'p.dart';
 
 extension _Instruction on Language {
-  String get _instruct => switch (this) {
+  String get _ttsSpkInstruct => switch (this) {
         Language.none => "",
         Language.en => "",
         Language.ja => "日本語で話してください。",
@@ -367,8 +367,8 @@ extension $TTS on _TTS {
     if (!P.chat.canSend.q) return;
 
     late final Message? msg;
-    final id = HF.shorterUS;
-    final receiveId = HF.shorterUS + 1;
+    final id = HF.debugShorterUS;
+    final receiveId = HF.debugShorterUS + 1;
     final spkName = selectedSpkName.q;
 
     if (spkName == null && this.selectSourceAudioPath.q == null) {
@@ -380,7 +380,9 @@ extension $TTS on _TTS {
     final selectSourceAudioPath = this.selectSourceAudioPath.q ?? await getPrebuiltSpkAudioPathFromTemp(spkName!);
     final ttsText = P.chat.textEditingController.text;
 
-    final instructionText = textInInput.q;
+    String instructionText = textInInput.q;
+
+    if (instructionText.isEmpty) instructionText = selectedLanguage.q._ttsSpkInstruct;
 
     final outputWavPrefix = P.app.cacheDir.q!.path + "/$receiveId.output";
     // TODO: handle multiple wav output via getTTSOutputFileList

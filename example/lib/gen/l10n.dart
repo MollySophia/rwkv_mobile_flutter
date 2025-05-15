@@ -1296,6 +1296,21 @@ class S {
       args: [],
     );
   }
+
+  /// `All done`
+  String get all_done {
+    return Intl.message('All done', name: 'all_done', desc: '', args: []);
+  }
+
+  /// `Playing partial generated audio`
+  String get playing_partial_generated_audio {
+    return Intl.message(
+      'Playing partial generated audio',
+      name: 'playing_partial_generated_audio',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

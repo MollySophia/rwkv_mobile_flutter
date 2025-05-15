@@ -27,10 +27,6 @@ import 'package:path/path.dart' as p;
 
   // Position after "fmt " content to start searching for other chunks
   int currentOffset = fmtIdOffset + 8 + fmtChunkContentSize;
-  // Align to word boundary if fmtChunkContentSize is odd (though fmt typically isn't odd)
-  if (fmtChunkContentSize.isOdd) {
-    currentOffset++;
-  }
 
   while (currentOffset + 8 <= wavBytes.lengthInBytes) {
     String chunkId = String.fromCharCodes(wavBytes.sublist(currentOffset, currentOffset + 4));
@@ -49,11 +45,7 @@ import 'package:path/path.dart' as p;
       return (dataIdOffset, chunkContentSize, audioDataStartOffset);
     }
 
-    currentOffset += (8 + chunkContentSize);
-    // RIFF chunks are word-aligned. If a chunk's data size is odd, a pad byte is added.
-    if (chunkContentSize.isOdd) {
-      currentOffset++;
-    }
+    currentOffset += 8 + (chunkContentSize ~/ 2) * 2;
   }
   debugPrint("data chunk not found after fmt chunk");
   return null; // "data" chunk not found

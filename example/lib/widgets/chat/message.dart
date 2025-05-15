@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:halo_alert/halo_alert.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:photo_viewer/photo_viewer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -53,7 +54,6 @@ class Message extends ConsumerWidget {
     P.tts.dismissAllShown();
 
     P.chat.latestClickedMessage.q = msg;
-    final isMine = msg.isMine;
 
     if (msg.type == model.MessageType.userAudio) {
       final audioUrl = msg.audioUrl;
@@ -75,6 +75,7 @@ class Message extends ConsumerWidget {
       if (P.world.playing.q) {
         P.world.stopPlaying();
       } else {
+        if (!msg.ttsIsDone) Alert.info(S.current.playing_partial_generated_audio);
         P.world.play(path: audioUrl);
       }
       return;
