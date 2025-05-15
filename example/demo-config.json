@@ -711,6 +711,18 @@
         "platforms": ["android", "ios", "macos", "windows", "linux"],
         "backends": ["ncnn"],
         "tags": ["cpu"]
+      },
+      {
+        "name": "RWKV7 Sudoku (GPU)",
+        "type": "webrwkv",
+        "modelSize": 0.013,
+        "url": "mollysama/rwkv-mobile-models/resolve/main/demos/sudoku/sudoku_rwkv-v7-L10-D320-webrwkv.st",
+        "fileName": "sudoku_rwkv-v7-L10-D320-webrwkv.st",
+        "fileSize": 26948008,
+        "quantization": "fp16",
+        "platforms": ["ios", "macos", "windows", "linux"],
+        "backends": ["webRwkv"],
+        "tags": ["gpu"]
       }
     ]
   }
