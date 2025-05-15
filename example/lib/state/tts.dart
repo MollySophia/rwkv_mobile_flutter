@@ -207,8 +207,8 @@ extension _$TTS on _TTS {
 
   void _onTTSResult(from_rwkv.TTSResult res) async {
     final filePaths = res.filePaths;
-    final perWavProgress = res.perWavProgress;
-    final overallProgress = res.overallProgress;
+    final perWavProgress = res.perWavProgress.map((e) => (e * 100).round() / 100.0).toList();
+    final overallProgress = (res.overallProgress * 100).round() / 100.0;
 
     this.filePaths.q = filePaths;
     this.perWavProgress.q = perWavProgress;
