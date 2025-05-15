@@ -433,8 +433,8 @@ extension $TTS on _TTS {
       type: MessageType.ttsGeneration,
       audioUrl: outputWavPath,
       ttsOverallProgress: 0.0,
-      ttsPerWavProgress: [],
-      ttsFilePaths: [],
+      ttsPerWavProgress: const [],
+      ttsFilePaths: const [],
     );
 
     P.chat.receiveId.q = receiveId;

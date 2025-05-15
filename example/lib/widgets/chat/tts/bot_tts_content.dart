@@ -118,7 +118,7 @@ class _BotTtsContentState extends ConsumerState<BotTtsContent> {
         children: [
           if (overallProgress >= 1)
             C(
-              padding: EI.s(v: 4),
+              padding: const EI.s(v: 4),
               child: T(S.current.all_done, s: TS(c: kB.q(.8), w: FW.w600)),
             ),
           Wrap(
