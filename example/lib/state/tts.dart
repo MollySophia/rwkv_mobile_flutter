@@ -19,7 +19,7 @@ Stream<T> _randomGenerator<T>(T Function() generator, Duration spacing) async* {
 }
 
 extension _TTSStatic on _TTS {
-  static const _defaultTextInInput = "请用正常的语气说";
+  static const _defaultTextInInput = "";
   static const _cfmStepsKey = "cfmSteps";
   static const _defaultCfmSteps = 5;
   static const _replaceMap = {
