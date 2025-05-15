@@ -1286,6 +1286,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Generating...`
+  String get generating {
+    return Intl.message(
+      'Generating...',
+      name: 'generating',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

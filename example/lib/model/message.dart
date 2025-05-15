@@ -22,12 +22,16 @@ final class Message extends Equatable {
   final String? imageUrl;
   final String? audioUrl;
   final int? audioLength;
+  final bool isSensitive;
+
+  final int? ttsCFMSteps;
   final String? ttsTarget;
   final String? ttsSpeakerName;
   final String? ttsSourceAudioPath;
   final String? ttsInstruction;
-  final int? ttsCFMSteps;
-  final bool isSensitive;
+  final double? ttsOverallProgress;
+  final List<double>? ttsPerWavProgress;
+  final List<String>? ttsFilePaths;
 
   const Message({
     required this.id,
@@ -46,6 +50,9 @@ final class Message extends Equatable {
     this.ttsInstruction,
     this.ttsCFMSteps,
     this.isSensitive = false,
+    this.ttsOverallProgress,
+    this.ttsPerWavProgress,
+    this.ttsFilePaths,
   });
 
   @override
@@ -66,6 +73,9 @@ final class Message extends Equatable {
         ttsInstruction,
         ttsCFMSteps,
         isSensitive,
+        ttsOverallProgress,
+        ...ttsPerWavProgress ?? [],
+        ...ttsFilePaths ?? [],
       ];
 
   factory Message.fromJson(Map<String, dynamic> json) {
@@ -86,6 +96,9 @@ final class Message extends Equatable {
       ttsInstruction: json["ttsInstruction"] as String?,
       ttsCFMSteps: json["ttsCFMSteps"] as int?,
       isSensitive: json["isSensitive"] as bool,
+      ttsOverallProgress: json["ttsOverallProgress"] as double?,
+      ttsPerWavProgress: json["ttsPerWavProgress"] as List<double>?,
+      ttsFilePaths: json["ttsFilePaths"] as List<String>?,
     );
   }
 
@@ -107,6 +120,9 @@ final class Message extends Equatable {
       "ttsInstruction": ttsInstruction,
       "ttsCFMSteps": ttsCFMSteps,
       "isSensitive": isSensitive,
+      "ttsOverallProgress": ttsOverallProgress,
+      "ttsPerWavProgress": ttsPerWavProgress,
+      "ttsFilePaths": ttsFilePaths,
     };
   }
 
@@ -127,6 +143,9 @@ final class Message extends Equatable {
     String? ttsInstruction,
     int? ttsCFMSteps,
     bool? isSensitive,
+    double? ttsOverallProgress,
+    List<double>? ttsPerWavProgress,
+    List<String>? ttsFilePaths,
   }) {
     return Message(
       id: id ?? this.id,
@@ -145,6 +164,9 @@ final class Message extends Equatable {
       ttsInstruction: ttsInstruction ?? this.ttsInstruction,
       ttsCFMSteps: ttsCFMSteps ?? this.ttsCFMSteps,
       isSensitive: isSensitive ?? this.isSensitive,
+      ttsOverallProgress: ttsOverallProgress ?? this.ttsOverallProgress,
+      ttsPerWavProgress: ttsPerWavProgress ?? this.ttsPerWavProgress,
+      ttsFilePaths: ttsFilePaths ?? this.ttsFilePaths,
     );
   }
 
@@ -168,6 +190,9 @@ Message(
   ttsInstruction: $ttsInstruction,
   ttsCFMSteps: $ttsCFMSteps,
   isSensitive: $isSensitive,
+  ttsOverallProgress: $ttsOverallProgress,
+  ttsPerWavProgress: $ttsPerWavProgress,
+  ttsFilePaths: $ttsFilePaths,
 )""";
   }
 

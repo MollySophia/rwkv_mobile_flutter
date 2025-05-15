@@ -11,13 +11,6 @@ extension _Instruction on Language {
       };
 }
 
-Stream<T> _randomGenerator<T>(T Function() generator, Duration spacing) async* {
-  while (true) {
-    yield generator();
-    await Future.delayed(spacing);
-  }
-}
-
 extension _TTSStatic on _TTS {
   static const _defaultTextInInput = "";
   static const _cfmStepsKey = "cfmSteps";
@@ -232,6 +225,9 @@ extension _$TTS on _TTS {
     P.chat._updateMessageById(
       id: receiveId,
       changing: !allReceived,
+      ttsOverallProgress: overallProgress,
+      ttsPerWavProgress: perWavProgress,
+      ttsFilePaths: filePaths,
     );
 
     if (allReceived) {
@@ -427,13 +423,16 @@ extension $TTS on _TTS {
 
     final receiveMsg = Message(
       id: receiveId,
-      content: "",
+      content: ttsText,
       isMine: false,
       changing: true,
       isReasoning: false,
       paused: false,
       type: MessageType.ttsGeneration,
       audioUrl: outputWavPath,
+      ttsOverallProgress: 0.0,
+      ttsPerWavProgress: [],
+      ttsFilePaths: [],
     );
 
     P.chat.receiveId.q = receiveId;

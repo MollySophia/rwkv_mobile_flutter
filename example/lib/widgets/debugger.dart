@@ -252,7 +252,9 @@ class _TTSDebugger extends ConsumerWidget {
                   T("perWavProgress".codeToName),
                   T(perWavProgress.toString()),
                   T("filePaths".codeToName),
-                  T(filePaths.toString()),
+                  Co(
+                    children: filePaths.map((e) => T(e)).toList(),
+                  ),
                   T("receiveId".codeToName),
                   T(receiveId.toString()),
                 ].indexMap((index, e) {

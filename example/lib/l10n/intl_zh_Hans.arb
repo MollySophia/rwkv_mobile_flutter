@@ -150,5 +150,6 @@
   "follow_us_on_twitter": "在 Twitter 上关注我们",
   "please_load_model_first": "请先加载模型",
   "inference_is_done": "🎉 推理完成",
-  "please_check_the_result": "请检查结果"
+  "please_check_the_result": "请检查结果",
+  "generating": "生成中..."
 }

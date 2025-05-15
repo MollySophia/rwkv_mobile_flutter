@@ -115,6 +115,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "generate_random_sudoku_puzzle": MessageLookupByLibrary.simpleMessage(
       "生成随机数独",
     ),
+    "generating": MessageLookupByLibrary.simpleMessage("生成中..."),
     "hide_stack": MessageLookupByLibrary.simpleMessage("隐藏 CoT 堆栈"),
     "human": MessageLookupByLibrary.simpleMessage("人类"),
     "i_want_rwkv_to_say": MessageLookupByLibrary.simpleMessage("我想让 RWKV 说..."),

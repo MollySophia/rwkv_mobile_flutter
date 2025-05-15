@@ -6,11 +6,13 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:photo_viewer/photo_viewer.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:zone/func/merge_wav.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:zone/model/cot_display_state.dart';
+import 'package:zone/model/demo_type.dart';
 import 'package:zone/model/message.dart' as model;
 import 'package:zone/model/world_type.dart';
 import 'package:zone/route/router.dart';
@@ -57,15 +59,24 @@ class Message extends ConsumerWidget {
       final audioUrl = msg.audioUrl;
       qqq("audioUrl: $audioUrl");
       if (audioUrl == null) return;
-      P.world.play(path: audioUrl);
+      if (P.world.playing.q) {
+        P.world.stopPlaying();
+      } else {
+        P.world.play(path: audioUrl);
+      }
       return;
     }
 
     if (msg.type == model.MessageType.ttsGeneration) {
-      final audioUrl = msg.audioUrl;
-      qqq("audioUrl: $audioUrl");
-      if (audioUrl == null) return;
-      P.world.play(path: audioUrl);
+      final start = DateTime.now().millisecondsSinceEpoch;
+      final audioUrl = await mergeWavFiles(msg.ttsFilePaths!);
+      final end = DateTime.now().millisecondsSinceEpoch;
+      qqq("mergeWavFiles: ${end - start}ms");
+      if (P.world.playing.q) {
+        P.world.stopPlaying();
+      } else {
+        P.world.play(path: audioUrl);
+      }
       return;
     }
   }
@@ -78,6 +89,7 @@ class Message extends ConsumerWidget {
     const marginVertical = .0;
     const kBubbleMinHeight = 44.0;
     const kBubbleMaxWidthAdjust = .0;
+    final demoType = ref.watch(P.app.demoType);
 
     final content = msg.content;
     final changing = msg.changing;
@@ -92,8 +104,17 @@ class Message extends ConsumerWidget {
       finalContent = finalContent.replaceAll("\n\n\n", "\n\n");
     }
 
-    if (isMine) {
-      finalContent = finalContent.replaceAll("\n\n", "\n");
+    if (isMine) finalContent = finalContent.replaceAll("\n\n", "\n");
+
+    switch (demoType) {
+      case DemoType.tts:
+        finalContent = "";
+      case DemoType.chat:
+      case DemoType.fifthteenPuzzle:
+      case DemoType.othello:
+      case DemoType.sudoku:
+      case DemoType.world:
+        break;
     }
 
     final cotDisplayState = ref.watch(P.chat.cotDisplayState(msg.id));

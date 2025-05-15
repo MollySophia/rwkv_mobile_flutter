@@ -150,5 +150,6 @@
   "follow_us_on_twitter": "Follow us on Twitter",
   "please_load_model_first": "Please load model first",
   "inference_is_done": "🎉 Inference is done",
-  "please_check_the_result": "Please check the result"
+  "please_check_the_result": "Please check the result",
+  "generating": "Generating..."
 }

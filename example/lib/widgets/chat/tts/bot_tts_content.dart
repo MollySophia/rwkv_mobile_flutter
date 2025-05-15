@@ -8,6 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:zone/func/merge_wav.dart';
+import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/demo_type.dart';
 import 'package:zone/model/message.dart' as model;
 import 'package:zone/state/p.dart';
@@ -47,9 +49,9 @@ class _BotTtsContentState extends ConsumerState<BotTtsContent> {
       }
     });
 
-    _getWavDuration(widget.msg.audioUrl!).then((value) {
-      if (_length == value.toDouble()) return;
-      _length = value.toDouble();
+    _syncWavDuration().then((value) {
+      if (_length == value) return;
+      _length = value;
       if (mounted) setState(() {});
     });
   }
@@ -61,15 +63,31 @@ class _BotTtsContentState extends ConsumerState<BotTtsContent> {
     _timer = null;
   }
 
+  Future<double> _syncWavDuration() async {
+    final filePaths = widget.msg.ttsFilePaths ?? [];
+    if (filePaths.isNotEmpty) {
+      final durations = await Future.wait(filePaths.map((e) => _getWavDuration(e)));
+      return durations.reduce((a, b) => a + b).toDouble();
+    }
+
+    final audioUrl = widget.msg.audioUrl;
+    if (audioUrl != null) {
+      final value = await _getWavDuration(audioUrl);
+      return value.toDouble();
+    }
+
+    return 4000;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.msg.isMine) return const SizedBox.shrink();
     final demoType = ref.watch(P.app.demoType);
     if (demoType != DemoType.tts) return const SizedBox.shrink();
 
-    _getWavDuration(widget.msg.audioUrl!).then((value) {
-      if (_length == value.toDouble()) return;
-      _length = value.toDouble();
+    _syncWavDuration().then((value) {
+      if (_length == value) return;
+      _length = value;
       if (mounted) setState(() {});
     });
 
@@ -80,10 +98,14 @@ class _BotTtsContentState extends ConsumerState<BotTtsContent> {
     final primaryColor = Theme.of(context).colorScheme.primary;
     final length = _length;
     final base = 4000;
-    final width = 50 * (length / (length + base)) + 55;
+    final width = 100 * (length / (length + base)) + 55;
     final isPlaying = ref.watch(P.world.playing);
     final latestClickedMessage = ref.watch(P.chat.latestClickedMessage);
     final isLatestClickedMessage = latestClickedMessage?.id == widget.msg.id;
+
+    final overallProgress = widget.msg.ttsOverallProgress ?? 0.0;
+    final perWavProgress = widget.msg.ttsPerWavProgress ?? [];
+    final filePaths = widget.msg.ttsFilePaths ?? [];
 
     return C(
       decoration: const BD(color: kC),
@@ -94,6 +116,18 @@ class _BotTtsContentState extends ConsumerState<BotTtsContent> {
         mainAxisSize: MainAxisSize.min,
         c: CAA.stretch,
         children: [
+          Ro(
+            children: [
+              ...perWavProgress.map((e) {
+                return Co(
+                  children: [
+                    Icon(Icons.audio_file, color: primaryColor),
+                    T(e.toStringAsFixed(2), s: TS(c: kB.q(.8), w: FW.w600, s: 10)),
+                  ],
+                );
+              }),
+            ],
+          ),
           if (changing)
             Ro(
               m: MAA.start,
@@ -112,7 +146,7 @@ class _BotTtsContentState extends ConsumerState<BotTtsContent> {
                   ),
                 ),
                 8.w,
-                T("Generating...", s: TS(c: kB.q(.8), w: FW.w500)),
+                T(S.current.generating, s: TS(c: kB.q(.8), w: FW.w500)),
               ],
             ),
           if (!changing)
@@ -163,11 +197,15 @@ class _BotTtsContentState extends ConsumerState<BotTtsContent> {
   }
 
   void _onSharePressed() async {
-    if (widget.msg.audioUrl == null) return;
-    final file = File(widget.msg.audioUrl!);
+    final audioUrl = await mergeWavFiles(widget.msg.ttsFilePaths!);
+    final file = File(audioUrl);
     if (!await file.exists()) return;
-
-    await Share.shareXFiles([XFile(widget.msg.audioUrl!)]);
+    await SharePlus.instance.share(ShareParams(
+      files: [XFile(audioUrl)],
+      text: widget.msg.content,
+      subject: widget.msg.content,
+      title: widget.msg.content,
+    ));
   }
 }
 

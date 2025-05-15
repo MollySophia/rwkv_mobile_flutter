@@ -744,6 +744,9 @@ extension _$Chat on _Chat {
     );
   }
 
+  /// Update a message by id
+  ///
+  /// Should follow [Message] class
   void _updateMessageById({
     required int id,
     String? content,
@@ -756,6 +759,10 @@ extension _$Chat on _Chat {
     bool? isReasoning,
     bool? paused,
     String? callingFunction,
+    bool? isSensitive,
+    double? ttsOverallProgress,
+    List<double>? ttsPerWavProgress,
+    List<String>? ttsFilePaths,
   }) {
     final currentMessages = [...messages.q];
     bool found = false;
@@ -773,6 +780,10 @@ extension _$Chat on _Chat {
           audioLength: audioLength ?? msg.audioLength,
           isReasoning: isReasoning ?? msg.isReasoning,
           paused: paused ?? msg.paused,
+          isSensitive: isSensitive ?? msg.isSensitive,
+          ttsOverallProgress: ttsOverallProgress ?? msg.ttsOverallProgress,
+          ttsPerWavProgress: ttsPerWavProgress ?? msg.ttsPerWavProgress,
+          ttsFilePaths: ttsFilePaths ?? msg.ttsFilePaths,
         );
         currentMessages.replaceRange(i, i + 1, [newMsg]);
         found = true;

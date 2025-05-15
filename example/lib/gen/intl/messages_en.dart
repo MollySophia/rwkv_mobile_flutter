@@ -144,6 +144,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "generate_random_sudoku_puzzle": MessageLookupByLibrary.simpleMessage(
       "Generate random Sudoku puzzle",
     ),
+    "generating": MessageLookupByLibrary.simpleMessage("Generating..."),
     "hide_stack": MessageLookupByLibrary.simpleMessage("Hide CoT Stack"),
     "human": MessageLookupByLibrary.simpleMessage("Human"),
     "i_want_rwkv_to_say": MessageLookupByLibrary.simpleMessage(
