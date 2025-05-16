@@ -38,9 +38,7 @@
       "type": "dart",
       "program": "example/lib/main.dart",
       "flutterMode": "release",
-      "args": [
-        "--dart-define=disableRemoteConfig=true"
-      ]
+      "args": []
     },
   ]
 }
