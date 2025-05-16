@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
@@ -17,14 +16,10 @@ class PageOthello extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (kDebugMode) {
-      return const Pager(
-        drawer: Menu(),
-        child: _Page(),
-      );
-    }
-
-    return const _Page();
+    return const Pager(
+      drawer: Menu(),
+      child: _Page(),
+    );
   }
 }
 
