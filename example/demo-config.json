@@ -47,7 +47,7 @@
         "tags": ["reason", "cpu"]
       },
       {
-        "name": "RWKV7-G1 1.5B Longly-Neko",
+        "name": "RWKV7-G1 1.5B Neko",
         "type": "gguf",
         "modelSize": 1.5,
         "fileName": "rwkv7-g1-1.5b-Lonely-Neko-Q6_K.gguf",
@@ -112,7 +112,7 @@
         "tags": ["reason", "gpu"]
       },
       {
-        "name": "RWKV7-G1 1.5B Longly-Neko",
+        "name": "RWKV7-G1 1.5B Neko",
         "type": "st",
         "modelSize": 1.5,
         "fileName": "rwkv7-g1-1.5b-Lonely-Neko-nf4.prefab",
