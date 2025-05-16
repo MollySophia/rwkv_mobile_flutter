@@ -8,28 +8,53 @@
 - 后端 (C++): [rwkv-mobile](https://github.com/MollySophia/rwkv-mobile)
 - 权重: [mollysama/rwkv-mobile-models](https://huggingface.co/mollysama/rwkv-mobile-models/tree/main)
 
-## 功能矩阵
+## Demos
 
-| 功能              | Android | Android-QNN | iOS | macOS | Windows | Linux |
-| ----------------- | :-----: | :---------: | :-: | :---: | :-----: | :---: |
-| Chat              |   ✅    |     ✅      | ✅  |  ✅   |         |  ✅   |
-| Othello           |   ✅    |             | ✅  |  ✅   |         |       |
-| English Vision QA |   ✅    |             |     |       |         |       |
-| English Audio QA  |   ✅    |             |     |       |         |       |
-| English ASR       |   ✅    |             |     |       |         |       |
-| Chinese ASR       |   🚧    |             |     |       |         |       |
-| Sudoku            |   🚧    |             |     |       |         |       |
-| 15Puzzle          |   🚧    |             |     |       |         |       |
+### RWKV Chat
 
-## 下载链接
+⬇️ 客户端下载通道：
 
-### Android APK
+▸ Android：https://www.pgyer.com/rwkvchat
+▸ iOS：https://testflight.apple.com/join/DaMqCNKh
 
-- [Pgyer](https://www.pgyer.com/rwkvchat)
+⬇️ 开源代码地址
 
-### iOS
+▸ Python：https://github.com/BlinkDL/RWKV-LM
 
-- [TestFlight](https://testflight.apple.com/join/DaMqCNKh)
+### RWKV Talk 语音
+
+### RWKV See 视觉理解
+
+⬇️ 客户端下载通道：
+
+▸ Android：https://www.pgyer.com/rwkv-see
+▸ iOS：https://testflight.apple.com/join/vAjawMJc (最新版本正在审核中)
+
+⬇️ 开源代码地址
+
+▸ Python：https://github.com/JL-er/WorldRWKV
+
+### RWKV Othello 黑白棋
+
+⬇️ 客户端下载通道
+
+▸ Android：https://www.pgyer.com/rwkv-othello
+▸ iOS：https://testflight.apple.com/join/f5SVf76c
+
+⬇️ 开源代码地址
+
+▸ Python：https://github.com/Jellyfish042/RWKV_Othello
+
+### RWKV Sudoku 数独
+
+⬇️ 客户端下载通道
+
+▸ Android：https://www.pgyer.com/rwkv-sudoku
+▸ iOS：最新版本审核中
+
+⬇️ 开源代码地址
+
+▸ Python：https://github.com/Jellyfish042/Sudoku-RWKV
 
 ## 前后端通讯方式
 
