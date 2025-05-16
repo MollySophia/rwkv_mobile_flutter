@@ -122,8 +122,8 @@
   "generate_hardest_sudoku_in_the_world": "生成世界上最难的数独",
   "start_to_inference": "开始推理",
   "no_puzzle": "没有数独",
-  "hide_stack": "隐藏 CoT 堆栈",
-  "show_stack": "显示 CoT 堆栈",
+  "hide_stack": "隐藏思维链堆栈",
+  "show_stack": "显示思维链堆栈",
   "clear": "清除",
   "set_the_value_of_grid": "设置网格值",
   "please_enter_a_number_0_means_empty": "请输入一个数字。0 表示空。",
@@ -158,5 +158,5 @@
   "turn_transfer": "落子权转移",
   "continue_using_smaller_model": "继续使用较小模型",
   "reselect_model": "重新选择模型",
-  "size_recommendation": "推荐至少选择1.5B模型，效果更好"
+  "size_recommendation": "推荐至少选择 1.5B 模型，效果更好"
 }
