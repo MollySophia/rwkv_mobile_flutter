@@ -75,6 +75,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "click_to_select_model": MessageLookupByLibrary.simpleMessage("点击选择模型"),
     "continue_download": MessageLookupByLibrary.simpleMessage("继续下载"),
+    "continue_using_smaller_model": MessageLookupByLibrary.simpleMessage(
+      "继续使用较小模型",
+    ),
     "create_a_new_one_by_clicking_the_button_above":
         MessageLookupByLibrary.simpleMessage("点击上方按钮创建新会话"),
     "current_turn": MessageLookupByLibrary.simpleMessage("当前回合"),
@@ -193,6 +196,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "reason": MessageLookupByLibrary.simpleMessage("推理"),
     "reasoning_enabled": MessageLookupByLibrary.simpleMessage("推理模式"),
     "remaining": MessageLookupByLibrary.simpleMessage("剩余时间："),
+    "reselect_model": MessageLookupByLibrary.simpleMessage("重新选择模型"),
     "reset": MessageLookupByLibrary.simpleMessage("重置"),
     "rwkv": MessageLookupByLibrary.simpleMessage("RWKV"),
     "rwkv_chat": MessageLookupByLibrary.simpleMessage("RWKV 聊天"),
@@ -206,6 +210,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "session_configuration": MessageLookupByLibrary.simpleMessage("会话配置"),
     "set_the_value_of_grid": MessageLookupByLibrary.simpleMessage("设置网格值"),
     "show_stack": MessageLookupByLibrary.simpleMessage("显示 CoT 堆栈"),
+    "size_recommendation": MessageLookupByLibrary.simpleMessage(
+      "推荐至少选择1.5B模型，效果更好",
+    ),
     "small": MessageLookupByLibrary.simpleMessage("小 (90%)"),
     "speed": MessageLookupByLibrary.simpleMessage("下载速度："),
     "start_a_new_chat": MessageLookupByLibrary.simpleMessage("开始新聊天"),

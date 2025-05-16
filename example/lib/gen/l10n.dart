@@ -1331,6 +1331,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Continue using smaller model`
+  String get continue_using_smaller_model {
+    return Intl.message(
+      'Continue using smaller model',
+      name: 'continue_using_smaller_model',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reselect model`
+  String get reselect_model {
+    return Intl.message(
+      'Reselect model',
+      name: 'reselect_model',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `It is recommended to choose at least a 1.5B model for better performance.`
+  String get size_recommendation {
+    return Intl.message(
+      'It is recommended to choose at least a 1.5B model for better performance.',
+      name: 'size_recommendation',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

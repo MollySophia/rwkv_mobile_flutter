@@ -79,6 +79,7 @@ class FileInfo extends Equatable {
   /// ["8 Gen 3", ...]
   final List<String> socLimitations;
 
+
   const FileInfo({
     required this.name,
     required this.fileName,

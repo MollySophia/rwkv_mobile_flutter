@@ -155,5 +155,8 @@
   "all_done": "全部完成",
   "playing_partial_generated_audio": "正在播放部分已生成的语音",
   "no_cell_available": "无子可下",
-  "turn_transfer": "落子权转移"
+  "turn_transfer": "落子权转移",
+  "continue_using_smaller_model": "继续使用较小模型",
+  "reselect_model": "重新选择模型",
+  "size_recommendation": "推荐至少选择1.5B模型，效果更好"
 }

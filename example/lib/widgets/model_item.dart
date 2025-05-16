@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'dart:developer';
+import 'dart:math';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:halo_state/halo_state.dart';
@@ -64,6 +65,19 @@ class ModelItem extends ConsumerWidget {
     if (P.rwkv.loading.q) {
       Alert.info(S.current.please_wait_for_the_model_to_load);
       return;
+    }
+
+    final modelSize = fileInfo.modelSize ?? 0.1;
+    if (modelSize < 1.5) {
+      final result = await showOkCancelAlertDialog(
+        context: getContext()!,
+        title: S.current.size_recommendation,
+        okLabel: S.current.continue_using_smaller_model,
+        cancelLabel: S.current.reselect_model,
+      );
+      if (result != OkCancelResult.ok) {
+        return;
+      }
     }
 
     final localFile = P.fileManager.locals(fileInfo).q;
@@ -244,12 +258,21 @@ class _Delete extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final primary = Theme.of(context).colorScheme.primary;
     return GD(
       onTap: _onTap,
       child: C(
-        decoration: BD(color: kCR.q(.8), borderRadius: 8.r, border: Border.all(color: kC)),
+        decoration: BD(
+            color: kC,
+            borderRadius: 8.r,
+            border: Border.all(
+              color: kC,
+            )),
         padding: const EI.a(5),
-        child: const Icon(Icons.delete_forever_outlined, color: kW),
+        child: Icon(
+          Icons.delete_forever_outlined,
+          color: primary,
+        ),
       ),
     );
   }

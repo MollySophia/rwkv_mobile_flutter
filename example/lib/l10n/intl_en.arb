@@ -155,5 +155,8 @@
   "all_done": "All done",
   "playing_partial_generated_audio": "Playing partial generated audio",
   "no_cell_available": "No cell available",
-  "turn_transfer": "Turn transfer"
+  "turn_transfer": "Turn transfer",
+  "continue_using_smaller_model": "Continue using smaller model",
+  "reselect_model": "Reselect model",
+  "size_recommendation": "It is recommended to choose at least a 1.5B model for better performance."
 }

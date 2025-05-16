@@ -329,12 +329,12 @@
     ]
   },
   "world": {
-    "latest_build": 337,
+    "latest_build": 409,
     "latest_build_ios": 334,
     "note_zh": ["提升应用程序的稳定性", "修复了已知问题"],
     "note_en": ["Improve application stability", "Fix known issues"],
-    "android_url": "https://www.pgyer.com/worldrwkv",
-    "ios_url": "",
+    "android_url": "https://www.pgyer.com/rwkv-see",
+    "ios_url": "https://testflight.apple.com/join/vAjawMJc",
     "model_config": [
       {
         "name": "RWKV7-G1 Siglip Vision Encoder",
@@ -474,8 +474,8 @@
     "latest_build_ios": 329,
     "note_zh": ["提升应用程序的稳定性", "修复了已知问题"],
     "note_en": ["Improve application stability", "Fix known issues"],
-    "android_url": "https://www.pgyer.com/rwkvtts",
-    "ios_url": "",
+    "android_url": "https://www.pgyer.com/rwkv-talk",
+    "ios_url": "https://testflight.apple.com/join/mfsdWS4b",
     "model_config": [
       {
         "name": "RWKV7 TTS 1.5B (8 Elite) 🇨🇳🇺🇸🇯🇵",
@@ -641,8 +641,18 @@
       }
     ]
   },
+  "othello": {
+    "latest_build": 1,
+    "latest_build_ios": 1,
+    "note_zh": ["提升应用程序的稳定性", "修复了已知问题"],
+    "note_en": ["Improve application stability", "Fix known issues"],
+    "android_url": "https://www.pgyer.com/rwkv-othello",
+    "ios_url": "https://testflight.apple.com/join/f5SVf76c",
+    "model_config": []
+  },
   "sudoku": {
     "latest_build": 1,
+    "latest_build_ios": 1,
     "note_zh": ["提升应用程序的稳定性", "修复了已知问题"],
     "note_en": ["Improve application stability", "Fix known issues"],
     "android_url": "https://www.pgyer.com/rwkv-sudoku",

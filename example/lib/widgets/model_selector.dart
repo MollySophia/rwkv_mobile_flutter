@@ -122,6 +122,7 @@ class ModelSelector extends ConsumerWidget {
             4.h,
             const _DownloadSource(),
             4.h,
+            if (demoType == DemoType.chat) T(S.current.size_recommendation, s: TS(c: kB.q(.7), s: 14, w: FW.w600)),
             if (demoType == DemoType.world)
               for (final worldType in WorldType.values.where((e) => e.isVisual)) WorldGroupItem(worldType),
             if (demoType == DemoType.tts)

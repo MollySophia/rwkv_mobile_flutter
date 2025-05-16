@@ -96,6 +96,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "continue_download": MessageLookupByLibrary.simpleMessage(
       "Continue Download",
     ),
+    "continue_using_smaller_model": MessageLookupByLibrary.simpleMessage(
+      "Continue using smaller model",
+    ),
     "create_a_new_one_by_clicking_the_button_above":
         MessageLookupByLibrary.simpleMessage(
           "Create a new one by clicking the button above.",
@@ -248,6 +251,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Reasoning enabled",
     ),
     "remaining": MessageLookupByLibrary.simpleMessage("Remaining:"),
+    "reselect_model": MessageLookupByLibrary.simpleMessage("Reselect model"),
     "reset": MessageLookupByLibrary.simpleMessage("Reset"),
     "rwkv": MessageLookupByLibrary.simpleMessage("RWKV"),
     "rwkv_chat": MessageLookupByLibrary.simpleMessage("RWKV Chat"),
@@ -269,6 +273,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Set the value of grid",
     ),
     "show_stack": MessageLookupByLibrary.simpleMessage("Show CoT Stack"),
+    "size_recommendation": MessageLookupByLibrary.simpleMessage(
+      "It is recommended to choose at least a 1.5B model for better performance.",
+    ),
     "small": MessageLookupByLibrary.simpleMessage("Small (90%)"),
     "speed": MessageLookupByLibrary.simpleMessage("Speed:"),
     "start_a_new_chat": MessageLookupByLibrary.simpleMessage(
