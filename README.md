@@ -24,7 +24,7 @@
 
 ### RWKV Othello 黑白棋
 
-[Android](https://www.pgyer.com/rwkv-othello) | [iOS TestFlight](https://testflight.apple.com/join/f5SVf76c) | [Python](https://github.com/Jellyfish042/RWKV_Othello)
+[Android](https://www.pgyer.com/rwkv-othello) | [_🚧 审核中_ iOS TestFlight](https://testflight.apple.com/join/f5SVf76c) | [Python](https://github.com/Jellyfish042/RWKV_Othello)
 
 ### RWKV Sudoku 数独
 
