@@ -1,6 +1,5 @@
 // ignore: unused_import
 import 'dart:developer';
-import 'dart:math';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:halo_state/halo_state.dart';
