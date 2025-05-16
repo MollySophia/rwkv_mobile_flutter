@@ -1,6 +1,6 @@
 {
   "chat": {
-    "latest_build": 331,
+    "latest_build": 411,
     "latest_build_ios": 331,
     "note_zh": ["提升应用程序的稳定性", "修复了已知问题"],
     "note_en": ["Improve application stability", "Fix known issues"],
@@ -330,7 +330,7 @@
   },
   "world": {
     "latest_build": 409,
-    "latest_build_ios": 334,
+    "latest_build_ios": 337,
     "note_zh": ["提升应用程序的稳定性", "修复了已知问题"],
     "note_en": ["Improve application stability", "Fix known issues"],
     "android_url": "https://www.pgyer.com/rwkv-see",
@@ -471,7 +471,7 @@
   },
   "tts": {
     "latest_build": 404,
-    "latest_build_ios": 329,
+    "latest_build_ios": 336,
     "note_zh": ["提升应用程序的稳定性", "修复了已知问题"],
     "note_en": ["Improve application stability", "Fix known issues"],
     "android_url": "https://www.pgyer.com/rwkv-talk",
@@ -642,7 +642,7 @@
     ]
   },
   "othello": {
-    "latest_build": 1,
+    "latest_build": 408,
     "latest_build_ios": 1,
     "note_zh": ["提升应用程序的稳定性", "修复了已知问题"],
     "note_en": ["Improve application stability", "Fix known issues"],
@@ -651,12 +651,12 @@
     "model_config": []
   },
   "sudoku": {
-    "latest_build": 1,
+    "latest_build": 412,
     "latest_build_ios": 1,
     "note_zh": ["提升应用程序的稳定性", "修复了已知问题"],
     "note_en": ["Improve application stability", "Fix known issues"],
     "android_url": "https://www.pgyer.com/rwkv-sudoku",
-    "ios_url": "",
+    "ios_url": "https://testflight.apple.com/join/CCc7rY5k",
     "model_config": [
       {
         "name": "RWKV7 Sudoku (8 Elite)",
