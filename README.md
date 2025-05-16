@@ -12,49 +12,23 @@
 
 ### RWKV Chat
 
-⬇️ 客户端下载通道：
-
-- Android：https://www.pgyer.com/rwkvchat
-- iOS：https://testflight.apple.com/join/DaMqCNKh
-
-⬇️ 开源代码地址
-
-- Python：https://github.com/BlinkDL/RWKV-LM
+[Android](https://www.pgyer.com/rwkvchat) | [iOS TestFlight](https://testflight.apple.com/join/DaMqCNKh) | [Python](https://github.com/BlinkDL/RWKV-LM)
 
 ### RWKV Talk 语音
 
+[Android](https://www.pgyer.com/rwkv-talk) | [iOS TestFlight](https://testflight.apple.com/join/mfsdWS4b) | [Python](https://github.com/yynil/RWKVTTS)
+
 ### RWKV See 视觉理解
 
-⬇️ 客户端下载通道：
-
-- Android：https://www.pgyer.com/rwkv-see
-- iOS：https://testflight.apple.com/join/vAjawMJc (最新版本正在审核中)
-
-⬇️ 开源代码地址
-
-- Python：https://github.com/JL-er/WorldRWKV
+[Android](https://www.pgyer.com/rwkv-see) | [iOS TestFlight](https://testflight.apple.com/join/vAjawMJc) | [Python](https://github.com/JL-er/WorldRWKV)
 
 ### RWKV Othello 黑白棋
 
-⬇️ 客户端下载通道
-
-- Android：https://www.pgyer.com/rwkv-othello
-- iOS：https://testflight.apple.com/join/f5SVf76c
-
-⬇️ 开源代码地址
-
-- Python：https://github.com/Jellyfish042/RWKV_Othello
+[Android](https://www.pgyer.com/rwkv-othello) | [iOS TestFlight](https://testflight.apple.com/join/f5SVf76c) | [Python](https://github.com/Jellyfish042/RWKV_Othello)
 
 ### RWKV Sudoku 数独
 
-⬇️ 客户端下载通道
-
-- Android：https://www.pgyer.com/rwkv-sudoku
-- iOS：最新版本审核中
-
-⬇️ 开源代码地址
-
-- Python：https://github.com/Jellyfish042/Sudoku-RWKV
+[Android](https://www.pgyer.com/rwkv-sudoku) | _🚧 审核中_ iOS TestFlight | [Python](https://github.com/Jellyfish042/Sudoku-RWKV)
 
 ## 前后端通讯方式
 
