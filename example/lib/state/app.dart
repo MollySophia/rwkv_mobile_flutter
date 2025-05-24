@@ -182,6 +182,7 @@ extension _$App on _App {
         qqe("androidUrl is null");
         return;
       }
+      // todo AppUpdateDialog.show(getContext()!, url: "");
       launchUrl(Uri.parse(androidUrl), mode: LaunchMode.externalApplication);
     }
 
