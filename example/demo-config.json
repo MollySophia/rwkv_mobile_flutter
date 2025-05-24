@@ -347,6 +347,19 @@
         "socLimitations": ["8s Gen 3"]
       },
       {
+        "name": "RWKV7-G1 1.5B Neko (8 Gen 2)",
+        "type": "bin",
+        "modelSize": 1.5,
+        "url": "mollysama/rwkv-mobile-models/resolve/main/qnn/rwkv7-g1-1.5b-LonelyNeko-a16w8-8gen2_combined.bin",
+        "fileName": "rwkv7-g1-1.5b-LonelyNeko-a16w8-8gen2_combined.bin",
+        "fileSize": 1692382728,
+        "quantization": "a16w8",
+        "platforms": ["android"],
+        "backends": ["qnn"],
+        "tags": ["reason", "npu"],
+        "socLimitations": ["8 Gen 2"]
+      },
+      {
         "name": "RWKV7-G1 2.9B (8 Elite)",
         "type": "bin",
         "modelSize": 2.9,
