@@ -36,6 +36,7 @@ class _Page extends ConsumerWidget {
     );
     final screenWidth = ref.watch(P.app.screenWidth);
     final paddingRight = ref.watch(P.app.paddingRight);
+    final kW = ref.watch(P.app.qw);
 
     return Scaffold(
       backgroundColor: kW,
@@ -120,6 +121,7 @@ class _Title extends ConsumerWidget {
     final version = ref.watch(P.app.version);
     final buildNumber = ref.watch(P.app.buildNumber);
     final usePortrait = ref.watch(P.othello.usePortrait);
+    final kB = ref.watch(P.app.qb);
     return Ro(
       m: MAA.center,
       children: [
@@ -128,7 +130,7 @@ class _Title extends ConsumerWidget {
         if (usePortrait) const Spacer(),
         T(
           s.rwkv_othello,
-          s: const TS(c: kB, s: 20, w: FW.w700),
+          s: TS(c: kB, s: 20, w: FW.w700),
         ),
         if (usePortrait) const Spacer(),
         if (!usePortrait) 32.w,
@@ -239,10 +241,11 @@ class _ModelSettings extends ConsumerWidget {
         ),
       ],
     );
+    final kB = ref.watch(P.app.qb);
 
     return Material(
       color: kB.q(.0),
-      textStyle: const TS(ff: "monospace", c: kB, s: 10),
+      textStyle: TS(ff: "monospace", c: kB, s: 10),
       child: C(
         padding: const EI.a(4),
         margin: const EI.a(4),
@@ -257,7 +260,7 @@ class _ModelSettings extends ConsumerWidget {
           children: [
             T(
               s.model_settings,
-              s: const TS(w: FW.w700),
+              s: TS(w: FW.w700),
             ),
             8.h,
             T(s.in_context_search_will_be_activated_when_both_breadth_and_depth_are_greater_than_2, s: TS(c: kB.q(.5), s: 10)),
@@ -309,6 +312,7 @@ class _Players extends ConsumerWidget {
       P.othello.settingsAndPlayersShouldAtDifferentColumnIsHorizontal,
     );
     final usePortrait = ref.watch(P.othello.usePortrait);
+    final kB = ref.watch(P.app.qb);
 
     final blackOptions = C(
       decoration: BD(
@@ -410,7 +414,7 @@ class _Players extends ConsumerWidget {
 
     return Material(
       color: kB.q(.0),
-      textStyle: const TS(ff: "monospace", c: kB, s: 10),
+      textStyle: TS(ff: "monospace", c: kB, s: 10),
       child: C(
         margin: const EI.a(4),
         padding: const EI.a(4),
@@ -424,7 +428,7 @@ class _Players extends ConsumerWidget {
           children: [
             T(
               s.players,
-              s: const TS(w: FW.w700),
+              s: TS(w: FW.w700),
             ),
             12.h,
             if (usePortrait && !playerShouldAtSameColumnWithSettings && !settingsAndPlayersShouldAtDifferentColumnIsHorizontal)
@@ -481,6 +485,7 @@ class _Score extends ConsumerWidget {
     final usePortrait = ref.watch(P.othello.usePortrait);
     final prefillSpeed = ref.watch(P.rwkv.prefillSpeed);
     final decodeSpeed = ref.watch(P.rwkv.decodeSpeed);
+    final kB = ref.watch(P.app.qb);
 
     final thinkingWidget = Co(
       mainAxisSize: MainAxisSize.min,
@@ -495,11 +500,11 @@ class _Score extends ConsumerWidget {
         ),
         T(
           "${s.prefill}: ${prefillSpeed.toStringAsFixed(1)} t/s",
-          s: const TS(c: kB, s: 10, w: FW.w400),
+          s: TS(c: kB, s: 10, w: FW.w400),
         ),
         T(
           "${s.decode}: ${decodeSpeed.toStringAsFixed(1)} t/s",
-          s: const TS(c: kB, s: 10, w: FW.w400),
+          s: TS(c: kB, s: 10, w: FW.w400),
         ),
       ],
     );
@@ -512,7 +517,7 @@ class _Score extends ConsumerWidget {
             },
       child: T(
         s.new_game,
-        s: const TS(c: kB, s: 10, w: FW.w500),
+        s: TS(c: kB, s: 10, w: FW.w500),
       ),
     );
 
@@ -597,6 +602,7 @@ class _Grid extends ConsumerWidget {
     final rulesHorizontalNames = ["a", "b", "c", "d", "e", "f", "g", "h"];
     final rulesVerticalNames = ["1", "2", "3", "4", "5", "6", "7", "8"];
     final labelSize = 16.0;
+    final kB = ref.watch(P.app.qb);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -647,7 +653,7 @@ class _Grid extends ConsumerWidget {
             child: Center(
               child: T(
                 e,
-                s: const TS(c: kB, s: 10, w: FW.w700),
+                s: TS(c: kB, s: 10, w: FW.w700),
               ),
             ),
           );
@@ -663,7 +669,7 @@ class _Grid extends ConsumerWidget {
             child: Center(
               child: T(
                 e,
-                s: const TS(c: kB, s: 10, w: FW.w700),
+                s: TS(c: kB, s: 10, w: FW.w700),
               ),
             ),
           );
@@ -835,6 +841,8 @@ class _Console extends ConsumerWidget {
     final paddingTop = ref.watch(P.app.paddingTop);
     final paddingBottom = ref.watch(P.app.quantizedIntPaddingBottom);
     final paddingLeft = ref.watch(P.app.paddingLeft);
+    final kW = ref.watch(P.app.qw);
+    final kB = ref.watch(P.app.qb);
 
     return Material(
       color: kB,
@@ -887,7 +895,7 @@ class _Console extends ConsumerWidget {
                   }),
               ],
             ),
-            style: const TS(c: kW, s: 12, w: FW.w500),
+            style: TS(c: kW, s: 12, w: FW.w500),
           );
         },
       ),
@@ -895,13 +903,14 @@ class _Console extends ConsumerWidget {
   }
 }
 
-class _ConsoleCell extends StatelessWidget {
+class _ConsoleCell extends ConsumerWidget {
   const _ConsoleCell({required this.cellType});
 
   final CellType cellType;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final kW = ref.watch(P.app.qw);
     Color color = kC;
     switch (cellType) {
       case CellType.black:

@@ -49,6 +49,7 @@ class _Empty extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = S.of(context);
+    final kB = ref.watch(P.app.qb);
     return Co(
       m: MAA.center,
       c: CAA.stretch,
@@ -86,7 +87,8 @@ class _Item extends ConsumerWidget {
     final isCurrent = current?.id == conversation.id;
     final primary = Theme.of(context).colorScheme.primary;
     final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
-
+    final kW = ref.watch(P.app.qw);
+    final kB = ref.watch(P.app.qb);
     return CupertinoContextMenu(
       actions: [
         CupertinoContextMenuAction(

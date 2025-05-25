@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
+import 'package:zone/state/p.dart';
 
-class TextFieldTest extends StatefulWidget {
+class TextFieldTest extends ConsumerStatefulWidget {
   const TextFieldTest({super.key});
 
   @override
-  State<TextFieldTest> createState() => _TextFieldTestState();
+  ConsumerState<TextFieldTest> createState() => _TextFieldTestState();
 }
 
-class _TextFieldTestState extends State<TextFieldTest> {
+class _TextFieldTestState extends ConsumerState<TextFieldTest> {
   final _focusNode = FocusNode();
   @override
   Widget build(BuildContext context) {
+    final kW = ref.watch(P.app.qw);
     return Scaffold(
       appBar: AppBar(
         title: const Text('TextFieldTest'),
@@ -21,7 +24,7 @@ class _TextFieldTestState extends State<TextFieldTest> {
           _focusNode.unfocus();
         },
         child: C(
-          decoration: const BD(color: kW),
+          decoration: BD(color: kW),
           child: Co(
             children: [
               TextField(

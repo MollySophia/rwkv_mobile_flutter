@@ -10,7 +10,7 @@ enum DemoType {
   world;
 
   ColorScheme? get colorScheme => switch (this) {
-    DemoType.chat => null,
+    DemoType.chat => ColorScheme.fromSeed(seedColor: Colors.deepPurple),
     DemoType.tts => ColorScheme.fromSeed(seedColor: Colors.green),
     DemoType.world => ColorScheme.fromSeed(seedColor: Colors.blue),
     DemoType.fifthteenPuzzle => ColorScheme.fromSeed(seedColor: Colors.blue),

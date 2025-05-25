@@ -129,6 +129,8 @@ class ModelItem extends ConsumerWidget {
         startTitle = s.start_to_chat;
     }
 
+    final kW = ref.watch(P.app.qw);
+
     return ClipRRect(
       borderRadius: 8.r,
       child: C(
@@ -159,7 +161,7 @@ class ModelItem extends ConsumerWidget {
                     padding: const EI.a(8),
                     child: T(
                       loading ? s.loading : startTitle,
-                      s: const TS(c: kW),
+                      s: TS(c: kW),
                     ),
                   ),
                 ),
@@ -172,7 +174,7 @@ class ModelItem extends ConsumerWidget {
                       borderRadius: 8.r,
                     ),
                     padding: const EI.a(8),
-                    child: T(s.chatting, s: const TS(c: kW)),
+                    child: T(s.chatting, s: TS(c: kW)),
                   ),
                 ),
               if (!isCurrentModel) 8.w,
@@ -206,6 +208,7 @@ class _DownloadIndicator extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final kB = ref.watch(P.app.qb);
     return GD(
       onTap: _onTap,
       child: C(
@@ -300,6 +303,8 @@ class FileKeyItem extends ConsumerWidget {
     if (timeRemaining.isNegative) timeRemaining = Duration.zero;
     final tags = fileInfo.tags;
     final primary = Theme.of(getContext()!).colorScheme.primary;
+    final kW = ref.watch(P.app.qw);
+    final kB = ref.watch(P.app.qb);
     return Co(
       c: CAA.start,
       children: [
@@ -309,7 +314,7 @@ class FileKeyItem extends ConsumerWidget {
           children: [
             T(
               fileInfo.name,
-              s: const TS(c: kB, w: FW.w600),
+              s: TS(c: kB, w: FW.w600),
             ),
             T(
               gbDisplay(fileSize),
@@ -402,10 +407,10 @@ class FileKeyItem extends ConsumerWidget {
         if (downloading)
           Wrap(
             children: [
-              T(s.speed, s: const TS(c: kB)),
+              T(s.speed, s: TS(c: kB)),
               T("${networkSpeed.toStringAsFixed(1)}MB/s"),
               12.w,
-              T(s.remaining, s: const TS(c: kB)),
+              T(s.remaining, s: TS(c: kB)),
               if (timeRemaining.inMinutes > 0) T("${timeRemaining.inMinutes}m"),
               if (timeRemaining.inMinutes == 0) T("${timeRemaining.inSeconds}s"),
             ],

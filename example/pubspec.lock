@@ -5,10 +5,10 @@ packages:
     dependency: transitive
     description:
       name: _fe_analyzer_shared
-      sha256: dc27559385e905ad30838356c5f5d574014ba39872d732111cd07ac0beff4c57
+      sha256: e55636ed79578b9abca5fecf9437947798f5ef7456308b5cb85720b793eac92f
       url: "https://pub.dev"
     source: hosted
-    version: "80.0.0"
+    version: "82.0.0"
   adaptive_dialog:
     dependency: "direct main"
     description:
@@ -21,10 +21,10 @@ packages:
     dependency: transitive
     description:
       name: analyzer
-      sha256: "192d1c5b944e7e53b24b5586db760db934b177d4147c42fbca8c8c5f1eb8d11e"
+      sha256: "904ae5bb474d32c38fb9482e2d925d5454cda04ddd0e55d2e6826bc72f6ba8c0"
       url: "https://pub.dev"
     source: hosted
-    version: "7.3.0"
+    version: "7.4.5"
   analyzer_plugin:
     dependency: transitive
     description:
@@ -373,10 +373,10 @@ packages:
     dependency: transitive
     description:
       name: custom_lint_visitor
-      sha256: "36282d85714af494ee2d7da8c8913630aa6694da99f104fb2ed4afcf8fc857d8"
+      sha256: cba5b6d7a6217312472bf4468cdf68c949488aed7ffb0eab792cd0b6c435054d
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0+7.3.0"
+    version: "1.0.0+7.4.5"
   dart_style:
     dependency: transitive
     description:
@@ -657,18 +657,18 @@ packages:
     dependency: "direct main"
     description:
       name: halo_alert
-      sha256: "5721a47b92f14a50e4c591764f8964d25a085be5c7f066ae0c0e05f74fe6a9b2"
+      sha256: "56800b474aeb422cba5043ba39e3ae5083d2f31b3f90616e37b93ebd8364bf5e"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.1"
+    version: "0.6.0"
   halo_state:
     dependency: "direct main"
     description:
       name: halo_state
-      sha256: "06c81ed7661e40dbec76ad7e773ac544316eca4b182894f7f9d4f30d75dcba07"
+      sha256: b80199ae7bbd62d98508e13ed244777ec11a4fec2756408deb8bf5d1f6de0427
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.8"
+    version: "0.3.0"
   hashcodes:
     dependency: transitive
     description:
@@ -913,10 +913,10 @@ packages:
     dependency: transitive
     description:
       name: macos_window_utils
-      sha256: "997d84f148c0e5a2bdb93997425a4289432984b135646c3f6134c697ef82ce3e"
+      sha256: b5832b9a9df1741d78b76ea77811803fbcc944599b3b41950a9f19e822731023
       url: "https://pub.dev"
     source: hosted
-    version: "1.8.0"
+    version: "1.8.1"
   markdown:
     dependency: transitive
     description:
@@ -1210,10 +1210,10 @@ packages:
     dependency: transitive
     description:
       name: record_linux
-      sha256: fcb5964a84292813de70d52253663c1caca00a15f849fb5d0fdf9b929b28a7b9
+      sha256: "29e7735b05c1944bb6c9b72a36c08d4a1b24117e712d6a9523c003bde12bf484"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.0"
   record_macos:
     dependency: transitive
     description:
@@ -1670,10 +1670,10 @@ packages:
     dependency: transitive
     description:
       name: vector_graphics_compiler
-      sha256: "1b4b9e706a10294258727674a340ae0d6e64a7231980f9f9a3d12e4b42407aad"
+      sha256: "557a315b7d2a6dbb0aaaff84d857967ce6bdc96a63dc6ee2a57ce5a6ee5d3331"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.16"
+    version: "1.1.17"
   vector_math:
     dependency: transitive
     description:

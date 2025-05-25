@@ -123,6 +123,9 @@ class Suggestions extends ConsumerWidget {
       bottom += inputHeight - 114 - paddingBottom;
     }
 
+    final kW = ref.watch(P.app.qw);
+    final kB = ref.watch(P.app.qb);
+
     return Positioned(
       bottom: bottom,
       left: 0,
@@ -158,7 +161,7 @@ class Suggestions extends ConsumerWidget {
               ),
               margin: const EI.o(r: 8, t: 4, b: 8),
               padding: const EI.s(v: 4, h: 8),
-              child: T(displayText, s: const TS(c: kB, s: 16)),
+              child: T(displayText, s: TS(c: kB, s: 16)),
             ),
           );
         }).toList(),

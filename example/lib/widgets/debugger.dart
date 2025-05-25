@@ -16,6 +16,8 @@ class Debugger extends ConsumerWidget {
     if (!kDebugMode) return const SizedBox.shrink();
     final demoType = ref.watch(P.app.demoType);
 
+    final kW = ref.watch(P.app.qw);
+
     switch (demoType) {
       case DemoType.sudoku:
         return const _SudokuDebugger();
@@ -66,6 +68,8 @@ class Debugger extends ConsumerWidget {
 
     final latestRuntimeAddress = ref.watch(P.preference.latestRuntimeAddress);
 
+    final kB = ref.watch(P.app.qb);
+
     return Positioned(
       left: 0,
       top: 0,
@@ -73,7 +77,7 @@ class Debugger extends ConsumerWidget {
       bottom: 0,
       child: IgnorePointer(
         child: Material(
-          textStyle: const TS(
+          textStyle: TS(
             ff: "Monospace",
             c: kW,
             s: 8,
@@ -173,6 +177,9 @@ class _SudokuDebugger extends ConsumerWidget {
     final page = ref.watch(Pager.page);
     final mainPageNotIgnoring = ref.watch(Pager.mainPageNotIgnoring);
 
+    final kW = ref.watch(P.app.qw);
+    final kB = ref.watch(P.app.qb);
+
     return Positioned(
       left: 0,
       top: 0,
@@ -180,7 +187,7 @@ class _SudokuDebugger extends ConsumerWidget {
       bottom: 0,
       child: IgnorePointer(
         child: Material(
-          textStyle: const TS(
+          textStyle: TS(
             ff: "Monospace",
             c: kW,
             s: 8,
@@ -241,6 +248,7 @@ class _TTSDebugger extends ConsumerWidget {
 
     final selectedSpkName = ref.watch(P.tts.selectedSpkName);
     final selectSourceAudioPath = ref.watch(P.tts.selectSourceAudioPath);
+    final kB = ref.watch(P.app.qb);
 
     return Positioned(
       left: 0,
@@ -249,7 +257,7 @@ class _TTSDebugger extends ConsumerWidget {
       bottom: 0,
       child: IgnorePointer(
         child: Material(
-          textStyle: const TS(
+          textStyle: TS(
             ff: "Monospace",
             c: kW,
             s: 8,

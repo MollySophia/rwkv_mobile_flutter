@@ -40,6 +40,8 @@ class Input extends ConsumerWidget {
         show = true;
     }
 
+    final kW = ref.watch(P.app.qw);
+
     return Positioned(
       bottom: show ? 0 : -P.chat.inputHeight.q,
       left: 0,
@@ -117,7 +119,7 @@ class _TextField extends ConsumerWidget {
     final intonationShown = ref.watch(P.tts.intonationShown);
     final keyboardType = intonationShown ? TextInputType.none : TextInputType.multiline;
 
-    qqq("intonationShown: $intonationShown, keyboardType: $keyboardType");
+    final kW = ref.watch(P.app.qw);
 
     return GD(
       onTap: textFieldEnabled ? null : _onTapTextFieldWhenItsDisabled,

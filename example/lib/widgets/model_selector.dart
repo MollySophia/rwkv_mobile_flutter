@@ -89,6 +89,7 @@ class ModelSelector extends ConsumerWidget {
     final demoType = ref.watch(P.app.demoType);
     final availableModels = ref.watch(P.fileManager.availableModels);
     final ttsCores = ref.watch(P.fileManager.ttsCores);
+    final kB = ref.watch(P.app.qb);
 
     return ClipRRect(
       borderRadius: 16.r,
@@ -167,6 +168,8 @@ class _DownloadSource extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentSource = ref.watch(P.fileManager.downloadSource);
     final primary = Theme.of(context).colorScheme.primary;
+    final kW = ref.watch(P.app.qw);
+    final kB = ref.watch(P.app.qb);
     return Co(
       c: CrossAxisAlignment.stretch,
       children: [

@@ -182,6 +182,8 @@ class Message extends ConsumerWidget {
 
     final textScaleFactorForCotContent = TextScaler.linear(MediaQuery.textScalerOf(context).scale(_kTextScaleFactorForCotContent));
 
+    final kB = ref.watch(P.app.qb);
+
     final markdownStyleSheetForCotContent = MarkdownStyleSheet(
       p: TS(c: kB.q(.5)),
       h1: TS(c: kB.q(.5)),
@@ -306,6 +308,8 @@ class Message extends ConsumerWidget {
     final screenWidth = ref.watch(P.app.screenWidth);
     final screenHeight = ref.watch(P.app.screenHeight);
     final rawMaxWidth = math.min(screenWidth, screenHeight);
+
+    final kW = ref.watch(P.app.qw);
 
     final bubbleContent = ConstrainedBox(
       constraints: BoxConstraints(maxWidth: width - kBubbleMaxWidthAdjust, minHeight: kBubbleMinHeight),

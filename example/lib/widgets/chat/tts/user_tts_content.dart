@@ -59,6 +59,9 @@ class UserTTSContent extends ConsumerWidget {
 
     const buttonSize = 24.0;
 
+    final qw = ref.watch(P.app.qw);
+
+
     return Padding(
       padding: const EI.o(
         t: 2,
@@ -75,7 +78,7 @@ class UserTTSContent extends ConsumerWidget {
               Exp(
                 child: C(
                   decoration: BD(
-                    color: kW.q(.5),
+                    color: qw.q(.5),
                     borderRadius: 8.r,
                     border: Border.all(color: primary, width: .5),
                   ),

@@ -31,6 +31,8 @@ class Settings extends ConsumerWidget {
     final preferredTextScaleFactor = ref.watch(P.preference.preferredTextScaleFactor);
     final preferredLanguage = ref.watch(P.preference.preferredLanguage);
     final paddingLeft = ref.watch(P.app.paddingLeft);
+    final kB = ref.watch(P.app.qb);
+    final kW = ref.watch(P.app.qw);
 
     final iconWidget = SB(
       width: 64,
@@ -57,18 +59,18 @@ class Settings extends ConsumerWidget {
             children: [iconWidget],
           ),
           16.h,
-          const Ro(
+          Ro(
             m: MAA.center,
             children: [
-              T(Config.appTitle, s: TS(s: 24)),
+              T(Config.appTitle, s: TS(s: 24, c: kB)),
             ],
           ),
           4.h,
           Ro(
             m: MAA.center,
             children: [
-              T(version, s: const TS(s: 12)),
-              T(" ($buildNumber)", s: const TS(s: 12)),
+              T(version, s: TS(s: 12, c: kB)),
+              T(" ($buildNumber)", s: TS(s: 12, c: kB)),
             ],
           ),
           16.h,

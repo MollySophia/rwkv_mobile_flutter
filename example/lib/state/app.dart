@@ -1,12 +1,7 @@
 part of 'p.dart';
 
-class _App extends RawApp with WidgetsBindingObserver {
-  final gotContextOnce = qs(false);
-
-  final lifecycleState = qs(AppLifecycleState.resumed);
-
+class _App extends RawApp {
   final _pageKey = qs(PageKey.first);
-
   late final pageKey = qp((ref) => ref.watch(_pageKey));
 
   /// 当前正在运行的任务
@@ -27,27 +22,11 @@ class _App extends RawApp with WidgetsBindingObserver {
   late final isDesktop = qs(false);
 
   @override
-  void didChangeMetrics() {
-    final context = getContext();
-    if (context == null) return;
-    if (!context.mounted) return;
-    contextGot(context);
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    lifecycleState.q = state;
-  }
+  BuildContext? get context => getContext();
 }
 
 /// Public methods
 extension $App on _App {
-  FV firstContextGot(BuildContext context) async {
-    await Future.delayed(Duration.zero);
-    // ignore: use_build_context_synchronously
-    contextGot(context);
-  }
-
   FV getConfig() async {
     qq;
 
@@ -98,6 +77,8 @@ extension _$App on _App {
     isDesktop.q = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
 
     await init();
+
+    preferredThemeMode.q = ThemeMode.light;
 
     late final String name;
     if (kDebugMode) {
