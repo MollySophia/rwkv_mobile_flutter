@@ -12,13 +12,13 @@
 
 - Windows:
 使用PowerShell执行脚本
-```
+```powershell
 & ./fetch_latest_libraries.ps1
 ```
 
 - Linux / macOS:
 终端执行脚本
-```
+```sh
 ./fetch_latest_libraries.sh
 ```
 
