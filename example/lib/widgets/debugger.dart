@@ -40,7 +40,7 @@ class Debugger extends ConsumerWidget {
     final isOthello = demoType == DemoType.othello;
     final paddingTop = ref.watch(P.app.paddingTop);
     final page = ref.watch(Pager.page);
-    final mainPageNotIgnoring = ref.watch(Pager.mainPageNotIgnoring);
+    final atMainPage = ref.watch(Pager.atMainPage);
     final conversation = ref.watch(P.conversation.current);
     final chains = ref.watch(P.chat.chains);
     final currentChain = ref.watch(P.chat.currentChain);
@@ -108,8 +108,10 @@ class Debugger extends ConsumerWidget {
                       T(inputHeight.toString()),
                       if (!isOthello) T("hasFocus".codeToName),
                       T(hasFocus.toString()),
-                      if (Config.enableConversation) T("mainPageNotIgnoring".codeToName),
-                      if (Config.enableConversation) T(mainPageNotIgnoring.toString()),
+                      T("atMainPage".codeToName),
+                      T(atMainPage.toString()),
+                      T("page".codeToName),
+                      T(page.toString()),
                       if (Config.enableConversation) T("conversation".codeToName),
                       if (Config.enableConversation) T(conversation?.name ?? "null"),
                       // T("receivingTokens".codeToName),
@@ -175,7 +177,7 @@ class _SudokuDebugger extends ConsumerWidget {
     final loaded = ref.watch(P.rwkv.loaded);
     final running = ref.watch(P.sudoku.running);
     final page = ref.watch(Pager.page);
-    final mainPageNotIgnoring = ref.watch(Pager.mainPageNotIgnoring);
+    final mainPageNotIgnoring = ref.watch(Pager.atMainPage);
 
     final kW = ref.watch(P.app.qw);
     final kB = ref.watch(P.app.qb);

@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gaimon/gaimon.dart';
 import 'package:halo/halo.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/model/demo_type.dart';
@@ -15,9 +14,11 @@ PageController? _controller;
 
 class Pager extends ConsumerStatefulWidget {
   static final page = qs<double>(1.0);
-  static final mainPageNotIgnoring = qs(true);
+  static final atMainPage = qs(true);
   static final childOpacity = qs(1.0);
   static final drawerOpacity = qs(.0);
+  static final _newToRight = qs(80.0);
+  static final _newController = qs<PageController?>(null);
 
   static FV toggle() async {
     final currentPage = Pager.page.q;
@@ -25,8 +26,8 @@ class Pager extends ConsumerStatefulWidget {
     qqq("currentPage: $currentPage, targetPage: $targetPage");
     _CustomPageScrollPhysics.disableGaimon = true;
     HF.wait(20).then((_) {
-      if (Platform.isAndroid) Gaimon.light();
-      if (Platform.isIOS) Gaimon.soft();
+      if (Platform.isAndroid) P.app.hapticLight();
+      if (Platform.isIOS) P.app.hapticSoft();
     });
     await _controller!.animateToPage(targetPage, duration: 300.ms, curve: Curves.easeOutCubic);
     await Future.delayed(50.ms);
@@ -56,9 +57,11 @@ class _PagerState extends ConsumerState<Pager> {
 
   void _onPageChanged() async {
     final rawString = (_controller!.page ?? 0).toStringAsFixed(2);
-    final v = double.tryParse(rawString) ?? .0;
+    double v = double.tryParse(rawString) ?? .0;
+    if (v > 1) v = 1;
+    if (v < 0) v = 0;
     Pager.page.q = v;
-    Pager.mainPageNotIgnoring.q = v == 1;
+    Pager.atMainPage.q = v == 1;
     Pager.childOpacity.q = v;
     Pager.drawerOpacity.q = 1 - v;
   }
@@ -83,7 +86,7 @@ class _PagerState extends ConsumerState<Pager> {
       _controller!.addListener(_onPageChanged);
     }
 
-    final ignorePointer = ref.watch(Pager.mainPageNotIgnoring);
+    final ignorePointer = ref.watch(Pager.atMainPage);
 
     final recording = ref.watch(P.world.recording);
 
@@ -146,7 +149,7 @@ class _Dim extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final screenWidth = ref.watch(P.app.screenWidth);
     final screenHeight = ref.watch(P.app.screenHeight);
-    final ignorePointer = ref.watch(Pager.mainPageNotIgnoring);
+    final ignorePointer = ref.watch(Pager.atMainPage);
     final drawerOpacity = ref.watch(Pager.drawerOpacity);
     final kB = ref.watch(P.app.qb);
 
@@ -206,7 +209,7 @@ class _CustomPageScrollPhysics extends PageScrollPhysics {
     final targetPage = getTargetPage(position, velocity);
 
     if (_latestTargetPage != null && _latestTargetPage != targetPage) {
-      if (!disableGaimon) Gaimon.soft();
+      if (!disableGaimon) P.app.hapticSoft();
     }
 
     _latestTargetPage = targetPage;
