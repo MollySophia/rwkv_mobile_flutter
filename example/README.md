@@ -37,11 +37,15 @@
 
 ## 聊天页面逻辑
 
-页面 UI: `lib/page/chat.dart`
-消息 UI: `lib/widgets/chat/message.dart`
-状态: `lib/state/chat.dart`
-模型: `example/lib/model/message.dart`
-后端: RWKV
+### 主要涉及的代码
+
+- 页面 UI: `lib/page/chat.dart`
+- 消息 UI: `lib/widgets/chat/message.dart`
+- 状态: `lib/state/chat.dart`
+- 模型: `example/lib/model/message.dart`
+- 后端: RWKV
+
+### 业务逻辑
 
 - 使用 ListView.separated 来渲染消息列表, `ListView.reverse = true`
 - 使用 `late final messages = qs<List<Message>>([]);` 作为数据源
