@@ -114,9 +114,9 @@ class _AppUpdateDialogState extends State<AppUpdateDialog> {
           margin: const EdgeInsets.symmetric(horizontal: 24),
           decoration: BoxDecoration(
             color: theme.colorScheme.surface,
-            borderRadius: BorderRadius.all(Radius.circular(16)),
+            borderRadius: const BorderRadius.all(Radius.circular(16)),
           ),
-          padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.min,
@@ -145,7 +145,7 @@ class _AppUpdateDialogState extends State<AppUpdateDialog> {
               8.h,
               Row(
                 children: [
-                  Spacer(),
+                  const Spacer(),
                   TextButton(
                     onPressed: () {
                       Navigator.pop(context);

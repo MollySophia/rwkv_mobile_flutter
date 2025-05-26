@@ -260,7 +260,7 @@ class _ModelSettings extends ConsumerWidget {
           children: [
             T(
               s.model_settings,
-              s: TS(w: FW.w700),
+              s: const TS(w: FW.w700),
             ),
             8.h,
             T(s.in_context_search_will_be_activated_when_both_breadth_and_depth_are_greater_than_2, s: TS(c: kB.q(.5), s: 10)),
@@ -428,7 +428,7 @@ class _Players extends ConsumerWidget {
           children: [
             T(
               s.players,
-              s: TS(w: FW.w700),
+              s: const TS(w: FW.w700),
             ),
             12.h,
             if (usePortrait && !playerShouldAtSameColumnWithSettings && !settingsAndPlayersShouldAtDifferentColumnIsHorizontal)

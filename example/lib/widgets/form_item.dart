@@ -37,7 +37,7 @@ class FormItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final kB = ref.watch(P.app.qb);
-    final qc = ref.watch(P.app.light) ? Color(0xFFFFFFFF) : Color(0xFF121212);
+    final qc = ref.watch(P.app.light) ? const Color(0xFFFFFFFF) : const Color(0xFF121212);
 
     return GD(
       onTap: onTap,

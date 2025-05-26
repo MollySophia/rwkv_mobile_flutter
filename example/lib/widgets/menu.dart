@@ -15,7 +15,7 @@ class Menu extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final kW = ref.watch(P.app.qw);
-    return Co(
+    return const Co(
       m: MAA.center,
       children: [
         Exp(child: Settings()),

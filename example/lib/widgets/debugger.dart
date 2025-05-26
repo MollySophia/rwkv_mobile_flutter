@@ -257,7 +257,7 @@ class _TTSDebugger extends ConsumerWidget {
       bottom: 0,
       child: IgnorePointer(
         child: Material(
-          textStyle: TS(
+          textStyle: const TS(
             ff: "Monospace",
             c: kW,
             s: 8,
