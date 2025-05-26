@@ -34,3 +34,16 @@
 ### 运行
 
 - 在 vscode / cursor 中运行 "Debug: Start Debugging" (`workbench.action.debug.start`)
+
+## 聊天页面逻辑
+
+页面 UI: `lib/page/chat.dart`
+消息 UI: `lib/widgets/chat/message.dart`
+状态: `lib/state/chat.dart`
+模型: `example/lib/model/message.dart`
+后端: RWKV
+
+- 使用 ListView.separated 来渲染消息列表, `ListView.reverse = true`
+- 使用 `late final messages = qs<List<Message>>([]);` 作为数据源
+- 使用 `P.chat.send` 方法发送消息, 主要逻辑为先发送用户消息, 同步至状态, 再发送 bot message, 同步至状态. 而后, 向 Backend 发送消息, 最后, 周期性地从 backend 接收新生成的字符串.
+- 从 backend 接收到新生成的字符串后, 更新 bot message 的状态, 触发 UI 更新

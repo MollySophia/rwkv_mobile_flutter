@@ -46,7 +46,6 @@ class _Chat {
 
   late final autoPauseId = qsn<int>();
 
-  // late final messages = qp<List<Message>>((_) => []);
   late final messages = qs<List<Message>>([]);
 
   /// 用于实现 DeepSeek 的 “分叉对话” 功能
