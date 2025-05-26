@@ -23,6 +23,7 @@ class _Chat {
   /// Disable sender
   ///
   /// TODO: Should be moved to state/rwkv.dart
+  @Deprecated("Use P.rwkv.receiving instead")
   late final receivingTokens = qs(false);
 
   /// TODO: Should be moved to state/rwkv.dart
@@ -422,7 +423,6 @@ extension _$Chat on _Chat {
       case DemoType.tts:
       case DemoType.world:
     }
-
     qq;
 
     textEditingController.addListener(_onTextEditingControllerValueChanged);
@@ -430,11 +430,8 @@ extension _$Chat on _Chat {
 
     P.app.pageKey.l(_onPageKeyChanged);
 
-    P.rwkv.oldBroadcastStream.listen(
-      _onStreamEvent,
-      onDone: _onStreamDone,
-      onError: _onStreamError,
-    );
+    P.rwkv.oldBroadcastStream.listen(_onOldStreamEvent, onDone: _onStreamDone, onError: _onStreamError);
+    P.rwkv.broadcastStream.listen(_onStreamEvent, onDone: _onStreamDone, onError: _onStreamError);
 
     P.world.audioFileStreamController.stream.listen(_onNewFileReceived);
     focusNode.addListener(_onFocusNodeChanged);
@@ -712,19 +709,19 @@ extension _$Chat on _Chat {
       final msg = currentMessages[i];
       if (msg.id == id) {
         final newMsg = msg.copyWith(
-          content: content ?? msg.content,
-          isMine: isMine ?? msg.isMine,
-          changing: changing ?? msg.changing,
-          type: type ?? msg.type,
-          imageUrl: imageUrl ?? msg.imageUrl,
-          audioUrl: audioUrl ?? msg.audioUrl,
-          audioLength: audioLength ?? msg.audioLength,
-          isReasoning: isReasoning ?? msg.isReasoning,
-          paused: paused ?? msg.paused,
-          isSensitive: isSensitive ?? msg.isSensitive,
-          ttsOverallProgress: ttsOverallProgress ?? msg.ttsOverallProgress,
-          ttsPerWavProgress: ttsPerWavProgress ?? msg.ttsPerWavProgress,
-          ttsFilePaths: ttsFilePaths ?? msg.ttsFilePaths,
+          content: content,
+          isMine: isMine,
+          changing: changing,
+          type: type,
+          imageUrl: imageUrl,
+          audioUrl: audioUrl,
+          audioLength: audioLength,
+          isReasoning: isReasoning,
+          paused: paused,
+          isSensitive: isSensitive,
+          ttsOverallProgress: ttsOverallProgress,
+          ttsPerWavProgress: ttsPerWavProgress,
+          ttsFilePaths: ttsFilePaths,
         );
         currentMessages.replaceRange(i, i + 1, [newMsg]);
         found = true;
@@ -742,41 +739,13 @@ extension _$Chat on _Chat {
     P.conversation.updateMessages(currentMessages);
   }
 
-  FV _onStreamEvent(LLMEvent event) async {
-    final demoType = P.app.demoType.q;
-    // if (demoType != DemoType.chat && demoType != DemoType.world) return;
-    switch (demoType) {
-      case DemoType.chat:
-      case DemoType.world:
-      case DemoType.tts:
-        break;
-      default:
-        return;
-    }
-
+  @Deprecated("Use _onStreamEvent instead")
+  void _onOldStreamEvent(LLMEvent event) {
     switch (event.type) {
-      case _RWKVMessageType.isGenerating:
-      case _RWKVMessageType.responseBufferContent:
-        break;
-      default:
-        qqq("event: $event");
-    }
-
-    switch (event.type) {
-      case _RWKVMessageType.responseBufferIds:
-        break;
-
       case _RWKVMessageType.isGenerating:
         final isGenerating = event.content == "true";
         receivingTokens.q = isGenerating;
         if (!isGenerating) _fullyReceived(callingFunction: "_onStreamEvent:isGenerating");
-        break;
-
-      case _RWKVMessageType.responseBufferContent:
-        receivedTokens.q = event.content;
-        _sensitiveThrottler.call(() {
-          _checkSensitive(event.content);
-        });
         break;
 
       case _RWKVMessageType.response:
@@ -803,17 +772,34 @@ extension _$Chat on _Chat {
         receivedTokens.q = "";
         receivingTokens.q = false;
         break;
+
+      default:
+        break;
     }
   }
 
-  FV _onStreamDone() async {
+  void _onStreamEvent(from_rwkv.FromRWKV event) {
+    switch (event) {
+      case from_rwkv.ResponseBufferContent res:
+        receivedTokens.q = res.responseBufferContent;
+        _sensitiveThrottler.call(() {
+          _checkSensitive(res.responseBufferContent);
+        });
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  void _onStreamDone() async {
     qq;
     final demoType = P.app.demoType.q;
     if (demoType != DemoType.chat && demoType != DemoType.world) return;
     receivingTokens.q = false;
   }
 
-  FV _onStreamError(Object error, StackTrace stackTrace) async {
+  void _onStreamError(Object error, StackTrace stackTrace) async {
     qqe("error: $error");
     if (!kDebugMode) Sentry.captureException(error, stackTrace: stackTrace);
     final demoType = P.app.demoType.q;
