@@ -183,5 +183,8 @@
   "dump_stopped": "Auto dump disabled",
   "dump_see_files": "Dump Message Records",
   "dump_see_files_subtitle": "Help us improve the algorithm",
-  "dump_see_files_alert_message": "Message records will be stored in the following folder\n {path}"
+  "dump_see_files_alert_message": "Message records will be stored in the following folder\n {path}",
+  "all": "All",
+  "all_prompt": "All Prompt",
+  "no_data": "No Data"
 }
