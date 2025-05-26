@@ -136,8 +136,8 @@ extension _$World on _World {
       case DemoType.fifthteenPuzzle:
       case DemoType.othello:
       case DemoType.sudoku:
-        return;
       case DemoType.chat:
+        return;
       case DemoType.tts:
       case DemoType.world:
     }
