@@ -40,7 +40,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "about": MessageLookupByLibrary.simpleMessage("About"),
     "according_to_the_following_audio_file":
         MessageLookupByLibrary.simpleMessage("According to: "),
+    "all": MessageLookupByLibrary.simpleMessage("All"),
     "all_done": MessageLookupByLibrary.simpleMessage("All Done"),
+    "all_prompt": MessageLookupByLibrary.simpleMessage("All Prompt"),
     "application_internal_test_group": MessageLookupByLibrary.simpleMessage(
       "Application Internal Test Group",
     ),
@@ -225,6 +227,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "no_cell_available": MessageLookupByLibrary.simpleMessage(
       "No cell available",
     ),
+    "no_data": MessageLookupByLibrary.simpleMessage("No Data"),
     "no_puzzle": MessageLookupByLibrary.simpleMessage("No Sudoku"),
     "number": MessageLookupByLibrary.simpleMessage("Number"),
     "ok": MessageLookupByLibrary.simpleMessage("OK"),

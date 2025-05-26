@@ -38,7 +38,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "about": MessageLookupByLibrary.simpleMessage("关于"),
     "according_to_the_following_audio_file":
         MessageLookupByLibrary.simpleMessage("根据: "),
+    "all": MessageLookupByLibrary.simpleMessage("全部"),
     "all_done": MessageLookupByLibrary.simpleMessage("全部完成"),
+    "all_prompt": MessageLookupByLibrary.simpleMessage("全部 Prompt"),
     "application_internal_test_group": MessageLookupByLibrary.simpleMessage(
       "应用内测群",
     ),
@@ -173,6 +175,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "new_game": MessageLookupByLibrary.simpleMessage("新游戏"),
     "new_version_found": MessageLookupByLibrary.simpleMessage("发现新版本"),
     "no_cell_available": MessageLookupByLibrary.simpleMessage("无子可下"),
+    "no_data": MessageLookupByLibrary.simpleMessage("无数据"),
     "no_puzzle": MessageLookupByLibrary.simpleMessage("没有数独"),
     "number": MessageLookupByLibrary.simpleMessage("数字"),
     "ok": MessageLookupByLibrary.simpleMessage("确定"),
