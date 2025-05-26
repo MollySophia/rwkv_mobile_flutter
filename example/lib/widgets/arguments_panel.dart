@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gaimon/gaimon.dart';
 import 'package:halo/halo.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/gen/l10n.dart';
@@ -199,7 +198,7 @@ class _Value extends ConsumerWidget {
     }
     final currentValue = P.rwkv.arguments(argument).q;
     if (currentValue == rawNewValue) return;
-    if (argument.enableGaimon) Gaimon.light();
+    if (argument.enableGaimon) P.app.hapticLight();
     P.rwkv.arguments(argument).q = rawNewValue;
     if (argument == Argument.maxLength) {
       P.rwkv.argumentUpdatingDebouncer.call(() {

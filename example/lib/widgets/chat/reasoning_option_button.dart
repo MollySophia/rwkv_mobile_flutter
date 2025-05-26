@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gaimon/gaimon.dart';
 import 'package:halo/halo.dart';
 import 'package:halo_alert/halo_alert.dart';
 import 'package:halo_state/halo_state.dart';
@@ -56,7 +55,7 @@ class ReasoningOptionButton extends ConsumerWidget {
         break;
     }
 
-    Gaimon.light();
+    P.app.hapticLight();
   }
 
   @override

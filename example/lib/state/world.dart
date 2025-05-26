@@ -119,7 +119,7 @@ extension $World on _World {
     await stopPlaying();
     ap.Source source = ap.DeviceFileSource(path);
     playing.q = true;
-    Gaimon.light();
+    P.app.hapticLight();
     await _audioPlayer.play(source);
   }
 

@@ -329,7 +329,7 @@ extension $Chat on _Chat {
 
   FV onStopButtonPressed() async {
     qqq("receiveId: ${receiveId.q}");
-    Gaimon.light();
+    P.app.hapticLight();
     await Future.delayed(1.ms);
     final id = receiveId.q;
     if (id == null) {
@@ -349,7 +349,7 @@ extension $Chat on _Chat {
 
   FV resumeMessageById({required int id, bool withHaptic = true}) async {
     qq;
-    if (withHaptic) Gaimon.light();
+    if (withHaptic) P.app.hapticLight();
     P.rwkv.sendMessages(_history());
     _updateMessageById(
       id: id,

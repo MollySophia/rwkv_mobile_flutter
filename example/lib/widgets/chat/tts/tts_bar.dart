@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
-import 'package:gaimon/gaimon.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:halo_alert/halo_alert.dart';
@@ -106,7 +105,7 @@ class _AudioInteractor extends ConsumerWidget {
 
     P.tts.selectSourceAudioPath.q = path;
     P.tts.selectedSpkName.q = null;
-    Gaimon.light();
+    P.app.hapticLight();
   }
 
   @override
@@ -177,14 +176,14 @@ class _IntonationPanel extends ConsumerWidget {
     if (!selection.isValid) {
       controller.text += e;
       controller.selection = TextSelection.collapsed(offset: controller.text.length);
-      Gaimon.light();
+      P.app.hapticLight();
       return;
     }
     final newText = text.replaceRange(selection.start, selection.end, e);
     final newOffset = selection.start + e.length;
     controller.text = newText;
     controller.selection = TextSelection.collapsed(offset: newOffset);
-    Gaimon.light();
+    P.app.hapticLight();
     return;
   }
 
@@ -459,7 +458,7 @@ class _SpkPanel extends ConsumerWidget {
                 return GD(
                   onTap: () {
                     P.tts.selectedSpkPanelFilter.q = e;
-                    Gaimon.light();
+                    P.app.hapticLight();
                   },
                   child: C(
                     padding: const EI.s(h: 4, v: 2),
@@ -504,7 +503,7 @@ class _SpkPanel extends ConsumerWidget {
                       qq;
                       P.tts.selectedSpkName.q = k;
                       P.tts.selectSourceAudioPath.q = null;
-                      Gaimon.light();
+                      P.app.hapticLight();
                     },
                     child: Ro(
                       children: [
@@ -598,7 +597,7 @@ class _InstructTabs extends ConsumerWidget {
       P.tts.interactingInstruction.q = e;
     }
 
-    Gaimon.light();
+    P.app.hapticLight();
   }
 
   @override
@@ -689,7 +688,7 @@ class _InstructOptions extends ConsumerWidget {
 
   void _onTap(int index) {
     qq;
-    Gaimon.light();
+    P.app.hapticLight();
     final interactingInstruction = P.tts.interactingInstruction.q;
     if (interactingInstruction == TTSInstruction.none) return;
     if (P.tts.instructions(interactingInstruction).q == index) {

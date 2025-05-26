@@ -125,7 +125,7 @@ extension _$Dump on _Dump {
 /// Public methods
 extension $Dump on _Dump {
   FV startDump() async {
-    Gaimon.light();
+    P.app.hapticLight();
     final status = await Permission.storage.status;
     if (!status.isGranted) {
       final status = await Permission.storage.request();
@@ -144,7 +144,7 @@ extension $Dump on _Dump {
   }
 
   FV stopDump() async {
-    Gaimon.light();
+    P.app.hapticLight();
     await P.preference._saveDumpping(false);
     Alert.info(S.current.dump_stopped);
   }
