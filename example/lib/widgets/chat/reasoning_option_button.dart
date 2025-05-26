@@ -66,6 +66,8 @@ class ReasoningOptionButton extends ConsumerWidget {
     final preferChinese = ref.watch(P.rwkv.preferChinese);
     final preferPseudo = ref.watch(P.rwkv.preferPseudo);
     final loading = ref.watch(P.rwkv.loading);
+    final kW = ref.watch(P.app.qw);
+    final kB = ref.watch(P.app.qb);
 
     final iconColor = switch (option) {
       ReasoningOption.language => preferChinese ? kW : kB.q(.25),
@@ -109,12 +111,12 @@ class ReasoningOptionButton extends ConsumerWidget {
                 m: MAA.center,
                 children: [
                   if (option == ReasoningOption.language) ...[
-                    if (preferChinese) T(s.prefer, s: const TS(c: kW, s: 10, height: 1)),
-                    if (preferChinese) T(s.chinese, s: const TS(c: kW, s: 10, height: 1)),
+                    if (preferChinese) T(s.prefer, s: TS(c: kW, s: 10, height: 1)),
+                    if (preferChinese) T(s.chinese, s: TS(c: kW, s: 10, height: 1)),
                     if (!preferChinese && !preferPseudo) T(s.auto, s: TS(c: kB.q(.25), s: 10, height: 1)),
                   ] else if (option == ReasoningOption.pseudo) ...[
-                    if (preferPseudo) T(s.prefer, s: const TS(c: kW, s: 10, height: 1)),
-                    if (preferPseudo) const T("伪推理", s: TS(c: kW, s: 10, height: 1)),
+                    if (preferPseudo) T(s.prefer, s: TS(c: kW, s: 10, height: 1)),
+                    if (preferPseudo) T("伪推理", s: TS(c: kW, s: 10, height: 1)),
                   ] else
                     ...[],
                 ],

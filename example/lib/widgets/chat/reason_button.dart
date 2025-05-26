@@ -43,6 +43,8 @@ class ReasonButton extends ConsumerWidget {
     final color = Theme.of(context).colorScheme.primary;
     final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
     final loading = ref.watch(P.rwkv.loading);
+    final kW = ref.watch(P.app.qw);
+    final kB = ref.watch(P.app.qb);
     return GD(
       onTap: _onTap,
       child: AnimatedContainer(

@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
+import 'package:zone/state/p.dart';
 
 class LayoutDebugger extends ConsumerWidget {
   const LayoutDebugger({
@@ -35,6 +36,9 @@ class LayoutDebugger extends ConsumerWidget {
     // 注意这里不能写这句话, 否则会影响手势事件
     // if (!showFrame) return child;
 
+    final kW = ref.watch(P.app.qw);
+    final kB = ref.watch(P.app.qb);
+
     return Stack(
       children: [
         child,
@@ -56,7 +60,7 @@ class LayoutDebugger extends ConsumerWidget {
             bottom: 0,
             child: Material(
               color: kB.q(.5),
-              textStyle: const TS(c: kW, s: 8),
+              textStyle: TS(c: kW, s: 8),
               child: C(
                 child: debugWidget!,
               ),

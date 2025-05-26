@@ -54,6 +54,7 @@ class _Page extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
     final padding = MediaQuery.of(context).padding;
+    final kW = ref.watch(P.app.qw);
 
     return Scaffold(
       backgroundColor: kW,
@@ -367,11 +368,11 @@ class _UI extends ConsumerWidget {
       ],
     ];
 
-    // debugger();
+    final kW = ref.watch(P.app.qw);
     return C(
       width: shouldUseVerticalLayout ? min / 1.428 : min * (isPortrait ? 1 : 1.428),
       height: shouldUseVerticalLayout ? min : min * (isPortrait ? 0.7 : 1),
-      decoration: const BD(color: kW),
+      decoration: BD(color: kW),
       margin: !isPortrait ? EI.o(t: paddingTop) : null,
       child: shouldUseVerticalLayout
           ? Co(
@@ -654,6 +655,7 @@ class _Terminal extends ConsumerWidget {
     final padding = MediaQuery.of(context).padding;
     final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
     final isDesktop = ref.watch(P.app.isDesktop);
+    final kW = ref.watch(P.app.qw);
     return SelectionArea(
       child: C(
         decoration: const BD(color: _kGridBGColor),

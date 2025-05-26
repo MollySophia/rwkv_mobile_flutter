@@ -120,6 +120,7 @@ class _SamplerOptions extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final s = S.of(context);
     final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
+    final kB = ref.watch(P.app.qb);
     return C(
       margin: const EI.s(h: 12),
       decoration: BD(color: kB.q(.1), borderRadius: 8.r),
@@ -149,6 +150,7 @@ class _CompletionOptions extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = S.of(context);
+    final kB = ref.watch(P.app.qb);
     final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
     return C(
       margin: const EI.s(h: 12),
@@ -214,6 +216,7 @@ class _Value extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final value = ref.watch(P.rwkv.arguments(argument));
     if (!argument.show) return const SizedBox.shrink();
+    final kB = ref.watch(P.app.qb);
     return Co(
       c: CAA.stretch,
       children: [

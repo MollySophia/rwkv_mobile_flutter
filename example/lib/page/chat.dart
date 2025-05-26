@@ -120,6 +120,7 @@ class _NavigationBarBottomLine extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final paddingTop = ref.watch(P.app.paddingTop);
+    final kB = ref.watch(P.app.qb);
     return Positioned(
       top: paddingTop + kToolbarHeight,
       left: 0,
@@ -184,6 +185,7 @@ class List extends ConsumerWidget {
         bottom += Suggestions.defaultHeight;
         scrollBarBottom += Suggestions.defaultHeight;
     }
+    final kB = ref.watch(P.app.qb);
 
     return Positioned.fill(
       child: GD(

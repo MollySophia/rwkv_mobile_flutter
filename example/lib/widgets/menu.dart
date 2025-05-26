@@ -14,14 +14,12 @@ class Menu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const Material(
-      color: kW,
-      child: Co(
-        m: MAA.center,
-        children: [
-          Exp(child: Settings()),
-        ],
-      ),
+    final kW = ref.watch(P.app.qw);
+    return const Co(
+      m: MAA.center,
+      children: [
+        Exp(child: Settings()),
+      ],
     );
   }
 }

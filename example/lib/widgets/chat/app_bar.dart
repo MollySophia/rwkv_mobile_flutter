@@ -59,6 +59,9 @@ class ChatAppBar extends ConsumerWidget {
       displayName = currentModel.name;
     }
 
+    final kW = ref.watch(P.app.qw);
+    final kB = ref.watch(P.app.qb);
+
     return Positioned(
       top: 0,
       left: 0,

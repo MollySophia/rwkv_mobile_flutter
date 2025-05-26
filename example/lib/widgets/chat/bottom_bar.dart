@@ -43,6 +43,7 @@ class BottomBar extends ConsumerWidget {
     final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
     final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
     final s = S.of(context);
+    final kB = ref.watch(P.app.qb);
 
     return Ro(
       children: [

@@ -108,6 +108,7 @@ class _BotTtsContentState extends ConsumerState<BotTtsContent> {
     final perWavProgress = widget.msg.ttsPerWavProgress ?? [];
 
     final allDone = overallProgress >= 1;
+    final kB = ref.watch(P.app.qb);
 
     return C(
       decoration: const BD(color: kC),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
+import 'package:zone/state/p.dart';
 
 class FormItem extends ConsumerWidget {
   final bool isSectionStart;
@@ -35,11 +36,14 @@ class FormItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final kB = ref.watch(P.app.qb);
+    final qc = ref.watch(P.app.light) ? const Color(0xFFFFFFFF) : const Color(0xFF121212);
+
     return GD(
       onTap: onTap,
       child: C(
         decoration: BD(
-          color: kW,
+          color: qc,
           borderRadius: BorderRadius.only(
             topLeft: isSectionStart ? 12.rr : Radius.zero,
             topRight: isSectionStart ? 12.rr : Radius.zero,
@@ -67,7 +71,7 @@ class FormItem extends ConsumerWidget {
                   T(
                     title,
                     textAlign: titleTextAlign,
-                    s: TS(w: FW.w500, s: 16, c: titleColor),
+                    s: TS(w: FW.w500, s: 16, c: titleColor ?? kB),
                   ),
                   if (subtitle != null)
                     T(

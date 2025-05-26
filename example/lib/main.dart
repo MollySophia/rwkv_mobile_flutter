@@ -45,13 +45,13 @@ FV _sentryAppRunner() async {
   await SentryFlutter.init(
     _configureSentry,
     appRunner: () {
-      runApp(const _App());
+      runApp(const _StateWrapper());
     },
   );
 }
 
 FV _debugAppRunner() async {
-  runApp(const _App());
+  runApp(const _StateWrapper());
 }
 
 FutureOr<void> _configureSentry(SentryFlutterOptions options) {
@@ -71,37 +71,46 @@ FutureOr<void> _configureSentry(SentryFlutterOptions options) {
 
 final _supportedLocales = Language.values.where((e) => e != Language.none).map((e) => e.locale).toList();
 
+class _StateWrapper extends ConsumerWidget {
+  const _StateWrapper();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    P.app.firstContextGot(context);
+    return const StateWrapper(child: _App());
+  }
+}
+
 class _App extends StatelessWidget {
   const _App();
 
   @override
   Widget build(BuildContext context) {
-    P.app.firstContextGot(context);
-
-    return StateWrapper(
-      child: MaterialApp.router(
-        color: kBG,
-        supportedLocales: _supportedLocales,
-        localizationsDelegates: const [
-          S.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        theme: ThemeData(
-          colorScheme: P.app.demoType.q.colorScheme,
-          appBarTheme: const AppBarTheme(scrolledUnderElevation: 0, backgroundColor: kBG),
-          scaffoldBackgroundColor: kBG,
-        ),
-        darkTheme: ThemeData(
-          colorScheme: P.app.demoType.q.colorScheme,
-          appBarTheme: const AppBarTheme(scrolledUnderElevation: 0, backgroundColor: kBG),
-          scaffoldBackgroundColor: kBG,
-        ),
-        debugShowCheckedModeBanner: kDebugMode,
-        routerConfig: kRouter,
-        builder: _builder,
+    return MaterialApp.router(
+      color: kBG,
+      supportedLocales: _supportedLocales,
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      themeMode: ThemeMode.light,
+      theme: ThemeData(
+        brightness: Brightness.light,
+        colorScheme: P.app.demoType.q.colorScheme!.copyWith(brightness: Brightness.light),
+        appBarTheme: const AppBarTheme(scrolledUnderElevation: 0, backgroundColor: kBG),
+        scaffoldBackgroundColor: kBG,
       ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        colorScheme: P.app.demoType.q.colorScheme!.copyWith(brightness: Brightness.dark),
+        appBarTheme: const AppBarTheme(scrolledUnderElevation: 0, backgroundColor: kB),
+        scaffoldBackgroundColor: kB,
+      ),
+      debugShowCheckedModeBanner: kDebugMode,
+      routerConfig: kRouter,
+      builder: _builder,
     );
   }
 

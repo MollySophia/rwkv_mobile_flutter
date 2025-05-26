@@ -130,10 +130,10 @@ class Suggestions extends ConsumerWidget {
   }
 
   Widget _buildRndPromptList(
-    BuildContext context,
-    DemoType demoType,
-    List suggestions,
-  ) {
+      BuildContext context,
+      DemoType demoType,
+      List suggestions,
+      ) {
     final primary = Theme.of(context).primaryColor;
     return ListView(
       padding: const EI.o(l: 8, b: 8, t: 2),

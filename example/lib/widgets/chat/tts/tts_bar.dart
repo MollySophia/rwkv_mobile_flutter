@@ -190,6 +190,7 @@ class _IntonationPanel extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final kB = ref.watch(P.app.qb);
     return SB(
       height: 250,
       child: Padding(
@@ -226,6 +227,7 @@ class _AudioButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = S.of(context);
+    final kW = ref.watch(P.app.qw);
     final primary = Theme.of(context).colorScheme.primary;
     final demoType = ref.watch(P.app.demoType);
     final borderRadius = demoType != DemoType.tts ? 12.r : 6.r;
@@ -256,6 +258,7 @@ class _SpkButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = S.of(context);
+    final kW = ref.watch(P.app.qw);
     final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
     final primary = Theme.of(context).colorScheme.primary;
     final demoType = ref.watch(P.app.demoType);
@@ -436,6 +439,8 @@ class _SpkPanel extends ConsumerWidget {
         spkNames = spkPairs.keys.where((e) => e.contains(Language.zh_Hans.enName!));
     }
 
+    final kB = ref.watch(P.app.qb);
+
     return SB(
       height: 250,
       child: Co(
@@ -611,6 +616,8 @@ class _InstructTabs extends ConsumerWidget {
     final _ = ref.watch(P.tts.interactingInstruction);
 
     final isZh = Localizations.localeOf(context).languageCode == "zh";
+
+    final kB = ref.watch(P.app.qb);
     return Ro(
       children: [
         Exp(
@@ -700,6 +707,7 @@ class _InstructOptions extends ConsumerWidget {
     final options = interactingInstruction.options;
     final selectedIndex = ref.watch(P.tts.instructions(interactingInstruction));
     final selectedInstruction = selectedIndex != null ? options[selectedIndex] : null;
+    final kB = ref.watch(P.app.qb);
     return GD(
       onTap: () {},
       child: AnimatedContainer(
@@ -767,6 +775,8 @@ class _TextField extends ConsumerWidget {
     final borderRadius = demoType != DemoType.tts ? 12.r : 6.r;
 
     final textInInput = ref.watch(P.tts.textInInput);
+
+    final kW = ref.watch(P.app.qw);
 
     return GD(
       onTap: textFieldEnabled ? null : _onTapTextFieldWhenItsDisabled,
@@ -897,6 +907,7 @@ class _PerformanceInfo extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final prefillSpeed = ref.watch(P.rwkv.prefillSpeed);
     final decodeSpeed = ref.watch(P.rwkv.decodeSpeed);
+    final kB = ref.watch(P.app.qb);
     if (prefillSpeed == 0 && decodeSpeed == 0) return const SizedBox.shrink();
     return Co(
       c: CAA.start,

@@ -125,6 +125,7 @@ downloading: $downloading""");
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
     final alreadyStarted = currentWorldType == worldType && isCurrentModel;
     final loading = ref.watch(P.rwkv.loading);
+    final kW = ref.watch(P.app.qw);
 
     return ClipRRect(
       borderRadius: 8.r,
