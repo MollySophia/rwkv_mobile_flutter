@@ -72,6 +72,7 @@ class Suggestions extends ConsumerWidget {
       case DemoType.chat:
         show = messages.isEmpty && currentModel != null;
         suggestions = config.chat.map((e) => e.suggestions).flattened.shuffled().take(5).toList();
+        break;
       case DemoType.world:
         switch (currentWorldType) {
           case WorldType.reasoningQA:
@@ -80,7 +81,7 @@ class Suggestions extends ConsumerWidget {
             break;
           case WorldType.ocr:
             show = imagePath != null && imagePath.isNotEmpty && messages.length == 1;
-            suggestions = config.seeOcr.shuffled.take(5).toList();
+            suggestions = config.seeOcr.toList().shuffled.take(5).toList();
             break;
           case WorldType.qa:
             show = imagePath != null && imagePath.isNotEmpty && messages.length == 1;
@@ -96,6 +97,7 @@ class Suggestions extends ConsumerWidget {
           case null:
             break;
         }
+        break;
       case DemoType.fifthteenPuzzle:
       case DemoType.othello:
       case DemoType.sudoku:
@@ -130,18 +132,20 @@ class Suggestions extends ConsumerWidget {
   }
 
   Widget _buildRndPromptList(
-      BuildContext context,
-      DemoType demoType,
-      List suggestions,
-      ) {
+    BuildContext context,
+    DemoType demoType,
+    List suggestions,
+  ) {
     final primary = Theme.of(context).primaryColor;
     return ListView(
       padding: const EI.o(l: 8, b: 8, t: 2),
       scrollDirection: Axis.horizontal,
       children: suggestions.map((e) {
         String displayText = '';
-        if (demoType == DemoType.chat) {
-          displayText = (e as Suggestion).display;
+        if (e is Suggestion) {
+          displayText = e.display;
+        } else {
+          displayText = e.toString();
         }
         return _buildTag(
           displayText,
