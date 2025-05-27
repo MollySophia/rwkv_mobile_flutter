@@ -5,19 +5,19 @@ enum DemoType {
   /// RWKV Chat
   chat,
 
-  /// RWKV Fiffthteen Puzzle
+  /// RWKV_Fiffthteen_Puzzle
   fifthteenPuzzle,
 
-  /// RWKV Othello
+  /// RWKV_Othello
   othello,
 
-  /// RWKV Sudoku
+  /// RWKV_Sudoku
   sudoku,
 
-  /// RWKV Talk
+  /// RWKV_Talk
   tts,
 
-  /// RWKV See
+  /// RWKV_See
   world;
 
   ColorScheme? get colorScheme => switch (this) {

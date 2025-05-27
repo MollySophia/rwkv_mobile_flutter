@@ -77,6 +77,56 @@ class ModelSelector extends ConsumerWidget {
 
   const ModelSelector({super.key, required this.scrollController});
 
+  List<Widget> _buildItems(BuildContext context, WidgetRef ref) {
+    final demoType = ref.watch(P.app.demoType);
+    final availableModels = ref.watch(P.fileManager.availableModels);
+    final ttsCores = ref.watch(P.fileManager.ttsCores);
+
+    switch (demoType) {
+      case DemoType.world:
+        return [
+          ...WorldType.values
+              .where((e) => e.available)
+              .map((e) {
+                return e.socPairs
+                    .where((pair) {
+                      return pair.$1 == "" || pair.$1 == P.rwkv.soc.q;
+                    })
+                    .map((pair) {
+                      return WorldGroupItem(e, socPair: pair);
+                    });
+              })
+              .reduce((v, e) {
+                return [...v, ...e];
+              }),
+        ];
+      case DemoType.tts:
+        return [
+          for (final fileInfo in ttsCores) TTSGroupItem(fileInfo),
+        ];
+      case DemoType.chat:
+      case DemoType.sudoku:
+        return [
+          for (final fileInfo
+              in availableModels
+                  .sorted((a, b) {
+                    /// 模型尺寸大的在上面
+                    return (b.modelSize ?? 0).compareTo(a.modelSize ?? 0);
+                  })
+                  .sorted((a, b) {
+                    return (a.tags.contains("gpu") ? 0 : 1).compareTo(b.tags.contains("gpu") ? 0 : 1);
+                  })
+                  .sorted((a, b) {
+                    return (a.tags.contains("npu") ? 0 : 1).compareTo(b.tags.contains("npu") ? 0 : 1);
+                  }))
+            ModelItem(fileInfo),
+        ];
+      case DemoType.fifthteenPuzzle:
+      case DemoType.othello:
+        return [];
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = S.of(context);
@@ -120,38 +170,7 @@ class ModelSelector extends ConsumerWidget {
                 "👉${s.size_recommendation}👈",
                 s: TS(c: kB.q(.7), s: 12, w: FW.w500),
               ),
-            if (demoType == DemoType.world)
-              ...WorldType.values
-                  .where((e) => e.available)
-                  .map((e) {
-                    return e.socPairs
-                        .where((pair) {
-                          return pair.$1 == "" || pair.$1 == P.rwkv.soc.q;
-                        })
-                        .map((pair) {
-                          return WorldGroupItem(e, socPair: pair);
-                        });
-                  })
-                  .reduce((v, e) {
-                    return [...v, ...e];
-                  }),
-            if (demoType == DemoType.tts)
-              for (final fileInfo in ttsCores) TTSGroupItem(fileInfo),
-            if (demoType == DemoType.chat || demoType == DemoType.sudoku)
-              for (final fileInfo
-                  in availableModels
-                      .sorted((a, b) {
-                        return a.fileSize.compareTo(b.fileSize);
-                      })
-                      .sorted((a, b) {
-                        return (a.isDebug ? 1 : 0).compareTo((b.isDebug ? 1 : 0));
-                      })
-                      .sorted((a, b) {
-                        final aIsDownloaded = P.fileManager.locals(a).q.hasFile ? 1 : 0;
-                        final bIsDownloaded = P.fileManager.locals(b).q.hasFile ? 1 : 0;
-                        return bIsDownloaded.compareTo(aIsDownloaded);
-                      }))
-                ModelItem(fileInfo),
+            ..._buildItems(context, ref),
             16.h,
             paddingBottom.h,
           ],
