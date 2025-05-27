@@ -34,7 +34,7 @@ void main() async {
 
 // ignore: unused_element
 class _TestApp extends StatelessWidget {
-  const _TestApp({super.key});
+  const _TestApp();
 
   @override
   Widget build(BuildContext context) {

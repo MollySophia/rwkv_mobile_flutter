@@ -100,7 +100,7 @@ class Suggestions extends ConsumerWidget {
       case DemoType.othello:
       case DemoType.sudoku:
       case DemoType.tts:
-        return SizedBox.shrink();
+        return const SizedBox.shrink();
     }
 
     double bottom = show ? paddingBottom + 114 : -paddingBottom - defaultHeight;
@@ -341,7 +341,7 @@ class _SuggestionList extends StatelessWidget {
     return ListView.builder(
       controller: scrollController,
       itemCount: suggestions.length,
-      padding: EI.o(t: 8, b: 40),
+      padding: const EI.o(t: 8, b: 40),
       itemBuilder: (c, i) {
         final s = suggestions[i];
         return InkWell(
