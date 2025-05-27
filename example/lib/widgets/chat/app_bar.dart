@@ -9,15 +9,21 @@ import 'package:halo_state/halo_state.dart';
 import 'package:zone/config.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/demo_type.dart';
+import 'package:zone/page/chat.dart' show keyChatList;
 import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
 import 'package:zone/widgets/arguments_panel.dart';
 import 'package:zone/widgets/pager.dart';
+import 'package:zone/widgets/screenshot.dart' show startScrollShot;
 
 class ChatAppBar extends ConsumerWidget {
   const ChatAppBar({super.key});
 
-  void _onTunePressed() async {
+  void onShareChatPressed() async {
+      startScrollShot(keyChatList);
+  }
+
+  void onSettingsPressed() async {
     final loaded = P.rwkv.loaded.q;
 
     if (!loaded) {
@@ -127,14 +133,54 @@ class ChatAppBar extends ConsumerWidget {
             ),
             actions: [
               if (demoType == DemoType.chat) const _NewConversationButton(),
-              IconButton(
-                onPressed: _onTunePressed,
+              if (demoType == DemoType.chat) _buildMorePopupMenuButton(),
+              if (demoType != DemoType.chat) IconButton(
+                onPressed: onSettingsPressed,
                 icon: const Icon(Icons.tune),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildMorePopupMenuButton() {
+    return PopupMenuButton(
+      onSelected: (v) {
+        switch (v) {
+          case 1:
+            onShareChatPressed();
+            break;
+          case 2:
+            onSettingsPressed();
+            break;
+        }
+      },
+      itemBuilder: (v) {
+        return [
+          PopupMenuItem(
+            value: 1,
+            child: Row(
+              children: [
+                const Icon(Icons.share_rounded),
+                8.w,
+                Text("Share Chat"),
+              ],
+            ),
+          ),
+          PopupMenuItem(
+            value: 2,
+            child: Row(
+              children: [
+                const Icon(Icons.settings_rounded),
+                8.w,
+                Text("Settings"),
+              ],
+            ),
+          ),
+        ];
+      },
     );
   }
 }
