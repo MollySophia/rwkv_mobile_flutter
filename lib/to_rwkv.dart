@@ -26,12 +26,12 @@ class GenerateAsync extends ToRWKV {
   GenerateAsync(this.prompt);
 }
 
-class Generate extends ToRWKV {
+class SudokuOthelloGenerate extends ToRWKV {
   final String prompt;
   final bool decodeStream;
   final bool wantRawJSON;
 
-  Generate(this.prompt, {this.decodeStream = true, this.wantRawJSON = true});
+  SudokuOthelloGenerate(this.prompt, {this.decodeStream = true, this.wantRawJSON = true});
 
   static const responseType = StreamResponse;
 }
@@ -72,13 +72,15 @@ class GetResponseBufferIds extends ToRWKV {}
 
 class GetSamplerParams extends ToRWKV {}
 
-class InitRuntime extends ToRWKV {
+class ReInitRuntime extends ToRWKV {
   final String modelPath;
   final Backend backend;
   final String tokenizerPath;
   final int latestRuntimeAddress;
 
-  InitRuntime({
+  static const responseType = ReInitSteps;
+
+  ReInitRuntime({
     required this.modelPath,
     required this.backend,
     required this.tokenizerPath,

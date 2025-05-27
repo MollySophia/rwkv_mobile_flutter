@@ -102,7 +102,7 @@ extension $RWKVLoad on _RWKV {
         send(to_rwkv.ReleaseWhisperEncoder());
         send(to_rwkv.ReleaseModel());
         final startMS = HF.debugShorterUS;
-        await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
+        await reInitRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
         final endMS = HF.debugShorterUS;
         qqr("initRuntime done in ${endMS - startMS}ms");
       } catch (e) {
@@ -162,7 +162,7 @@ extension $RWKVLoad on _RWKV {
       send(to_rwkv.ReleaseVisionEncoder());
       send(to_rwkv.ReleaseModel());
       final startMS = HF.debugShorterUS;
-      await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
+      await reInitRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
       final endMS = HF.debugShorterUS;
       qqr("initRuntime done in ${endMS - startMS}ms");
     } else {
@@ -224,7 +224,7 @@ extension $RWKVLoad on _RWKV {
       try {
         send(to_rwkv.ReleaseTTSModels());
         final startMS = HF.debugShorterUS;
-        await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
+        await reInitRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
         final endMS = HF.debugShorterUS;
         qqr("initRuntime done in ${endMS - startMS}ms");
       } catch (e) {
@@ -303,7 +303,7 @@ extension $RWKVLoad on _RWKV {
     if (_sendPort != null) {
       try {
         final startMS = HF.debugShorterUS;
-        await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
+        await reInitRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
         final endMS = HF.debugShorterUS;
         qqr("initRuntime done in ${endMS - startMS}ms");
       } catch (e) {
@@ -361,7 +361,7 @@ extension $RWKVLoad on _RWKV {
 
     if (_sendPort != null) {
       send(
-        to_rwkv.InitRuntime(
+        to_rwkv.ReInitRuntime(
           modelPath: modelPath,
           backend: backend,
           tokenizerPath: tokenizerPath,
@@ -421,7 +421,7 @@ extension $RWKVLoad on _RWKV {
 
     if (_sendPort != null) {
       send(
-        to_rwkv.InitRuntime(
+        to_rwkv.ReInitRuntime(
           modelPath: modelPath,
           backend: backend,
           tokenizerPath: tokenizerPath,
@@ -506,6 +506,7 @@ extension $RWKV on _RWKV {
     });
   }
 
+  /// 直接在 ffi+cpp 线程中进行推理工作
   FV generate(String prompt) async {
     prefillSpeed.q = 0;
     decodeSpeed.q = 0;
@@ -514,7 +515,7 @@ extension $RWKV on _RWKV {
       qqw("sendPort is null");
       return;
     }
-    send(to_rwkv.Generate(prompt));
+    send(to_rwkv.SudokuOthelloGenerate(prompt));
 
     if (_getTokensTimer != null) {
       _getTokensTimer!.cancel();
@@ -556,7 +557,7 @@ extension $RWKV on _RWKV {
 
   FV stop() async => send(to_rwkv.Stop());
 
-  FV initRuntime({
+  FV reInitRuntime({
     required String modelPath,
     required Backend backend,
     required String tokenizerPath,
@@ -565,7 +566,7 @@ extension $RWKV on _RWKV {
     decodeSpeed.q = 0;
     _initRuntimeCompleter = Completer<void>();
     send(
-      to_rwkv.InitRuntime(
+      to_rwkv.ReInitRuntime(
         modelPath: modelPath,
         backend: backend,
         tokenizerPath: tokenizerPath,
@@ -760,33 +761,12 @@ extension _$RWKV on _RWKV {
       return;
     }
 
-    if (message["currentPrompt"] != null) {
-      qqq("Got currentPrompt: \"${message["currentPrompt"]}\"");
-      _oldMessagesController.add(
-        LLMEvent(
-          content: message["currentPrompt"].toString(),
-          type: _RWKVMessageType.currentPrompt,
-        ),
-      );
-      return;
-    }
-
-    if (message["generateStart"] == true) {
-      _oldMessagesController.add(
-        const LLMEvent(
-          content: "",
-          type: _RWKVMessageType.generateStart,
-        ),
-      );
-      return;
-    }
-
-    if (message["response"] != null) {
-      final responseText = message["response"].toString();
+    if (message["sudokuOthelloResponse"] != null) {
+      final responseText = message["sudokuOthelloResponse"].toString();
       _oldMessagesController.add(
         LLMEvent(
           content: responseText,
-          type: _RWKVMessageType.response,
+          type: _RWKVMessageType.sudokuOthelloResponse,
         ),
       );
       return;
@@ -810,31 +790,6 @@ extension _$RWKV on _RWKV {
       return;
     }
 
-    if (message["generateStop"] != null) {
-      _oldMessagesController.add(
-        const LLMEvent(
-          content: "",
-          type: _RWKVMessageType.generateStop,
-        ),
-      );
-      return;
-    }
-
-    if (message["initRuntimeDone"] != null) {
-      final result = message["initRuntimeDone"];
-      if (result == true) {
-        if (_initRuntimeCompleter.isCompleted) return;
-        _initRuntimeCompleter.complete();
-      } else {
-        final error = message["error"];
-        qqe("initRuntime failed: $error");
-        if (!kDebugMode) Sentry.captureException(Exception("initRuntime failed: $error"), stackTrace: StackTrace.current);
-        if (_initRuntimeCompleter.isCompleted) return;
-        _initRuntimeCompleter.completeError(error);
-      }
-      return;
-    }
-
     qqe("unknown message: $message");
     if (!kDebugMode) Sentry.captureException(Exception("unknown message: $message"), stackTrace: StackTrace.current);
   }
@@ -842,6 +797,25 @@ extension _$RWKV on _RWKV {
   void _handleFromRWKV(from_rwkv.FromRWKV message) {
     _messagesController.add(message);
     switch (message) {
+      case from_rwkv.ReInitSteps res:
+        final done = res.done;
+        final success = res.success;
+        final error = res.error;
+        final step = res.step;
+
+        if (done) {
+          if (success == true) {
+            if (_initRuntimeCompleter.isCompleted) return;
+            _initRuntimeCompleter.complete();
+          } else if (success == false) {
+            qqe("initRuntime failed: $error");
+            final exception = Exception("initRuntime failed: $error");
+            if (!kDebugMode) Sentry.captureException(exception, stackTrace: StackTrace.current);
+            if (_initRuntimeCompleter.isCompleted) return;
+            _initRuntimeCompleter.completeError(exception);
+          } else {}
+        }
+
       case from_rwkv.LatestRuntimeAddress response:
         P.preference._saveLatestRuntimeAddress(response.latestRuntimeAddress);
 
@@ -905,17 +879,11 @@ extension _$RWKV on _RWKV {
 enum _RWKVMessageType {
   /// 模型吐完 token 了会被调用, 调用内容该次 generate 吐出的总文本
   @Deprecated("Use FromRWKV instead")
-  response,
+  sudokuOthelloResponse,
 
   /// 模型每吐一个token，调用一次, 调用内容为该次 generate 已经吐出的文本
   @Deprecated("Use FromRWKV instead")
   streamResponse,
-
-  @Deprecated("Use FromRWKV instead")
-  currentPrompt,
-
-  @Deprecated("Use FromRWKV instead")
-  generateStart,
 
   /// 模型是否正在生成
   @Deprecated("Use FromRWKV instead")
@@ -923,9 +891,6 @@ enum _RWKVMessageType {
 
   @Deprecated("Use FromRWKV instead")
   responseBufferIds,
-
-  @Deprecated("Use FromRWKV instead")
-  generateStop,
 }
 
 @Deprecated("Use FromRWKV instead")
