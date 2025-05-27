@@ -74,6 +74,9 @@ class _RWKV {
   late final _qnnLibsCopied = qs(false);
 
   Timer? _ttsPerformanceTimer;
+
+  // TODO: Use it @WangCe
+  late final receiving = qs(false);
 }
 
 extension $RWKVLoad on _RWKV {
@@ -254,7 +257,7 @@ extension $RWKVLoad on _RWKV {
       _ttsPerformanceTimer = null;
     }
 
-    _ttsPerformanceTimer = Timer.periodic(Duration(milliseconds: HF.randomInt(min: 150, max: 300)), (timer) async {
+    _ttsPerformanceTimer = Timer.periodic(225.ms, (timer) async {
       send(to_rwkv.GetPrefillAndDecodeSpeed());
     });
 
@@ -731,17 +734,6 @@ extension _$RWKV on _RWKV {
       return;
     }
 
-    if (message["responseBufferContent"] != null) {
-      final responseBufferContent = message["responseBufferContent"];
-      _oldMessagesController.add(
-        LLMEvent(
-          content: responseBufferContent,
-          type: _RWKVMessageType.responseBufferContent,
-        ),
-      );
-      return;
-    }
-
     if (message["responseBufferIds"] != null) {
       final responseBufferIdsList = message["responseBufferIds"];
       _oldMessagesController.add(
@@ -911,10 +903,6 @@ extension _$RWKV on _RWKV {
 
 @Deprecated("Use FromRWKV instead")
 enum _RWKVMessageType {
-  /// 模型每吐一个token，调用一次, 调用内容为该次 generate 已经吐出的文本
-  @Deprecated("Use FromRWKV instead")
-  responseBufferContent,
-
   /// 模型吐完 token 了会被调用, 调用内容该次 generate 吐出的总文本
   @Deprecated("Use FromRWKV instead")
   response,

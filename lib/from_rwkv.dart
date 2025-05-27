@@ -42,7 +42,11 @@ class Speed extends FromRWKV {
   Speed({required this.prefillSpeed, required this.decodeSpeed, super.toRWKV});
 }
 
-class ResponseBufferContent extends FromRWKV {}
+class ResponseBufferContent extends FromRWKV {
+  final String responseBufferContent;
+
+  ResponseBufferContent({required this.responseBufferContent, super.toRWKV});
+}
 
 class SamplerParams extends FromRWKV {
   final num temperature;
