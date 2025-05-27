@@ -128,12 +128,12 @@ class RWKVMobile {
         // TODO: better solution for this
         final tempDir = await getTemporaryDirectory();
         if (kDebugMode) print("💬 tempDir: ${tempDir.path}");
-        rwkvMobile.rwkvmobile_runtime_add_adsp_library_path((tempDir.path + '/assets/lib/').toNativeUtf8().cast<ffi.Char>());
 
         runtime = rwkvMobile.rwkvmobile_runtime_init_with_name_extra(
           modelBackendString.toNativeUtf8().cast<ffi.Char>(),
           (tempDir.path + '/assets/lib/libQnnHtp.so').toNativeUtf8().cast<ffi.Void>(),
         );
+        rwkvMobile.rwkvmobile_runtime_set_qnn_library_path(runtime, (tempDir.path + '/assets/lib/').toNativeUtf8().cast<ffi.Char>());
       case Backend.ncnn:
       case Backend.llamacpp:
       case Backend.webRwkv:
