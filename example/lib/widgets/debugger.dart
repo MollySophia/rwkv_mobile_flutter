@@ -42,33 +42,12 @@ class Debugger extends ConsumerWidget {
     final page = ref.watch(Pager.page);
     final atMainPage = ref.watch(Pager.atMainPage);
     final conversation = ref.watch(P.conversation.current);
-    final chains = ref.watch(P.chat.chains);
-    final currentChain = ref.watch(P.chat.currentChain);
     final editingIndex = ref.watch(P.chat.editingIndex);
-    final branchesCountList = ref.watch(P.chat.branchesCountList);
     final receiveId = ref.watch(P.chat.receiveId);
-    final ttsDone = ref.watch(P.tts.ttsDone);
-    final spkNames = ref.watch(P.tts.spkPairs);
-
-    final spkShown = ref.watch(P.tts.spkShown);
-    final audioInteractorShown = ref.watch(P.tts.audioInteractorShown);
-    final intonationShown = ref.watch(P.tts.intonationShown);
-    final selectSpkName = ref.watch(P.tts.selectedSpkName);
-    final selectSourceAudioPath = ref.watch(P.tts.selectSourceAudioPath);
-
-    final textInInput = ref.watch(P.tts.textInInput);
-    final ttsCores = ref.watch(P.fileManager.ttsCores);
-
-    final interactingInstruction = ref.watch(P.tts.interactingInstruction);
-
-    final selectedIndex = ref.watch(P.tts.instructions(interactingInstruction));
-    final selectedInstruction = selectedIndex != null ? interactingInstruction.options[selectedIndex] : null;
-
-    final recording = ref.watch(P.world.recording);
-
     final latestRuntimeAddress = ref.watch(P.preference.latestRuntimeAddress);
-
     final kB = ref.watch(P.app.qb);
+    final drawerWidth = ref.watch(Pager.drawerWidth);
+    final screenWidth = ref.watch(P.app.screenWidth);
 
     return Positioned(
       left: 0,
@@ -126,36 +105,14 @@ class Debugger extends ConsumerWidget {
                       T(editingIndex.toString()),
                       T("latestRuntimeAddress".codeToName),
                       T(latestRuntimeAddress.toString()),
-                      if (demoType == DemoType.tts) ...[
-                        T("ttsDone".codeToName),
-                        T(ttsDone.toString()),
-                        T("spkNames length".codeToName),
-                        T(spkNames.length.toString()),
-                        T("spkShown".codeToName),
-                        T(spkShown.toString()),
-                        T("audioInteractorShown".codeToName),
-                        T(audioInteractorShown.toString()),
-                        T("intonationShown".codeToName),
-                        T(intonationShown.toString()),
-                        T("selectSpkName".codeToName),
-                        T(selectSpkName.toString()),
-                        T("selectSourceAudioPath".codeToName),
-                        T(selectSourceAudioPath.toString()),
-                        T("textInInput".codeToName),
-                        T(textInInput.toString()),
-                        // T("ttsCores".codeToName),
-                        // T(ttsCores.map((e) => e.name).join("\n")),
-                        T("interactingInstruction".codeToName),
-                        T(interactingInstruction.toString()),
-                        T("selectedInstruction".codeToName),
-                        T(selectedInstruction.toString()),
-                        T("recording".codeToName),
-                        T(recording.toString()),
-                      ],
+                      T("drawerWidth".codeToName),
+                      T(drawerWidth.toString()),
+                      T("screenWidth".codeToName),
+                      T(screenWidth.toString()),
                     ].indexMap((index, e) {
                       return C(
                         margin: EI.o(t: index % 2 == 0 ? 0 : 1),
-                        decoration: BD(color: kB.q(.33)),
+                        decoration: BD(color: kB.q(.55)),
                         child: e,
                       );
                     }),
@@ -235,22 +192,29 @@ class _TTSDebugger extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final paddingTop = ref.watch(P.app.paddingTop);
-
-    final overallProgress = ref.watch(P.tts.overallProgress);
-    final perWavProgress = ref.watch(P.tts.perWavProgress);
-    final filePaths = ref.watch(P.tts.filePaths);
-    final receiveId = ref.watch(P.chat.receiveId);
-
-    final selectedSpkPanelFilter = ref.watch(P.tts.selectedSpkPanelFilter);
-    final selectedLanguage = ref.watch(P.tts.selectedLanguage);
-
-    final startTime = ref.watch(P.world.startTime);
+    final audioInteractorShown = ref.watch(P.tts.audioInteractorShown);
     final endTime = ref.watch(P.world.endTime);
-
-    final selectedSpkName = ref.watch(P.tts.selectedSpkName);
-    final selectSourceAudioPath = ref.watch(P.tts.selectSourceAudioPath);
+    final filePaths = ref.watch(P.tts.filePaths);
+    final interactingInstruction = ref.watch(P.tts.interactingInstruction);
+    final intonationShown = ref.watch(P.tts.intonationShown);
     final kB = ref.watch(P.app.qb);
+    final overallProgress = ref.watch(P.tts.overallProgress);
+    final paddingTop = ref.watch(P.app.paddingTop);
+    final perWavProgress = ref.watch(P.tts.perWavProgress);
+    final receiveId = ref.watch(P.chat.receiveId);
+    final recording = ref.watch(P.world.recording);
+    final selectSourceAudioPath = ref.watch(P.tts.selectSourceAudioPath);
+    final selectSpkName = ref.watch(P.tts.selectedSpkName);
+    final selectedIndex = ref.watch(P.tts.instructions(interactingInstruction));
+    final selectedInstruction = selectedIndex != null ? interactingInstruction.options[selectedIndex] : null;
+    final selectedLanguage = ref.watch(P.tts.selectedLanguage);
+    final selectedSpkName = ref.watch(P.tts.selectedSpkName);
+    final selectedSpkPanelFilter = ref.watch(P.tts.selectedSpkPanelFilter);
+    final spkNames = ref.watch(P.tts.spkPairs);
+    final spkShown = ref.watch(P.tts.spkShown);
+    final startTime = ref.watch(P.world.startTime);
+    final textInInput = ref.watch(P.tts.textInInput);
+    final ttsDone = ref.watch(P.tts.ttsDone);
 
     return Positioned(
       left: 0,
@@ -298,6 +262,30 @@ class _TTSDebugger extends ConsumerWidget {
                       T(selectedSpkName.toString()),
                       T("selectSourceAudioPath".codeToName),
                       T(selectSourceAudioPath.toString()),
+                      T("ttsDone".codeToName),
+                      T(ttsDone.toString()),
+                      T("spkNames length".codeToName),
+                      T(spkNames.length.toString()),
+                      T("spkShown".codeToName),
+                      T(spkShown.toString()),
+                      T("audioInteractorShown".codeToName),
+                      T(audioInteractorShown.toString()),
+                      T("intonationShown".codeToName),
+                      T(intonationShown.toString()),
+                      T("selectSpkName".codeToName),
+                      T(selectSpkName.toString()),
+                      T("selectSourceAudioPath".codeToName),
+                      T(selectSourceAudioPath.toString()),
+                      T("textInInput".codeToName),
+                      T(textInInput.toString()),
+                      // T("ttsCores".codeToName),
+                      // T(ttsCores.map((e) => e.name).join("\n")),
+                      T("interactingInstruction".codeToName),
+                      T(interactingInstruction.toString()),
+                      T("selectedInstruction".codeToName),
+                      T(selectedInstruction.toString()),
+                      T("recording".codeToName),
+                      T(recording.toString()),
                     ].indexMap((index, e) {
                       return C(
                         margin: EI.o(t: index % 2 == 0 ? 0 : 1),

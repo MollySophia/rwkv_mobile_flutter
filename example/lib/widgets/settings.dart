@@ -62,7 +62,13 @@ class Settings extends ConsumerWidget {
           Ro(
             m: MAA.center,
             children: [
-              T(Config.appTitle, s: TS(s: 24, c: kB)),
+              Exp(
+                child: T(
+                  Config.appTitle,
+                  s: TS(s: 24, c: kB),
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ],
           ),
           4.h,
@@ -77,9 +83,11 @@ class Settings extends ConsumerWidget {
           Ro(
             m: MAA.start,
             children: [
-              T(
-                s.application_settings,
-                s: TS(w: FW.w500, c: kB.q(.8), s: 12),
+              Exp(
+                child: T(
+                  s.application_settings,
+                  s: TS(w: FW.w500, c: kB.q(.8), s: 12),
+                ),
               ),
             ],
           ),
@@ -102,9 +110,11 @@ class Settings extends ConsumerWidget {
           Ro(
             m: MAA.start,
             children: [
-              T(
-                s.join_the_community,
-                s: TS(w: FW.w500, c: kB.q(.8), s: 12),
+              Exp(
+                child: T(
+                  s.join_the_community,
+                  s: TS(w: FW.w500, c: kB.q(.8), s: 12),
+                ),
               ),
             ],
           ),

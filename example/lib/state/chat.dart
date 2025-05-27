@@ -224,6 +224,8 @@ extension $Chat on _Chat {
   }
 
   FV startNewChat() async {
+    if (receivingTokens.q) await onStopButtonPressed();
+    await Future.delayed(100.ms);
     Alert.success(S.current.new_chat_started);
     P.rwkv.clearStates();
     messages.uc();
@@ -560,6 +562,7 @@ extension _$Chat on _Chat {
   }
 
   void _onLifecycleStateChanged(AppLifecycleState? previous, AppLifecycleState next) {
+    if (P.app.isDesktop.q) return;
     final isToBackground = next == AppLifecycleState.paused || next == AppLifecycleState.hidden;
     if (isToBackground) {
       if (receiveId.q != null && autoPauseId.q == null && receivingTokens.q == true) {

@@ -460,9 +460,8 @@ outputWavPath: $outputWavPath""");
   }
 
   void dismissAllShown({bool intonationShown = false}) {
-    qqq("intonationShown: $intonationShown");
-
     if (P.app.demoType.q != DemoType.tts) return;
+    qqq("intonationShown: $intonationShown");
 
     audioInteractorShown.q = false;
     spkShown.q = false;

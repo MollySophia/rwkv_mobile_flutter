@@ -186,5 +186,7 @@
   "dump_see_files_alert_message": "Message records will be stored in the following folder\n {path}",
   "all": "All",
   "all_prompt": "All Prompt",
-  "no_data": "No Data"
+  "no_data": "No Data",
+  "quick_thinking": "Quick Reasoning",
+  "quick_thinking_enabled": "Quick Reasoning Enabled"
 }

@@ -140,7 +140,6 @@ extension _$App on _App {
     if (Platform.isIOS && latestBuildIos.q <= int.parse(buildNumber.q)) return;
 
     if (!Platform.isIOS && !Platform.isAndroid) {
-      if (kDebugMode) Alert.warning("DEBUG: This feature is not supported on this platform");
       qqw("This feature is not supported on this platform");
       return;
     }
