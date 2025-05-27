@@ -27,9 +27,93 @@ class SuggestionConfig {
     required this.seeOcr,
   });
 
-  static const SuggestionConfig def = SuggestionConfig(
+  SuggestionConfig copyWith({
+    List<SuggestionCategory>? chat,
+    List<String>? tts,
+    List<String>? seeReasoningQa,
+    List<String>? seeOcr,
+  }) {
+    return SuggestionConfig(
+      chat: chat ?? this.chat,
+      tts: tts ?? this.tts,
+      seeReasoningQa: seeReasoningQa ?? this.seeReasoningQa,
+      seeOcr: seeOcr ?? this.seeOcr,
+    );
+  }
+}
+
+class _Suggestion {
+  final config = qs<SuggestionConfig>(_DefaultSuggestion.en);
+
+  FV loadSuggestions() async {
+    final demoType = P.app.demoType.q;
+    final shouldUseEn = P.preference.preferredLanguage.q.resolved.locale.languageCode != "zh";
+    config.q = shouldUseEn ? _DefaultSuggestion.en : _DefaultSuggestion.zh;
+
+    // TODO load suggestions from server
+
+    if (demoType == DemoType.chat) {
+      const head = "assets/config/chat/suggestions";
+      final lang = shouldUseEn ? ".en-US" : ".zh-hans";
+      final suffix = kDebugMode ? ".debug" : "";
+      final assetPath = "$head$lang$suffix.json";
+      final jsonString = await rootBundle.loadString(assetPath);
+      final list = HF.list(jsonDecode(jsonString));
+
+      final suggestions = list.map((e) => Suggestion(display: e['display'], prompt: e['prompt'])).toList();
+      config.q = config.q.copyWith(
+        chat: [
+          SuggestionCategory(
+            name: 'Default',
+            suggestions: suggestions,
+          ),
+        ],
+      );
+    }
+  }
+}
+
+/// Private methods
+extension _$Suggestion on _Suggestion {
+  FV _init() async {
+    qq;
+  }
+}
+
+/// Public methods
+extension $Suggestion on _Suggestion {}
+
+class _DefaultSuggestion {
+  static const SuggestionConfig zh = SuggestionConfig(
     chat: [],
-    tts: [],
+    tts: [
+      "一二三四五，上山打老虎！",
+      "一日不见，如三秋兮",
+      "世界那么大，我想去看看",
+      "人生若只如初见，何事秋风悲画扇",
+      "你笑起来真像好天气",
+      "做自己喜欢的事，遇见志同道合的人",
+      "别让昨天的沮丧，毁掉今天的美好",
+      "在最好的年纪，做最疯狂的事",
+      "失败是成功之母，不要轻易放弃",
+      "奥利给！",
+      "心有猛虎，细嗅蔷薇",
+      "愿你出走半生，归来仍是少年",
+      "所有伟大，源于一个勇敢的开始",
+      "时间会告诉我们，简单的喜欢最长远",
+      "星辰大海，是我永恒的向往",
+      "春风十里，不如你",
+      "月亮不睡我不睡",
+      "有趣的灵魂终会相遇",
+      "来了老弟！",
+      "梦想是注定孤独的旅行",
+      "每一个不曾起舞的日子，都是对生命的辜负",
+      "生活不止眼前的苟且，还有诗和远方",
+      "贫穷限制了我的想象力",
+      "长风破浪会有时，直挂云帆济沧海",
+      "颜值即正义",
+      "风雨之后，必见彩虹",
+    ],
     seeReasoningQa: [
       "请向我描述这张图片",
       "Please describe this image for me~",
@@ -49,60 +133,56 @@ class SuggestionConfig {
     ],
   );
 
-  SuggestionConfig copyWith({
-    List<SuggestionCategory>? chat,
-    List<String>? tts,
-    List<String>? seeReasoningQa,
-    List<String>? seeOcr,
-  }) {
-    return SuggestionConfig(
-      chat: chat ?? this.chat,
-      tts: tts ?? this.tts,
-      seeReasoningQa: seeReasoningQa ?? this.seeReasoningQa,
-      seeOcr: seeOcr ?? this.seeOcr,
-    );
-  }
+  static const SuggestionConfig en = SuggestionConfig(
+    chat: [],
+    tts: [
+      "Believe in yourself and all that you are",
+      "Dream big and dare to fail",
+      "Stay hungry, stay foolish",
+      "The best is yet to come",
+      "You are stronger than you think",
+      "Every day is a second chance",
+      "Do what you love, love what you do",
+      "Life is short, make it sweet",
+      "Be a voice, not an echo",
+      "Happiness looks good on you",
+      "Let your dreams be bigger than your fears",
+      "The sky is not the limit, it's just the view",
+      "Difficult roads often lead to beautiful destinations",
+      "Stay close to people who feel like sunshine",
+      "Create your own sunshine",
+      "Good vibes only",
+      "You are enough",
+      "Chase the sun",
+      "Kindness changes everything",
+      "Stars can't shine without darkness",
+      "Smile, it's free therapy",
+      "Progress, not perfection",
+      "Adventure is out there",
+      "Keep going, keep growing",
+      "Magic is something you make",
+      "Breathe. Everything is going to be okay",
+      "Radiate positivity",
+      "Nothing worth having comes easy",
+      "Today is a perfect day to start",
+      "Find joy in the ordinary",
+    ],
+    seeReasoningQa: [
+      "请向我描述这张图片",
+      "Please describe this image for me~",
+    ],
+    seeOcr: [
+      "请向我描述这张图片",
+      "Please describe this image for me~",
+      "图片上的文字是什么意思？",
+      "可以帮我识别一下这张图片上的文字吗？",
+      "图片里的文字内容是什么？",
+      "这张图片里写了什么？",
+      "What does the text in the image mean?",
+      "Can you help me recognize the text on this image?",
+      "What is the text content in this image?",
+      "What is written in this image?",
+      "What do you see in this picture?",
+    ],
+  );
 }
-
-class _Suggestion {
-  final config = qs<SuggestionConfig>(SuggestionConfig.def);
-
-  FV loadSuggestions() async {
-    final demoType = P.app.demoType.q;
-    final isChat = demoType == DemoType.chat;
-    if (!isChat && demoType != DemoType.tts) return;
-    final shouldUseEn = P.preference.preferredLanguage.q.resolved.locale.languageCode != "zh";
-
-    // TODO load suggestions from server
-
-    const head = "assets/config/chat/suggestions";
-    final lang = shouldUseEn ? ".en-US" : ".zh-hans";
-    final suffix = kDebugMode ? ".debug" : "";
-
-    final assetPath = "$head$lang$suffix.json";
-
-    final jsonString = await rootBundle.loadString(assetPath);
-    final list = HF.list(jsonDecode(jsonString));
-    final suggestions = list //
-        .map((e) => Suggestion(display: e['display'], prompt: e['prompt']))
-        .toList();
-    config.q = config.q.copyWith(
-      chat: [
-        SuggestionCategory(
-          name: 'Default',
-          suggestions: suggestions,
-        ),
-      ],
-    );
-  }
-}
-
-/// Private methods
-extension _$Suggestion on _Suggestion {
-  FV _init() async {
-    qq;
-  }
-}
-
-/// Public methods
-extension $Suggestion on _Suggestion {}

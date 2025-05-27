@@ -90,18 +90,15 @@ class Suggestions extends ConsumerWidget {
               "Please describe this image for me~",
             ];
             break;
-          case WorldType.engVisualQA:
-          case WorldType.engAudioQA:
-          case WorldType.chineseASR:
-          case WorldType.engASR:
-          case null:
+          default:
             break;
         }
         break;
-      case DemoType.fifthteenPuzzle:
-      case DemoType.othello:
-      case DemoType.sudoku:
       case DemoType.tts:
+        show = true;
+        suggestions = config.tts.toList().shuffled.take(5).toList();
+        break;
+      default:
         return SizedBox.shrink();
     }
 
@@ -121,7 +118,7 @@ class Suggestions extends ConsumerWidget {
       child: Row(
         children: [
           Exp(
-            child: _buildRndPromptList(context, demoType, suggestions),
+            child: _buildRndPromptList(context, suggestions),
           ),
           if (showAllPromptButton) 8.w,
           if (showAllPromptButton) _buildAllButton(context),
@@ -133,7 +130,6 @@ class Suggestions extends ConsumerWidget {
 
   Widget _buildRndPromptList(
     BuildContext context,
-    DemoType demoType,
     List suggestions,
   ) {
     final primary = Theme.of(context).primaryColor;
