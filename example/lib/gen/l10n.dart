@@ -28,9 +28,10 @@ class S {
   static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
-    final name = (locale.countryCode?.isEmpty ?? false)
-        ? locale.languageCode
-        : locale.toString();
+    final name =
+        (locale.countryCode?.isEmpty ?? false)
+            ? locale.languageCode
+            : locale.toString();
     final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
@@ -1374,6 +1375,21 @@ class S {
   /// `无数据`
   String get no_data {
     return Intl.message('无数据', name: 'no_data', desc: '', args: []);
+  }
+
+  /// `快思考`
+  String get quick_thinking {
+    return Intl.message('快思考', name: 'quick_thinking', desc: '', args: []);
+  }
+
+  /// `快思考已经开启`
+  String get quick_thinking_enabled {
+    return Intl.message(
+      '快思考已经开启',
+      name: 'quick_thinking_enabled',
+      desc: '',
+      args: [],
+    );
   }
 }
 

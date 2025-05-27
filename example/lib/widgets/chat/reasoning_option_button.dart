@@ -51,7 +51,7 @@ class ReasoningOptionButton extends ConsumerWidget {
       case ReasoningOption.pseudo:
         final newValue = !P.rwkv.preferPseudo.q;
         await P.rwkv.setModelConfig(preferPseudo: newValue);
-        if (newValue) Alert.success("开启伪推理");
+        if (newValue) Alert.success(S.current.quick_thinking_enabled);
         break;
     }
 
@@ -88,6 +88,8 @@ class ReasoningOptionButton extends ConsumerWidget {
       ReasoningOption.pseudo => preferPseudo ? const EI.o(l: 4, r: 8, t: 4, b: 4) : const EI.o(l: 4, r: 4, t: 4, b: 4),
     };
 
+    final locale = ref.watch(P.preference.preferredLanguage);
+
     return AnimatedOpacity(
       opacity: loading ? .33 : 1,
       duration: 250.ms,
@@ -114,8 +116,11 @@ class ReasoningOptionButton extends ConsumerWidget {
                     if (preferChinese) T(s.chinese, s: TS(c: kW, s: 10, height: 1)),
                     if (!preferChinese && !preferPseudo) T(s.auto, s: TS(c: kB.q(.25), s: 10, height: 1)),
                   ] else if (option == ReasoningOption.pseudo) ...[
-                    if (preferPseudo) T(s.prefer, s: TS(c: kW, s: 10, height: 1)),
-                    if (preferPseudo) T("伪推理", s: TS(c: kW, s: 10, height: 1)),
+                    if (preferPseudo && locale.resolved.isCJK) T(s.prefer, s: TS(c: kW, s: 10, height: 1)),
+                    if (preferPseudo && !locale.resolved.isCJK) T("Quick", s: TS(c: kW, s: 10, height: 1)),
+                    if (preferPseudo) 2.h,
+                    if (preferPseudo && locale.resolved.isCJK) T(s.quick_thinking, s: TS(c: kW, s: 10, height: 1)),
+                    if (preferPseudo && !locale.resolved.isCJK) T("Reason", s: TS(c: kW, s: 10, height: 1)),
                   ] else
                     ...[],
                 ],

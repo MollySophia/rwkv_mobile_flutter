@@ -657,18 +657,18 @@ packages:
     dependency: "direct main"
     description:
       name: halo_alert
-      sha256: "56800b474aeb422cba5043ba39e3ae5083d2f31b3f90616e37b93ebd8364bf5e"
+      sha256: "6287e6b4e3329a00eaff5795aeee6440adac286c444003debc918fb11a19f4de"
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.0"
+    version: "0.7.0"
   halo_state:
     dependency: "direct main"
     description:
       name: halo_state
-      sha256: b80199ae7bbd62d98508e13ed244777ec11a4fec2756408deb8bf5d1f6de0427
+      sha256: be52942423168bf10575dfa460f17cfcac3292928685bc17132e10961681e846
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.0"
+    version: "0.3.2"
   hashcodes:
     dependency: transitive
     description:
