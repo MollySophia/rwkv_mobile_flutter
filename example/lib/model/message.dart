@@ -34,6 +34,8 @@ final class Message extends Equatable {
   final List<double>? ttsPerWavProgress;
   final List<String>? ttsFilePaths;
 
+  final String? generatedBy;
+
   bool get ttsHasContent => ttsFilePaths?.isNotEmpty ?? false;
   bool get ttsIsDone => (ttsOverallProgress ?? 0.0) >= 1.0;
 
@@ -57,6 +59,7 @@ final class Message extends Equatable {
     this.ttsOverallProgress,
     this.ttsPerWavProgress,
     this.ttsFilePaths,
+    this.generatedBy,
   });
 
   @override
@@ -80,6 +83,7 @@ final class Message extends Equatable {
     ttsOverallProgress,
     ...ttsPerWavProgress ?? [],
     ...ttsFilePaths ?? [],
+    generatedBy,
   ];
 
   factory Message.fromJson(Map<String, dynamic> json) {
@@ -103,6 +107,7 @@ final class Message extends Equatable {
       ttsOverallProgress: json["ttsOverallProgress"] as double?,
       ttsPerWavProgress: json["ttsPerWavProgress"] as List<double>?,
       ttsFilePaths: json["ttsFilePaths"] as List<String>?,
+      generatedBy: json["generatedBy"] as String?,
     );
   }
 
@@ -127,6 +132,7 @@ final class Message extends Equatable {
       "ttsOverallProgress": ttsOverallProgress,
       "ttsPerWavProgress": ttsPerWavProgress,
       "ttsFilePaths": ttsFilePaths,
+      "generatedBy": generatedBy,
     };
   }
 
@@ -150,6 +156,7 @@ final class Message extends Equatable {
     double? ttsOverallProgress,
     List<double>? ttsPerWavProgress,
     List<String>? ttsFilePaths,
+    String? generatedBy,
   }) {
     return Message(
       id: id ?? this.id,
@@ -171,6 +178,7 @@ final class Message extends Equatable {
       ttsOverallProgress: ttsOverallProgress ?? this.ttsOverallProgress,
       ttsPerWavProgress: ttsPerWavProgress ?? this.ttsPerWavProgress,
       ttsFilePaths: ttsFilePaths ?? this.ttsFilePaths,
+      generatedBy: generatedBy ?? this.generatedBy,
     );
   }
 
@@ -197,6 +205,7 @@ Message(
   ttsOverallProgress: $ttsOverallProgress,
   ttsPerWavProgress: $ttsPerWavProgress,
   ttsFilePaths: $ttsFilePaths,
+  generatedBy: $generatedBy,
 )""";
   }
 

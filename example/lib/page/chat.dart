@@ -100,6 +100,7 @@ class _Page extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return const Scaffold(
+      backgroundColor: kW,
       body: Stack(
         children: [
           List(),
@@ -192,6 +193,8 @@ class List extends ConsumerWidget {
     }
     final kB = ref.watch(P.app.qb);
 
+    // return Positioned.fill(child: C());
+
     return Positioned.fill(
       child: GD(
         onTap: P.chat.onTapMessageList,
@@ -206,6 +209,7 @@ class List extends ConsumerWidget {
           ),
           controller: P.chat.scrollController,
           child: ScrollShotArea(
+            repaintBoundaryColor: kW,
             key: keyChatList,
             controller: P.chat.scrollController,
             child: ListView.separated(
