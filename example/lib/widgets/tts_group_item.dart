@@ -95,7 +95,7 @@ class TTSGroupItem extends ConsumerWidget {
       await P.rwkv.loadTTSModels(
         modelPath: modelLocalFile.targetPath,
         backend: fileInfo.backend!,
-        usingReasoningModel: false,
+        enableReasoning: false,
         campPlusPath: localCampPlusFile.targetPath,
         flowEncoderPath: localFlowEncoderFile.targetPath,
         flowDecoderEstimatorPath: localFlowDecoderEstimatorFile.targetPath,

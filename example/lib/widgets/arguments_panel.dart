@@ -118,7 +118,7 @@ class _SamplerOptions extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = S.of(context);
-    final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
+    final reasoning = ref.watch(P.rwkv.reasoning);
     final kB = ref.watch(P.app.qb);
     return C(
       margin: const EI.s(h: 12),
@@ -126,14 +126,14 @@ class _SamplerOptions extends ConsumerWidget {
       child: Ro(
         children: [
           12.w,
-          Exp(child: T("Sampler Options" + (usingReasoningModel ? " (Reason)" : ""))),
+          Exp(child: T("Sampler Options" + (reasoning ? " (Reason)" : ""))),
           TextButton(
             style: TextButton.styleFrom(
               padding: EI.zero,
               iconSize: 16,
             ),
             onPressed: () {
-              P.rwkv.resetSamplerParams(usingReasoningModel: usingReasoningModel);
+              P.rwkv.resetSamplerParams(enableReasoning: reasoning);
             },
             child: T(s.reset),
           ),
@@ -150,21 +150,21 @@ class _CompletionOptions extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final s = S.of(context);
     final kB = ref.watch(P.app.qb);
-    final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
+    final reasoning = ref.watch(P.rwkv.reasoning);
     return C(
       margin: const EI.s(h: 12),
       decoration: BD(color: kB.q(.1), borderRadius: 8.r),
       child: Ro(
         children: [
           12.w,
-          Exp(child: T("Completion Options" + (usingReasoningModel ? " (Reason)" : ""))),
+          Exp(child: T("Completion Options" + (reasoning ? " (Reason)" : ""))),
           TextButton(
             style: TextButton.styleFrom(
               padding: EI.zero,
               iconSize: 16,
             ),
             onPressed: () {
-              P.rwkv.resetMaxLength(usingReasoningModel: usingReasoningModel);
+              P.rwkv.resetMaxLength(enableReasoning: reasoning);
             },
             child: T(s.reset),
           ),

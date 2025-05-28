@@ -38,8 +38,9 @@ class _RWKV {
     return argument.defaults;
   });
 
-  late final usingReasoningModel = qp((ref) => ref.watch(_usingReasoningModel));
-  late final _usingReasoningModel = qs(false);
+  /// 当前如果让 RWKV Backend 执行任务, 是否使用 reasoning / thinking 模式
+  late final reasoning = qp((ref) => ref.watch(_reasoning));
+  late final _reasoning = qs(false);
 
   late final preferChinese = qp((ref) => ref.watch(_preferChinese));
   late final _preferChinese = qs(false);
@@ -84,7 +85,7 @@ extension $RWKVLoad on _RWKV {
     required String modelPath,
     required String encoderPath,
     required Backend backend,
-    required bool usingReasoningModel,
+    required bool enableReasoning,
   }) async {
     qq;
     _loading.q = true;
@@ -132,12 +133,12 @@ extension $RWKVLoad on _RWKV {
 
     send(to_rwkv.LoadVisionEncoder(encoderPath));
     await setModelConfig(
-      usingReasoningModel: usingReasoningModel,
+      enableReasoning: enableReasoning,
       preferChinese: false,
       setPrompt: false,
     );
-    await resetSamplerParams(usingReasoningModel: usingReasoningModel);
-    await resetMaxLength(usingReasoningModel: usingReasoningModel);
+    await resetSamplerParams(enableReasoning: enableReasoning);
+    await resetMaxLength(enableReasoning: enableReasoning);
     send(to_rwkv.SetEosToken("\x17"));
     send(to_rwkv.SetBosToken("\x16"));
     send(to_rwkv.SetTokenBanned([0]));
@@ -186,12 +187,12 @@ extension $RWKVLoad on _RWKV {
 
     send(to_rwkv.LoadWhisperEncoder(encoderPath));
     await setModelConfig(
-      usingReasoningModel: false,
+      enableReasoning: false,
       preferChinese: false,
       setPrompt: false,
     );
-    await resetSamplerParams(usingReasoningModel: false);
-    await resetMaxLength(usingReasoningModel: false);
+    await resetSamplerParams(enableReasoning: false);
+    await resetMaxLength(enableReasoning: false);
     send(to_rwkv.SetEosToken("\x17"));
     send(to_rwkv.SetBosToken("\x16"));
     send(to_rwkv.SetTokenBanned([0]));
@@ -202,7 +203,7 @@ extension $RWKVLoad on _RWKV {
   FV loadTTSModels({
     required String modelPath,
     required Backend backend,
-    required bool usingReasoningModel,
+    required bool enableReasoning,
     required String campPlusPath,
     required String flowEncoderPath,
     required String flowDecoderEstimatorPath,
@@ -288,7 +289,7 @@ extension $RWKVLoad on _RWKV {
   FV loadChat({
     required String modelPath,
     required Backend backend,
-    required bool usingReasoningModel,
+    required bool enableReasoning,
   }) async {
     qq;
     _loading.q = true;
@@ -332,9 +333,9 @@ extension $RWKVLoad on _RWKV {
     send(to_rwkv.GetLatestRuntimeAddress());
 
     P.app.demoType.q = DemoType.chat;
-    await setModelConfig(usingReasoningModel: usingReasoningModel);
-    await resetSamplerParams(usingReasoningModel: usingReasoningModel);
-    await resetMaxLength(usingReasoningModel: usingReasoningModel);
+    await setModelConfig(enableReasoning: enableReasoning);
+    await resetSamplerParams(enableReasoning: enableReasoning);
+    await resetMaxLength(enableReasoning: enableReasoning);
     send(to_rwkv.GetSamplerParams());
     _loading.q = false;
   }
@@ -493,7 +494,7 @@ extension $RWKV on _RWKV {
       return;
     }
 
-    send(to_rwkv.ChatAsync(messages));
+    send(to_rwkv.ChatAsync(messages, reasoning: reasoning.q));
 
     if (_getTokensTimer != null) {
       _getTokensTimer!.cancel();
@@ -577,12 +578,12 @@ extension $RWKV on _RWKV {
   }
 
   FV setModelConfig({
-    bool? usingReasoningModel,
+    bool? enableReasoning,
     bool? preferChinese,
     bool? preferPseudo,
     bool setPrompt = true,
   }) async {
-    if (usingReasoningModel != null) _usingReasoningModel.q = usingReasoningModel;
+    if (enableReasoning != null) _reasoning.q = enableReasoning;
 
     if (preferChinese != null && preferPseudo != null) {
       Alert.error("preferChinese and preferPseudo cannot be set at the same time");
@@ -604,8 +605,7 @@ extension $RWKV on _RWKV {
 
     if (setPrompt) qqq("setPrompt: $finalPrompt");
 
-    send(to_rwkv.SetEnableReasoning(_usingReasoningModel.q));
-    if (setPrompt) send(to_rwkv.SetPrompt(_usingReasoningModel.q ? "<EOD>" : finalPrompt));
+    if (setPrompt) send(to_rwkv.SetPrompt(_reasoning.q ? "<EOD>" : finalPrompt));
 
     late final String thinkingToken;
 
@@ -625,14 +625,14 @@ extension $RWKV on _RWKV {
     send(to_rwkv.SetThinkingToken(thinkingToken));
   }
 
-  FV resetSamplerParams({required bool usingReasoningModel}) async {
+  FV resetSamplerParams({required bool enableReasoning}) async {
     await syncSamplerParams(
-      temperature: usingReasoningModel ? Argument.temperature.reasonDefaults : Argument.temperature.defaults,
-      topK: usingReasoningModel ? Argument.topK.reasonDefaults : Argument.topK.defaults,
-      topP: usingReasoningModel ? Argument.topP.reasonDefaults : Argument.topP.defaults,
-      presencePenalty: usingReasoningModel ? Argument.presencePenalty.reasonDefaults : Argument.presencePenalty.defaults,
-      frequencyPenalty: usingReasoningModel ? Argument.frequencyPenalty.reasonDefaults : Argument.frequencyPenalty.defaults,
-      penaltyDecay: usingReasoningModel ? Argument.penaltyDecay.reasonDefaults : Argument.penaltyDecay.defaults,
+      temperature: enableReasoning ? Argument.temperature.reasonDefaults : Argument.temperature.defaults,
+      topK: enableReasoning ? Argument.topK.reasonDefaults : Argument.topK.defaults,
+      topP: enableReasoning ? Argument.topP.reasonDefaults : Argument.topP.defaults,
+      presencePenalty: enableReasoning ? Argument.presencePenalty.reasonDefaults : Argument.presencePenalty.defaults,
+      frequencyPenalty: enableReasoning ? Argument.frequencyPenalty.reasonDefaults : Argument.frequencyPenalty.defaults,
+      penaltyDecay: enableReasoning ? Argument.penaltyDecay.reasonDefaults : Argument.penaltyDecay.defaults,
     );
   }
 
@@ -665,9 +665,9 @@ extension $RWKV on _RWKV {
     if (kDebugMode) send(to_rwkv.GetSamplerParams());
   }
 
-  FV resetMaxLength({required bool usingReasoningModel}) async {
+  FV resetMaxLength({required bool enableReasoning}) async {
     await syncMaxLength(
-      maxLength: usingReasoningModel ? Argument.maxLength.reasonDefaults : Argument.maxLength.defaults,
+      maxLength: enableReasoning ? Argument.maxLength.reasonDefaults : Argument.maxLength.defaults,
     );
   }
 

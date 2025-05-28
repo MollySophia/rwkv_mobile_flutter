@@ -132,14 +132,14 @@ class Message extends ConsumerWidget {
         break;
     }
 
-    final usingReasoningModel = msg.isReasoning && !msg.isSensitive;
+    final reasoning = msg.isReasoning && !msg.isSensitive;
 
     String cotContent = "";
     String cotResult = "";
 
     final subStringCount = worldType == WorldType.reasoningQA ? 8 : 9;
 
-    if (usingReasoningModel) {
+    if (reasoning) {
       assert(!msg.isMine);
       final isCot = finalContent.startsWith("<think>");
       if (isCot) {
@@ -356,7 +356,7 @@ class Message extends ConsumerWidget {
                   ),
                 if (worldDemoMessageHeader.isNotEmpty) 4.h,
                 // 🔥 Bot message
-                if (!usingReasoningModel)
+                if (!reasoning)
                   MarkdownBody(
                     data: finalContent,
                     selectable: false,
@@ -365,7 +365,7 @@ class Message extends ConsumerWidget {
                     onTapLink: _onTapLink,
                   ),
                 // 🔥 Bot message cot header
-                if (usingReasoningModel)
+                if (reasoning)
                   GD(
                     onTap: () {
                       if (showingCotContent) {
@@ -388,8 +388,8 @@ class Message extends ConsumerWidget {
                     ),
                   ),
                 // 🔥 Bot message cot content
-                if (usingReasoningModel) 4.h,
-                if (usingReasoningModel)
+                if (reasoning) 4.h,
+                if (reasoning)
                   AnimatedContainer(
                     duration: 250.ms,
                     height: cotContentHeight,
@@ -402,8 +402,8 @@ class Message extends ConsumerWidget {
                     ),
                   ),
                 // 🔥 Bot message cot result
-                if (cotResult.isNotEmpty && usingReasoningModel && showingCotContent) 12.h,
-                if (cotResult.isNotEmpty && usingReasoningModel)
+                if (cotResult.isNotEmpty && reasoning && showingCotContent) 12.h,
+                if (cotResult.isNotEmpty && reasoning)
                   MarkdownBody(
                     data: cotResult,
                     selectable: false,

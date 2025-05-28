@@ -36,8 +36,6 @@ class SudokuOthelloGenerate extends ToRWKV {
   static const responseType = StreamResponse;
 }
 
-class GetEnableReasoning extends ToRWKV {}
-
 class GetIsGenerating extends ToRWKV {}
 
 class GetPrefillAndDecodeSpeed extends ToRWKV {
@@ -134,12 +132,10 @@ class ReleaseWhisperEncoder extends ToRWKV {}
 
 class ChatAsync extends ToRWKV {
   final List<String> messages;
+  final bool reasoning;
 
-  ChatAsync(this.messages);
+  ChatAsync(this.messages, {required this.reasoning});
 }
-
-@Deprecated("use RequestRunTTSAsync instead")
-class RunTTS extends ToRWKV {}
 
 /// 开始 TTS 任务
 ///
@@ -174,11 +170,6 @@ class SetBosToken extends ToRWKV {
   final String bosToken;
 
   SetBosToken(this.bosToken);
-}
-
-class SetEnableReasoning extends ToRWKV {
-  final bool enableReasoning;
-  SetEnableReasoning(this.enableReasoning);
 }
 
 class SetEosToken extends ToRWKV {

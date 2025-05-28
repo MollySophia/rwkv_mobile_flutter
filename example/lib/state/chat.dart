@@ -320,7 +320,7 @@ extension $Chat on _Chat {
       content: "",
       isMine: false,
       changing: true,
-      isReasoning: P.rwkv.usingReasoningModel.q,
+      isReasoning: P.rwkv.reasoning.q,
       paused: false,
     );
 

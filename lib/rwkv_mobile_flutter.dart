@@ -97,7 +97,6 @@ class RWKVMobile {
     int maxMessages = 1000;
     int generationStopToken = 0; // Takes effect in 'generation' mode; not used in 'chat' mode
     int retVal = 0;
-    int enableReasoning = 0;
 
     final inputsPtr = calloc.allocate<ffi.Pointer<ffi.Char>>(maxMessages);
 
@@ -152,7 +151,7 @@ class RWKVMobile {
           if (arg > 0) maxLength = arg;
 
         // 🟥 clearStates
-        case ClearStates req:
+        case ClearStates _:
           rwkvMobile.rwkvmobile_runtime_clear_state(runtime);
 
         // 🟥 setGenerationStopToken
@@ -203,18 +202,8 @@ class RWKVMobile {
             ),
           );
 
-        // 🟥 setEnableReasoning
-        case SetEnableReasoning req:
-          // TODO: 这里不应该使用这个变量, 因为无法保证值同步至 cpp 的内存
-          enableReasoning = req.enableReasoning ? 1 : 0;
-
-        // 🟥 getEnableReasoning
-        case GetEnableReasoning req:
-          bool enableReasoningBool = (enableReasoning != 0);
-          sendPort.send({'enableReasoning': enableReasoningBool});
-
         // 🟥 getIsGenerating
-        case GetIsGenerating req:
+        case GetIsGenerating _:
           bool isGeneratingBool = (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) != 0);
           sendPort.send({'isGenerating': isGeneratingBool});
 
@@ -306,7 +295,7 @@ class RWKVMobile {
             numInputs,
             maxLength,
             ffi.nullptr,
-            enableReasoning,
+            req.reasoning ? 1 : 0,
           );
           if (kDebugMode) print('💬 Started LLM generation thread (chat mode)');
           if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation thread: retVal: $retVal', toRWKV: req));
@@ -397,7 +386,7 @@ class RWKVMobile {
           if (retVal == 0) sendPort.send(GenerateStop(toRWKV: req));
 
         // 🟥 releaseModel
-        case ReleaseModel req:
+        case ReleaseModel _:
           if (kDebugMode) print('💬 Releasing model');
           rwkvMobile.rwkvmobile_runtime_release(runtime);
           runtime = ffi.nullptr;
@@ -500,7 +489,7 @@ class RWKVMobile {
           sendPort.send(Speed(prefillSpeed: prefillSpeed, decodeSpeed: decodeSpeed, toRWKV: req));
 
         // 🟥 getResponseBufferIds
-        case GetResponseBufferIds req:
+        case GetResponseBufferIds _:
           final responseBufferIds = rwkvMobile.rwkvmobile_runtime_get_response_buffer_ids(runtime);
           final responseBufferIdsList = responseBufferIds.ids.asTypedList(responseBufferIds.len).toList();
           rwkvMobile.rwkvmobile_runtime_free_token_ids(responseBufferIds);
@@ -536,10 +525,6 @@ class RWKVMobile {
         case ReleaseTTSModels req:
           retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_release_models(runtime);
           if (retVal != 0) sendPort.send(Error('Failed to release TTS models', req));
-
-        // 🟥 runTTS
-        case RunTTS req:
-          sendPort.send(Error('RunTTS method is deprecated, please use RunTTSAsync instead', req));
 
         // 🟥 runTTSAsync
         case StartTTS req:

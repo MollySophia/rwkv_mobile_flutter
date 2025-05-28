@@ -46,9 +46,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "application_internal_test_group": MessageLookupByLibrary.simpleMessage(
       "Application Internal Test Group",
     ),
-    "application_language": MessageLookupByLibrary.simpleMessage(
-      "Application Language",
-    ),
+    "application_language": MessageLookupByLibrary.simpleMessage("Language"),
     "application_settings": MessageLookupByLibrary.simpleMessage(
       "Application Settings",
     ),
@@ -155,7 +153,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "finish_recording": MessageLookupByLibrary.simpleMessage(
       "Recording finished",
     ),
-    "follow_system": MessageLookupByLibrary.simpleMessage("Follow System"),
+    "follow_system": MessageLookupByLibrary.simpleMessage("System"),
     "follow_us_on_twitter": MessageLookupByLibrary.simpleMessage(
       "Follow us on Twitter",
     ),
