@@ -31,4 +31,13 @@ Assistant: 你好，我是你的助手，我会提供专家级的完整回答。
   static const timeout = Duration(seconds: 60);
   static late final String xApiKey;
   static const appTitle = "RWKV Chat";
+
+  static const fontFamilyFallback = [
+    'Microsoft YaHei',
+    "Sarasa Mono SC",
+    "PingFang SC",
+    ".AppleSystemUIFont",
+    'miui',
+    'mipro',
+  ];
 }
