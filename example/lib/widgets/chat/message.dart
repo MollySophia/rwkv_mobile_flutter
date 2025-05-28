@@ -269,7 +269,7 @@ class Message extends ConsumerWidget {
     }
 
     EI padding = const EI.o(t: 12, l: 12, r: 12);
-    Border border = Border.all(color: primary.q(.2));
+    Border? border = Border.all(color: primary.q(.2));
     double radius = 20;
 
     switch (msg.type) {
@@ -301,6 +301,8 @@ class Message extends ConsumerWidget {
         padding = EI.zero;
 
       case model.MessageType.text:
+        if (!msg.isMine) border = null;
+        if (!msg.isMine) padding = EI.o(t: 12, l: 6, r: 6);
       case model.MessageType.ttsGeneration:
       case model.MessageType.userAudio:
     }
