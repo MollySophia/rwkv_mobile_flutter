@@ -1,6 +1,6 @@
 {
   "chat": {
-    "latest_build": 422,
+    "latest_build": 423,
     "latest_build_ios": 422,
     "note_zh": ["提升应用程序的稳定性", "修复了已知问题"],
     "note_en": ["Improve application stability", "Fix known issues"],
