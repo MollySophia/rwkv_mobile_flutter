@@ -24,12 +24,15 @@ Assistant: 你好，我是你的助手，我会提供专家级的完整回答。
 """;
 
   static const reasonTag = "reason";
-  static const enableConversation = false && Args.isChat;
-  static const enableChain = false && Args.isChat;
+  static const enableConversation = false && Args.demoType == "__chat__";
+  static const enableChain = true && Args.demoType == "__chat__";
 
   static const domain = "https://api-model.rwkvos.com";
+
   static const timeout = Duration(seconds: 60);
+
   static late final String xApiKey;
+
   static const appTitle = "RWKV Chat";
 
   static const fontFamilyFallback = [
