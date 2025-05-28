@@ -328,6 +328,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "set_the_value_of_grid": MessageLookupByLibrary.simpleMessage(
       "Set Grid Value",
     ),
+    "share_chat": MessageLookupByLibrary.simpleMessage("Share Chat"),
     "show_stack": MessageLookupByLibrary.simpleMessage("Show Thought Stack"),
     "size_recommendation": MessageLookupByLibrary.simpleMessage(
       "It is recommended to choose at least a 1.5B model for better results",

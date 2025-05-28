@@ -244,6 +244,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "server_error": MessageLookupByLibrary.simpleMessage("服务器错误"),
     "session_configuration": MessageLookupByLibrary.simpleMessage("会话配置"),
     "set_the_value_of_grid": MessageLookupByLibrary.simpleMessage("设置网格值"),
+    "share_chat": MessageLookupByLibrary.simpleMessage("分享聊天"),
     "show_stack": MessageLookupByLibrary.simpleMessage("显示思维链堆栈"),
     "size_recommendation": MessageLookupByLibrary.simpleMessage(
       "推荐至少选择 1.5B 模型，效果更好",

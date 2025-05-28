@@ -186,5 +186,6 @@
   "dump_see_files_alert_message": "消息记录会存储在该文件夹下\n {path}",
   "all": "全部",
   "all_prompt": "全部 Prompt",
-  "no_data": "无数据"
+  "no_data": "无数据",
+  "share_chat": "分享聊天"
 }
