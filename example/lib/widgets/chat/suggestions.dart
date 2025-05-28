@@ -38,7 +38,6 @@ class Suggestions extends ConsumerWidget {
           final last = current.characters.last;
           final lastIsChinese = containsChineseCharacters(last);
           final lastIsEnglish = isEnglish(last);
-          P.suggestion.loadSuggestions();
           if (lastIsChinese) {
             P.chat.textEditingController.text = "$current。$suggestion";
           } else if (lastIsEnglish) {
@@ -52,59 +51,20 @@ class Suggestions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final imagePath = ref.watch(P.world.imagePath);
     final demoType = ref.watch(P.app.demoType);
-    final messages = ref.watch(P.chat.messages);
     final paddingBottom = ref.watch(P.app.quantizedIntPaddingBottom);
-    final currentModel = ref.watch(P.rwkv.currentModel);
     final inputHeight = ref.watch(P.chat.inputHeight);
 
-    final _ = ref.watch(P.fileManager.modelSelectorShown);
-
-    final currentWorldType = ref.watch(P.rwkv.currentWorldType);
-
-    bool show = false;
-
-    List<dynamic> suggestions = [];
+    List<dynamic> suggestions = ref.watch(P.suggestion.suggestion);
     final config = ref.watch(P.suggestion.config);
 
-    switch (demoType) {
-      case DemoType.chat:
-        show = messages.isEmpty && currentModel != null;
-        suggestions = config.chat.map((e) => e.suggestions).flattened.shuffled().take(5).toList();
-        break;
-      case DemoType.world:
-        switch (currentWorldType) {
-          case WorldType.reasoningQA:
-            show = imagePath != null && imagePath.isNotEmpty && messages.length == 1;
-            suggestions = config.seeReasoningQa;
-            break;
-          case WorldType.ocr:
-            show = imagePath != null && imagePath.isNotEmpty && messages.length == 1;
-            suggestions = config.seeOcr.toList().shuffled.take(5).toList();
-            break;
-          case WorldType.qa:
-            show = imagePath != null && imagePath.isNotEmpty && messages.length == 1;
-            suggestions = [
-              "请向我描述这张图片",
-              "Please describe this image for me~",
-            ];
-            break;
-          default:
-            break;
-        }
-        break;
-      case DemoType.tts:
-        show = true;
-        suggestions = config.tts.toList().shuffled.take(5).toList();
-        break;
-      default:
-        return SizedBox.shrink();
+    if (suggestions.isEmpty) {
+      return SizedBox.shrink();
     }
 
-    double bottom = show ? paddingBottom + 114 : -paddingBottom - defaultHeight;
+    double bottom = paddingBottom + 114;
 
-    if (show && demoType == DemoType.tts) {
+    if (demoType == DemoType.tts) {
       bottom += inputHeight - 114 - paddingBottom;
     }
 
@@ -114,7 +74,7 @@ class Suggestions extends ConsumerWidget {
       bottom: bottom,
       left: 0,
       right: 0,
-      height: defaultHeight,
+      height: Suggestions.defaultHeight,
       child: Row(
         children: [
           Exp(

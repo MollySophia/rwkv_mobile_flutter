@@ -43,7 +43,47 @@ class SuggestionConfig {
 }
 
 class _Suggestion {
+  /// All suggestion config
   final config = qs<SuggestionConfig>(_DefaultSuggestion.en);
+
+  /// suggestion prompt list at top of the text input
+  /// item type: [String] or [Suggestion]
+  final suggestion = qp<List<dynamic>>((ref) {
+    final imagePath = ref.watch(P.world.imagePath);
+    final demoType = ref.watch(P.app.demoType);
+    final messages = ref.watch(P.chat.messages);
+    final currentModel = ref.watch(P.rwkv.currentModel);
+
+    final hideCases = [
+      demoType == DemoType.chat && (messages.isNotEmpty || currentModel == null),
+      demoType == DemoType.world && (imagePath == null || imagePath.isEmpty || messages.length != 1),
+    ];
+    if (hideCases.any((e) => e)) {
+      return [];
+    }
+    final config = ref.watch(P.suggestion.config);
+    final currentWorldType = ref.watch(P.rwkv.currentWorldType);
+
+    switch (demoType) {
+      case DemoType.chat:
+        return config.chat.map((e) => e.suggestions).flattened.shuffled().take(5).toList();
+      case DemoType.world:
+        switch (currentWorldType) {
+          case WorldType.reasoningQA:
+            return config.seeReasoningQa;
+          case WorldType.ocr:
+            return config.seeOcr.toList().shuffled.take(5).toList();
+          default:
+            break;
+        }
+        break;
+      case DemoType.tts:
+        return config.tts.toList().shuffled.take(5).toList();
+      default:
+        return [];
+    }
+    return [];
+  });
 
   FV loadSuggestions() async {
     final demoType = P.app.demoType.q;
