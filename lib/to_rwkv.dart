@@ -26,17 +26,15 @@ class GenerateAsync extends ToRWKV {
   GenerateAsync(this.prompt);
 }
 
-class Generate extends ToRWKV {
+class SudokuOthelloGenerate extends ToRWKV {
   final String prompt;
   final bool decodeStream;
   final bool wantRawJSON;
 
-  Generate(this.prompt, {this.decodeStream = true, this.wantRawJSON = true});
+  SudokuOthelloGenerate(this.prompt, {this.decodeStream = true, this.wantRawJSON = true});
 
   static const responseType = StreamResponse;
 }
-
-class GetEnableReasoning extends ToRWKV {}
 
 class GetIsGenerating extends ToRWKV {}
 
@@ -72,13 +70,15 @@ class GetResponseBufferIds extends ToRWKV {}
 
 class GetSamplerParams extends ToRWKV {}
 
-class InitRuntime extends ToRWKV {
+class ReInitRuntime extends ToRWKV {
   final String modelPath;
   final Backend backend;
   final String tokenizerPath;
   final int latestRuntimeAddress;
 
-  InitRuntime({
+  static const responseType = ReInitSteps;
+
+  ReInitRuntime({
     required this.modelPath,
     required this.backend,
     required this.tokenizerPath,
@@ -132,12 +132,10 @@ class ReleaseWhisperEncoder extends ToRWKV {}
 
 class ChatAsync extends ToRWKV {
   final List<String> messages;
+  final bool reasoning;
 
-  ChatAsync(this.messages);
+  ChatAsync(this.messages, {required this.reasoning});
 }
-
-@Deprecated("use RequestRunTTSAsync instead")
-class RunTTS extends ToRWKV {}
 
 /// 开始 TTS 任务
 ///
@@ -172,11 +170,6 @@ class SetBosToken extends ToRWKV {
   final String bosToken;
 
   SetBosToken(this.bosToken);
-}
-
-class SetEnableReasoning extends ToRWKV {
-  final bool enableReasoning;
-  SetEnableReasoning(this.enableReasoning);
 }
 
 class SetEosToken extends ToRWKV {

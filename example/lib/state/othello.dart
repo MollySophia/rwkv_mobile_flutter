@@ -258,24 +258,13 @@ extension _$Othello on _Othello {
         final isGenerating = event.content == "true";
         receivingTokens.q = isGenerating;
         break;
-      case _RWKVMessageType.response:
+      case _RWKVMessageType.sudokuOthelloResponse:
         received.q = event.content;
-        break;
-      case _RWKVMessageType.generateStart:
-        receivingTokens.q = true;
-        received.q = "";
         break;
       case _RWKVMessageType.streamResponse:
         received.q = event.content;
         final token = event.token;
         _onStreamingToken(token);
-        break;
-      case _RWKVMessageType.currentPrompt:
-        received.q = event.content;
-        receivingTokens.q = false;
-        break;
-      case _RWKVMessageType.generateStop:
-        receivingTokens.q = false;
         break;
     }
 
@@ -341,6 +330,15 @@ extension _$Othello on _Othello {
     switch (event) {
       case from_rwkv.ResponseBufferContent res:
         received.q = res.responseBufferContent;
+        break;
+
+      case from_rwkv.GenerateStart _:
+        receivingTokens.q = true;
+        received.q = "";
+        break;
+
+      case from_rwkv.GenerateStop _:
+        receivingTokens.q = false;
         break;
 
       default:

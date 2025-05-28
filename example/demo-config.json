@@ -120,10 +120,9 @@
         "fileSize": 2315788802,
         "sha256": "004093a6dfa36233fa119a0fbede3422b8639eca7caab88575d7527fe214cb4f",
         "quantization": "NF4",
-        "platforms": ["ios", "macos", "web", "windows"],
+        "platforms": ["macos", "web", "windows"],
         "backends": ["webRwkv"],
-        "tags": ["reason", "gpu"],
-        "isDebug": true
+        "tags": ["reason", "gpu"]
       },
       {
         "name": "RWKV7-G1 1.5B Neko",

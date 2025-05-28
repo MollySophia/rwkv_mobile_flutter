@@ -320,7 +320,7 @@ extension $Chat on _Chat {
       content: "",
       isMine: false,
       changing: true,
-      isReasoning: P.rwkv.usingReasoningModel.q,
+      isReasoning: P.rwkv.reasoning.q,
       paused: false,
     );
 
@@ -751,29 +751,9 @@ extension _$Chat on _Chat {
         if (!isGenerating) _fullyReceived(callingFunction: "_onStreamEvent:isGenerating");
         break;
 
-      case _RWKVMessageType.response:
-        receivedTokens.q = event.content;
-        receivingTokens.q = false;
-        _fullyReceived(callingFunction: "_onStreamEvent:response");
-        break;
-
-      case _RWKVMessageType.generateStart:
-        receivedTokens.q = "";
-        receivingTokens.q = true;
-        break;
-
       case _RWKVMessageType.streamResponse:
         receivedTokens.q = event.content;
         receivingTokens.q = true;
-        break;
-
-      case _RWKVMessageType.currentPrompt:
-        receivedTokens.q = event.content;
-        break;
-
-      case _RWKVMessageType.generateStop:
-        receivedTokens.q = "";
-        receivingTokens.q = false;
         break;
 
       default:
@@ -788,6 +768,16 @@ extension _$Chat on _Chat {
         _sensitiveThrottler.call(() {
           _checkSensitive(res.responseBufferContent);
         });
+        break;
+
+      case from_rwkv.GenerateStop _:
+        receivedTokens.q = "";
+        receivingTokens.q = false;
+        break;
+
+      case from_rwkv.GenerateStart _:
+        receivedTokens.q = "";
+        receivingTokens.q = true;
         break;
 
       default:

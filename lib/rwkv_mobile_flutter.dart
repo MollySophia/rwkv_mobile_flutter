@@ -54,14 +54,14 @@ class RWKVMobile {
   static String getPlatformName() {
     final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
     final platformName = rwkvMobile.rwkvmobile_get_platform_name();
-    if (kDebugMode) print("💬 platformName: ${platformName.cast<Utf8>().toDartString()}");
+    if (kDebugMode) print('💬 platformName: ${platformName.cast<Utf8>().toDartString()}');
     return platformName.cast<Utf8>().toDartString();
   }
 
   static String getSocName() {
     final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
     final socName = rwkvMobile.rwkvmobile_get_soc_name();
-    if (kDebugMode) print("💬 socName: ${socName.cast<Utf8>().toDartString()}");
+    if (kDebugMode) print('💬 socName: ${socName.cast<Utf8>().toDartString()}');
     return socName.cast<Utf8>().toDartString();
   }
 
@@ -74,7 +74,7 @@ class RWKVMobile {
   static String getSnapdragonHtpArch() {
     final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
     final snapdragonHtpArch = rwkvMobile.rwkvmobile_get_htp_arch();
-    if (kDebugMode) print("💬 snapdragonHtpArch: ${snapdragonHtpArch.cast<Utf8>().toDartString()}");
+    if (kDebugMode) print('💬 snapdragonHtpArch: ${snapdragonHtpArch.cast<Utf8>().toDartString()}');
     return snapdragonHtpArch.cast<Utf8>().toDartString();
   }
 
@@ -97,7 +97,6 @@ class RWKVMobile {
     int maxMessages = 1000;
     int generationStopToken = 0; // Takes effect in 'generation' mode; not used in 'chat' mode
     int retVal = 0;
-    int enableReasoning = 0;
 
     final inputsPtr = calloc.allocate<ffi.Pointer<ffi.Char>>(maxMessages);
 
@@ -106,28 +105,14 @@ class RWKVMobile {
     var modelBackendString = backend.asArgument;
     var tokenizerPath = options.tokenizerPath;
 
-    // TODO: @Molly please use this variable to initialize runtime
-    // TODO: 需要检查一下地址里是否有东西, 如果不是 hot restart 而是 cold boot, 前端传递的 address 里面可能没有东西
     rwkvmobile_runtime_t runtime;
-
-    // if (kDebugMode && backend == Backend.llamacpp) {
-    //   final latestRuntimeAddress = options.latestRuntimeAddress;
-    //   if (kDebugMode) print("💬 latestRuntimeAddress: $latestRuntimeAddress");
-
-    //   if (latestRuntimeAddress != 0) {
-    //     if (kDebugMode) print("💬 got previous runtime address, releasing");
-    //     runtime = ffi.Pointer.fromAddress(latestRuntimeAddress);
-    //     rwkvMobile.rwkvmobile_runtime_release(runtime);
-    //     runtime = ffi.nullptr;
-    //   }
-    // }
 
     // runtime initializations
     switch (backend) {
       case Backend.qnn:
         // TODO: better solution for this
         final tempDir = await getTemporaryDirectory();
-        if (kDebugMode) print("💬 tempDir: ${tempDir.path}");
+        if (kDebugMode) print('💬 tempDir: ${tempDir.path}');
 
         runtime = rwkvMobile.rwkvmobile_runtime_init_with_name_extra(
           modelBackendString.toNativeUtf8().cast<ffi.Char>(),
@@ -157,7 +142,7 @@ class RWKVMobile {
       switch (message) {
         // 🟥 getLatestRuntimeAddress
         case GetLatestRuntimeAddress req:
-          if (kDebugMode) print("✅ getLatestRuntimeAddress: ${runtime.address}");
+          if (kDebugMode) print('✅ getLatestRuntimeAddress: ${runtime.address}');
           sendPort.send(LatestRuntimeAddress(latestRuntimeAddress: runtime.address, toRWKV: req));
 
         // 🟥 setMaxLength
@@ -166,7 +151,7 @@ class RWKVMobile {
           if (arg > 0) maxLength = arg;
 
         // 🟥 clearStates
-        case ClearStates req:
+        case ClearStates _:
           rwkvMobile.rwkvmobile_runtime_clear_state(runtime);
 
         // 🟥 setGenerationStopToken
@@ -185,7 +170,7 @@ class RWKVMobile {
           final stringBuffer = calloc.allocate<ffi.Char>(maxLength);
           rwkvMobile.rwkvmobile_runtime_get_prompt(runtime, stringBuffer, maxLength);
           final prompt = stringBuffer.cast<Utf8>().toDartString();
-          sendPort.send({'currentPrompt': prompt});
+          sendPort.send(CurrentPrompt(prompt: prompt, toRWKV: req));
           calloc.free(stringBuffer);
 
         // 🟥 setSamplerParams
@@ -217,18 +202,8 @@ class RWKVMobile {
             ),
           );
 
-        // 🟥 setEnableReasoning
-        case SetEnableReasoning req:
-          // TODO: 这里不应该使用这个变量, 因为无法保证值同步至 cpp 的内存
-          enableReasoning = req.enableReasoning ? 1 : 0;
-
-        // 🟥 getEnableReasoning
-        case GetEnableReasoning req:
-          bool enableReasoningBool = (enableReasoning != 0);
-          sendPort.send({'enableReasoning': enableReasoningBool});
-
         // 🟥 getIsGenerating
-        case GetIsGenerating req:
+        case GetIsGenerating _:
           bool isGeneratingBool = (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) != 0);
           sendPort.send({'isGenerating': isGeneratingBool});
 
@@ -312,18 +287,18 @@ class RWKVMobile {
             break;
           }
 
-          sendPort.send({'generateStart': true});
-          if (kDebugMode) print("💬 Starting LLM generation thread (chat mode)");
+          sendPort.send(GenerateStart(toRWKV: req));
+          if (kDebugMode) print('💬 Starting LLM generation thread (chat mode)');
           retVal = rwkvMobile.rwkvmobile_runtime_eval_chat_with_history_async(
             runtime,
             inputsPtr,
             numInputs,
             maxLength,
             ffi.nullptr,
-            enableReasoning,
+            req.reasoning ? 1 : 0,
           );
-          if (kDebugMode) print("💬 Started LLM generation thread (chat mode)");
-          if (retVal != 0) sendPort.send({'generateStop': true, 'error': 'Failed to start generation thread: retVal: $retVal'});
+          if (kDebugMode) print('💬 Started LLM generation thread (chat mode)');
+          if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation thread: retVal: $retVal', toRWKV: req));
 
         // 🟥 generateAsync
         case GenerateAsync req:
@@ -334,14 +309,14 @@ class RWKVMobile {
             break;
           }
 
-          sendPort.send({'generateStart': true});
-          if (kDebugMode) print("🔥 Starting LLM generation thread (gen mode), maxlength = $maxLength");
+          sendPort.send(GenerateStart(toRWKV: req));
+          if (kDebugMode) print('🔥 Starting LLM generation thread (gen mode), maxlength = $maxLength');
           retVal = rwkvMobile.rwkvmobile_runtime_gen_completion_async(runtime, promptPtr, maxLength, generationStopToken, ffi.nullptr);
-          if (kDebugMode) print("🔥 Started LLM generation thread (gen mode)");
-          if (retVal != 0) sendPort.send({'generateStop': true, 'error': 'Failed to start generation'});
+          if (kDebugMode) print('🔥 Started LLM generation thread (gen mode)');
+          if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation: retVal: $retVal', toRWKV: req));
 
         // 🟥 generate
-        case Generate req:
+        case SudokuOthelloGenerate req:
           final promptPtr = req.prompt.toNativeUtf8().cast<ffi.Char>();
           String responseStr = req.prompt;
           final randon = Random();
@@ -362,7 +337,7 @@ class RWKVMobile {
               stream = cppStream.cast<Utf8>().toDartString();
               responseStr = stream;
             } else {
-              stream = "";
+              stream = '';
             }
 
             // TODO: @wangce 移除该调用
@@ -395,8 +370,8 @@ class RWKVMobile {
           final nativeCallable = ffi.NativeCallable<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int, ffi.Pointer<ffi.Char>)>.isolateLocal(
             callbackFunction,
           );
-          sendPort.send({'generateStart': true});
-          if (kDebugMode) print("🔥 Start to call LLM (gen mode), maxlength = $maxLength");
+          sendPort.send(GenerateStart(toRWKV: req));
+          if (kDebugMode) print('🔥 Start to call LLM (gen mode), maxlength = $maxLength');
           retVal = rwkvMobile.rwkvmobile_runtime_gen_completion(
             runtime,
             promptPtr,
@@ -404,65 +379,99 @@ class RWKVMobile {
             generationStopToken,
             nativeCallable.nativeFunction,
           );
-          if (kDebugMode) print("🔥 Call LLM done (gen mode)");
-          if (retVal != 0) sendPort.send({'generateStop': true, 'error': 'Failed to start generation'});
+          if (kDebugMode) print('🔥 Call LLM done (gen mode)');
+          if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation: retVal: $retVal', toRWKV: req));
 
-          sendPort.send({'response': responseStr});
-          sendPort.send({'generateStop': true});
+          sendPort.send({'sudokuOthelloResponse': responseStr});
+          if (retVal == 0) sendPort.send(GenerateStop(toRWKV: req));
 
         // 🟥 releaseModel
-        case ReleaseModel req:
-          if (kDebugMode) print("💬 Releasing model");
+        case ReleaseModel _:
+          if (kDebugMode) print('💬 Releasing model');
           rwkvMobile.rwkvmobile_runtime_release(runtime);
           runtime = ffi.nullptr;
 
         // 🟥 initRuntime
-        case InitRuntime req:
+        case ReInitRuntime req:
           modelPath = req.modelPath;
           modelBackendString = req.backend.asArgument;
           tokenizerPath = req.tokenizerPath;
-          if (runtime.address != 0) rwkvMobile.rwkvmobile_runtime_release(runtime);
+          if (runtime.address != 0) {
+            sendPort.send(ReInitSteps(done: false, step: 'release runtime if runtime.address != 0', toRWKV: req));
+            rwkvMobile.rwkvmobile_runtime_release(runtime);
+          }
 
-          if (modelBackendString == 'qnn') {
-            // TODO: better solution for this
-            final tempDir = await getTemporaryDirectory();
-            rwkvMobile.rwkvmobile_runtime_add_adsp_library_path((tempDir.path + '/assets/lib/').toNativeUtf8().cast<ffi.Char>());
+          sendPort.send(ReInitSteps(done: false, step: 'init backend: ${backend.asArgument}', toRWKV: req));
+          switch (backend) {
+            case Backend.ncnn:
+            case Backend.llamacpp:
+            case Backend.webRwkv:
+            case Backend.mnn:
+              runtime = rwkvMobile.rwkvmobile_runtime_init_with_name(
+                modelBackendString.toNativeUtf8().cast<ffi.Char>(),
+              );
+            case Backend.qnn:
+              // TODO: better solution for this
+              final tempDir = await getTemporaryDirectory();
+              sendPort.send(ReInitSteps(done: false, step: 'add adsp library path', toRWKV: req));
+              rwkvMobile.rwkvmobile_runtime_add_adsp_library_path((tempDir.path + '/assets/lib/').toNativeUtf8().cast<ffi.Char>());
 
-            runtime = rwkvMobile.rwkvmobile_runtime_init_with_name_extra(
-              modelBackendString.toNativeUtf8().cast<ffi.Char>(),
-              (tempDir.path + '/assets/lib/libQnnHtp.so').toNativeUtf8().cast<ffi.Void>(),
-            );
-          } else {
-            runtime = rwkvMobile.rwkvmobile_runtime_init_with_name(modelBackendString.toNativeUtf8().cast<ffi.Char>());
+              sendPort.send(ReInitSteps(done: false, step: 'init with name extra', toRWKV: req));
+              runtime = rwkvMobile.rwkvmobile_runtime_init_with_name_extra(
+                modelBackendString.toNativeUtf8().cast<ffi.Char>(),
+                (tempDir.path + '/assets/lib/libQnnHtp.so').toNativeUtf8().cast<ffi.Void>(),
+              );
           }
 
           if (runtime.address == 0) {
-            sendPort.send({'initRuntimeDone': false, 'error': 'Failed to initialize runtime'});
+            sendPort.send(
+              ReInitSteps(
+                done: false,
+                error: 'Failed to initialize runtime: runtime.address: ${runtime.address}',
+                toRWKV: req,
+                success: false,
+              ),
+            );
             break;
           }
 
           retVal = rwkvMobile.rwkvmobile_runtime_load_tokenizer(runtime, tokenizerPath.toNativeUtf8().cast<ffi.Char>());
           if (retVal != 0) {
-            sendPort.send({'initRuntimeDone': false, 'error': 'Failed to load tokenizer, tokenizer path: $tokenizerPath'});
+            sendPort.send(
+              ReInitSteps(
+                done: false,
+                error: 'Failed to load tokenizer, tokenizer path: $tokenizerPath',
+                toRWKV: req,
+                success: false,
+              ),
+            );
             break;
           }
 
           retVal = rwkvMobile.rwkvmobile_runtime_load_model(runtime, modelPath.toNativeUtf8().cast<ffi.Char>());
           if (retVal != 0) {
-            sendPort.send({'initRuntimeDone': false, 'error': 'Failed to load model, model path: $modelPath'});
+            sendPort.send(
+              ReInitSteps(
+                done: false,
+                error: 'Failed to load model, model path: $modelPath',
+                toRWKV: req,
+                success: false,
+              ),
+            );
             break;
           }
-          sendPort.send({'initRuntimeDone': true});
+
+          sendPort.send(ReInitSteps(done: true, success: true, toRWKV: req));
 
         // 🟥 stop
         case Stop req:
           bool generating = rwkvMobile.rwkvmobile_runtime_is_generating(runtime) == 1;
           while (generating) {
             rwkvMobile.rwkvmobile_runtime_stop_generation(runtime);
-            if (kDebugMode) print("💬 Waiting for generation to stop...");
+            if (kDebugMode) print('💬 Waiting for generation to stop...');
             await Future.delayed(const Duration(milliseconds: 5));
             generating = rwkvMobile.rwkvmobile_runtime_is_generating(runtime) == 1;
-            if (!generating) sendPort.send({'generateStop': true});
+            if (!generating) sendPort.send(GenerateStop(toRWKV: req));
           }
 
         // 🟥 getResponseBufferContent
@@ -480,7 +489,7 @@ class RWKVMobile {
           sendPort.send(Speed(prefillSpeed: prefillSpeed, decodeSpeed: decodeSpeed, toRWKV: req));
 
         // 🟥 getResponseBufferIds
-        case GetResponseBufferIds req:
+        case GetResponseBufferIds _:
           final responseBufferIds = rwkvMobile.rwkvmobile_runtime_get_response_buffer_ids(runtime);
           final responseBufferIdsList = responseBufferIds.ids.asTypedList(responseBufferIds.len).toList();
           rwkvMobile.rwkvmobile_runtime_free_token_ids(responseBufferIds);
@@ -516,10 +525,6 @@ class RWKVMobile {
         case ReleaseTTSModels req:
           retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_release_models(runtime);
           if (retVal != 0) sendPort.send(Error('Failed to release TTS models', req));
-
-        // 🟥 runTTS
-        case RunTTS req:
-          sendPort.send(Error('RunTTS method is deprecated, please use RunTTSAsync instead', req));
 
         // 🟥 runTTSAsync
         case StartTTS req:
@@ -588,7 +593,7 @@ class RWKVMobile {
         // 🟥 dumpLog
         case DumpLog req:
           final log = rwkvMobile.rwkvmobile_dump_log();
-          sendPort.send({'runtimeLog': log.cast<Utf8>().toDartString()});
+          sendPort.send(RuntimeLog(runtimeLog: log.cast<Utf8>().toDartString(), toRWKV: req));
       }
     }
   }

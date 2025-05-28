@@ -73,7 +73,7 @@ class WorldGroupItem extends ConsumerWidget {
             modelPath: modelLocalFile.targetPath,
             encoderPath: encoderLocalFile.targetPath,
             backend: modelFileKey.backend!,
-            usingReasoningModel: worldType.isReasoning,
+            enableReasoning: worldType.isReasoning,
           );
         // throw "Not implemented";
       }

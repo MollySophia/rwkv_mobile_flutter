@@ -41,7 +41,7 @@ class BottomBar extends ConsumerWidget {
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
     final demoType = ref.watch(P.app.demoType);
     final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
-    final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
+    final reasoning = ref.watch(P.rwkv.reasoning);
     final s = S.of(context);
     final kB = ref.watch(P.app.qb);
 
@@ -68,11 +68,11 @@ class BottomBar extends ConsumerWidget {
             ),
           ),
         if (demoType == DemoType.chat) const ReasonButton(),
-        if (usingReasoningModel) 4.w,
-        if (usingReasoningModel)
+        if (reasoning) 4.w,
+        if (reasoning)
           if (demoType == DemoType.chat) const ReasoningOptionButton(option: ReasoningOption.language),
-        if (usingReasoningModel) 4.w,
-        if (usingReasoningModel)
+        if (reasoning) 4.w,
+        if (reasoning)
           if (demoType == DemoType.chat) const ReasoningOptionButton(option: ReasoningOption.pseudo),
         8.w,
         Co(

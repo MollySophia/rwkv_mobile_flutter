@@ -38,8 +38,9 @@ class _RWKV {
     return argument.defaults;
   });
 
-  late final usingReasoningModel = qp((ref) => ref.watch(_usingReasoningModel));
-  late final _usingReasoningModel = qs(false);
+  /// 当前如果让 RWKV Backend 执行任务, 是否使用 reasoning / thinking 模式
+  late final reasoning = qp((ref) => ref.watch(_reasoning));
+  late final _reasoning = qs(false);
 
   late final preferChinese = qp((ref) => ref.watch(_preferChinese));
   late final _preferChinese = qs(false);
@@ -84,7 +85,7 @@ extension $RWKVLoad on _RWKV {
     required String modelPath,
     required String encoderPath,
     required Backend backend,
-    required bool usingReasoningModel,
+    required bool enableReasoning,
   }) async {
     qq;
     _loading.q = true;
@@ -102,7 +103,7 @@ extension $RWKVLoad on _RWKV {
         send(to_rwkv.ReleaseWhisperEncoder());
         send(to_rwkv.ReleaseModel());
         final startMS = HF.debugShorterUS;
-        await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
+        await reInitRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
         final endMS = HF.debugShorterUS;
         qqr("initRuntime done in ${endMS - startMS}ms");
       } catch (e) {
@@ -132,12 +133,12 @@ extension $RWKVLoad on _RWKV {
 
     send(to_rwkv.LoadVisionEncoder(encoderPath));
     await setModelConfig(
-      usingReasoningModel: usingReasoningModel,
+      enableReasoning: enableReasoning,
       preferChinese: false,
       setPrompt: false,
     );
-    await resetSamplerParams(usingReasoningModel: usingReasoningModel);
-    await resetMaxLength(usingReasoningModel: usingReasoningModel);
+    await resetSamplerParams(enableReasoning: enableReasoning);
+    await resetMaxLength(enableReasoning: enableReasoning);
     send(to_rwkv.SetEosToken("\x17"));
     send(to_rwkv.SetBosToken("\x16"));
     send(to_rwkv.SetTokenBanned([0]));
@@ -162,7 +163,7 @@ extension $RWKVLoad on _RWKV {
       send(to_rwkv.ReleaseVisionEncoder());
       send(to_rwkv.ReleaseModel());
       final startMS = HF.debugShorterUS;
-      await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
+      await reInitRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
       final endMS = HF.debugShorterUS;
       qqr("initRuntime done in ${endMS - startMS}ms");
     } else {
@@ -186,12 +187,12 @@ extension $RWKVLoad on _RWKV {
 
     send(to_rwkv.LoadWhisperEncoder(encoderPath));
     await setModelConfig(
-      usingReasoningModel: false,
+      enableReasoning: false,
       preferChinese: false,
       setPrompt: false,
     );
-    await resetSamplerParams(usingReasoningModel: false);
-    await resetMaxLength(usingReasoningModel: false);
+    await resetSamplerParams(enableReasoning: false);
+    await resetMaxLength(enableReasoning: false);
     send(to_rwkv.SetEosToken("\x17"));
     send(to_rwkv.SetBosToken("\x16"));
     send(to_rwkv.SetTokenBanned([0]));
@@ -202,7 +203,7 @@ extension $RWKVLoad on _RWKV {
   FV loadTTSModels({
     required String modelPath,
     required Backend backend,
-    required bool usingReasoningModel,
+    required bool enableReasoning,
     required String campPlusPath,
     required String flowEncoderPath,
     required String flowDecoderEstimatorPath,
@@ -224,7 +225,7 @@ extension $RWKVLoad on _RWKV {
       try {
         send(to_rwkv.ReleaseTTSModels());
         final startMS = HF.debugShorterUS;
-        await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
+        await reInitRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
         final endMS = HF.debugShorterUS;
         qqr("initRuntime done in ${endMS - startMS}ms");
       } catch (e) {
@@ -288,7 +289,7 @@ extension $RWKVLoad on _RWKV {
   FV loadChat({
     required String modelPath,
     required Backend backend,
-    required bool usingReasoningModel,
+    required bool enableReasoning,
   }) async {
     qq;
     _loading.q = true;
@@ -303,7 +304,7 @@ extension $RWKVLoad on _RWKV {
     if (_sendPort != null) {
       try {
         final startMS = HF.debugShorterUS;
-        await initRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
+        await reInitRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
         final endMS = HF.debugShorterUS;
         qqr("initRuntime done in ${endMS - startMS}ms");
       } catch (e) {
@@ -332,9 +333,9 @@ extension $RWKVLoad on _RWKV {
     send(to_rwkv.GetLatestRuntimeAddress());
 
     P.app.demoType.q = DemoType.chat;
-    await setModelConfig(usingReasoningModel: usingReasoningModel);
-    await resetSamplerParams(usingReasoningModel: usingReasoningModel);
-    await resetMaxLength(usingReasoningModel: usingReasoningModel);
+    await setModelConfig(enableReasoning: enableReasoning);
+    await resetSamplerParams(enableReasoning: enableReasoning);
+    await resetMaxLength(enableReasoning: enableReasoning);
     send(to_rwkv.GetSamplerParams());
     _loading.q = false;
   }
@@ -361,7 +362,7 @@ extension $RWKVLoad on _RWKV {
 
     if (_sendPort != null) {
       send(
-        to_rwkv.InitRuntime(
+        to_rwkv.ReInitRuntime(
           modelPath: modelPath,
           backend: backend,
           tokenizerPath: tokenizerPath,
@@ -421,7 +422,7 @@ extension $RWKVLoad on _RWKV {
 
     if (_sendPort != null) {
       send(
-        to_rwkv.InitRuntime(
+        to_rwkv.ReInitRuntime(
           modelPath: modelPath,
           backend: backend,
           tokenizerPath: tokenizerPath,
@@ -493,7 +494,7 @@ extension $RWKV on _RWKV {
       return;
     }
 
-    send(to_rwkv.ChatAsync(messages));
+    send(to_rwkv.ChatAsync(messages, reasoning: reasoning.q));
 
     if (_getTokensTimer != null) {
       _getTokensTimer!.cancel();
@@ -506,6 +507,7 @@ extension $RWKV on _RWKV {
     });
   }
 
+  /// 直接在 ffi+cpp 线程中进行推理工作
   FV generate(String prompt) async {
     prefillSpeed.q = 0;
     decodeSpeed.q = 0;
@@ -514,7 +516,7 @@ extension $RWKV on _RWKV {
       qqw("sendPort is null");
       return;
     }
-    send(to_rwkv.Generate(prompt));
+    send(to_rwkv.SudokuOthelloGenerate(prompt));
 
     if (_getTokensTimer != null) {
       _getTokensTimer!.cancel();
@@ -556,7 +558,7 @@ extension $RWKV on _RWKV {
 
   FV stop() async => send(to_rwkv.Stop());
 
-  FV initRuntime({
+  FV reInitRuntime({
     required String modelPath,
     required Backend backend,
     required String tokenizerPath,
@@ -565,7 +567,7 @@ extension $RWKV on _RWKV {
     decodeSpeed.q = 0;
     _initRuntimeCompleter = Completer<void>();
     send(
-      to_rwkv.InitRuntime(
+      to_rwkv.ReInitRuntime(
         modelPath: modelPath,
         backend: backend,
         tokenizerPath: tokenizerPath,
@@ -576,12 +578,12 @@ extension $RWKV on _RWKV {
   }
 
   FV setModelConfig({
-    bool? usingReasoningModel,
+    bool? enableReasoning,
     bool? preferChinese,
     bool? preferPseudo,
     bool setPrompt = true,
   }) async {
-    if (usingReasoningModel != null) _usingReasoningModel.q = usingReasoningModel;
+    if (enableReasoning != null) _reasoning.q = enableReasoning;
 
     if (preferChinese != null && preferPseudo != null) {
       Alert.error("preferChinese and preferPseudo cannot be set at the same time");
@@ -603,8 +605,7 @@ extension $RWKV on _RWKV {
 
     if (setPrompt) qqq("setPrompt: $finalPrompt");
 
-    send(to_rwkv.SetEnableReasoning(_usingReasoningModel.q));
-    if (setPrompt) send(to_rwkv.SetPrompt(_usingReasoningModel.q ? "<EOD>" : finalPrompt));
+    if (setPrompt) send(to_rwkv.SetPrompt(_reasoning.q ? "<EOD>" : finalPrompt));
 
     late final String thinkingToken;
 
@@ -624,14 +625,14 @@ extension $RWKV on _RWKV {
     send(to_rwkv.SetThinkingToken(thinkingToken));
   }
 
-  FV resetSamplerParams({required bool usingReasoningModel}) async {
+  FV resetSamplerParams({required bool enableReasoning}) async {
     await syncSamplerParams(
-      temperature: usingReasoningModel ? Argument.temperature.reasonDefaults : Argument.temperature.defaults,
-      topK: usingReasoningModel ? Argument.topK.reasonDefaults : Argument.topK.defaults,
-      topP: usingReasoningModel ? Argument.topP.reasonDefaults : Argument.topP.defaults,
-      presencePenalty: usingReasoningModel ? Argument.presencePenalty.reasonDefaults : Argument.presencePenalty.defaults,
-      frequencyPenalty: usingReasoningModel ? Argument.frequencyPenalty.reasonDefaults : Argument.frequencyPenalty.defaults,
-      penaltyDecay: usingReasoningModel ? Argument.penaltyDecay.reasonDefaults : Argument.penaltyDecay.defaults,
+      temperature: enableReasoning ? Argument.temperature.reasonDefaults : Argument.temperature.defaults,
+      topK: enableReasoning ? Argument.topK.reasonDefaults : Argument.topK.defaults,
+      topP: enableReasoning ? Argument.topP.reasonDefaults : Argument.topP.defaults,
+      presencePenalty: enableReasoning ? Argument.presencePenalty.reasonDefaults : Argument.presencePenalty.defaults,
+      frequencyPenalty: enableReasoning ? Argument.frequencyPenalty.reasonDefaults : Argument.frequencyPenalty.defaults,
+      penaltyDecay: enableReasoning ? Argument.penaltyDecay.reasonDefaults : Argument.penaltyDecay.defaults,
     );
   }
 
@@ -664,9 +665,9 @@ extension $RWKV on _RWKV {
     if (kDebugMode) send(to_rwkv.GetSamplerParams());
   }
 
-  FV resetMaxLength({required bool usingReasoningModel}) async {
+  FV resetMaxLength({required bool enableReasoning}) async {
     await syncMaxLength(
-      maxLength: usingReasoningModel ? Argument.maxLength.reasonDefaults : Argument.maxLength.defaults,
+      maxLength: enableReasoning ? Argument.maxLength.reasonDefaults : Argument.maxLength.defaults,
     );
   }
 
@@ -760,33 +761,12 @@ extension _$RWKV on _RWKV {
       return;
     }
 
-    if (message["currentPrompt"] != null) {
-      qqq("Got currentPrompt: \"${message["currentPrompt"]}\"");
-      _oldMessagesController.add(
-        LLMEvent(
-          content: message["currentPrompt"].toString(),
-          type: _RWKVMessageType.currentPrompt,
-        ),
-      );
-      return;
-    }
-
-    if (message["generateStart"] == true) {
-      _oldMessagesController.add(
-        const LLMEvent(
-          content: "",
-          type: _RWKVMessageType.generateStart,
-        ),
-      );
-      return;
-    }
-
-    if (message["response"] != null) {
-      final responseText = message["response"].toString();
+    if (message["sudokuOthelloResponse"] != null) {
+      final responseText = message["sudokuOthelloResponse"].toString();
       _oldMessagesController.add(
         LLMEvent(
           content: responseText,
-          type: _RWKVMessageType.response,
+          type: _RWKVMessageType.sudokuOthelloResponse,
         ),
       );
       return;
@@ -810,31 +790,6 @@ extension _$RWKV on _RWKV {
       return;
     }
 
-    if (message["generateStop"] != null) {
-      _oldMessagesController.add(
-        const LLMEvent(
-          content: "",
-          type: _RWKVMessageType.generateStop,
-        ),
-      );
-      return;
-    }
-
-    if (message["initRuntimeDone"] != null) {
-      final result = message["initRuntimeDone"];
-      if (result == true) {
-        if (_initRuntimeCompleter.isCompleted) return;
-        _initRuntimeCompleter.complete();
-      } else {
-        final error = message["error"];
-        qqe("initRuntime failed: $error");
-        if (!kDebugMode) Sentry.captureException(Exception("initRuntime failed: $error"), stackTrace: StackTrace.current);
-        if (_initRuntimeCompleter.isCompleted) return;
-        _initRuntimeCompleter.completeError(error);
-      }
-      return;
-    }
-
     qqe("unknown message: $message");
     if (!kDebugMode) Sentry.captureException(Exception("unknown message: $message"), stackTrace: StackTrace.current);
   }
@@ -842,6 +797,25 @@ extension _$RWKV on _RWKV {
   void _handleFromRWKV(from_rwkv.FromRWKV message) {
     _messagesController.add(message);
     switch (message) {
+      case from_rwkv.ReInitSteps res:
+        final done = res.done;
+        final success = res.success;
+        final error = res.error;
+        final step = res.step;
+
+        if (done) {
+          if (success == true) {
+            if (_initRuntimeCompleter.isCompleted) return;
+            _initRuntimeCompleter.complete();
+          } else if (success == false) {
+            qqe("initRuntime failed: $error");
+            final exception = Exception("initRuntime failed: $error");
+            if (!kDebugMode) Sentry.captureException(exception, stackTrace: StackTrace.current);
+            if (_initRuntimeCompleter.isCompleted) return;
+            _initRuntimeCompleter.completeError(exception);
+          } else {}
+        }
+
       case from_rwkv.LatestRuntimeAddress response:
         P.preference._saveLatestRuntimeAddress(response.latestRuntimeAddress);
 
@@ -905,17 +879,11 @@ extension _$RWKV on _RWKV {
 enum _RWKVMessageType {
   /// 模型吐完 token 了会被调用, 调用内容该次 generate 吐出的总文本
   @Deprecated("Use FromRWKV instead")
-  response,
+  sudokuOthelloResponse,
 
   /// 模型每吐一个token，调用一次, 调用内容为该次 generate 已经吐出的文本
   @Deprecated("Use FromRWKV instead")
   streamResponse,
-
-  @Deprecated("Use FromRWKV instead")
-  currentPrompt,
-
-  @Deprecated("Use FromRWKV instead")
-  generateStart,
 
   /// 模型是否正在生成
   @Deprecated("Use FromRWKV instead")
@@ -923,9 +891,6 @@ enum _RWKVMessageType {
 
   @Deprecated("Use FromRWKV instead")
   responseBufferIds,
-
-  @Deprecated("Use FromRWKV instead")
-  generateStop,
 }
 
 @Deprecated("Use FromRWKV instead")
