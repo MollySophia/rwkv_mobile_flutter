@@ -14,13 +14,13 @@ import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
 import 'package:zone/widgets/arguments_panel.dart';
 import 'package:zone/widgets/pager.dart';
-import 'package:zone/widgets/screenshot.dart' show startScrollShot;
+import 'package:zone/widgets/screenshot.dart' show Screenshot;
 
 class ChatAppBar extends ConsumerWidget {
   const ChatAppBar({super.key});
 
   void onShareChatPressed() async {
-      startScrollShot(keyChatList);
+      Screenshot.startScrollShot(keyChatList);
   }
 
   void onSettingsPressed() async {
@@ -133,7 +133,7 @@ class ChatAppBar extends ConsumerWidget {
             ),
             actions: [
               if (demoType == DemoType.chat) const _NewConversationButton(),
-              if (demoType == DemoType.chat) _buildMorePopupMenuButton(),
+              if (demoType == DemoType.chat) _buildMorePopupMenuButton(context),
               if (demoType != DemoType.chat) IconButton(
                 onPressed: onSettingsPressed,
                 icon: const Icon(Icons.tune),
@@ -145,7 +145,7 @@ class ChatAppBar extends ConsumerWidget {
     );
   }
 
-  Widget _buildMorePopupMenuButton() {
+  Widget _buildMorePopupMenuButton(BuildContext context) {
     return PopupMenuButton(
       onSelected: (v) {
         switch (v) {
@@ -165,7 +165,7 @@ class ChatAppBar extends ConsumerWidget {
               children: [
                 const Icon(Icons.share_rounded),
                 8.w,
-                Text("Share Chat"),
+                Text(S.of(context).share_chat),
               ],
             ),
           ),
@@ -175,7 +175,7 @@ class ChatAppBar extends ConsumerWidget {
               children: [
                 const Icon(Icons.settings_rounded),
                 8.w,
-                Text("Settings"),
+                Text(S.of(context).session_configuration),
               ],
             ),
           ),

@@ -8,6 +8,8 @@
 		<string>We need to use microphone to send your voice</string>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>We need to use phone library to select your avatar</string>
+		<key>NSPhotoLibraryAddUsageDescription</key>
+		<string>We need to use phone library to save screenshot</string>
 		<key>CADisableMinimumFrameDurationOnPhone</key>
 		<true/>
 		<key>CFBundleDevelopmentRegion</key>

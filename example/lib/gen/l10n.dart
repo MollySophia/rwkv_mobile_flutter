@@ -1375,6 +1375,11 @@ class S {
   String get no_data {
     return Intl.message('无数据', name: 'no_data', desc: '', args: []);
   }
+
+  /// `分享聊天`
+  String get share_chat {
+    return Intl.message('分享聊天', name: 'share_chat', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

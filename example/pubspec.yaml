@@ -54,6 +54,7 @@ dependencies:
   system_info2:
   url_launcher:
   vclibs:
+  gal: ^2.3.1
 
 dev_dependencies:
   build_runner:
