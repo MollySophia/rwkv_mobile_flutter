@@ -97,12 +97,14 @@ class _App extends StatelessWidget {
       ],
       themeMode: ThemeMode.light,
       theme: ThemeData(
+        fontFamilyFallback: Config.fontFamilyFallback,
         brightness: Brightness.light,
         colorScheme: P.app.demoType.q.colorScheme!.copyWith(brightness: Brightness.light),
         appBarTheme: const AppBarTheme(scrolledUnderElevation: 0, backgroundColor: kBG),
         scaffoldBackgroundColor: kBG,
       ),
       darkTheme: ThemeData(
+        fontFamilyFallback: Config.fontFamilyFallback,
         brightness: Brightness.dark,
         colorScheme: P.app.demoType.q.colorScheme!.copyWith(brightness: Brightness.dark),
         appBarTheme: const AppBarTheme(scrolledUnderElevation: 0, backgroundColor: kB),
