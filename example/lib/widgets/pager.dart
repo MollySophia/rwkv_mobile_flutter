@@ -1,23 +1,21 @@
 // ignore: unused_import
 import 'dart:developer';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gaimon/gaimon.dart';
 import 'package:halo/halo.dart';
 import 'package:halo_state/halo_state.dart';
-import 'package:zone/model/demo_type.dart';
 import 'package:zone/state/p.dart';
-
-const _toRight = 80.0;
-PageController? _controller;
 
 class Pager extends ConsumerStatefulWidget {
   static final page = qs<double>(1.0);
-  static final mainPageNotIgnoring = qs(true);
+  static final atMainPage = qs(true);
   static final childOpacity = qs(1.0);
   static final drawerOpacity = qs(.0);
+  static final _newController = qs<PageController>(PageController());
+  static final drawerWidth = qs(100.0);
 
   static FV toggle() async {
     final currentPage = Pager.page.q;
@@ -25,23 +23,25 @@ class Pager extends ConsumerStatefulWidget {
     qqq("currentPage: $currentPage, targetPage: $targetPage");
     _CustomPageScrollPhysics.disableGaimon = true;
     HF.wait(20).then((_) {
-      if (Platform.isAndroid) Gaimon.light();
-      if (Platform.isIOS) Gaimon.soft();
+      if (Platform.isAndroid) P.app.hapticLight();
+      if (Platform.isIOS) P.app.hapticSoft();
     });
-    await _controller!.animateToPage(targetPage, duration: 300.ms, curve: Curves.easeOutCubic);
+    await Pager._newController.q.animateToPage(
+      targetPage,
+      duration: 300.ms,
+      curve: Curves.easeOutCubic,
+    );
     await Future.delayed(50.ms);
     _CustomPageScrollPhysics.disableGaimon = false;
   }
 
   final Widget child;
   final Widget drawer;
-  final double drawerToRight;
 
   const Pager({
     super.key,
     required this.child,
     required this.drawer,
-    this.drawerToRight = _toRight,
   });
 
   @override
@@ -52,40 +52,60 @@ class _PagerState extends ConsumerState<Pager> {
   @override
   void initState() {
     super.initState();
+    ref.listenManual(P.app.screenWidth, _onScreenWidthChanged, fireImmediately: true);
+  }
+
+  void _onScreenWidthChanged(double? previous, double? screenWidth) async {
+    if (screenWidth == null || screenWidth <= 0) return;
+
+    double wantedWidth = max(screenWidth - 80, 0.0);
+    final maxWidth = min(screenWidth, 414.0);
+    final minWidth = min(maxWidth, wantedWidth);
+
+    if (wantedWidth > maxWidth) wantedWidth = maxWidth;
+    if (wantedWidth < minWidth) wantedWidth = minWidth;
+
+    final viewportFraction = wantedWidth / screenWidth;
+
+    Pager._newController.q.dispose();
+    Pager._newController.q = PageController(
+      viewportFraction: viewportFraction,
+      initialPage: 1,
+    )..addListener(_onPageChanged);
+
+    await Future.delayed(0.ms);
+    Pager.drawerWidth.q = wantedWidth;
   }
 
   void _onPageChanged() async {
-    final rawString = (_controller!.page ?? 0).toStringAsFixed(2);
-    final v = double.tryParse(rawString) ?? .0;
+    final rawString = (Pager._newController.q.page ?? 0).toStringAsFixed(2);
+    double v = double.tryParse(rawString) ?? .0;
+    if (v > 1) v = 1;
+    if (v < 0) v = 0;
+    await Future.delayed(0.ms);
     Pager.page.q = v;
-    Pager.mainPageNotIgnoring.q = v == 1;
+    Pager.atMainPage.q = v == 1;
     Pager.childOpacity.q = v;
     Pager.drawerOpacity.q = 1 - v;
   }
 
   void _onPopInvokedWithResult(bool didPop, dynamic result) async {
     qqq("didPop: $didPop, result: $result");
-    await _controller!.animateToPage(1, duration: 200.ms, curve: Curves.easeOutCubic);
+    await Pager._newController.q.animateToPage(1, duration: 200.ms, curve: Curves.easeOutCubic);
   }
 
   @override
   Widget build(BuildContext context) {
-    final drawerToRight = widget.drawerToRight;
     final screenWidth = ref.watch(P.app.screenWidth);
     final screenHeight = ref.watch(P.app.screenHeight);
 
     if (screenWidth == 0) return const SB();
 
-    final demoType = ref.watch(P.app.demoType);
-
-    if (_controller == null || demoType == DemoType.sudoku || demoType == DemoType.fifthteenPuzzle || demoType == DemoType.othello) {
-      _controller = PageController(viewportFraction: ((screenWidth - drawerToRight) / screenWidth), initialPage: 1);
-      _controller!.addListener(_onPageChanged);
-    }
-
-    final ignorePointer = ref.watch(Pager.mainPageNotIgnoring);
+    final ignorePointer = ref.watch(Pager.atMainPage);
 
     final recording = ref.watch(P.world.recording);
+
+    final drawerWidth = ref.watch(Pager.drawerWidth);
 
     return PopScope(
       canPop: ignorePointer,
@@ -93,16 +113,16 @@ class _PagerState extends ConsumerState<Pager> {
       child: NotificationListener<ScrollNotification>(
         onNotification: _onNotification,
         child: SingleChildScrollView(
-          controller: _controller,
+          controller: Pager._newController.q,
           physics: recording ? const NeverScrollableScrollPhysics() : const _CustomPageScrollPhysics(parent: ClampingScrollPhysics()),
           scrollDirection: Axis.horizontal,
           child: SB(
-            width: screenWidth * 2 - drawerToRight,
+            width: screenWidth + drawerWidth,
             height: screenHeight,
             child: Ro(
               children: [
                 SB(
-                  width: screenWidth - drawerToRight,
+                  width: drawerWidth,
                   height: screenHeight,
                   child: widget.drawer,
                 ),
@@ -146,7 +166,7 @@ class _Dim extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final screenWidth = ref.watch(P.app.screenWidth);
     final screenHeight = ref.watch(P.app.screenHeight);
-    final ignorePointer = ref.watch(Pager.mainPageNotIgnoring);
+    final ignorePointer = ref.watch(Pager.atMainPage);
     final drawerOpacity = ref.watch(Pager.drawerOpacity);
     final kB = ref.watch(P.app.qb);
 
@@ -206,7 +226,7 @@ class _CustomPageScrollPhysics extends PageScrollPhysics {
     final targetPage = getTargetPage(position, velocity);
 
     if (_latestTargetPage != null && _latestTargetPage != targetPage) {
-      if (!disableGaimon) Gaimon.soft();
+      if (!disableGaimon) P.app.hapticSoft();
     }
 
     _latestTargetPage = targetPage;

@@ -277,7 +277,7 @@ extension $TTS on _TTS {
 
   FV onAudioInteractorButtonPressed() async {
     qq;
-    Gaimon.light();
+    P.app.hapticLight();
     if (focusNode.hasFocus) focusNode.unfocus();
     if (P.chat.focusNode.hasFocus) P.chat.focusNode.unfocus();
     audioInteractorShown.q = !audioInteractorShown.q;
@@ -289,7 +289,7 @@ extension $TTS on _TTS {
 
   FV onSpkButtonPressed() async {
     qq;
-    Gaimon.light();
+    P.app.hapticLight();
     if (focusNode.hasFocus) focusNode.unfocus();
     if (P.chat.focusNode.hasFocus) P.chat.focusNode.unfocus();
     spkShown.q = !spkShown.q;
@@ -301,7 +301,7 @@ extension $TTS on _TTS {
 
   FV onIntonationButtonPressed() async {
     qq;
-    Gaimon.light();
+    P.app.hapticLight();
     if (focusNode.hasFocus) focusNode.unfocus();
     if (P.chat.focusNode.hasFocus) P.chat.focusNode.unfocus();
     intonationShown.q = !intonationShown.q;
@@ -460,9 +460,8 @@ outputWavPath: $outputWavPath""");
   }
 
   void dismissAllShown({bool intonationShown = false}) {
-    qqq("intonationShown: $intonationShown");
-
     if (P.app.demoType.q != DemoType.tts) return;
+    qqq("intonationShown: $intonationShown");
 
     audioInteractorShown.q = false;
     spkShown.q = false;

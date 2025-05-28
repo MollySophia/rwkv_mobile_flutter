@@ -46,9 +46,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "application_internal_test_group": MessageLookupByLibrary.simpleMessage(
       "Application Internal Test Group",
     ),
-    "application_language": MessageLookupByLibrary.simpleMessage(
-      "Application Language",
-    ),
+    "application_language": MessageLookupByLibrary.simpleMessage("Language"),
     "application_settings": MessageLookupByLibrary.simpleMessage(
       "Application Settings",
     ),
@@ -155,7 +153,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "finish_recording": MessageLookupByLibrary.simpleMessage(
       "Recording finished",
     ),
-    "follow_system": MessageLookupByLibrary.simpleMessage("Follow System"),
+    "follow_system": MessageLookupByLibrary.simpleMessage("System"),
     "follow_us_on_twitter": MessageLookupByLibrary.simpleMessage(
       "Follow us on Twitter",
     ),
@@ -294,6 +292,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "prefill": MessageLookupByLibrary.simpleMessage("Prefill"),
     "qq_group_1": MessageLookupByLibrary.simpleMessage("QQ Group 1"),
     "qq_group_2": MessageLookupByLibrary.simpleMessage("QQ Group 2"),
+    "quick_thinking": MessageLookupByLibrary.simpleMessage("Quick Reasoning"),
+    "quick_thinking_enabled": MessageLookupByLibrary.simpleMessage(
+      "Quick Reasoning Enabled",
+    ),
     "reason": MessageLookupByLibrary.simpleMessage("Reason"),
     "reasoning_enabled": MessageLookupByLibrary.simpleMessage("Reasoning Mode"),
     "recording_your_voice": MessageLookupByLibrary.simpleMessage(

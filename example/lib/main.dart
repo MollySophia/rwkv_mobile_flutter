@@ -27,8 +27,25 @@ void main() async {
   } else {
     await _sentryAppRunner();
   }
+  // runApp(const _TestApp());
   await HF.wait(50);
   FlutterNativeSplash.remove();
+}
+
+// ignore: unused_element
+class _TestApp extends StatelessWidget {
+  const _TestApp();
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Text('Hello World!'),
+        ),
+      ),
+    );
+  }
 }
 
 FV _loadEnv() async {

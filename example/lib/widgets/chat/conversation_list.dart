@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gaimon/gaimon.dart';
 import 'package:halo/halo.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/conversation.dart';
@@ -21,7 +20,7 @@ class ConversationList extends ConsumerWidget {
 
     return RefreshIndicator.adaptive(
       onRefresh: () async {
-        Gaimon.light();
+        P.app.hapticLight();
         await P.conversation.load();
       },
       child: ListView.builder(

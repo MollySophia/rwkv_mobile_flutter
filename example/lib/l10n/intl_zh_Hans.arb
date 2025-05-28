@@ -187,5 +187,7 @@
   "all": "全部",
   "all_prompt": "全部 Prompt",
   "no_data": "无数据",
-  "share_chat": "分享聊天"
+  "share_chat": "分享聊天",
+  "quick_thinking": "快思考",
+  "quick_thinking_enabled": "快思考已经开启"
 }

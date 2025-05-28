@@ -89,7 +89,7 @@ class ModelItem extends ConsumerWidget {
       await P.rwkv.loadChat(
         modelPath: modelPath,
         backend: backend!,
-        usingReasoningModel: fileInfo.isReasoning,
+        enableReasoning: fileInfo.isReasoning,
       );
     } catch (e) {
       Alert.error(e.toString());

@@ -6,3 +6,4 @@ example/linux/**/* linguist-vendored
 example/windows/**/* linguist-vendored
 
 *.lock  linguist-vendored
+* text=auto eol=lf

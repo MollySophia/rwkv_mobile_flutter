@@ -85,18 +85,31 @@ class Message extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = S.of(context);
+    final kB = ref.watch(P.app.qb);
+    final primary = Theme.of(context).colorScheme.primary;
+    final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
+
+    final demoType = ref.watch(P.app.demoType);
+    final worldType = ref.watch(P.rwkv.currentWorldType);
+
+    // 由 message 对象是否正在 changing 来决定是否根据 receivedTokens 渲染消息内容
+    final received = ref.watch(P.chat.receivedTokens.select((v) => msg.changing ? v : ""));
+    final cotDisplayState = ref.watch(P.chat.cotDisplayState(msg.id));
+
+    final editingIndex = ref.watch(P.chat.editingIndex);
+
+    final receiveId = ref.watch(P.chat.receiveId);
+    final receiving = ref.watch(P.chat.receivingTokens);
+
     final isMine = msg.isMine;
     final alignment = isMine ? Alignment.centerRight : Alignment.centerLeft;
     const marginHorizontal = 12.0;
     const marginVertical = .0;
     const kBubbleMinHeight = 44.0;
     const kBubbleMaxWidthAdjust = .0;
-    final demoType = ref.watch(P.app.demoType);
 
     final content = msg.content;
     final changing = msg.changing;
-
-    final received = ref.watch(P.chat.receivedTokens.select((v) => msg.changing ? v : ""));
 
     String finalContent = changing ? (received.isEmpty ? content : received) : content;
     if (msg.isSensitive) finalContent = s.filter;
@@ -119,17 +132,14 @@ class Message extends ConsumerWidget {
         break;
     }
 
-    final cotDisplayState = ref.watch(P.chat.cotDisplayState(msg.id));
-
-    final usingReasoningModel = msg.isReasoning && !msg.isSensitive;
+    final reasoning = msg.isReasoning && !msg.isSensitive;
 
     String cotContent = "";
     String cotResult = "";
 
-    final worldType = ref.watch(P.rwkv.currentWorldType);
     final subStringCount = worldType == WorldType.reasoningQA ? 8 : 9;
 
-    if (usingReasoningModel) {
+    if (reasoning) {
       assert(!msg.isMine);
       final isCot = finalContent.startsWith("<think>");
       if (isCot) {
@@ -153,11 +163,6 @@ class Message extends ConsumerWidget {
       }
     }
 
-    final primaryColor = Theme.of(context).colorScheme.primary;
-    final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
-
-    final editingIndex = ref.watch(P.chat.editingIndex);
-
     final isHistoryForEditing = editingIndex != null && editingIndex > index;
     final isEditing = editingIndex != null && editingIndex == index;
     final isFutureForEditing = editingIndex != null && editingIndex < index;
@@ -176,13 +181,9 @@ class Message extends ConsumerWidget {
       opacity = 1;
     }
 
-    final receiveId = ref.watch(P.chat.receiveId);
-    final receiving = ref.watch(P.chat.receivingTokens);
     final thisMessageIsReceiving = receiveId == msg.id && receiving;
 
     final textScaleFactorForCotContent = TextScaler.linear(MediaQuery.textScalerOf(context).scale(_kTextScaleFactorForCotContent));
-
-    final kB = ref.watch(P.app.qb);
 
     final markdownStyleSheetForCotContent = MarkdownStyleSheet(
       p: TS(c: kB.q(.5)),
@@ -269,7 +270,7 @@ class Message extends ConsumerWidget {
     }
 
     EI padding = const EI.o(t: 12, l: 12, r: 12);
-    Border border = Border.all(color: primaryColor.q(.2));
+    Border border = Border.all(color: primary.q(.2));
     double radius = 20;
 
     switch (msg.type) {
@@ -355,7 +356,7 @@ class Message extends ConsumerWidget {
                   ),
                 if (worldDemoMessageHeader.isNotEmpty) 4.h,
                 // 🔥 Bot message
-                if (!usingReasoningModel)
+                if (!reasoning)
                   MarkdownBody(
                     data: finalContent,
                     selectable: false,
@@ -364,7 +365,7 @@ class Message extends ConsumerWidget {
                     onTapLink: _onTapLink,
                   ),
                 // 🔥 Bot message cot header
-                if (usingReasoningModel)
+                if (reasoning)
                   GD(
                     onTap: () {
                       if (showingCotContent) {
@@ -387,8 +388,8 @@ class Message extends ConsumerWidget {
                     ),
                   ),
                 // 🔥 Bot message cot content
-                if (usingReasoningModel) 4.h,
-                if (usingReasoningModel)
+                if (reasoning) 4.h,
+                if (reasoning)
                   AnimatedContainer(
                     duration: 250.ms,
                     height: cotContentHeight,
@@ -401,8 +402,8 @@ class Message extends ConsumerWidget {
                     ),
                   ),
                 // 🔥 Bot message cot result
-                if (cotResult.isNotEmpty && usingReasoningModel && showingCotContent) 12.h,
-                if (cotResult.isNotEmpty && usingReasoningModel)
+                if (cotResult.isNotEmpty && reasoning && showingCotContent) 12.h,
+                if (cotResult.isNotEmpty && reasoning)
                   MarkdownBody(
                     data: cotResult,
                     selectable: false,

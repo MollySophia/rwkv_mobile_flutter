@@ -2,11 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 enum DemoType {
+  /// RWKV Chat
   chat,
+
+  /// RWKV_Fiffthteen_Puzzle
   fifthteenPuzzle,
+
+  /// RWKV_Othello
   othello,
+
+  /// RWKV_Sudoku
   sudoku,
+
+  /// RWKV_Talk
   tts,
+
+  /// RWKV_See
   world;
 
   ColorScheme? get colorScheme => switch (this) {

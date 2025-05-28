@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gaimon/gaimon.dart';
 import 'package:halo/halo.dart';
 import 'package:halo_alert/halo_alert.dart';
 import 'package:halo_state/halo_state.dart';
@@ -29,19 +28,19 @@ class ReasonButton extends ConsumerWidget {
       P.fileManager.modelSelectorShown.q = true;
       return;
     }
-    final newValue = !P.rwkv.usingReasoningModel.q;
-    await P.rwkv.setModelConfig(usingReasoningModel: newValue);
+    final newValue = !P.rwkv.reasoning.q;
+    await P.rwkv.setModelConfig(enableReasoning: newValue);
 
     if (newValue) Alert.success(S.current.reasoning_enabled);
 
-    Gaimon.light();
+    P.app.hapticLight();
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = S.of(context);
     final color = Theme.of(context).colorScheme.primary;
-    final usingReasoningModel = ref.watch(P.rwkv.usingReasoningModel);
+    final reasoning = ref.watch(P.rwkv.reasoning);
     final loading = ref.watch(P.rwkv.loading);
     final kW = ref.watch(P.app.qw);
     final kB = ref.watch(P.app.qb);
@@ -50,9 +49,9 @@ class ReasonButton extends ConsumerWidget {
       child: AnimatedContainer(
         duration: 150.ms,
         decoration: BD(
-          color: usingReasoningModel ? color : kC,
+          color: reasoning ? color : kC,
           border: Border.all(
-            color: usingReasoningModel ? color.q(.5) : kB.q(.25),
+            color: reasoning ? color.q(.5) : kB.q(.25),
           ),
           borderRadius: 12.r,
         ),
@@ -63,7 +62,7 @@ class ReasonButton extends ConsumerWidget {
             if (!loading)
               Icon(
                 Icons.emoji_objects_outlined,
-                color: usingReasoningModel ? kW : kB.q(.25),
+                color: reasoning ? kW : kB.q(.25),
               ),
             if (loading)
               C(
@@ -71,19 +70,19 @@ class ReasonButton extends ConsumerWidget {
                 height: 12,
                 width: 12,
                 child: CircularProgressIndicator(
-                  color: usingReasoningModel ? kW : color,
+                  color: reasoning ? kW : color,
                   strokeWidth: 2,
                 ),
               ),
             if (!loading)
               T(
                 s.reason,
-                s: TS(c: usingReasoningModel ? kW : kB.q(.25)),
+                s: TS(c: reasoning ? kW : kB.q(.25)),
               ),
             if (loading)
               T(
                 s.loading,
-                s: TS(c: usingReasoningModel ? kW : color),
+                s: TS(c: reasoning ? kW : color),
               ),
           ],
         ),

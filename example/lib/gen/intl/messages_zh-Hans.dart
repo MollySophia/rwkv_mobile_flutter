@@ -224,6 +224,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "prefill": MessageLookupByLibrary.simpleMessage("预填"),
     "qq_group_1": MessageLookupByLibrary.simpleMessage("QQ 群 1"),
     "qq_group_2": MessageLookupByLibrary.simpleMessage("QQ 群 2"),
+    "quick_thinking": MessageLookupByLibrary.simpleMessage("快思考"),
+    "quick_thinking_enabled": MessageLookupByLibrary.simpleMessage("快思考已经开启"),
     "reason": MessageLookupByLibrary.simpleMessage("推理"),
     "reasoning_enabled": MessageLookupByLibrary.simpleMessage("推理模式"),
     "recording_your_voice": MessageLookupByLibrary.simpleMessage("正在录音..."),

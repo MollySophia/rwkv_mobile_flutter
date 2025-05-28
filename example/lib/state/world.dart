@@ -119,7 +119,7 @@ extension $World on _World {
     await stopPlaying();
     ap.Source source = ap.DeviceFileSource(path);
     playing.q = true;
-    Gaimon.light();
+    P.app.hapticLight();
     await _audioPlayer.play(source);
   }
 
@@ -136,8 +136,8 @@ extension _$World on _World {
       case DemoType.fifthteenPuzzle:
       case DemoType.othello:
       case DemoType.sudoku:
-        return;
       case DemoType.chat:
+        return;
       case DemoType.tts:
       case DemoType.world:
     }

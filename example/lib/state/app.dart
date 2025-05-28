@@ -19,7 +19,10 @@ class _App extends RawApp {
 
   static const String _remoteDemoConfigKey = "demo-config.json";
 
-  late final isDesktop = qs(false);
+  late final isDesktop = qp((ref) => ref.watch(_isDesktop));
+  final _isDesktop = qs(false);
+  late final isMobile = qp((ref) => ref.watch(_isMobile));
+  final _isMobile = qs(true);
 
   @override
   BuildContext? get context => getContext();
@@ -67,6 +70,18 @@ extension $App on _App {
       if (!kDebugMode) Sentry.captureException(e, stackTrace: StackTrace.current);
     }
   }
+
+  void hapticLight() {
+    if (_isMobile.q) Gaimon.light();
+  }
+
+  void hapticSoft() {
+    if (_isMobile.q) Gaimon.soft();
+  }
+
+  void hapticMedium() {
+    if (_isMobile.q) Gaimon.medium();
+  }
 }
 
 /// Private methods
@@ -74,7 +89,8 @@ extension _$App on _App {
   FV _init() async {
     qq;
 
-    isDesktop.q = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
+    _isDesktop.q = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
+    _isMobile.q = Platform.isAndroid || Platform.isIOS;
 
     await init();
 
@@ -124,7 +140,6 @@ extension _$App on _App {
     if (Platform.isIOS && latestBuildIos.q <= int.parse(buildNumber.q)) return;
 
     if (!Platform.isIOS && !Platform.isAndroid) {
-      if (kDebugMode) Alert.warning("DEBUG: This feature is not supported on this platform");
       qqw("This feature is not supported on this platform");
       return;
     }

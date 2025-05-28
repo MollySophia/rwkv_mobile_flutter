@@ -137,7 +137,7 @@ extension $Sudoku on _Sudoku {
     final prompt = _genPrompt(grid);
     P.rwkv.send(to_rwkv.ClearStates());
     P.rwkv.send(
-      to_rwkv.Generate(
+      to_rwkv.SudokuOthelloGenerate(
         prompt,
         decodeStream: false,
         wantRawJSON: false,
