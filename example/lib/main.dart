@@ -81,11 +81,12 @@ class _StateWrapper extends ConsumerWidget {
   }
 }
 
-class _App extends StatelessWidget {
+class _App extends ConsumerWidget {
   const _App();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isDesktop = ref.watch(P.app.isDesktop);
     return MaterialApp.router(
       color: kBG,
       supportedLocales: _supportedLocales,
@@ -97,14 +98,14 @@ class _App extends StatelessWidget {
       ],
       themeMode: ThemeMode.light,
       theme: ThemeData(
-        fontFamilyFallback: Config.fontFamilyFallback,
+        fontFamilyFallback: isDesktop ? Config.fontFamilyFallback : null,
         brightness: Brightness.light,
         colorScheme: P.app.demoType.q.colorScheme!.copyWith(brightness: Brightness.light),
         appBarTheme: const AppBarTheme(scrolledUnderElevation: 0, backgroundColor: kBG),
         scaffoldBackgroundColor: kBG,
       ),
       darkTheme: ThemeData(
-        fontFamilyFallback: Config.fontFamilyFallback,
+        fontFamilyFallback: isDesktop ? Config.fontFamilyFallback : null,
         brightness: Brightness.dark,
         colorScheme: P.app.demoType.q.colorScheme!.copyWith(brightness: Brightness.dark),
         appBarTheme: const AppBarTheme(scrolledUnderElevation: 0, backgroundColor: kB),
