@@ -38,11 +38,11 @@ class _TTS {
   late final instructions = qsf<TTSInstruction, int?>(null);
   late final interactingInstruction = qs(TTSInstruction.none);
   late final intonationShown = qs(false);
-  late final selectSourceAudioPath = qsn<String>();
+  late final selectSourceAudioPath = qs<String?>(null);
   late final selectedLanguage = qs(Language.none);
 
   /// 若用户选择自己的声音作为源声音, 则该 value 为 null
-  late final selectedSpkName = qsn<String>();
+  late final selectedSpkName = qs<String?>(null);
 
   late final selectedSpkPanelFilter = qs(Language.none);
   late final spkPairs = qs<JSON>({});

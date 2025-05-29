@@ -42,7 +42,7 @@ class _Othello {
 
   late final modelPlacingController = StreamController<(int col, int row)>();
 
-  late final latestPlacing = qsn<(int col, int row)>();
+  late final latestPlacing = qs<(int col, int row)?>(null);
 
   late final usePortrait = qs(true);
 
