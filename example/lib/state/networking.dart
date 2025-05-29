@@ -260,12 +260,15 @@ Future<Object?> _get(
       url = url.substring(1);
     }
     final r = Config.domain.split("://");
-    final uri = Uri(
+    Uri uri = Uri(
       scheme: r[0],
       host: r[1],
       path: url,
       queryParameters: query.isNotEmpty ? query.allString : null,
     );
+    if (url.startsWith("http://") || url.startsWith("https://")) {
+      uri = Uri.parse(url);
+    }
     final headers = _buildHeaders();
     switch (contentType) {
       case ContentType.json:

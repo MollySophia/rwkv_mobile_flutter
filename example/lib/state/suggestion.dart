@@ -5,13 +5,27 @@ class Suggestion {
   final String prompt;
 
   Suggestion({required this.display, required this.prompt});
+
+  factory Suggestion.fromJson(dynamic json) {
+    return Suggestion(
+      display: json['display'] as String,
+      prompt: json['prompt'] as String,
+    );
+  }
 }
 
 class SuggestionCategory {
   final String name;
-  final List<Suggestion> suggestions;
+  final List<Suggestion> items;
 
-  const SuggestionCategory({required this.name, required this.suggestions});
+  const SuggestionCategory({required this.name, required this.items});
+
+  factory SuggestionCategory.fromJson(dynamic json) {
+    return SuggestionCategory(
+      name: json['name'] as String,
+      items: (json['items'] as Iterable).map((e) => Suggestion.fromJson(e)).toList(),
+    );
+  }
 }
 
 class SuggestionConfig {
@@ -40,11 +54,20 @@ class SuggestionConfig {
       seeOcr: seeOcr ?? this.seeOcr,
     );
   }
+
+  factory SuggestionConfig.fromJson(dynamic json) {
+    return SuggestionConfig(
+      chat: (json['chat'] as Iterable).map((e) => SuggestionCategory.fromJson(e)).toList(),
+      tts: (json['tts'] as Iterable).map((e) => e as String).toList(),
+      seeReasoningQa: (json['see_reasoning_qa'] as Iterable).map((e) => e as String).toList(),
+      seeOcr: (json['see_ocr'] as Iterable).map((e) => e as String).toList(),
+    );
+  }
 }
 
 class _Suggestion {
   /// All suggestion config
-  final config = qs<SuggestionConfig>(_DefaultSuggestion.en);
+  final config = qs<SuggestionConfig>(_DefaultSuggestion.zh);
 
   /// suggestion prompt list at top of the text input
   /// item type: [String] or [Suggestion]
@@ -66,13 +89,21 @@ class _Suggestion {
 
     switch (demoType) {
       case DemoType.chat:
-        return config.chat.map((e) => e.suggestions).flattened.shuffled().take(5).toList();
+        final s = config.chat.map((e) => e.items).flattened.shuffled();
+        if (s.length < 5) {
+          return s;
+        }
+        return s.take(5).toList();
       case DemoType.world:
         switch (currentWorldType) {
           case WorldType.reasoningQA:
             return config.seeReasoningQa;
           case WorldType.ocr:
-            return config.seeOcr.toList().shuffled.take(5).toList();
+            final s2 = config.seeOcr.shuffled;
+            if (s2.length < 5) {
+              return s2;
+            }
+            return s2.take(5).toList();
           default:
             break;
         }
@@ -86,6 +117,25 @@ class _Suggestion {
   });
 
   FV loadSuggestions() async {
+    final shouldUseEn = P.preference.preferredLanguage.q.resolved.locale.languageCode != "zh";
+    dynamic resp;
+    try {
+      resp = await _get("http://120.77.3.4:3010/suggestions.json") as dynamic;
+      if (resp == null) {
+        return;
+      }
+      final lang = shouldUseEn ? "en" : "zh";
+      final sConfig = SuggestionConfig.fromJson(resp[lang]);
+      config.q = sConfig;
+    } catch (e) {
+      qqe("load suggestions failed: $e");
+      config.q = shouldUseEn ? _DefaultSuggestion.en : _DefaultSuggestion.zh;
+      return;
+    }
+  }
+
+  @Deprecated('Deprecated')
+  FV _loadSuggestions() async {
     final demoType = P.app.demoType.q;
     final shouldUseEn = P.preference.preferredLanguage.q.resolved.locale.languageCode != "zh";
     config.q = shouldUseEn ? _DefaultSuggestion.en : _DefaultSuggestion.zh;
@@ -105,7 +155,7 @@ class _Suggestion {
         chat: [
           SuggestionCategory(
             name: 'Default',
-            suggestions: suggestions,
+            items: suggestions,
           ),
         ],
       );

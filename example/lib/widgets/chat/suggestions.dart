@@ -23,8 +23,8 @@ class Suggestions extends ConsumerWidget {
   void _onSuggestionTap(dynamic suggestion) {
     switch (P.app.demoType.q) {
       case DemoType.chat:
-        final text = (suggestion as Suggestion).prompt;
-        P.chat.send(text);
+        final s = (suggestion as Suggestion);
+        P.chat.send(s.prompt.isEmpty ? s.display : s.prompt);
       case DemoType.fifthteenPuzzle:
       case DemoType.othello:
       case DemoType.sudoku:
@@ -68,7 +68,7 @@ class Suggestions extends ConsumerWidget {
       bottom += inputHeight - 114 - paddingBottom;
     }
 
-    final showAllPromptButton = config.chat.length > 1;
+    final showAllPromptButton = demoType == DemoType.chat && config.chat.length > 1;
 
     return Positioned(
       bottom: bottom,
@@ -265,7 +265,7 @@ class _AllSuggestionDialogState extends State<AllSuggestionDialog> implements Ti
                 final category = allCategories[page];
                 return _SuggestionList(
                   scrollController: widget.scrollController,
-                  suggestions: category.suggestions,
+                  suggestions: category.items,
                 );
               },
             ),
