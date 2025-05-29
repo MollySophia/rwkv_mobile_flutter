@@ -39,14 +39,23 @@ class _RWKV {
   });
 
   /// 当前如果让 RWKV Backend 执行任务, 是否使用 reasoning / thinking 模式
+  @Deprecated("Use thinkingMode instead")
   late final reasoning = qp((ref) => ref.watch(_reasoning));
+  @Deprecated("Use thinkingMode instead")
   late final _reasoning = qs(false);
 
+  @Deprecated("Use thinkingMode instead")
   late final preferChinese = qp((ref) => ref.watch(_preferChinese));
+  @Deprecated("Use thinkingMode instead")
   late final _preferChinese = qs(false);
 
+  @Deprecated("Use thinkingMode instead")
   late final preferPseudo = qp((ref) => ref.watch(_preferPseudo));
+  @Deprecated("Use thinkingMode instead")
   late final _preferPseudo = qs(false);
+
+  late final thinkingMode = qp((ref) => ref.watch(_thinkingMode));
+  late final _thinkingMode = qs(thinking_mode.Lighting());
 
   /// 模型是否已加载
   late final loaded = qp((ref) {

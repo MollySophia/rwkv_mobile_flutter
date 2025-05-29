@@ -48,6 +48,7 @@ class Debugger extends ConsumerWidget {
     final kB = ref.watch(P.app.qb);
     final drawerWidth = ref.watch(Pager.drawerWidth);
     final screenWidth = ref.watch(P.app.screenWidth);
+    final thinkingMode = ref.watch(P.rwkv.thinkingMode);
 
     return Positioned(
       left: 0,
@@ -109,6 +110,8 @@ class Debugger extends ConsumerWidget {
                       T(drawerWidth.toString()),
                       T("screenWidth".codeToName),
                       T(screenWidth.toString()),
+                      T("thinkingMode".codeToName),
+                      T(thinkingMode.toString()),
                     ].indexMap((index, e) {
                       return C(
                         margin: EI.o(t: index % 2 == 0 ? 0 : 1),
