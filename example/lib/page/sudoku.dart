@@ -12,6 +12,7 @@ import 'package:zone/gen/l10n.dart';
 import 'dart:math' as math;
 
 import 'package:zone/state/p.dart';
+import 'package:zone/widgets/chat/app_bar.dart';
 import 'package:zone/widgets/menu.dart';
 import 'package:zone/widgets/model_selector.dart';
 import 'package:zone/widgets/pager.dart';
@@ -52,16 +53,25 @@ class _Page extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
-    final padding = MediaQuery.of(context).padding;
+    final screenWidth = ref.watch(P.app.screenWidth);
+    final screenHeight = ref.watch(P.app.screenHeight);
+    final isPortrait = (screenHeight - kToolbarHeight) > screenWidth;
+    final paddingTop = ref.watch(P.app.paddingTop);
     final kW = ref.watch(P.app.qw);
 
     return Scaffold(
       backgroundColor: kW,
+      floatingActionButton: FloatingActionButton.small(
+        onPressed: () {
+          Pager.toggle();
+        },
+        child: const Icon(Icons.menu),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
       body: isPortrait
           ? Co(
               children: [
-                padding.top.h,
+                paddingTop.h,
                 const _UI(),
                 const Exp(child: _Terminal()),
               ],
@@ -304,9 +314,9 @@ class _UI extends ConsumerWidget {
       P.sudoku.uiOffset.q = Offset(position.dx, 0);
     });
 
-    final isPortrait = ref.watch(P.app.isPortrait);
     final screenWidth = ref.watch(P.app.screenWidth);
     final screenHeight = ref.watch(P.app.screenHeight);
+    final isPortrait = (screenHeight - kToolbarHeight) > screenWidth;
 
     final paddingBottom = ref.watch(P.app.quantizedIntPaddingBottom);
     final paddingTop = ref.watch(P.app.paddingTop);
@@ -619,7 +629,12 @@ class _Grid extends ConsumerWidget {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final RenderBox renderBox = context.findRenderObject() as RenderBox;
-      final Offset position = renderBox.localToGlobal(Offset.zero);
+      Offset position = renderBox.localToGlobal(Offset.zero);
+      final drawerWidth = Pager.drawerWidth.q;
+      final atMainPage = Pager.atMainPage.q;
+      // position = Offset(position.dx - (atMainPage ? drawerWidth : 0), position.dy);
+      position = Offset(position.dx - (atMainPage ? 0 : 0), position.dy);
+
       P.sudoku.widgetPosition.q = {
         ...P.sudoku.widgetPosition.q,
         "$col-$row": position,
