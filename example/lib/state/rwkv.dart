@@ -51,11 +51,11 @@ class _RWKV {
     return currentModel != null;
   });
 
-  late final currentModel = qsn<FileInfo>();
+  late final currentModel = qs<FileInfo?>(null);
 
-  late final currentWorldType = qsn<WorldType>();
+  late final currentWorldType = qs<WorldType?>(null);
 
-  late final currentGroupInfo = qsn<GroupInfo>();
+  late final currentGroupInfo = qs<GroupInfo?>(null);
 
   late final loading = qp((ref) {
     return ref.watch(_loading);

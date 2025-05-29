@@ -31,9 +31,9 @@ class _Chat {
 
   late final inputHeight = qs(77.0);
 
-  late final receiveId = qsn<int>();
+  late final receiveId = qs<int?>(null);
 
-  late final editingIndex = qsn<int>();
+  late final editingIndex = qs<int?>(null);
 
   late final editingBotMessage = qp<bool>((ref) {
     final editingIndex = ref.watch(this.editingIndex);
@@ -41,11 +41,11 @@ class _Chat {
     return messages.q[editingIndex].isMine == false;
   });
 
-  late final latestClickedMessage = qsn<Message>();
+  late final latestClickedMessage = qs<Message?>(null);
 
   late final hasFocus = qs(false);
 
-  late final autoPauseId = qsn<int>();
+  late final autoPauseId = qs<int?>(null);
 
   late final messages = qs<List<Message>>([]);
 
