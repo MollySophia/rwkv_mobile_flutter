@@ -73,7 +73,7 @@ class _PagerState extends ConsumerState<Pager> {
       initialPage: 1,
     )..addListener(_onPageChanged);
 
-    await Future.delayed(0.ms);
+    await Future.delayed(1.ms);
     Pager.drawerWidth.q = wantedWidth;
   }
 

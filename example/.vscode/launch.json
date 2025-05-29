@@ -10,9 +10,6 @@
       "type": "dart",
       "program": "lib/main.dart",
       "flutterMode": "debug",
-      "args": [
-        "--dart-define=disableRemoteConfig=true",
-      ]
     },
     {
       "name": "debug (halo)",
@@ -21,7 +18,9 @@
       "program": "lib/main.dart",
       "flutterMode": "debug",
       "args": [
-        "--maxTokens=500"
+        "--dart-define=maxTokens=100",
+        "--dart-define=enableMsgTree=true",
+        "--dart-define=disableRemoteConfig=true",
       ]
     },
     {
@@ -39,41 +38,18 @@
       "flutterMode": "release",
     },
     {
-      "name": "iPhone16simulator",
-      "request": "launch",
-      "type": "dart",
-      "program": "lib/main.dart",
-      "flutterMode": "debug",
-      "deviceId": "9DAF9CC5-FC15-4AC5-8B3D-546F4597DA79",
-      "args": []
-    },
-    {
-      "name": "xiaomi14",
-      "request": "launch",
-      "type": "dart",
-      "program": "lib/main.dart",
-      "flutterMode": "debug",
-      "deviceId": "90313e34",
-      "args": []
-    },
-    {
       "name": "macos",
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
       "flutterMode": "debug",
       "deviceId": "macos",
-      "args": []
     },
   ],
   "compounds": [
     {
       "name": "All",
-      "configurations": [
-        // "iPhone16simulator",
-        "xiaomi14",
-        "macos"
-      ],
+      "configurations": [],
     }
   ]
 }
