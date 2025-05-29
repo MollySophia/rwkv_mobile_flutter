@@ -1,6 +1,6 @@
 flutter_native_splash:
   color: '#ffffff'
-  image: assets/icon/icon.sudoku.png
+  image: assets/icon/icon.chat.png
   branding: assets/icon/logo.png
   branding_bottom_padding: 24
 

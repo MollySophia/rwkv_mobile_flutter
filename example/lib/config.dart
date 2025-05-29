@@ -7,7 +7,7 @@ const kBG = Color(0xFFF4F8FF);
 
 abstract class Config {
   // TODO: 根据 args 决定
-  static final firstPage = PageKey.sudoku.name;
+  static final firstPage = PageKey.chat.name;
 
   // TODO: @wangce 需要有一个统一的标识来决定当前的 App 正在运行什么逻辑
 
@@ -30,7 +30,7 @@ Assistant: 你好，我是你的助手，我会提供专家级的完整回答。
   static const domain = "https://api-model.rwkvos.com";
   static const timeout = Duration(seconds: 60);
   static late final String xApiKey;
-  static const appTitle = "RWKV Sudoku";
+  static const appTitle = "RWKV Chat";
 
   static const fontFamilyFallback = [
     'Microsoft YaHei',
