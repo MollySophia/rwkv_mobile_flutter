@@ -24,6 +24,10 @@ class ModelSelector extends ConsumerWidget {
   static FV show() async {
     qq;
 
+    if (P.fileManager.modelSelectorShown.q) {
+      return;
+    }
+
     P.fileManager.modelSelectorShown.q = true;
     P.fileManager.checkLocal();
 

@@ -24,8 +24,8 @@ class Menu extends ConsumerWidget {
   }
 }
 
-// ignore: unused_element
 // TODO: Use this in the future
+// ignore: unused_element
 class _BottomInfo extends ConsumerWidget {
   const _BottomInfo();
 

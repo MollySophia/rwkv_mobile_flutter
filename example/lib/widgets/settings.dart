@@ -1,6 +1,7 @@
 // ignore: unused_import
 import 'dart:developer';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,7 +33,6 @@ class Settings extends ConsumerWidget {
     final preferredLanguage = ref.watch(P.preference.preferredLanguage);
     final paddingLeft = ref.watch(P.app.paddingLeft);
     final kB = ref.watch(P.app.qb);
-    final kW = ref.watch(P.app.qw);
 
     final iconWidget = SB(
       width: 64,
@@ -47,7 +47,7 @@ class Settings extends ConsumerWidget {
       body: ListView(
         padding: EI.o(
           t: paddingTop,
-          b: paddingBottom,
+          b: max(paddingBottom, 12),
           l: 12 + paddingLeft,
           r: 12,
         ),

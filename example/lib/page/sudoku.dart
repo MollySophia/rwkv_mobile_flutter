@@ -61,29 +61,27 @@ class _Page extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: kW,
-      body: Column(
-        children: [
-          ChatAppBar(),
-          isPortrait
-              ? Expanded(
-                  child: Co(
-                    children: [
-                      paddingTop.h,
-                      const _UI(),
-                      const Exp(child: _Terminal()),
-                    ],
-                  ),
-                )
-              : Expanded(
-                  child: const Ro(
-                    children: [
-                      Exp(child: _Terminal()),
-                      _UI(),
-                    ],
-                  ),
-                ),
-        ],
+      floatingActionButton: FloatingActionButton.small(
+        onPressed: () {
+          Pager.toggle();
+        },
+        child: const Icon(Icons.menu),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
+      body: isPortrait
+          ? Co(
+              children: [
+                paddingTop.h,
+                const _UI(),
+                const Exp(child: _Terminal()),
+              ],
+            )
+          : const Ro(
+              children: [
+                Exp(child: _Terminal()),
+                _UI(),
+              ],
+            ),
     );
   }
 }
@@ -331,18 +329,18 @@ class _UI extends ConsumerWidget {
     final shouldUseVerticalLayout = isDesktop && ratio < 1.9 && !isPortrait;
 
     final List<Widget> buttons = [
-      // const SB(width: 12, height: 12),
-      // T(
-      //   "RWKV Sudoku",
-      //   textAlign: TextAlign.center,
-      //   s: TS(s: 14 * magnification, w: FontWeight.w500),
-      // ),
-      // C(
-      //   height: 1,
-      //   width: 1,
-      //   decoration: BD(color: const Color(0xFF888888).q(0.33)),
-      //   margin: const EI.s(v: 4, h: 4),
-      // ),
+      const SB(width: 12, height: 12),
+      T(
+        "RWKV Sudoku",
+        textAlign: TextAlign.center,
+        s: TS(s: 14 * magnification, w: FontWeight.w500),
+      ),
+      C(
+        height: 1,
+        width: 1,
+        decoration: BD(color: const Color(0xFF888888).q(0.33)),
+        margin: const EI.s(v: 4, h: 4),
+      ),
       const _TokensInfo(),
       4.h,
       if (shouldUseVerticalLayout)
@@ -631,7 +629,12 @@ class _Grid extends ConsumerWidget {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final RenderBox renderBox = context.findRenderObject() as RenderBox;
-      final Offset position = renderBox.localToGlobal(Offset.zero);
+      Offset position = renderBox.localToGlobal(Offset.zero);
+      final drawerWidth = Pager.drawerWidth.q;
+      final atMainPage = Pager.atMainPage.q;
+      // position = Offset(position.dx - (atMainPage ? drawerWidth : 0), position.dy);
+      position = Offset(position.dx - (atMainPage ? 0 : 0), position.dy);
+
       P.sudoku.widgetPosition.q = {
         ...P.sudoku.widgetPosition.q,
         "$col-$row": position,

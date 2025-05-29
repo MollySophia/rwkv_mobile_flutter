@@ -139,6 +139,8 @@ class _SudokuDebugger extends ConsumerWidget {
     final kW = ref.watch(P.app.qw);
     final kB = ref.watch(P.app.qb);
 
+    final modelSelectorShown = ref.watch(P.fileManager.modelSelectorShown);
+
     return Positioned(
       left: 0,
       top: 0,
@@ -171,6 +173,8 @@ class _SudokuDebugger extends ConsumerWidget {
                       T(page.toString()),
                       T("mainPageNotIgnoring".codeToName),
                       T(mainPageNotIgnoring.toString()),
+                      T("modelSelectorShown".codeToName),
+                      T(modelSelectorShown.toString()),
                     ].indexMap((index, e) {
                       return C(
                         margin: EI.o(t: index % 2 == 0 ? 0 : 1),

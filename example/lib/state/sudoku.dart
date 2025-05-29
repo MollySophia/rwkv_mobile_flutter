@@ -373,11 +373,8 @@ extension _$Sudoku on _Sudoku {
 
     qq;
 
-    P.fileManager.modelSelectorShown.lv(_onModelSelectorShownChanged);
-
-    HF.wait(1500).then((_) {
-      P.fileManager.modelSelectorShown.q = false;
-      P.fileManager.modelSelectorShown.q = true;
+    HF.wait(1000).then((_) {
+      ModelSelector.show();
     });
 
     final directory = await getApplicationDocumentsDirectory();
