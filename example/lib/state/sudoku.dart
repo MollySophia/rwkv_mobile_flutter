@@ -373,8 +373,10 @@ extension _$Sudoku on _Sudoku {
 
     qq;
 
-    HF.wait(1000).then((_) {
-      ModelSelector.show();
+    HF.wait(2000).then((_) {
+      if (P.rwkv.loaded.q == false) {
+        ModelSelector.show();
+      }
     });
 
     final directory = await getApplicationDocumentsDirectory();
