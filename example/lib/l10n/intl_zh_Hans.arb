@@ -189,5 +189,7 @@
   "no_data": "无数据",
   "share_chat": "分享聊天",
   "quick_thinking": "快思考",
-  "quick_thinking_enabled": "快思考已经开启"
+  "quick_thinking_enabled": "快思考已经开启",
+  "download_from_browser": "从浏览器下载",
+  "downloading": "下载中"
 }

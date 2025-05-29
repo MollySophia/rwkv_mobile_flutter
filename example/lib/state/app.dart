@@ -12,7 +12,8 @@ class _App extends RawApp {
   late final noteZh = qs<List<String>>([]);
   late final noteEn = qs<List<String>>([]);
   late final modelConfig = qs<List<JSON>>([]);
-  late final androidUrl = qsn<String>();
+  late final androidUrl = qsn<String?>(null);
+  late final androidApkUrl = qsn<String?>(null);
   late final iosUrl = qsn<String>();
 
   late final newVersionDialogShown = qs(false);
@@ -144,10 +145,11 @@ extension _$App on _App {
       return;
     }
 
-    final androidUrl = this.androidUrl.q;
+    final androidUrl = this.androidUrl.q ?? '';
+    final androidApkUrl = this.androidApkUrl.q ?? '';
     final iosUrl = this.iosUrl.q;
 
-    if (Platform.isAndroid && (androidUrl == null || androidUrl.isEmpty)) return;
+    if (Platform.isAndroid && (androidUrl.isEmpty)) return;
 
     if (Platform.isIOS && (iosUrl == null || iosUrl.isEmpty)) return;
 
@@ -161,25 +163,37 @@ extension _$App on _App {
 
     final message = useEn ? noteEn.join("\n") : noteZh.join("\n");
 
+    final showInAppUpdate = Platform.isAndroid && androidApkUrl.isNotEmpty;
+
+    qqq('app update: \n$androidUrl\n$androidApkUrl\n$iosUrl\n$message');
+
     newVersionDialogShown.q = true;
-    final res = await showOkCancelAlertDialog(
+    final res = await showAlertDialog(
       context: getContext()!,
       title: S.current.new_version_found,
       message: message,
-      okLabel: S.current.update_now,
-      cancelLabel: S.current.cancel_update,
+      // okLabel: S.current.update_now,
+      actions: [
+        AlertDialogAction(key: 1, label: S.current.cancel_update),
+        if (showInAppUpdate)
+          AlertDialogAction(
+            key: 2,
+            label: S.current.download_from_browser,
+          ),
+        AlertDialogAction(key: 3, label: S.current.update_now),
+      ],
+      // cancelLabel: S.current.cancel_update,
     );
     newVersionDialogShown.q = false;
 
-    if (res != OkCancelResult.ok) return;
+    if (res == 1 || res == null) return;
 
     if (Platform.isAndroid) {
-      if (androidUrl == null) {
-        qqe("androidUrl is null");
-        return;
+      if (res == 3 && showInAppUpdate) {
+        AppUpdateDialog.show(getContext()!, url: androidApkUrl);
+      } else {
+        launchUrl(Uri.parse(androidUrl), mode: LaunchMode.externalApplication);
       }
-      // todo AppUpdateDialog.show(getContext()!, url: "");
-      launchUrl(Uri.parse(androidUrl), mode: LaunchMode.externalApplication);
     }
 
     if (Platform.isIOS) {
@@ -218,7 +232,8 @@ extension _$App on _App {
     noteZh.q = (config["note_zh"] as List<dynamic>).m((e) => e.toString());
     noteEn.q = (config["note_en"] as List<dynamic>).m((e) => e.toString());
     modelConfig.q = HF.listJSON(config["model_config"]);
-    androidUrl.q = config["android_url"].toString();
+    androidUrl.q = config["android_url"];
+    androidApkUrl.q = config["android_apk_url"];
     iosUrl.q = config["ios_url"].toString();
     await P.fileManager.syncAvailableModels();
     await P.fileManager.checkLocal();

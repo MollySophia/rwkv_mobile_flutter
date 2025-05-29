@@ -125,11 +125,15 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "discord": MessageLookupByLibrary.simpleMessage("Discord"),
     "download_all": MessageLookupByLibrary.simpleMessage("Download All"),
+    "download_from_browser": MessageLookupByLibrary.simpleMessage(
+      "Download from browser",
+    ),
     "download_missing": MessageLookupByLibrary.simpleMessage(
       "Download Missing Files",
     ),
     "download_model": MessageLookupByLibrary.simpleMessage("Download model"),
     "download_source": MessageLookupByLibrary.simpleMessage("Download Source"),
+    "downloading": MessageLookupByLibrary.simpleMessage("Downloading"),
     "draw": MessageLookupByLibrary.simpleMessage("Draw!"),
     "dump_see_files": MessageLookupByLibrary.simpleMessage(
       "Dump Message Records",
