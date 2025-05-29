@@ -12,6 +12,7 @@ import 'package:zone/gen/l10n.dart';
 import 'dart:math' as math;
 
 import 'package:zone/state/p.dart';
+import 'package:zone/widgets/chat/app_bar.dart';
 import 'package:zone/widgets/menu.dart';
 import 'package:zone/widgets/model_selector.dart';
 import 'package:zone/widgets/pager.dart';
@@ -52,26 +53,37 @@ class _Page extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
-    final padding = MediaQuery.of(context).padding;
+    final screenWidth = ref.watch(P.app.screenWidth);
+    final screenHeight = ref.watch(P.app.screenHeight);
+    final isPortrait = (screenHeight - kToolbarHeight) > screenWidth;
+    final paddingTop = ref.watch(P.app.paddingTop);
     final kW = ref.watch(P.app.qw);
 
     return Scaffold(
       backgroundColor: kW,
-      body: isPortrait
-          ? Co(
-              children: [
-                padding.top.h,
-                const _UI(),
-                const Exp(child: _Terminal()),
-              ],
-            )
-          : const Ro(
-              children: [
-                Exp(child: _Terminal()),
-                _UI(),
-              ],
-            ),
+      body: Column(
+        children: [
+          ChatAppBar(),
+          isPortrait
+              ? Expanded(
+                  child: Co(
+                    children: [
+                      paddingTop.h,
+                      const _UI(),
+                      const Exp(child: _Terminal()),
+                    ],
+                  ),
+                )
+              : Expanded(
+                  child: const Ro(
+                    children: [
+                      Exp(child: _Terminal()),
+                      _UI(),
+                    ],
+                  ),
+                ),
+        ],
+      ),
     );
   }
 }
@@ -304,9 +316,9 @@ class _UI extends ConsumerWidget {
       P.sudoku.uiOffset.q = Offset(position.dx, 0);
     });
 
-    final isPortrait = ref.watch(P.app.isPortrait);
     final screenWidth = ref.watch(P.app.screenWidth);
     final screenHeight = ref.watch(P.app.screenHeight);
+    final isPortrait = (screenHeight - kToolbarHeight) > screenWidth;
 
     final paddingBottom = ref.watch(P.app.quantizedIntPaddingBottom);
     final paddingTop = ref.watch(P.app.paddingTop);
@@ -319,18 +331,18 @@ class _UI extends ConsumerWidget {
     final shouldUseVerticalLayout = isDesktop && ratio < 1.9 && !isPortrait;
 
     final List<Widget> buttons = [
-      const SB(width: 12, height: 12),
-      T(
-        "RWKV Chat",
-        textAlign: TextAlign.center,
-        s: TS(s: 14 * magnification, w: FontWeight.w500),
-      ),
-      C(
-        height: 1,
-        width: 1,
-        decoration: BD(color: const Color(0xFF888888).q(0.33)),
-        margin: const EI.s(v: 4, h: 4),
-      ),
+      // const SB(width: 12, height: 12),
+      // T(
+      //   "RWKV Sudoku",
+      //   textAlign: TextAlign.center,
+      //   s: TS(s: 14 * magnification, w: FontWeight.w500),
+      // ),
+      // C(
+      //   height: 1,
+      //   width: 1,
+      //   decoration: BD(color: const Color(0xFF888888).q(0.33)),
+      //   margin: const EI.s(v: 4, h: 4),
+      // ),
       const _TokensInfo(),
       4.h,
       if (shouldUseVerticalLayout)

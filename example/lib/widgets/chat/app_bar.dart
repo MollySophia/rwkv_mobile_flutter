@@ -20,7 +20,7 @@ class ChatAppBar extends ConsumerWidget {
   const ChatAppBar({super.key});
 
   void onShareChatPressed() async {
-      Screenshot.startScrollShot(keyChatList);
+    Screenshot.startScrollShot(keyChatList);
   }
 
   void onSettingsPressed() async {
@@ -134,10 +134,11 @@ class ChatAppBar extends ConsumerWidget {
             actions: [
               if (demoType == DemoType.chat) const _NewConversationButton(),
               if (demoType == DemoType.chat) _buildMorePopupMenuButton(context),
-              if (demoType != DemoType.chat) IconButton(
-                onPressed: onSettingsPressed,
-                icon: const Icon(Icons.tune),
-              ),
+              if (demoType != DemoType.chat && demoType != DemoType.sudoku)
+                IconButton(
+                  onPressed: onSettingsPressed,
+                  icon: const Icon(Icons.tune),
+                ),
             ],
           ),
         ),

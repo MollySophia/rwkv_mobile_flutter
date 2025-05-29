@@ -373,10 +373,11 @@ extension _$Sudoku on _Sudoku {
 
     qq;
 
-    HF.wait(2000).then((_) {
-      if (!P.fileManager.modelSelectorShown.q) {
-        ModelSelector.show();
-      }
+    P.fileManager.modelSelectorShown.lv(_onModelSelectorShownChanged);
+
+    HF.wait(1500).then((_) {
+      P.fileManager.modelSelectorShown.q = false;
+      P.fileManager.modelSelectorShown.q = true;
     });
 
     final directory = await getApplicationDocumentsDirectory();
@@ -394,6 +395,13 @@ extension _$Sudoku on _Sudoku {
     _loadDefaultPuzzle();
 
     P.rwkv.broadcastStream.listen(_onStreamEvent, onDone: _onStreamDone, onError: _onStreamError);
+  }
+
+  void _onModelSelectorShownChanged() {
+    if (P.fileManager.modelSelectorShown.q) {
+      ModelSelector.show();
+      return;
+    }
   }
 
   void _onStreamEvent(from_rwkv.FromRWKV event) {
