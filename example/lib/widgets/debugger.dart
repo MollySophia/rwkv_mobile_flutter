@@ -44,7 +44,6 @@ class Debugger extends ConsumerWidget {
     final conversation = ref.watch(P.conversation.current);
     final editingIndex = ref.watch(P.chat.editingIndex);
     final receiveId = ref.watch(P.chat.receiveId);
-    final latestRuntimeAddress = ref.watch(P.preference.latestRuntimeAddress);
     final kB = ref.watch(P.app.qb);
     final drawerWidth = ref.watch(Pager.drawerWidth);
     final screenWidth = ref.watch(P.app.screenWidth);
@@ -104,8 +103,6 @@ class Debugger extends ConsumerWidget {
                       // T(autoPauseId.toString()),
                       T("editingIndex".codeToName),
                       T(editingIndex.toString()),
-                      T("latestRuntimeAddress".codeToName),
-                      T(latestRuntimeAddress.toString()),
                       T("drawerWidth".codeToName),
                       T(drawerWidth.toString()),
                       T("screenWidth".codeToName),

@@ -14,7 +14,7 @@ import 'package:zone/widgets/chat/app_bar.dart';
 import 'package:zone/widgets/chat/audio_empty.dart';
 import 'package:zone/widgets/chat/audio_input.dart';
 import 'package:zone/widgets/chat/empty.dart';
-import 'package:zone/widgets/chat/input.dart';
+import 'package:zone/widgets/chat/bottom_bar.dart';
 import 'package:zone/widgets/chat/message.dart';
 import 'package:zone/widgets/chat/suggestions.dart';
 import 'package:zone/widgets/chat/visual_empty.dart';
@@ -108,7 +108,7 @@ class _Page extends ConsumerWidget {
           ChatAppBar(),
           _NavigationBarBottomLine(),
           Suggestions(),
-          Input(),
+          BottomBar(),
           AudioInput(),
         ],
       ),

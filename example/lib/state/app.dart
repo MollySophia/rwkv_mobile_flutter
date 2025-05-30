@@ -132,6 +132,32 @@ extension _$App on _App {
         _showNewVersionDialogIfNeeded();
       });
     }
+
+    lifecycleState.lv(_onLifecycleStateChanged);
+
+    HF.wait(1500).then((_) => _toLightMode());
+  }
+
+  FV _toLightMode() async {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        systemNavigationBarColor: this.qw.q,
+        systemNavigationBarIconBrightness: Brightness.light,
+      ),
+    );
+  }
+
+  FV _onLifecycleStateChanged() async {
+    qqr("lifecycleState: ${lifecycleState.q}");
+    switch (lifecycleState.q) {
+      case AppLifecycleState.resumed:
+        await HF.wait(500);
+        _toLightMode();
+      case AppLifecycleState.detached:
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.hidden:
+      case AppLifecycleState.paused:
+    }
   }
 
   FV _showNewVersionDialogIfNeeded() async {

@@ -19,8 +19,8 @@ import 'package:zone/state/p.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:zone/widgets/performance_info.dart';
 
-class TTSBar extends ConsumerWidget {
-  const TTSBar({super.key});
+class TTSBottomInteractions extends ConsumerWidget {
+  const TTSBottomInteractions({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
