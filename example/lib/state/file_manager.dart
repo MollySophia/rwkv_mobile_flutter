@@ -25,6 +25,8 @@ class _FileManager {
   late final modelSelectorShown = qs(false);
 
   late final ttsCores = qs<Set<FileInfo>>({});
+
+  late final downloader = bd.FileDownloader();
 }
 
 /// Public methods
@@ -99,52 +101,83 @@ extension $FileManager on _FileManager {
   }
 
   FV getFile({required FileInfo fileInfo}) async {
+    /// resume download if needed
+    try {
+      bd.Task? task;
+      final records = await downloader.database.allRecords();
+      final r = records.firstWhereOrNull((e) => e.task.filename == fileInfo.fileName);
+      task = r?.task;
+      qqq("try resume task: $task");
+
+      if (task != null) {
+        final canResume = await downloader.taskCanResume(task);
+        if (canResume) {
+          await downloader.resume(task as bd.DownloadTask);
+          qqq("#### resume download ####: ${fileInfo.fileName}");
+          return;
+        }
+        await downloader.database.deleteRecordWithId(task.taskId);
+        qqq('task cannot resume');
+      }
+    } catch (e) {
+      qqe(e);
+    }
+
     final fileName = fileInfo.fileName;
     final url = downloadSource.q.prefix + fileInfo.raw + downloadSource.q.suffix;
     final state = locals(fileInfo);
     qqq("fileKey: $fileInfo\nfileName: $fileName\nurl: $url");
 
-    // TODO: Handle resume after relaunch app
-
     try {
-      state.q = state.q.copyWith(downloading: true);
+      state.q = state.q.copyWith(state: DownloadLoadState.none);
 
       final task = bd.DownloadTask(
+        taskId: url,
         url: url,
         baseDirectory: bd.BaseDirectory.applicationDocuments,
         filename: fileName,
-        updates: bd.Updates.statusAndProgress, // request status and progress updates
+        updates: bd.Updates.statusAndProgress,
+        // request status and progress updates
         requiresWiFi: false,
         retries: 5,
-        allowPause: false,
+        allowPause: true,
+        metaData: fileInfo.fileName,
         httpRequestMethod: "GET",
       );
 
       state.q = state.q.copyWith(downloadTaskId: task.taskId);
 
-      final success = await bd.FileDownloader().enqueue(task);
+      final success = await downloader.enqueue(task);
 
       if (!success) {
         throw Exception("Enqueue failed");
       }
     } catch (e) {
       qqe("getFile error: $e");
-      state.q = state.q.copyWith(downloading: false);
+      state.q = state.q.copyWith(state: DownloadLoadState.none);
     }
+  }
+
+  FV pauseDownload({required FileInfo fileInfo}) async {
+    final taskId = locals(fileInfo).q.downloadTaskId;
+    if (taskId == null) throw Exception("😡 TaskId is null");
+    final task = await downloader.taskForId(taskId);
+    if (task == null) throw Exception("😡 Task not found");
+    await downloader.pause(task as bd.DownloadTask);
   }
 
   FV cancelDownload({required FileInfo fileInfo}) async {
     final state = locals(fileInfo);
     final value = state.q;
 
-    if (!value.downloading) throw Exception("😡 Download not in progress");
+    if (value.state != DownloadLoadState.downloading) throw Exception("😡 Download not in progress");
 
     final taskId = value.downloadTaskId;
 
     if (taskId == null) throw Exception("😡 Task ID not found");
 
-    await bd.FileDownloader().cancelTaskWithId(taskId);
-    state.q = value.copyWith(downloading: false, downloadTaskId: null);
+    await downloader.cancelTaskWithId(taskId);
+    state.q = value.copyWith(state: DownloadLoadState.none, downloadTaskId: null);
   }
 
   FV deleteFile({required FileInfo fileInfo}) async {
@@ -169,95 +202,81 @@ extension _$FileManager on _FileManager {
   FV _init() async {
     // 1. check file
     // 2. check zip file
-    await bd.FileDownloader().ready;
-    bd.FileDownloader().updates.listen(_onTaskUpdate);
     await syncAvailableModels();
+    await downloader.ready;
+    downloader.updates.listen(_onTaskUpdate);
+    await _updateTaskRecord();
+    await downloader.trackTasks();
     await checkLocal();
+    downloader.pauseAll();
   }
 
-  void _onTaskUpdate(bd.TaskUpdate _taskUpdate) {
-    final task = _taskUpdate.task;
+  FV _updateTaskRecord() async {
+    try {
+      final allRecords = await downloader.database.allRecords();
+      for (final record in allRecords) {
+        qqq("check record: ${record.status}, ${record.progress.toStringAsFixed(2)}, ${record.task.filename}");
+        switch (record.status) {
+          case bd.TaskStatus.waitingToRetry:
+          case bd.TaskStatus.failed:
+          case bd.TaskStatus.running:
+            await downloader.database.updateRecord(
+              record.copyWith(status: bd.TaskStatus.paused),
+            );
+            break;
+          case bd.TaskStatus.enqueued:
+          case bd.TaskStatus.complete:
+          case bd.TaskStatus.notFound:
+          case bd.TaskStatus.canceled:
+            await downloader.database.deleteRecordWithId(record.taskId);
+            break;
+          case bd.TaskStatus.paused:
+          // do nothing
+        }
+      }
+    } catch (e) {
+      qqe(e);
+    }
+  }
+
+  void _onTaskUpdate(bd.TaskUpdate taskUpdate) async {
+    final task = taskUpdate.task;
     final taskId = task.taskId;
 
-    final pairs = _all.q.where((e) => locals(e).q.downloading).map((e) => (e, locals(e).q));
-    final pair = pairs.firstWhereOrNull((e) => e.$2.downloadTaskId == taskId);
+    final pair = _all.q.firstWhereOrNull((e) {
+      final lf = locals(e).q;
+      return lf.fileName == task.metaData || lf.downloadTaskId == taskId;
+    });
 
     if (pair == null) {
-      qqe("_onTaskUpdate:");
-      qqe("taskId: $taskId not found");
-      bd.FileDownloader().cancelTaskWithId(taskId);
+      final task = await downloader.taskForId(taskId);
+      qqe("_onTaskUpdate: taskId: $taskId not found, ${task?.toJson()}");
+      downloader.cancelTaskWithId(taskId);
       return;
     }
+    final state = locals(pair);
 
-    final state = locals(pair.$1);
-
-    switch (_taskUpdate) {
-      case bd.TaskProgressUpdate progressUpdate:
-        final progress = progressUpdate.progress;
-        final networkSpeed = progressUpdate.networkSpeed;
-        final timeRemaining = progressUpdate.timeRemaining;
-        final expectedFileSize = progressUpdate.expectedFileSize;
-        qqq("$progress $networkSpeed $timeRemaining $expectedFileSize");
+    switch (taskUpdate) {
+      case bd.TaskProgressUpdate update:
+        qqq("task_update_progress: ${update.progress.toStringAsFixed(2)} => ${task.filename}");
+        final progress = update.progress;
+        final networkSpeed = update.networkSpeed;
+        final timeRemaining = update.timeRemaining;
         final done = progress >= 1.0;
         state.q = state.q.copyWith(
           progress: progress,
+          downloadTaskId: taskId,
+          state: DownloadLoadState.downloading,
           networkSpeed: done ? state.q.networkSpeed : networkSpeed,
           timeRemaining: done ? state.q.timeRemaining : timeRemaining,
         );
         return;
-      case bd.TaskStatusUpdate statusUpdate:
-        _onStatusUpdate(statusUpdate);
+      case bd.TaskStatusUpdate update:
+        qqq("task_update_status:  ${update.status}, ${task.filename}, ${update.exception}");
+        state.q = state.q.copyWith(state: DownloadLoadState.from(update));
+        checkLocal();
         return;
     }
-  }
-
-  void _onStatusUpdate(bd.TaskStatusUpdate statusUpdate) {
-    final task = statusUpdate.task;
-    final taskId = task.taskId;
-
-    final pairs = _all.q.where((e) => locals(e).q.downloading).map((e) => (e, locals(e).q));
-    final pair = pairs.firstWhereOrNull((e) => e.$2.downloadTaskId == taskId);
-
-    if (pair == null) {
-      qqe("_onTaskUpdate:");
-      qqe("taskId: $taskId not found");
-      return;
-    }
-
-    final state = locals(pair.$1);
-
-    qqr("_onStatusUpdate:");
-    final status = statusUpdate.status;
-    final exception = statusUpdate.exception;
-    final responseBody = statusUpdate.responseBody;
-    final responseHeaders = statusUpdate.responseHeaders;
-    final responseStatusCode = statusUpdate.responseStatusCode;
-
-    qqq("$status $exception $responseBody $responseHeaders $responseStatusCode");
-
-    bool downloading = false;
-    qqq("🔥 $status");
-    switch (status) {
-      case bd.TaskStatus.enqueued:
-        downloading = true;
-      case bd.TaskStatus.running:
-        downloading = true;
-      case bd.TaskStatus.complete:
-        downloading = false;
-      case bd.TaskStatus.notFound:
-        downloading = false;
-      case bd.TaskStatus.failed:
-        downloading = false;
-      case bd.TaskStatus.canceled:
-        downloading = false;
-      case bd.TaskStatus.waitingToRetry:
-        downloading = true;
-      case bd.TaskStatus.paused:
-        downloading = false;
-    }
-
-    state.q = state.q.copyWith(downloading: downloading);
-    checkLocal();
   }
 }
 
