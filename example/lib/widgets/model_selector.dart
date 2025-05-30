@@ -31,17 +31,6 @@ class ModelSelector extends ConsumerWidget {
     P.fileManager.modelSelectorShown.q = true;
     P.fileManager.checkLocal();
 
-    switch (P.app.demoType.q) {
-      case DemoType.fifthteenPuzzle:
-      case DemoType.othello:
-      case DemoType.sudoku:
-        break;
-      case DemoType.chat:
-      case DemoType.tts:
-      case DemoType.world:
-        P.suggestion.loadSuggestions();
-    }
-
     if (!Args.disableRemoteConfig) {
       P.app.getConfig().then((_) async {
         await P.fileManager.syncAvailableModels();

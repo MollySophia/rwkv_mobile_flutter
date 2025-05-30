@@ -132,7 +132,6 @@ extension $Chat on _Chat {
 
     if (P.app.demoType.q == DemoType.tts) {
       await P.tts.gen();
-      P.suggestion.loadSuggestions();
       return;
     }
 
