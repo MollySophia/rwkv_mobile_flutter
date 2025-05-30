@@ -7,9 +7,11 @@ class Suggestion {
   Suggestion({required this.display, required this.prompt});
 
   factory Suggestion.fromJson(dynamic json) {
+    final display = json['display'] as String?;
+    final prompt = json['prompt'];
     return Suggestion(
-      display: json['display'] as String,
-      prompt: json['prompt'] as String,
+      display: display ?? prompt,
+      prompt: prompt ?? display,
     );
   }
 }
@@ -89,7 +91,9 @@ class _Suggestion {
 
     switch (demoType) {
       case DemoType.chat:
-        final s = config.chat.map((e) => e.items).flattened.shuffled();
+        final s = config.chat.map((e) => e.items).flattened.shuffled()
+            .where((e) => e.display.length < 14) /// NOTE: filter out long suggestions
+            .toList();
         if (s.length < 5) {
           return s;
         }
