@@ -32,6 +32,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:zone/args.dart';
 import 'package:zone/config.dart';
+import 'package:zone/func/check_model_selection.dart';
 import 'package:zone/func/from_assets_to_temp.dart';
 import 'package:zone/gen/assets.gen.dart';
 import 'package:zone/gen/l10n.dart';

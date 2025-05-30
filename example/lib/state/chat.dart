@@ -15,7 +15,7 @@ class _Chat {
 
   late final textInInput = qs("");
 
-  late final canSend = qp((ref) {
+  late final inputHasContent = qp((ref) {
     final textInInput = ref.watch(this.textInInput);
     return textInInput.trim().isNotEmpty;
   });
@@ -77,12 +77,12 @@ extension $Chat on _Chat {
 
   FV onInputRightButtonPressed() async {
     qq;
-    if (P.rwkv.currentModel.q == null) {
-      P.fileManager.modelSelectorShown.q = true;
+    if (!checkModelSelection()) return;
+
+    if (!inputHasContent.q) {
+      Alert.info("Please enter a message");
       return;
     }
-
-    if (!canSend.q) return;
 
     focusNode.unfocus();
     final textToSend = textInInput.q.trim();
@@ -100,6 +100,8 @@ extension $Chat on _Chat {
         changing: false,
         isReasoning: messages.q[_editingIndex].isReasoning,
         paused: messages.q[_editingIndex].paused,
+        modelName: messages.q[_editingIndex].modelName,
+        runningMode: messages.q[_editingIndex].runningMode,
       );
       // currentMessages.replaceRange(_editingIndex, _editingIndex + 1, [newBotMessage]);
       final newMessages = [
@@ -153,12 +155,7 @@ extension $Chat on _Chat {
   }
 
   FV onTapEditInUserMessageBubble({required int index}) async {
-    final loaded = P.rwkv.loaded.q;
-    if (!loaded) {
-      Alert.info("Please load model first");
-      P.fileManager.modelSelectorShown.q = true;
-      return;
-    }
+    if (!checkModelSelection()) return;
     final content = messages.q[index].content;
     textEditingController.value = TextEditingValue(text: content);
     focusNode.requestFocus();
@@ -166,13 +163,7 @@ extension $Chat on _Chat {
   }
 
   FV onTapEditInBotMessageBubble({required int index}) async {
-    // TODO: 这里也要消息分叉
-    final loaded = P.rwkv.loaded.q;
-    if (!loaded) {
-      Alert.info("Please load model first");
-      P.fileManager.modelSelectorShown.q = true;
-      return;
-    }
+    if (!checkModelSelection()) return;
     final content = messages.q[index].content;
     textEditingController.value = TextEditingValue(text: content);
     focusNode.requestFocus();
@@ -181,12 +172,7 @@ extension $Chat on _Chat {
 
   FV onRegeneratePressed({required int index}) async {
     qqq("index: $index");
-    final loaded = P.rwkv.loaded.q;
-    if (!loaded) {
-      Alert.info("Please load model first");
-      P.fileManager.modelSelectorShown.q = true;
-      return;
-    }
+    if (!checkModelSelection()) return;
 
     final userMessage = messages.q[index - 1];
     editingIndex.q = index;
@@ -321,6 +307,8 @@ extension $Chat on _Chat {
       changing: true,
       isReasoning: P.rwkv.reasoning.q,
       paused: false,
+      modelName: P.rwkv.currentModel.q?.name,
+      runningMode: P.rwkv.thinkingMode.q.toString(),
     );
 
     messages.ua(receiveMsg);
@@ -649,9 +637,7 @@ extension _$Chat on _Chat {
       messages.uc();
     });
 
-    if (!P.rwkv.loaded.q) {
-      P.fileManager.modelSelectorShown.q = true;
-    }
+    if (!checkModelSelection()) return;
   }
 
   void _onTextEditingControllerValueChanged() {

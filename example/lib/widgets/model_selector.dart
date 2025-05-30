@@ -24,11 +24,10 @@ class ModelSelector extends ConsumerWidget {
   static FV show() async {
     qq;
 
-    if (P.fileManager.modelSelectorShown.q) {
-      return;
-    }
+    if (P.fileManager.modelSelectorShown.q) return;
 
     P.fileManager.modelSelectorShown.q = true;
+
     P.fileManager.checkLocal();
 
     if (!Args.disableRemoteConfig) {
@@ -45,7 +44,6 @@ class ModelSelector extends ConsumerWidget {
     HF.wait(250).then((_) {
       P.device.sync();
     });
-
     await showModalBottomSheet(
       isScrollControlled: true,
       context: getContext()!,

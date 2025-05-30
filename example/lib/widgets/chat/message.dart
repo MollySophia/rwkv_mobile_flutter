@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'dart:async';
+import 'dart:developer';
 import 'dart:math' as math;
 
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -31,9 +32,7 @@ const double _kTextScaleFactorForCotContent = 1;
 class Message extends ConsumerWidget {
   final model.Message msg;
 
-  /// 使用逆顺序
-  ///
-  /// TODO: 明确一下这里的 index, 到底是顺序还是逆序
+  /// 页面中第一个消息的 index 为 0
   final int index;
 
   const Message(this.msg, this.index, {super.key});
@@ -312,6 +311,9 @@ class Message extends ConsumerWidget {
 
     final kW = ref.watch(P.app.qw);
 
+    // 如果是快速考 <think>\n<think>, 则不展示思考过程
+    final isQuickThinking = cotContent.trim().isEmpty;
+
     final bubbleContent = ConstrainedBox(
       constraints: BoxConstraints(maxWidth: width - kBubbleMaxWidthAdjust, minHeight: kBubbleMinHeight),
       child: ClipRRect(
@@ -365,7 +367,7 @@ class Message extends ConsumerWidget {
                     onTapLink: _onTapLink,
                   ),
                 // 🔥 Bot message cot header
-                if (reasoning)
+                if (reasoning && !isQuickThinking)
                   GD(
                     onTap: () {
                       if (showingCotContent) {
@@ -388,8 +390,8 @@ class Message extends ConsumerWidget {
                     ),
                   ),
                 // 🔥 Bot message cot content
-                if (reasoning) 4.h,
-                if (reasoning)
+                if (reasoning && !isQuickThinking) 4.h,
+                if (reasoning && !isQuickThinking)
                   AnimatedContainer(
                     duration: 250.ms,
                     height: cotContentHeight,
@@ -402,7 +404,7 @@ class Message extends ConsumerWidget {
                     ),
                   ),
                 // 🔥 Bot message cot result
-                if (cotResult.isNotEmpty && reasoning && showingCotContent) 12.h,
+                if (cotResult.isNotEmpty && reasoning && showingCotContent && !isQuickThinking) 12.h,
                 if (cotResult.isNotEmpty && reasoning)
                   MarkdownBody(
                     data: cotResult,

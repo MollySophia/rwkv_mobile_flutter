@@ -363,12 +363,9 @@ extension $TTS on _TTS {
 
   FV gen() async {
     qq;
-    if (P.rwkv.currentModel.q == null) {
-      P.fileManager.modelSelectorShown.q = true;
-      return;
-    }
+    if (!checkModelSelection()) return;
 
-    if (!P.chat.canSend.q) return;
+    if (!P.chat.inputHasContent.q) return;
 
     late final Message? msg;
     final id = HF.debugShorterUS;

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:halo_state/halo_state.dart';
+import 'package:zone/func/check_model_selection.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:halo_alert/halo_alert.dart';
 import 'package:flutter/material.dart';
@@ -194,11 +195,6 @@ class _TextField extends ConsumerWidget {
 
   void _onTapTextFieldWhenItsDisabled() {
     qq;
-    final loaded = P.rwkv.loaded.q;
-    if (!loaded) {
-      Alert.info("Please load model first");
-      P.fileManager.modelSelectorShown.q = true;
-      return;
-    }
+    if (!checkModelSelection()) return;
   }
 }

@@ -9,25 +9,16 @@ import 'package:halo_alert/halo_alert.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/func/show_image_selector.dart';
 import 'package:zone/gen/l10n.dart';
+import 'package:zone/model/demo_type.dart';
 import 'package:zone/model/thinking_mode.dart' as thinking_mode;
 import 'package:zone/state/p.dart';
-import 'package:zone/widgets/chat/reasoning_option_button.dart';
 import 'package:zone/widgets/performance_info.dart';
-import 'package:halo_state/halo_state.dart';
 
 class BottomInteractions extends ConsumerWidget {
   const BottomInteractions({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final color = Theme.of(context).colorScheme.primary;
-    final currentWorldType = ref.watch(P.rwkv.currentWorldType);
-    final demoType = ref.watch(P.app.demoType);
-    final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
-    final reasoning = ref.watch(P.rwkv.reasoning);
-    final s = S.of(context);
-    final kB = ref.watch(P.app.qb);
-
     return Padding(
       padding: const EI.o(t: 8),
       child: LayoutBuilder(
@@ -53,14 +44,14 @@ class _Interactions extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
-    final thinkingMode = ref.watch(P.rwkv.thinkingMode);
+    final demoType = ref.watch(P.app.demoType);
     return Wrap(
       spacing: 4,
       runSpacing: 4,
       children: [
         if (currentWorldType?.isVisualDemo == true) const IntrinsicWidth(child: _SelectImageButton()),
-        const _ThinkingModeButton(),
-        const _SecondaryOptionsButton(),
+        if (demoType == DemoType.chat) const _ThinkingModeButton(),
+        if (demoType == DemoType.chat) const _SecondaryOptionsButton(),
         const IntrinsicWidth(child: PerformanceInfo()),
       ],
     );
@@ -71,16 +62,13 @@ class _ThinkingModeButton extends ConsumerWidget {
   const _ThinkingModeButton();
 
   void _onTap() {
-    // TODO: finish this
-    P.rwkv.setModelConfig();
+    P.rwkv.onThinkModeTyped();
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = S.of(context);
     final primary = Theme.of(context).colorScheme.primary;
-    final preferChinese = ref.watch(P.rwkv.preferChinese);
-    final preferPseudo = ref.watch(P.rwkv.preferPseudo);
     final loading = ref.watch(P.rwkv.loading);
     final qw = ref.watch(P.app.qw);
     final kB = ref.watch(P.app.qb);
@@ -89,23 +77,23 @@ class _ThinkingModeButton extends ConsumerWidget {
 
     final color = switch (thinkingMode) {
       thinking_mode.Lighting() => kC,
+      thinking_mode.None() => kC,
       thinking_mode.Free() => primary,
       thinking_mode.PreferChinese() => primary,
-      thinking_mode.None() => kC,
     };
 
     final borderColor = switch (thinkingMode) {
       thinking_mode.Lighting() => primary.q(.33),
+      thinking_mode.None() => primary.q(.33),
       thinking_mode.Free() => primary.q(.5),
       thinking_mode.PreferChinese() => primary.q(.5),
-      thinking_mode.None() => primary.q(.5),
     };
 
     final textColor = switch (thinkingMode) {
       thinking_mode.Lighting() => primary.q(.5),
-      thinking_mode.Free() => primary,
-      thinking_mode.PreferChinese() => primary,
-      thinking_mode.None() => kC,
+      thinking_mode.None() => primary.q(.5),
+      thinking_mode.Free() => qw,
+      thinking_mode.PreferChinese() => qw,
     };
 
     return IntrinsicWidth(
@@ -142,8 +130,7 @@ class _SecondaryOptionsButton extends ConsumerWidget {
   const _SecondaryOptionsButton();
 
   void _onTap() {
-    // TODO: finish this
-    P.rwkv.setModelConfig();
+    P.rwkv.onSecondaryOptionsTyped();
   }
 
   @override
@@ -153,58 +140,81 @@ class _SecondaryOptionsButton extends ConsumerWidget {
     final loading = ref.watch(P.rwkv.loading);
 
     final thinkingMode = ref.watch(P.rwkv.thinkingMode);
+    final qw = ref.watch(P.app.qw);
 
     final color = switch (thinkingMode) {
-      thinking_mode.Lighting() => kC,
-      thinking_mode.Free() => primary,
+      thinking_mode.Lighting() => qw,
+      thinking_mode.Free() => qw,
+      thinking_mode.None() => primary,
       thinking_mode.PreferChinese() => primary,
-      thinking_mode.None() => kC,
     };
 
     final borderColor = switch (thinkingMode) {
       thinking_mode.Lighting() => primary.q(.33),
-      thinking_mode.Free() => primary.q(.5),
-      thinking_mode.PreferChinese() => primary.q(.5),
-      thinking_mode.None() => primary.q(.5),
+      thinking_mode.Free() => primary.q(.33),
+      thinking_mode.PreferChinese() => primary.q(.33),
+      thinking_mode.None() => primary.q(.33),
     };
 
     final textColor = switch (thinkingMode) {
       thinking_mode.Lighting() => primary.q(.5),
-      thinking_mode.Free() => primary,
-      thinking_mode.PreferChinese() => primary,
-      thinking_mode.None() => kC,
+      thinking_mode.None() => qw,
+      thinking_mode.Free() => primary.q(.5),
+      thinking_mode.PreferChinese() => qw,
     };
 
-    final Widget iconWidget = switch (thinkingMode) {
-      // thinking_mode.Lighting() => Icon(Icons.lightbulb_outline, color: textColor, size: 14),
-      // thinking_mode.Free() => Icon(Icons.lightbulb_outline, color: textColor, size: 14),
-      // thinking_mode.PreferChinese() => Icon(Icons.translate, color: textColor, size: 14),
-      thinking_mode.None() => ZZZIcon(color: textColor),
-      _ => ZZZIcon(color: textColor),
+    final iconWidget = switch (thinkingMode) {
+      thinking_mode.Free() => Icon(Icons.translate, color: textColor, size: 14),
+      thinking_mode.PreferChinese() => Icon(Icons.translate, color: textColor, size: 14),
+      _ => Padding(
+        padding: const EI.o(l: 4, r: 4, t: 2, b: 2),
+        child: Icon(CupertinoIcons.zzz, color: textColor, size: 18),
+      ),
     };
 
-    return IntrinsicWidth(
-      child: AnimatedOpacity(
-        opacity: loading ? .33 : 1,
-        duration: 250.ms,
-        child: GD(
-          onTap: _onTap,
-          child: C(
-            decoration: BD(
-              color: color,
-              border: Border.all(color: borderColor),
-              borderRadius: 10.r,
-            ),
-            padding: const EI.o(l: 8, r: 8, t: 7, b: 7),
-            child: Row(
-              children: [
-                iconWidget,
-                2.w,
-                T(
-                  s.reason,
-                  s: TS(c: textColor, s: 14, height: 1, w: FontWeight.w500),
-                ),
-              ],
+    final textWidget = switch (thinkingMode) {
+      thinking_mode.Lighting() => null,
+      thinking_mode.None() => null,
+      _ => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          T(s.prefer, s: TS(c: textColor, s: 10, height: 1)),
+          2.h,
+          T(s.chinese, s: TS(c: textColor, s: 10, height: 1)),
+        ],
+      ),
+    };
+
+    final buttonPadding = switch (thinkingMode) {
+      _ => const EI.s(h: 8, v: 5),
+    };
+
+    return AnimatedSize(
+      key: Key("_SecondaryOptionsButton"),
+      duration: 150.ms,
+      curve: Curves.easeOutCubic,
+      child: IntrinsicWidth(
+        child: AnimatedOpacity(
+          opacity: loading ? .33 : 1,
+          duration: 250.ms,
+          child: GD(
+            onTap: _onTap,
+            child: AnimatedContainer(
+              duration: 150.ms,
+              curve: Curves.easeOutCubic,
+              decoration: BD(
+                color: color,
+                border: Border.all(color: borderColor),
+                borderRadius: 10.r,
+              ),
+              padding: buttonPadding,
+              child: Row(
+                children: [
+                  iconWidget,
+                  if (textWidget != null) 4.w,
+                  ?textWidget,
+                ],
+              ),
             ),
           ),
         ),
@@ -225,7 +235,9 @@ class _SelectImageButton extends ConsumerWidget {
       onTap: () async {
         await showImageSelector();
       },
-      child: C(
+      child: AnimatedContainer(
+        duration: 150.ms,
+        curve: Curves.easeOutCubic,
         decoration: BD(
           color: primaryContainer,
           border: Border.all(
@@ -264,7 +276,7 @@ class _MessageButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final receiving = ref.watch(P.chat.receivingTokens);
-    final canSend = ref.watch(P.chat.canSend);
+    final canSend = ref.watch(P.chat.inputHasContent);
     final editingBotMessage = ref.watch(P.chat.editingBotMessage);
     final color = Theme.of(context).colorScheme.primary;
 
@@ -328,67 +340,4 @@ class _MessageButton extends ConsumerWidget {
       ),
     );
   }
-}
-
-class ZZZIcon extends StatelessWidget {
-  final Color color;
-  final double size;
-
-  const ZZZIcon({
-    super.key,
-    required this.color,
-    this.size = 18,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: size,
-      height: size,
-      child: CustomPaint(
-        painter: ZZZPainter(color: color),
-      ),
-    );
-  }
-}
-
-class ZZZPainter extends CustomPainter {
-  final Color color;
-
-  ZZZPainter({required this.color});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5
-      ..strokeCap = StrokeCap.round;
-
-    // 绘制三个 Z，顶部最大，底部最小，纵向间距加大
-    final z1 = Path()
-      ..moveTo(1, 2)
-      ..lineTo(7, 2)
-      ..lineTo(1, 6)
-      ..lineTo(7, 6);
-
-    final z2 = Path()
-      ..moveTo(5, 8)
-      ..lineTo(11, 8)
-      ..lineTo(5, 12)
-      ..lineTo(11, 12);
-
-    final z3 = Path()
-      ..moveTo(9, 14)
-      ..lineTo(13, 14)
-      ..lineTo(9, 17)
-      ..lineTo(13, 17);
-
-    canvas.drawPath(z1, paint);
-    canvas.drawPath(z2, paint);
-    canvas.drawPath(z3, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

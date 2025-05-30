@@ -2,6 +2,7 @@
 import 'dart:developer';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:collection/collection.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/config.dart';
 import 'package:zone/func/gb_display.dart';
@@ -333,8 +334,8 @@ class FileKeyItem extends ConsumerWidget {
           spacing: 4,
           runSpacing: 8,
           children: [
-            ...tags.map((tag) {
-              final showHighlight = tag == Config.reasonTag || tag == "encoder" || tag == "npu";
+            ...tags.where((tag) => tag != "encoder" && tag != "reason").map((tag) {
+              final showHighlight = tag == Config.reasonTag || tag == "npu" || tag == "gpu";
               return C(
                 decoration: BD(
                   borderRadius: 4.r,
@@ -350,17 +351,6 @@ class FileKeyItem extends ConsumerWidget {
                 ),
               );
             }),
-            C(
-              decoration: BD(color: kG.q(.2), borderRadius: 4.r),
-              padding: const EI.s(h: 4),
-              child: T(fileInfo.backend?.asArgument ?? ""),
-            ),
-            if (modelSize > 0)
-              C(
-                decoration: BD(color: kG.q(.2), borderRadius: 4.r),
-                padding: const EI.s(h: 4),
-                child: T("${modelSize}B"),
-              ),
             if (quantization != null && quantization.isNotEmpty)
               C(
                 decoration: BD(color: kG.q(.2), borderRadius: 4.r),
