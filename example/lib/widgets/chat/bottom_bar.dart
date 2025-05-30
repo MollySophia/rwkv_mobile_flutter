@@ -10,7 +10,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:zone/model/demo_type.dart';
-import 'package:zone/model/world_type.dart';
 import 'package:zone/state/p.dart';
 import 'package:zone/widgets/chat/bottom_interactions.dart';
 import 'package:zone/widgets/chat/tts/bottom_interactions.dart';
@@ -22,28 +21,12 @@ class BottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final paddingBottom = ref.watch(P.app.quantizedIntPaddingBottom);
     final primary = Theme.of(context).colorScheme.primary;
-    final worldType = ref.watch(P.rwkv.currentWorldType);
     final demoType = ref.watch(P.app.demoType);
-
-    bool show = true;
-
-    switch (worldType) {
-      case WorldType.engAudioQA:
-      case WorldType.chineseASR:
-      case WorldType.engASR:
-        show = false;
-      case WorldType.engVisualQA:
-      case WorldType.qa:
-      case WorldType.reasoningQA:
-      case WorldType.ocr:
-      case null:
-        show = true;
-    }
 
     final qw = ref.watch(P.app.qw);
 
     return Positioned(
-      bottom: show ? 0 : -P.chat.inputHeight.q,
+      bottom: 0,
       left: 0,
       right: 0,
       child: MeasureSize(
@@ -74,7 +57,6 @@ class BottomBar extends ConsumerWidget {
                 child: Co(
                   children: [
                     const _TextField(),
-                    if (demoType != DemoType.tts) 8.h,
                     if (demoType != DemoType.tts) const BottomInteractions(),
                     if (demoType == DemoType.tts) const TTSBottomInteractions(),
                   ],

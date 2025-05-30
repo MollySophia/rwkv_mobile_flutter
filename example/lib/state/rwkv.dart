@@ -55,7 +55,7 @@ class _RWKV {
   late final _preferPseudo = qs(false);
 
   late final thinkingMode = qp((ref) => ref.watch(_thinkingMode));
-  late final _thinkingMode = qs(thinking_mode.Lighting());
+  late final _thinkingMode = qs<ThinkingMode>(thinking_mode.Lighting());
 
   /// 模型是否已加载
   late final loaded = qp((ref) {
