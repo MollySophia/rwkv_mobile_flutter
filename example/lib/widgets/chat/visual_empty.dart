@@ -59,9 +59,9 @@ class VisualEmpty extends ConsumerWidget {
       left: 0,
       width: screenWidth,
       top: paddingTop + kToolbarHeight,
-      child: Co(
-        c: CAA.center,
-        m: MAA.center,
+      child: Column(
+        crossAxisAlignment: CAA.center,
+        mainAxisAlignment: MAA.center,
         children: [
           Center(
             child: ClipRRect(
@@ -76,9 +76,9 @@ class VisualEmpty extends ConsumerWidget {
                   ),
                   width: math.min(maxW, maxH) - 16,
                   height: math.min(maxW, maxH) * .75,
-                  child: Co(
-                    c: CAA.center,
-                    m: MAA.center,
+                  child: Column(
+                    crossAxisAlignment: CAA.center,
+                    mainAxisAlignment: MAA.center,
                     children: [
                       if (imagePath == null) const Icon(Icons.image),
                       if (imagePath == null) 8.h,

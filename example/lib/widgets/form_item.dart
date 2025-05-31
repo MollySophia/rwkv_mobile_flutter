@@ -60,13 +60,13 @@ class FormItem extends ConsumerWidget {
           ),
         ),
         padding: const EI.o(t: 12, b: 12, r: 8, l: 8),
-        child: Ro(
+        child: Row(
           children: [
             if (icon != null) icon!,
             if (icon != null) 8.w,
-            Exp(
-              child: Co(
-                c: CAA.start,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CAA.start,
                 children: [
                   T(
                     title,
@@ -83,7 +83,7 @@ class FormItem extends ConsumerWidget {
             ),
             if (info != null) 8.w,
             if (info != null)
-              Exp(
+              Expanded(
                 child: T(
                   info,
                   s: TS(w: FW.w500, s: 12, c: kB.q(.6)),

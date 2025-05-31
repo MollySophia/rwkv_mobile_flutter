@@ -41,7 +41,7 @@ class BranchSwitcher extends ConsumerWidget {
       decoration: BD(color: primary.q(.0)),
       child: Stack(
         children: [
-          Ro(
+          Row(
             children: [
               44.h,
               Icon(CupertinoIcons.chevron_back, color: primary.q(isFirst ? .4 : .8)),
@@ -53,15 +53,15 @@ class BranchSwitcher extends ConsumerWidget {
             ],
           ),
           Positioned.fill(
-            child: Ro(
+            child: Row(
               children: [
-                Exp(
+                Expanded(
                   child: GD(
                     onTap: isFirst ? null : _onBackPressed,
                     child: C(decoration: BD(color: kDebugMode ? kCR.q(.1) : kC)),
                   ),
                 ),
-                Exp(
+                Expanded(
                   child: GD(
                     onTap: isLast ? null : _onForwardPressed,
                     child: C(decoration: BD(color: kDebugMode ? kCB.q(.1) : kC)),

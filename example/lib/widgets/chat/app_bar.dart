@@ -80,8 +80,8 @@ class ChatAppBar extends ConsumerWidget {
                 decoration: const BD(
                   color: kC,
                 ),
-                child: Co(
-                  c: CAA.center,
+                child: Column(
+                  crossAxisAlignment: CAA.center,
                   children: [
                     const T(
                       Config.appTitle,
@@ -94,10 +94,10 @@ class ChatAppBar extends ConsumerWidget {
                         color: kB.q(.1),
                         borderRadius: 10.r,
                       ),
-                      child: Ro(
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
-                        c: CAA.center,
-                        m: MAA.center,
+                        crossAxisAlignment: CAA.center,
+                        mainAxisAlignment: MAA.center,
                         children: [
                           T(
                             displayName,
@@ -121,7 +121,7 @@ class ChatAppBar extends ConsumerWidget {
                 ),
               ),
             ),
-            leading: const Ro(
+            leading: const Row(
               children: [
                 _MenuButton(),
               ],

@@ -119,7 +119,7 @@ class _PagerState extends ConsumerState<Pager> {
           child: SB(
             width: screenWidth + drawerWidth,
             height: screenHeight,
-            child: Ro(
+            child: Row(
               children: [
                 SB(
                   width: drawerWidth,

@@ -77,7 +77,7 @@ class Suggestions extends ConsumerWidget {
       height: Suggestions.defaultHeight,
       child: Row(
         children: [
-          Exp(
+          Expanded(
             child: _buildRndPromptList(context, suggestions),
           ),
           if (showAllPromptButton) 8.w,
@@ -232,8 +232,8 @@ class _AllSuggestionDialogState extends State<AllSuggestionDialog> implements Ti
   Widget build(BuildContext context) {
     return SB(
       width: double.infinity,
-      child: Co(
-        c: CrossAxisAlignment.center,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           16.h,
           T(S.of(context).all_prompt, s: const TS(s: 16, w: FW.w600)),
@@ -257,7 +257,7 @@ class _AllSuggestionDialogState extends State<AllSuggestionDialog> implements Ti
               ],
             ),
           ),
-          Exp(
+          Expanded(
             child: PageView.builder(
               controller: pageController,
               itemCount: categoryCount,

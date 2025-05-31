@@ -55,7 +55,7 @@ class BottomBar extends ConsumerWidget {
               ),
               child: AnimatedSize(
                 duration: 250.ms,
-                child: Co(
+                child: Column(
                   children: [
                     const _TextField(),
                     if (demoType != DemoType.tts) const BottomInteractions(),

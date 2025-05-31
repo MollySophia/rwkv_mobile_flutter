@@ -325,8 +325,8 @@ class Message extends ConsumerWidget {
             border: border,
             borderRadius: borderRadius,
           ),
-          child: Co(
-            c: isMine ? CAA.end : CAA.start,
+          child: Column(
+            crossAxisAlignment: isMine ? CAA.end : CAA.start,
             children: [
               if (isMine) ...[
                 // 🔥 User message
@@ -378,7 +378,7 @@ class Message extends ConsumerWidget {
                     },
                     child: C(
                       decoration: const BD(color: kC),
-                      child: Ro(
+                      child: Row(
                         children: [
                           T(
                             thisMessageIsReceiving ? s.thinking : s.thought_result,

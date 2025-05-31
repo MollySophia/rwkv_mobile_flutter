@@ -65,8 +65,8 @@ class UserMessageBottom extends ConsumerWidget {
     final playing = ref.watch(P.world.playing);
     final isCurrentMessage = latestClickedMessage?.id == msg.id;
 
-    return Ro(
-      m: MAA.end,
+    return Row(
+      mainAxisAlignment: MAA.end,
       mainAxisSize: MainAxisSize.min,
       children: [
         if (showUserEditButton)

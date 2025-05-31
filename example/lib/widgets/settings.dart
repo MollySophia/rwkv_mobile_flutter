@@ -54,15 +54,15 @@ class Settings extends ConsumerWidget {
         controller: scrollController,
         children: [
           12.h,
-          Ro(
-            m: MAA.center,
+          Row(
+            mainAxisAlignment: MAA.center,
             children: [iconWidget],
           ),
           16.h,
-          Ro(
-            m: MAA.center,
+          Row(
+            mainAxisAlignment: MAA.center,
             children: [
-              Exp(
+              Expanded(
                 child: T(
                   Config.appTitle,
                   s: TS(s: 24, c: kB),
@@ -72,18 +72,18 @@ class Settings extends ConsumerWidget {
             ],
           ),
           4.h,
-          Ro(
-            m: MAA.center,
+          Row(
+            mainAxisAlignment: MAA.center,
             children: [
               T(version, s: TS(s: 12, c: kB)),
               T(" ($buildNumber)", s: TS(s: 12, c: kB)),
             ],
           ),
           16.h,
-          Ro(
-            m: MAA.start,
+          Row(
+            mainAxisAlignment: MAA.start,
             children: [
-              Exp(
+              Expanded(
                 child: T(
                   s.application_settings,
                   s: TS(w: FW.w500, c: kB.q(.8), s: 12),
@@ -107,10 +107,10 @@ class Settings extends ConsumerWidget {
             onTap: P.preference.showLocaleDialog,
           ),
           12.h,
-          Ro(
-            m: MAA.start,
+          Row(
+            mainAxisAlignment: MAA.start,
             children: [
-              Exp(
+              Expanded(
                 child: T(
                   s.join_the_community,
                   s: TS(w: FW.w500, c: kB.q(.8), s: 12),
@@ -146,8 +146,8 @@ class Settings extends ConsumerWidget {
             onTap: _openTwitter,
           ),
           12.h,
-          Ro(
-            m: MAA.start,
+          Row(
+            mainAxisAlignment: MAA.start,
             children: [
               T(
                 s.about,

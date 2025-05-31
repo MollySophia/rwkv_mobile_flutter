@@ -68,13 +68,13 @@ class UserTTSContent extends ConsumerWidget {
         r: 6,
         b: 6,
       ),
-      child: Co(
-        c: CAA.start,
+      child: Column(
+        crossAxisAlignment: CAA.start,
         children: [
-          Ro(
+          Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Exp(
+              Expanded(
                 child: C(
                   decoration: BD(
                     color: qw.q(.5),

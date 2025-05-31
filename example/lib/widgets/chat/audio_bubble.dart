@@ -58,8 +58,8 @@ class _AudioBubbleState extends ConsumerState<AudioBubble> {
     return C(
       decoration: const BD(color: kC),
       width: width,
-      child: Ro(
-        m: MAA.end,
+      child: Row(
+        mainAxisAlignment: MAA.end,
         children: [
           T(
             (length / 1000).toStringAsFixed(0) + "s",

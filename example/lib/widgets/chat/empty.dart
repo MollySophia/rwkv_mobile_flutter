@@ -53,8 +53,8 @@ class Empty extends ConsumerWidget {
               Positioned.fill(
                 left: 32,
                 right: 32,
-                child: Co(
-                  c: CAA.center,
+                child: Column(
+                  crossAxisAlignment: CAA.center,
                   children: [
                     const Spacer(),
                     Image.asset(logoPath, width: 140),

@@ -25,8 +25,8 @@ class BottomInteractions extends ConsumerWidget {
         builder: (context, constraints) {
           final width = constraints.maxWidth;
           qqr(width);
-          return Ro(
-            m: MAA.spaceBetween,
+          return Row(
+            mainAxisAlignment: MAA.spaceBetween,
             children: [
               Expanded(child: const _Interactions()),
               const _MessageButton(),

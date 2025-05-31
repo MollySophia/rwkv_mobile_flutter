@@ -138,9 +138,9 @@ class ModelItem extends ConsumerWidget {
         decoration: BD(color: kW, borderRadius: 8.r),
         margin: const EI.o(t: 8),
         padding: const EI.a(8),
-        child: Ro(
+        child: Row(
           children: [
-            Exp(
+            Expanded(
               child: FileKeyItem(fileInfo),
             ),
             8.w,
@@ -306,8 +306,8 @@ class FileKeyItem extends ConsumerWidget {
     final primary = Theme.of(getContext()!).colorScheme.primary;
     final kW = ref.watch(P.app.qw);
     final kB = ref.watch(P.app.qb);
-    return Co(
-      c: CAA.start,
+    return Column(
+      crossAxisAlignment: CAA.start,
       children: [
         Wrap(
           spacing: 8,
@@ -366,9 +366,9 @@ class FileKeyItem extends ConsumerWidget {
               final width = constraints.maxWidth;
               return SB(
                 width: width - 100,
-                child: Ro(
+                child: Row(
                   children: [
-                    Exp(
+                    Expanded(
                       flex: (100 * progress).toInt(),
                       child: C(
                         decoration: BD(
@@ -378,7 +378,7 @@ class FileKeyItem extends ConsumerWidget {
                         height: 4,
                       ),
                     ),
-                    Exp(
+                    Expanded(
                       flex: 100 - (100 * progress).toInt(),
                       child: C(
                         decoration: BD(

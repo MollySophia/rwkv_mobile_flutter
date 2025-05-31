@@ -77,8 +77,8 @@ class BotMessageBottom extends ConsumerWidget {
       _ => const SizedBox.shrink(),
     };
 
-    return Ro(
-      m: MAA.start,
+    return Row(
+      mainAxisAlignment: MAA.start,
       children: [
         if (Config.enableChain) BranchSwitcher(msg, index),
         if (changing)

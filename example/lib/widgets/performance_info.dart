@@ -13,9 +13,9 @@ class PerformanceInfo extends ConsumerWidget {
     final prefillSpeed = ref.watch(P.rwkv.prefillSpeed);
     final decodeSpeed = ref.watch(P.rwkv.decodeSpeed);
     final kB = ref.watch(P.app.qb);
-    return Co(
-      c: CAA.start,
-      m: MAA.center,
+    return Column(
+      crossAxisAlignment: CAA.start,
+      mainAxisAlignment: MAA.center,
       children: [
         T("Prefill: ${prefillSpeed.toStringAsFixed(1)} t/s", s: TS(c: kB.q(.6), s: 10)),
         T("Decode: ${decodeSpeed.toStringAsFixed(1)} t/s", s: TS(c: kB.q(.6), s: 10)),

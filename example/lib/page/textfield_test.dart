@@ -25,7 +25,7 @@ class _TextFieldTestState extends ConsumerState<TextFieldTest> {
         },
         child: C(
           decoration: BD(color: kW),
-          child: Co(
+          child: Column(
             children: [
               TextField(
                 focusNode: _focusNode,

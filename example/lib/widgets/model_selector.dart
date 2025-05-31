@@ -140,9 +140,9 @@ class ModelSelector extends ConsumerWidget {
           padding: const EI.o(l: 12, r: 12),
           controller: scrollController,
           children: [
-            Ro(
+            Row(
               children: [
-                Exp(
+                Expanded(
                   child: T(s.chat_welcome_to_use(Config.appTitle), s: const TS(s: 18, w: FW.w600)),
                 ),
                 IconButton(
@@ -180,8 +180,8 @@ class _DownloadSource extends ConsumerWidget {
     final primary = Theme.of(context).colorScheme.primary;
     final kW = ref.watch(P.app.qw);
     final kB = ref.watch(P.app.qb);
-    return Co(
-      c: CrossAxisAlignment.stretch,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         4.h,
         T(

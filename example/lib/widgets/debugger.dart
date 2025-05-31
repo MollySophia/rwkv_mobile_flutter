@@ -65,9 +65,9 @@ class Debugger extends ConsumerWidget {
           child: SB(
             child: C(
               decoration: const BD(color: kC),
-              child: Co(
-                m: MAA.start,
-                c: CAA.end,
+              child: Column(
+                mainAxisAlignment: MAA.start,
+                crossAxisAlignment: CAA.end,
                 children:
                     [
                       paddingTop.h,
@@ -157,9 +157,9 @@ class _SudokuDebugger extends ConsumerWidget {
           child: SB(
             child: C(
               decoration: const BD(color: kC),
-              child: Co(
-                m: MAA.start,
-                c: CAA.end,
+              child: Column(
+                mainAxisAlignment: MAA.start,
+                crossAxisAlignment: CAA.end,
                 children:
                     [
                       paddingTop.h,
@@ -236,9 +236,9 @@ class _TTSDebugger extends ConsumerWidget {
           child: SB(
             child: C(
               decoration: const BD(color: kC),
-              child: Co(
-                m: MAA.start,
-                c: CAA.end,
+              child: Column(
+                mainAxisAlignment: MAA.start,
+                crossAxisAlignment: CAA.end,
                 children:
                     [
                       paddingTop.h,
@@ -249,7 +249,7 @@ class _TTSDebugger extends ConsumerWidget {
                       T("perWavProgress".codeToName),
                       T(perWavProgress.toString()),
                       T("filePaths".codeToName),
-                      Co(
+                      Column(
                         children: filePaths.map((e) => T(e)).toList(),
                       ),
                       T("receiveId".codeToName),
