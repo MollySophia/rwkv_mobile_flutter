@@ -136,11 +136,13 @@ class _App extends ConsumerWidget {
 
   Widget _builder(BuildContext context, Widget? child) {
     qq;
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final screenHeight = MediaQuery.sizeOf(context).height;
     return _LocaleWrapper(
       child: _TextScaleWrapper(
         child: Stack(
           children: [
-            C(color: kBG),
+            Positioned(left: 0, right: 0, top: 0, bottom: 0, child: C(color: kBG)),
             if (child != null) child,
             const Alert(),
             if (kDebugMode) const Debugger(),

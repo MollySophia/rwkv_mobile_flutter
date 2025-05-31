@@ -38,15 +38,12 @@ class _RWKV {
     return argument.defaults;
   });
 
-  /// 当前如果让 RWKV Backend 执行任务, 是否使用 reasoning / thinking 模式
-  late final reasoning = qp((ref) => ref.watch(_reasoning));
-  late final _reasoning = qs(false);
+  late final reasoning = qp((ref) => ref.watch(_thinkingMode).hasThinkTag);
+  late final thinkingMode = qp((ref) => ref.watch(_thinkingMode));
+  late final _thinkingMode = qs<ThinkingMode>(thinking_mode.Lighting());
 
-  late final preferChinese = qp((ref) => ref.watch(_preferChinese));
-  late final _preferChinese = qs(false);
-
-  late final preferPseudo = qp((ref) => ref.watch(_preferPseudo));
-  late final _preferPseudo = qs(false);
+  ThinkingMode reasoningOnOrder = thinking_mode.Free();
+  ThinkingMode reasoningOffOrder = thinking_mode.Lighting();
 
   /// 模型是否已加载
   late final loaded = qp((ref) {
@@ -494,7 +491,7 @@ extension $RWKV on _RWKV {
       return;
     }
 
-    send(to_rwkv.ChatAsync(messages, reasoning: reasoning.q));
+    send(to_rwkv.ChatAsync(messages, reasoning: thinkingMode.q.hasThinkTag));
 
     if (_getTokensTimer != null) {
       _getTokensTimer!.cancel();
@@ -578,51 +575,35 @@ extension $RWKV on _RWKV {
   }
 
   FV setModelConfig({
-    bool? enableReasoning,
-    bool? preferChinese,
-    bool? preferPseudo,
+    ThinkingMode? thinkingMode,
+    @Deprecated("Use thinkingMode instead, 不能排除之后突然来个不支持 <think> 的模型, 所以先不删除") bool? enableReasoning,
+    @Deprecated("Use thinkingMode instead, 不能排除之后突然来个不支持 <think> 的模型, 所以先不删除") bool? preferChinese,
+    @Deprecated("Use thinkingMode instead, 不能排除之后突然来个不支持 <think> 的模型, 所以先不删除") bool? preferPseudo,
     bool setPrompt = true,
   }) async {
-    if (enableReasoning != null) _reasoning.q = enableReasoning;
+    qqr(thinkingMode);
+    _thinkingMode.q = thinkingMode ?? thinking_mode.Lighting();
 
-    if (preferChinese != null && preferPseudo != null) {
-      Alert.error("preferChinese and preferPseudo cannot be set at the same time");
-      return;
+    final finalPrompt = switch (_thinkingMode) {
+      thinking_mode.PreferChinese() => Config.promptCN,
+      _ => Config.prompt,
+    };
+
+    if (setPrompt) {
+      qqq("setPrompt: $finalPrompt");
+      send(to_rwkv.SetPrompt(_thinkingMode.q.hasThinkTag ? "<EOD>" : finalPrompt));
     }
 
-    if (preferChinese != null) {
-      _preferChinese.q = preferChinese;
-      if (preferChinese) _preferPseudo.q = false;
+    switch (_thinkingMode.q) {
+      case thinking_mode.Lighting():
+      case thinking_mode.Free():
+      case thinking_mode.PreferChinese():
+        final thinkingToken = _thinkingMode.q.header;
+        qqq("setThinkingToken: $thinkingToken");
+        send(to_rwkv.SetThinkingToken(thinkingToken));
+      case thinking_mode.None():
+        break;
     }
-    if (preferPseudo != null) {
-      _preferPseudo.q = preferPseudo;
-      if (preferPseudo) _preferChinese.q = false;
-    }
-
-    late final String finalPrompt;
-
-    finalPrompt = _preferChinese.q ? Config.promptCN : Config.prompt;
-
-    if (setPrompt) qqq("setPrompt: $finalPrompt");
-
-    if (setPrompt) send(to_rwkv.SetPrompt(_reasoning.q ? "<EOD>" : finalPrompt));
-
-    late final String thinkingToken;
-
-    if (_preferChinese.q && _preferPseudo.q) {
-      Alert.error("preferChinese and preferPseudo cannot be set at the same time");
-      return;
-    }
-
-    if (_preferChinese.q) {
-      thinkingToken = "<think>嗯";
-    } else if (_preferPseudo.q) {
-      thinkingToken = "<think>\n</think>";
-    } else {
-      thinkingToken = "<think";
-    }
-
-    send(to_rwkv.SetThinkingToken(thinkingToken));
   }
 
   FV resetSamplerParams({required bool enableReasoning}) async {
@@ -675,6 +656,63 @@ extension $RWKV on _RWKV {
     if (maxLength != null) arguments(Argument.maxLength).q = maxLength.toDouble();
     send(to_rwkv.SetMaxLength(_intIfFixedDecimalsIsZero(Argument.maxLength).toInt()));
   }
+
+  void onThinkModeTyped() async {
+    final receiving = P.chat.receivingTokens.q;
+    if (receiving) {
+      Alert.info(S.current.please_wait_for_the_model_to_finish_generating);
+      return;
+    }
+
+    if (!checkModelSelection()) return;
+
+    P.app.hapticLight();
+    final current = thinkingMode.q;
+    switch (current) {
+      case thinking_mode.Lighting():
+        setModelConfig(thinkingMode: reasoningOnOrder);
+        if (reasoningOnOrder is thinking_mode.Free) Alert.success(S.current.reasoning_enabled);
+        if (reasoningOnOrder is thinking_mode.PreferChinese) Alert.success(S.current.prefer_chinese);
+        reasoningOffOrder = thinking_mode.Lighting();
+      case thinking_mode.Free():
+        setModelConfig(thinkingMode: reasoningOffOrder);
+        reasoningOnOrder = thinking_mode.Free();
+      case thinking_mode.PreferChinese():
+        setModelConfig(thinkingMode: reasoningOffOrder);
+        reasoningOnOrder = thinking_mode.PreferChinese();
+      case thinking_mode.None():
+        setModelConfig(thinkingMode: reasoningOnOrder);
+        reasoningOffOrder = thinking_mode.None();
+    }
+  }
+
+  void onSecondaryOptionsTyped() async {
+    final receiving = P.chat.receivingTokens.q;
+    if (receiving) {
+      Alert.info(S.current.please_wait_for_the_model_to_finish_generating);
+      return;
+    }
+
+    if (!checkModelSelection()) return;
+
+    final current = thinkingMode.q;
+    P.app.hapticLight();
+    switch (current) {
+      case thinking_mode.Lighting():
+        setModelConfig(thinkingMode: thinking_mode.None());
+        reasoningOffOrder = thinking_mode.None();
+      case thinking_mode.Free():
+        setModelConfig(thinkingMode: thinking_mode.PreferChinese());
+        Alert.success(S.current.prefer_chinese);
+        reasoningOnOrder = thinking_mode.PreferChinese();
+      case thinking_mode.PreferChinese():
+        setModelConfig(thinkingMode: thinking_mode.Free());
+        reasoningOnOrder = thinking_mode.Free();
+      case thinking_mode.None():
+        setModelConfig(thinkingMode: thinking_mode.Lighting());
+        reasoningOffOrder = thinking_mode.Lighting();
+    }
+  }
 }
 
 /// Private methods
@@ -686,11 +724,6 @@ extension _$RWKV on _RWKV {
       return RWKVMobile.getSocName();
     }, []);
     soc.q = r;
-
-    Future.delayed(const Duration(milliseconds: 1000)).then((_) {
-      final currentLocale = Intl.getCurrentLocale().toLowerCase();
-      _preferChinese.q = currentLocale.contains("zh") || currentLocale.contains("cn");
-    });
   }
 
   num _intIfFixedDecimalsIsZero(Argument argument) {

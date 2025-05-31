@@ -34,6 +34,9 @@ final class Message extends Equatable {
   final List<double>? ttsPerWavProgress;
   final List<String>? ttsFilePaths;
 
+  final String? modelName;
+  final String? runningMode;
+
   bool get ttsHasContent => ttsFilePaths?.isNotEmpty ?? false;
   bool get ttsIsDone => (ttsOverallProgress ?? 0.0) >= 1.0;
 
@@ -57,6 +60,8 @@ final class Message extends Equatable {
     this.ttsOverallProgress,
     this.ttsPerWavProgress,
     this.ttsFilePaths,
+    this.modelName,
+    this.runningMode,
   });
 
   @override
@@ -80,6 +85,8 @@ final class Message extends Equatable {
     ttsOverallProgress,
     ...ttsPerWavProgress ?? [],
     ...ttsFilePaths ?? [],
+    modelName,
+    runningMode,
   ];
 
   factory Message.fromJson(Map<String, dynamic> json) {
@@ -103,6 +110,8 @@ final class Message extends Equatable {
       ttsOverallProgress: json["ttsOverallProgress"] as double?,
       ttsPerWavProgress: json["ttsPerWavProgress"] as List<double>?,
       ttsFilePaths: json["ttsFilePaths"] as List<String>?,
+      modelName: json["modelName"] as String?,
+      runningMode: json["runningMode"] as String?,
     );
   }
 
@@ -127,6 +136,8 @@ final class Message extends Equatable {
       "ttsOverallProgress": ttsOverallProgress,
       "ttsPerWavProgress": ttsPerWavProgress,
       "ttsFilePaths": ttsFilePaths,
+      "modelName": modelName,
+      "runningMode": runningMode,
     };
   }
 
@@ -150,6 +161,8 @@ final class Message extends Equatable {
     double? ttsOverallProgress,
     List<double>? ttsPerWavProgress,
     List<String>? ttsFilePaths,
+    String? modelName,
+    String? runningMode,
   }) {
     return Message(
       id: id ?? this.id,
@@ -171,6 +184,8 @@ final class Message extends Equatable {
       ttsOverallProgress: ttsOverallProgress ?? this.ttsOverallProgress,
       ttsPerWavProgress: ttsPerWavProgress ?? this.ttsPerWavProgress,
       ttsFilePaths: ttsFilePaths ?? this.ttsFilePaths,
+      modelName: modelName ?? this.modelName,
+      runningMode: runningMode ?? this.runningMode,
     );
   }
 
@@ -197,6 +212,8 @@ Message(
   ttsOverallProgress: $ttsOverallProgress,
   ttsPerWavProgress: $ttsPerWavProgress,
   ttsFilePaths: $ttsFilePaths,
+  modelName: $modelName,
+  runningMode: $runningMode,
 )""";
   }
 

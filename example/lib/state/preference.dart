@@ -34,6 +34,7 @@ class _Preference {
     1.4: S.current.ultra_large,
   };
 
+  @Deprecated("This is not used anymore")
   late final latestRuntimeAddress = qs<int>(0);
 
   late final dumpping = qs(false);

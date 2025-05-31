@@ -14,82 +14,25 @@ import 'package:zone/widgets/chat/app_bar.dart';
 import 'package:zone/widgets/chat/audio_empty.dart';
 import 'package:zone/widgets/chat/audio_input.dart';
 import 'package:zone/widgets/chat/empty.dart';
-import 'package:zone/widgets/chat/input.dart';
+import 'package:zone/widgets/chat/bottom_bar.dart';
 import 'package:zone/widgets/chat/message.dart';
 import 'package:zone/widgets/chat/suggestions.dart';
 import 'package:zone/widgets/chat/visual_empty.dart';
 import 'package:zone/widgets/menu.dart';
-import 'package:zone/widgets/model_selector.dart';
 import 'package:zone/widgets/pager.dart';
 import 'package:zone/widgets/screenshot.dart';
 
-class PageChat extends StatefulWidget {
+class PageChat extends ConsumerWidget {
   const PageChat({super.key});
 
   @override
-  State<PageChat> createState() => _PageChatState();
-}
-
-class _PageChatState extends State<PageChat> {
-  @override
-  void initState() {
-    super.initState();
-    P.fileManager.modelSelectorShown.l(_onShowingModelSelectorChanged);
-    HF.wait(1000).then((_) {
-      final loaded = P.rwkv.loaded.q;
-      if (!loaded) {
-        P.fileManager.modelSelectorShown.q = true;
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Screenshot(
       child: const Pager(
         drawer: Menu(),
         child: _Page(),
       ),
     );
-  }
-
-  @Deprecated("Use ModelSelector.show in the future")
-  void _onShowingModelSelectorChanged(bool showing) async {
-    if (!showing) return;
-    P.fileManager.checkLocal();
-
-    if (!Args.disableRemoteConfig) {
-      P.app.getConfig().then((_) async {
-        await P.fileManager.syncAvailableModels();
-        await P.fileManager.checkLocal();
-      });
-    } else {
-      P.fileManager.syncAvailableModels().then((_) {
-        P.fileManager.checkLocal();
-      });
-    }
-
-    HF.wait(250).then((_) {
-      P.device.sync();
-    });
-    await showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (context) {
-        return DraggableScrollableSheet(
-          initialChildSize: .8,
-          maxChildSize: .9,
-          expand: false,
-          snap: false,
-          builder: (BuildContext context, ScrollController scrollController) {
-            return ModelSelector(
-              scrollController: scrollController,
-            );
-          },
-        );
-      },
-    );
-    P.fileManager.modelSelectorShown.q = false;
   }
 }
 
@@ -108,7 +51,7 @@ class _Page extends ConsumerWidget {
           ChatAppBar(),
           _NavigationBarBottomLine(),
           Suggestions(),
-          Input(),
+          BottomBar(),
           AudioInput(),
         ],
       ),
@@ -143,7 +86,6 @@ class List extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO: @wangce Use select to improve performance
     final messages = ref.watch(P.chat.messages);
     final paddingTop = ref.watch(P.app.paddingTop);
     final paddingLeft = ref.watch(P.app.paddingLeft);
@@ -209,6 +151,7 @@ class List extends ConsumerWidget {
             controller: P.chat.scrollController,
             child: ListView.separated(
               reverse: true,
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: EI.o(t: top, b: bottom, l: paddingLeft, r: paddingRight),
               controller: P.chat.scrollController,
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,

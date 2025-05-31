@@ -6,6 +6,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:halo_state/halo_state.dart';
+import 'package:zone/func/check_model_selection.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:halo_alert/halo_alert.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +18,10 @@ import 'package:zone/model/language.dart';
 import 'package:zone/model/tts_instruction.dart';
 import 'package:zone/state/p.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:zone/widgets/performance_info.dart';
 
-class TTSBar extends ConsumerWidget {
-  const TTSBar({super.key});
+class TTSBottomInteractions extends ConsumerWidget {
+  const TTSBottomInteractions({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -321,7 +323,7 @@ class _Actions extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ttsDone = ref.watch(P.tts.ttsDone);
-    final canSend = ref.watch(P.chat.canSend);
+    final canSend = ref.watch(P.chat.inputHasContent);
     final editingBotMessage = ref.watch(P.chat.editingBotMessage);
     final color = Theme.of(context).colorScheme.primary;
     final loaded = ref.watch(P.rwkv.loaded);
@@ -341,7 +343,7 @@ class _Actions extends ConsumerWidget {
               const _SpkButton(),
               const _IntonationButton(),
               if (!audioInteractorShown && !intonationShown && !spkShown && interactingInstruction == TTSInstruction.none)
-                const _PerformanceInfo(),
+                const PerformanceInfo(),
             ],
           ),
         ),
@@ -890,32 +892,6 @@ class _TextField extends ConsumerWidget {
 
   void _onTapTextFieldWhenItsDisabled() {
     qq;
-    final loaded = P.rwkv.loaded.q;
-    if (!loaded) {
-      Alert.info(S.current.please_load_model_first);
-      P.fileManager.modelSelectorShown.q = true;
-      return;
-    }
-  }
-}
-
-class _PerformanceInfo extends ConsumerWidget {
-  const _PerformanceInfo();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final prefillSpeed = ref.watch(P.rwkv.prefillSpeed);
-    final decodeSpeed = ref.watch(P.rwkv.decodeSpeed);
-    final kB = ref.watch(P.app.qb);
-    if (prefillSpeed == 0 && decodeSpeed == 0) return const SizedBox.shrink();
-    return Co(
-      c: CAA.start,
-      m: MAA.center,
-      children: [
-        T("Prefill: ${prefillSpeed.toStringAsFixed(2)} t/s", s: TS(c: kB.q(.6), s: 10)),
-        T("Decode: ${decodeSpeed.toStringAsFixed(2)} t/s", s: TS(c: kB.q(.6), s: 10)),
-        6.h,
-      ],
-    );
+    if (!checkModelSelection()) return;
   }
 }

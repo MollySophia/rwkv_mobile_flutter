@@ -1,147 +1,200 @@
 // ignore: unused_import
+import 'dart:developer';
+import 'dart:ui';
 
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
+import 'package:halo_state/halo_state.dart';
+import 'package:zone/func/check_model_selection.dart';
+import 'package:zone/gen/l10n.dart';
+import 'package:halo_alert/halo_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
-import 'package:halo_state/halo_state.dart';
-import 'package:zone/func/show_image_selector.dart';
-import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/demo_type.dart';
 import 'package:zone/state/p.dart';
-import 'package:zone/widgets/chat/reasoning_option_button.dart';
-import 'package:zone/widgets/chat/reason_button.dart';
+import 'package:zone/widgets/chat/bottom_interactions.dart';
+import 'package:zone/widgets/chat/tts/bottom_interactions.dart';
 
 class BottomBar extends ConsumerWidget {
   const BottomBar({super.key});
 
-  void _onRightButtonPressed() async {
-    qq;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final paddingBottom = ref.watch(P.app.quantizedIntPaddingBottom);
+    final primary = Theme.of(context).colorScheme.primary;
+    final demoType = ref.watch(P.app.demoType);
 
-    final currentWorldType = P.rwkv.currentWorldType.q;
-    final imagePath = P.world.imagePath.q;
+    final qw = ref.watch(P.app.qw);
 
-    if (currentWorldType != null && imagePath == null) {
-      await showImageSelector();
-      return;
-    }
-
-    await P.chat.onInputRightButtonPressed();
+    return Positioned(
+      bottom: 0,
+      left: 0,
+      right: 0,
+      child: MeasureSize(
+        onChange: (size) {
+          P.chat.inputHeight.q = size.height;
+        },
+        child: ClipRRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+            child: C(
+              decoration: BD(
+                color: qw.q(.8),
+                border: Border(
+                  top: BorderSide(
+                    color: primary.q(.33),
+                    width: .5,
+                  ),
+                ),
+              ),
+              padding: EI.o(
+                l: 10,
+                r: 10,
+                b: paddingBottom + 12,
+                t: 12,
+              ),
+              child: AnimatedSize(
+                duration: 250.ms,
+                child: Co(
+                  children: [
+                    const _TextField(),
+                    if (demoType != DemoType.tts) const BottomInteractions(),
+                    if (demoType == DemoType.tts) const TTSBottomInteractions(),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
+}
+
+class _TextField extends ConsumerWidget {
+  const _TextField();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final receiving = ref.watch(P.chat.receivingTokens);
-    final canSend = ref.watch(P.chat.canSend);
-    final editingBotMessage = ref.watch(P.chat.editingBotMessage);
-    final color = Theme.of(context).colorScheme.primary;
-    final prefillSpeed = ref.watch(P.rwkv.prefillSpeed);
-    final decodeSpeed = ref.watch(P.rwkv.decodeSpeed);
-    final currentWorldType = ref.watch(P.rwkv.currentWorldType);
-    final demoType = ref.watch(P.app.demoType);
-    final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
-    final reasoning = ref.watch(P.rwkv.reasoning);
     final s = S.of(context);
-    final kB = ref.watch(P.app.qb);
+    final primary = Theme.of(context).colorScheme.primary;
+    final loaded = ref.watch(P.rwkv.loaded);
+    final loading = ref.watch(P.rwkv.loading);
+    final demoType = ref.watch(P.app.demoType);
 
-    return Ro(
-      children: [
-        if (currentWorldType?.isVisualDemo ?? false)
-          GD(
-            onTap: () async {
-              await showImageSelector();
-            },
-            child: C(
-              decoration: BD(
-                color: primaryContainer,
-                border: Border.all(
-                  color: color.q(.5),
-                ),
-                borderRadius: 12.r,
-              ),
-              padding: const EI.o(l: 8, r: 8, t: 8, b: 8),
-              child: T(
-                s.select_new_image,
-                s: TS(c: color),
-              ),
-            ),
+    late final String hintText;
+    switch (demoType) {
+      case DemoType.chat:
+      case DemoType.fifthteenPuzzle:
+      case DemoType.othello:
+      case DemoType.sudoku:
+      case DemoType.world:
+        hintText = s.send_message_to_rwkv;
+      case DemoType.tts:
+        hintText = s.i_want_rwkv_to_say;
+    }
+
+    bool textFieldEnabled = loaded && !loading;
+
+    final borderRadius = demoType != DemoType.tts ? 12.r : 6.r;
+
+    final textInInput = ref.watch(P.chat.textInInput);
+    final intonationShown = ref.watch(P.tts.intonationShown);
+    final keyboardType = intonationShown ? TextInputType.none : TextInputType.multiline;
+
+    final kW = ref.watch(P.app.qw);
+
+    return GD(
+      onTap: textFieldEnabled ? null : _onTapTextFieldWhenItsDisabled,
+      child: TextField(
+        focusNode: P.chat.focusNode,
+        enabled: textFieldEnabled,
+        controller: P.chat.textEditingController,
+        onSubmitted: P.chat.onSubmitted,
+        onChanged: _onChanged,
+        onEditingComplete: P.chat.onEditingComplete,
+        onAppPrivateCommand: _onAppPrivateCommand,
+        onTap: _onTap,
+        onTapOutside: _onTapOutside,
+        keyboardType: keyboardType,
+        enableSuggestions: true,
+        textInputAction: TextInputAction.send,
+        maxLines: 10,
+        minLines: 1,
+        decoration: InputDecoration(
+          contentPadding: const EI.o(
+            l: 12,
+            r: 12,
+            t: 4,
+            b: 4,
           ),
-        if (demoType == DemoType.chat) const ReasonButton(),
-        if (reasoning) 4.w,
-        if (reasoning)
-          if (demoType == DemoType.chat) const ReasoningOptionButton(option: ReasoningOption.language),
-        if (reasoning) 4.w,
-        if (reasoning)
-          if (demoType == DemoType.chat) const ReasoningOptionButton(option: ReasoningOption.pseudo),
-        8.w,
-        Co(
-          c: CAA.start,
-          children: [
-            T("Prefill: ${prefillSpeed.toStringAsFixed(2)} t/s", s: TS(c: kB.q(.6), s: 10)),
-            T("Decode: ${decodeSpeed.toStringAsFixed(2)} t/s", s: TS(c: kB.q(.6), s: 10)),
-          ],
+          fillColor: kW,
+          focusColor: kW,
+          hoverColor: kW,
+          iconColor: kW,
+          border: OutlineInputBorder(
+            borderRadius: borderRadius,
+            borderSide: BorderSide(color: primary.q(.33)),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: borderRadius,
+            borderSide: BorderSide(color: primary.q(.33)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: borderRadius,
+            borderSide: BorderSide(color: primary.q(.33)),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: borderRadius,
+            borderSide: BorderSide(color: primary.q(.33)),
+          ),
+          hintText: hintText,
+          suffixIcon: textInInput.isEmpty
+              ? null
+              : GD(
+                  onTap: () {
+                    P.chat.textEditingController.clear();
+                    P.chat.textInInput.uc();
+                  },
+                  child: const Icon(Icons.clear),
+                ),
         ),
-        const Spacer(),
-        if (receiving)
-          GD(
-            onTap: P.chat.onStopButtonPressed,
-            child: C(
-              decoration: const BD(color: kC),
-              child: Stack(
-                children: [
-                  SizedBox(
-                    width: 46,
-                    height: 34,
-                    child: Center(
-                      child: C(
-                        decoration: BD(color: color, borderRadius: 2.r),
-                        width: 12,
-                        height: 12,
-                      ),
-                    ),
-                  ),
-                  SB(
-                    width: 46,
-                    height: 34,
-                    child: Center(
-                      child: SB(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(
-                          color: color.q(.5),
-                          strokeWidth: 3,
-                          strokeCap: StrokeCap.round,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        if (!receiving)
-          AnimatedOpacity(
-            opacity: canSend ? 1 : .333,
-            duration: 250.ms,
-            child: GD(
-              onTap: _onRightButtonPressed,
-              child: C(
-                padding: const EI.s(h: 10, v: 5),
-                child: Icon(
-                  (Platform.isIOS || Platform.isMacOS)
-                      ? editingBotMessage
-                            ? CupertinoIcons.pencil_circle_fill
-                            : CupertinoIcons.arrow_up_circle_fill
-                      : editingBotMessage
-                      ? Icons.edit
-                      : Icons.send,
-                  color: color,
-                ),
-              ),
-            ),
-          ),
-      ],
+      ),
     );
+  }
+
+  void _onChanged(String value) {}
+
+  void _onTap() async {
+    qq;
+    await Future.delayed(const Duration(milliseconds: 300));
+    await P.chat.scrollToBottom();
+  }
+
+  void _onAppPrivateCommand(String action, Map<String, dynamic> data) {}
+
+  void _onTapOutside(PointerDownEvent event) {}
+
+  void _onKeyEvent(KeyEvent event) {
+    final character = event.character;
+    final isShiftPressed = HardwareKeyboard.instance.isShiftPressed;
+    final isEnterPressed = event.logicalKey == LogicalKeyboardKey.enter && character != null;
+    if (!isEnterPressed) return;
+    if (isShiftPressed) {
+      final currentValue = P.chat.textEditingController.value;
+      if (currentValue.text.trim().isNotEmpty) {
+        P.chat.textEditingController.value = TextEditingValue(text: P.chat.textEditingController.value.text);
+      } else {
+        Alert.warning(S.current.chat_empty_message);
+        P.chat.textEditingController.value = const TextEditingValue(text: "");
+      }
+    } else {
+      P.chat.onInputRightButtonPressed();
+    }
+  }
+
+  void _onTapTextFieldWhenItsDisabled() {
+    qq;
+    if (!checkModelSelection()) return;
   }
 }

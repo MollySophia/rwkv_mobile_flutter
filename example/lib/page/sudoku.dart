@@ -630,7 +630,6 @@ class _Grid extends ConsumerWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final RenderBox renderBox = context.findRenderObject() as RenderBox;
       Offset position = renderBox.localToGlobal(Offset.zero);
-      final drawerWidth = Pager.drawerWidth.q;
       final atMainPage = Pager.atMainPage.q;
       // position = Offset(position.dx - (atMainPage ? drawerWidth : 0), position.dy);
       position = Offset(position.dx - (atMainPage ? 0 : 0), position.dy);

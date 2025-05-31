@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:zone/model/demo_type.dart';
 import 'package:zone/state/p.dart';
+import 'package:zone/widgets/model_selector.dart';
 
 class Empty extends ConsumerWidget {
   const Empty({super.key});
@@ -70,8 +71,7 @@ class Empty extends ConsumerWidget {
                     if (!loaded)
                       TextButton(
                         onPressed: () async {
-                          P.fileManager.modelSelectorShown.q = false;
-                          P.fileManager.modelSelectorShown.q = true;
+                          ModelSelector.show();
                         },
                         child: T(demoType == DemoType.world ? s.select_a_world_type : s.select_a_model, s: const TS(s: 16, w: FW.w600)),
                       ),

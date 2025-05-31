@@ -1,6 +1,7 @@
 // ignore: unused_import
 
 import 'dart:math' as math;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,6 +11,7 @@ import 'package:zone/config.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/demo_type.dart';
 import 'package:zone/model/message.dart' as model;
+import 'package:zone/model/thinking_mode.dart';
 import 'package:zone/state/p.dart';
 import 'package:zone/widgets/chat/branch_switcher.dart';
 
@@ -39,7 +41,6 @@ class BotMessageBottom extends ConsumerWidget {
     bool showBotEditButton = true;
     bool showBotCopyButton = true;
     bool showBotRegenerateButton = true;
-    bool showDownloadButton = false;
     bool showResumeButton = true;
 
     switch (worldType) {
@@ -55,7 +56,6 @@ class BotMessageBottom extends ConsumerWidget {
         showBotEditButton = false;
         showBotCopyButton = false;
         showBotRegenerateButton = false;
-        showDownloadButton = true;
         showResumeButton = false;
       default:
         break;
@@ -66,6 +66,16 @@ class BotMessageBottom extends ConsumerWidget {
       showBotCopyButton = false;
       showBotEditButton = false;
     }
+
+    final thinkingMode = ThinkingMode.fromString(msg.runningMode);
+
+    final modeWidget = switch (thinkingMode) {
+      None() => Padding(
+        padding: const EI.o(v: 4, r: 4, l: 4),
+        child: Icon(CupertinoIcons.zzz, color: primaryColor.q(.8), size: 14),
+      ),
+      _ => const SizedBox.shrink(),
+    };
 
     return Ro(
       m: MAA.start,
@@ -124,6 +134,15 @@ class BotMessageBottom extends ConsumerWidget {
               ),
             ),
           ),
+        if (msg.modelName != null)
+          Padding(
+            padding: const EI.o(v: 12, r: 4, l: 4),
+            child: T(
+              msg.modelName!,
+              s: TS(c: primaryColor.q(.8), s: 12),
+            ),
+          ),
+        modeWidget,
         if (showResumeButton && paused && receiveId == msg.id) const Spacer(),
         if (showResumeButton && paused && receiveId == msg.id)
           GD(
