@@ -522,10 +522,10 @@ packages:
     dependency: "direct dev"
     description:
       name: flutter_lints
-      sha256: "5398f14efa795ffb7a33e9b6a08798b26a180edac4ad7db3f231e40f82ce11e1"
+      sha256: "3105dc8492f6183fb076ccf1f351ac3d60564bff92e20bfc4af9cc1651f4e7e1"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.0"
+    version: "6.0.0"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -657,26 +657,26 @@ packages:
     dependency: "direct main"
     description:
       name: halo
-      sha256: "123dc9c24c3840fb4349ef9bf1d5a0bfff85159b510fcfdbf5693c241ca9fc3e"
+      sha256: c2547c315e17e1069aa4b35ee1bb07361f7d39c82464fa7c2f932584d431e31d
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.2"
+    version: "0.8.0"
   halo_alert:
     dependency: "direct main"
     description:
       name: halo_alert
-      sha256: "6287e6b4e3329a00eaff5795aeee6440adac286c444003debc918fb11a19f4de"
+      sha256: a7edf41b8127a289f47c862ec5439e674b19ebaab74b61e33084c5ac0d623dc1
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.0"
+    version: "0.8.4"
   halo_state:
     dependency: "direct main"
     description:
       name: halo_state
-      sha256: be52942423168bf10575dfa460f17cfcac3292928685bc17132e10961681e846
+      sha256: dece4a8c65daaccd726975edb40496666a173973e0d75ecb2eb823366fa2b0f8
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.2"
+    version: "0.4.1"
   hashcodes:
     dependency: transitive
     description:
@@ -897,10 +897,10 @@ packages:
     dependency: transitive
     description:
       name: lints
-      sha256: c35bb79562d980e9a453fc715854e1ed39e24e7d0297a880ef54e17f9874a9d7
+      sha256: a5e2b223cb7c9c8efdc663ef484fdd95bb243bff242ef5b13e26883547fce9a0
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.1"
+    version: "6.0.0"
   logging:
     dependency: transitive
     description:
@@ -1284,7 +1284,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.1"
+    version: "1.0.0"
   rxdart:
     dependency: transitive
     description:
