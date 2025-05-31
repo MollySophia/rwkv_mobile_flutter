@@ -35,8 +35,6 @@ class BranchSwitcher extends ConsumerWidget {
     final isFirst = indexInBranches == 0;
     final isLast = indexInBranches == branches.length - 1;
 
-    qqq("message: $msg, index: $index");
-
     return C(
       decoration: BD(color: primary.q(.0)),
       child: Stack(
