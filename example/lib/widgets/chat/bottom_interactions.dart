@@ -71,7 +71,7 @@ class _ThinkingModeButton extends ConsumerWidget {
     final primary = Theme.of(context).colorScheme.primary;
     final loading = ref.watch(P.rwkv.loading);
     final qw = ref.watch(P.app.qw);
-    final kB = ref.watch(P.app.qb);
+    final qb = ref.watch(P.app.qb);
 
     final thinkingMode = ref.watch(P.rwkv.thinkingMode);
 
@@ -143,8 +143,8 @@ class _SecondaryOptionsButton extends ConsumerWidget {
     final qw = ref.watch(P.app.qw);
 
     final color = switch (thinkingMode) {
-      thinking_mode.Lighting() => qw,
-      thinking_mode.Free() => qw,
+      thinking_mode.Lighting() => kC,
+      thinking_mode.Free() => kC,
       thinking_mode.None() => primary,
       thinking_mode.PreferChinese() => primary,
     };
