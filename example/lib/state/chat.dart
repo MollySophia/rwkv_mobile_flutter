@@ -531,7 +531,6 @@ extension _$Chat on _Chat {
       qqe("nextIds is empty");
       qqe("next: $next");
       if (!kDebugMode) Sentry.captureException(Exception("nextIds is empty"), stackTrace: StackTrace.current);
-      debugger();
       return;
     }
 
