@@ -72,7 +72,6 @@ class _ThinkingModeButton extends ConsumerWidget {
     final loading = ref.watch(P.rwkv.loading);
     final qw = ref.watch(P.app.qw);
     final qb = ref.watch(P.app.qb);
-
     final thinkingMode = ref.watch(P.rwkv.thinkingMode);
 
     final color = switch (thinkingMode) {
@@ -96,28 +95,35 @@ class _ThinkingModeButton extends ConsumerWidget {
       thinking_mode.PreferChinese() => qw,
     };
 
+    final textScaleFactor = MediaQuery.textScalerOf(context);
+    final height = textScaleFactor.scale(14) + 20;
+    final padding = EI.s(h: 8);
+
     return IntrinsicWidth(
       child: AnimatedOpacity(
         opacity: loading ? .33 : 1,
         duration: 250.ms,
         child: GD(
           onTap: _onTap,
-          child: C(
-            decoration: BD(
-              color: color,
-              border: Border.all(color: borderColor),
-              borderRadius: 10.r,
-            ),
-            padding: const EI.o(l: 8, r: 8, t: 9, b: 9),
-            child: Row(
-              children: [
-                Icon(Icons.lightbulb_outline, color: textColor, size: 14),
-                2.w,
-                T(
-                  s.reason,
-                  s: TS(c: textColor, s: 14, height: 1, w: FontWeight.w500),
-                ),
-              ],
+          child: SB(
+            height: height,
+            child: C(
+              padding: padding,
+              decoration: BD(
+                color: color,
+                border: Border.all(color: borderColor),
+                borderRadius: 10.r,
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.lightbulb_outline, color: textColor, size: 18),
+                  2.w,
+                  T(
+                    s.reason,
+                    s: TS(c: textColor, s: 14, height: 1, w: FontWeight.w500),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -164,12 +170,9 @@ class _SecondaryOptionsButton extends ConsumerWidget {
     };
 
     final iconWidget = switch (thinkingMode) {
-      thinking_mode.Free() => Icon(Icons.translate, color: textColor, size: 14),
-      thinking_mode.PreferChinese() => Icon(Icons.translate, color: textColor, size: 14),
-      _ => Padding(
-        padding: const EI.o(l: 4, r: 4, t: 2, b: 2),
-        child: Icon(CupertinoIcons.zzz, color: textColor, size: 18),
-      ),
+      thinking_mode.Free() => Icon(Icons.translate, color: textColor, size: 18),
+      thinking_mode.PreferChinese() => Icon(Icons.translate, color: textColor, size: 18),
+      _ => Icon(CupertinoIcons.zzz, color: textColor, size: 18),
     };
 
     final textWidget = switch (thinkingMode) {
@@ -177,6 +180,7 @@ class _SecondaryOptionsButton extends ConsumerWidget {
       thinking_mode.None() => null,
       _ => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MAA.center,
         children: [
           T(s.prefer, s: TS(c: textColor, s: 10, height: 1)),
           2.h,
@@ -185,9 +189,9 @@ class _SecondaryOptionsButton extends ConsumerWidget {
       ),
     };
 
-    final buttonPadding = switch (thinkingMode) {
-      _ => const EI.s(h: 8, v: 5),
-    };
+    final textScaleFactor = MediaQuery.textScalerOf(context);
+    final height = textScaleFactor.scale(14) + 20;
+    final padding = EI.s(h: 8);
 
     return AnimatedSize(
       key: Key("_SecondaryOptionsButton"),
@@ -200,14 +204,15 @@ class _SecondaryOptionsButton extends ConsumerWidget {
           child: GD(
             onTap: _onTap,
             child: AnimatedContainer(
+              height: height,
               duration: 150.ms,
               curve: Curves.easeOutCubic,
+              padding: padding,
               decoration: BD(
                 color: color,
                 border: Border.all(color: borderColor),
                 borderRadius: 10.r,
               ),
-              padding: buttonPadding,
               child: Row(
                 children: [
                   iconWidget,
