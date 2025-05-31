@@ -18,9 +18,7 @@
       "program": "lib/main.dart",
       "flutterMode": "debug",
       "args": [
-        "--dart-define=maxTokens=100",
         "--dart-define=enableMsgTree=true",
-        "--dart-define=disableRemoteConfig=true",
       ]
     },
     {

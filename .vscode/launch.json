@@ -17,7 +17,9 @@
       "type": "dart",
       "program": "example/lib/main.dart",
       "flutterMode": "debug",
-      "args": []
+      "args": [
+        "--dart-define=enableMsgTree=true",
+      ]
     },
     {
       "name": "debug (Molly)",
