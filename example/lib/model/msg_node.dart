@@ -42,4 +42,16 @@ final class MsgNode {
     }
     return msgIds;
   }
+
+  List<int> get latestMsgIds {
+    final msgIds = <int>[];
+    var current = root?.latest;
+    while (current != null) {
+      if (current.children.isNotEmpty) assert(current.latest != null);
+      if (current.children.isNotEmpty) assert(current.children.contains(current.latest));
+      msgIds.add(current.id);
+      current = current.latest;
+    }
+    return msgIds;
+  }
 }
