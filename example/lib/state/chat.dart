@@ -109,7 +109,6 @@ extension $Chat on _Chat {
         newBotMessage,
       ];
       messages.q = newMessages;
-      P.conversation.updateMessages(newMessages);
       editingIndex.q = null;
       Alert.success(S.current.bot_message_edited);
       return;
@@ -243,7 +242,6 @@ extension $Chat on _Chat {
       // 将 editingIndex, 及 editingIndex 之后的消息都删掉
       // TODO: 分叉
       messages.q = messagesWithoutEditing;
-      if (Config.enableConversation) P.conversation.updateMessages(messagesWithoutEditing);
     }
 
     late final Message? msg;
@@ -264,7 +262,6 @@ extension $Chat on _Chat {
         paused: false,
       );
       messages.ua(msg);
-      // if (Config.enableConversation) P.conversation.updateMessages([...messages.q, msg]);
     } else {
       msg = null;
     }
@@ -280,7 +277,6 @@ extension $Chat on _Chat {
 
     // if (Config.enableConversation) {
     //   try {
-    //     P.conversation.addMessage(msg);
     //   } catch (e) {
     //     qqe(e);
     //   }
@@ -319,7 +315,6 @@ extension $Chat on _Chat {
     );
 
     messages.ua(receiveMsg);
-    P.conversation.updateMessages([...messages.q, receiveMsg]);
 
     _checkSensitive(message);
   }
@@ -730,7 +725,6 @@ extension _$Chat on _Chat {
       }
     }
     messages.q = currentMessages;
-    P.conversation.updateMessages(currentMessages);
   }
 
   @Deprecated("Use _onStreamEvent instead")

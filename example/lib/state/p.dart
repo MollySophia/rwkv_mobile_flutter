@@ -48,6 +48,7 @@ import 'package:zone/model/language.dart';
 import 'package:zone/model/local_file.dart';
 import 'package:zone/model/message.dart';
 import 'package:zone/model/message_chain.dart';
+import 'package:zone/model/msg_node.dart';
 import 'package:zone/model/thinking_mode.dart';
 import 'package:zone/model/tts_instruction.dart';
 import 'package:zone/model/world_type.dart';
@@ -66,7 +67,6 @@ part "othello.dart";
 part "file_manager.dart";
 part "device.dart";
 part "adapter.dart";
-part "debugger.dart";
 part "world.dart";
 part "conversation.dart";
 part "networking.dart";
@@ -85,7 +85,6 @@ abstract class P {
   static final fileManager = _FileManager();
   static final device = _Device();
   static final adapter = _Adapter();
-  static final debugger = _Debugger();
   static final world = _World();
   static final conversation = _Conversation();
   static final tts = _TTS();
@@ -110,7 +109,6 @@ abstract class P {
       fileManager._init(),
       device._init(),
       adapter._init(),
-      debugger._init(),
       world._init(),
       conversation._init(),
       tts._init(),

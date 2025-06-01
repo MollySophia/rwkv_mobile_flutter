@@ -21,18 +21,11 @@ class BottomInteractions extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EI.o(t: 8),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final width = constraints.maxWidth;
-          qqr(width);
-          return Row(
-            mainAxisAlignment: MAA.spaceBetween,
-            children: [
-              Expanded(child: const _Interactions()),
-              const _MessageButton(),
-            ],
-          );
-        },
+      child: Row(
+        children: const [
+          Expanded(child: _Interactions()),
+          _MessageButton(),
+        ],
       ),
     );
   }
