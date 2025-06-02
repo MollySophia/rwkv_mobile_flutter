@@ -75,6 +75,7 @@ part "guard.dart";
 part "sudoku.dart";
 part "suggestion.dart";
 part "dump.dart";
+part "msg.dart";
 
 abstract class P {
   static final app = _App();
@@ -92,6 +93,7 @@ abstract class P {
   static final sudoku = _Sudoku();
   static final suggestion = _Suggestion();
   static final dump = _Dump();
+  static final msg = _Msg();
 
   static FV init() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -115,6 +117,7 @@ abstract class P {
       sudoku._init(),
       suggestion._init(),
       dump._init(),
+      msg._init(),
     ]);
   }
 }

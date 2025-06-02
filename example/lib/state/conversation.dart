@@ -130,7 +130,6 @@ extension $Conversation on _Conversation {
     if (!Config.enableConversation) return;
     current.q = conversation;
     Pager.toggle();
-    P.chat.loadConversation(conversation);
   }
 
   FV updateMessages(List<Message> messages) async {

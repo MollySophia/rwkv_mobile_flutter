@@ -324,7 +324,7 @@ class _Actions extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ttsDone = ref.watch(P.tts.ttsDone);
     final canSend = ref.watch(P.chat.inputHasContent);
-    final editingBotMessage = ref.watch(P.chat.editingBotMessage);
+    final editingBotMessage = ref.watch(P.msg.editingBotMessage);
     final color = Theme.of(context).colorScheme.primary;
     final loaded = ref.watch(P.rwkv.loaded);
     final interactingInstruction = ref.watch(P.tts.interactingInstruction);
@@ -537,7 +537,7 @@ class _SpkPanel extends ConsumerWidget {
                         GD(
                           onTap: () async {
                             final path = await P.tts.getPrebuiltSpkAudioPathFromTemp(k);
-                            P.chat.latestClickedMessage.q = null;
+                            P.msg.latestClicked.q = null;
                             await P.world.play(path: path);
                           },
                           child: C(

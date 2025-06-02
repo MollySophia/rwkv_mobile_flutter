@@ -256,7 +256,7 @@ class _SelectImageButton extends ConsumerWidget {
 class _MessageButton extends ConsumerWidget {
   const _MessageButton();
 
-  void _onRightButtonPressed() async {
+  void _onPressed() async {
     qq;
 
     final currentWorldType = P.rwkv.currentWorldType.q;
@@ -268,14 +268,14 @@ class _MessageButton extends ConsumerWidget {
       return;
     }
 
-    await P.chat.onInputRightButtonPressed();
+    await P.chat.onSendButtonPressed();
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final receiving = ref.watch(P.chat.receivingTokens);
     final canSend = ref.watch(P.chat.inputHasContent);
-    final editingBotMessage = ref.watch(P.chat.editingBotMessage);
+    final editingBotMessage = ref.watch(P.msg.editingBotMessage);
     final color = Theme.of(context).colorScheme.primary;
 
     if (!receiving) {
@@ -283,7 +283,7 @@ class _MessageButton extends ConsumerWidget {
         opacity: canSend ? 1 : .333,
         duration: 250.ms,
         child: GD(
-          onTap: _onRightButtonPressed,
+          onTap: _onPressed,
           child: C(
             padding: const EI.s(h: 10, v: 5),
             child: Icon(

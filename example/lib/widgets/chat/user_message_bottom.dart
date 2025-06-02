@@ -61,7 +61,7 @@ class UserMessageBottom extends ConsumerWidget {
         showUserCopyButton = false;
     }
 
-    final latestClickedMessage = ref.watch(P.chat.latestClickedMessage);
+    final latestClickedMessage = ref.watch(P.msg.latestClicked);
     final playing = ref.watch(P.world.playing);
     final isCurrentMessage = latestClickedMessage?.id == msg.id;
 
@@ -130,7 +130,7 @@ class UserMessageBottom extends ConsumerWidget {
 
   void _onTTSPlayPressed() {
     qq;
-    P.chat.latestClickedMessage.q = msg;
+    P.msg.latestClicked.q = msg;
     P.world.play(path: msg.audioUrl!);
   }
 

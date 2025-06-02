@@ -2,6 +2,8 @@
 final class MsgNode {
   int id;
   List<MsgNode> children;
+
+  /// 当前节点, 最新的子节点
   MsgNode? latest;
   MsgNode? parent;
   MsgNode? root;
@@ -77,7 +79,7 @@ final class MsgNode {
   List<int> get latestMsgIds {
     final msgIds = <int>[];
     // Correctly starts from 'this' node if 'this' is root and its 'root' field is null.
-    MsgNode? current = (this.root?.latest) ?? this;
+    MsgNode? current = (root?.latest) ?? this;
     while (current != null) {
       msgIds.add(current.id);
       current = current.latest;
@@ -85,11 +87,16 @@ final class MsgNode {
     return msgIds;
   }
 
+  List<int> get latestMsgIdsWithoutRoot {
+    return latestMsgIds.where((e) => e != 0).toList();
+  }
+
   int get wholeLatestMsgId {
     // Changed to non-nullable as wholeLatestNode ensures a node.
     return wholeLatestNode.id;
   }
 
+  /// 当前消息树, 最后一次被添加消息的节点
   MsgNode get wholeLatestNode {
     MsgNode current = root ?? this; // Start from root, or this if no root.
     while (current.latest != null) {

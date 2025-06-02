@@ -1,8 +1,6 @@
 // ignore: unused_import
 import 'dart:developer';
 
-import 'package:halo_state/halo_state.dart';
-import 'package:zone/args.dart';
 import 'package:zone/model/demo_type.dart';
 import 'package:zone/model/message.dart' as model;
 import 'package:zone/model/world_type.dart';
@@ -45,7 +43,7 @@ class _Page extends ConsumerWidget {
       backgroundColor: kW,
       body: Stack(
         children: [
-          List(),
+          _List(),
           Empty(),
           VisualEmpty(),
           AudioEmpty(),
@@ -82,12 +80,12 @@ class _NavigationBarBottomLine extends ConsumerWidget {
 
 final GlobalKey keyChatList = GlobalKey(debugLabel: "chatListShot");
 
-class List extends ConsumerWidget {
-  const List({super.key});
+class _List extends ConsumerWidget {
+  const _List();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final messages = ref.watch(P.chat.messages);
+    final messages = ref.watch(P.msg.list);
     final paddingTop = ref.watch(P.app.paddingTop);
     final paddingLeft = ref.watch(P.app.paddingLeft);
     final paddingRight = ref.watch(P.app.paddingRight);

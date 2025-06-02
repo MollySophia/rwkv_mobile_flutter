@@ -33,21 +33,9 @@ class _Chat {
 
   late final receiveId = qs<int?>(null);
 
-  late final editingIndex = qs<int?>(null);
-
-  late final editingBotMessage = qp<bool>((ref) {
-    final editingIndex = ref.watch(this.editingIndex);
-    if (editingIndex == null) return false;
-    return messages.q[editingIndex].isMine == false;
-  });
-
-  late final latestClickedMessage = qs<Message?>(null);
-
   late final hasFocus = qs(false);
 
   late final autoPauseId = qs<int?>(null);
-
-  late final messages = qs<List<Message>>([]);
 
   late final _sensitiveThrottler = Throttler(milliseconds: 333, trailing: true);
 }
@@ -55,10 +43,10 @@ class _Chat {
 /// Public methods
 extension $Chat on _Chat {
   void clearMessages() {
-    messages.uc();
+    P.msg.clear();
   }
 
-  FV onInputRightButtonPressed() async {
+  FV onSendButtonPressed() async {
     qq;
     if (!checkModelSelection()) return;
 
@@ -71,28 +59,34 @@ extension $Chat on _Chat {
     final textToSend = textInInput.q.trim();
     textInInput.uc();
 
-    final _editingBotMessage = editingBotMessage.q;
+    final _editingBotMessage = P.msg.editingBotMessage.q;
+
     if (_editingBotMessage) {
-      // final currentMessages = [...messages.q];
-      final _editingIndex = editingIndex.q!;
       final id = HF.debugShorterUS;
-      final newBotMessage = Message(
+      final currentMessages = [...P.msg.list.q];
+      final _editingIndex = P.msg.editingOrRegeneratingIndex.q!;
+      final currentMessage = currentMessages[_editingIndex];
+
+      final newMsg = Message(
         id: id,
         content: textToSend,
         isMine: false,
         changing: false,
-        isReasoning: messages.q[_editingIndex].isReasoning,
-        paused: messages.q[_editingIndex].paused,
-        modelName: messages.q[_editingIndex].modelName,
-        runningMode: messages.q[_editingIndex].runningMode,
+        isReasoning: currentMessage.isReasoning,
+        paused: currentMessage.paused,
+        modelName: currentMessage.modelName,
+        runningMode: currentMessage.runningMode,
       );
-      // currentMessages.replaceRange(_editingIndex, _editingIndex + 1, [newBotMessage]);
-      final newMessages = [
-        ...messages.q.sublist(0, _editingIndex),
-        newBotMessage,
-      ];
-      messages.q = newMessages;
-      editingIndex.q = null;
+
+      P.msg.pool.q = {...P.msg.pool.q, id: newMsg};
+      final userMsgNode = P.msg._msgNode.findParentByMsgId(currentMessage.id);
+      if (userMsgNode == null) {
+        qqe("We should found a user message node before a bot message node");
+        return;
+      }
+      userMsgNode.add(MsgNode(id));
+      P.msg.ids.q = P.msg._msgNode.latestMsgIdsWithoutRoot;
+      P.msg.editingOrRegeneratingIndex.q = null;
       Alert.success(S.current.bot_message_edited);
       return;
     }
@@ -104,7 +98,7 @@ extension $Chat on _Chat {
     qq;
   }
 
-  FV onSubmitted(String aString) async {
+  FV onKeyboardSubmitted(String aString) async {
     qqq(aString);
 
     final receivingTokens = P.chat.receivingTokens.q;
@@ -130,9 +124,9 @@ extension $Chat on _Chat {
     qq;
     P.chat.focusNode.unfocus();
     P.tts.dismissAllShown();
-    final _editingIndex = P.chat.editingIndex.q;
+    final _editingIndex = P.msg.editingOrRegeneratingIndex.q;
     if (_editingIndex == null) return;
-    editingIndex.q = null;
+    P.msg.editingOrRegeneratingIndex.q = null;
     textEditingController.value = const TextEditingValue(text: "");
   }
 
@@ -140,31 +134,31 @@ extension $Chat on _Chat {
     qq;
     textEditingController.clear();
     textInInput.uc();
-    editingIndex.q = null;
+    P.msg.editingOrRegeneratingIndex.q = null;
   }
 
   FV onTapEditInUserMessageBubble({required int index}) async {
     if (!checkModelSelection()) return;
-    final content = messages.q[index].content;
+    final content = P.msg.list.q[index].content;
     textEditingController.value = TextEditingValue(text: content);
     focusNode.requestFocus();
-    editingIndex.q = index;
+    P.msg.editingOrRegeneratingIndex.q = index;
   }
 
   FV onTapEditInBotMessageBubble({required int index}) async {
     if (!checkModelSelection()) return;
-    final content = messages.q[index].content;
+    final content = P.msg.list.q[index].content;
     textEditingController.value = TextEditingValue(text: content);
     focusNode.requestFocus();
-    editingIndex.q = index;
+    P.msg.editingOrRegeneratingIndex.q = index;
   }
 
   FV onRegeneratePressed({required int index}) async {
     qqq("index: $index");
     if (!checkModelSelection()) return;
 
-    final userMessage = messages.q[index - 1];
-    editingIndex.q = index;
+    final userMessage = P.msg.list.q[index - 1];
+    P.msg.editingOrRegeneratingIndex.q = index;
     textInInput.uc();
     focusNode.unfocus();
     if (userMessage.type == MessageType.userAudio) {
@@ -202,8 +196,8 @@ extension $Chat on _Chat {
     if (receivingTokens.q) await onStopButtonPressed();
     await Future.delayed(100.ms);
     Alert.success(S.current.new_chat_started);
+    P.msg.clear();
     P.rwkv.clearStates();
-    messages.uc();
   }
 
   FV send(
@@ -215,24 +209,38 @@ extension $Chat on _Chat {
     bool withHistory = true,
     bool isRegenerate = false,
   }) async {
-    qqq("message: $message");
+    MsgNode? parentNode = P.msg._msgNode.wholeLatestNode;
 
-    final _editingIndex = editingIndex.q;
-    if (_editingIndex != null) {
-      qqq("editingIndex: $_editingIndex");
-      assert(_editingIndex >= 0 && _editingIndex < messages.q.length);
-      final messagesWithoutEditing = messages.q.sublist(0, _editingIndex);
-      // 将 editingIndex, 及 editingIndex 之后的消息都删掉
-      // TODO: 分叉
-      messages.q = messagesWithoutEditing;
+    final editingOrRegeneratingIndex = P.msg.editingOrRegeneratingIndex.q;
+    if (editingOrRegeneratingIndex != null) {
+      final currentMessage = P.msg.findByIndex(editingOrRegeneratingIndex);
+      if (currentMessage == null) {
+        qqe("currentMessage is null");
+        return;
+      }
+
+      if (isRegenerate) {
+        parentNode = P.msg._msgNode.findNodeByMsgId(currentMessage.id);
+      } else {
+        // 以该消息的父节点作为新消息的父结点
+        parentNode = P.msg._msgNode.findParentByMsgId(currentMessage.id);
+      }
+
+      if (parentNode == null) {
+        qqe("parentNode is null");
+        return;
+      }
     }
 
     late final Message? msg;
 
     final id = HF.debugShorterUS;
-    final receiveId = HF.debugShorterUS + 1;
 
-    if (!isRegenerate) {
+    if (isRegenerate) {
+      // 重新生成 Bot 消息, 所以, 不添加新的用户消息
+      msg = null;
+    } else {
+      // 新增或编辑了用户消息
       msg = Message(
         id: id,
         content: message,
@@ -244,9 +252,9 @@ extension $Chat on _Chat {
         isReasoning: false,
         paused: false,
       );
-      messages.ua(msg);
-    } else {
-      msg = null;
+      P.msg.pool.q = {...P.msg.pool.q, id: msg};
+      parentNode = parentNode.add(MsgNode(id));
+      P.msg.ids.q = P.msg._msgNode.latestMsgIdsWithoutRoot;
     }
 
     Future.delayed(34.ms).then((_) {
@@ -258,14 +266,7 @@ extension $Chat on _Chat {
       return;
     }
 
-    // if (Config.enableConversation) {
-    //   try {
-    //   } catch (e) {
-    //     qqe(e);
-    //   }
-    // }
-
-    final historyMessage = messages.q
+    final historyMessage = P.msg.list.q
         .where((e) {
           return e.type != MessageType.userImage;
         })
@@ -280,10 +281,12 @@ extension $Chat on _Chat {
     final history = withHistory ? historyMessage : [message];
 
     P.rwkv.sendMessages(history);
-    editingIndex.q = null;
+    P.msg.editingOrRegeneratingIndex.q = null;
 
-    receivedTokens.uc();
+    receivedTokens.q = "";
     receivingTokens.q = true;
+
+    final receiveId = HF.debugShorterUS + 1;
 
     this.receiveId.q = receiveId;
     final receiveMsg = Message(
@@ -297,7 +300,9 @@ extension $Chat on _Chat {
       runningMode: P.rwkv.thinkingMode.q.toString(),
     );
 
-    messages.ua(receiveMsg);
+    P.msg.pool.q[receiveId] = receiveMsg;
+    parentNode.add(MsgNode(receiveId));
+    P.msg.ids.q = P.msg._msgNode.latestMsgIdsWithoutRoot;
 
     _checkSensitive(message);
   }
@@ -312,14 +317,6 @@ extension $Chat on _Chat {
       return;
     }
     _pauseMessageById(id: id);
-  }
-
-  FV loadConversation(Conversation? conversation) async {
-    if (conversation == null) {
-      messages.uc();
-      return;
-    }
-    messages.q = conversation.messages;
   }
 
   FV resumeMessageById({required int id, bool withHaptic = true}) async {
@@ -370,8 +367,6 @@ extension _$Chat on _Chat {
 
     P.app.lifecycleState.lb(_onLifecycleStateChanged);
 
-    messages.lb(_onMessagesChanged);
-
     P.preference.preferredLanguage.lv(P.suggestion.loadSuggestions);
   }
 
@@ -388,18 +383,6 @@ extension _$Chat on _Chat {
     await Future.delayed(1.ms);
 
     _pauseMessageById(id: id, isSensitive: true);
-  }
-
-  void _onMessagesChanged(List<Message>? previous, List<Message> next) {
-    // TODO: Implement
-  }
-
-  void _syncBranchesCountList() {
-    // TODO: Implement
-  }
-
-  void _syncChains(List<Message>? previous, List<Message> next) {
-    // TODO: Implement
   }
 
   void _onLifecycleStateChanged(AppLifecycleState? previous, AppLifecycleState next) {
@@ -420,7 +403,7 @@ extension _$Chat on _Chat {
   }
 
   List<String> _history() {
-    final history = messages.q.where((msg) => msg.type == MessageType.text).m((e) {
+    final history = P.msg.list.q.where((msg) => msg.type == MessageType.text).m((e) {
       if (!e.isReasoning) return e.content;
       if (!e.isCotFormat) return e.content;
       if (!e.containsCotEndMark) return e.content;
@@ -438,7 +421,7 @@ extension _$Chat on _Chat {
 
     P.rwkv.stop();
 
-    final msg = messages.q.firstWhereOrNull((e) => e.id == id);
+    final msg = P.msg.pool.q[id];
     if (msg == null) {
       qqw("message not found");
       return;
@@ -449,13 +432,8 @@ extension _$Chat on _Chat {
       return;
     }
 
-    final newMessages = messages.q.map((e) {
-      if (e.id == id) {
-        return e.copyWith(paused: true, isSensitive: isSensitive);
-      }
-      return e;
-    }).toList();
-    messages.q = newMessages;
+    final newMsg = msg.copyWith(paused: true, isSensitive: isSensitive);
+    P.msg.pool.q = {...P.msg.pool.q, id: newMsg};
   }
 
   FV _onFocusNodeChanged() async {
@@ -491,7 +469,7 @@ extension _$Chat on _Chat {
   void _onPageKeyChanged(PageKey pageKey) {
     qqq("_onPageKeyChanged: $pageKey");
     Future.delayed(200.ms).then((_) {
-      messages.uc();
+      P.msg.clear();
     });
 
     if (!checkModelSelection()) return;
@@ -547,40 +525,28 @@ extension _$Chat on _Chat {
     List<double>? ttsPerWavProgress,
     List<String>? ttsFilePaths,
   }) {
-    final currentMessages = [...messages.q];
-    bool found = false;
-
-    for (var i = 0; i < currentMessages.length; i++) {
-      final msg = currentMessages[i];
-      if (msg.id == id) {
-        final newMsg = msg.copyWith(
-          content: content,
-          isMine: isMine,
-          changing: changing,
-          type: type,
-          imageUrl: imageUrl,
-          audioUrl: audioUrl,
-          audioLength: audioLength,
-          isReasoning: isReasoning,
-          paused: paused,
-          isSensitive: isSensitive,
-          ttsOverallProgress: ttsOverallProgress,
-          ttsPerWavProgress: ttsPerWavProgress,
-          ttsFilePaths: ttsFilePaths,
-        );
-        currentMessages.replaceRange(i, i + 1, [newMsg]);
-        found = true;
-        break;
-      }
-    }
-
-    if (!found) {
+    final msg = P.msg.pool.q[id];
+    if (msg == null) {
       qqe("message not found");
-      if (!kDebugMode) {
-        Sentry.captureException(Exception("message not found, callingFunction: $callingFunction"), stackTrace: StackTrace.current);
-      }
+      Sentry.captureException(Exception("message not found, callingFunction: $callingFunction"), stackTrace: StackTrace.current);
+      return;
     }
-    messages.q = currentMessages;
+    final newMsg = msg.copyWith(
+      content: content,
+      isMine: isMine,
+      changing: changing,
+      type: type,
+      imageUrl: imageUrl,
+      audioUrl: audioUrl,
+      audioLength: audioLength,
+      isReasoning: isReasoning,
+      paused: paused,
+      isSensitive: isSensitive,
+      ttsOverallProgress: ttsOverallProgress,
+      ttsPerWavProgress: ttsPerWavProgress,
+      ttsFilePaths: ttsFilePaths,
+    );
+    P.msg.pool.q = {...P.msg.pool.q, id: newMsg};
   }
 
   @Deprecated("Use _onStreamEvent instead")

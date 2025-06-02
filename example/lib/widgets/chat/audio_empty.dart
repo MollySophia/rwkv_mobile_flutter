@@ -38,7 +38,7 @@ class AudioEmpty extends ConsumerWidget {
         return Positioned(child: IgnorePointer(child: C()));
     }
 
-    final messages = ref.watch(P.chat.messages);
+    final messages = ref.watch(P.msg.list);
 
     bool show = true;
     if (messages.isNotEmpty) {

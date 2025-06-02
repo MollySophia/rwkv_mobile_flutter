@@ -52,7 +52,7 @@ class Message extends ConsumerWidget {
     P.chat.focusNode.unfocus();
     P.tts.dismissAllShown();
 
-    P.chat.latestClickedMessage.q = msg;
+    P.msg.latestClicked.q = msg;
 
     if (msg.type == model.MessageType.userAudio) {
       final audioUrl = msg.audioUrl;
@@ -95,7 +95,7 @@ class Message extends ConsumerWidget {
     final received = ref.watch(P.chat.receivedTokens.select((v) => msg.changing ? v : ""));
     final cotDisplayState = ref.watch(P.chat.cotDisplayState(msg.id));
 
-    final editingIndex = ref.watch(P.chat.editingIndex);
+    final editingIndex = ref.watch(P.msg.editingOrRegeneratingIndex);
 
     final receiveId = ref.watch(P.chat.receiveId);
     final receiving = ref.watch(P.chat.receivingTokens);
