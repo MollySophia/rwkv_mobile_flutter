@@ -49,19 +49,6 @@ class _Chat {
 
   late final messages = qs<List<Message>>([]);
 
-  /// 用于实现 DeepSeek 的 “分叉对话” 功能
-  ///
-  /// TODO: 想办法存到聊天记录中
-  late final currentChain = qs(const MessageChain(ids: []));
-
-  /// 用于实现 DeepSeek 的 “分叉对话” 功能
-  late final chains = qs({const MessageChain(ids: [])});
-
-  /// 用于在切换分叉时, 如果同一层级有多个分叉, 能切回原先的分叉
-  late final chainSwitchingHistory = qs<List<MessageChain>>([]);
-
-  late final branchesCountList = qs<List<List<int>>>([]);
-
   late final _sensitiveThrottler = Throttler(milliseconds: 333, trailing: true);
 }
 
@@ -69,10 +56,6 @@ class _Chat {
 extension $Chat on _Chat {
   void clearMessages() {
     messages.uc();
-    branchesCountList.uc();
-    chainSwitchingHistory.uc();
-    currentChain.q = const MessageChain(ids: []);
-    chains.q = {const MessageChain(ids: [])};
   }
 
   FV onInputRightButtonPressed() async {
@@ -352,53 +335,7 @@ extension $Chat on _Chat {
   }
 
   void onTapSwitchAtIndex(int index, {required bool isBack, required Message msg}) {
-    qq;
-    final branches = P.chat.branchesCountList.q[index];
-    if (branches.length <= 1) {
-      qqw("No branches to switch");
-      return;
-    }
-    final isFirstMessageSwitching = index == 0;
-    final currentChain = this.currentChain.q;
-    final previousMessageId = isFirstMessageSwitching ? null : currentChain.ids[index - 1];
-    final history = chainSwitchingHistory.q.reversed;
-
-    MessageChain? targetChain;
-
-    if (previousMessageId == null) {
-      targetChain = history.firstWhereOrNull((e) => e != currentChain);
-      if (targetChain == null) {
-        qqw("When switching the first message, no target chain found in history");
-        return;
-      }
-      this.currentChain.q = targetChain;
-      chainSwitchingHistory.ua(targetChain);
-      return;
-    }
-
-    targetChain = history.firstWhereOrNull((e) => e.ids[index - 1] == previousMessageId && e != currentChain);
-    if (targetChain != null) {
-      qqr("Found target chain in history");
-      this.currentChain.q = targetChain;
-      chainSwitchingHistory.ua(targetChain);
-      return;
-    } else {
-      qqw("No target chain found in history");
-    }
-
-    // 如果找不到, 则从 chains 中找
-    targetChain = chains.q.firstWhereOrNull((e) => e.ids[index - 1] == previousMessageId && e != currentChain);
-    if (targetChain != null) {
-      qqr("Found target chain in chains");
-      this.currentChain.q = targetChain;
-      chainSwitchingHistory.ua(targetChain);
-      return;
-    } else {
-      qqw("No target chain found in chains");
-    }
-
-    qqe("No target chain found");
-    if (!kDebugMode) Sentry.captureException(Exception("No target chain found"), stackTrace: StackTrace.current);
+    // TODO: Implement
   }
 }
 
@@ -434,8 +371,6 @@ extension _$Chat on _Chat {
     P.app.lifecycleState.lb(_onLifecycleStateChanged);
 
     messages.lb(_onMessagesChanged);
-    if (Config.enableChain) chains.lv(_syncBranchesCountList);
-    if (Config.enableChain) currentChain.lv(_syncBranchesCountList);
 
     P.preference.preferredLanguage.lv(P.suggestion.loadSuggestions);
   }
@@ -456,94 +391,15 @@ extension _$Chat on _Chat {
   }
 
   void _onMessagesChanged(List<Message>? previous, List<Message> next) {
-    if (Config.enableChain) _syncChains(previous, next);
+    // TODO: Implement
   }
 
   void _syncBranchesCountList() {
-    final chains = this.chains.q;
-    final currentChain = this.currentChain.q;
-    final List<List<int>> newValue = [];
-    final currentMessageIds = currentChain.ids;
-    for (var i = 0; i < currentMessageIds.length; i++) {
-      if (i == 0) {
-        final firstBranchIds = chains.m((e) => e.ids.first).toSet().sorted((a, b) => a.compareTo(b));
-        newValue.add(firstBranchIds);
-        continue;
-      }
-      // 获取上一个消息的 id
-      final previousMessageId = currentMessageIds[i - 1];
-      // 遍历所有消息链, 获取所有上一个消息的 id 等于 previousMessageId 的消息链
-      final branchIds = chains
-          .where((e) => e.ids[i - 1] == previousMessageId)
-          .map((e) => e.ids[i])
-          .sorted((a, b) => a.compareTo(b))
-          .toList();
-      newValue.add(branchIds);
-    }
-    if (listEquals(branchesCountList.q, newValue)) return;
-    branchesCountList.q = newValue;
+    // TODO: Implement
   }
 
   void _syncChains(List<Message>? previous, List<Message> next) {
-    qq;
-    if (previous == null) {
-      qqe("previous is null");
-      if (!kDebugMode) Sentry.captureException(Exception("previous is null"), stackTrace: StackTrace.current);
-      return;
-    }
-
-    final previousIds = previous.map((e) => e.id).toList();
-    final nextIds = next.map((e) => e.id).toList();
-    final previousLength = previous.length;
-    final nextLength = next.length;
-
-    if (listEquals(previousIds, nextIds)) return;
-
-    // Add a new chain
-    if (previousLength == 0 && nextLength == 1) {
-      final firstId = nextIds.first;
-      final chain = MessageChain(ids: [firstId]);
-      this.chains.q = {chain};
-      this.currentChain.q = chain;
-      return;
-    }
-
-    // 是否应该消息分叉?
-    final shouldCreateNewBranch = nextLength <= previousLength;
-
-    final chains = this.chains.q;
-    final currentChain = this.currentChain.q;
-
-    if (!chains.contains(currentChain)) {
-      qqe("currentChain not found in chains");
-      if (!kDebugMode) Sentry.captureException(Exception("currentChain not found in chains"), stackTrace: StackTrace.current);
-      return;
-    }
-
-    late final MessageChain newChain;
-
-    if (nextIds.isEmpty) {
-      qqe("nextIds is empty");
-      qqe("next: $next");
-      if (!kDebugMode) Sentry.captureException(Exception("nextIds is empty"), stackTrace: StackTrace.current);
-      return;
-    }
-
-    final latestId = nextIds.last;
-
-    if (shouldCreateNewBranch) {
-      newChain = currentChain.addAt(latestId, nextLength - 1);
-    } else {
-      newChain = currentChain.add(latestId);
-    }
-
-    if (!shouldCreateNewBranch) chains.remove(currentChain);
-    chains.add(newChain);
-
-    if (!setEquals(this.chains.q, chains)) this.chains.q = chains;
-    this.currentChain.q = newChain;
-
-    qqq("chains count: ${this.chains.q.length}, currentChain length: ${this.currentChain.q.ids.length}");
+    // TODO: Implement
   }
 
   void _onLifecycleStateChanged(AppLifecycleState? previous, AppLifecycleState next) {

@@ -433,9 +433,7 @@ class Message extends ConsumerWidget {
           duration: 250.ms,
           child: Padding(
             padding: const EI.s(h: marginHorizontal, v: marginVertical),
-            child: SelectionArea(
-              child: GD(onTap: _onTap, child: bubbleContent),
-            ),
+            child: GD(onTap: _onTap, child: bubbleContent),
           ),
         ),
       ),

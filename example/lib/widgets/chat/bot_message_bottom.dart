@@ -7,13 +7,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:halo_alert/halo_alert.dart';
-import 'package:zone/config.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/demo_type.dart';
 import 'package:zone/model/message.dart' as model;
 import 'package:zone/model/thinking_mode.dart';
 import 'package:zone/state/p.dart';
-import 'package:zone/widgets/chat/branch_switcher.dart';
 
 class BotMessageBottom extends ConsumerWidget {
   final model.Message msg;
@@ -80,7 +78,6 @@ class BotMessageBottom extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MAA.start,
       children: [
-        if (Config.enableChain) BranchSwitcher(msg, index),
         if (changing)
           Padding(
             padding: const EI.o(v: 12, r: 4),
