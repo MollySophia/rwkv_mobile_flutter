@@ -20,10 +20,6 @@ analyzer:
   errors:
     invalid_annotation_target: ignore
 
-custom_lint:
-  rules:
-    - missing_provider_scope: false
-
 formatter:
   page_width: 140
   trailing_commas: preserve
