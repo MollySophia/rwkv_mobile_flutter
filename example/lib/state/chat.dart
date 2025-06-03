@@ -154,6 +154,13 @@ extension $Chat on _Chat {
     textEditingController.value = const TextEditingValue(text: "");
   }
 
+  FV onTapClearInput() async {
+    qq;
+    textEditingController.clear();
+    textInInput.uc();
+    editingIndex.q = null;
+  }
+
   FV onTapEditInUserMessageBubble({required int index}) async {
     if (!checkModelSelection()) return;
     final content = messages.q[index].content;

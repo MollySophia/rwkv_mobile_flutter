@@ -152,10 +152,7 @@ class _TextField extends ConsumerWidget {
           suffixIcon: textInInput.isEmpty
               ? null
               : GD(
-                  onTap: () {
-                    P.chat.textEditingController.clear();
-                    P.chat.textInInput.uc();
-                  },
+                  onTap: P.chat.onTapClearInput,
                   child: const Icon(Icons.clear),
                 ),
         ),
