@@ -18,7 +18,7 @@ class _Msg {
   late final editingBotMessage = qp<bool>((ref) {
     final editingIndex = ref.watch(editingOrRegeneratingIndex);
     if (editingIndex == null) return false;
-    final list = ref.watch(P.msg.list);
+    final list = ref.watch(this.list);
     return list[editingIndex].isMine == false;
   });
 }
@@ -39,16 +39,57 @@ extension _$Msg on _Msg {
   }
 
   Message? findByIndex(int index) {
-    final currentMessages = [...P.msg.list.q];
+    final currentMessages = [...list.q];
     if (index < 0 || index >= currentMessages.length) return null;
     return currentMessages[index];
+  }
+
+  void _clear() {
+    ids.q = [];
+    _msgNode = MsgNode(0);
   }
 }
 
 /// Public methods
 extension $Msg on _Msg {
-  void clear() {
-    ids.q = [];
-    _msgNode = MsgNode(0);
+  int siblingCount(Message msg) {
+    final parent = _msgNode.findParentByMsgId(msg.id);
+    if (parent == null) return 1;
+    return parent.children.length;
+  }
+
+  List<int> siblingIds(Message msg) {
+    final parent = _msgNode.findParentByMsgId(msg.id);
+    if (parent == null) return [];
+    return parent.children.map((e) => e.id).toList();
+  }
+
+  void onTapSwitchAtIndex(
+    int index, {
+    required bool isBack,
+    required Message msg,
+  }) {
+    final parent = _msgNode.findParentByMsgId(msg.id);
+    if (parent == null) {
+      qqe("parent is null");
+      return;
+    }
+    final siblingIds = parent.children.map((e) => e.id).toList();
+    final siblingIndex = siblingIds.indexOf(msg.id);
+    if (siblingIndex == -1) {
+      qqe("siblingIndex is -1");
+      return;
+    }
+    if (siblingIds.length == 1) {
+      qqe("No siblings to switch");
+      return;
+    }
+    final newIndex = siblingIndex + (isBack ? -1 : 1);
+    if (newIndex < 0 || newIndex >= siblingIds.length) {
+      qqe("newIndex is out of range");
+      return;
+    }
+    parent.latest = parent.children[newIndex];
+    ids.q = _msgNode.latestMsgIdsWithoutRoot;
   }
 }

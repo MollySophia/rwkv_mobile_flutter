@@ -476,14 +476,6 @@ extension $RWKV on _RWKV {
 
     qqq("message lengths: ${messages.m((e) => e.length)}");
 
-    if (kDebugMode) {
-      messages.forEach((message) {
-        if (message.contains("<think>")) {
-          qqw("message contains <think>");
-        }
-      });
-    }
-
     final sendPort = _sendPort;
 
     if (sendPort == null) {

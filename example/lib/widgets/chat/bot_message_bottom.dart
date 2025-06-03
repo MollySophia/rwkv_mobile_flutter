@@ -12,6 +12,7 @@ import 'package:zone/model/demo_type.dart';
 import 'package:zone/model/message.dart' as model;
 import 'package:zone/model/thinking_mode.dart';
 import 'package:zone/state/p.dart';
+import 'package:zone/widgets/chat/branch_switcher.dart';
 
 class BotMessageBottom extends ConsumerWidget {
   final model.Message msg;
@@ -131,6 +132,7 @@ class BotMessageBottom extends ConsumerWidget {
               ),
             ),
           ),
+        BranchSwitcher(msg, index),
         if (msg.modelName != null) 4.w,
         if (msg.modelName != null)
           Expanded(

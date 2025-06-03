@@ -43,7 +43,7 @@ class _Chat {
 /// Public methods
 extension $Chat on _Chat {
   void clearMessages() {
-    P.msg.clear();
+    P.msg._clear();
   }
 
   FV onSendButtonPressed() async {
@@ -196,7 +196,7 @@ extension $Chat on _Chat {
     if (receivingTokens.q) await onStopButtonPressed();
     await Future.delayed(100.ms);
     Alert.success(S.current.new_chat_started);
-    P.msg.clear();
+    P.msg._clear();
     P.rwkv.clearStates();
   }
 
@@ -220,7 +220,7 @@ extension $Chat on _Chat {
       }
 
       if (isRegenerate) {
-        parentNode = P.msg._msgNode.findNodeByMsgId(currentMessage.id);
+        parentNode = P.msg._msgNode.findParentByMsgId(currentMessage.id);
       } else {
         // 以该消息的父节点作为新消息的父结点
         parentNode = P.msg._msgNode.findParentByMsgId(currentMessage.id);
@@ -239,6 +239,8 @@ extension $Chat on _Chat {
     if (isRegenerate) {
       // 重新生成 Bot 消息, 所以, 不添加新的用户消息
       msg = null;
+      // 但是, 需要移除旧的 bot 消息
+      parentNode.latest = null;
     } else {
       // 新增或编辑了用户消息
       msg = Message(
@@ -254,8 +256,10 @@ extension $Chat on _Chat {
       );
       P.msg.pool.q = {...P.msg.pool.q, id: msg};
       parentNode = parentNode.add(MsgNode(id));
-      P.msg.ids.q = P.msg._msgNode.latestMsgIdsWithoutRoot;
     }
+
+    // 更新消息 id 列表
+    P.msg.ids.q = P.msg._msgNode.latestMsgIdsWithoutRoot;
 
     Future.delayed(34.ms).then((_) {
       scrollToBottom();
@@ -329,10 +333,6 @@ extension $Chat on _Chat {
       paused: false,
       callingFunction: "resumeMessageById",
     );
-  }
-
-  void onTapSwitchAtIndex(int index, {required bool isBack, required Message msg}) {
-    // TODO: Implement
   }
 }
 
@@ -469,7 +469,7 @@ extension _$Chat on _Chat {
   void _onPageKeyChanged(PageKey pageKey) {
     qqq("_onPageKeyChanged: $pageKey");
     Future.delayed(200.ms).then((_) {
-      P.msg.clear();
+      P.msg._clear();
     });
 
     if (!checkModelSelection()) return;

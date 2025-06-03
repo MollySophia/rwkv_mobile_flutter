@@ -69,6 +69,7 @@ class UserMessageBottom extends ConsumerWidget {
       mainAxisAlignment: MAA.end,
       mainAxisSize: MainAxisSize.min,
       children: [
+        BranchSwitcher(msg, index),
         if (showUserEditButton)
           GD(
             onTap: _onUserEditPressed,
@@ -110,7 +111,6 @@ class UserMessageBottom extends ConsumerWidget {
             ),
           ),
         if (!showUserEditButton && !showUserCopyButton) 8.h,
-        BranchSwitcher(msg, index),
       ],
     );
   }
