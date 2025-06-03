@@ -1,4 +1,7 @@
+// ignore_for_file: dead_code
+
 import 'package:flutter/foundation.dart';
+import 'package:zone/args.dart';
 import 'package:zone/config.dart';
 import 'package:zone/model/demo_type.dart';
 import 'package:zone/state/p.dart';
@@ -52,6 +55,24 @@ class Debugger extends ConsumerWidget {
     final messages = ref.watch(P.msg.list);
     final ids = ref.watch(P.msg.ids);
     final pool = ref.watch(P.msg.pool);
+    final socName = ref.watch(P.rwkv.socName);
+    final socBrand = ref.watch(P.rwkv.socBrand);
+    final availableModels = ref.watch(P.fileManager.availableModels);
+    final unavailableModels = ref.watch(P.fileManager.unavailableModels);
+    final disableRemoteConfig = Args.disableRemoteConfig;
+
+    const showDrawerWidth = false;
+    const showEditingBotMessage = false;
+    const showAvailableModels = false;
+    const showUnavailableModels = false;
+    const showSocName = false;
+    const showSocBrand = false;
+    const showIds = false;
+    const showPool = false;
+    const showMessages = false;
+    const showEditingIndex = false;
+    const showAtMainPage = false;
+    const showPage = false;
 
     return Positioned(
       left: 0,
@@ -91,10 +112,10 @@ class Debugger extends ConsumerWidget {
                       T(inputHeight.toString()),
                       if (!isOthello) T("hasFocus".codeToName),
                       T(hasFocus.toString()),
-                      T("atMainPage".codeToName),
-                      T(atMainPage.toString()),
-                      T("page".codeToName),
-                      T(page.toString()),
+                      if (showAtMainPage) T("atMainPage".codeToName),
+                      if (showAtMainPage) T(atMainPage.toString()),
+                      if (showPage) T("page".codeToName),
+                      if (showPage) T(page.toString()),
                       if (Config.enableConversation) T("conversation".codeToName),
                       if (Config.enableConversation) T(conversation?.name ?? "null"),
                       // T("receivingTokens".codeToName),
@@ -105,24 +126,34 @@ class Debugger extends ConsumerWidget {
                       // T(lifecycleState.toString().split(".").last),
                       // T("autoPauseId".codeToName),
                       // T(autoPauseId.toString()),
-                      T("editingIndex".codeToName),
-                      T(editingIndex.toString()),
-                      T("drawerWidth".codeToName),
-                      T(drawerWidth.toString()),
+                      if (showEditingIndex) T("editingIndex".codeToName),
+                      if (showEditingIndex) T(editingIndex.toString()),
+                      if (showDrawerWidth) T("drawerWidth".codeToName),
+                      if (showDrawerWidth) T(drawerWidth.toString()),
                       T("screenWidth".codeToName),
                       T(screenWidth.toString()),
                       T("thinkingMode".codeToName),
                       T(thinkingMode.toString()),
-                      T("editingBotMessage".codeToName),
-                      T(editingBotMessage.toString()),
-                      T("messages length".codeToName),
-                      T(messages.length.toString()),
-                      T("messages changing".codeToName),
-                      T(messages.m((e) => e.changing).join(", ")),
-                      T("ids".codeToName),
-                      T(ids.toString()),
-                      T("pool length".codeToName),
-                      T(pool.length.toString()),
+                      if (showEditingBotMessage) T("editingBotMessage".codeToName),
+                      if (showEditingBotMessage) T(editingBotMessage.toString()),
+                      if (showMessages) T("messages length".codeToName),
+                      if (showMessages) T(messages.length.toString()),
+                      if (showMessages) T("messages changing".codeToName),
+                      if (showMessages) T(messages.m((e) => e.changing).join(", ")),
+                      if (showIds) T("ids".codeToName),
+                      if (showIds) T(ids.toString()),
+                      if (showPool) T("pool length".codeToName),
+                      if (showPool) T(pool.length.toString()),
+                      if (showSocName) T("socName".codeToName),
+                      if (showSocName) T(socName),
+                      if (showSocBrand) T("socBrand".codeToName),
+                      if (showSocBrand) T(socBrand.toString()),
+                      if (showAvailableModels) T("availableModels".codeToName),
+                      if (showAvailableModels) T(availableModels.map((e) => e.name).join("\n")),
+                      if (showUnavailableModels) T("unavailableModels".codeToName),
+                      if (showUnavailableModels) T(unavailableModels.map((e) => e.name).join("\n")),
+                      T("disableRemoteConfig".codeToName),
+                      T(disableRemoteConfig.toString()),
                     ].indexMap((index, e) {
                       return C(
                         margin: EI.o(t: index % 2 == 0 ? 0 : 1),

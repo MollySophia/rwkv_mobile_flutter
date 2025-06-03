@@ -81,7 +81,7 @@ class ModelSelector extends ConsumerWidget {
               .map((e) {
                 return e.socPairs
                     .where((pair) {
-                      return pair.$1 == "" || pair.$1 == P.rwkv.soc.q;
+                      return pair.$1 == "" || pair.$1 == P.rwkv.socName.q;
                     })
                     .map((pair) {
                       return WorldGroupItem(e, socPair: pair);

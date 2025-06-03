@@ -18,6 +18,8 @@ class _FileManager {
 
   late final availableModels = qs<Set<FileInfo>>({});
 
+  late final unavailableModels = qs<Set<FileInfo>>({});
+
   late final downloadSource = qs(FileDownloadSource.hfmirror);
 
   late final hasDownloadedModels = qs(false);
@@ -62,6 +64,7 @@ extension $FileManager on _FileManager {
       final weights = json.map((e) => FileInfo.fromJSON(e)).toSet();
       _all.q = weights;
       availableModels.q = weights.where((e) => e.available).toSet();
+      unavailableModels.q = weights.where((e) => !e.available).toSet();
       if (P.app.demoType.q == DemoType.tts) {
         ttsCores.q = availableModels.q.where((e) => e.tags.contains("core")).toSet();
       }

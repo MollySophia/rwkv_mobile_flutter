@@ -18,7 +18,7 @@
       "program": "example/lib/main.dart",
       "flutterMode": "debug",
       "args": [
-        "--dart-define=enableMsgTree=true",
+        "--dart-define=disableRemoteConfig=true",
       ]
     },
     {

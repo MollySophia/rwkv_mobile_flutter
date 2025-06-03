@@ -32,12 +32,12 @@ class _App extends RawApp {
 /// Public methods
 extension $App on _App {
   FV getConfig() async {
-    qq;
-
     if (Args.disableRemoteConfig) {
       qqw("Remote config is disabled");
       return;
     }
+
+    qq;
 
     final sp = await SharedPreferences.getInstance();
 

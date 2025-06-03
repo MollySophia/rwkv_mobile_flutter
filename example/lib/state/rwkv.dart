@@ -67,7 +67,8 @@ class _RWKV {
 
   Timer? _getTokensTimer;
 
-  late final soc = qs("");
+  late final socName = qs("");
+  late final socBrand = qs<SocBrand>(SocBrand.unknown);
 
   late final _qnnLibsCopied = qs(false);
 
@@ -713,9 +714,13 @@ extension _$RWKV on _RWKV {
     P.app.pageKey.lv(_onPageKeyChanged);
     _receivePort.listen(_onMessage);
     final r = await compute((_) {
-      return RWKVMobile.getSocName();
+      final socName = RWKVMobile.getSocName();
+      final platformName = RWKVMobile.getPlatformName();
+      final socBrand = SocBrand.fromString(platformName);
+      return (socName, socBrand);
     }, []);
-    soc.q = r;
+    socName.q = r.$1;
+    socBrand.q = r.$2;
   }
 
   num _intIfFixedDecimalsIsZero(Argument argument) {
