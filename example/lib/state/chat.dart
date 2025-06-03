@@ -270,6 +270,7 @@ extension $Chat on _Chat {
       return;
     }
 
+    // TODO: @WangCe: Use _history() instead
     final historyMessage = P.msg.list.q
         .where((e) {
           return e.type != MessageType.userImage;
