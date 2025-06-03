@@ -78,6 +78,9 @@ class _Suggestion {
     final demoType = ref.watch(P.app.demoType);
     final messages = ref.watch(P.msg.list);
     final currentModel = ref.watch(P.rwkv.currentModel);
+    final lang = ref.watch(P.preference.preferredLanguage);
+    final en = lang.resolved.locale.languageCode != "zh";
+    final maxLen = en ? 30 : 14;
 
     final hideCases = [
       demoType == DemoType.chat && (messages.isNotEmpty || currentModel == null),
@@ -95,7 +98,7 @@ class _Suggestion {
             .map((e) => e.items)
             .flattened
             .shuffled()
-            .where((e) => e.display.length < 14)
+            .where((e) => e.display.length < maxLen)
             /// NOTE: filter out long suggestions
             .toList();
         if (s.length < 5) {
