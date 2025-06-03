@@ -62,7 +62,7 @@ extension $Chat on _Chat {
     final _editingBotMessage = P.msg.editingBotMessage.q;
 
     if (_editingBotMessage) {
-      final id = HF.debugShorterUS;
+      final id = HF.debugShorterMS;
       final currentMessages = [...P.msg.list.q];
       final _editingIndex = P.msg.editingOrRegeneratingIndex.q!;
       final currentMessage = currentMessages[_editingIndex];
@@ -234,7 +234,7 @@ extension $Chat on _Chat {
 
     late final Message? msg;
 
-    final id = HF.debugShorterUS;
+    final id = HF.debugShorterMS;
 
     if (isRegenerate) {
       // 重新生成 Bot 消息, 所以, 不添加新的用户消息
@@ -286,7 +286,7 @@ extension $Chat on _Chat {
     receivedTokens.q = "";
     receivingTokens.q = true;
 
-    final receiveId = HF.debugShorterUS + 1;
+    final receiveId = HF.debugShorterMS + 1;
 
     this.receiveId.q = receiveId;
     final receiveMsg = Message(
@@ -448,12 +448,12 @@ extension _$Chat on _Chat {
 
       qqq("new file received: $path, length: $length");
 
-      final t0 = HF.debugShorterUS;
+      final t0 = HF.debugShorterMS;
       P.rwkv.setAudioPrompt(path: path);
-      final t1 = HF.debugShorterUS;
+      final t1 = HF.debugShorterMS;
       qqq("setAudioPrompt done in ${t1 - t0}ms");
       send("", type: MessageType.userAudio, audioUrl: path, withHistory: false, audioLength: length);
-      final t2 = HF.debugShorterUS;
+      final t2 = HF.debugShorterMS;
       qqq("send done in ${t2 - t1}ms");
     }
 

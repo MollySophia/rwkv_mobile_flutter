@@ -40,7 +40,7 @@ extension $World on _World {
       return;
     }
 
-    final t = HF.debugShorterUS;
+    final t = HF.debugShorterMS;
     startTime.q = t;
     recording.q = true;
     _currentStreamController = StreamController<Uint8List>();
@@ -76,7 +76,7 @@ extension $World on _World {
       return false;
     }
 
-    final t = HF.debugShorterUS;
+    final t = HF.debugShorterMS;
     endTime.q = t;
 
     final audioLengthInMilliseconds = endTime.q - startTime.q;
