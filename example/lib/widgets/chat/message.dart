@@ -52,7 +52,7 @@ class Message extends ConsumerWidget {
     P.chat.focusNode.unfocus();
     P.tts.dismissAllShown();
 
-    P.chat.latestClickedMessage.q = msg;
+    P.msg.latestClicked.q = msg;
 
     if (msg.type == model.MessageType.userAudio) {
       final audioUrl = msg.audioUrl;
@@ -95,7 +95,7 @@ class Message extends ConsumerWidget {
     final received = ref.watch(P.chat.receivedTokens.select((v) => msg.changing ? v : ""));
     final cotDisplayState = ref.watch(P.chat.cotDisplayState(msg.id));
 
-    final editingIndex = ref.watch(P.chat.editingIndex);
+    final editingIndex = ref.watch(P.msg.editingOrRegeneratingIndex);
 
     final receiveId = ref.watch(P.chat.receiveId);
     final receiving = ref.watch(P.chat.receivingTokens);
@@ -269,7 +269,7 @@ class Message extends ConsumerWidget {
     }
 
     EI padding = const EI.o(t: 12, l: 12, r: 12);
-    Border border = Border.all(color: primary.q(.2));
+    Border? border = Border.all(color: primary.q(.2));
     double radius = 20;
 
     switch (msg.type) {
@@ -301,6 +301,8 @@ class Message extends ConsumerWidget {
         padding = EI.zero;
 
       case model.MessageType.text:
+        if (!msg.isMine) border = null;
+        if (!msg.isMine) padding = EI.o(t: 12, l: 6, r: 6);
       case model.MessageType.ttsGeneration:
       case model.MessageType.userAudio:
     }
@@ -431,9 +433,7 @@ class Message extends ConsumerWidget {
           duration: 250.ms,
           child: Padding(
             padding: const EI.s(h: marginHorizontal, v: marginVertical),
-            child: SelectionArea(
-              child: GD(onTap: _onTap, child: bubbleContent),
-            ),
+            child: GD(onTap: _onTap, child: bubbleContent),
           ),
         ),
       ),

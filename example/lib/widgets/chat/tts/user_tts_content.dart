@@ -26,7 +26,7 @@ class UserTTSContent extends ConsumerWidget {
 
   void _onTTSPlayPressed() {
     qq;
-    P.chat.latestClickedMessage.q = msg;
+    P.msg.latestClicked.q = msg;
     P.world.play(path: msg.audioUrl!);
   }
 
@@ -46,7 +46,7 @@ class UserTTSContent extends ConsumerWidget {
     // final displayNameEn = ref.watch(P.tts.displayNameEn);
     final (String displayFlag, String displayNameCn, String displayNameEn) = P.tts.getSpkInfo(msg.ttsSpeakerName ?? "");
 
-    final latestClickedMessage = ref.watch(P.chat.latestClickedMessage);
+    final latestClickedMessage = ref.watch(P.msg.latestClicked);
     final playing = ref.watch(P.world.playing);
     final isCurrentMessage = latestClickedMessage?.id == msg.id;
 

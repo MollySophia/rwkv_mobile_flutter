@@ -51,11 +51,11 @@ class _RWKV {
     return currentModel != null;
   });
 
-  late final currentModel = qsn<FileInfo>();
+  late final currentModel = qs<FileInfo?>(null);
 
-  late final currentWorldType = qsn<WorldType>();
+  late final currentWorldType = qs<WorldType?>(null);
 
-  late final currentGroupInfo = qsn<GroupInfo>();
+  late final currentGroupInfo = qs<GroupInfo?>(null);
 
   late final loading = qp((ref) {
     return ref.watch(_loading);
@@ -99,9 +99,9 @@ extension $RWKVLoad on _RWKV {
       try {
         send(to_rwkv.ReleaseWhisperEncoder());
         send(to_rwkv.ReleaseModel());
-        final startMS = HF.debugShorterUS;
+        final startMS = HF.debugShorterMS;
         await reInitRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
-        final endMS = HF.debugShorterUS;
+        final endMS = HF.debugShorterMS;
         qqr("initRuntime done in ${endMS - startMS}ms");
       } catch (e) {
         qqe("initRuntime failed: $e");
@@ -159,9 +159,9 @@ extension $RWKVLoad on _RWKV {
     if (_sendPort != null) {
       send(to_rwkv.ReleaseVisionEncoder());
       send(to_rwkv.ReleaseModel());
-      final startMS = HF.debugShorterUS;
+      final startMS = HF.debugShorterMS;
       await reInitRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
-      final endMS = HF.debugShorterUS;
+      final endMS = HF.debugShorterMS;
       qqr("initRuntime done in ${endMS - startMS}ms");
     } else {
       final options = StartOptions(
@@ -221,9 +221,9 @@ extension $RWKVLoad on _RWKV {
     if (_sendPort != null) {
       try {
         send(to_rwkv.ReleaseTTSModels());
-        final startMS = HF.debugShorterUS;
+        final startMS = HF.debugShorterMS;
         await reInitRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
-        final endMS = HF.debugShorterUS;
+        final endMS = HF.debugShorterMS;
         qqr("initRuntime done in ${endMS - startMS}ms");
       } catch (e) {
         qqe("initRuntime failed: $e");
@@ -300,9 +300,9 @@ extension $RWKVLoad on _RWKV {
 
     if (_sendPort != null) {
       try {
-        final startMS = HF.debugShorterUS;
+        final startMS = HF.debugShorterMS;
         await reInitRuntime(backend: backend, modelPath: modelPath, tokenizerPath: tokenizerPath);
-        final endMS = HF.debugShorterUS;
+        final endMS = HF.debugShorterMS;
         qqr("initRuntime done in ${endMS - startMS}ms");
       } catch (e) {
         qqe("initRuntime failed: $e");
@@ -475,14 +475,6 @@ extension $RWKV on _RWKV {
     decodeSpeed.q = 0;
 
     qqq("message lengths: ${messages.m((e) => e.length)}");
-
-    if (kDebugMode) {
-      messages.forEach((message) {
-        if (message.contains("<think>")) {
-          qqw("message contains <think>");
-        }
-      });
-    }
 
     final sendPort = _sendPort;
 

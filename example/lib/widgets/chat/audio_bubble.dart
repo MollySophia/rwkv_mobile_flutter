@@ -25,7 +25,7 @@ class _AudioBubbleState extends ConsumerState<AudioBubble> {
   void initState() {
     super.initState();
 
-    ref.listenManual(P.chat.latestClickedMessage, (previous, next) {
+    ref.listenManual(P.msg.latestClicked, (previous, next) {
       if (next?.id == widget.msg.id) {
         _timer?.cancel();
         _timer = Timer.periodic(500.ms, (timer) {
@@ -52,7 +52,7 @@ class _AudioBubbleState extends ConsumerState<AudioBubble> {
     final base = 4000;
     final width = 200 * (length / (length + base));
     final isPlaying = ref.watch(P.world.playing);
-    final latestClickedMessage = ref.watch(P.chat.latestClickedMessage);
+    final latestClickedMessage = ref.watch(P.msg.latestClicked);
     final isLatestClickedMessage = latestClickedMessage?.id == widget.msg.id;
     final kB = ref.watch(P.app.qb);
     return C(

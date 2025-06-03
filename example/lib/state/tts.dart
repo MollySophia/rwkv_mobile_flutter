@@ -38,11 +38,11 @@ class _TTS {
   late final instructions = qsf<TTSInstruction, int?>(null);
   late final interactingInstruction = qs(TTSInstruction.none);
   late final intonationShown = qs(false);
-  late final selectSourceAudioPath = qsn<String>();
+  late final selectSourceAudioPath = qs<String?>(null);
   late final selectedLanguage = qs(Language.none);
 
   /// 若用户选择自己的声音作为源声音, 则该 value 为 null
-  late final selectedSpkName = qsn<String>();
+  late final selectedSpkName = qs<String?>(null);
 
   late final selectedSpkPanelFilter = qs(Language.none);
   late final spkPairs = qs<JSON>({});
@@ -368,8 +368,8 @@ extension $TTS on _TTS {
     if (!P.chat.inputHasContent.q) return;
 
     late final Message? msg;
-    final id = HF.debugShorterUS;
-    final receiveId = HF.debugShorterUS + 1;
+    final id = HF.debugShorterMS;
+    final receiveId = HF.debugShorterMS + 1;
     final spkName = selectedSpkName.q;
 
     if (spkName == null && this.selectSourceAudioPath.q == null) {
@@ -418,7 +418,8 @@ extension $TTS on _TTS {
       ttsCFMSteps: cfmSteps.q,
     );
 
-    P.chat.messages.ua(msg);
+    P.msg.pool.q = {...P.msg.pool.q, id: msg};
+    P.msg._msgNode.rootAdd(MsgNode(id));
 
     Future.delayed(34.ms).then((_) {
       P.chat.scrollToBottom();
@@ -439,7 +440,8 @@ extension $TTS on _TTS {
     );
 
     P.chat.receiveId.q = receiveId;
-    P.chat.messages.ua(receiveMsg);
+    P.msg.pool.q[receiveId] = receiveMsg;
+    P.msg._msgNode.rootAdd(MsgNode(receiveId));
 
     qqr("""ttsText: $ttsText
 instructionText: $instructionText

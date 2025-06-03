@@ -31,36 +31,11 @@ class _Chat {
 
   late final inputHeight = qs(77.0);
 
-  late final receiveId = qsn<int>();
-
-  late final editingIndex = qsn<int>();
-
-  late final editingBotMessage = qp<bool>((ref) {
-    final editingIndex = ref.watch(this.editingIndex);
-    if (editingIndex == null) return false;
-    return messages.q[editingIndex].isMine == false;
-  });
-
-  late final latestClickedMessage = qsn<Message>();
+  late final receiveId = qs<int?>(null);
 
   late final hasFocus = qs(false);
 
-  late final autoPauseId = qsn<int>();
-
-  late final messages = qs<List<Message>>([]);
-
-  /// 用于实现 DeepSeek 的 “分叉对话” 功能
-  ///
-  /// TODO: 想办法存到聊天记录中
-  late final currentChain = qs(const MessageChain(ids: []));
-
-  /// 用于实现 DeepSeek 的 “分叉对话” 功能
-  late final chains = qs({const MessageChain(ids: [])});
-
-  /// 用于在切换分叉时, 如果同一层级有多个分叉, 能切回原先的分叉
-  late final chainSwitchingHistory = qs<List<MessageChain>>([]);
-
-  late final branchesCountList = qs<List<List<int>>>([]);
+  late final autoPauseId = qs<int?>(null);
 
   late final _sensitiveThrottler = Throttler(milliseconds: 333, trailing: true);
 }
@@ -68,14 +43,10 @@ class _Chat {
 /// Public methods
 extension $Chat on _Chat {
   void clearMessages() {
-    messages.uc();
-    branchesCountList.uc();
-    chainSwitchingHistory.uc();
-    currentChain.q = const MessageChain(ids: []);
-    chains.q = {const MessageChain(ids: [])};
+    P.msg._clear();
   }
 
-  FV onInputRightButtonPressed() async {
+  FV onSendButtonPressed() async {
     qq;
     if (!checkModelSelection()) return;
 
@@ -88,29 +59,34 @@ extension $Chat on _Chat {
     final textToSend = textInInput.q.trim();
     textInInput.uc();
 
-    final _editingBotMessage = editingBotMessage.q;
+    final _editingBotMessage = P.msg.editingBotMessage.q;
+
     if (_editingBotMessage) {
-      // final currentMessages = [...messages.q];
-      final _editingIndex = editingIndex.q!;
-      final id = HF.debugShorterUS;
-      final newBotMessage = Message(
+      final id = HF.debugShorterMS;
+      final currentMessages = [...P.msg.list.q];
+      final _editingIndex = P.msg.editingOrRegeneratingIndex.q!;
+      final currentMessage = currentMessages[_editingIndex];
+
+      final newMsg = Message(
         id: id,
         content: textToSend,
         isMine: false,
         changing: false,
-        isReasoning: messages.q[_editingIndex].isReasoning,
-        paused: messages.q[_editingIndex].paused,
-        modelName: messages.q[_editingIndex].modelName,
-        runningMode: messages.q[_editingIndex].runningMode,
+        isReasoning: currentMessage.isReasoning,
+        paused: currentMessage.paused,
+        modelName: currentMessage.modelName,
+        runningMode: currentMessage.runningMode,
       );
-      // currentMessages.replaceRange(_editingIndex, _editingIndex + 1, [newBotMessage]);
-      final newMessages = [
-        ...messages.q.sublist(0, _editingIndex),
-        newBotMessage,
-      ];
-      messages.q = newMessages;
-      P.conversation.updateMessages(newMessages);
-      editingIndex.q = null;
+
+      P.msg.pool.q = {...P.msg.pool.q, id: newMsg};
+      final userMsgNode = P.msg._msgNode.findParentByMsgId(currentMessage.id);
+      if (userMsgNode == null) {
+        qqe("We should found a user message node before a bot message node");
+        return;
+      }
+      userMsgNode.add(MsgNode(id));
+      P.msg.ids.q = P.msg._msgNode.latestMsgIdsWithoutRoot;
+      P.msg.editingOrRegeneratingIndex.q = null;
       Alert.success(S.current.bot_message_edited);
       return;
     }
@@ -122,7 +98,7 @@ extension $Chat on _Chat {
     qq;
   }
 
-  FV onSubmitted(String aString) async {
+  FV onKeyboardSubmitted(String aString) async {
     qqq(aString);
 
     final receivingTokens = P.chat.receivingTokens.q;
@@ -148,9 +124,9 @@ extension $Chat on _Chat {
     qq;
     P.chat.focusNode.unfocus();
     P.tts.dismissAllShown();
-    final _editingIndex = P.chat.editingIndex.q;
+    final _editingIndex = P.msg.editingOrRegeneratingIndex.q;
     if (_editingIndex == null) return;
-    editingIndex.q = null;
+    P.msg.editingOrRegeneratingIndex.q = null;
     textEditingController.value = const TextEditingValue(text: "");
   }
 
@@ -158,31 +134,31 @@ extension $Chat on _Chat {
     qq;
     textEditingController.clear();
     textInInput.uc();
-    editingIndex.q = null;
+    P.msg.editingOrRegeneratingIndex.q = null;
   }
 
   FV onTapEditInUserMessageBubble({required int index}) async {
     if (!checkModelSelection()) return;
-    final content = messages.q[index].content;
+    final content = P.msg.list.q[index].content;
     textEditingController.value = TextEditingValue(text: content);
     focusNode.requestFocus();
-    editingIndex.q = index;
+    P.msg.editingOrRegeneratingIndex.q = index;
   }
 
   FV onTapEditInBotMessageBubble({required int index}) async {
     if (!checkModelSelection()) return;
-    final content = messages.q[index].content;
+    final content = P.msg.list.q[index].content;
     textEditingController.value = TextEditingValue(text: content);
     focusNode.requestFocus();
-    editingIndex.q = index;
+    P.msg.editingOrRegeneratingIndex.q = index;
   }
 
   FV onRegeneratePressed({required int index}) async {
     qqq("index: $index");
     if (!checkModelSelection()) return;
 
-    final userMessage = messages.q[index - 1];
-    editingIndex.q = index;
+    final userMessage = P.msg.list.q[index - 1];
+    P.msg.editingOrRegeneratingIndex.q = index;
     textInInput.uc();
     focusNode.unfocus();
     if (userMessage.type == MessageType.userAudio) {
@@ -220,8 +196,8 @@ extension $Chat on _Chat {
     if (receivingTokens.q) await onStopButtonPressed();
     await Future.delayed(100.ms);
     Alert.success(S.current.new_chat_started);
+    P.msg._clear();
     P.rwkv.clearStates();
-    messages.uc();
   }
 
   FV send(
@@ -233,25 +209,40 @@ extension $Chat on _Chat {
     bool withHistory = true,
     bool isRegenerate = false,
   }) async {
-    qqq("message: $message");
+    MsgNode? parentNode = P.msg._msgNode.wholeLatestNode;
 
-    final _editingIndex = editingIndex.q;
-    if (_editingIndex != null) {
-      qqq("editingIndex: $_editingIndex");
-      assert(_editingIndex >= 0 && _editingIndex < messages.q.length);
-      final messagesWithoutEditing = messages.q.sublist(0, _editingIndex);
-      // 将 editingIndex, 及 editingIndex 之后的消息都删掉
-      // TODO: 分叉
-      messages.q = messagesWithoutEditing;
-      if (Config.enableConversation) P.conversation.updateMessages(messagesWithoutEditing);
+    final editingOrRegeneratingIndex = P.msg.editingOrRegeneratingIndex.q;
+    if (editingOrRegeneratingIndex != null) {
+      final currentMessage = P.msg.findByIndex(editingOrRegeneratingIndex);
+      if (currentMessage == null) {
+        qqe("currentMessage is null");
+        return;
+      }
+
+      if (isRegenerate) {
+        parentNode = P.msg._msgNode.findParentByMsgId(currentMessage.id);
+      } else {
+        // 以该消息的父节点作为新消息的父结点
+        parentNode = P.msg._msgNode.findParentByMsgId(currentMessage.id);
+      }
+
+      if (parentNode == null) {
+        qqe("parentNode is null");
+        return;
+      }
     }
 
     late final Message? msg;
 
-    final id = HF.debugShorterUS;
-    final receiveId = HF.debugShorterUS + 1;
+    final id = HF.debugShorterMS;
 
-    if (!isRegenerate) {
+    if (isRegenerate) {
+      // 重新生成 Bot 消息, 所以, 不添加新的用户消息
+      msg = null;
+      // 但是, 需要移除旧的 bot 消息
+      parentNode.latest = null;
+    } else {
+      // 新增或编辑了用户消息
       msg = Message(
         id: id,
         content: message,
@@ -263,11 +254,12 @@ extension $Chat on _Chat {
         isReasoning: false,
         paused: false,
       );
-      messages.ua(msg);
-      // if (Config.enableConversation) P.conversation.updateMessages([...messages.q, msg]);
-    } else {
-      msg = null;
+      P.msg.pool.q = {...P.msg.pool.q, id: msg};
+      parentNode = parentNode.add(MsgNode(id));
     }
+
+    // 更新消息 id 列表
+    P.msg.ids.q = P.msg._msgNode.latestMsgIdsWithoutRoot;
 
     Future.delayed(34.ms).then((_) {
       scrollToBottom();
@@ -278,15 +270,7 @@ extension $Chat on _Chat {
       return;
     }
 
-    // if (Config.enableConversation) {
-    //   try {
-    //     P.conversation.addMessage(msg);
-    //   } catch (e) {
-    //     qqe(e);
-    //   }
-    // }
-
-    final historyMessage = messages.q
+    final historyMessage = P.msg.list.q
         .where((e) {
           return e.type != MessageType.userImage;
         })
@@ -301,10 +285,12 @@ extension $Chat on _Chat {
     final history = withHistory ? historyMessage : [message];
 
     P.rwkv.sendMessages(history);
-    editingIndex.q = null;
+    P.msg.editingOrRegeneratingIndex.q = null;
 
-    receivedTokens.uc();
+    receivedTokens.q = "";
     receivingTokens.q = true;
+
+    final receiveId = HF.debugShorterMS + 1;
 
     this.receiveId.q = receiveId;
     final receiveMsg = Message(
@@ -318,8 +304,9 @@ extension $Chat on _Chat {
       runningMode: P.rwkv.thinkingMode.q.toString(),
     );
 
-    messages.ua(receiveMsg);
-    P.conversation.updateMessages([...messages.q, receiveMsg]);
+    P.msg.pool.q[receiveId] = receiveMsg;
+    parentNode.add(MsgNode(receiveId));
+    P.msg.ids.q = P.msg._msgNode.latestMsgIdsWithoutRoot;
 
     _checkSensitive(message);
   }
@@ -336,14 +323,6 @@ extension $Chat on _Chat {
     _pauseMessageById(id: id);
   }
 
-  FV loadConversation(Conversation? conversation) async {
-    if (conversation == null) {
-      messages.uc();
-      return;
-    }
-    messages.q = conversation.messages;
-  }
-
   FV resumeMessageById({required int id, bool withHaptic = true}) async {
     qq;
     if (withHaptic) P.app.hapticLight();
@@ -354,56 +333,6 @@ extension $Chat on _Chat {
       paused: false,
       callingFunction: "resumeMessageById",
     );
-  }
-
-  void onTapSwitchAtIndex(int index, {required bool isBack, required Message msg}) {
-    qq;
-    final branches = P.chat.branchesCountList.q[index];
-    if (branches.length <= 1) {
-      qqw("No branches to switch");
-      return;
-    }
-    final isFirstMessageSwitching = index == 0;
-    final currentChain = this.currentChain.q;
-    final previousMessageId = isFirstMessageSwitching ? null : currentChain.ids[index - 1];
-    final history = chainSwitchingHistory.q.reversed;
-
-    MessageChain? targetChain;
-
-    if (previousMessageId == null) {
-      targetChain = history.firstWhereOrNull((e) => e != currentChain);
-      if (targetChain == null) {
-        qqw("When switching the first message, no target chain found in history");
-        return;
-      }
-      this.currentChain.q = targetChain;
-      chainSwitchingHistory.ua(targetChain);
-      return;
-    }
-
-    targetChain = history.firstWhereOrNull((e) => e.ids[index - 1] == previousMessageId && e != currentChain);
-    if (targetChain != null) {
-      qqr("Found target chain in history");
-      this.currentChain.q = targetChain;
-      chainSwitchingHistory.ua(targetChain);
-      return;
-    } else {
-      qqw("No target chain found in history");
-    }
-
-    // 如果找不到, 则从 chains 中找
-    targetChain = chains.q.firstWhereOrNull((e) => e.ids[index - 1] == previousMessageId && e != currentChain);
-    if (targetChain != null) {
-      qqr("Found target chain in chains");
-      this.currentChain.q = targetChain;
-      chainSwitchingHistory.ua(targetChain);
-      return;
-    } else {
-      qqw("No target chain found in chains");
-    }
-
-    qqe("No target chain found");
-    if (!kDebugMode) Sentry.captureException(Exception("No target chain found"), stackTrace: StackTrace.current);
   }
 }
 
@@ -438,10 +367,6 @@ extension _$Chat on _Chat {
 
     P.app.lifecycleState.lb(_onLifecycleStateChanged);
 
-    messages.lb(_onMessagesChanged);
-    if (Config.enableChain) chains.lv(_syncBranchesCountList);
-    if (Config.enableChain) currentChain.lv(_syncBranchesCountList);
-
     P.preference.preferredLanguage.lv(P.suggestion.loadSuggestions);
   }
 
@@ -458,98 +383,6 @@ extension _$Chat on _Chat {
     await Future.delayed(1.ms);
 
     _pauseMessageById(id: id, isSensitive: true);
-  }
-
-  void _onMessagesChanged(List<Message>? previous, List<Message> next) {
-    if (Config.enableChain) _syncChains(previous, next);
-  }
-
-  void _syncBranchesCountList() {
-    final chains = this.chains.q;
-    final currentChain = this.currentChain.q;
-    final List<List<int>> newValue = [];
-    final currentMessageIds = currentChain.ids;
-    for (var i = 0; i < currentMessageIds.length; i++) {
-      if (i == 0) {
-        final firstBranchIds = chains.m((e) => e.ids.first).toSet().sorted((a, b) => a.compareTo(b));
-        newValue.add(firstBranchIds);
-        continue;
-      }
-      // 获取上一个消息的 id
-      final previousMessageId = currentMessageIds[i - 1];
-      // 遍历所有消息链, 获取所有上一个消息的 id 等于 previousMessageId 的消息链
-      final branchIds = chains
-          .where((e) => e.ids[i - 1] == previousMessageId)
-          .map((e) => e.ids[i])
-          .sorted((a, b) => a.compareTo(b))
-          .toList();
-      newValue.add(branchIds);
-    }
-    if (listEquals(branchesCountList.q, newValue)) return;
-    branchesCountList.q = newValue;
-  }
-
-  void _syncChains(List<Message>? previous, List<Message> next) {
-    qq;
-    if (previous == null) {
-      qqe("previous is null");
-      if (!kDebugMode) Sentry.captureException(Exception("previous is null"), stackTrace: StackTrace.current);
-      return;
-    }
-
-    final previousIds = previous.map((e) => e.id).toList();
-    final nextIds = next.map((e) => e.id).toList();
-    final previousLength = previous.length;
-    final nextLength = next.length;
-
-    if (listEquals(previousIds, nextIds)) return;
-
-    // Add a new chain
-    if (previousLength == 0 && nextLength == 1) {
-      final firstId = nextIds.first;
-      final chain = MessageChain(ids: [firstId]);
-      this.chains.q = {chain};
-      this.currentChain.q = chain;
-      return;
-    }
-
-    // 是否应该消息分叉?
-    final shouldCreateNewBranch = nextLength <= previousLength;
-
-    final chains = this.chains.q;
-    final currentChain = this.currentChain.q;
-
-    if (!chains.contains(currentChain)) {
-      qqe("currentChain not found in chains");
-      if (!kDebugMode) Sentry.captureException(Exception("currentChain not found in chains"), stackTrace: StackTrace.current);
-      return;
-    }
-
-    late final MessageChain newChain;
-
-    if (nextIds.isEmpty) {
-      qqe("nextIds is empty");
-      qqe("next: $next");
-      if (!kDebugMode) Sentry.captureException(Exception("nextIds is empty"), stackTrace: StackTrace.current);
-      debugger();
-      return;
-    }
-
-    final latestId = nextIds.last;
-
-    if (shouldCreateNewBranch) {
-      newChain = currentChain.addAt(latestId, nextLength - 1);
-    } else {
-      newChain = currentChain.add(latestId);
-    }
-
-    if (!shouldCreateNewBranch) chains.remove(currentChain);
-    chains.add(newChain);
-
-    if (!setEquals(this.chains.q, chains)) this.chains.q = chains;
-    this.currentChain.q = newChain;
-
-    qqq("chains count: ${this.chains.q.length}, currentChain length: ${this.currentChain.q.ids.length}");
   }
 
   void _onLifecycleStateChanged(AppLifecycleState? previous, AppLifecycleState next) {
@@ -570,7 +403,7 @@ extension _$Chat on _Chat {
   }
 
   List<String> _history() {
-    final history = messages.q.where((msg) => msg.type == MessageType.text).m((e) {
+    final history = P.msg.list.q.where((msg) => msg.type == MessageType.text).m((e) {
       if (!e.isReasoning) return e.content;
       if (!e.isCotFormat) return e.content;
       if (!e.containsCotEndMark) return e.content;
@@ -588,7 +421,7 @@ extension _$Chat on _Chat {
 
     P.rwkv.stop();
 
-    final msg = messages.q.firstWhereOrNull((e) => e.id == id);
+    final msg = P.msg.pool.q[id];
     if (msg == null) {
       qqw("message not found");
       return;
@@ -599,13 +432,8 @@ extension _$Chat on _Chat {
       return;
     }
 
-    final newMessages = messages.q.map((e) {
-      if (e.id == id) {
-        return e.copyWith(paused: true, isSensitive: isSensitive);
-      }
-      return e;
-    }).toList();
-    messages.q = newMessages;
+    final newMsg = msg.copyWith(paused: true, isSensitive: isSensitive);
+    P.msg.pool.q = {...P.msg.pool.q, id: newMsg};
   }
 
   FV _onFocusNodeChanged() async {
@@ -620,12 +448,12 @@ extension _$Chat on _Chat {
 
       qqq("new file received: $path, length: $length");
 
-      final t0 = HF.debugShorterUS;
+      final t0 = HF.debugShorterMS;
       P.rwkv.setAudioPrompt(path: path);
-      final t1 = HF.debugShorterUS;
+      final t1 = HF.debugShorterMS;
       qqq("setAudioPrompt done in ${t1 - t0}ms");
       send("", type: MessageType.userAudio, audioUrl: path, withHistory: false, audioLength: length);
-      final t2 = HF.debugShorterUS;
+      final t2 = HF.debugShorterMS;
       qqq("send done in ${t2 - t1}ms");
     }
 
@@ -641,7 +469,7 @@ extension _$Chat on _Chat {
   void _onPageKeyChanged(PageKey pageKey) {
     qqq("_onPageKeyChanged: $pageKey");
     Future.delayed(200.ms).then((_) {
-      messages.uc();
+      P.msg._clear();
     });
 
     if (!checkModelSelection()) return;
@@ -697,41 +525,28 @@ extension _$Chat on _Chat {
     List<double>? ttsPerWavProgress,
     List<String>? ttsFilePaths,
   }) {
-    final currentMessages = [...messages.q];
-    bool found = false;
-
-    for (var i = 0; i < currentMessages.length; i++) {
-      final msg = currentMessages[i];
-      if (msg.id == id) {
-        final newMsg = msg.copyWith(
-          content: content,
-          isMine: isMine,
-          changing: changing,
-          type: type,
-          imageUrl: imageUrl,
-          audioUrl: audioUrl,
-          audioLength: audioLength,
-          isReasoning: isReasoning,
-          paused: paused,
-          isSensitive: isSensitive,
-          ttsOverallProgress: ttsOverallProgress,
-          ttsPerWavProgress: ttsPerWavProgress,
-          ttsFilePaths: ttsFilePaths,
-        );
-        currentMessages.replaceRange(i, i + 1, [newMsg]);
-        found = true;
-        break;
-      }
-    }
-
-    if (!found) {
+    final msg = P.msg.pool.q[id];
+    if (msg == null) {
       qqe("message not found");
-      if (!kDebugMode) {
-        Sentry.captureException(Exception("message not found, callingFunction: $callingFunction"), stackTrace: StackTrace.current);
-      }
+      Sentry.captureException(Exception("message not found, callingFunction: $callingFunction"), stackTrace: StackTrace.current);
+      return;
     }
-    messages.q = currentMessages;
-    P.conversation.updateMessages(currentMessages);
+    final newMsg = msg.copyWith(
+      content: content,
+      isMine: isMine,
+      changing: changing,
+      type: type,
+      imageUrl: imageUrl,
+      audioUrl: audioUrl,
+      audioLength: audioLength,
+      isReasoning: isReasoning,
+      paused: paused,
+      isSensitive: isSensitive,
+      ttsOverallProgress: ttsOverallProgress,
+      ttsPerWavProgress: ttsPerWavProgress,
+      ttsFilePaths: ttsFilePaths,
+    );
+    P.msg.pool.q = {...P.msg.pool.q, id: newMsg};
   }
 
   @Deprecated("Use _onStreamEvent instead")

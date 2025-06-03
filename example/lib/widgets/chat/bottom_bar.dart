@@ -110,7 +110,7 @@ class _TextField extends ConsumerWidget {
         focusNode: P.chat.focusNode,
         enabled: textFieldEnabled,
         controller: P.chat.textEditingController,
-        onSubmitted: P.chat.onSubmitted,
+        onSubmitted: P.chat.onKeyboardSubmitted,
         onChanged: _onChanged,
         onEditingComplete: P.chat.onEditingComplete,
         onAppPrivateCommand: _onAppPrivateCommand,
@@ -186,7 +186,7 @@ class _TextField extends ConsumerWidget {
         P.chat.textEditingController.value = const TextEditingValue(text: "");
       }
     } else {
-      P.chat.onInputRightButtonPressed();
+      P.chat.onSendButtonPressed();
     }
   }
 

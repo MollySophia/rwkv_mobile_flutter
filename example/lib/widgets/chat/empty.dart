@@ -17,7 +17,7 @@ class Empty extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = S.of(context);
-    final messages = ref.watch(P.chat.messages);
+    final messages = ref.watch(P.msg.list);
     if (messages.isNotEmpty) return Positioned.fill(child: IgnorePointer(child: Container()));
     final loaded = ref.watch(P.rwkv.loaded);
     final currentModel = ref.watch(P.rwkv.currentModel);

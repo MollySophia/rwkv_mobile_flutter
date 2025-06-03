@@ -195,7 +195,7 @@ class _NewConversationButton extends ConsumerWidget {
 
     icon = const Icon(Icons.add_comment_outlined);
     final loaded = ref.watch(P.rwkv.loaded);
-    final isEmpty = ref.watch(P.chat.messages.select((v) => v.isEmpty));
+    final isEmpty = ref.watch(P.msg.list.select((v) => v.isEmpty));
 
     return IconButton(
       onPressed: loaded && !isEmpty

@@ -34,7 +34,7 @@ class Debugger extends ConsumerWidget {
     final visualFloatHeight = ref.watch(P.world.visualFloatHeight);
     final loading = ref.watch(P.rwkv.loading);
     final playing = ref.watch(P.world.playing);
-    final latestClickedMessage = ref.watch(P.chat.latestClickedMessage);
+    final latestClickedMessage = ref.watch(P.msg.latestClicked);
     final inputHeight = ref.watch(P.chat.inputHeight);
     final hasFocus = ref.watch(P.chat.hasFocus);
     final isOthello = demoType == DemoType.othello;
@@ -42,13 +42,16 @@ class Debugger extends ConsumerWidget {
     final page = ref.watch(Pager.page);
     final atMainPage = ref.watch(Pager.atMainPage);
     final conversation = ref.watch(P.conversation.current);
-    final editingIndex = ref.watch(P.chat.editingIndex);
+    final editingIndex = ref.watch(P.msg.editingOrRegeneratingIndex);
     final receiveId = ref.watch(P.chat.receiveId);
     final kB = ref.watch(P.app.qb);
     final drawerWidth = ref.watch(Pager.drawerWidth);
     final screenWidth = ref.watch(P.app.screenWidth);
     final thinkingMode = ref.watch(P.rwkv.thinkingMode);
-    final editingBotMessage = ref.watch(P.chat.editingBotMessage);
+    final editingBotMessage = ref.watch(P.msg.editingBotMessage);
+    final messages = ref.watch(P.msg.list);
+    final ids = ref.watch(P.msg.ids);
+    final pool = ref.watch(P.msg.pool);
 
     return Positioned(
       left: 0,
@@ -112,6 +115,14 @@ class Debugger extends ConsumerWidget {
                       T(thinkingMode.toString()),
                       T("editingBotMessage".codeToName),
                       T(editingBotMessage.toString()),
+                      T("messages length".codeToName),
+                      T(messages.length.toString()),
+                      T("messages changing".codeToName),
+                      T(messages.m((e) => e.changing).join(", ")),
+                      T("ids".codeToName),
+                      T(ids.toString()),
+                      T("pool length".codeToName),
+                      T(pool.length.toString()),
                     ].indexMap((index, e) {
                       return C(
                         margin: EI.o(t: index % 2 == 0 ? 0 : 1),

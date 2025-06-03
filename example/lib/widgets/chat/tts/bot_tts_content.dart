@@ -37,7 +37,7 @@ class _BotTtsContentState extends ConsumerState<BotTtsContent> {
     final demoType = P.app.demoType.q;
     if (demoType != DemoType.tts) return;
 
-    ref.listenManual(P.chat.latestClickedMessage, (previous, next) {
+    ref.listenManual(P.msg.latestClicked, (previous, next) {
       if (next?.id == widget.msg.id) {
         _timer?.cancel();
         _timer = Timer.periodic(500.ms, (timer) {
@@ -101,7 +101,7 @@ class _BotTtsContentState extends ConsumerState<BotTtsContent> {
     final base = 4000;
     final width = 80 * (length / (length + base)) + 55;
     final isPlaying = ref.watch(P.world.playing);
-    final latestClickedMessage = ref.watch(P.chat.latestClickedMessage);
+    final latestClickedMessage = ref.watch(P.msg.latestClicked);
     final isLatestClickedMessage = latestClickedMessage?.id == widget.msg.id;
 
     final overallProgress = widget.msg.ttsOverallProgress ?? 0.0;

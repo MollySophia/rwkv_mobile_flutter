@@ -80,7 +80,7 @@ extension $Conversation on _Conversation {
 
   FV addMessage(Message message, [Conversation? conversation]) async {
     if (!Config.enableConversation) return;
-    final now = HF.debugShorterUS;
+    final now = HF.debugShorterMS;
     if (conversation == null) {
       // Create new conversation
       final newId = conversations.q.isEmpty ? 1 : (conversations.q.firstOrNull?.id ?? 0) + 1;
@@ -130,7 +130,6 @@ extension $Conversation on _Conversation {
     if (!Config.enableConversation) return;
     current.q = conversation;
     Pager.toggle();
-    P.chat.loadConversation(conversation);
   }
 
   FV updateMessages(List<Message> messages) async {
@@ -142,7 +141,7 @@ extension $Conversation on _Conversation {
       name: conversation.name,
       messages: messages,
       createdAt: conversation.createdAt,
-      updatedAt: HF.debugShorterUS,
+      updatedAt: HF.debugShorterMS,
     );
 
     conversations.q = [
