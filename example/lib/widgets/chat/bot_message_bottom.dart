@@ -134,16 +134,17 @@ class BotMessageBottom extends ConsumerWidget {
               ),
             ),
           ),
+        if (msg.modelName != null) 4.w,
         if (msg.modelName != null)
-          Padding(
-            padding: const EI.o(v: 12, r: 4, l: 4),
+          Expanded(
             child: T(
               msg.modelName!,
-              s: TS(c: primaryColor.q(.8), s: 12),
+              s: TS(c: primaryColor.q(.8), s: 10),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         modeWidget,
-        if (showResumeButton && paused && receiveId == msg.id) const Spacer(),
         if (showResumeButton && paused && receiveId == msg.id)
           GD(
             onTap: _onResumePressed,
