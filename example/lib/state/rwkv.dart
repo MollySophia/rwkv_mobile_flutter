@@ -19,14 +19,9 @@ class _RWKV {
     return _oldBroadcastStream!;
   }
 
-  late final _messagesController = StreamController<from_rwkv.FromRWKV>();
+  late final _messagesController = StreamController<from_rwkv.FromRWKV>.broadcast();
 
-  static Stream<from_rwkv.FromRWKV>? _broadcastStream;
-
-  Stream<from_rwkv.FromRWKV> get broadcastStream {
-    _broadcastStream ??= _messagesController.stream.asBroadcastStream();
-    return _broadcastStream!;
-  }
+  Stream<from_rwkv.FromRWKV> get broadcastStream => _messagesController.stream;
 
   late Completer<void> _initRuntimeCompleter = Completer<void>();
 

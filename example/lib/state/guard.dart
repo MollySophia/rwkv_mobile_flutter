@@ -1,7 +1,7 @@
 part of 'p.dart';
 
 class _Guard {
-  late final _blockedWords = qs<List<String>>([]);
+  late final _blockedWords = qs<Set<String>>({});
 }
 
 /// Public methods
@@ -17,6 +17,16 @@ extension $Guard on _Guard {
       }
       return false;
     }, (text, blockedWords));
+    return res;
+  }
+
+  String replaceSensitive(String text) {
+    final blockedWords = _blockedWords.q;
+    if (blockedWords.isEmpty || text.isEmpty) return text;
+    String res = text;
+    for (final word in blockedWords) {
+      res = res.replaceAll(word, "■︎" * word.length);
+    }
     return res;
   }
 }
@@ -44,7 +54,7 @@ extension _$Guard on _Guard {
     final filter = await rootBundle.loadString("assets/filter.txt");
     final res = await compute((filter) async {
       final lines = filter.split("\n");
-      return lines.map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
+      return lines.map((e) => e.trim()).where((e) => e.isNotEmpty).toSet();
     }, filter);
     final end = HF.milliseconds;
     _blockedWords.q = res;

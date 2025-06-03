@@ -95,7 +95,7 @@ extension $Chat on _Chat {
       final id = HF.debugShorterUS;
       final newBotMessage = Message(
         id: id,
-        content: textToSend,
+        content: P.guard.replaceSensitive(textToSend),
         isMine: false,
         changing: false,
         isReasoning: messages.q[_editingIndex].isReasoning,
@@ -261,7 +261,7 @@ extension $Chat on _Chat {
     if (!isRegenerate) {
       msg = Message(
         id: id,
-        content: message,
+        content: P.guard.replaceSensitive(message),
         isMine: true,
         type: type,
         imageUrl: imageUrl,
@@ -326,7 +326,10 @@ extension $Chat on _Chat {
     messages.ua(receiveMsg);
     P.conversation.updateMessages([...messages.q, receiveMsg]);
 
-    _checkSensitive(message);
+    // TODO
+    if (false) {
+      _checkSensitive(message);
+    }
   }
 
   FV onStopButtonPressed() async {
@@ -432,7 +435,33 @@ extension _$Chat on _Chat {
     P.app.pageKey.l(_onPageKeyChanged);
 
     P.rwkv.oldBroadcastStream.listen(_onOldStreamEvent, onDone: _onStreamDone, onError: _onStreamError);
-    P.rwkv.broadcastStream.listen(_onStreamEvent, onDone: _onStreamDone, onError: _onStreamError);
+    // P.rwkv.broadcastStream.listen(_onStreamEvent, onDone: _onStreamDone, onError: _onStreamError);
+
+    P.rwkv.broadcastStream
+        .where((e) {
+          if (e is from_rwkv.GenerateStart) {
+            receivedTokens.q = "";
+            receivingTokens.q = true;
+            qqq('[start]');
+          } else if (e is from_rwkv.GenerateStop) {
+            receivedTokens.q = "";
+            receivingTokens.q = false;
+            qqq('[stop]');
+          }
+          return e is from_rwkv.ResponseBufferContent;
+        })
+        .cast<from_rwkv.ResponseBufferContent>()
+        .map((e) => e.responseBufferContent)
+        .replaceSensitive(P.guard._blockedWords.q)
+        .listen(
+          (e) {
+            receivedTokens.q = receivedTokens.q + e;
+            qqq('=>$e');
+            // qqq('=>${receivedTokens.q}');
+          },
+          onDone: _onStreamDone,
+          onError: _onStreamError,
+        );
 
     P.world.audioFileStreamController.stream.listen(_onNewFileReceived);
     focusNode.addListener(_onFocusNodeChanged);
