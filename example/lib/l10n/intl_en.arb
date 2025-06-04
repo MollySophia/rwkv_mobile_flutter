@@ -187,6 +187,9 @@
   "all": "All",
   "all_prompt": "All Prompt",
   "no_data": "No Data",
+  "share_chat": "Share Chat",
   "quick_thinking": "Quick Reasoning",
-  "quick_thinking_enabled": "Quick Reasoning Enabled"
+  "quick_thinking_enabled": "Quick Reasoning Enabled",
+  "download_from_browser": "Download from browser",
+  "downloading": "Downloading"
 }

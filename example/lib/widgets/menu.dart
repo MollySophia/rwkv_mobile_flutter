@@ -15,17 +15,17 @@ class Menu extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final kW = ref.watch(P.app.qw);
-    return const Co(
-      m: MAA.center,
+    return const Column(
+      mainAxisAlignment: MAA.center,
       children: [
-        Exp(child: Settings()),
+        Expanded(child: Settings()),
       ],
     );
   }
 }
 
-// ignore: unused_element
 // TODO: Use this in the future
+// ignore: unused_element
 class _BottomInfo extends ConsumerWidget {
   const _BottomInfo();
 
@@ -46,24 +46,24 @@ class _BottomInfo extends ConsumerWidget {
       ),
     );
 
-    return Co(
+    return Column(
       children: [
         12.h,
-        Ro(
+        Row(
           children: [
             12.w,
             iconWidget,
             8.w,
-            Exp(
-              child: Co(
-                c: CAA.stretch,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CAA.stretch,
                 children: [
                   const T(
                     Config.appTitle,
                     s: TS(s: 20),
                   ),
-                  Ro(
-                    // m: MAA.center,
+                  Row(
+                    // mainAxisAlignment: MAA.center,
                     children: [
                       T(
                         version,

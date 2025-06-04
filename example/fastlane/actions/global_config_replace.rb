@@ -50,6 +50,10 @@ module Fastlane
           # Fastlane文件
           'fastlane/Appfile',
           'fastlane/Fastfile',
+
+          # Windows/Linux
+          '**/*.rc',
+          '**/CMakeLists.txt',
         ]
 
         # 添加排除模式（替代原来的exclude_files）

@@ -61,14 +61,15 @@ class UserMessageBottom extends ConsumerWidget {
         showUserCopyButton = false;
     }
 
-    final latestClickedMessage = ref.watch(P.chat.latestClickedMessage);
+    final latestClickedMessage = ref.watch(P.msg.latestClicked);
     final playing = ref.watch(P.world.playing);
     final isCurrentMessage = latestClickedMessage?.id == msg.id;
 
-    return Ro(
-      m: MAA.end,
+    return Row(
+      mainAxisAlignment: MAA.end,
       mainAxisSize: MainAxisSize.min,
       children: [
+        BranchSwitcher(msg, index),
         if (showUserEditButton)
           GD(
             onTap: _onUserEditPressed,
@@ -110,7 +111,6 @@ class UserMessageBottom extends ConsumerWidget {
             ),
           ),
         if (!showUserEditButton && !showUserCopyButton) 8.h,
-        BranchSwitcher(msg, index),
       ],
     );
   }
@@ -130,7 +130,7 @@ class UserMessageBottom extends ConsumerWidget {
 
   void _onTTSPlayPressed() {
     qq;
-    P.chat.latestClickedMessage.q = msg;
+    P.msg.latestClicked.q = msg;
     P.world.play(path: msg.audioUrl!);
   }
 

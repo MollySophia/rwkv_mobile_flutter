@@ -1,6 +1,16 @@
 import 'dart:isolate';
 import 'dart:ui';
 
+enum SocBrand {
+  snapdragon,
+  unknown;
+
+  static SocBrand fromString(String value) {
+    if (value.toLowerCase().contains('snapdragon')) return SocBrand.snapdragon;
+    return SocBrand.unknown;
+  }
+}
+
 /// Runtime backend of RWKV flutter
 enum Backend {
   /// Currently we use it on Android, Windows and Linux

@@ -7,24 +7,26 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/config.dart';
+import 'package:zone/func/check_model_selection.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/demo_type.dart';
+import 'package:zone/page/chat.dart' show keyChatList;
 import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
 import 'package:zone/widgets/arguments_panel.dart';
+import 'package:zone/widgets/model_selector.dart';
 import 'package:zone/widgets/pager.dart';
+import 'package:zone/widgets/screenshot.dart' show Screenshot;
 
 class ChatAppBar extends ConsumerWidget {
   const ChatAppBar({super.key});
 
-  void _onTunePressed() async {
-    final loaded = P.rwkv.loaded.q;
+  void onShareChatPressed() async {
+    Screenshot.startScrollShot(keyChatList);
+  }
 
-    if (!loaded) {
-      P.fileManager.modelSelectorShown.q = false;
-      P.fileManager.modelSelectorShown.q = true;
-      return;
-    }
+  void onSettingsPressed() async {
+    if (!checkModelSelection()) return;
 
     final demoType = P.app.demoType.q;
     if (demoType == DemoType.tts) {
@@ -37,8 +39,7 @@ class ChatAppBar extends ConsumerWidget {
   }
 
   void _onTitlePressed() async {
-    P.fileManager.modelSelectorShown.q = false;
-    P.fileManager.modelSelectorShown.q = true;
+    ModelSelector.show();
   }
 
   @override
@@ -79,8 +80,8 @@ class ChatAppBar extends ConsumerWidget {
                 decoration: const BD(
                   color: kC,
                 ),
-                child: Co(
-                  c: CAA.center,
+                child: Column(
+                  crossAxisAlignment: CAA.center,
                   children: [
                     const T(
                       Config.appTitle,
@@ -93,10 +94,10 @@ class ChatAppBar extends ConsumerWidget {
                         color: kB.q(.1),
                         borderRadius: 10.r,
                       ),
-                      child: Ro(
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
-                        c: CAA.center,
-                        m: MAA.center,
+                        crossAxisAlignment: CAA.center,
+                        mainAxisAlignment: MAA.center,
                         children: [
                           T(
                             displayName,
@@ -120,21 +121,62 @@ class ChatAppBar extends ConsumerWidget {
                 ),
               ),
             ),
-            leading: const Ro(
+            leading: const Row(
               children: [
                 _MenuButton(),
               ],
             ),
             actions: [
               if (demoType == DemoType.chat) const _NewConversationButton(),
-              IconButton(
-                onPressed: _onTunePressed,
-                icon: const Icon(Icons.tune),
-              ),
+              if (demoType == DemoType.chat) _buildMorePopupMenuButton(context),
+              if (demoType != DemoType.chat && demoType != DemoType.sudoku)
+                IconButton(
+                  onPressed: onSettingsPressed,
+                  icon: const Icon(Icons.tune),
+                ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildMorePopupMenuButton(BuildContext context) {
+    return PopupMenuButton(
+      onSelected: (v) {
+        switch (v) {
+          case 1:
+            onShareChatPressed();
+            break;
+          case 2:
+            onSettingsPressed();
+            break;
+        }
+      },
+      itemBuilder: (v) {
+        return [
+          PopupMenuItem(
+            value: 1,
+            child: Row(
+              children: [
+                const Icon(Icons.share_rounded),
+                8.w,
+                Text(S.of(context).share_chat),
+              ],
+            ),
+          ),
+          PopupMenuItem(
+            value: 2,
+            child: Row(
+              children: [
+                const Icon(Icons.settings_rounded),
+                8.w,
+                Text(S.of(context).session_configuration),
+              ],
+            ),
+          ),
+        ];
+      },
     );
   }
 }
@@ -153,7 +195,7 @@ class _NewConversationButton extends ConsumerWidget {
 
     icon = const Icon(Icons.add_comment_outlined);
     final loaded = ref.watch(P.rwkv.loaded);
-    final isEmpty = ref.watch(P.chat.messages.select((v) => v.isEmpty));
+    final isEmpty = ref.watch(P.msg.list.select((v) => v.isEmpty));
 
     return IconButton(
       onPressed: loaded && !isEmpty

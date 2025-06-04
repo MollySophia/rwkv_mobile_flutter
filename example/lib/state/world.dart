@@ -3,9 +3,9 @@ part of 'p.dart';
 class _World {
   // 🔥 Vision
 
-  late final imagePath = qsn<String>();
-  late final imageHeight = qsn<double>();
-  late final visualFloatHeight = qsn<double>();
+  late final imagePath = qs<String?>(null);
+  late final imageHeight = qs<double?>(null);
+  late final visualFloatHeight = qs<double?>(null);
 
   // 🔥 Audio
 
@@ -40,7 +40,7 @@ extension $World on _World {
       return;
     }
 
-    final t = HF.debugShorterUS;
+    final t = HF.debugShorterMS;
     startTime.q = t;
     recording.q = true;
     _currentStreamController = StreamController<Uint8List>();
@@ -76,7 +76,7 @@ extension $World on _World {
       return false;
     }
 
-    final t = HF.debugShorterUS;
+    final t = HF.debugShorterMS;
     endTime.q = t;
 
     final audioLengthInMilliseconds = endTime.q - startTime.q;

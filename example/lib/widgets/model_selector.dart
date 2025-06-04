@@ -24,19 +24,11 @@ class ModelSelector extends ConsumerWidget {
   static FV show() async {
     qq;
 
-    P.fileManager.modelSelectorShown.q = true;
-    P.fileManager.checkLocal();
+    if (P.fileManager.modelSelectorShown.q) return;
 
-    switch (P.app.demoType.q) {
-      case DemoType.fifthteenPuzzle:
-      case DemoType.othello:
-      case DemoType.sudoku:
-        break;
-      case DemoType.chat:
-      case DemoType.tts:
-      case DemoType.world:
-        P.suggestion.loadSuggestions();
-    }
+    P.fileManager.modelSelectorShown.q = true;
+
+    P.fileManager.checkLocal();
 
     if (!Args.disableRemoteConfig) {
       P.app.getConfig().then((_) async {
@@ -52,7 +44,6 @@ class ModelSelector extends ConsumerWidget {
     HF.wait(250).then((_) {
       P.device.sync();
     });
-
     await showModalBottomSheet(
       isScrollControlled: true,
       context: getContext()!,
@@ -90,7 +81,7 @@ class ModelSelector extends ConsumerWidget {
               .map((e) {
                 return e.socPairs
                     .where((pair) {
-                      return pair.$1 == "" || pair.$1 == P.rwkv.soc.q;
+                      return pair.$1 == "" || pair.$1 == P.rwkv.socName.q;
                     })
                     .map((pair) {
                       return WorldGroupItem(e, socPair: pair);
@@ -149,9 +140,9 @@ class ModelSelector extends ConsumerWidget {
           padding: const EI.o(l: 12, r: 12),
           controller: scrollController,
           children: [
-            Ro(
+            Row(
               children: [
-                Exp(
+                Expanded(
                   child: T(s.chat_welcome_to_use(Config.appTitle), s: const TS(s: 18, w: FW.w600)),
                 ),
                 IconButton(
@@ -189,8 +180,8 @@ class _DownloadSource extends ConsumerWidget {
     final primary = Theme.of(context).colorScheme.primary;
     final kW = ref.watch(P.app.qw);
     final kB = ref.watch(P.app.qb);
-    return Co(
-      c: CrossAxisAlignment.stretch,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         4.h,
         T(

@@ -44,10 +44,10 @@ class ArgumentsPanel extends ConsumerWidget {
       borderRadius: 16.r,
       child: C(
         margin: const EI.o(t: 8),
-        child: Co(
-          c: CAA.stretch,
+        child: Column(
+          crossAxisAlignment: CAA.stretch,
           children: [
-            Ro(
+            Row(
               children: [
                 4.w,
                 TextButton(
@@ -60,10 +60,10 @@ class ArgumentsPanel extends ConsumerWidget {
                   },
                   child: T(s.cancel),
                 ),
-                Exp(
-                  child: Ro(
-                    c: CAA.center,
-                    m: MAA.center,
+                Expanded(
+                  child: Row(
+                    crossAxisAlignment: CAA.center,
+                    mainAxisAlignment: MAA.center,
                     children: [
                       const Icon(Icons.tune),
                       12.w,
@@ -88,7 +88,7 @@ class ArgumentsPanel extends ConsumerWidget {
               ],
             ),
             12.h,
-            Exp(
+            Expanded(
               child: ListView(
                 controller: scrollController,
                 padding: EI.o(b: paddingBottom),
@@ -123,10 +123,10 @@ class _SamplerOptions extends ConsumerWidget {
     return C(
       margin: const EI.s(h: 12),
       decoration: BD(color: kB.q(.1), borderRadius: 8.r),
-      child: Ro(
+      child: Row(
         children: [
           12.w,
-          Exp(child: T("Sampler Options" + (reasoning ? " (Reason)" : ""))),
+          Expanded(child: T("Sampler Options" + (reasoning ? " (Reason)" : ""))),
           TextButton(
             style: TextButton.styleFrom(
               padding: EI.zero,
@@ -154,10 +154,10 @@ class _CompletionOptions extends ConsumerWidget {
     return C(
       margin: const EI.s(h: 12),
       decoration: BD(color: kB.q(.1), borderRadius: 8.r),
-      child: Ro(
+      child: Row(
         children: [
           12.w,
-          Exp(child: T("Completion Options" + (reasoning ? " (Reason)" : ""))),
+          Expanded(child: T("Completion Options" + (reasoning ? " (Reason)" : ""))),
           TextButton(
             style: TextButton.styleFrom(
               padding: EI.zero,
@@ -216,14 +216,14 @@ class _Value extends ConsumerWidget {
     final value = ref.watch(P.rwkv.arguments(argument));
     if (!argument.show) return const SizedBox.shrink();
     final kB = ref.watch(P.app.qb);
-    return Co(
-      c: CAA.stretch,
+    return Column(
+      crossAxisAlignment: CAA.stretch,
       children: [
         12.h,
-        Ro(
+        Row(
           children: [
             12.w,
-            Exp(
+            Expanded(
               child: T(
                 argument.name.codeToName,
                 s: const TS(
@@ -237,7 +237,7 @@ class _Value extends ConsumerWidget {
           ],
         ),
         4.h,
-        Ro(
+        Row(
           children: [
             12.w,
             T(
@@ -245,7 +245,7 @@ class _Value extends ConsumerWidget {
               s: TS(s: 12, c: kB.q(.5)),
             ),
             14.w,
-            Exp(
+            Expanded(
               child: Slider(
                 padding: EI.zero,
                 value: value,

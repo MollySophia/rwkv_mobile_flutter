@@ -6,6 +6,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:halo_state/halo_state.dart';
+import 'package:zone/func/check_model_selection.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:halo_alert/halo_alert.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +18,10 @@ import 'package:zone/model/language.dart';
 import 'package:zone/model/tts_instruction.dart';
 import 'package:zone/state/p.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:zone/widgets/performance_info.dart';
 
-class TTSBar extends ConsumerWidget {
-  const TTSBar({super.key});
+class TTSBottomInteractions extends ConsumerWidget {
+  const TTSBottomInteractions({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -47,8 +49,8 @@ class TTSBar extends ConsumerWidget {
       onTap: P.tts.dismissAllShown,
       child: C(
         decoration: const BD(color: kC),
-        child: Co(
-          c: CAA.stretch,
+        child: Column(
+          crossAxisAlignment: CAA.stretch,
           children: [
             if (selectedSpkName != null)
               C(
@@ -114,13 +116,13 @@ class _AudioInteractor extends ConsumerWidget {
     final primary = Theme.of(context).colorScheme.primary;
     return SB(
       height: 250,
-      child: Co(
+      child: Column(
         children: [
           24.h,
-          Ro(
+          Row(
             children: [
               24.w,
-              Exp(
+              Expanded(
                 child: Text.rich(
                   TextSpan(
                     children: [
@@ -321,8 +323,8 @@ class _Actions extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ttsDone = ref.watch(P.tts.ttsDone);
-    final canSend = ref.watch(P.chat.canSend);
-    final editingBotMessage = ref.watch(P.chat.editingBotMessage);
+    final canSend = ref.watch(P.chat.inputHasContent);
+    final editingBotMessage = ref.watch(P.msg.editingBotMessage);
     final color = Theme.of(context).colorScheme.primary;
     final loaded = ref.watch(P.rwkv.loaded);
     final interactingInstruction = ref.watch(P.tts.interactingInstruction);
@@ -331,9 +333,9 @@ class _Actions extends ConsumerWidget {
     final intonationShown = ref.watch(P.tts.intonationShown);
     final spkShown = ref.watch(P.tts.spkShown);
 
-    return Ro(
+    return Row(
       children: [
-        Exp(
+        Expanded(
           child: Wrap(
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
@@ -341,7 +343,7 @@ class _Actions extends ConsumerWidget {
               const _SpkButton(),
               const _IntonationButton(),
               if (!audioInteractorShown && !intonationShown && !spkShown && interactingInstruction == TTSInstruction.none)
-                const _PerformanceInfo(),
+                const PerformanceInfo(),
             ],
           ),
         ),
@@ -442,13 +444,13 @@ class _SpkPanel extends ConsumerWidget {
 
     return SB(
       height: 250,
-      child: Co(
-        c: CAA.stretch,
+      child: Column(
+        crossAxisAlignment: CAA.stretch,
         children: [
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             physics: const AlwaysScrollableScrollPhysics(),
-            child: Ro(
+            child: Row(
               children: [Language.zh_Hans, Language.en, Language.ja].m((e) {
                 final flag = e.flag;
                 final localizedName = e.soundDisplay;
@@ -468,7 +470,7 @@ class _SpkPanel extends ConsumerWidget {
                       borderRadius: 4.r,
                       border: Border.all(color: kB.q(.5), width: .5),
                     ),
-                    child: Ro(
+                    child: Row(
                       children: [
                         T((flag ?? "") + " " + (localizedName ?? "")),
                         if (selected) 4.w,
@@ -480,7 +482,7 @@ class _SpkPanel extends ConsumerWidget {
               }),
             ),
           ),
-          Exp(
+          Expanded(
             child: RawScrollbar(
               controller: controller,
               padding: const EI.o(t: 12, b: 12),
@@ -505,18 +507,18 @@ class _SpkPanel extends ConsumerWidget {
                       P.tts.selectSourceAudioPath.q = null;
                       P.app.hapticLight();
                     },
-                    child: Ro(
+                    child: Row(
                       children: [
-                        Exp(
+                        Expanded(
                           child: C(
                             padding: const EI.o(t: 4, b: 4, l: 8, r: 8),
                             decoration: BD(
                               color: selected ? primary.q(.1) : kC,
                               borderRadius: 6.r,
                             ),
-                            child: Ro(
+                            child: Row(
                               children: [
-                                Exp(
+                                Expanded(
                                   child: T(
                                     display,
                                     s: TS(c: selected ? primary : primary.q(.8), w: selected ? FW.w600 : FW.w400),
@@ -535,7 +537,7 @@ class _SpkPanel extends ConsumerWidget {
                         GD(
                           onTap: () async {
                             final path = await P.tts.getPrebuiltSpkAudioPathFromTemp(k);
-                            P.chat.latestClickedMessage.q = null;
+                            P.msg.latestClicked.q = null;
                             await P.world.play(path: path);
                           },
                           child: C(
@@ -573,8 +575,8 @@ class _Instruction extends ConsumerWidget {
     return Stack(
       children: [
         if (selectSpkName == null)
-          Co(
-            c: CAA.stretch,
+          Column(
+            crossAxisAlignment: CAA.stretch,
             children: [
               const _TextField(),
               if (!hasFocus) const _InstructTabs(),
@@ -617,9 +619,9 @@ class _InstructTabs extends ConsumerWidget {
     final isZh = Localizations.localeOf(context).languageCode == "zh";
 
     final kB = ref.watch(P.app.qb);
-    return Ro(
+    return Row(
       children: [
-        Exp(
+        Expanded(
           child: Wrap(
             // runSpacing: 4,
             spacing: 4,
@@ -658,8 +660,8 @@ class _InstructTabs extends ConsumerWidget {
                       border: Border.all(color: kB.q(.5), width: .5),
                       borderRadius: 4.r,
                     ),
-                    child: Ro(
-                      c: CAA.center,
+                    child: Row(
+                      crossAxisAlignment: CAA.center,
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         if (hasValue)
@@ -797,7 +799,7 @@ class _TextField extends ConsumerWidget {
           maxLines: 5,
           minLines: 1,
           decoration: InputDecoration(
-            suffixIcon: Ro(
+            suffixIcon: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 GD(
@@ -890,32 +892,6 @@ class _TextField extends ConsumerWidget {
 
   void _onTapTextFieldWhenItsDisabled() {
     qq;
-    final loaded = P.rwkv.loaded.q;
-    if (!loaded) {
-      Alert.info(S.current.please_load_model_first);
-      P.fileManager.modelSelectorShown.q = true;
-      return;
-    }
-  }
-}
-
-class _PerformanceInfo extends ConsumerWidget {
-  const _PerformanceInfo();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final prefillSpeed = ref.watch(P.rwkv.prefillSpeed);
-    final decodeSpeed = ref.watch(P.rwkv.decodeSpeed);
-    final kB = ref.watch(P.app.qb);
-    if (prefillSpeed == 0 && decodeSpeed == 0) return const SizedBox.shrink();
-    return Co(
-      c: CAA.start,
-      m: MAA.center,
-      children: [
-        T("Prefill: ${prefillSpeed.toStringAsFixed(2)} t/s", s: TS(c: kB.q(.6), s: 10)),
-        T("Decode: ${decodeSpeed.toStringAsFixed(2)} t/s", s: TS(c: kB.q(.6), s: 10)),
-        6.h,
-      ],
-    );
+    if (!checkModelSelection()) return;
   }
 }

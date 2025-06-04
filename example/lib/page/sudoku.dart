@@ -12,6 +12,7 @@ import 'package:zone/gen/l10n.dart';
 import 'dart:math' as math;
 
 import 'package:zone/state/p.dart';
+import 'package:zone/widgets/chat/app_bar.dart';
 import 'package:zone/widgets/menu.dart';
 import 'package:zone/widgets/model_selector.dart';
 import 'package:zone/widgets/pager.dart';
@@ -52,23 +53,32 @@ class _Page extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
-    final padding = MediaQuery.of(context).padding;
+    final screenWidth = ref.watch(P.app.screenWidth);
+    final screenHeight = ref.watch(P.app.screenHeight);
+    final isPortrait = (screenHeight - kToolbarHeight) > screenWidth;
+    final paddingTop = ref.watch(P.app.paddingTop);
     final kW = ref.watch(P.app.qw);
 
     return Scaffold(
       backgroundColor: kW,
+      floatingActionButton: FloatingActionButton.small(
+        onPressed: () {
+          Pager.toggle();
+        },
+        child: const Icon(Icons.menu),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
       body: isPortrait
-          ? Co(
+          ? Column(
               children: [
-                padding.top.h,
+                paddingTop.h,
                 const _UI(),
-                const Exp(child: _Terminal()),
+                const Expanded(child: _Terminal()),
               ],
             )
-          : const Ro(
+          : const Row(
               children: [
-                Exp(child: _Terminal()),
+                Expanded(child: _Terminal()),
                 _UI(),
               ],
             ),
@@ -204,8 +214,8 @@ class _ButtonInference extends ConsumerWidget {
           ),
           onPressed: !hasPuzzle || running ? null : () => _onPressed(context, ref),
           child: running
-              ? Ro(
-                  m: MAA.center,
+              ? Row(
+                  mainAxisAlignment: MAA.center,
                   children: [
                     SB(
                       width: 12,
@@ -304,9 +314,9 @@ class _UI extends ConsumerWidget {
       P.sudoku.uiOffset.q = Offset(position.dx, 0);
     });
 
-    final isPortrait = ref.watch(P.app.isPortrait);
     final screenWidth = ref.watch(P.app.screenWidth);
     final screenHeight = ref.watch(P.app.screenHeight);
+    final isPortrait = (screenHeight - kToolbarHeight) > screenWidth;
 
     final paddingBottom = ref.watch(P.app.quantizedIntPaddingBottom);
     final paddingTop = ref.watch(P.app.paddingTop);
@@ -334,24 +344,24 @@ class _UI extends ConsumerWidget {
       const _TokensInfo(),
       4.h,
       if (shouldUseVerticalLayout)
-        Co(
+        Column(
           children: [
-            Ro(
+            Row(
               children: [
                 8.w,
-                const Exp(child: _ButtonGenerate()),
+                const Expanded(child: _ButtonGenerate()),
                 8.w,
-                const Exp(child: _ButtonInference()),
+                const Expanded(child: _ButtonInference()),
                 8.w,
               ],
             ),
             4.h,
-            Ro(
+            Row(
               children: [
                 8.w,
-                const Exp(child: _ButtonClear()),
+                const Expanded(child: _ButtonClear()),
                 4.w,
-                const Exp(child: _ButtonShowStack()),
+                const Expanded(child: _ButtonShowStack()),
                 8.w,
               ],
             ),
@@ -375,22 +385,22 @@ class _UI extends ConsumerWidget {
       decoration: BD(color: kW),
       margin: !isPortrait ? EI.o(t: paddingTop) : null,
       child: shouldUseVerticalLayout
-          ? Co(
+          ? Column(
               children: [
-                const Exp(flex: 7, child: _Sudoku()),
-                Exp(
+                const Expanded(flex: 7, child: _Sudoku()),
+                Expanded(
                   flex: 3,
-                  child: Co(c: CAA.stretch, children: buttons),
+                  child: Column(crossAxisAlignment: CAA.stretch, children: buttons),
                 ),
               ],
             )
-          : Ro(
-              c: CAA.stretch,
+          : Row(
+              crossAxisAlignment: CAA.stretch,
               children: [
-                const Exp(flex: 7, child: _Sudoku()),
-                Exp(
+                const Expanded(flex: 7, child: _Sudoku()),
+                Expanded(
                   flex: 3,
-                  child: Co(c: CAA.stretch, children: buttons),
+                  child: Column(crossAxisAlignment: CAA.stretch, children: buttons),
                 ),
               ],
             ),
@@ -427,18 +437,18 @@ class _Board extends ConsumerWidget {
     final dynamicData = ref.watch(P.sudoku.dynamicData);
     final isDesktop = ref.watch(P.app.isDesktop);
     final double magnification = isDesktop ? 2 : 1;
-    return Co(
+    return Column(
       children:
           List.generate(9, (rowIndex) {
-            return Exp(
-              child: Ro(
+            return Expanded(
+              child: Row(
                 children:
                     List.generate(9, (colIndex) {
                       final staticValue = staticData[rowIndex][colIndex];
                       final dynamicValue = dynamicData[rowIndex][colIndex];
                       final isStatic = dynamicValue == 0 || dynamicValue == staticValue;
                       final value = isStatic ? staticValue : dynamicValue;
-                      return Exp(
+                      return Expanded(
                         child: _Grid(
                           value: value,
                           isStatic: isStatic,
@@ -549,8 +559,8 @@ class _TokensInfo extends ConsumerWidget {
     final isDesktop = ref.watch(P.app.isDesktop);
     final shouldUseVerticalLayout = isDesktop && ratio < 2.2 && !isPortrait;
     return shouldUseVerticalLayout
-        ? Ro(
-            m: MAA.center,
+        ? Row(
+            mainAxisAlignment: MAA.center,
             children: [
               T(
                 "$tokenCount ${tokenCount > 1 ? "tokens" : "token"}",
@@ -565,7 +575,7 @@ class _TokensInfo extends ConsumerWidget {
               ),
             ],
           )
-        : Co(
+        : Column(
             children: [
               T(
                 "$tokenCount ${tokenCount > 1 ? "tokens" : "token"}",
@@ -619,7 +629,11 @@ class _Grid extends ConsumerWidget {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final RenderBox renderBox = context.findRenderObject() as RenderBox;
-      final Offset position = renderBox.localToGlobal(Offset.zero);
+      Offset position = renderBox.localToGlobal(Offset.zero);
+      final atMainPage = Pager.atMainPage.q;
+      // position = Offset(position.dx - (atMainPage ? drawerWidth : 0), position.dy);
+      position = Offset(position.dx - (atMainPage ? 0 : 0), position.dy);
+
       P.sudoku.widgetPosition.q = {
         ...P.sudoku.widgetPosition.q,
         "$col-$row": position,

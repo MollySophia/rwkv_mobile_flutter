@@ -125,11 +125,15 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "discord": MessageLookupByLibrary.simpleMessage("Discord"),
     "download_all": MessageLookupByLibrary.simpleMessage("Download All"),
+    "download_from_browser": MessageLookupByLibrary.simpleMessage(
+      "Download from browser",
+    ),
     "download_missing": MessageLookupByLibrary.simpleMessage(
       "Download Missing Files",
     ),
     "download_model": MessageLookupByLibrary.simpleMessage("Download model"),
     "download_source": MessageLookupByLibrary.simpleMessage("Download Source"),
+    "downloading": MessageLookupByLibrary.simpleMessage("Downloading"),
     "draw": MessageLookupByLibrary.simpleMessage("Draw!"),
     "dump_see_files": MessageLookupByLibrary.simpleMessage(
       "Dump Message Records",
@@ -330,6 +334,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "set_the_value_of_grid": MessageLookupByLibrary.simpleMessage(
       "Set Grid Value",
     ),
+    "share_chat": MessageLookupByLibrary.simpleMessage("Share Chat"),
     "show_stack": MessageLookupByLibrary.simpleMessage("Show Thought Stack"),
     "size_recommendation": MessageLookupByLibrary.simpleMessage(
       "It is recommended to choose at least a 1.5B model for better results",

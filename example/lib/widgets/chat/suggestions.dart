@@ -23,8 +23,8 @@ class Suggestions extends ConsumerWidget {
   void _onSuggestionTap(dynamic suggestion) {
     switch (P.app.demoType.q) {
       case DemoType.chat:
-        final text = (suggestion as Suggestion).prompt;
-        P.chat.send(text);
+        final s = (suggestion as Suggestion);
+        P.chat.send(s.prompt.isEmpty ? s.display : s.prompt);
       case DemoType.fifthteenPuzzle:
       case DemoType.othello:
       case DemoType.sudoku:
@@ -38,7 +38,6 @@ class Suggestions extends ConsumerWidget {
           final last = current.characters.last;
           final lastIsChinese = containsChineseCharacters(last);
           final lastIsEnglish = isEnglish(last);
-          P.suggestion.loadSuggestions();
           if (lastIsChinese) {
             P.chat.textEditingController.text = "$current。$suggestion";
           } else if (lastIsEnglish) {
@@ -52,74 +51,34 @@ class Suggestions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final imagePath = ref.watch(P.world.imagePath);
     final demoType = ref.watch(P.app.demoType);
-    final messages = ref.watch(P.chat.messages);
     final paddingBottom = ref.watch(P.app.quantizedIntPaddingBottom);
-    final currentModel = ref.watch(P.rwkv.currentModel);
     final inputHeight = ref.watch(P.chat.inputHeight);
 
-    final _ = ref.watch(P.fileManager.modelSelectorShown);
-
-    final currentWorldType = ref.watch(P.rwkv.currentWorldType);
-
-    bool show = false;
-
-    List<dynamic> suggestions = [];
+    List<dynamic> suggestions = ref.watch(P.suggestion.suggestion);
     final config = ref.watch(P.suggestion.config);
 
-    switch (demoType) {
-      case DemoType.chat:
-        show = messages.isEmpty && currentModel != null;
-        suggestions = config.chat.map((e) => e.suggestions).flattened.shuffled().take(5).toList();
-      case DemoType.world:
-        switch (currentWorldType) {
-          case WorldType.reasoningQA:
-            show = imagePath != null && imagePath.isNotEmpty && messages.length == 1;
-            suggestions = config.seeReasoningQa;
-            break;
-          case WorldType.ocr:
-            show = imagePath != null && imagePath.isNotEmpty && messages.length == 1;
-            suggestions = config.seeOcr.shuffled.take(5).toList();
-            break;
-          case WorldType.qa:
-            show = imagePath != null && imagePath.isNotEmpty && messages.length == 1;
-            suggestions = [
-              "请向我描述这张图片",
-              "Please describe this image for me~",
-            ];
-            break;
-          case WorldType.engVisualQA:
-          case WorldType.engAudioQA:
-          case WorldType.chineseASR:
-          case WorldType.engASR:
-          case null:
-            break;
-        }
-      case DemoType.fifthteenPuzzle:
-      case DemoType.othello:
-      case DemoType.sudoku:
-      case DemoType.tts:
-        return const SizedBox.shrink();
+    if (suggestions.isEmpty) {
+      return SizedBox.shrink();
     }
 
-    double bottom = show ? paddingBottom + 114 : -paddingBottom - defaultHeight;
+    double bottom = paddingBottom + 114;
 
-    if (show && demoType == DemoType.tts) {
+    if (demoType == DemoType.tts) {
       bottom += inputHeight - 114 - paddingBottom;
     }
 
-    final showAllPromptButton = config.chat.length > 1;
+    final showAllPromptButton = demoType == DemoType.chat && config.chat.length > 1;
 
     return Positioned(
       bottom: bottom,
       left: 0,
       right: 0,
-      height: defaultHeight,
+      height: Suggestions.defaultHeight,
       child: Row(
         children: [
-          Exp(
-            child: _buildRndPromptList(context, demoType, suggestions),
+          Expanded(
+            child: _buildRndPromptList(context, suggestions),
           ),
           if (showAllPromptButton) 8.w,
           if (showAllPromptButton) _buildAllButton(context),
@@ -130,18 +89,19 @@ class Suggestions extends ConsumerWidget {
   }
 
   Widget _buildRndPromptList(
-      BuildContext context,
-      DemoType demoType,
-      List suggestions,
-      ) {
+    BuildContext context,
+    List suggestions,
+  ) {
     final primary = Theme.of(context).primaryColor;
     return ListView(
       padding: const EI.o(l: 8, b: 8, t: 2),
       scrollDirection: Axis.horizontal,
       children: suggestions.map((e) {
         String displayText = '';
-        if (demoType == DemoType.chat) {
-          displayText = (e as Suggestion).display;
+        if (e is Suggestion) {
+          displayText = e.display;
+        } else {
+          displayText = e.toString();
         }
         return _buildTag(
           displayText,
@@ -272,8 +232,8 @@ class _AllSuggestionDialogState extends State<AllSuggestionDialog> implements Ti
   Widget build(BuildContext context) {
     return SB(
       width: double.infinity,
-      child: Co(
-        c: CrossAxisAlignment.center,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           16.h,
           T(S.of(context).all_prompt, s: const TS(s: 16, w: FW.w600)),
@@ -297,7 +257,7 @@ class _AllSuggestionDialogState extends State<AllSuggestionDialog> implements Ti
               ],
             ),
           ),
-          Exp(
+          Expanded(
             child: PageView.builder(
               controller: pageController,
               itemCount: categoryCount,
@@ -305,7 +265,7 @@ class _AllSuggestionDialogState extends State<AllSuggestionDialog> implements Ti
                 final category = allCategories[page];
                 return _SuggestionList(
                   scrollController: widget.scrollController,
-                  suggestions: category.suggestions,
+                  suggestions: category.items,
                 );
               },
             ),
@@ -341,7 +301,7 @@ class _SuggestionList extends StatelessWidget {
     return ListView.builder(
       controller: scrollController,
       itemCount: suggestions.length,
-      padding: const EI.o(t: 8, b: 40),
+      padding: EI.o(t: 8, b: 40),
       itemBuilder: (c, i) {
         final s = suggestions[i];
         return InkWell(

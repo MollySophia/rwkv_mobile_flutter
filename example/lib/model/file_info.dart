@@ -79,6 +79,8 @@ class FileInfo extends Equatable {
   /// ["8 Gen 3", ...]
   final List<String> socLimitations;
 
+  final Set<SocBrand> unsupportedSocBrand;
+
   const FileInfo({
     required this.name,
     required this.fileName,
@@ -95,6 +97,7 @@ class FileInfo extends Equatable {
     required this.quantization,
     required this.tags,
     required this.socLimitations,
+    required this.unsupportedSocBrand,
   });
 
   factory FileInfo.fromJSON(Map<String, dynamic> json) {
@@ -103,6 +106,7 @@ class FileInfo extends Equatable {
     final rawFileType = json['fileType'];
     final fileType = rawFileType == null ? FileType.weights : FileType.values.byName(rawFileType);
     final socLimitations = HF.list(json['socLimitations'] ?? []).map((e) => e.toString()).toList();
+    final unsupportedSocBrand = HF.list(json['unsupportedSocBrand'] ?? []).map((e) => SocBrand.values.byName(e.toString())).toSet();
     return FileInfo(
       name: json['name'],
       fileName: json['fileName'],
@@ -119,6 +123,7 @@ class FileInfo extends Equatable {
       quantization: json['quantization'] as String?,
       tags: HF.list(json['tags'] ?? []).map((e) => e.toString()).toList(),
       socLimitations: socLimitations,
+      unsupportedSocBrand: unsupportedSocBrand,
     );
   }
 
@@ -135,13 +140,14 @@ class FileInfo extends Equatable {
 
   bool get socSupported {
     if (socLimitations.isEmpty) return true;
-    final soc = P.rwkv.soc.q;
+    final soc = P.rwkv.socName.q;
     return socLimitations.contains(soc);
   }
 
   bool get available {
     if (isDebug) return kDebugMode && platformSupported;
     if (fileType == FileType.downloadTest) return kDebugMode;
+    if (unsupportedSocBrand.contains(P.rwkv.socBrand.q)) return false;
     return platformSupported && socSupported;
   }
 
@@ -186,6 +192,8 @@ FileInfo(
   ext: $ext,
   quantization: $quantization,
   tags: $tags,
+  socLimitations: $socLimitations,
+  unsupportedSocBrand: $unsupportedSocBrand,
 )''';
   }
 }

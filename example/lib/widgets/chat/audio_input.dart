@@ -128,7 +128,7 @@ class AudioInput extends ConsumerWidget {
               Positioned(
                 left: 0,
                 right: 0,
-                child: Co(
+                child: Column(
                   children: [
                     GD(
                       onTapDown: _onTapDown,

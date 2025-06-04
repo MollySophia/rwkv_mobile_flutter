@@ -90,7 +90,10 @@ class RWKVMobile {
     // TODO: We can load the runtime in the future. Only Apple cannot.
     final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
 
-    if (kDebugMode) rwkvMobile.rwkvmobile_set_loglevel(RWKV_LOG_LEVEL_DEBUG);
+    if (kDebugMode) {
+      const logLevel = int.fromEnvironment('logLevel', defaultValue: RWKV_LOG_LEVEL_DEBUG);
+      rwkvMobile.rwkvmobile_set_loglevel(logLevel);
+    }
 
     // definitions
     int maxLength = 2000;

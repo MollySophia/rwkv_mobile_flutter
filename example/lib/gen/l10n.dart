@@ -28,10 +28,9 @@ class S {
   static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
-    final name =
-        (locale.countryCode?.isEmpty ?? false)
-            ? locale.languageCode
-            : locale.toString();
+    final name = (locale.countryCode?.isEmpty ?? false)
+        ? locale.languageCode
+        : locale.toString();
     final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
@@ -1377,6 +1376,11 @@ class S {
     return Intl.message('无数据', name: 'no_data', desc: '', args: []);
   }
 
+  /// `分享聊天`
+  String get share_chat {
+    return Intl.message('分享聊天', name: 'share_chat', desc: '', args: []);
+  }
+
   /// `快思考`
   String get quick_thinking {
     return Intl.message('快思考', name: 'quick_thinking', desc: '', args: []);
@@ -1390,6 +1394,21 @@ class S {
       desc: '',
       args: [],
     );
+  }
+
+  /// `从浏览器下载`
+  String get download_from_browser {
+    return Intl.message(
+      '从浏览器下载',
+      name: 'download_from_browser',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `下载中`
+  String get downloading {
+    return Intl.message('下载中', name: 'downloading', desc: '', args: []);
   }
 }
 
