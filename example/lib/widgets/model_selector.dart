@@ -53,10 +53,9 @@ class ModelSelector extends ConsumerWidget {
           maxChildSize: .9,
           expand: false,
           snap: false,
+
           builder: (BuildContext context, ScrollController scrollController) {
-            return ModelSelector(
-              scrollController: scrollController,
-            );
+            return ModelSelector(scrollController: scrollController);
           },
         );
       },
@@ -130,7 +129,7 @@ class ModelSelector extends ConsumerWidget {
     final demoType = ref.watch(P.app.demoType);
     final availableModels = ref.watch(P.fileManager.availableModels);
     final ttsCores = ref.watch(P.fileManager.ttsCores);
-    final kB = ref.watch(P.app.qb);
+    final qb = ref.watch(P.app.qb);
 
     return ClipRRect(
       borderRadius: 16.r,
@@ -154,12 +153,12 @@ class ModelSelector extends ConsumerWidget {
               ],
             ),
             if (demoType == DemoType.world) T(s.please_select_a_world_type, s: const TS(s: 16, w: FW.w500)),
-            T(s.memory_used(memUsedString, memFreeString), s: TS(c: kB.q(.7), s: 12)),
+            // T(s.memory_used(memUsedString, memFreeString), s: TS(c: qb.q(.7), s: 12)),
             const _DownloadSource(),
             if (demoType == DemoType.chat)
               T(
                 "👉${s.size_recommendation}👈",
-                s: TS(c: kB.q(.7), s: 12, w: FW.w500),
+                s: TS(c: qb.q(.7), s: 12, w: FW.w500),
               ),
             ..._buildItems(context, ref),
             16.h,
@@ -178,8 +177,8 @@ class _DownloadSource extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentSource = ref.watch(P.fileManager.downloadSource);
     final primary = Theme.of(context).colorScheme.primary;
-    final kW = ref.watch(P.app.qw);
-    final kB = ref.watch(P.app.qb);
+    final qw = ref.watch(P.app.qw);
+    final qb = ref.watch(P.app.qb);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [

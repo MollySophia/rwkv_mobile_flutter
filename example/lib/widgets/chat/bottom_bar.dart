@@ -24,7 +24,7 @@ class BottomBar extends ConsumerWidget {
     final primary = Theme.of(context).colorScheme.primary;
     final demoType = ref.watch(P.app.demoType);
 
-    final qw = ref.watch(P.app.qw);
+    final scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
 
     return Positioned(
       bottom: 0,
@@ -39,7 +39,7 @@ class BottomBar extends ConsumerWidget {
             filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
             child: C(
               decoration: BD(
-                color: qw.q(.8),
+                color: scaffoldBackgroundColor.q(.8),
                 border: Border(
                   top: BorderSide(
                     color: primary.q(.33),
@@ -102,7 +102,7 @@ class _TextField extends ConsumerWidget {
     final intonationShown = ref.watch(P.tts.intonationShown);
     final keyboardType = intonationShown ? TextInputType.none : TextInputType.multiline;
 
-    final kW = ref.watch(P.app.qw);
+    final qw = ref.watch(P.app.qw);
 
     return GD(
       onTap: textFieldEnabled ? null : _onTapTextFieldWhenItsDisabled,
@@ -128,10 +128,10 @@ class _TextField extends ConsumerWidget {
             t: 4,
             b: 4,
           ),
-          fillColor: kW,
-          focusColor: kW,
-          hoverColor: kW,
-          iconColor: kW,
+          fillColor: qw,
+          focusColor: qw,
+          hoverColor: qw,
+          iconColor: qw,
           border: OutlineInputBorder(
             borderRadius: borderRadius,
             borderSide: BorderSide(color: primary.q(.33)),

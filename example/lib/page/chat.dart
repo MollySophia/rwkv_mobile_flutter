@@ -40,7 +40,6 @@ class _Page extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return const Scaffold(
-      backgroundColor: kW,
       body: Stack(
         children: [
           _List(),
@@ -64,7 +63,7 @@ class _NavigationBarBottomLine extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final paddingTop = ref.watch(P.app.paddingTop);
-    final kB = ref.watch(P.app.qb);
+    final qb = ref.watch(P.app.qb);
     return Positioned(
       top: paddingTop + kToolbarHeight,
       left: 0,
@@ -72,7 +71,7 @@ class _NavigationBarBottomLine extends ConsumerWidget {
       height: .5,
       child: C(
         height: kToolbarHeight,
-        color: kB.q(.1),
+        color: qb.q(.1),
       ),
     );
   }
@@ -130,7 +129,7 @@ class _List extends ConsumerWidget {
         bottom += Suggestions.defaultHeight;
         scrollBarBottom += Suggestions.defaultHeight;
     }
-    final kB = ref.watch(P.app.qb);
+    final qb = ref.watch(P.app.qb);
 
     // return Positioned.fill(child: C());
 
@@ -140,7 +139,7 @@ class _List extends ConsumerWidget {
         child: RawScrollbar(
           radius: 100.rr,
           thickness: 4,
-          thumbColor: kB.q(.4),
+          thumbColor: qb.q(.4),
           padding: EI.o(
             r: 4,
             b: scrollBarBottom,
@@ -148,7 +147,6 @@ class _List extends ConsumerWidget {
           ),
           controller: P.chat.scrollController,
           child: ScrollShotArea(
-            repaintBoundaryColor: kW,
             key: keyChatList,
             controller: P.chat.scrollController,
             child: ListView.separated(

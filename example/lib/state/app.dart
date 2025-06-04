@@ -25,6 +25,8 @@ class _App extends RawApp {
   late final isMobile = qp((ref) => ref.watch(_isMobile));
   final _isMobile = qs(true);
 
+  late final customTheme = qs<custom_theme.CustomTheme>(custom_theme.Light());
+
   @override
   BuildContext? get context => getContext();
 }
@@ -95,8 +97,6 @@ extension _$App on _App {
 
     await init();
 
-    preferredThemeMode.q = ThemeMode.light;
-
     late final String name;
     if (kDebugMode) {
       name = (Args.demoType).replaceAll("__", "");
@@ -135,8 +135,6 @@ extension _$App on _App {
 
     lifecycleState.lv(_onLifecycleStateChanged);
 
-    HF.wait(1500).then((_) => _toLightMode());
-
     // 目前下面四种 demo 需要选择模型
     switch (demoType.q) {
       case DemoType.chat:
@@ -146,22 +144,68 @@ extension _$App on _App {
         HF.wait(1750).then((_) {
           final loaded = P.rwkv.loaded.q;
           if (loaded) return;
-          ModelSelector.show();
+          if (!Args.disableAutoWeightsPanelAutoShow) ModelSelector.show();
         });
       case DemoType.fifthteenPuzzle:
       // Other demos don't need to select model, weights are already built in
       case DemoType.othello:
         break;
     }
+
+    if (Args.debuggingThemes) {
+      Timer.periodic(const Duration(seconds: 4), (timer) {
+        final theme = customTheme.q;
+        switch (theme) {
+          case custom_theme.Light():
+            if (HF.randomBool()) {
+              customTheme.q = custom_theme.Dim();
+            } else {
+              customTheme.q = custom_theme.Dim();
+            }
+          case custom_theme.Dim():
+            customTheme.q = custom_theme.Light();
+          case custom_theme.Dark():
+            customTheme.q = custom_theme.Light();
+        }
+        if (customTheme.q.light) {
+          preferredThemeMode.q = ThemeMode.light;
+        } else {
+          preferredThemeMode.q = ThemeMode.dark;
+        }
+      });
+    }
+
+    customTheme.lv(_onCustomThemeChanged, fireImmediately: true);
   }
 
   FV _toLightMode() async {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        systemNavigationBarColor: this.qw.q,
-        systemNavigationBarIconBrightness: Brightness.light,
+        systemNavigationBarColor: customTheme.q.scaffold,
+        systemNavigationBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.dark,
       ),
     );
+  }
+
+  FV _toDarkMode() async {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        systemNavigationBarColor: customTheme.q.scaffold,
+        systemNavigationBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.light,
+      ),
+    );
+  }
+
+  FV _onCustomThemeChanged() async {
+    switch (customTheme.q) {
+      case custom_theme.Light():
+        _toLightMode();
+      case custom_theme.Dark():
+      case custom_theme.Dim():
+        _toDarkMode();
+    }
   }
 
   FV _onLifecycleStateChanged() async {

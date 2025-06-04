@@ -32,7 +32,8 @@ class Settings extends ConsumerWidget {
     final preferredTextScaleFactor = ref.watch(P.preference.preferredTextScaleFactor);
     final preferredLanguage = ref.watch(P.preference.preferredLanguage);
     final paddingLeft = ref.watch(P.app.paddingLeft);
-    final kB = ref.watch(P.app.qb);
+    final qb = ref.watch(P.app.qb);
+    final customTheme = ref.watch(P.app.customTheme);
 
     final iconWidget = SB(
       width: 64,
@@ -44,6 +45,7 @@ class Settings extends ConsumerWidget {
     );
 
     return Scaffold(
+      backgroundColor: customTheme.setting,
       body: ListView(
         padding: EI.o(
           t: paddingTop,
@@ -65,7 +67,7 @@ class Settings extends ConsumerWidget {
               Expanded(
                 child: T(
                   Config.appTitle,
-                  s: TS(s: 24, c: kB),
+                  s: TS(s: 24),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -75,8 +77,8 @@ class Settings extends ConsumerWidget {
           Row(
             mainAxisAlignment: MAA.center,
             children: [
-              T(version, s: TS(s: 12, c: kB)),
-              T(" ($buildNumber)", s: TS(s: 12, c: kB)),
+              T(version, s: TS(s: 12)),
+              T(" ($buildNumber)", s: TS(s: 12)),
             ],
           ),
           16.h,
@@ -86,7 +88,7 @@ class Settings extends ConsumerWidget {
               Expanded(
                 child: T(
                   s.application_settings,
-                  s: TS(w: FW.w500, c: kB.q(.8), s: 12),
+                  s: TS(w: FW.w500, c: qb.q(.8), s: 12),
                 ),
               ),
             ],
@@ -94,14 +96,14 @@ class Settings extends ConsumerWidget {
           8.h,
           FormItem(
             isSectionStart: true,
-            icon: Icon(Icons.format_size_outlined, color: kB.q(.667), size: 16),
+            icon: Icon(Icons.format_size_outlined, color: qb.q(.667), size: 16),
             title: s.font_size,
             info: "${P.preference.textScalePairs[preferredTextScaleFactor]}",
             onTap: P.preference.showTextScaleFactorDialog,
           ),
           FormItem(
             isSectionEnd: true,
-            icon: Icon(Icons.language_outlined, color: kB.q(.667), size: 16),
+            icon: Icon(Icons.language_outlined, color: qb.q(.667), size: 16),
             title: s.application_language,
             info: preferredLanguage.display ?? s.follow_system,
             onTap: P.preference.showLocaleDialog,
@@ -113,34 +115,34 @@ class Settings extends ConsumerWidget {
               Expanded(
                 child: T(
                   s.join_the_community,
-                  s: TS(w: FW.w500, c: kB.q(.8), s: 12),
+                  s: TS(w: FW.w500, c: qb.q(.8), s: 12),
                 ),
               ),
             ],
           ),
           8.h,
           FormItem(
-            icon: Icon(Icons.chat_bubble_outline, color: kB.q(.667), size: 16),
+            icon: Icon(Icons.chat_bubble_outline, color: qb.q(.667), size: 16),
             isSectionStart: true,
             title: s.qq_group_1,
             subtitle: "${s.application_internal_test_group}: 332381861",
             onTap: _openQQGroup1,
           ),
           FormItem(
-            icon: Icon(Icons.chat_bubble_outline, color: kB.q(.667), size: 16),
+            icon: Icon(Icons.chat_bubble_outline, color: qb.q(.667), size: 16),
             title: s.qq_group_2,
             subtitle: "${s.technical_research_group}: 325154699",
             onTap: _openQQGroup2,
           ),
           FormItem(
-            icon: Icon(Icons.chat_bubble_outline, color: kB.q(.667), size: 16),
+            icon: Icon(Icons.chat_bubble_outline, color: qb.q(.667), size: 16),
             title: s.discord,
             subtitle: s.join_our_discord_server,
             onTap: _openDiscord,
           ),
           FormItem(
             isSectionEnd: true,
-            icon: Icon(Icons.tag, color: kB.q(.667), size: 16),
+            icon: Icon(Icons.tag, color: qb.q(.667), size: 16),
             title: s.twitter,
             subtitle: "@BlinkDL_AI",
             onTap: _openTwitter,
@@ -151,7 +153,7 @@ class Settings extends ConsumerWidget {
             children: [
               T(
                 s.about,
-                s: TS(w: FW.w500, c: kB.q(.8), s: 12),
+                s: TS(w: FW.w500, c: qb.q(.8), s: 12),
               ),
             ],
           ),
@@ -159,7 +161,7 @@ class Settings extends ConsumerWidget {
           FormItem(
             isSectionStart: true,
             title: s.feedback,
-            icon: Icon(Icons.feedback_outlined, color: kB.q(.667), size: 16),
+            icon: Icon(Icons.feedback_outlined, color: qb.q(.667), size: 16),
             onTap: _openFeedback,
           ),
           if (demoType == DemoType.world && Platform.isAndroid)
@@ -167,7 +169,7 @@ class Settings extends ConsumerWidget {
               isSectionStart: false,
               title: S.current.dump_see_files,
               subtitle: S.current.dump_see_files_subtitle,
-              icon: Icon(Icons.bug_report, color: kB.q(.667), size: 16),
+              icon: Icon(Icons.bug_report, color: qb.q(.667), size: 16),
               trailing: const _DumpSwitch(),
               onTap: () {
                 if (P.preference.dumpping.q == true) {
@@ -181,7 +183,7 @@ class Settings extends ConsumerWidget {
           FormItem(
             isSectionEnd: true,
             title: s.license,
-            icon: Icon(Icons.contact_page_outlined, color: kB.q(.667), size: 16),
+            icon: Icon(Icons.contact_page_outlined, color: qb.q(.667), size: 16),
             onTap: () => _showLicensePage(context, version, buildNumber, iconWidget),
           ),
           paddingBottom.h,

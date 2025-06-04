@@ -119,10 +119,10 @@ class _SamplerOptions extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final s = S.of(context);
     final reasoning = ref.watch(P.rwkv.reasoning);
-    final kB = ref.watch(P.app.qb);
+    final qb = ref.watch(P.app.qb);
     return C(
       margin: const EI.s(h: 12),
-      decoration: BD(color: kB.q(.1), borderRadius: 8.r),
+      decoration: BD(color: qb.q(.1), borderRadius: 8.r),
       child: Row(
         children: [
           12.w,
@@ -149,11 +149,11 @@ class _CompletionOptions extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = S.of(context);
-    final kB = ref.watch(P.app.qb);
+    final qb = ref.watch(P.app.qb);
     final reasoning = ref.watch(P.rwkv.reasoning);
     return C(
       margin: const EI.s(h: 12),
-      decoration: BD(color: kB.q(.1), borderRadius: 8.r),
+      decoration: BD(color: qb.q(.1), borderRadius: 8.r),
       child: Row(
         children: [
           12.w,
@@ -215,7 +215,7 @@ class _Value extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final value = ref.watch(P.rwkv.arguments(argument));
     if (!argument.show) return const SizedBox.shrink();
-    final kB = ref.watch(P.app.qb);
+    final qb = ref.watch(P.app.qb);
     return Column(
       crossAxisAlignment: CAA.stretch,
       children: [
@@ -242,7 +242,7 @@ class _Value extends ConsumerWidget {
             12.w,
             T(
               argument.min.toStringAsFixed(argument.fixedDecimals),
-              s: TS(s: 12, c: kB.q(.5)),
+              s: TS(s: 12, c: qb.q(.5)),
             ),
             14.w,
             Expanded(
@@ -257,7 +257,7 @@ class _Value extends ConsumerWidget {
             14.w,
             T(
               argument.max.toStringAsFixed(argument.fixedDecimals),
-              s: TS(s: 12, c: kB.q(.5)),
+              s: TS(s: 12, c: qb.q(.5)),
             ),
             12.w,
           ],

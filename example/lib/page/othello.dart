@@ -36,10 +36,10 @@ class _Page extends ConsumerWidget {
     );
     final screenWidth = ref.watch(P.app.screenWidth);
     final paddingRight = ref.watch(P.app.paddingRight);
-    final kW = ref.watch(P.app.qw);
+    final qw = ref.watch(P.app.qw);
 
     return Scaffold(
-      backgroundColor: kW,
+      backgroundColor: qw,
       body: usePortrait
           ? Column(
               children: [
@@ -121,20 +121,20 @@ class _Title extends ConsumerWidget {
     final version = ref.watch(P.app.version);
     final buildNumber = ref.watch(P.app.buildNumber);
     final usePortrait = ref.watch(P.othello.usePortrait);
-    final kB = ref.watch(P.app.qb);
+    final qb = ref.watch(P.app.qb);
     return Row(
       mainAxisAlignment: MAA.center,
       children: [
         12.w,
-        T("$version($buildNumber)", s: TS(c: kB.q(.0), s: 10)),
+        T("$version($buildNumber)", s: TS(c: qb.q(.0), s: 10)),
         if (usePortrait) const Spacer(),
         T(
           s.rwkv_othello,
-          s: TS(c: kB, s: 20, w: FW.w700),
+          s: TS(s: 20, w: FW.w700),
         ),
         if (usePortrait) const Spacer(),
         if (!usePortrait) 32.w,
-        T("$version($buildNumber)", s: TS(c: kB.q(.5), s: 10)),
+        T("$version($buildNumber)", s: TS(c: qb.q(.5), s: 10)),
         if (!usePortrait) 32.w,
         12.w,
       ],
@@ -241,18 +241,18 @@ class _ModelSettings extends ConsumerWidget {
         ),
       ],
     );
-    final kB = ref.watch(P.app.qb);
+    final qb = ref.watch(P.app.qb);
 
     return Material(
-      color: kB.q(.0),
-      textStyle: TS(ff: "monospace", c: kB, s: 10),
+      color: qb.q(.0),
+      textStyle: TS(ff: "monospace", s: 10),
       child: C(
         padding: const EI.a(4),
         margin: const EI.a(4),
         decoration: BD(
-          color: kB.q(.0),
+          color: qb.q(.0),
           borderRadius: 4.r,
-          border: Border.all(color: kB.q(.5), width: .5),
+          border: Border.all(color: qb.q(.5), width: .5),
         ),
         child: Column(
           crossAxisAlignment: CAA.start,
@@ -263,7 +263,7 @@ class _ModelSettings extends ConsumerWidget {
               s: const TS(w: FW.w700),
             ),
             8.h,
-            T(s.in_context_search_will_be_activated_when_both_breadth_and_depth_are_greater_than_2, s: TS(c: kB.q(.5), s: 10)),
+            T(s.in_context_search_will_be_activated_when_both_breadth_and_depth_are_greater_than_2, s: TS(c: qb.q(.5), s: 10)),
             8.h,
             usePortrait
                 ? Column(
@@ -312,13 +312,13 @@ class _Players extends ConsumerWidget {
       P.othello.settingsAndPlayersShouldAtDifferentColumnIsHorizontal,
     );
     final usePortrait = ref.watch(P.othello.usePortrait);
-    final kB = ref.watch(P.app.qb);
+    final qb = ref.watch(P.app.qb);
 
     final blackOptions = C(
       decoration: BD(
         color: kC,
         borderRadius: 4.r,
-        border: Border.all(color: kB.q(.5), width: .5),
+        border: Border.all(color: qb.q(.5), width: .5),
       ),
       padding: const EI.o(l: 8, r: 8, t: 8),
       child: Wrap(
@@ -367,7 +367,7 @@ class _Players extends ConsumerWidget {
       decoration: BD(
         color: kC,
         borderRadius: 4.r,
-        border: Border.all(color: kB.q(.5), width: .5),
+        border: Border.all(color: qb.q(.5), width: .5),
       ),
       padding: const EI.o(l: 8, r: 8, t: 8),
       child: Wrap(
@@ -413,15 +413,15 @@ class _Players extends ConsumerWidget {
     );
 
     return Material(
-      color: kB.q(.0),
-      textStyle: TS(ff: "monospace", c: kB, s: 10),
+      color: qb.q(.0),
+      textStyle: TS(ff: "monospace", s: 10),
       child: C(
         margin: const EI.a(4),
         padding: const EI.a(4),
         decoration: BD(
-          color: kB.q(.0),
+          color: qb.q(.0),
           borderRadius: 4.r,
-          border: Border.all(color: kB.q(.5), width: .5),
+          border: Border.all(color: qb.q(.5), width: .5),
         ),
         child: Column(
           crossAxisAlignment: CAA.start,
@@ -485,7 +485,7 @@ class _Score extends ConsumerWidget {
     final usePortrait = ref.watch(P.othello.usePortrait);
     final prefillSpeed = ref.watch(P.rwkv.prefillSpeed);
     final decodeSpeed = ref.watch(P.rwkv.decodeSpeed);
-    final kB = ref.watch(P.app.qb);
+    final qb = ref.watch(P.app.qb);
 
     final thinkingWidget = Column(
       mainAxisSize: MainAxisSize.min,
@@ -495,16 +495,16 @@ class _Score extends ConsumerWidget {
           duration: const Duration(milliseconds: 150),
           child: T(
             s.thinking,
-            s: TS(c: kB, s: 10, w: thinking ? FW.w400 : FW.w400),
+            s: TS(s: 10, w: thinking ? FW.w400 : FW.w400),
           ),
         ),
         T(
           "${s.prefill}: ${prefillSpeed.toStringAsFixed(1)} t/s",
-          s: TS(c: kB, s: 10, w: FW.w400),
+          s: TS(s: 10, w: FW.w400),
         ),
         T(
           "${s.decode}: ${decodeSpeed.toStringAsFixed(1)} t/s",
-          s: TS(c: kB, s: 10, w: FW.w400),
+          s: TS(s: 10, w: FW.w400),
         ),
       ],
     );
@@ -517,7 +517,7 @@ class _Score extends ConsumerWidget {
             },
       child: T(
         s.new_game,
-        s: TS(c: kB, s: 10, w: FW.w500),
+        s: TS(s: 10, w: FW.w500),
       ),
     );
 
@@ -537,7 +537,7 @@ class _Score extends ConsumerWidget {
           decoration: BD(
             color: kC,
             borderRadius: 8.r,
-            border: Border.all(color: kB.q(.5), width: .5),
+            border: Border.all(color: qb.q(.5), width: .5),
           ),
           child: Column(
             children: [
@@ -602,7 +602,7 @@ class _Grid extends ConsumerWidget {
     final rulesHorizontalNames = ["a", "b", "c", "d", "e", "f", "g", "h"];
     final rulesVerticalNames = ["1", "2", "3", "4", "5", "6", "7", "8"];
     final labelSize = 16.0;
-    final kB = ref.watch(P.app.qb);
+    final qb = ref.watch(P.app.qb);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -653,7 +653,7 @@ class _Grid extends ConsumerWidget {
             child: Center(
               child: T(
                 e,
-                s: TS(c: kB, s: 10, w: FW.w700),
+                s: TS(s: 10, w: FW.w700),
               ),
             ),
           );
@@ -669,7 +669,7 @@ class _Grid extends ConsumerWidget {
             child: Center(
               child: T(
                 e,
-                s: TS(c: kB, s: 10, w: FW.w700),
+                s: TS(s: 10, w: FW.w700),
               ),
             ),
           );
@@ -773,7 +773,7 @@ class _White extends StatelessWidget {
       decoration: BD(
         boxShadow: [
           BoxShadow(
-            color: kB.q(.3),
+            color: Colors.black.q(.3),
             offset: const Offset(1, 1),
             blurRadius: 3,
           ),
@@ -812,7 +812,7 @@ class _Black extends StatelessWidget {
       decoration: BD(
         boxShadow: [
           BoxShadow(
-            color: kB.q(.3),
+            color: Colors.black.q(.3),
             offset: const Offset(1, 1),
             blurRadius: 3,
           ),
@@ -841,12 +841,12 @@ class _Console extends ConsumerWidget {
     final paddingTop = ref.watch(P.app.paddingTop);
     final paddingBottom = ref.watch(P.app.quantizedIntPaddingBottom);
     final paddingLeft = ref.watch(P.app.paddingLeft);
-    final kW = ref.watch(P.app.qw);
-    final kB = ref.watch(P.app.qb);
+    final qw = ref.watch(P.app.qw);
+    final qb = ref.watch(P.app.qb);
 
     return Material(
-      color: kB,
-      textStyle: TS(ff: (Platform.isIOS || Platform.isMacOS) ? "Menlo" : "Monospace", c: kW, s: 10),
+      color: qb,
+      textStyle: TS(ff: (Platform.isIOS || Platform.isMacOS) ? "Menlo" : "Monospace", c: qw, s: 10),
       child: ListView.builder(
         padding: EI.o(
           t: 8 + (usePortrait ? 0 : paddingTop),
@@ -895,7 +895,7 @@ class _Console extends ConsumerWidget {
                   }),
               ],
             ),
-            style: TS(c: kW, s: 12, w: FW.w500),
+            style: TS(c: qw, s: 12, w: FW.w500),
           );
         },
       ),
@@ -910,7 +910,7 @@ class _ConsoleCell extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final kW = ref.watch(P.app.qw);
+    final qw = ref.watch(P.app.qw);
     Color color = kC;
     switch (cellType) {
       case CellType.black:
@@ -927,7 +927,7 @@ class _ConsoleCell extends ConsumerWidget {
       height: 12,
       width: 12,
       margin: const EI.s(h: 1),
-      decoration: BD(color: kW.q(.33)),
+      decoration: BD(color: qw.q(.33)),
       child: Center(
         child: Icon(
           Icons.circle,

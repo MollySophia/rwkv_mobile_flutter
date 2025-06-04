@@ -14,7 +14,6 @@ class Menu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final kW = ref.watch(P.app.qw);
     return const Column(
       mainAxisAlignment: MAA.center,
       children: [

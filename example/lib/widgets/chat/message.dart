@@ -83,7 +83,7 @@ class Message extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = S.of(context);
-    final kB = ref.watch(P.app.qb);
+    final qb = ref.watch(P.app.qb);
     final primary = Theme.of(context).colorScheme.primary;
     final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
 
@@ -184,14 +184,14 @@ class Message extends ConsumerWidget {
     final textScaleFactorForCotContent = TextScaler.linear(MediaQuery.textScalerOf(context).scale(_kTextScaleFactorForCotContent));
 
     final markdownStyleSheetForCotContent = MarkdownStyleSheet(
-      p: TS(c: kB.q(.5)),
-      h1: TS(c: kB.q(.5)),
-      h2: TS(c: kB.q(.5)),
-      h3: TS(c: kB.q(.5)),
-      h4: TS(c: kB.q(.5)),
-      h5: TS(c: kB.q(.5)),
-      h6: TS(c: kB.q(.5)),
-      listBullet: TS(c: kB.q(.5)),
+      p: TS(c: qb.q(.5)),
+      h1: TS(c: qb.q(.5)),
+      h2: TS(c: qb.q(.5)),
+      h3: TS(c: qb.q(.5)),
+      h4: TS(c: qb.q(.5)),
+      h5: TS(c: qb.q(.5)),
+      h6: TS(c: qb.q(.5)),
+      listBullet: TS(c: qb.q(.5)),
       listBulletPadding: const EI.o(l: 0),
       listIndent: 20,
       textScaler: textScaleFactorForCotContent,
@@ -204,13 +204,13 @@ class Message extends ConsumerWidget {
       listIndent: 20,
       textScaler: textScaleFactor,
       horizontalRuleDecoration: BoxDecoration(
-        color: kB.q(.1),
-        border: Border(top: BorderSide(color: kB.q(.1), width: 1)),
+        color: qb.q(.1),
+        border: Border(top: BorderSide(color: qb.q(.1), width: 1)),
       ),
     );
 
     final rawFontSize = Theme.of(context).textTheme.bodyMedium?.fontSize ?? 14.0;
-    final userMessageStyle = TS(c: kB, s: rawFontSize * _kTextScaleFactor);
+    final userMessageStyle = TS(s: rawFontSize * _kTextScaleFactor);
 
     double? cotContentHeight;
 
@@ -310,7 +310,7 @@ class Message extends ConsumerWidget {
     final screenHeight = ref.watch(P.app.screenHeight);
     final rawMaxWidth = math.min(screenWidth, screenHeight);
 
-    final kW = ref.watch(P.app.qw);
+    final scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
 
     // 如果是快速考 <think>\n<think>, 则不展示思考过程
     final isQuickThinking = cotContent.trim().isEmpty;
@@ -322,7 +322,7 @@ class Message extends ConsumerWidget {
         child: C(
           padding: padding,
           decoration: BD(
-            color: isMine ? primaryContainer : kW,
+            color: isMine ? primaryContainer : scaffoldBackgroundColor,
             border: border,
             borderRadius: borderRadius,
           ),
@@ -355,7 +355,7 @@ class Message extends ConsumerWidget {
                 if (worldDemoMessageHeader.isNotEmpty)
                   T(
                     worldDemoMessageHeader,
-                    s: TS(c: kB.q(.5), w: FW.w700, s: 10),
+                    s: TS(c: qb.q(.5), w: FW.w700, s: 10),
                   ),
                 if (worldDemoMessageHeader.isNotEmpty) 4.h,
                 // 🔥 Bot message
@@ -383,9 +383,9 @@ class Message extends ConsumerWidget {
                         children: [
                           T(
                             thisMessageIsReceiving ? s.thinking : s.thought_result,
-                            s: TS(c: kB.q(.5), w: FW.w600),
+                            s: TS(c: qb.q(.5), w: FW.w600),
                           ),
-                          showingCotContent ? Icon(Icons.expand_more, color: kB.q(.5)) : Icon(Icons.expand_less, color: kB.q(.5)),
+                          showingCotContent ? Icon(Icons.expand_more, color: qb.q(.5)) : Icon(Icons.expand_less, color: qb.q(.5)),
                         ],
                       ),
                     ),

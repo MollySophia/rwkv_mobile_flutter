@@ -36,14 +36,14 @@ class FormItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final kB = ref.watch(P.app.qb);
-    final qc = ref.watch(P.app.light) ? const Color(0xFFFFFFFF) : const Color(0xFF121212);
+    final customTheme = ref.watch(P.app.customTheme);
+    final qb = ref.watch(P.app.qb);
 
     return GD(
       onTap: onTap,
       child: C(
         decoration: BD(
-          color: qc,
+          color: customTheme.settingItem,
           borderRadius: BorderRadius.only(
             topLeft: isSectionStart ? 12.rr : Radius.zero,
             topRight: isSectionStart ? 12.rr : Radius.zero,
@@ -53,7 +53,7 @@ class FormItem extends ConsumerWidget {
           border: Border(
             bottom: (autoShowBottomBorder && !isSectionEnd)
                 ? BorderSide(
-                    color: kB.q(.1),
+                    color: qb.q(.1),
                     width: .5,
                   )
                 : BorderSide.none,
@@ -71,12 +71,15 @@ class FormItem extends ConsumerWidget {
                   T(
                     title,
                     textAlign: titleTextAlign,
-                    s: TS(w: FW.w500, s: 16, c: titleColor ?? kB),
+                    s: TS(w: FW.w500, s: 16, c: titleColor),
                   ),
                   if (subtitle != null)
-                    T(
-                      subtitle!,
-                      s: TS(w: FW.w500, s: 12, c: kB.q(.6)),
+                    Opacity(
+                      opacity: 0.5,
+                      child: T(
+                        subtitle!,
+                        s: TS(w: FW.w500, s: 12),
+                      ),
                     ),
                 ],
               ),
@@ -86,7 +89,7 @@ class FormItem extends ConsumerWidget {
               Expanded(
                 child: T(
                   info,
-                  s: TS(w: FW.w500, s: 12, c: kB.q(.6)),
+                  s: TS(w: FW.w500, s: 12),
                   textAlign: TextAlign.right,
                 ),
               ),
@@ -96,7 +99,6 @@ class FormItem extends ConsumerWidget {
             if (showArrow)
               Icon(
                 Icons.chevron_right,
-                color: kB.q(.4),
               ),
           ],
         ),

@@ -191,7 +191,7 @@ class _IntonationPanel extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final kB = ref.watch(P.app.qb);
+    final qb = ref.watch(P.app.qb);
     return SB(
       height: 250,
       child: Padding(
@@ -208,7 +208,7 @@ class _IntonationPanel extends ConsumerWidget {
               child: C(
                 decoration: BD(
                   color: kC,
-                  border: Border.all(color: kB.q(.5), width: .5),
+                  border: Border.all(color: qb.q(.5), width: .5),
                   borderRadius: 4.r,
                 ),
                 padding: const EI.o(l: 8, r: 8, t: 4, b: 4),
@@ -228,7 +228,7 @@ class _AudioButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = S.of(context);
-    final kW = ref.watch(P.app.qw);
+    final qw = ref.watch(P.app.qw);
     final primary = Theme.of(context).colorScheme.primary;
     final demoType = ref.watch(P.app.demoType);
     final borderRadius = demoType != DemoType.tts ? 12.r : 6.r;
@@ -245,7 +245,7 @@ class _AudioButton extends ConsumerWidget {
           ),
           child: T(
             s.voice_cloning + (audioInteractorShown ? " ×" : ""),
-            s: TS(c: audioInteractorShown ? kW : primary),
+            s: TS(c: audioInteractorShown ? qw : primary),
           ),
         ),
       ),
@@ -259,7 +259,7 @@ class _SpkButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = S.of(context);
-    final kW = ref.watch(P.app.qw);
+    final qw = ref.watch(P.app.qw);
     final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
     final primary = Theme.of(context).colorScheme.primary;
     final demoType = ref.watch(P.app.demoType);
@@ -279,7 +279,7 @@ class _SpkButton extends ConsumerWidget {
           ),
           child: T(
             s.prebuilt_voices + (spkShown ? " ×" : ""),
-            s: TS(c: spkShown ? kW : primary),
+            s: TS(c: spkShown ? qw : primary),
           ),
         ),
       ),
@@ -292,6 +292,7 @@ class _IntonationButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final qw = ref.watch(P.app.qw);
     final s = S.of(context);
     final primary = Theme.of(context).colorScheme.primary;
     final demoType = ref.watch(P.app.demoType);
@@ -309,7 +310,7 @@ class _IntonationButton extends ConsumerWidget {
           ),
           child: T(
             s.intonations + (intonationShown ? " ×" : ""),
-            s: TS(c: intonationShown ? kW : primary),
+            s: TS(c: intonationShown ? qw : primary),
           ),
         ),
       ),
@@ -440,7 +441,7 @@ class _SpkPanel extends ConsumerWidget {
         spkNames = spkPairs.keys.where((e) => e.contains(Language.zh_Hans.enName!));
     }
 
-    final kB = ref.watch(P.app.qb);
+    final qb = ref.watch(P.app.qb);
 
     return SB(
       height: 250,
@@ -468,7 +469,7 @@ class _SpkPanel extends ConsumerWidget {
                     decoration: BD(
                       color: filtered ? primary.q(.1) : kC,
                       borderRadius: 4.r,
-                      border: Border.all(color: kB.q(.5), width: .5),
+                      border: Border.all(color: qb.q(.5), width: .5),
                     ),
                     child: Row(
                       children: [
@@ -618,7 +619,7 @@ class _InstructTabs extends ConsumerWidget {
 
     final isZh = Localizations.localeOf(context).languageCode == "zh";
 
-    final kB = ref.watch(P.app.qb);
+    final qb = ref.watch(P.app.qb);
     return Row(
       children: [
         Expanded(
@@ -657,7 +658,7 @@ class _InstructTabs extends ConsumerWidget {
                     padding: const EI.o(l: 8, r: 8, t: 4, b: 4),
                     decoration: BD(
                       color: isSelected ? primary.q(.2) : kC,
-                      border: Border.all(color: kB.q(.5), width: .5),
+                      border: Border.all(color: qb.q(.5), width: .5),
                       borderRadius: 4.r,
                     ),
                     child: Row(
@@ -708,7 +709,7 @@ class _InstructOptions extends ConsumerWidget {
     final options = interactingInstruction.options;
     final selectedIndex = ref.watch(P.tts.instructions(interactingInstruction));
     final selectedInstruction = selectedIndex != null ? options[selectedIndex] : null;
-    final kB = ref.watch(P.app.qb);
+    final qb = ref.watch(P.app.qb);
     return GD(
       onTap: () {},
       child: AnimatedContainer(
@@ -716,7 +717,7 @@ class _InstructOptions extends ConsumerWidget {
         height: interactingInstruction == TTSInstruction.none ? 0 : 150,
         margin: const EI.o(t: 4),
         decoration: BD(
-          border: Border(top: BorderSide(color: kB.q(.5), width: .5)),
+          border: Border(top: BorderSide(color: qb.q(.5), width: .5)),
         ),
         child: Wrap(
           alignment: WrapAlignment.start,
@@ -736,7 +737,7 @@ class _InstructOptions extends ConsumerWidget {
                 margin: const EI.o(t: 4),
                 decoration: BD(
                   color: selected ? primary.q(.2) : kC,
-                  border: Border.all(color: kB.q(.5), width: .5),
+                  border: Border.all(color: qb.q(.5), width: .5),
                   borderRadius: 4.r,
                 ),
                 child: T(e + (selected ? " ×" : "")),
@@ -777,7 +778,7 @@ class _TextField extends ConsumerWidget {
 
     final textInInput = ref.watch(P.tts.textInInput);
 
-    final kW = ref.watch(P.app.qw);
+    final qw = ref.watch(P.app.qw);
 
     return GD(
       onTap: textFieldEnabled ? null : _onTapTextFieldWhenItsDisabled,
@@ -828,10 +829,10 @@ class _TextField extends ConsumerWidget {
               t: 4,
               b: 4,
             ),
-            fillColor: kW,
-            focusColor: kW,
-            hoverColor: kW,
-            iconColor: kW,
+            fillColor: qw,
+            focusColor: qw,
+            hoverColor: qw,
+            iconColor: qw,
             border: OutlineInputBorder(
               borderRadius: borderRadius,
               borderSide: BorderSide(color: primary.q(.33)),

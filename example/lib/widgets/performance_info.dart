@@ -12,13 +12,13 @@ class PerformanceInfo extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final prefillSpeed = ref.watch(P.rwkv.prefillSpeed);
     final decodeSpeed = ref.watch(P.rwkv.decodeSpeed);
-    final kB = ref.watch(P.app.qb);
+    final qb = ref.watch(P.app.qb);
     return Column(
       crossAxisAlignment: CAA.start,
       mainAxisAlignment: MAA.center,
       children: [
-        T("Prefill: ${prefillSpeed.toStringAsFixed(1)} t/s", s: TS(c: kB.q(.6), s: 10)),
-        T("Decode: ${decodeSpeed.toStringAsFixed(1)} t/s", s: TS(c: kB.q(.6), s: 10)),
+        T("Prefill: ${prefillSpeed.toStringAsFixed(1)} t/s", s: TS(c: qb.q(.6), s: 10)),
+        T("Decode: ${decodeSpeed.toStringAsFixed(1)} t/s", s: TS(c: qb.q(.6), s: 10)),
       ],
     );
   }

@@ -24,6 +24,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart' as ar;
 import 'package:rwkv_mobile_flutter/from_rwkv.dart' as from_rwkv;
 import 'package:rwkv_mobile_flutter/to_rwkv.dart' as to_rwkv;
+import 'package:zone/model/custom_theme.dart' as custom_theme;
 import 'package:rwkv_mobile_flutter/rwkv.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
