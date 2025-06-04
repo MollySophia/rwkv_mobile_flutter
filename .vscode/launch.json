@@ -19,6 +19,7 @@
       "flutterMode": "debug",
       "args": [
         "--dart-define=disableRemoteConfig=true",
+        "--dart-define=logLevel=3"
       ]
     },
     {
