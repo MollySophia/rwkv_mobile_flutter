@@ -25,7 +25,7 @@ final class MsgNode {
     child.parent = this;
     child.root = root ?? this;
     if (children.map((e) => e.id).contains(child.id)) {
-      throw AssertionError("child id ${child.id} already exists in parent ${this.id}");
+      throw AssertionError("child id ${child.id} already exists in parent $id");
     }
     children.add(child);
     if (!keepLatest) latest = child;

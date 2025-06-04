@@ -1,6 +1,5 @@
 // ignore: unused_import
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
@@ -50,7 +49,7 @@ class BranchSwitcher extends ConsumerWidget {
           children: [
             IconButton(
               onPressed: isFirst ? null : _onBackPressed,
-              padding: EdgeInsets.only(left: 4, right: 16, top: 4, bottom: 4),
+              padding: const EdgeInsets.only(left: 4, right: 16, top: 4, bottom: 4),
               constraints: const BoxConstraints(), // override default min size of 48px
               icon: Icon(
                 Icons.arrow_back_ios_new,
@@ -60,7 +59,7 @@ class BranchSwitcher extends ConsumerWidget {
             ),
             IconButton(
               onPressed: isLast ? null : _onForwardPressed,
-              padding: EdgeInsets.only(left: 16, right: 4, top: 4, bottom: 4),
+              padding: const EdgeInsets.only(left: 16, right: 4, top: 4, bottom: 4),
               constraints: const BoxConstraints(), // override default min size of 48px
               icon: Icon(
                 Icons.arrow_forward_ios,

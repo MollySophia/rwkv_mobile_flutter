@@ -10,11 +10,11 @@ sealed class ThinkingMode {
   }
 
   static ThinkingMode fromString(String? runningMode) {
-    if (runningMode == "ThinkingMode.None") return None();
-    if (runningMode == "ThinkingMode.Lighting") return Lighting();
-    if (runningMode == "ThinkingMode.Free") return Free();
-    if (runningMode == "ThinkingMode.PreferChinese") return PreferChinese();
-    return None();
+    if (runningMode == "ThinkingMode.None") return const None();
+    if (runningMode == "ThinkingMode.Lighting") return const Lighting();
+    if (runningMode == "ThinkingMode.Free") return const Free();
+    if (runningMode == "ThinkingMode.PreferChinese") return const PreferChinese();
+    return const None();
   }
 }
 
