@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'dart:async';
+import 'dart:developer';
 import 'dart:math' as math;
 
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -31,9 +32,7 @@ const double _kTextScaleFactorForCotContent = 1;
 class Message extends ConsumerWidget {
   final model.Message msg;
 
-  /// 使用逆顺序
-  ///
-  /// TODO: 明确一下这里的 index, 到底是顺序还是逆序
+  /// 页面中第一个消息的 index 为 0
   final int index;
 
   const Message(this.msg, this.index, {super.key});
@@ -53,7 +52,7 @@ class Message extends ConsumerWidget {
     P.chat.focusNode.unfocus();
     P.tts.dismissAllShown();
 
-    P.chat.latestClickedMessage.q = msg;
+    P.msg.latestClicked.q = msg;
 
     if (msg.type == model.MessageType.userAudio) {
       final audioUrl = msg.audioUrl;
@@ -96,7 +95,7 @@ class Message extends ConsumerWidget {
     final received = ref.watch(P.chat.receivedTokens.select((v) => msg.changing ? v : ""));
     final cotDisplayState = ref.watch(P.chat.cotDisplayState(msg.id));
 
-    final editingIndex = ref.watch(P.chat.editingIndex);
+    final editingIndex = ref.watch(P.msg.editingOrRegeneratingIndex);
 
     final receiveId = ref.watch(P.chat.receiveId);
     final receiving = ref.watch(P.chat.receivingTokens);
@@ -270,7 +269,7 @@ class Message extends ConsumerWidget {
     }
 
     EI padding = const EI.o(t: 12, l: 12, r: 12);
-    Border border = Border.all(color: primary.q(.2));
+    Border? border = Border.all(color: primary.q(.2));
     double radius = 20;
 
     switch (msg.type) {
@@ -302,6 +301,8 @@ class Message extends ConsumerWidget {
         padding = EI.zero;
 
       case model.MessageType.text:
+        if (!msg.isMine) border = null;
+        if (!msg.isMine) padding = EI.o(t: 12, l: 6, r: 6);
       case model.MessageType.ttsGeneration:
       case model.MessageType.userAudio:
     }
@@ -311,6 +312,9 @@ class Message extends ConsumerWidget {
     final rawMaxWidth = math.min(screenWidth, screenHeight);
 
     final kW = ref.watch(P.app.qw);
+
+    // 如果是快速考 <think>\n<think>, 则不展示思考过程
+    final isQuickThinking = cotContent.trim().isEmpty;
 
     final bubbleContent = ConstrainedBox(
       constraints: BoxConstraints(maxWidth: width - kBubbleMaxWidthAdjust, minHeight: kBubbleMinHeight),
@@ -323,8 +327,8 @@ class Message extends ConsumerWidget {
             border: border,
             borderRadius: borderRadius,
           ),
-          child: Co(
-            c: isMine ? CAA.end : CAA.start,
+          child: Column(
+            crossAxisAlignment: isMine ? CAA.end : CAA.start,
             children: [
               if (isMine) ...[
                 // 🔥 User message
@@ -365,7 +369,7 @@ class Message extends ConsumerWidget {
                     onTapLink: _onTapLink,
                   ),
                 // 🔥 Bot message cot header
-                if (reasoning)
+                if (reasoning && !isQuickThinking)
                   GD(
                     onTap: () {
                       if (showingCotContent) {
@@ -376,7 +380,7 @@ class Message extends ConsumerWidget {
                     },
                     child: C(
                       decoration: const BD(color: kC),
-                      child: Ro(
+                      child: Row(
                         children: [
                           T(
                             thisMessageIsReceiving ? s.thinking : s.thought_result,
@@ -388,8 +392,8 @@ class Message extends ConsumerWidget {
                     ),
                   ),
                 // 🔥 Bot message cot content
-                if (reasoning) 4.h,
-                if (reasoning)
+                if (reasoning && !isQuickThinking) 4.h,
+                if (reasoning && !isQuickThinking)
                   AnimatedContainer(
                     duration: 250.ms,
                     height: cotContentHeight,
@@ -402,7 +406,7 @@ class Message extends ConsumerWidget {
                     ),
                   ),
                 // 🔥 Bot message cot result
-                if (cotResult.isNotEmpty && reasoning && showingCotContent) 12.h,
+                if (cotResult.isNotEmpty && reasoning && showingCotContent && !isQuickThinking) 12.h,
                 if (cotResult.isNotEmpty && reasoning)
                   MarkdownBody(
                     data: cotResult,
@@ -429,9 +433,7 @@ class Message extends ConsumerWidget {
           duration: 250.ms,
           child: Padding(
             padding: const EI.s(h: marginHorizontal, v: marginVertical),
-            child: SelectionArea(
-              child: GD(onTap: _onTap, child: bubbleContent),
-            ),
+            child: GD(onTap: _onTap, child: bubbleContent),
           ),
         ),
       ),

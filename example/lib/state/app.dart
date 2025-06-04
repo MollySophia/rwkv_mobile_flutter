@@ -32,12 +32,12 @@ class _App extends RawApp {
 /// Public methods
 extension $App on _App {
   FV getConfig() async {
-    qq;
-
     if (Args.disableRemoteConfig) {
       qqw("Remote config is disabled");
       return;
     }
+
+    qq;
 
     final sp = await SharedPreferences.getInstance();
 
@@ -131,6 +131,49 @@ extension _$App on _App {
         await HF.wait(1000);
         _showNewVersionDialogIfNeeded();
       });
+    }
+
+    lifecycleState.lv(_onLifecycleStateChanged);
+
+    HF.wait(1500).then((_) => _toLightMode());
+
+    // 目前下面四种 demo 需要选择模型
+    switch (demoType.q) {
+      case DemoType.chat:
+      case DemoType.sudoku:
+      case DemoType.tts:
+      case DemoType.world:
+        HF.wait(1750).then((_) {
+          final loaded = P.rwkv.loaded.q;
+          if (loaded) return;
+          ModelSelector.show();
+        });
+      case DemoType.fifthteenPuzzle:
+      // Other demos don't need to select model, weights are already built in
+      case DemoType.othello:
+        break;
+    }
+  }
+
+  FV _toLightMode() async {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        systemNavigationBarColor: this.qw.q,
+        systemNavigationBarIconBrightness: Brightness.light,
+      ),
+    );
+  }
+
+  FV _onLifecycleStateChanged() async {
+    qqr("lifecycleState: ${lifecycleState.q}");
+    switch (lifecycleState.q) {
+      case AppLifecycleState.resumed:
+        await HF.wait(500);
+        _toLightMode();
+      case AppLifecycleState.detached:
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.hidden:
+      case AppLifecycleState.paused:
     }
   }
 

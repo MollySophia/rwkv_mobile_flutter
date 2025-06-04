@@ -67,13 +67,13 @@ class _PagerState extends ConsumerState<Pager> {
 
     final viewportFraction = wantedWidth / screenWidth;
 
+    await Future.delayed(0.ms);
     Pager._newController.q.dispose();
     Pager._newController.q = PageController(
       viewportFraction: viewportFraction,
       initialPage: 1,
     )..addListener(_onPageChanged);
 
-    await Future.delayed(0.ms);
     Pager.drawerWidth.q = wantedWidth;
   }
 
@@ -119,7 +119,7 @@ class _PagerState extends ConsumerState<Pager> {
           child: SB(
             width: screenWidth + drawerWidth,
             height: screenHeight,
-            child: Ro(
+            child: Row(
               children: [
                 SB(
                   width: drawerWidth,

@@ -49,15 +49,15 @@ class _Empty extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final s = S.of(context);
     final kB = ref.watch(P.app.qb);
-    return Co(
-      m: MAA.center,
-      c: CAA.stretch,
+    return Column(
+      mainAxisAlignment: MAA.center,
+      crossAxisAlignment: CAA.stretch,
       children: [
         IconButton(
           onPressed: _onPressed,
-          icon: Co(
+          icon: Column(
             mainAxisSize: MainAxisSize.min,
-            c: CAA.center,
+            crossAxisAlignment: CAA.center,
             children: [
               const Icon(Icons.add),
               T(s.new_chat, s: const TS(s: 20)),

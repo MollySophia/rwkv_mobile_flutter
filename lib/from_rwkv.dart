@@ -66,6 +66,13 @@ class Speed extends FromRWKV {
   Speed({required this.prefillSpeed, required this.decodeSpeed, super.toRWKV});
 }
 
+/// 获取本次推理已生成的 tokens 被 decode 为普通字符串的值
+///
+/// 目前, 前端通过周期性调用该方法, 来获取 decode 的值渲染到 UI 上
+///
+/// 1. stop 之后 responseBufferContent 还保留着
+/// 2. 然后 resume 之后 responseBufferContent 会先短暂清空
+/// 3. 然后变成 stop 前已经生成了的内容并接着生成
 class ResponseBufferContent extends FromRWKV {
   final String responseBufferContent;
 

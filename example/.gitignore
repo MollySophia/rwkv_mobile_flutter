@@ -52,3 +52,4 @@ sentry.properties
 /ignore
 *.log
 assets/filter.txt
+# pubspec.lock #see: https://dart.dev/tools/pub/private-files#pubspec-lock

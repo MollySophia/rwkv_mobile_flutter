@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:zone/model/demo_type.dart';
 import 'package:zone/state/p.dart';
+import 'package:zone/widgets/model_selector.dart';
 
 class Empty extends ConsumerWidget {
   const Empty({super.key});
@@ -16,7 +17,7 @@ class Empty extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = S.of(context);
-    final messages = ref.watch(P.chat.messages);
+    final messages = ref.watch(P.msg.list);
     if (messages.isNotEmpty) return Positioned.fill(child: IgnorePointer(child: Container()));
     final loaded = ref.watch(P.rwkv.loaded);
     final currentModel = ref.watch(P.rwkv.currentModel);
@@ -52,8 +53,8 @@ class Empty extends ConsumerWidget {
               Positioned.fill(
                 left: 32,
                 right: 32,
-                child: Co(
-                  c: CAA.center,
+                child: Column(
+                  crossAxisAlignment: CAA.center,
                   children: [
                     const Spacer(),
                     Image.asset(logoPath, width: 140),
@@ -70,8 +71,7 @@ class Empty extends ConsumerWidget {
                     if (!loaded)
                       TextButton(
                         onPressed: () async {
-                          P.fileManager.modelSelectorShown.q = false;
-                          P.fileManager.modelSelectorShown.q = true;
+                          ModelSelector.show();
                         },
                         child: T(demoType == DemoType.world ? s.select_a_world_type : s.select_a_model, s: const TS(s: 16, w: FW.w600)),
                       ),

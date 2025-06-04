@@ -18,14 +18,14 @@ extension _$Dump on _Dump {
       case DemoType.world:
     }
     qq;
-    P.chat.messages.lv(_onMessagesChanged);
+    P.msg.list.lv(_onMessagesChanged);
   }
 
   FV _onMessagesChanged() async {
     qr;
     final dumpping = P.preference.dumpping.q;
     if (!dumpping) return;
-    final messages = P.chat.messages.q;
+    final messages = P.msg.list.q;
     if (messages.length != 3) return;
     final lastMessage = messages.last;
     final isMine = lastMessage.isMine;
@@ -48,7 +48,7 @@ extension _$Dump on _Dump {
 
     qr;
 
-    final messages = P.chat.messages.q;
+    final messages = P.msg.list.q;
 
     if (messages.isEmpty) return;
 

@@ -7,12 +7,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/config.dart';
+import 'package:zone/func/check_model_selection.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/demo_type.dart';
 import 'package:zone/page/chat.dart' show keyChatList;
 import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
 import 'package:zone/widgets/arguments_panel.dart';
+import 'package:zone/widgets/model_selector.dart';
 import 'package:zone/widgets/pager.dart';
 import 'package:zone/widgets/screenshot.dart' show Screenshot;
 
@@ -24,13 +26,7 @@ class ChatAppBar extends ConsumerWidget {
   }
 
   void onSettingsPressed() async {
-    final loaded = P.rwkv.loaded.q;
-
-    if (!loaded) {
-      P.fileManager.modelSelectorShown.q = false;
-      P.fileManager.modelSelectorShown.q = true;
-      return;
-    }
+    if (!checkModelSelection()) return;
 
     final demoType = P.app.demoType.q;
     if (demoType == DemoType.tts) {
@@ -43,8 +39,7 @@ class ChatAppBar extends ConsumerWidget {
   }
 
   void _onTitlePressed() async {
-    P.fileManager.modelSelectorShown.q = false;
-    P.fileManager.modelSelectorShown.q = true;
+    ModelSelector.show();
   }
 
   @override
@@ -85,8 +80,8 @@ class ChatAppBar extends ConsumerWidget {
                 decoration: const BD(
                   color: kC,
                 ),
-                child: Co(
-                  c: CAA.center,
+                child: Column(
+                  crossAxisAlignment: CAA.center,
                   children: [
                     const T(
                       Config.appTitle,
@@ -99,10 +94,10 @@ class ChatAppBar extends ConsumerWidget {
                         color: kB.q(.1),
                         borderRadius: 10.r,
                       ),
-                      child: Ro(
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
-                        c: CAA.center,
-                        m: MAA.center,
+                        crossAxisAlignment: CAA.center,
+                        mainAxisAlignment: MAA.center,
                         children: [
                           T(
                             displayName,
@@ -126,7 +121,7 @@ class ChatAppBar extends ConsumerWidget {
                 ),
               ),
             ),
-            leading: const Ro(
+            leading: const Row(
               children: [
                 _MenuButton(),
               ],
@@ -200,7 +195,7 @@ class _NewConversationButton extends ConsumerWidget {
 
     icon = const Icon(Icons.add_comment_outlined);
     final loaded = ref.watch(P.rwkv.loaded);
-    final isEmpty = ref.watch(P.chat.messages.select((v) => v.isEmpty));
+    final isEmpty = ref.watch(P.msg.list.select((v) => v.isEmpty));
 
     return IconButton(
       onPressed: loaded && !isEmpty

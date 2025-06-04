@@ -38,7 +38,7 @@ class AudioEmpty extends ConsumerWidget {
         return Positioned(child: IgnorePointer(child: C()));
     }
 
-    final messages = ref.watch(P.chat.messages);
+    final messages = ref.watch(P.msg.list);
 
     bool show = true;
     if (messages.isNotEmpty) {
@@ -76,9 +76,9 @@ class AudioEmpty extends ConsumerWidget {
           curve: Curves.easeInOutBack,
           child: C(
             decoration: const BD(color: kC),
-            child: Co(
-              c: CAA.center,
-              m: MAA.center,
+            child: Column(
+              crossAxisAlignment: CAA.center,
+              mainAxisAlignment: MAA.center,
               children: [
                 C(
                   padding: const EI.s(h: 24),

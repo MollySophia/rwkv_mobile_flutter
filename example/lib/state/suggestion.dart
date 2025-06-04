@@ -76,8 +76,11 @@ class _Suggestion {
   final suggestion = qp<List<dynamic>>((ref) {
     final imagePath = ref.watch(P.world.imagePath);
     final demoType = ref.watch(P.app.demoType);
-    final messages = ref.watch(P.chat.messages);
+    final messages = ref.watch(P.msg.list);
     final currentModel = ref.watch(P.rwkv.currentModel);
+    final lang = ref.watch(P.preference.preferredLanguage);
+    final en = lang.resolved.locale.languageCode != "zh";
+    final maxLen = en ? 30 : 14;
 
     final hideCases = [
       demoType == DemoType.chat && (messages.isNotEmpty || currentModel == null),
@@ -91,8 +94,12 @@ class _Suggestion {
 
     switch (demoType) {
       case DemoType.chat:
-        final s = config.chat.map((e) => e.items).flattened.shuffled()
-            .where((e) => e.display.length < 14) /// NOTE: filter out long suggestions
+        final s = config.chat
+            .map((e) => e.items)
+            .flattened
+            .shuffled()
+            .where((e) => e.display.length < maxLen)
+            /// NOTE: filter out long suggestions
             .toList();
         if (s.length < 5) {
           return s;

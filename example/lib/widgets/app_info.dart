@@ -69,8 +69,8 @@ class AppInfo extends ConsumerWidget {
           controller: scrollController,
           children: [
             12.h,
-            Ro(
-              m: MAA.end,
+            Row(
+              mainAxisAlignment: MAA.end,
               children: [
                 IconButton(
                   onPressed: () {
@@ -82,13 +82,13 @@ class AppInfo extends ConsumerWidget {
               ],
             ),
             12.h,
-            Ro(
-              m: MAA.center,
+            Row(
+              mainAxisAlignment: MAA.center,
               children: [iconWidget],
             ),
             16.h,
-            const Ro(
-              m: MAA.center,
+            const Row(
+              mainAxisAlignment: MAA.center,
               children: [
                 T(
                   Config.appTitle,
@@ -97,8 +97,8 @@ class AppInfo extends ConsumerWidget {
               ],
             ),
             4.h,
-            Ro(
-              m: MAA.center,
+            Row(
+              mainAxisAlignment: MAA.center,
               children: [
                 T(
                   version,
@@ -111,8 +111,8 @@ class AppInfo extends ConsumerWidget {
               ],
             ),
             16.h,
-            const Ro(
-              m: MAA.center,
+            const Row(
+              mainAxisAlignment: MAA.center,
               children: [
                 T(
                   "Join the community",
@@ -121,7 +121,7 @@ class AppInfo extends ConsumerWidget {
               ],
             ),
             16.h,
-            Co(
+            Column(
               children: [
                 _buildCommunityLink(
                   icon: Icons.chat,
@@ -227,15 +227,15 @@ class AppInfo extends ConsumerWidget {
   }) {
     return InkWell(
       onTap: onTap,
-      child: Co(
+      child: Column(
         children: [
           6.h,
-          Ro(
+          Row(
             children: [
               16.w,
-              Exp(
-                child: Co(
-                  c: CAA.start,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CAA.start,
                   children: [
                     T(title, s: const TS(s: 14, w: FontWeight.bold)),
                     4.h,

@@ -64,7 +64,12 @@ class GetTTSOutputFileList extends ToRWKV {
 /// 1. stop 之后 responseBufferContent 还保留着
 /// 2. 然后 resume 之后 responseBufferContent 会先短暂清空
 /// 3. 然后变成 stop 前已经生成了的内容并接着生成
-class GetResponseBufferContent extends ToRWKV {}
+class GetResponseBufferContent extends ToRWKV {
+  static const responseType = ResponseBufferContent;
+}
+
+/// stop之后responseBufferContent还保留着，然后resume之后responseBufferContent会先短暂清空，然后变成stop前已经生成了的内容并接着生成
+class Stop extends ToRWKV {}
 
 class GetResponseBufferIds extends ToRWKV {}
 
@@ -248,8 +253,5 @@ class SetVisionPrompt extends ToRWKV {
 
   SetVisionPrompt(this.imagePathPtr);
 }
-
-/// stop之后responseBufferContent还保留着，然后resume之后responseBufferContent会先短暂清空，然后变成stop前已经生成了的内容并接着生成
-class Stop extends ToRWKV {}
 
 class GetLatestRuntimeAddress extends ToRWKV {}
