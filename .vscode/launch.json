@@ -12,7 +12,7 @@
       "flutterMode": "debug",
     },
     {
-      "name": "debug (halo)",
+      "name": "debug (Halo)",
       "request": "launch",
       "type": "dart",
       "program": "example/lib/main.dart",
@@ -20,7 +20,7 @@
       "args": [
         "--dart-define=disableRemoteConfig=true",
         "--dart-define=logLevel=3",
-        "--dart-define=disableAutoWeightsPanelAutoShow=true",
+        "--dart-define=disableAutoShowOfWeightsPanel=true",
         "--dart-define=debuggingThemes=true",
       ]
     },

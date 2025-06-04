@@ -4,6 +4,6 @@ abstract class Args {
   static const demoType = String.fromEnvironment("demoType", defaultValue: "__chat__");
   static const maxTokens = int.fromEnvironment("maxTokens", defaultValue: -1);
   static const disableRemoteConfig = bool.fromEnvironment("disableRemoteConfig", defaultValue: false);
-  static const disableAutoWeightsPanelAutoShow = bool.fromEnvironment("disableAutoWeightsPanelAutoShow", defaultValue: false);
+  static const disableAutoShowOfWeightsPanel = bool.fromEnvironment("disableAutoShowOfWeightsPanel", defaultValue: false);
   static const debuggingThemes = bool.fromEnvironment("debuggingThemes", defaultValue: false);
 }

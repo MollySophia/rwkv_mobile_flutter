@@ -144,7 +144,7 @@ extension _$App on _App {
         HF.wait(1750).then((_) {
           final loaded = P.rwkv.loaded.q;
           if (loaded) return;
-          if (!Args.disableAutoWeightsPanelAutoShow) ModelSelector.show();
+          if (!Args.disableAutoShowOfWeightsPanel) ModelSelector.show();
         });
       case DemoType.fifthteenPuzzle:
       // Other demos don't need to select model, weights are already built in
