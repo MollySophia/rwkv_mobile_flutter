@@ -2,7 +2,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/scheduler/ticker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +11,6 @@ import 'package:zone/config.dart';
 import 'package:zone/func/is_chinese.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/demo_type.dart';
-import 'package:zone/model/world_type.dart';
 import 'package:zone/state/p.dart';
 
 class Suggestions extends ConsumerWidget {
@@ -59,7 +57,7 @@ class Suggestions extends ConsumerWidget {
     final config = ref.watch(P.suggestion.config);
 
     if (suggestions.isEmpty) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
 
     double bottom = paddingBottom + 114;
@@ -301,7 +299,7 @@ class _SuggestionList extends StatelessWidget {
     return ListView.builder(
       controller: scrollController,
       itemCount: suggestions.length,
-      padding: EI.o(t: 8, b: 40),
+      padding: const EI.o(t: 8, b: 40),
       itemBuilder: (c, i) {
         final s = suggestions[i];
         return InkWell(

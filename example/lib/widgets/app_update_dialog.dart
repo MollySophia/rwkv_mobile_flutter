@@ -1,10 +1,8 @@
-import 'dart:io';
 
 import 'package:background_downloader/background_downloader.dart' as bd;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:halo/halo.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:zone/gen/l10n.dart';
 
 class AppUpdateDialog extends StatefulWidget {
@@ -68,7 +66,7 @@ class _AppUpdateDialogState extends State<AppUpdateDialog> {
 
   void installApk() async {
     qqq('apk path: $path');
-    final utils = MethodChannel("utils");
+    final utils = const MethodChannel("utils");
     final r = await utils.invokeMethod('installApk', {"path": path});
     qqq(r);
   }

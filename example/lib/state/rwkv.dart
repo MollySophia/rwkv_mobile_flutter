@@ -40,10 +40,10 @@ class _RWKV {
 
   late final reasoning = qp((ref) => ref.watch(_thinkingMode).hasThinkTag);
   late final thinkingMode = qp((ref) => ref.watch(_thinkingMode));
-  late final _thinkingMode = qs<ThinkingMode>(thinking_mode.Lighting());
+  late final _thinkingMode = qs<ThinkingMode>(const thinking_mode.Lighting());
 
-  ThinkingMode reasoningOnOrder = thinking_mode.Free();
-  ThinkingMode reasoningOffOrder = thinking_mode.Lighting();
+  ThinkingMode reasoningOnOrder = const thinking_mode.Free();
+  ThinkingMode reasoningOffOrder = const thinking_mode.Lighting();
 
   /// 模型是否已加载
   late final loaded = qp((ref) {
@@ -575,7 +575,7 @@ extension $RWKV on _RWKV {
     bool setPrompt = true,
   }) async {
     qqr(thinkingMode);
-    _thinkingMode.q = thinkingMode ?? thinking_mode.Lighting();
+    _thinkingMode.q = thinkingMode ?? const thinking_mode.Lighting();
 
     final finalPrompt = switch (_thinkingMode) {
       thinking_mode.PreferChinese() => Config.promptCN,
@@ -666,16 +666,16 @@ extension $RWKV on _RWKV {
         setModelConfig(thinkingMode: reasoningOnOrder);
         if (reasoningOnOrder is thinking_mode.Free) Alert.success(S.current.reasoning_enabled);
         if (reasoningOnOrder is thinking_mode.PreferChinese) Alert.success(S.current.prefer_chinese);
-        reasoningOffOrder = thinking_mode.Lighting();
+        reasoningOffOrder = const thinking_mode.Lighting();
       case thinking_mode.Free():
         setModelConfig(thinkingMode: reasoningOffOrder);
-        reasoningOnOrder = thinking_mode.Free();
+        reasoningOnOrder = const thinking_mode.Free();
       case thinking_mode.PreferChinese():
         setModelConfig(thinkingMode: reasoningOffOrder);
-        reasoningOnOrder = thinking_mode.PreferChinese();
+        reasoningOnOrder = const thinking_mode.PreferChinese();
       case thinking_mode.None():
         setModelConfig(thinkingMode: reasoningOnOrder);
-        reasoningOffOrder = thinking_mode.None();
+        reasoningOffOrder = const thinking_mode.None();
     }
   }
 
@@ -692,18 +692,18 @@ extension $RWKV on _RWKV {
     P.app.hapticLight();
     switch (current) {
       case thinking_mode.Lighting():
-        setModelConfig(thinkingMode: thinking_mode.None());
-        reasoningOffOrder = thinking_mode.None();
+        setModelConfig(thinkingMode: const thinking_mode.None());
+        reasoningOffOrder = const thinking_mode.None();
       case thinking_mode.Free():
-        setModelConfig(thinkingMode: thinking_mode.PreferChinese());
+        setModelConfig(thinkingMode: const thinking_mode.PreferChinese());
         Alert.success(S.current.prefer_chinese);
-        reasoningOnOrder = thinking_mode.PreferChinese();
+        reasoningOnOrder = const thinking_mode.PreferChinese();
       case thinking_mode.PreferChinese():
-        setModelConfig(thinkingMode: thinking_mode.Free());
-        reasoningOnOrder = thinking_mode.Free();
+        setModelConfig(thinkingMode: const thinking_mode.Free());
+        reasoningOnOrder = const thinking_mode.Free();
       case thinking_mode.None():
-        setModelConfig(thinkingMode: thinking_mode.Lighting());
-        reasoningOffOrder = thinking_mode.Lighting();
+        setModelConfig(thinkingMode: const thinking_mode.Lighting());
+        reasoningOffOrder = const thinking_mode.Lighting();
     }
   }
 }

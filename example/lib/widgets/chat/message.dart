@@ -1,6 +1,5 @@
 // ignore: unused_import
 import 'dart:async';
-import 'dart:developer';
 import 'dart:math' as math;
 
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -302,7 +301,7 @@ class Message extends ConsumerWidget {
 
       case model.MessageType.text:
         if (!msg.isMine) border = null;
-        if (!msg.isMine) padding = EI.o(t: 12, l: 6, r: 6);
+        if (!msg.isMine) padding = const EI.o(t: 12, l: 6, r: 6);
       case model.MessageType.ttsGeneration:
       case model.MessageType.userAudio:
     }

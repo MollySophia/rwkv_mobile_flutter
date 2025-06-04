@@ -1,7 +1,7 @@
 name: zone
 description: "A new Flutter project."
 publish_to: "none"
-version: 1.6.10+426
+version: 1.7.0+427
 
 environment:
   sdk: ^3.8.0

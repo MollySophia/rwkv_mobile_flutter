@@ -19,10 +19,10 @@ class BottomInteractions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Padding(
-      padding: const EI.o(t: 8),
+    return const Padding(
+      padding: EI.o(t: 8),
       child: Row(
-        children: const [
+        children: [
           Expanded(child: _Interactions()),
           _MessageButton(),
         ],
@@ -90,7 +90,7 @@ class _ThinkingModeButton extends ConsumerWidget {
 
     final textScaleFactor = MediaQuery.textScalerOf(context);
     final height = textScaleFactor.scale(14) + 20;
-    final padding = EI.s(h: 8);
+    final padding = const EI.s(h: 8);
 
     return IntrinsicWidth(
       child: AnimatedOpacity(
@@ -184,10 +184,10 @@ class _SecondaryOptionsButton extends ConsumerWidget {
 
     final textScaleFactor = MediaQuery.textScalerOf(context);
     final height = textScaleFactor.scale(14) + 20;
-    final padding = EI.s(h: 8);
+    final padding = const EI.s(h: 8);
 
     return AnimatedSize(
-      key: Key("_SecondaryOptionsButton"),
+      key: const Key("_SecondaryOptionsButton"),
       duration: 150.ms,
       curve: Curves.easeOutCubic,
       child: IntrinsicWidth(

@@ -327,7 +327,7 @@ class _ScreenshotState extends ConsumerState<Screenshot> {
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.2),
-              offset: Offset(2, 4),
+              offset: const Offset(2, 4),
               blurRadius: 6,
             ),
           ],
