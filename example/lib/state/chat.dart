@@ -38,6 +38,8 @@ class _Chat {
   late final autoPauseId = qs<int?>(null);
 
   late final _sensitiveThrottler = Throttler(milliseconds: 333, trailing: true);
+
+  late final sensitiveFilter = ChatMessageFilter(P.guard._blockedWords.q);
 }
 
 /// Public methods
@@ -70,6 +72,7 @@ extension $Chat on _Chat {
       final newMsg = Message(
         id: id,
         content: P.guard.replaceSensitive(textToSend),
+        rawContent: textToSend,
         isMine: false,
         changing: false,
         isReasoning: currentMessage.isReasoning,
@@ -246,6 +249,7 @@ extension $Chat on _Chat {
       msg = Message(
         id: id,
         content: P.guard.replaceSensitive(message),
+        rawContent: message,
         isMine: true,
         type: type,
         imageUrl: imageUrl,
@@ -276,9 +280,9 @@ extension $Chat on _Chat {
           return e.type != MessageType.userImage;
         })
         .m((e) {
-          if (!e.isReasoning) return e.content;
-          if (!e.isCotFormat) return e.content;
-          if (!e.containsCotEndMark) return e.content;
+          if (!e.isReasoning) return e.rawContent;
+          if (!e.isCotFormat) return e.rawContent;
+          if (!e.containsCotEndMark) return e.rawContent;
           final (cotContent, cotResult) = e.cotContentAndResult;
           return cotResult;
         });
@@ -297,6 +301,7 @@ extension $Chat on _Chat {
     final receiveMsg = Message(
       id: receiveId,
       content: "",
+      rawContent: "",
       isMine: false,
       changing: true,
       isReasoning: P.rwkv.reasoning.q,
@@ -361,32 +366,7 @@ extension _$Chat on _Chat {
 
     P.rwkv.oldBroadcastStream.listen(_onOldStreamEvent, onDone: _onStreamDone, onError: _onStreamError);
     // P.rwkv.broadcastStream.listen(_onStreamEvent, onDone: _onStreamDone, onError: _onStreamError);
-
-    P.rwkv.broadcastStream
-        .where((e) {
-          if (e is from_rwkv.GenerateStart) {
-            receivedTokens.q = "";
-            receivingTokens.q = true;
-            qqq('[start]');
-          } else if (e is from_rwkv.GenerateStop) {
-            receivedTokens.q = "";
-            receivingTokens.q = false;
-            qqq('[stop]');
-          }
-          return e is from_rwkv.ResponseBufferContent;
-        })
-        .cast<from_rwkv.ResponseBufferContent>()
-        .map((e) => e.responseBufferContent)
-        .replaceSensitive(P.guard._blockedWords.q)
-        .listen(
-          (e) {
-            receivedTokens.q = receivedTokens.q + e;
-            qqq('=>$e');
-            // qqq('=>${receivedTokens.q}');
-          },
-          onDone: _onStreamDone,
-          onError: _onStreamError,
-        );
+    _initMessageStream();
 
     P.world.audioFileStreamController.stream.listen(_onNewFileReceived);
     focusNode.addListener(_onFocusNodeChanged);
@@ -398,6 +378,51 @@ extension _$Chat on _Chat {
     P.app.lifecycleState.lb(_onLifecycleStateChanged);
 
     P.preference.preferredLanguage.lv(P.suggestion.loadSuggestions);
+  }
+
+  void _initMessageStream() async {
+    /// NOTE: ensure the sensitive words are loaded
+    await FV.delayed(1000.ms);
+
+    P.rwkv.broadcastStream
+        .where((e) {
+          switch (e) {
+            case from_rwkv.ResponseBufferContent _:
+              return true;
+            case from_rwkv.GenerateStop _:
+              sensitiveFilter.flush();
+              receivedTokens.q = "";
+              receivingTokens.q = false;
+              qqq('[stop]');
+              return false;
+            case from_rwkv.GenerateStart _:
+              receivedTokens.q = "";
+              receivingTokens.q = true;
+              qqq('[start]');
+              return false;
+            default:
+              return false;
+          }
+        })
+        .cast<from_rwkv.ResponseBufferContent>()
+        .map((e) => e.responseBufferContent)
+        .transform(sensitiveFilter.transformer())
+        .listen(
+          _onMessageStreamEvent,
+          onDone: _onStreamDone,
+          onError: _onStreamError,
+        );
+  }
+
+  void _onMessageStreamEvent(FilteredChatMessage e) {
+    receivedTokens.q = e.content;
+    _updateMessageById(
+      id: receiveId.q!,
+      content: e.content,
+      rawContent: e.origin,
+    );
+    // qqq('=>$e');
+    // qqq('=>${receivedTokens.q}');
   }
 
   FV _checkSensitive(String content) async {
@@ -434,10 +459,10 @@ extension _$Chat on _Chat {
 
   List<String> _history() {
     final history = P.msg.list.q.where((msg) => msg.type == MessageType.text).m((e) {
-      if (!e.isReasoning) return e.content;
-      if (!e.isCotFormat) return e.content;
-      if (!e.containsCotEndMark) return e.content;
-      if (e.paused) return e.content;
+      if (!e.isReasoning) return e.rawContent;
+      if (!e.isCotFormat) return e.rawContent;
+      if (!e.containsCotEndMark) return e.rawContent;
+      if (e.paused) return e.rawContent;
       final (cotContent, cotResult) = e.cotContentAndResult;
       return cotResult;
     });
@@ -522,6 +547,8 @@ extension _$Chat on _Chat {
 
     final id = receiveId.q;
 
+    sensitiveFilter.flush();
+
     if (id == null) {
       qqe("receiveId is null");
       return;
@@ -541,6 +568,7 @@ extension _$Chat on _Chat {
   void _updateMessageById({
     required int id,
     String? content,
+    String? rawContent,
     bool? isMine,
     bool? changing,
     MessageType? type,
@@ -565,6 +593,7 @@ extension _$Chat on _Chat {
       content: content,
       isMine: isMine,
       changing: changing,
+      rawContent: rawContent,
       type: type,
       imageUrl: imageUrl,
       audioUrl: audioUrl,
@@ -589,6 +618,7 @@ extension _$Chat on _Chat {
         break;
 
       case _RWKVMessageType.streamResponse:
+        qq;
         receivedTokens.q = event.content;
         receivingTokens.q = true;
         break;

@@ -14,6 +14,7 @@ enum MessageType {
 final class Message extends Equatable {
   final int id;
   final String content;
+  final String rawContent;
   final bool isMine;
   final bool changing;
   final MessageType type;
@@ -43,6 +44,7 @@ final class Message extends Equatable {
   const Message({
     required this.id,
     required this.content,
+    required this.rawContent,
     required this.isMine,
     required this.isReasoning,
     required this.paused,
@@ -68,6 +70,7 @@ final class Message extends Equatable {
   List<Object?> get props => [
     id,
     content,
+    rawContent,
     isMine,
     changing,
     type,
@@ -93,6 +96,7 @@ final class Message extends Equatable {
     return Message(
       id: json["id"] as int,
       content: json["content"] as String,
+      rawContent: json["rawContent"] as String,
       isMine: json["roleType"] == 1,
       changing: false,
       type: MessageType.values.firstWhere((e) => e.name == json["type"]),
@@ -119,6 +123,7 @@ final class Message extends Equatable {
     return {
       "id": id,
       "content": content,
+      "rawContent": rawContent,
       "roleType": isMine ? 1 : 0,
       "type": type.name,
       "imageUrl": imageUrl,
@@ -144,6 +149,7 @@ final class Message extends Equatable {
   Message copyWith({
     int? id,
     String? content,
+    String? rawContent,
     bool? isMine,
     bool? changing,
     MessageType? type,
@@ -167,6 +173,7 @@ final class Message extends Equatable {
     return Message(
       id: id ?? this.id,
       content: content ?? this.content,
+      rawContent: rawContent ?? this.rawContent,
       isMine: isMine ?? this.isMine,
       changing: changing ?? this.changing,
       type: type ?? this.type,
@@ -195,6 +202,7 @@ final class Message extends Equatable {
 Message(
   id: $id,
   content: $content,
+  rawContent: $rawContent,
   isMine: $isMine,
   changing: $changing,
   type: $type,
@@ -217,22 +225,22 @@ Message(
 )""";
   }
 
-  bool get isCotFormat => content.startsWith("<think>");
-  bool get containsCotEndMark => content.contains("</think>");
+  bool get isCotFormat => rawContent.startsWith("<think>");
+  bool get containsCotEndMark => rawContent.contains("</think>");
 
   (String cotContent, String cotResult) get cotContentAndResult {
     if (!isCotFormat) {
       return ("", "");
     }
     if (!containsCotEndMark) {
-      return (content.substring(7), "");
+      return (rawContent.substring(7), "");
     }
 
-    final endIndex = content.indexOf("</think>");
-    final _content = content.substring(7, endIndex);
+    final endIndex = rawContent.indexOf("</think>");
+    final _content = rawContent.substring(7, endIndex);
     String _result = "";
-    if (endIndex + 9 < content.length) {
-      _result = content.substring(endIndex + 9);
+    if (endIndex + 9 < rawContent.length) {
+      _result = rawContent.substring(endIndex + 9);
     }
 
     return (_content, _result);

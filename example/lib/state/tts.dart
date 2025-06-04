@@ -406,6 +406,7 @@ extension $TTS on _TTS {
     msg = Message(
       id: id,
       content: "",
+      rawContent: "",
       isMine: true,
       type: MessageType.userTTS,
       isReasoning: false,
@@ -428,6 +429,7 @@ extension $TTS on _TTS {
     final receiveMsg = Message(
       id: receiveId,
       content: ttsText,
+      rawContent: ttsText,
       isMine: false,
       changing: true,
       isReasoning: false,

@@ -3,70 +3,102 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:halo/halo.dart';
 
-extension ChatMessageFilterExt on Stream<String> {
-  Stream<String> replaceSensitive(Set<String> words) {
-    return _ChatMessageFilter(words).handle(this);
+class FilteredChatMessage {
+  final String content;
+  final String origin;
+
+  FilteredChatMessage({required this.content, required this.origin});
+
+  factory FilteredChatMessage.empty() => FilteredChatMessage(content: "", origin: "");
+
+  FilteredChatMessage copyWith({String? content, String? origin}) {
+    return FilteredChatMessage(
+      content: content ?? this.content,
+      origin: origin ?? this.origin,
+    );
   }
 }
 
-class _ChatMessageFilter {
+class ChatMessageFilter {
   int _index = -1;
   final List<String> _buffer = [];
-  final replaceChar = "■︎";
+  final _replaceChar = "■︎";
 
+  FilteredChatMessage _message = FilteredChatMessage.empty();
+
+  EventSink<FilteredChatMessage>? _sink;
   final _Trie _trie = _Trie();
-  int maxWordLength = 0;
+  int _maxWordLength = 0;
 
-  _ChatMessageFilter(Set<String> words) {
+  ChatMessageFilter(Set<String> words) {
     for (final word in words) {
       _trie.insert(word);
     }
-    maxWordLength = words.fold(0, (max, word) => word.length > max ? word.length : max);
+    _maxWordLength = words.fold(0, (max, word) => word.length > max ? word.length : max);
+    qqq("sensitiveWords: ${words.length}, maxWordLength: $_maxWordLength");
   }
 
-  Stream<String> handle(Stream<String> data) {
-    return data.transform(
-      StreamTransformer<String, String>.fromHandlers(
-        handleData: _handleData,
-        handleDone: _handleDone,
-      ),
+  StreamTransformer<String, FilteredChatMessage> transformer() {
+    return StreamTransformer<String, FilteredChatMessage>.fromHandlers(
+      handleData: _handleData,
+      handleDone: _handleDone,
     );
   }
 
-  void _handleData(String data, EventSink<String> sink) {
-    // qqq('data: $data');
-    if (data.length < _index) {
-      _buffer.clear();
-      _index = -1;
-    }
-    final n = _index == -1 ? data : data.substring(_index);
-    _buffer.addAll(n.characters);
-    _index = data.length;
+  void reset() {
+    _index = -1;
+    _sink = null;
+    _message = FilteredChatMessage.empty();
+    _buffer.clear();
+  }
 
-    _processBuffer(sink);
-
-    if (_buffer.length > maxWordLength) {
-      sink.add(_buffer.removeAt(0));
+  void flush() {
+    qq;
+    if (_message.content.isNotEmpty) {
+      _sink?.add(
+        _message.copyWith(
+          content: _message.content + _buffer.join(),
+        ),
+      );
     }
   }
 
-  void _handleDone(EventSink<String> sink) {
-    if (_buffer.isNotEmpty) {
-      _processBuffer(sink);
+  void _handleData(String data, EventSink<FilteredChatMessage> sink) {
+    if (data.isEmpty) {
+      return;
     }
-    sink.add(_buffer.join());
-    _index = -1;
-    _buffer.clear();
+    _sink = sink;
+    // qqq('data: $data');
+    if (data.length < _index) {
+      reset();
+    }
+    final n = _index == -1 ? data.trimLeft() : data.substring(_index);
+    _buffer.addAll(n.characters);
+    _message = _message.copyWith(origin: _message.origin + n);
+
+    final offset = data.length - _index;
+    _index = data.length;
+
+    _processBuffer(sink, offset);
+
+    while (_buffer.length > _maxWordLength) {
+      _message = _message.copyWith(content: _message.content + _buffer.removeAt(0));
+      sink.add(_message);
+    }
+  }
+
+  void _handleDone(EventSink<FilteredChatMessage> sink) {
+    reset();
     sink.close();
   }
 
-  void _processBuffer(EventSink<String> sink) {
+  void _processBuffer(EventSink<FilteredChatMessage> sink, int offset) {
     final range = _trie.search(_buffer);
     if (range.isNotEmpty) {
-      qqw('sensitiveWords: $range');
       final start = range.first;
       final end = range.last;
-      final replacement = List.filled(end - start + 1, replaceChar);
+      qqw('sensitiveWords: $start-$end \n${_buffer.join()}');
+      final replacement = List.filled(end - start, _replaceChar);
       _buffer.replaceRange(start, end, replacement);
     }
   }
@@ -92,7 +124,7 @@ class _Trie {
       }
       node = node.children[char]!;
       depth++;
-      if (node.isEnd && node.children.isEmpty) {
+      if (node.isEnd) {
         return [index, index + depth];
       }
     }
