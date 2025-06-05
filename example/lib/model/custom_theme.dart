@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
+import 'package:zone/gen/l10n.dart';
 
 sealed class CustomTheme extends Equatable {
   abstract final String displayName;
@@ -12,11 +13,28 @@ sealed class CustomTheme extends Equatable {
 
   @override
   List<Object?> get props => [displayName, scaffold, setting, settingItem, pagerDim];
+
+  static CustomTheme? fromString(String name) {
+    switch (name) {
+      case "Light":
+        return Light();
+      case "Dim":
+        return Dim();
+      case "LightsOut":
+        return LightsOut();
+    }
+    return null;
+  }
+
+  @override
+  String toString() {
+    return runtimeType.toString();
+  }
 }
 
 final class Light extends CustomTheme {
   @override
-  final String displayName = "Light";
+  String get displayName => S.current.theme_light;
 
   @override
   final bool light = true;
@@ -36,7 +54,7 @@ final class Light extends CustomTheme {
 
 final class Dim extends CustomTheme {
   @override
-  final String displayName = "Dim";
+  String get displayName => S.current.theme_dim;
 
   @override
   final bool light = false;
@@ -54,9 +72,9 @@ final class Dim extends CustomTheme {
   final Color pagerDim = const Color(0xFFFFFFFF);
 }
 
-final class Dark extends CustomTheme {
+final class LightsOut extends CustomTheme {
   @override
-  final String displayName = "Dark";
+  String get displayName => S.current.theme_lights_out;
 
   @override
   final bool light = false;

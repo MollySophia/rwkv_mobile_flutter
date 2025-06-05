@@ -15,6 +15,7 @@ import 'package:zone/model/demo_type.dart';
 import 'package:zone/state/p.dart';
 import 'package:zone/widgets/form_item.dart';
 
+// TODO: @wangce move it to pages
 class Settings extends ConsumerWidget {
   final ScrollController? scrollController;
 
@@ -34,6 +35,8 @@ class Settings extends ConsumerWidget {
     final paddingLeft = ref.watch(P.app.paddingLeft);
     final qb = ref.watch(P.app.qb);
     final customTheme = ref.watch(P.app.customTheme);
+    final isLightMode = customTheme.light;
+    final preferredThemeMode = ref.watch(P.app.preferredThemeMode);
 
     final iconWidget = SB(
       width: 64,
@@ -102,11 +105,17 @@ class Settings extends ConsumerWidget {
             onTap: P.preference.showTextScaleFactorDialog,
           ),
           FormItem(
-            isSectionEnd: true,
             icon: Icon(Icons.language_outlined, color: qb.q(.667), size: 16),
             title: s.application_language,
             info: preferredLanguage.display ?? s.follow_system,
             onTap: P.preference.showLocaleDialog,
+          ),
+          FormItem(
+            isSectionEnd: true,
+            icon: Icon(isLightMode ? Icons.light_mode : Icons.dark_mode, color: qb.q(.667), size: 16),
+            title: s.appearance,
+            info: preferredThemeMode.displayName,
+            onTap: P.preference.showThemeSettings,
           ),
           12.h,
           Row(
@@ -264,4 +273,12 @@ class _DumpSwitch extends ConsumerWidget {
       ),
     );
   }
+}
+
+extension _LocalizedThemeMode on ThemeMode {
+  String get displayName => switch (this) {
+    ThemeMode.light => S.current.light_mode,
+    ThemeMode.dark => S.current.dark_mode,
+    ThemeMode.system => S.current.follow_system,
+  };
 }

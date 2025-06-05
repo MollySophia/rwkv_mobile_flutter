@@ -60,6 +60,10 @@ class Debugger extends ConsumerWidget {
     final availableModels = ref.watch(P.fileManager.availableModels);
     final unavailableModels = ref.watch(P.fileManager.unavailableModels);
     final disableRemoteConfig = Args.disableRemoteConfig;
+    final preferredThemeMode = ref.watch(P.app.preferredThemeMode);
+    final customTheme = ref.watch(P.app.customTheme);
+    final themeMode = ref.watch(P.preference.themeMode);
+    final preferredDarkCustomTheme = ref.watch(P.preference.preferredDarkCustomTheme);
 
     const showDrawerWidth = false;
     const showEditingBotMessage = false;
@@ -154,6 +158,14 @@ class Debugger extends ConsumerWidget {
                       if (showUnavailableModels) T(unavailableModels.map((e) => e.name).join("\n")),
                       T("disableRemoteConfig".codeToName),
                       T(disableRemoteConfig.toString()),
+                      T("preferredThemeMode".codeToName),
+                      T(preferredThemeMode.toString()),
+                      T("customTheme".codeToName),
+                      T(customTheme.runtimeType.toString()),
+                      T("themeMode".codeToName),
+                      T(themeMode.toString()),
+                      T("preferredDarkCustomTheme".codeToName),
+                      T(preferredDarkCustomTheme.runtimeType.toString()),
                     ].indexMap((index, e) {
                       return C(
                         margin: EI.o(t: index % 2 == 0 ? 0 : 1),

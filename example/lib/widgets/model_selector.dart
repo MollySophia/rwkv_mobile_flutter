@@ -20,6 +20,7 @@ import 'package:zone/widgets/tts_group_item.dart';
 import 'package:zone/widgets/world_group_item.dart';
 import 'package:zone/widgets/model_item.dart';
 
+// TODO: move it to pages/panel
 class ModelSelector extends ConsumerWidget {
   static FV show() async {
     qq;
@@ -177,7 +178,6 @@ class _DownloadSource extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentSource = ref.watch(P.fileManager.downloadSource);
     final primary = Theme.of(context).colorScheme.primary;
-    final qw = ref.watch(P.app.qw);
     final qb = ref.watch(P.app.qb);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -185,7 +185,7 @@ class _DownloadSource extends ConsumerWidget {
         4.h,
         T(
           S.current.download_server_,
-          s: TS(c: kB.q(.7), s: 12, w: FW.w600),
+          s: TS(c: qb.q(.7), s: 12, w: FW.w600),
         ),
         4.h,
         Wrap(
@@ -207,7 +207,7 @@ class _DownloadSource extends ConsumerWidget {
                 padding: const EI.s(h: 6, v: 2),
                 child: T(
                   e.name + (e == FileDownloadSource.huggingface ? S.current.overseas : ""),
-                  s: TS(c: e == currentSource ? kW : kB.q(.7), s: 14),
+                  s: TS(c: e == currentSource ? kW : qb.q(.7), s: 14),
                 ),
               ),
             );

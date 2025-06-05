@@ -25,6 +25,7 @@ class _App extends RawApp {
   late final isMobile = qp((ref) => ref.watch(_isMobile));
   final _isMobile = qs(true);
 
+  /// 当前应用的主题
   late final customTheme = qs<custom_theme.CustomTheme>(custom_theme.Light());
 
   @override
@@ -152,33 +153,33 @@ extension _$App on _App {
         break;
     }
 
-    if (Args.debuggingThemes) {
-      Timer.periodic(const Duration(seconds: 4), (timer) {
-        final theme = customTheme.q;
-        switch (theme) {
-          case custom_theme.Light():
-            if (HF.randomBool()) {
-              customTheme.q = custom_theme.Dim();
-            } else {
-              customTheme.q = custom_theme.Dim();
-            }
-          case custom_theme.Dim():
-            customTheme.q = custom_theme.Light();
-          case custom_theme.Dark():
-            customTheme.q = custom_theme.Light();
-        }
-        if (customTheme.q.light) {
-          preferredThemeMode.q = ThemeMode.light;
-        } else {
-          preferredThemeMode.q = ThemeMode.dark;
-        }
-      });
-    }
-
     customTheme.lv(_onCustomThemeChanged, fireImmediately: true);
+    preferredThemeMode.lv(_syncTheme, fireImmediately: true);
+    light.lv(_syncTheme, fireImmediately: true);
+    P.preference.preferredDarkCustomTheme.lv(_syncTheme, fireImmediately: true);
   }
 
-  FV _toLightMode() async {
+  FV _syncTheme() async {
+    final light = this.light.q;
+    final preferredThemeMode = this.preferredThemeMode.q;
+    final preferredDarkCustomTheme = P.preference.preferredDarkCustomTheme.q;
+    qqr("syncTheme: light: $light, preferredThemeMode: $preferredThemeMode");
+    switch (preferredThemeMode) {
+      case ThemeMode.light:
+        customTheme.q = custom_theme.Light();
+      case ThemeMode.dark:
+        customTheme.q = preferredDarkCustomTheme;
+      case ThemeMode.system:
+        switch (light) {
+          case true:
+            customTheme.q = custom_theme.Light();
+          case false:
+            customTheme.q = preferredDarkCustomTheme;
+        }
+    }
+  }
+
+  FV _statusBarToLightMode() async {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         systemNavigationBarColor: customTheme.q.scaffold,
@@ -188,7 +189,7 @@ extension _$App on _App {
     );
   }
 
-  FV _toDarkMode() async {
+  FV _statusBarToDarkMode() async {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         systemNavigationBarColor: customTheme.q.scaffold,
@@ -201,10 +202,10 @@ extension _$App on _App {
   FV _onCustomThemeChanged() async {
     switch (customTheme.q) {
       case custom_theme.Light():
-        _toLightMode();
-      case custom_theme.Dark():
+        _statusBarToLightMode();
+      case custom_theme.LightsOut():
       case custom_theme.Dim():
-        _toDarkMode();
+        _statusBarToDarkMode();
     }
   }
 
@@ -213,7 +214,7 @@ extension _$App on _App {
     switch (lifecycleState.q) {
       case AppLifecycleState.resumed:
         await HF.wait(500);
-        _toLightMode();
+        _statusBarToLightMode();
       case AppLifecycleState.detached:
       case AppLifecycleState.inactive:
       case AppLifecycleState.hidden:

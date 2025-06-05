@@ -105,7 +105,7 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos
 
 SPEC CHECKSUMS:
-  appkit_ui_element_colors: 711e7a2aa027790964e6fd90c78a666efe631432
+  appkit_ui_element_colors: c8e13c23cbd781e0f5d9b75cad686e6a4bb958da
   audioplayers_darwin: 761f2948df701d05b5db603220c384fb55720012
   dynamic_color: b820c000cc68df65e7ba7ff177cb98404ce56651
   file_picker: 7584aae6fa07a041af2b36a2655122d42f578c1a

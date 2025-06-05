@@ -10,6 +10,7 @@ import 'package:zone/model/argument.dart';
 import 'package:zone/route/method.dart';
 import 'package:zone/state/p.dart';
 
+// TODO: @wangce move it to pages/panel
 class ArgumentsPanel extends ConsumerWidget {
   static Future<void> show(BuildContext context) async {
     if (P.rwkv.argumentsPanelShown.q) return;
