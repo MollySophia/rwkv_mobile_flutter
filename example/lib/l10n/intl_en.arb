@@ -193,5 +193,6 @@
   "download_from_browser": "Download from browser",
   "downloading": "Downloading",
   "download_server_": "Download Source",
-  "overseas": ""
+  "overseas": "",
+  "x_message_selected": "%d Selected"
 }

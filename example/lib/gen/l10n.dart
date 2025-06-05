@@ -1425,6 +1425,16 @@ class S {
   String get overseas {
     return Intl.message('(境外)', name: 'overseas', desc: '', args: []);
   }
+
+  /// `已选 %d 条消息`
+  String get x_message_selected {
+    return Intl.message(
+      '已选 %d 条消息',
+      name: 'x_message_selected',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

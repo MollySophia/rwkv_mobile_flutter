@@ -32,6 +32,11 @@ class UserMessageBottom extends ConsumerWidget {
 
     final primary = Theme.of(context).colorScheme.primary;
     final worldType = ref.watch(P.rwkv.currentWorldType);
+    final selectMessageMode = ref.watch(P.chat.selectMessageMode);
+
+    if (selectMessageMode) {
+      return const SizedBox(height: 12);
+    }
 
     bool showUserEditButton = false;
     bool showUserCopyButton = false;

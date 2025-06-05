@@ -1,6 +1,7 @@
 // ignore: unused_import
 import 'dart:developer';
 
+import 'package:halo_state/halo_state.dart';
 import 'package:zone/model/demo_type.dart';
 import 'package:zone/model/message.dart' as model;
 import 'package:zone/model/world_type.dart';
@@ -39,19 +40,21 @@ class _Page extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const Scaffold(
+    final selectMessageMode = ref.watch(P.chat.selectMessageMode);
+
+    return Scaffold(
       backgroundColor: kW,
       body: Stack(
         children: [
-          _List(),
-          Empty(),
-          VisualEmpty(),
-          AudioEmpty(),
-          ChatAppBar(),
-          _NavigationBarBottomLine(),
-          Suggestions(),
-          BottomBar(),
-          AudioInput(),
+          const _List(),
+          const Empty(),
+          const VisualEmpty(),
+          const AudioEmpty(),
+          const ChatAppBar(),
+          const _NavigationBarBottomLine(),
+          if (!selectMessageMode) const Suggestions(),
+          if (!selectMessageMode) const BottomBar(),
+          if (!selectMessageMode) const AudioInput(),
         ],
       ),
     );
@@ -161,7 +164,7 @@ class _List extends ConsumerWidget {
               itemBuilder: (context, index) {
                 final finalIndex = messages.length - 1 - index;
                 final msg = messages[finalIndex];
-                return Message(msg, finalIndex);
+                return _MessageWrap(msg: msg, finalIndex: finalIndex);
               },
               separatorBuilder: (context, index) {
                 return const SB(height: 15);
@@ -169,6 +172,48 @@ class _List extends ConsumerWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _MessageWrap extends ConsumerWidget {
+  final model.Message msg;
+  final int finalIndex;
+
+  _MessageWrap({required this.msg, required this.finalIndex});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectMessageMode = ref.watch(P.chat.selectMessageMode);
+
+    if (!selectMessageMode) {
+      return Message(msg, finalIndex);
+    }
+    final selectedIds = ref.watch(P.chat.selectedMessages);
+    final selected = selectedIds.contains(msg.id);
+
+    void toggle() {
+      P.chat.selectedMessages.q =
+          !selected //
+          ? {...selectedIds, msg.id}
+          : selectedIds.where((id) => id != msg.id).toSet();
+    }
+
+    return GestureDetector(
+      onTap: () => toggle(),
+      behavior: HitTestBehavior.opaque,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Checkbox(
+            value: selected,
+            onChanged: (checked) => toggle(),
+          ),
+          Exp(
+            child: Message(msg, finalIndex),
+          ),
+        ],
       ),
     );
   }
