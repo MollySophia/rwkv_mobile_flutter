@@ -65,6 +65,12 @@ lane :test do |params|
   ios_upload(groups: ['External'])
 end
 
+lane :lint do |params|
+  raw_change_analysis_options()
+  dart_fix()
+  raw_change_analysis_options()
+end
+
 # ✅ Shared
 
 lane :dart_fix do
