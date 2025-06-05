@@ -417,6 +417,20 @@
         "socLimitations": ["8 Gen 2"]
       },
       {
+        "name": "RWKV7-G1 0.4B",
+        "type": "zip",
+        "modelSize": 0.4,
+        "fileName": "rwkv7-g1-0.4b-20250324-ctx4096_fp16.mlmodelc.zip",
+        "url": "mollysama/rwkv-mobile-models/resolve/main/coreml/rwkv7-g1-0.4b-20250324-ctx4096_fp16.mlmodelc.zip",
+        "fileSize": 716981009,
+        "sha256": "be1e0e8e8826d6dc55d506c48228516231732cd80d1d2090a0e4f4002571d32d",
+        "quantization": "FP16",
+        "platforms": ["macos", "ios"],
+        "backends": ["coreml"],
+        "tags": ["reason", "npu"],
+        "isDebug": true
+      },
+      {
         "name": "test: github-releases",
         "type": "gguf",
         "fileName": "test",
