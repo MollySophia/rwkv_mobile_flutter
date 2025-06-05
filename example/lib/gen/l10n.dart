@@ -1410,6 +1410,21 @@ class S {
   String get downloading {
     return Intl.message('下载中', name: 'downloading', desc: '', args: []);
   }
+
+  /// `下载服务器(请试试哪个快)`
+  String get download_server_ {
+    return Intl.message(
+      '下载服务器(请试试哪个快)',
+      name: 'download_server_',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `(境外)`
+  String get overseas {
+    return Intl.message('(境外)', name: 'overseas', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

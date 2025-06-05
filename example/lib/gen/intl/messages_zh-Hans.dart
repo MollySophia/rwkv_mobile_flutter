@@ -106,6 +106,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "download_from_browser": MessageLookupByLibrary.simpleMessage("从浏览器下载"),
     "download_missing": MessageLookupByLibrary.simpleMessage("下载缺失文件"),
     "download_model": MessageLookupByLibrary.simpleMessage("下载模型"),
+    "download_server_": MessageLookupByLibrary.simpleMessage("下载服务器(请试试哪个快)"),
     "download_source": MessageLookupByLibrary.simpleMessage("下载源"),
     "downloading": MessageLookupByLibrary.simpleMessage("下载中"),
     "draw": MessageLookupByLibrary.simpleMessage("平局！"),
@@ -187,6 +188,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "或开始一个空白聊天",
     ),
     "othello_title": MessageLookupByLibrary.simpleMessage("RWKV 黑白棋"),
+    "overseas": MessageLookupByLibrary.simpleMessage("(境外)"),
     "players": MessageLookupByLibrary.simpleMessage("玩家"),
     "playing_partial_generated_audio": MessageLookupByLibrary.simpleMessage(
       "正在播放部分已生成的语音",

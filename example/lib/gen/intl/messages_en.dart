@@ -132,6 +132,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Download Missing Files",
     ),
     "download_model": MessageLookupByLibrary.simpleMessage("Download model"),
+    "download_server_": MessageLookupByLibrary.simpleMessage("Download Source"),
     "download_source": MessageLookupByLibrary.simpleMessage("Download Source"),
     "downloading": MessageLookupByLibrary.simpleMessage("Downloading"),
     "draw": MessageLookupByLibrary.simpleMessage("Draw!"),
@@ -241,6 +242,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Or start a new empty chat",
     ),
     "othello_title": MessageLookupByLibrary.simpleMessage("RWKV Othello"),
+    "overseas": MessageLookupByLibrary.simpleMessage(""),
     "players": MessageLookupByLibrary.simpleMessage("Players"),
     "playing_partial_generated_audio": MessageLookupByLibrary.simpleMessage(
       "Playing partially generated audio",

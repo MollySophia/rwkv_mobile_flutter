@@ -185,7 +185,7 @@ class _DownloadSource extends ConsumerWidget {
       children: [
         4.h,
         T(
-          S.current.download_source,
+          S.current.download_server_,
           s: TS(c: kB.q(.7), s: 12, w: FW.w600),
         ),
         4.h,
@@ -207,7 +207,7 @@ class _DownloadSource extends ConsumerWidget {
                 ),
                 padding: const EI.s(h: 6, v: 2),
                 child: T(
-                  e.name,
+                  e.name + (e == FileDownloadSource.huggingface ? S.current.overseas : ""),
                   s: TS(c: e == currentSource ? kW : kB.q(.7), s: 14),
                 ),
               ),
