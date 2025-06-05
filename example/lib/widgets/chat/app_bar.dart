@@ -60,8 +60,8 @@ class ChatAppBar extends ConsumerWidget {
       displayName = currentModel.name;
     }
 
-    final kW = ref.watch(P.app.qw);
-    final kB = ref.watch(P.app.qb);
+    final scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
+    final qb = ref.watch(P.app.qb);
 
     return Positioned(
       top: 0,
@@ -71,7 +71,7 @@ class ChatAppBar extends ConsumerWidget {
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
           child: AppBar(
-            backgroundColor: kW.q(.6),
+            backgroundColor: scaffoldBackgroundColor.q(.6),
             elevation: 0,
             centerTitle: true,
             title: GD(
@@ -91,7 +91,7 @@ class ChatAppBar extends ConsumerWidget {
                     C(
                       padding: const EI.o(l: 4, r: 4, t: 1, b: 1),
                       decoration: BD(
-                        color: kB.q(.1),
+                        color: qb.q(.1),
                         borderRadius: 10.r,
                       ),
                       child: Row(
@@ -227,8 +227,9 @@ class _MenuButton extends ConsumerWidget {
 class _TrianglePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
+    final qb = P.app.qb.q;
     final paint = Paint()
-      ..color = Colors.black.q(.667)
+      ..color = qb.q(.667)
       ..style = PaintingStyle.fill;
 
     final path = Path()

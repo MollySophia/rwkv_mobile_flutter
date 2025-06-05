@@ -169,7 +169,7 @@ class _Dim extends ConsumerWidget {
     final screenHeight = ref.watch(P.app.screenHeight);
     final ignorePointer = ref.watch(Pager.atMainPage);
     final drawerOpacity = ref.watch(Pager.drawerOpacity);
-    final kB = ref.watch(P.app.qb);
+    final qb = ref.watch(P.app.qb);
 
     return IgnorePointer(
       ignoring: ignorePointer,
@@ -182,7 +182,7 @@ class _Dim extends ConsumerWidget {
             child: C(
               width: screenWidth,
               height: screenHeight,
-              decoration: BD(color: kB.q(.3)),
+              decoration: BD(color: qb.q(.3)),
             ),
           ),
         ),

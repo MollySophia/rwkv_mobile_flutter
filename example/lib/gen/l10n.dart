@@ -28,9 +28,10 @@ class S {
   static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
-    final name = (locale.countryCode?.isEmpty ?? false)
-        ? locale.languageCode
-        : locale.toString();
+    final name =
+        (locale.countryCode?.isEmpty ?? false)
+            ? locale.languageCode
+            : locale.toString();
     final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
@@ -1424,6 +1425,66 @@ class S {
   /// `(境外)`
   String get overseas {
     return Intl.message('(境外)', name: 'overseas', desc: '', args: []);
+  }
+
+  /// `外观`
+  String get appearance {
+    return Intl.message('外观', name: 'appearance', desc: '', args: []);
+  }
+
+  /// `深色模式`
+  String get dark_mode {
+    return Intl.message('深色模式', name: 'dark_mode', desc: '', args: []);
+  }
+
+  /// `强制使用深色模式`
+  String get force_dark_mode {
+    return Intl.message(
+      '强制使用深色模式',
+      name: 'force_dark_mode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `浅色模式`
+  String get light_mode {
+    return Intl.message('浅色模式', name: 'light_mode', desc: '', args: []);
+  }
+
+  /// `跟随系统`
+  String get system_mode {
+    return Intl.message('跟随系统', name: 'system_mode', desc: '', args: []);
+  }
+
+  /// `色彩模式跟随系统`
+  String get color_theme_follow_system {
+    return Intl.message(
+      '色彩模式跟随系统',
+      name: 'color_theme_follow_system',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `深色模式主题`
+  String get dark_mode_theme {
+    return Intl.message('深色模式主题', name: 'dark_mode_theme', desc: '', args: []);
+  }
+
+  /// `深色`
+  String get theme_dim {
+    return Intl.message('深色', name: 'theme_dim', desc: '', args: []);
+  }
+
+  /// `黑色`
+  String get theme_lights_out {
+    return Intl.message('黑色', name: 'theme_lights_out', desc: '', args: []);
+  }
+
+  /// `浅色`
+  String get theme_light {
+    return Intl.message('浅色', name: 'theme_light', desc: '', args: []);
   }
 }
 

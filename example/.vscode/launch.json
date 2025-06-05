@@ -12,12 +12,17 @@
       "flutterMode": "debug",
     },
     {
-      "name": "debug (halo)",
+      "name": "debug (Halo)",
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
       "flutterMode": "debug",
-      "args": []
+      "args": [
+        // "--dart-define=disableRemoteConfig=true",
+        "--dart-define=logLevel=3",
+        "--dart-define=disableAutoShowOfWeightsPanel=true",
+        // ke
+      ]
     },
     {
       "name": "profile",

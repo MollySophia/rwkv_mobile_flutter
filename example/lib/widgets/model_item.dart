@@ -2,7 +2,7 @@
 import 'dart:developer';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
-import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/config.dart';
 import 'package:zone/func/gb_display.dart';
@@ -116,6 +116,7 @@ class ModelItem extends ConsumerWidget {
     final isCurrentModel = currentModel == fileInfo;
     final loading = ref.watch(P.rwkv.loading);
     final demoType = ref.watch(P.app.demoType);
+    final customTheme = ref.watch(P.app.customTheme);
 
     late final String startTitle;
 
@@ -130,12 +131,16 @@ class ModelItem extends ConsumerWidget {
         startTitle = s.start_to_chat;
     }
 
-    final kW = ref.watch(P.app.qw);
+    final qw = ref.watch(P.app.qw);
 
     return ClipRRect(
       borderRadius: 8.r,
       child: C(
-        decoration: BD(color: kW, borderRadius: 8.r),
+        decoration: BD(
+          color: customTheme.settingItem,
+          borderRadius: 8.r,
+          border: Border.all(color: qw.q(.1), width: .5),
+        ),
         margin: const EI.o(t: 8),
         padding: const EI.a(8),
         child: Row(
@@ -162,7 +167,7 @@ class ModelItem extends ConsumerWidget {
                     padding: const EI.a(8),
                     child: T(
                       loading ? s.loading : startTitle,
-                      s: TS(c: kW),
+                      s: TS(c: qw),
                     ),
                   ),
                 ),
@@ -175,7 +180,7 @@ class ModelItem extends ConsumerWidget {
                       borderRadius: 8.r,
                     ),
                     padding: const EI.a(8),
-                    child: T(s.chatting, s: TS(c: kW)),
+                    child: T(s.chatting, s: TS(c: qw)),
                   ),
                 ),
               if (!isCurrentModel) 8.w,
@@ -209,7 +214,7 @@ class _DownloadIndicator extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final kB = ref.watch(P.app.qb);
+    final qb = ref.watch(P.app.qb);
     return GD(
       onTap: _onTap,
       child: C(
@@ -231,7 +236,7 @@ class _DownloadIndicator extends ConsumerWidget {
               child: Icon(
                 Icons.stop,
                 size: 16,
-                color: kB.q(.7),
+                color: qb.q(.7),
               ),
             ),
           ],
@@ -304,8 +309,8 @@ class FileKeyItem extends ConsumerWidget {
     if (timeRemaining.isNegative) timeRemaining = Duration.zero;
     final tags = fileInfo.tags;
     final primary = Theme.of(getContext()!).colorScheme.primary;
-    final kW = ref.watch(P.app.qw);
-    final kB = ref.watch(P.app.qb);
+    final qw = ref.watch(P.app.qw);
+    final qb = ref.watch(P.app.qb);
     return Column(
       crossAxisAlignment: CAA.start,
       children: [
@@ -315,11 +320,11 @@ class FileKeyItem extends ConsumerWidget {
           children: [
             T(
               fileInfo.name,
-              s: TS(c: kB, w: FW.w600),
+              s: const TS(w: FW.w600),
             ),
             T(
               gbDisplay(fileSize),
-              s: TS(c: kB.q(.7), w: FW.w500),
+              s: TS(c: qb.q(.7), w: FW.w500),
             ),
             if (showDownloaded && localFile.hasFile)
               Icon(
@@ -345,12 +350,18 @@ class FileKeyItem extends ConsumerWidget {
                 child: T(
                   tag,
                   s: TS(
-                    c: showHighlight ? kW : kB,
+                    c: showHighlight ? qw : qb,
                     w: showHighlight ? FW.w500 : FW.w400,
                   ),
                 ),
               );
             }),
+            if (kDebugMode && fileInfo.isDebug)
+              Container(
+                decoration: BD(color: kCR, borderRadius: 4.r),
+                padding: const EI.s(h: 4),
+                child: T("DEBUG", s: TS(c: qw)),
+              ),
             if (quantization != null && quantization.isNotEmpty)
               C(
                 decoration: BD(color: kG.q(.2), borderRadius: 4.r),
@@ -397,10 +408,10 @@ class FileKeyItem extends ConsumerWidget {
         if (downloading)
           Wrap(
             children: [
-              T(s.speed, s: TS(c: kB)),
+              T(s.speed),
               T("${networkSpeed.toStringAsFixed(1)}MB/s"),
               12.w,
-              T(s.remaining, s: TS(c: kB)),
+              T(s.remaining),
               if (timeRemaining.inMinutes > 0) T("${timeRemaining.inMinutes}m"),
               if (timeRemaining.inMinutes == 0) T("${timeRemaining.inSeconds}s"),
             ],

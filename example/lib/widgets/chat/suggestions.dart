@@ -7,7 +7,6 @@ import 'package:flutter/src/scheduler/ticker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:halo_state/halo_state.dart';
-import 'package:zone/config.dart';
 import 'package:zone/func/is_chinese.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/demo_type.dart';
@@ -90,7 +89,7 @@ class Suggestions extends ConsumerWidget {
     BuildContext context,
     List suggestions,
   ) {
-    final primary = Theme.of(context).primaryColor;
+    final primary = Theme.of(context).colorScheme.primary;
     return ListView(
       padding: const EI.o(l: 8, b: 8, t: 2),
       scrollDirection: Axis.horizontal,
@@ -137,28 +136,31 @@ class Suggestions extends ConsumerWidget {
   }
 
   Widget _buildTag(String text, {required Color color, required VoidCallback? onTap}) {
+    final qw = P.app.qw.q;
+    final qb = P.app.qb.q;
+    final customTheme = P.app.customTheme.q;
     return GD(
       onTap: onTap,
       child: C(
         alignment: Alignment.center,
         decoration: BD(
-          color: Platform.isIOS ? kW.q(.9) : kW,
+          color: Platform.isIOS ? qw.q(.9) : qw,
           borderRadius: 6.r,
           border: Border.all(
             color: color,
             width: .5,
           ),
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
-              color: kBG,
+              color: customTheme.scaffold,
               blurRadius: 10,
-              offset: Offset(0, 0),
+              offset: const Offset(0, 0),
             ),
           ],
         ),
         margin: const EI.o(r: 8, t: 4),
         padding: const EI.s(v: 4, h: 8),
-        child: T(text, s: const TS(c: kB, s: 16)),
+        child: T(text, s: const TS(s: 16)),
       ),
     );
   }
@@ -228,6 +230,7 @@ class _AllSuggestionDialogState extends State<AllSuggestionDialog> implements Ti
 
   @override
   Widget build(BuildContext context) {
+    final qb = P.app.qb.q;
     return SB(
       width: double.infinity,
       child: Column(
@@ -240,7 +243,7 @@ class _AllSuggestionDialogState extends State<AllSuggestionDialog> implements Ti
             height: 50,
             child: TabBar(
               isScrollable: true,
-              unselectedLabelStyle: const TS(c: kB, s: 12),
+              unselectedLabelStyle: const TS(s: 12),
               labelPadding: const EI.s(v: 0, h: 12),
               tabAlignment: TabAlignment.start,
               controller: tabController,

@@ -125,12 +125,18 @@ downloading: $downloading""");
     final currentWorldType = ref.watch(P.rwkv.currentWorldType);
     final alreadyStarted = currentWorldType == worldType && isCurrentModel;
     final loading = ref.watch(P.rwkv.loading);
-    final kW = ref.watch(P.app.qw);
+    final qw = ref.watch(P.app.qw);
+
+    final customTheme = ref.watch(P.app.customTheme);
 
     return ClipRRect(
       borderRadius: 8.r,
       child: C(
-        decoration: BD(color: kW, borderRadius: 8.r),
+        decoration: BD(
+          color: customTheme.settingItem,
+          borderRadius: 8.r,
+          border: Border.all(color: qw.q(.1), width: .5),
+        ),
         margin: const EI.o(t: 8),
         padding: const EI.o(t: 8, l: 8, r: 8),
         child: Column(

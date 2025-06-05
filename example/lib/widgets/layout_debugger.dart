@@ -36,8 +36,8 @@ class LayoutDebugger extends ConsumerWidget {
     // 注意这里不能写这句话, 否则会影响手势事件
     // if (!showFrame) return child;
 
-    final kW = ref.watch(P.app.qw);
-    final kB = ref.watch(P.app.qb);
+    final qw = ref.watch(P.app.qw);
+    final qb = ref.watch(P.app.qb);
 
     return Stack(
       children: [
@@ -59,8 +59,8 @@ class LayoutDebugger extends ConsumerWidget {
           Positioned(
             bottom: 0,
             child: Material(
-              color: kB.q(.5),
-              textStyle: TS(c: kW, s: 8),
+              color: qb.q(.5),
+              textStyle: TS(c: qw, s: 8),
               child: C(
                 child: debugWidget!,
               ),

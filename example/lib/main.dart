@@ -104,8 +104,25 @@ class _App extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isDesktop = ref.watch(P.app.isDesktop);
+    final preferredThemeMode = ref.watch(P.app.preferredThemeMode);
+    final customTheme = ref.watch(P.app.customTheme);
+    final brightness = customTheme.light ? Brightness.light : Brightness.dark;
+    final demoTypeColorScheme = customTheme.light ? P.app.demoType.q.colorScheme : P.app.demoType.q.colorSchemeDark;
+    final modalBarrierColor = customTheme.pagerDim.q(.25);
+    final bottomSheetTheme = BottomSheetThemeData(backgroundColor: customTheme.setting, modalBarrierColor: modalBarrierColor);
+    final appBarTheme = AppBarTheme(scrolledUnderElevation: 0, backgroundColor: customTheme.scaffold);
+
+    final themeData = ThemeData(
+      fontFamilyFallback: isDesktop ? Config.fontFamilyFallback : null,
+      brightness: brightness,
+      colorScheme: demoTypeColorScheme,
+      appBarTheme: appBarTheme,
+      scaffoldBackgroundColor: customTheme.scaffold,
+      bottomSheetTheme: bottomSheetTheme,
+    );
+
     return MaterialApp.router(
-      color: kBG,
+      color: customTheme.scaffold,
       supportedLocales: _supportedLocales,
       localizationsDelegates: const [
         S.delegate,
@@ -113,21 +130,9 @@ class _App extends ConsumerWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      themeMode: ThemeMode.light,
-      theme: ThemeData(
-        fontFamilyFallback: isDesktop ? Config.fontFamilyFallback : null,
-        brightness: Brightness.light,
-        colorScheme: P.app.demoType.q.colorScheme!.copyWith(brightness: Brightness.light),
-        appBarTheme: const AppBarTheme(scrolledUnderElevation: 0, backgroundColor: kBG),
-        scaffoldBackgroundColor: kBG,
-      ),
-      darkTheme: ThemeData(
-        fontFamilyFallback: isDesktop ? Config.fontFamilyFallback : null,
-        brightness: Brightness.dark,
-        colorScheme: P.app.demoType.q.colorScheme!.copyWith(brightness: Brightness.dark),
-        appBarTheme: const AppBarTheme(scrolledUnderElevation: 0, backgroundColor: kB),
-        scaffoldBackgroundColor: kB,
-      ),
+      themeMode: preferredThemeMode,
+      theme: themeData,
+      darkTheme: themeData,
       debugShowCheckedModeBanner: kDebugMode,
       routerConfig: kRouter,
       builder: _builder,
@@ -135,11 +140,12 @@ class _App extends ConsumerWidget {
   }
 
   Widget _builder(BuildContext context, Widget? child) {
+    final customTheme = P.app.customTheme.q;
     return _LocaleWrapper(
       child: _TextScaleWrapper(
         child: Stack(
           children: [
-            Positioned(left: 0, right: 0, top: 0, bottom: 0, child: C(color: kBG)),
+            Positioned(left: 0, right: 0, top: 0, bottom: 0, child: C(color: customTheme.scaffold)),
             if (child != null) child,
             const Alert(),
             if (kDebugMode) const Debugger(),

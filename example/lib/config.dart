@@ -1,9 +1,5 @@
-import 'dart:ui';
-
 import 'package:zone/args.dart';
 import 'package:zone/route/page_key.dart';
-
-const kBG = Color(0xFFF4F8FF);
 
 abstract class Config {
   // TODO: 根据 args 决定

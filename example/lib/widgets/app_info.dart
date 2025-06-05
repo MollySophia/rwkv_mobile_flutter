@@ -12,6 +12,7 @@ import 'package:zone/gen/l10n.dart';
 import 'package:zone/route/method.dart';
 import 'package:zone/state/p.dart';
 
+// TODO: @wangce move it to pages/panel
 class AppInfo extends ConsumerWidget {
   static final _shown = qs(false);
 
