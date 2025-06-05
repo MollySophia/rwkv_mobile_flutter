@@ -64,7 +64,7 @@ class Settings extends ConsumerWidget {
             children: [iconWidget],
           ),
           16.h,
-          Row(
+          const Row(
             mainAxisAlignment: MAA.center,
             children: [
               Expanded(
@@ -80,8 +80,8 @@ class Settings extends ConsumerWidget {
           Row(
             mainAxisAlignment: MAA.center,
             children: [
-              T(version, s: TS(s: 12)),
-              T(" ($buildNumber)", s: TS(s: 12)),
+              T(version, s: const TS(s: 12)),
+              T(" ($buildNumber)", s: const TS(s: 12)),
             ],
           ),
           16.h,

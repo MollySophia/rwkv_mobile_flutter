@@ -7,7 +7,6 @@ import 'package:flutter/src/scheduler/ticker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:halo_state/halo_state.dart';
-import 'package:zone/config.dart';
 import 'package:zone/func/is_chinese.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/demo_type.dart';
@@ -155,13 +154,13 @@ class Suggestions extends ConsumerWidget {
             BoxShadow(
               color: customTheme.scaffold,
               blurRadius: 10,
-              offset: Offset(0, 0),
+              offset: const Offset(0, 0),
             ),
           ],
         ),
         margin: const EI.o(r: 8, t: 4),
         padding: const EI.s(v: 4, h: 8),
-        child: T(text, s: TS(s: 16)),
+        child: T(text, s: const TS(s: 16)),
       ),
     );
   }
@@ -244,7 +243,7 @@ class _AllSuggestionDialogState extends State<AllSuggestionDialog> implements Ti
             height: 50,
             child: TabBar(
               isScrollable: true,
-              unselectedLabelStyle: TS(s: 12),
+              unselectedLabelStyle: const TS(s: 12),
               labelPadding: const EI.s(v: 0, h: 12),
               tabAlignment: TabAlignment.start,
               controller: tabController,

@@ -2,7 +2,6 @@
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
-import 'package:halo_alert/halo_alert.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zone/gen/l10n.dart';
@@ -127,7 +126,7 @@ class ThemeSelector extends ConsumerWidget {
     ];
 
     return ClipRRect(
-      borderRadius: BorderRadius.only(
+      borderRadius: const BorderRadius.only(
         topLeft: Radius.circular(16),
         topRight: Radius.circular(16),
       ),
@@ -144,14 +143,14 @@ class ThemeSelector extends ConsumerWidget {
                 onPressed: () {
                   pop();
                 },
-                icon: Icon(Icons.close),
+                icon: const Icon(Icons.close),
               ),
             ),
           ],
         ),
         body: ListView.builder(
           controller: scrollController,
-          padding: EI.o(
+          padding: const EI.o(
             l: 12,
             r: 12,
           ),

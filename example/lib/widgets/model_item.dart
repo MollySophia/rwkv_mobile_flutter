@@ -2,7 +2,6 @@
 import 'dart:developer';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
-import 'package:collection/collection.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/config.dart';
 import 'package:zone/func/gb_display.dart';
@@ -320,7 +319,7 @@ class FileKeyItem extends ConsumerWidget {
           children: [
             T(
               fileInfo.name,
-              s: TS(w: FW.w600),
+              s: const TS(w: FW.w600),
             ),
             T(
               gbDisplay(fileSize),

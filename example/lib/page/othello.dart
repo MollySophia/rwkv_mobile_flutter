@@ -130,7 +130,7 @@ class _Title extends ConsumerWidget {
         if (usePortrait) const Spacer(),
         T(
           s.rwkv_othello,
-          s: TS(s: 20, w: FW.w700),
+          s: const TS(s: 20, w: FW.w700),
         ),
         if (usePortrait) const Spacer(),
         if (!usePortrait) 32.w,
@@ -245,7 +245,7 @@ class _ModelSettings extends ConsumerWidget {
 
     return Material(
       color: qb.q(.0),
-      textStyle: TS(ff: "monospace", s: 10),
+      textStyle: const TS(ff: "monospace", s: 10),
       child: C(
         padding: const EI.a(4),
         margin: const EI.a(4),
@@ -414,7 +414,7 @@ class _Players extends ConsumerWidget {
 
     return Material(
       color: qb.q(.0),
-      textStyle: TS(ff: "monospace", s: 10),
+      textStyle: const TS(ff: "monospace", s: 10),
       child: C(
         margin: const EI.a(4),
         padding: const EI.a(4),
@@ -500,11 +500,11 @@ class _Score extends ConsumerWidget {
         ),
         T(
           "${s.prefill}: ${prefillSpeed.toStringAsFixed(1)} t/s",
-          s: TS(s: 10, w: FW.w400),
+          s: const TS(s: 10, w: FW.w400),
         ),
         T(
           "${s.decode}: ${decodeSpeed.toStringAsFixed(1)} t/s",
-          s: TS(s: 10, w: FW.w400),
+          s: const TS(s: 10, w: FW.w400),
         ),
       ],
     );
@@ -517,7 +517,7 @@ class _Score extends ConsumerWidget {
             },
       child: T(
         s.new_game,
-        s: TS(s: 10, w: FW.w500),
+        s: const TS(s: 10, w: FW.w500),
       ),
     );
 
@@ -653,7 +653,7 @@ class _Grid extends ConsumerWidget {
             child: Center(
               child: T(
                 e,
-                s: TS(s: 10, w: FW.w700),
+                s: const TS(s: 10, w: FW.w700),
               ),
             ),
           );
@@ -669,7 +669,7 @@ class _Grid extends ConsumerWidget {
             child: Center(
               child: T(
                 e,
-                s: TS(s: 10, w: FW.w700),
+                s: const TS(s: 10, w: FW.w700),
               ),
             ),
           );

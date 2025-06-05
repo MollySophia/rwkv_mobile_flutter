@@ -78,7 +78,7 @@ class FormItem extends ConsumerWidget {
                       opacity: 0.5,
                       child: T(
                         subtitle!,
-                        s: TS(w: FW.w500, s: 12),
+                        s: const TS(w: FW.w500, s: 12),
                       ),
                     ),
                 ],
@@ -89,7 +89,7 @@ class FormItem extends ConsumerWidget {
               Expanded(
                 child: T(
                   info,
-                  s: TS(w: FW.w500, s: 12),
+                  s: const TS(w: FW.w500, s: 12),
                   textAlign: TextAlign.right,
                 ),
               ),
@@ -97,7 +97,7 @@ class FormItem extends ConsumerWidget {
             ?trailing,
             if (showArrow) 8.w,
             if (showArrow)
-              Icon(
+              const Icon(
                 Icons.chevron_right,
               ),
           ],
