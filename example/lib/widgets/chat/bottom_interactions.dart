@@ -41,6 +41,7 @@ class _Interactions extends ConsumerWidget {
     return Wrap(
       spacing: 4,
       runSpacing: 4,
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         if (currentWorldType?.isVisualDemo == true) const IntrinsicWidth(child: _SelectImageButton()),
         if (demoType == DemoType.chat) const _ThinkingModeButton(),

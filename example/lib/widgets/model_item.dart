@@ -2,6 +2,7 @@
 import 'dart:developer';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:flutter/foundation.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/config.dart';
 import 'package:zone/func/gb_display.dart';
@@ -355,6 +356,12 @@ class FileKeyItem extends ConsumerWidget {
                 ),
               );
             }),
+            if (kDebugMode && fileInfo.isDebug)
+              Container(
+                decoration: BD(color: kCR, borderRadius: 4.r),
+                padding: const EI.s(h: 4),
+                child: T("DEBUG", s: TS(c: qw)),
+              ),
             if (quantization != null && quantization.isNotEmpty)
               C(
                 decoration: BD(color: kG.q(.2), borderRadius: 4.r),

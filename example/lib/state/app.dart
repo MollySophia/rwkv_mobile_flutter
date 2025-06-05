@@ -153,6 +153,20 @@ extension _$App on _App {
         break;
     }
 
+    if (Args.debuggingThemes) {
+      Timer.periodic(const Duration(seconds: 1), (timer) {
+        final theme = customTheme.q;
+        switch (theme) {
+          case custom_theme.Light():
+            customTheme.q = P.preference.preferredDarkCustomTheme.q;
+          case custom_theme.Dim():
+          case custom_theme.LightsOut():
+            customTheme.q = custom_theme.Light();
+        }
+        preferredThemeMode.q = customTheme.q.light ? ThemeMode.light : ThemeMode.dark;
+      });
+    }
+
     customTheme.lv(_onCustomThemeChanged, fireImmediately: true);
     preferredThemeMode.lv(_syncTheme, fireImmediately: true);
     light.lv(_syncTheme, fireImmediately: true);

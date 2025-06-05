@@ -179,6 +179,7 @@ class _DownloadSource extends ConsumerWidget {
     final currentSource = ref.watch(P.fileManager.downloadSource);
     final primary = Theme.of(context).colorScheme.primary;
     final qb = ref.watch(P.app.qb);
+    final qw = ref.watch(P.app.qw);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -207,7 +208,7 @@ class _DownloadSource extends ConsumerWidget {
                 padding: const EI.s(h: 6, v: 2),
                 child: T(
                   e.name + (e == FileDownloadSource.huggingface ? S.current.overseas : ""),
-                  s: TS(c: e == currentSource ? kW : qb.q(.7), s: 14),
+                  s: TS(c: e == currentSource ? qw : qb.q(.7), s: 14),
                 ),
               ),
             );
