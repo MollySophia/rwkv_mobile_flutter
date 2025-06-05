@@ -46,9 +46,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "application_internal_test_group": MessageLookupByLibrary.simpleMessage(
       "Application Internal Test Group",
     ),
-    "application_language": MessageLookupByLibrary.simpleMessage(
-      "Application Language",
-    ),
+    "application_language": MessageLookupByLibrary.simpleMessage("Language"),
     "application_settings": MessageLookupByLibrary.simpleMessage(
       "Application Settings",
     ),
@@ -127,11 +125,16 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "discord": MessageLookupByLibrary.simpleMessage("Discord"),
     "download_all": MessageLookupByLibrary.simpleMessage("Download All"),
+    "download_from_browser": MessageLookupByLibrary.simpleMessage(
+      "Download from browser",
+    ),
     "download_missing": MessageLookupByLibrary.simpleMessage(
       "Download Missing Files",
     ),
     "download_model": MessageLookupByLibrary.simpleMessage("Download model"),
+    "download_server_": MessageLookupByLibrary.simpleMessage("Download Source"),
     "download_source": MessageLookupByLibrary.simpleMessage("Download Source"),
+    "downloading": MessageLookupByLibrary.simpleMessage("Downloading"),
     "draw": MessageLookupByLibrary.simpleMessage("Draw!"),
     "dump_see_files": MessageLookupByLibrary.simpleMessage(
       "Dump Message Records",
@@ -155,7 +158,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "finish_recording": MessageLookupByLibrary.simpleMessage(
       "Recording finished",
     ),
-    "follow_system": MessageLookupByLibrary.simpleMessage("Follow System"),
+    "follow_system": MessageLookupByLibrary.simpleMessage("System"),
     "follow_us_on_twitter": MessageLookupByLibrary.simpleMessage(
       "Follow us on Twitter",
     ),
@@ -239,6 +242,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Or start a new empty chat",
     ),
     "othello_title": MessageLookupByLibrary.simpleMessage("RWKV Othello"),
+    "overseas": MessageLookupByLibrary.simpleMessage(""),
     "players": MessageLookupByLibrary.simpleMessage("Players"),
     "playing_partial_generated_audio": MessageLookupByLibrary.simpleMessage(
       "Playing partially generated audio",
@@ -294,6 +298,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "prefill": MessageLookupByLibrary.simpleMessage("Prefill"),
     "qq_group_1": MessageLookupByLibrary.simpleMessage("QQ Group 1"),
     "qq_group_2": MessageLookupByLibrary.simpleMessage("QQ Group 2"),
+    "quick_thinking": MessageLookupByLibrary.simpleMessage("Quick Reasoning"),
+    "quick_thinking_enabled": MessageLookupByLibrary.simpleMessage(
+      "Quick Reasoning Enabled",
+    ),
     "reason": MessageLookupByLibrary.simpleMessage("Reason"),
     "reasoning_enabled": MessageLookupByLibrary.simpleMessage("Reasoning Mode"),
     "recording_your_voice": MessageLookupByLibrary.simpleMessage(

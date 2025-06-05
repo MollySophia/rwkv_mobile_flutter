@@ -187,5 +187,11 @@
   "all": "全部",
   "all_prompt": "全部 Prompt",
   "no_data": "无数据",
-  "share_chat": "分享聊天"
+  "share_chat": "分享聊天",
+  "quick_thinking": "快思考",
+  "quick_thinking_enabled": "快思考已经开启",
+  "download_from_browser": "从浏览器下载",
+  "downloading": "下载中",
+  "download_server_": "下载服务器(请试试哪个快)",
+  "overseas": "(境外)"
 }

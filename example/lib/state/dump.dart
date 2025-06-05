@@ -18,14 +18,14 @@ extension _$Dump on _Dump {
       case DemoType.world:
     }
     qq;
-    P.chat.messages.lv(_onMessagesChanged);
+    P.msg.list.lv(_onMessagesChanged);
   }
 
   FV _onMessagesChanged() async {
     qr;
     final dumpping = P.preference.dumpping.q;
     if (!dumpping) return;
-    final messages = P.chat.messages.q;
+    final messages = P.msg.list.q;
     if (messages.length != 3) return;
     final lastMessage = messages.last;
     final isMine = lastMessage.isMine;
@@ -48,7 +48,7 @@ extension _$Dump on _Dump {
 
     qr;
 
-    final messages = P.chat.messages.q;
+    final messages = P.msg.list.q;
 
     if (messages.isEmpty) return;
 
@@ -125,7 +125,7 @@ extension _$Dump on _Dump {
 /// Public methods
 extension $Dump on _Dump {
   FV startDump() async {
-    Gaimon.light();
+    P.app.hapticLight();
     final status = await Permission.storage.status;
     if (!status.isGranted) {
       final status = await Permission.storage.request();
@@ -144,7 +144,7 @@ extension $Dump on _Dump {
   }
 
   FV stopDump() async {
-    Gaimon.light();
+    P.app.hapticLight();
     await P.preference._saveDumpping(false);
     Alert.info(S.current.dump_stopped);
   }

@@ -1,7 +1,5 @@
 // ignore: unused_import
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
@@ -15,63 +13,63 @@ class BranchSwitcher extends ConsumerWidget {
   const BranchSwitcher(this.msg, this.index, {super.key});
 
   void _onBackPressed() {
-    P.chat.onTapSwitchAtIndex(index, isBack: true, msg: msg);
+    P.msg.onTapSwitchAtIndex(index, isBack: true, msg: msg);
   }
 
   void _onForwardPressed() {
-    P.chat.onTapSwitchAtIndex(index, isBack: false, msg: msg);
+    P.msg.onTapSwitchAtIndex(index, isBack: false, msg: msg);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final branches = ref.watch(
-      P.chat.branchesCountList.select((list) {
-        return list.length > index ? list[index] : [];
-      }),
-    );
-    if (branches.length <= 1) return const SizedBox.shrink();
     final primary = Theme.of(context).colorScheme.primary;
-    final indexInBranches = branches.indexOf(msg.id);
-    final isFirst = indexInBranches == 0;
-    final isLast = indexInBranches == branches.length - 1;
+    final siblingCount = P.msg.siblingCount(msg);
+    final index = P.msg.siblingIds(msg).indexOf(msg.id);
 
-    qqq("message: $msg, index: $index");
+    if (siblingCount <= 1) return const SizedBox.shrink();
 
-    return C(
-      decoration: BD(color: primary.q(.0)),
-      child: Stack(
-        children: [
-          Ro(
-            children: [
-              44.h,
-              Icon(CupertinoIcons.chevron_back, color: primary.q(isFirst ? .4 : .8)),
-              T(
-                "${indexInBranches + 1} / ${branches.length}",
-                s: TS(c: primary.q(.8), w: FW.w600),
+    bool isFirst = index == 0;
+    bool isLast = index == siblingCount - 1;
+
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: C(
+            constraints: const BoxConstraints(minWidth: 16),
+            child: Center(
+              child: T(
+                "${index + 1} / $siblingCount",
+                s: TS(c: primary, s: 12, w: FW.w600),
               ),
-              Icon(CupertinoIcons.chevron_forward, color: primary.q(isLast ? .4 : .8)),
-            ],
-          ),
-          Positioned.fill(
-            child: Ro(
-              children: [
-                Exp(
-                  child: GD(
-                    onTap: isFirst ? null : _onBackPressed,
-                    child: C(decoration: BD(color: kDebugMode ? kCR.q(.1) : kC)),
-                  ),
-                ),
-                Exp(
-                  child: GD(
-                    onTap: isLast ? null : _onForwardPressed,
-                    child: C(decoration: BD(color: kDebugMode ? kCB.q(.1) : kC)),
-                  ),
-                ),
-              ],
             ),
           ),
-        ],
-      ),
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              onPressed: isFirst ? null : _onBackPressed,
+              padding: const EdgeInsets.only(left: 4, right: 16, top: 4, bottom: 4),
+              constraints: const BoxConstraints(), // override default min size of 48px
+              icon: Icon(
+                Icons.arrow_back_ios_new,
+                color: isFirst ? primary.q(.5) : primary,
+                size: 16,
+              ),
+            ),
+            IconButton(
+              onPressed: isLast ? null : _onForwardPressed,
+              padding: const EdgeInsets.only(left: 16, right: 4, top: 4, bottom: 4),
+              constraints: const BoxConstraints(), // override default min size of 48px
+              icon: Icon(
+                Icons.arrow_forward_ios,
+                color: isLast ? primary.q(.5) : primary,
+                size: 16,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

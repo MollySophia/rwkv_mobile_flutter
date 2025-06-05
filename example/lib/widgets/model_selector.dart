@@ -24,19 +24,11 @@ class ModelSelector extends ConsumerWidget {
   static FV show() async {
     qq;
 
-    P.fileManager.modelSelectorShown.q = true;
-    P.fileManager.checkLocal();
+    if (P.fileManager.modelSelectorShown.q) return;
 
-    switch (P.app.demoType.q) {
-      case DemoType.fifthteenPuzzle:
-      case DemoType.othello:
-      case DemoType.sudoku:
-        break;
-      case DemoType.chat:
-      case DemoType.tts:
-      case DemoType.world:
-        P.suggestion.loadSuggestions();
-    }
+    P.fileManager.modelSelectorShown.q = true;
+
+    P.fileManager.checkLocal();
 
     if (!Args.disableRemoteConfig) {
       P.app.getConfig().then((_) async {
@@ -52,7 +44,6 @@ class ModelSelector extends ConsumerWidget {
     HF.wait(250).then((_) {
       P.device.sync();
     });
-
     await showModalBottomSheet(
       isScrollControlled: true,
       context: getContext()!,
@@ -77,6 +68,56 @@ class ModelSelector extends ConsumerWidget {
 
   const ModelSelector({super.key, required this.scrollController});
 
+  List<Widget> _buildItems(BuildContext context, WidgetRef ref) {
+    final demoType = ref.watch(P.app.demoType);
+    final availableModels = ref.watch(P.fileManager.availableModels);
+    final ttsCores = ref.watch(P.fileManager.ttsCores);
+
+    switch (demoType) {
+      case DemoType.world:
+        return [
+          ...WorldType.values
+              .where((e) => e.available)
+              .map((e) {
+                return e.socPairs
+                    .where((pair) {
+                      return pair.$1 == "" || pair.$1 == P.rwkv.socName.q;
+                    })
+                    .map((pair) {
+                      return WorldGroupItem(e, socPair: pair);
+                    });
+              })
+              .reduce((v, e) {
+                return [...v, ...e];
+              }),
+        ];
+      case DemoType.tts:
+        return [
+          for (final fileInfo in ttsCores) TTSGroupItem(fileInfo),
+        ];
+      case DemoType.chat:
+      case DemoType.sudoku:
+        return [
+          for (final fileInfo
+              in availableModels
+                  .sorted((a, b) {
+                    /// 模型尺寸大的在上面
+                    return (b.modelSize ?? 0).compareTo(a.modelSize ?? 0);
+                  })
+                  .sorted((a, b) {
+                    return (a.tags.contains("gpu") ? 0 : 1).compareTo(b.tags.contains("gpu") ? 0 : 1);
+                  })
+                  .sorted((a, b) {
+                    return (a.tags.contains("npu") ? 0 : 1).compareTo(b.tags.contains("npu") ? 0 : 1);
+                  }))
+            ModelItem(fileInfo),
+        ];
+      case DemoType.fifthteenPuzzle:
+      case DemoType.othello:
+        return [];
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = S.of(context);
@@ -99,9 +140,9 @@ class ModelSelector extends ConsumerWidget {
           padding: const EI.o(l: 12, r: 12),
           controller: scrollController,
           children: [
-            Ro(
+            Row(
               children: [
-                Exp(
+                Expanded(
                   child: T(s.chat_welcome_to_use(Config.appTitle), s: const TS(s: 18, w: FW.w600)),
                 ),
                 IconButton(
@@ -120,38 +161,7 @@ class ModelSelector extends ConsumerWidget {
                 "👉${s.size_recommendation}👈",
                 s: TS(c: kB.q(.7), s: 12, w: FW.w500),
               ),
-            if (demoType == DemoType.world)
-              ...WorldType.values
-                  .where((e) => e.available)
-                  .map((e) {
-                    return e.socPairs
-                        .where((pair) {
-                          return pair.$1 == "" || pair.$1 == P.rwkv.soc.q;
-                        })
-                        .map((pair) {
-                          return WorldGroupItem(e, socPair: pair);
-                        });
-                  })
-                  .reduce((v, e) {
-                    return [...v, ...e];
-                  }),
-            if (demoType == DemoType.tts)
-              for (final fileInfo in ttsCores) TTSGroupItem(fileInfo),
-            if (demoType == DemoType.chat || demoType == DemoType.sudoku)
-              for (final fileInfo
-                  in availableModels
-                      .sorted((a, b) {
-                        return a.fileSize.compareTo(b.fileSize);
-                      })
-                      .sorted((a, b) {
-                        return (a.isDebug ? 1 : 0).compareTo((b.isDebug ? 1 : 0));
-                      })
-                      .sorted((a, b) {
-                        final aIsDownloaded = P.fileManager.locals(a).q.hasFile ? 1 : 0;
-                        final bIsDownloaded = P.fileManager.locals(b).q.hasFile ? 1 : 0;
-                        return bIsDownloaded.compareTo(aIsDownloaded);
-                      }))
-                ModelItem(fileInfo),
+            ..._buildItems(context, ref),
             16.h,
             paddingBottom.h,
           ],
@@ -170,12 +180,12 @@ class _DownloadSource extends ConsumerWidget {
     final primary = Theme.of(context).colorScheme.primary;
     final kW = ref.watch(P.app.qw);
     final kB = ref.watch(P.app.qb);
-    return Co(
-      c: CrossAxisAlignment.stretch,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         4.h,
         T(
-          S.current.download_source,
+          S.current.download_server_,
           s: TS(c: kB.q(.7), s: 12, w: FW.w600),
         ),
         4.h,
@@ -197,7 +207,7 @@ class _DownloadSource extends ConsumerWidget {
                 ),
                 padding: const EI.s(h: 6, v: 2),
                 child: T(
-                  e.name,
+                  e.name + (e == FileDownloadSource.huggingface ? S.current.overseas : ""),
                   s: TS(c: e == currentSource ? kW : kB.q(.7), s: 14),
                 ),
               ),

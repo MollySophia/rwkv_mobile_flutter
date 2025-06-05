@@ -26,7 +26,7 @@ class UserTTSContent extends ConsumerWidget {
 
   void _onTTSPlayPressed() {
     qq;
-    P.chat.latestClickedMessage.q = msg;
+    P.msg.latestClicked.q = msg;
     P.world.play(path: msg.audioUrl!);
   }
 
@@ -46,7 +46,7 @@ class UserTTSContent extends ConsumerWidget {
     // final displayNameEn = ref.watch(P.tts.displayNameEn);
     final (String displayFlag, String displayNameCn, String displayNameEn) = P.tts.getSpkInfo(msg.ttsSpeakerName ?? "");
 
-    final latestClickedMessage = ref.watch(P.chat.latestClickedMessage);
+    final latestClickedMessage = ref.watch(P.msg.latestClicked);
     final playing = ref.watch(P.world.playing);
     final isCurrentMessage = latestClickedMessage?.id == msg.id;
 
@@ -61,7 +61,6 @@ class UserTTSContent extends ConsumerWidget {
 
     final qw = ref.watch(P.app.qw);
 
-
     return Padding(
       padding: const EI.o(
         t: 2,
@@ -69,13 +68,13 @@ class UserTTSContent extends ConsumerWidget {
         r: 6,
         b: 6,
       ),
-      child: Co(
-        c: CAA.start,
+      child: Column(
+        crossAxisAlignment: CAA.start,
         children: [
-          Ro(
+          Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Exp(
+              Expanded(
                 child: C(
                   decoration: BD(
                     color: qw.q(.5),

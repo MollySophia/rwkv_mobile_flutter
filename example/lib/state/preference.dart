@@ -34,6 +34,7 @@ class _Preference {
     1.4: S.current.ultra_large,
   };
 
+  @Deprecated("This is not used anymore")
   late final latestRuntimeAddress = qs<int>(0);
 
   late final dumpping = qs(false);
@@ -63,12 +64,14 @@ extension _$Preference on _Preference {
     final latestRuntimeAddress = sp.getInt("halo_state.latestRuntimeAddress");
     if (latestRuntimeAddress != null) this.latestRuntimeAddress.q = latestRuntimeAddress;
 
-    final status = await Permission.storage.status;
-    if (status.isGranted) {
-      final dumpping = sp.getBool("halo_state.dumpping");
-      if (dumpping != null) this.dumpping.q = dumpping;
-    } else {
-      await _saveDumpping(false);
+    if (Platform.isAndroid && P.app.demoType.q == DemoType.world) {
+      final status = await Permission.storage.status;
+      if (status.isGranted) {
+        final dumpping = sp.getBool("halo_state.dumpping");
+        if (dumpping != null) this.dumpping.q = dumpping;
+      } else {
+        await _saveDumpping(false);
+      }
     }
   }
 

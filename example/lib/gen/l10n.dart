@@ -1380,6 +1380,51 @@ class S {
   String get share_chat {
     return Intl.message('分享聊天', name: 'share_chat', desc: '', args: []);
   }
+
+  /// `快思考`
+  String get quick_thinking {
+    return Intl.message('快思考', name: 'quick_thinking', desc: '', args: []);
+  }
+
+  /// `快思考已经开启`
+  String get quick_thinking_enabled {
+    return Intl.message(
+      '快思考已经开启',
+      name: 'quick_thinking_enabled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `从浏览器下载`
+  String get download_from_browser {
+    return Intl.message(
+      '从浏览器下载',
+      name: 'download_from_browser',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `下载中`
+  String get downloading {
+    return Intl.message('下载中', name: 'downloading', desc: '', args: []);
+  }
+
+  /// `下载服务器(请试试哪个快)`
+  String get download_server_ {
+    return Intl.message(
+      '下载服务器(请试试哪个快)',
+      name: 'download_server_',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `(境外)`
+  String get overseas {
+    return Intl.message('(境外)', name: 'overseas', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

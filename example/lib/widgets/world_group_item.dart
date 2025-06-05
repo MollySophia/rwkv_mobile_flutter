@@ -73,7 +73,7 @@ class WorldGroupItem extends ConsumerWidget {
             modelPath: modelLocalFile.targetPath,
             encoderPath: encoderLocalFile.targetPath,
             backend: modelFileKey.backend!,
-            usingReasoningModel: worldType.isReasoning,
+            enableReasoning: worldType.isReasoning,
           );
         // throw "Not implemented";
       }
@@ -133,8 +133,8 @@ downloading: $downloading""");
         decoration: BD(color: kW, borderRadius: 8.r),
         margin: const EI.o(t: 8),
         padding: const EI.o(t: 8, l: 8, r: 8),
-        child: Co(
-          c: CAA.stretch,
+        child: Column(
+          crossAxisAlignment: CAA.stretch,
           children: [
             Wrap(
               alignment: WrapAlignment.spaceBetween,
@@ -156,7 +156,7 @@ downloading: $downloading""");
                 child: FileKeyItem(e, showDownloaded: true),
               ),
             ),
-            Ro(
+            Row(
               children: [
                 if (downloading) 8.h,
                 if (allMissing && !downloading)

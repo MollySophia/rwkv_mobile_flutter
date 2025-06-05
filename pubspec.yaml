@@ -1,7 +1,7 @@
 name: rwkv_mobile_flutter
-description: 'A new Flutter package project.'
-version: 0.0.1
-homepage: null
+description: 'RWKV Backend for flutter applications. Available on Android, iOS, macOS, Windows and Linux.'
+version: 1.0.0
+homepage: https://github.com/MollySophia/rwkv_mobile_flutter
 
 environment:
   sdk: ^3.8.0

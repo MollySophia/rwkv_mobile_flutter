@@ -1,7 +1,7 @@
-import 'dart:io';
 
 import 'package:background_downloader/background_downloader.dart' as bd;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:halo/halo.dart';
 import 'package:zone/gen/l10n.dart';
 
@@ -31,6 +31,7 @@ class _AppUpdateDialogState extends State<AppUpdateDialog> {
   double progress = 0;
   double fileSizeMB = 0;
   bd.DownloadTask? task;
+  String path = '';
 
   @override
   void initState() {
@@ -63,16 +64,19 @@ class _AppUpdateDialogState extends State<AppUpdateDialog> {
     });
   }
 
+  void installApk() async {
+    qqq('apk path: $path');
+    final utils = const MethodChannel("utils");
+    final r = await utils.invokeMethod('installApk', {"path": path});
+    qqq(r);
+  }
+
   FV downloadAppUpdate(String url) async {
-    final downloadDir = bd.BaseDirectory.applicationDocuments;
-    final fileName = "release.apk";
-    final file = File([downloadDir, fileName].join(Platform.pathSeparator));
-    if (file.existsSync()) {
-      file.deleteSync();
-    }
+    final ts = DateTime.now().millisecondsSinceEpoch;
+    final fileName = "$ts.apk";
     task = bd.DownloadTask(
       url: url,
-      baseDirectory: downloadDir,
+      baseDirectory: bd.BaseDirectory.temporary,
       filename: fileName,
       updates: bd.Updates.statusAndProgress,
       requiresWiFi: false,
@@ -86,10 +90,12 @@ class _AppUpdateDialogState extends State<AppUpdateDialog> {
     final dl = bd.FileDownloader();
     dl.download(
       task!,
-      onStatus: (s) {
+      onStatus: (s) async {
         if (s.isFinalState) {
           if (progress == 1) {
-            Navigator.pop(context);
+            path = await task!.filePath();
+            installApk();
+            if (mounted) Navigator.pop(context);
           } else {
             onDownloadFailed();
           }
@@ -123,8 +129,8 @@ class _AppUpdateDialogState extends State<AppUpdateDialog> {
             children: [
               4.h,
               Text(
-                "Download App Update",
-                style: theme.textTheme.headlineSmall,
+                S.of(context).downloading,
+                style: theme.textTheme.titleMedium,
               ),
               12.h,
               LinearProgressIndicator(
@@ -139,8 +145,7 @@ class _AppUpdateDialogState extends State<AppUpdateDialog> {
               if (progress == -1)
                 Text(
                   'Download failed',
-                  style: theme.textTheme.bodyMedium
-                      ?.copyWith(color: Colors.redAccent),
+                  style: theme.textTheme.bodyMedium?.copyWith(color: Colors.redAccent),
                 ),
               8.h,
               Row(
@@ -151,7 +156,7 @@ class _AppUpdateDialogState extends State<AppUpdateDialog> {
                       Navigator.pop(context);
                     },
                     child: Text(S.of(context).cancel_download),
-                  )
+                  ),
                 ],
               ),
             ],

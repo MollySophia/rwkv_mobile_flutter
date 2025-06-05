@@ -27,8 +27,25 @@ void main() async {
   } else {
     await _sentryAppRunner();
   }
+  // runApp(const _TestApp());
   await HF.wait(50);
   FlutterNativeSplash.remove();
+}
+
+// ignore: unused_element
+class _TestApp extends StatelessWidget {
+  const _TestApp();
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Text('Hello World!'),
+        ),
+      ),
+    );
+  }
 }
 
 FV _loadEnv() async {
@@ -81,11 +98,12 @@ class _StateWrapper extends ConsumerWidget {
   }
 }
 
-class _App extends StatelessWidget {
+class _App extends ConsumerWidget {
   const _App();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isDesktop = ref.watch(P.app.isDesktop);
     return MaterialApp.router(
       color: kBG,
       supportedLocales: _supportedLocales,
@@ -97,12 +115,14 @@ class _App extends StatelessWidget {
       ],
       themeMode: ThemeMode.light,
       theme: ThemeData(
+        fontFamilyFallback: isDesktop ? Config.fontFamilyFallback : null,
         brightness: Brightness.light,
         colorScheme: P.app.demoType.q.colorScheme!.copyWith(brightness: Brightness.light),
         appBarTheme: const AppBarTheme(scrolledUnderElevation: 0, backgroundColor: kBG),
         scaffoldBackgroundColor: kBG,
       ),
       darkTheme: ThemeData(
+        fontFamilyFallback: isDesktop ? Config.fontFamilyFallback : null,
         brightness: Brightness.dark,
         colorScheme: P.app.demoType.q.colorScheme!.copyWith(brightness: Brightness.dark),
         appBarTheme: const AppBarTheme(scrolledUnderElevation: 0, backgroundColor: kB),
@@ -115,12 +135,11 @@ class _App extends StatelessWidget {
   }
 
   Widget _builder(BuildContext context, Widget? child) {
-    qq;
     return _LocaleWrapper(
       child: _TextScaleWrapper(
         child: Stack(
           children: [
-            C(color: kBG),
+            Positioned(left: 0, right: 0, top: 0, bottom: 0, child: C(color: kBG)),
             if (child != null) child,
             const Alert(),
             if (kDebugMode) const Debugger(),

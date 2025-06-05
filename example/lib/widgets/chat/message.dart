@@ -31,9 +31,7 @@ const double _kTextScaleFactorForCotContent = 1;
 class Message extends ConsumerWidget {
   final model.Message msg;
 
-  /// 使用逆顺序
-  ///
-  /// TODO: 明确一下这里的 index, 到底是顺序还是逆序
+  /// 页面中第一个消息的 index 为 0
   final int index;
 
   const Message(this.msg, this.index, {super.key});
@@ -53,7 +51,7 @@ class Message extends ConsumerWidget {
     P.chat.focusNode.unfocus();
     P.tts.dismissAllShown();
 
-    P.chat.latestClickedMessage.q = msg;
+    P.msg.latestClicked.q = msg;
 
     if (msg.type == model.MessageType.userAudio) {
       final audioUrl = msg.audioUrl;
@@ -85,18 +83,31 @@ class Message extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = S.of(context);
+    final kB = ref.watch(P.app.qb);
+    final primary = Theme.of(context).colorScheme.primary;
+    final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
+
+    final demoType = ref.watch(P.app.demoType);
+    final worldType = ref.watch(P.rwkv.currentWorldType);
+
+    // 由 message 对象是否正在 changing 来决定是否根据 receivedTokens 渲染消息内容
+    final received = ref.watch(P.chat.receivedTokens.select((v) => msg.changing ? v : ""));
+    final cotDisplayState = ref.watch(P.chat.cotDisplayState(msg.id));
+
+    final editingIndex = ref.watch(P.msg.editingOrRegeneratingIndex);
+
+    final receiveId = ref.watch(P.chat.receiveId);
+    final receiving = ref.watch(P.chat.receivingTokens);
+
     final isMine = msg.isMine;
     final alignment = isMine ? Alignment.centerRight : Alignment.centerLeft;
     const marginHorizontal = 12.0;
     const marginVertical = .0;
     const kBubbleMinHeight = 44.0;
     const kBubbleMaxWidthAdjust = .0;
-    final demoType = ref.watch(P.app.demoType);
 
     final content = msg.content;
     final changing = msg.changing;
-
-    final received = ref.watch(P.chat.receivedTokens.select((v) => msg.changing ? v : ""));
 
     String finalContent = changing ? (received.isEmpty ? content : received) : content;
     if (msg.isSensitive) finalContent = s.filter;
@@ -119,17 +130,14 @@ class Message extends ConsumerWidget {
         break;
     }
 
-    final cotDisplayState = ref.watch(P.chat.cotDisplayState(msg.id));
-
-    final usingReasoningModel = msg.isReasoning && !msg.isSensitive;
+    final reasoning = msg.isReasoning && !msg.isSensitive;
 
     String cotContent = "";
     String cotResult = "";
 
-    final worldType = ref.watch(P.rwkv.currentWorldType);
     final subStringCount = worldType == WorldType.reasoningQA ? 8 : 9;
 
-    if (usingReasoningModel) {
+    if (reasoning) {
       assert(!msg.isMine);
       final isCot = finalContent.startsWith("<think>");
       if (isCot) {
@@ -153,11 +161,6 @@ class Message extends ConsumerWidget {
       }
     }
 
-    final primaryColor = Theme.of(context).colorScheme.primary;
-    final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
-
-    final editingIndex = ref.watch(P.chat.editingIndex);
-
     final isHistoryForEditing = editingIndex != null && editingIndex > index;
     final isEditing = editingIndex != null && editingIndex == index;
     final isFutureForEditing = editingIndex != null && editingIndex < index;
@@ -176,13 +179,9 @@ class Message extends ConsumerWidget {
       opacity = 1;
     }
 
-    final receiveId = ref.watch(P.chat.receiveId);
-    final receiving = ref.watch(P.chat.receivingTokens);
     final thisMessageIsReceiving = receiveId == msg.id && receiving;
 
     final textScaleFactorForCotContent = TextScaler.linear(MediaQuery.textScalerOf(context).scale(_kTextScaleFactorForCotContent));
-
-    final kB = ref.watch(P.app.qb);
 
     final markdownStyleSheetForCotContent = MarkdownStyleSheet(
       p: TS(c: kB.q(.5)),
@@ -269,7 +268,7 @@ class Message extends ConsumerWidget {
     }
 
     EI padding = const EI.o(t: 12, l: 12, r: 12);
-    Border border = Border.all(color: primaryColor.q(.2));
+    Border? border = Border.all(color: primary.q(.2));
     double radius = 20;
 
     switch (msg.type) {
@@ -301,6 +300,8 @@ class Message extends ConsumerWidget {
         padding = EI.zero;
 
       case model.MessageType.text:
+        if (!msg.isMine) border = null;
+        if (!msg.isMine) padding = const EI.o(t: 12, l: 6, r: 6);
       case model.MessageType.ttsGeneration:
       case model.MessageType.userAudio:
     }
@@ -310,6 +311,9 @@ class Message extends ConsumerWidget {
     final rawMaxWidth = math.min(screenWidth, screenHeight);
 
     final kW = ref.watch(P.app.qw);
+
+    // 如果是快速考 <think>\n<think>, 则不展示思考过程
+    final isQuickThinking = cotContent.trim().isEmpty;
 
     final bubbleContent = ConstrainedBox(
       constraints: BoxConstraints(maxWidth: width - kBubbleMaxWidthAdjust, minHeight: kBubbleMinHeight),
@@ -322,8 +326,8 @@ class Message extends ConsumerWidget {
             border: border,
             borderRadius: borderRadius,
           ),
-          child: Co(
-            c: isMine ? CAA.end : CAA.start,
+          child: Column(
+            crossAxisAlignment: isMine ? CAA.end : CAA.start,
             children: [
               if (isMine) ...[
                 // 🔥 User message
@@ -355,7 +359,7 @@ class Message extends ConsumerWidget {
                   ),
                 if (worldDemoMessageHeader.isNotEmpty) 4.h,
                 // 🔥 Bot message
-                if (!usingReasoningModel)
+                if (!reasoning)
                   MarkdownBody(
                     data: finalContent,
                     selectable: false,
@@ -364,7 +368,7 @@ class Message extends ConsumerWidget {
                     onTapLink: _onTapLink,
                   ),
                 // 🔥 Bot message cot header
-                if (usingReasoningModel)
+                if (reasoning && !isQuickThinking)
                   GD(
                     onTap: () {
                       if (showingCotContent) {
@@ -375,7 +379,7 @@ class Message extends ConsumerWidget {
                     },
                     child: C(
                       decoration: const BD(color: kC),
-                      child: Ro(
+                      child: Row(
                         children: [
                           T(
                             thisMessageIsReceiving ? s.thinking : s.thought_result,
@@ -387,8 +391,8 @@ class Message extends ConsumerWidget {
                     ),
                   ),
                 // 🔥 Bot message cot content
-                if (usingReasoningModel) 4.h,
-                if (usingReasoningModel)
+                if (reasoning && !isQuickThinking) 4.h,
+                if (reasoning && !isQuickThinking)
                   AnimatedContainer(
                     duration: 250.ms,
                     height: cotContentHeight,
@@ -401,8 +405,8 @@ class Message extends ConsumerWidget {
                     ),
                   ),
                 // 🔥 Bot message cot result
-                if (cotResult.isNotEmpty && usingReasoningModel && showingCotContent) 12.h,
-                if (cotResult.isNotEmpty && usingReasoningModel)
+                if (cotResult.isNotEmpty && reasoning && showingCotContent && !isQuickThinking) 12.h,
+                if (cotResult.isNotEmpty && reasoning)
                   MarkdownBody(
                     data: cotResult,
                     selectable: false,
@@ -428,9 +432,7 @@ class Message extends ConsumerWidget {
           duration: 250.ms,
           child: Padding(
             padding: const EI.s(h: marginHorizontal, v: marginVertical),
-            child: SelectionArea(
-              child: GD(onTap: _onTap, child: bubbleContent),
-            ),
+            child: GD(onTap: _onTap, child: bubbleContent),
           ),
         ),
       ),

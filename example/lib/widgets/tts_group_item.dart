@@ -95,7 +95,7 @@ class TTSGroupItem extends ConsumerWidget {
       await P.rwkv.loadTTSModels(
         modelPath: modelLocalFile.targetPath,
         backend: fileInfo.backend!,
-        usingReasoningModel: false,
+        enableReasoning: false,
         campPlusPath: localCampPlusFile.targetPath,
         flowEncoderPath: localFlowEncoderFile.targetPath,
         flowDecoderEstimatorPath: localFlowDecoderEstimatorFile.targetPath,
@@ -151,8 +151,8 @@ class TTSGroupItem extends ConsumerWidget {
         decoration: BD(color: kW, borderRadius: 8.r),
         margin: const EI.o(t: 8),
         padding: const EI.o(t: 8, l: 8, r: 8, b: 8),
-        child: Co(
-          c: CAA.stretch,
+        child: Column(
+          crossAxisAlignment: CAA.stretch,
           children: [
             Wrap(
               alignment: WrapAlignment.spaceBetween,
@@ -162,7 +162,7 @@ class TTSGroupItem extends ConsumerWidget {
                 const T("TTS", s: TS(s: 12, w: FW.w400)),
               ],
             ),
-            Ro(
+            Row(
               children: [
                 if (downloading) 8.h,
                 if (allMissing && !downloading)

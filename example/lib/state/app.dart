@@ -12,14 +12,18 @@ class _App extends RawApp {
   late final noteZh = qs<List<String>>([]);
   late final noteEn = qs<List<String>>([]);
   late final modelConfig = qs<List<JSON>>([]);
-  late final androidUrl = qsn<String>();
+  late final androidUrl = qsn<String?>(null);
+  late final androidApkUrl = qsn<String?>(null);
   late final iosUrl = qsn<String>();
 
   late final newVersionDialogShown = qs(false);
 
   static const String _remoteDemoConfigKey = "demo-config.json";
 
-  late final isDesktop = qs(false);
+  late final isDesktop = qp((ref) => ref.watch(_isDesktop));
+  final _isDesktop = qs(false);
+  late final isMobile = qp((ref) => ref.watch(_isMobile));
+  final _isMobile = qs(true);
 
   @override
   BuildContext? get context => getContext();
@@ -28,12 +32,12 @@ class _App extends RawApp {
 /// Public methods
 extension $App on _App {
   FV getConfig() async {
-    qq;
-
     if (Args.disableRemoteConfig) {
       qqw("Remote config is disabled");
       return;
     }
+
+    qq;
 
     final sp = await SharedPreferences.getInstance();
 
@@ -67,6 +71,18 @@ extension $App on _App {
       if (!kDebugMode) Sentry.captureException(e, stackTrace: StackTrace.current);
     }
   }
+
+  void hapticLight() {
+    if (_isMobile.q) Gaimon.light();
+  }
+
+  void hapticSoft() {
+    if (_isMobile.q) Gaimon.soft();
+  }
+
+  void hapticMedium() {
+    if (_isMobile.q) Gaimon.medium();
+  }
 }
 
 /// Private methods
@@ -74,7 +90,8 @@ extension _$App on _App {
   FV _init() async {
     qq;
 
-    isDesktop.q = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
+    _isDesktop.q = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
+    _isMobile.q = Platform.isAndroid || Platform.isIOS;
 
     await init();
 
@@ -115,6 +132,49 @@ extension _$App on _App {
         _showNewVersionDialogIfNeeded();
       });
     }
+
+    lifecycleState.lv(_onLifecycleStateChanged);
+
+    HF.wait(1500).then((_) => _toLightMode());
+
+    // 目前下面四种 demo 需要选择模型
+    switch (demoType.q) {
+      case DemoType.chat:
+      case DemoType.sudoku:
+      case DemoType.tts:
+      case DemoType.world:
+        HF.wait(1750).then((_) {
+          final loaded = P.rwkv.loaded.q;
+          if (loaded) return;
+          ModelSelector.show();
+        });
+      case DemoType.fifthteenPuzzle:
+      // Other demos don't need to select model, weights are already built in
+      case DemoType.othello:
+        break;
+    }
+  }
+
+  FV _toLightMode() async {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        systemNavigationBarColor: this.qw.q,
+        systemNavigationBarIconBrightness: Brightness.light,
+      ),
+    );
+  }
+
+  FV _onLifecycleStateChanged() async {
+    qqr("lifecycleState: ${lifecycleState.q}");
+    switch (lifecycleState.q) {
+      case AppLifecycleState.resumed:
+        await HF.wait(500);
+        _toLightMode();
+      case AppLifecycleState.detached:
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.hidden:
+      case AppLifecycleState.paused:
+    }
   }
 
   FV _showNewVersionDialogIfNeeded() async {
@@ -124,15 +184,15 @@ extension _$App on _App {
     if (Platform.isIOS && latestBuildIos.q <= int.parse(buildNumber.q)) return;
 
     if (!Platform.isIOS && !Platform.isAndroid) {
-      if (kDebugMode) Alert.warning("DEBUG: This feature is not supported on this platform");
       qqw("This feature is not supported on this platform");
       return;
     }
 
-    final androidUrl = this.androidUrl.q;
+    final androidUrl = this.androidUrl.q ?? '';
+    final androidApkUrl = this.androidApkUrl.q ?? '';
     final iosUrl = this.iosUrl.q;
 
-    if (Platform.isAndroid && (androidUrl == null || androidUrl.isEmpty)) return;
+    if (Platform.isAndroid && (androidUrl.isEmpty)) return;
 
     if (Platform.isIOS && (iosUrl == null || iosUrl.isEmpty)) return;
 
@@ -146,25 +206,37 @@ extension _$App on _App {
 
     final message = useEn ? noteEn.join("\n") : noteZh.join("\n");
 
+    final showInAppUpdate = Platform.isAndroid && androidApkUrl.isNotEmpty;
+
+    qqq('app update: \n$androidUrl\n$androidApkUrl\n$iosUrl\n$message');
+
     newVersionDialogShown.q = true;
-    final res = await showOkCancelAlertDialog(
+    final res = await showAlertDialog(
       context: getContext()!,
       title: S.current.new_version_found,
       message: message,
-      okLabel: S.current.update_now,
-      cancelLabel: S.current.cancel_update,
+      // okLabel: S.current.update_now,
+      actions: [
+        AlertDialogAction(key: 1, label: S.current.cancel_update),
+        if (showInAppUpdate)
+          AlertDialogAction(
+            key: 2,
+            label: S.current.download_from_browser,
+          ),
+        AlertDialogAction(key: 3, label: S.current.update_now),
+      ],
+      // cancelLabel: S.current.cancel_update,
     );
     newVersionDialogShown.q = false;
 
-    if (res != OkCancelResult.ok) return;
+    if (res == 1 || res == null) return;
 
     if (Platform.isAndroid) {
-      if (androidUrl == null) {
-        qqe("androidUrl is null");
-        return;
+      if (res == 3 && showInAppUpdate) {
+        AppUpdateDialog.show(getContext()!, url: androidApkUrl);
+      } else {
+        launchUrl(Uri.parse(androidUrl), mode: LaunchMode.externalApplication);
       }
-      // todo AppUpdateDialog.show(getContext()!, url: "");
-      launchUrl(Uri.parse(androidUrl), mode: LaunchMode.externalApplication);
     }
 
     if (Platform.isIOS) {
@@ -203,7 +275,8 @@ extension _$App on _App {
     noteZh.q = (config["note_zh"] as List<dynamic>).m((e) => e.toString());
     noteEn.q = (config["note_en"] as List<dynamic>).m((e) => e.toString());
     modelConfig.q = HF.listJSON(config["model_config"]);
-    androidUrl.q = config["android_url"].toString();
+    androidUrl.q = config["android_url"];
+    androidApkUrl.q = config["android_apk_url"];
     iosUrl.q = config["ios_url"].toString();
     await P.fileManager.syncAvailableModels();
     await P.fileManager.checkLocal();

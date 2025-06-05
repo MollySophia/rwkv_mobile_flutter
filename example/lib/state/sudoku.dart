@@ -23,9 +23,6 @@ class _Sudoku {
 
   final running = qs<bool>(false);
 
-  // TODO: 用户强制终止 exec
-  final bool _forceStop = false;
-
   // final streamController = StreamController<(int output, String decoded)>.broadcast();
 
   bool _recordingTagBoard = false;
@@ -137,7 +134,7 @@ extension $Sudoku on _Sudoku {
     final prompt = _genPrompt(grid);
     P.rwkv.send(to_rwkv.ClearStates());
     P.rwkv.send(
-      to_rwkv.Generate(
+      to_rwkv.SudokuOthelloGenerate(
         prompt,
         decodeStream: false,
         wantRawJSON: false,
@@ -373,12 +370,6 @@ extension _$Sudoku on _Sudoku {
 
     qq;
 
-    HF.wait(2000).then((_) {
-      if (!P.fileManager.modelSelectorShown.q) {
-        ModelSelector.show();
-      }
-    });
-
     final directory = await getApplicationDocumentsDirectory();
     final filePath = '${directory.path}/output_log.txt';
     final file = File(filePath);
@@ -533,11 +524,13 @@ ${grid.map((row) => row.join(' ') + " \n").join("")}</input>
     staticData.q = defaultPuzzle;
   }
 
+  // ignore: unused_element
   Future<void> _closeFileSink() async {
     // await _fileSink.flush();
     // await _fileSink.close();
   }
 
+  // ignore: unused_element
   void _initializeFileSink() {
     // final file = File('your_fileqpath');
     // _fileSink = file.openWrite(mode: FileMode.append);

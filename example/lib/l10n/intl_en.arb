@@ -70,8 +70,8 @@
   "voice_cloning": "Voice Cloning",
   "prebuilt_voices": "Prebuilt Voices",
   "intonations": "Intonations",
-  "follow_system": "Follow System",
-  "application_language": "Application Language",
+  "follow_system": "System",
+  "application_language": "Language",
   "please_select_application_language": "Please select application language",
   "please_select_font_size": "Please select font size",
   "font_size": "Font Size",
@@ -183,9 +183,15 @@
   "dump_stopped": "Auto dump disabled",
   "dump_see_files": "Dump Message Records",
   "dump_see_files_subtitle": "Help us improve the algorithm",
-  "dump_see_files_alert_message": "Message records will be stored in the following folder\n {path}",
+  "dump_see_files_alert_message":   "Message records will be stored in the following folder\n {path}",
   "all": "All",
   "all_prompt": "All Prompt",
   "no_data": "No Data",
-  "share_chat": "Share Chat"
+  "share_chat": "Share Chat",
+  "quick_thinking": "Quick Reasoning",
+  "quick_thinking_enabled": "Quick Reasoning Enabled",
+  "download_from_browser": "Download from browser",
+  "downloading": "Downloading",
+  "download_server_": "Download Source",
+  "overseas": ""
 }

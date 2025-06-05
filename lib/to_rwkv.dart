@@ -26,17 +26,15 @@ class GenerateAsync extends ToRWKV {
   GenerateAsync(this.prompt);
 }
 
-class Generate extends ToRWKV {
+class SudokuOthelloGenerate extends ToRWKV {
   final String prompt;
   final bool decodeStream;
   final bool wantRawJSON;
 
-  Generate(this.prompt, {this.decodeStream = true, this.wantRawJSON = true});
+  SudokuOthelloGenerate(this.prompt, {this.decodeStream = true, this.wantRawJSON = true});
 
   static const responseType = StreamResponse;
 }
-
-class GetEnableReasoning extends ToRWKV {}
 
 class GetIsGenerating extends ToRWKV {}
 
@@ -63,26 +61,29 @@ class GetTTSOutputFileList extends ToRWKV {
 ///
 /// 目前, 前端通过周期性调用该方法, 来获取 decode 的值渲染到 UI 上
 ///
-/// 目前, 前端通过 Map<String, dynamic> 取值
-///
-/// TODO: @WangCe 将 `sendPort.send({'responseBufferContent': str});` 调用改为更安全的方式
-///
 /// 1. stop 之后 responseBufferContent 还保留着
 /// 2. 然后 resume 之后 responseBufferContent 会先短暂清空
 /// 3. 然后变成 stop 前已经生成了的内容并接着生成
-class GetResponseBufferContent extends ToRWKV {}
+class GetResponseBufferContent extends ToRWKV {
+  static const responseType = ResponseBufferContent;
+}
+
+/// stop之后responseBufferContent还保留着，然后resume之后responseBufferContent会先短暂清空，然后变成stop前已经生成了的内容并接着生成
+class Stop extends ToRWKV {}
 
 class GetResponseBufferIds extends ToRWKV {}
 
 class GetSamplerParams extends ToRWKV {}
 
-class InitRuntime extends ToRWKV {
+class ReInitRuntime extends ToRWKV {
   final String modelPath;
   final Backend backend;
   final String tokenizerPath;
   final int latestRuntimeAddress;
 
-  InitRuntime({
+  static const responseType = ReInitSteps;
+
+  ReInitRuntime({
     required this.modelPath,
     required this.backend,
     required this.tokenizerPath,
@@ -136,12 +137,10 @@ class ReleaseWhisperEncoder extends ToRWKV {}
 
 class ChatAsync extends ToRWKV {
   final List<String> messages;
+  final bool reasoning;
 
-  ChatAsync(this.messages);
+  ChatAsync(this.messages, {required this.reasoning});
 }
-
-@Deprecated("use RequestRunTTSAsync instead")
-class RunTTS extends ToRWKV {}
 
 /// 开始 TTS 任务
 ///
@@ -176,11 +175,6 @@ class SetBosToken extends ToRWKV {
   final String bosToken;
 
   SetBosToken(this.bosToken);
-}
-
-class SetEnableReasoning extends ToRWKV {
-  final bool enableReasoning;
-  SetEnableReasoning(this.enableReasoning);
 }
 
 class SetEosToken extends ToRWKV {
@@ -259,8 +253,5 @@ class SetVisionPrompt extends ToRWKV {
 
   SetVisionPrompt(this.imagePathPtr);
 }
-
-/// stop之后responseBufferContent还保留着，然后resume之后responseBufferContent会先短暂清空，然后变成stop前已经生成了的内容并接着生成
-class Stop extends ToRWKV {}
 
 class GetLatestRuntimeAddress extends ToRWKV {}

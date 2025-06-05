@@ -1,6 +1,7 @@
 // ignore: unused_import
 import 'dart:developer';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,7 +33,6 @@ class Settings extends ConsumerWidget {
     final preferredLanguage = ref.watch(P.preference.preferredLanguage);
     final paddingLeft = ref.watch(P.app.paddingLeft);
     final kB = ref.watch(P.app.qb);
-    final kW = ref.watch(P.app.qw);
 
     final iconWidget = SB(
       width: 64,
@@ -47,39 +47,47 @@ class Settings extends ConsumerWidget {
       body: ListView(
         padding: EI.o(
           t: paddingTop,
-          b: paddingBottom,
+          b: max(paddingBottom, 12),
           l: 12 + paddingLeft,
           r: 12,
         ),
         controller: scrollController,
         children: [
           12.h,
-          Ro(
-            m: MAA.center,
+          Row(
+            mainAxisAlignment: MAA.center,
             children: [iconWidget],
           ),
           16.h,
-          Ro(
-            m: MAA.center,
+          Row(
+            mainAxisAlignment: MAA.center,
             children: [
-              T(Config.appTitle, s: TS(s: 24, c: kB)),
+              Expanded(
+                child: T(
+                  Config.appTitle,
+                  s: TS(s: 24, c: kB),
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ],
           ),
           4.h,
-          Ro(
-            m: MAA.center,
+          Row(
+            mainAxisAlignment: MAA.center,
             children: [
               T(version, s: TS(s: 12, c: kB)),
               T(" ($buildNumber)", s: TS(s: 12, c: kB)),
             ],
           ),
           16.h,
-          Ro(
-            m: MAA.start,
+          Row(
+            mainAxisAlignment: MAA.start,
             children: [
-              T(
-                s.application_settings,
-                s: TS(w: FW.w500, c: kB.q(.8), s: 12),
+              Expanded(
+                child: T(
+                  s.application_settings,
+                  s: TS(w: FW.w500, c: kB.q(.8), s: 12),
+                ),
               ),
             ],
           ),
@@ -99,12 +107,14 @@ class Settings extends ConsumerWidget {
             onTap: P.preference.showLocaleDialog,
           ),
           12.h,
-          Ro(
-            m: MAA.start,
+          Row(
+            mainAxisAlignment: MAA.start,
             children: [
-              T(
-                s.join_the_community,
-                s: TS(w: FW.w500, c: kB.q(.8), s: 12),
+              Expanded(
+                child: T(
+                  s.join_the_community,
+                  s: TS(w: FW.w500, c: kB.q(.8), s: 12),
+                ),
               ),
             ],
           ),
@@ -136,8 +146,8 @@ class Settings extends ConsumerWidget {
             onTap: _openTwitter,
           ),
           12.h,
-          Ro(
-            m: MAA.start,
+          Row(
+            mainAxisAlignment: MAA.start,
             children: [
               T(
                 s.about,

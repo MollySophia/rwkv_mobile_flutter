@@ -2,6 +2,7 @@
 import 'dart:developer';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:collection/collection.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:zone/config.dart';
 import 'package:zone/func/gb_display.dart';
@@ -89,7 +90,7 @@ class ModelItem extends ConsumerWidget {
       await P.rwkv.loadChat(
         modelPath: modelPath,
         backend: backend!,
-        usingReasoningModel: fileInfo.isReasoning,
+        enableReasoning: fileInfo.isReasoning,
       );
     } catch (e) {
       Alert.error(e.toString());
@@ -137,9 +138,9 @@ class ModelItem extends ConsumerWidget {
         decoration: BD(color: kW, borderRadius: 8.r),
         margin: const EI.o(t: 8),
         padding: const EI.a(8),
-        child: Ro(
+        child: Row(
           children: [
-            Exp(
+            Expanded(
               child: FileKeyItem(fileInfo),
             ),
             8.w,
@@ -305,8 +306,8 @@ class FileKeyItem extends ConsumerWidget {
     final primary = Theme.of(getContext()!).colorScheme.primary;
     final kW = ref.watch(P.app.qw);
     final kB = ref.watch(P.app.qb);
-    return Co(
-      c: CAA.start,
+    return Column(
+      crossAxisAlignment: CAA.start,
       children: [
         Wrap(
           spacing: 8,
@@ -333,8 +334,8 @@ class FileKeyItem extends ConsumerWidget {
           spacing: 4,
           runSpacing: 8,
           children: [
-            ...tags.map((tag) {
-              final showHighlight = tag == Config.reasonTag || tag == "encoder" || tag == "npu";
+            ...tags.where((tag) => tag != "encoder" && tag != "reason").map((tag) {
+              final showHighlight = tag == Config.reasonTag || tag == "npu" || tag == "gpu";
               return C(
                 decoration: BD(
                   borderRadius: 4.r,
@@ -350,17 +351,6 @@ class FileKeyItem extends ConsumerWidget {
                 ),
               );
             }),
-            C(
-              decoration: BD(color: kG.q(.2), borderRadius: 4.r),
-              padding: const EI.s(h: 4),
-              child: T(fileInfo.backend?.asArgument ?? ""),
-            ),
-            if (modelSize > 0)
-              C(
-                decoration: BD(color: kG.q(.2), borderRadius: 4.r),
-                padding: const EI.s(h: 4),
-                child: T("${modelSize}B"),
-              ),
             if (quantization != null && quantization.isNotEmpty)
               C(
                 decoration: BD(color: kG.q(.2), borderRadius: 4.r),
@@ -376,9 +366,9 @@ class FileKeyItem extends ConsumerWidget {
               final width = constraints.maxWidth;
               return SB(
                 width: width - 100,
-                child: Ro(
+                child: Row(
                   children: [
-                    Exp(
+                    Expanded(
                       flex: (100 * progress).toInt(),
                       child: C(
                         decoration: BD(
@@ -388,7 +378,7 @@ class FileKeyItem extends ConsumerWidget {
                         height: 4,
                       ),
                     ),
-                    Exp(
+                    Expanded(
                       flex: 100 - (100 * progress).toInt(),
                       child: C(
                         decoration: BD(

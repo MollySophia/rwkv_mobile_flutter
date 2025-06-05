@@ -41,7 +41,7 @@ class _Page extends ConsumerWidget {
     return Scaffold(
       backgroundColor: kW,
       body: usePortrait
-          ? Co(
+          ? Column(
               children: [
                 paddingTop.h,
                 12.h,
@@ -49,11 +49,11 @@ class _Page extends ConsumerWidget {
                 12.h,
                 const _Score(),
                 4.h,
-                Ro(
-                  c: CAA.center,
+                Row(
+                  crossAxisAlignment: CAA.center,
                   children: [
-                    Exp(
-                      child: Co(
+                    Expanded(
+                      child: Column(
                         children: [
                           const _ModelSettings(),
                           if (playerShouldAtSameColumnWithSettings) const _Players(),
@@ -65,22 +65,22 @@ class _Page extends ConsumerWidget {
                   ],
                 ),
                 if (!playerShouldAtSameColumnWithSettings) const _Players(),
-                const Exp(child: _Console()),
+                const Expanded(child: _Console()),
               ],
             )
-          : Ro(
+          : Row(
               children: [
-                const Exp(child: _Console()),
-                Co(
-                  c: CAA.center,
+                const Expanded(child: _Console()),
+                Column(
+                  crossAxisAlignment: CAA.center,
                   children: [
                     const _Title(),
                     4.h,
                     const _Score(),
                     4.h,
-                    Ro(
+                    Row(
                       children: [
-                        Co(
+                        Column(
                           children: [
                             const _Othello(),
                             if (!settingsAndPlayersShouldAtDifferentColumnIsHorizontal) const _ModelSettings(),
@@ -92,9 +92,9 @@ class _Page extends ConsumerWidget {
                             constraints: BoxConstraints(
                               maxWidth: screenWidth * .33,
                             ),
-                            child: const Co(
-                              c: CAA.center,
-                              m: MAA.center,
+                            child: const Column(
+                              crossAxisAlignment: CAA.center,
+                              mainAxisAlignment: MAA.center,
                               children: [
                                 _ModelSettings(),
                                 _Players(),
@@ -122,8 +122,8 @@ class _Title extends ConsumerWidget {
     final buildNumber = ref.watch(P.app.buildNumber);
     final usePortrait = ref.watch(P.othello.usePortrait);
     final kB = ref.watch(P.app.qb);
-    return Ro(
-      m: MAA.center,
+    return Row(
+      mainAxisAlignment: MAA.center,
       children: [
         12.w,
         T("$version($buildNumber)", s: TS(c: kB.q(.0), s: 10)),
@@ -157,9 +157,9 @@ class _ModelSettings extends ConsumerWidget {
     final searchBreadthAddAvailable = searchBreadth < 5;
     final searchBreadthRemoveAvailable = searchBreadth > 1;
 
-    final searchDepthControls = Ro(
+    final searchDepthControls = Row(
       mainAxisSize: MainAxisSize.min,
-      m: MAA.center,
+      mainAxisAlignment: MAA.center,
       children: [
         SB(
           width: 32,
@@ -200,9 +200,9 @@ class _ModelSettings extends ConsumerWidget {
       ],
     );
 
-    final searchBreadthControls = Ro(
+    final searchBreadthControls = Row(
       mainAxisSize: MainAxisSize.min,
-      m: MAA.center,
+      mainAxisAlignment: MAA.center,
       children: [
         SizedBox(
           width: 32,
@@ -254,9 +254,9 @@ class _ModelSettings extends ConsumerWidget {
           borderRadius: 4.r,
           border: Border.all(color: kB.q(.5), width: .5),
         ),
-        child: Co(
-          c: CAA.start,
-          m: MAA.center,
+        child: Column(
+          crossAxisAlignment: CAA.start,
+          mainAxisAlignment: MAA.center,
           children: [
             T(
               s.model_settings,
@@ -266,8 +266,8 @@ class _ModelSettings extends ConsumerWidget {
             T(s.in_context_search_will_be_activated_when_both_breadth_and_depth_are_greater_than_2, s: TS(c: kB.q(.5), s: 10)),
             8.h,
             usePortrait
-                ? Co(
-                    c: CAA.stretch,
+                ? Column(
+                    crossAxisAlignment: CAA.stretch,
                     children: [
                       T(s.search_depth, textAlign: TextAlign.center),
                       searchDepthControls,
@@ -278,13 +278,13 @@ class _ModelSettings extends ConsumerWidget {
                   )
                 : Wrap(
                     children: [
-                      Ro(
+                      Row(
                         children: [
                           T(s.search_depth, textAlign: TextAlign.center),
                           searchDepthControls,
                         ],
                       ),
-                      Ro(
+                      Row(
                         children: [
                           T(s.search_breadth, textAlign: TextAlign.center),
                           searchBreadthControls,
@@ -331,7 +331,7 @@ class _Players extends ConsumerWidget {
           ),
           Wrap(
             children: [
-              Ro(
+              Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Radio(
@@ -344,7 +344,7 @@ class _Players extends ConsumerWidget {
                   T(s.human),
                 ],
               ),
-              Ro(
+              Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Radio(
@@ -380,7 +380,7 @@ class _Players extends ConsumerWidget {
           ),
           Wrap(
             children: [
-              Ro(
+              Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Radio(
@@ -393,7 +393,7 @@ class _Players extends ConsumerWidget {
                   T(s.human),
                 ],
               ),
-              Ro(
+              Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Radio(
@@ -423,8 +423,8 @@ class _Players extends ConsumerWidget {
           borderRadius: 4.r,
           border: Border.all(color: kB.q(.5), width: .5),
         ),
-        child: Co(
-          c: CAA.start,
+        child: Column(
+          crossAxisAlignment: CAA.start,
           children: [
             T(
               s.players,
@@ -432,33 +432,33 @@ class _Players extends ConsumerWidget {
             ),
             12.h,
             if (usePortrait && !playerShouldAtSameColumnWithSettings && !settingsAndPlayersShouldAtDifferentColumnIsHorizontal)
-              Ro(
-                m: MAA.center,
+              Row(
+                mainAxisAlignment: MAA.center,
                 children: [
-                  Exp(
+                  Expanded(
                     child: blackOptions,
                   ),
                   16.w,
-                  Exp(
+                  Expanded(
                     child: whiteOptions,
                   ),
                 ],
               ),
             if (settingsAndPlayersShouldAtDifferentColumnIsHorizontal)
-              Ro(
-                m: MAA.center,
+              Row(
+                mainAxisAlignment: MAA.center,
                 children: [
-                  Exp(
+                  Expanded(
                     child: blackOptions,
                   ),
                   16.w,
-                  Exp(
+                  Expanded(
                     child: whiteOptions,
                   ),
                 ],
               ),
             if (playerShouldAtSameColumnWithSettings && !settingsAndPlayersShouldAtDifferentColumnIsHorizontal)
-              Co(
+              Column(
                 children: [
                   blackOptions,
                   4.h,
@@ -487,7 +487,7 @@ class _Score extends ConsumerWidget {
     final decodeSpeed = ref.watch(P.rwkv.decodeSpeed);
     final kB = ref.watch(P.app.qb);
 
-    final thinkingWidget = Co(
+    final thinkingWidget = Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         AnimatedOpacity(
@@ -521,10 +521,10 @@ class _Score extends ConsumerWidget {
       ),
     );
 
-    return Ro(
-      c: CAA.center,
+    return Row(
+      crossAxisAlignment: CAA.center,
       children: [
-        if (usePortrait) Exp(child: thinkingWidget),
+        if (usePortrait) Expanded(child: thinkingWidget),
         if (!usePortrait) thinkingWidget,
         if (!usePortrait) 16.w,
         T(
@@ -539,7 +539,7 @@ class _Score extends ConsumerWidget {
             borderRadius: 8.r,
             border: Border.all(color: kB.q(.5), width: .5),
           ),
-          child: Co(
+          child: Column(
             children: [
               T(s.current_turn),
               4.h,
@@ -553,7 +553,7 @@ class _Score extends ConsumerWidget {
           "${s.white}\n$whiteScore",
           textAlign: TextAlign.center,
         ),
-        if (usePortrait) Exp(child: newGameButton),
+        if (usePortrait) Expanded(child: newGameButton),
         if (!usePortrait) 16.w,
         if (!usePortrait) newGameButton,
       ],
@@ -568,7 +568,7 @@ class _Othello extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final screenWidth = ref.watch(P.app.screenWidth);
     final screenHeight = ref.watch(P.app.screenHeight);
-    return Ro(
+    return Row(
       children: [
         ConstrainedBox(
           constraints: BoxConstraints(

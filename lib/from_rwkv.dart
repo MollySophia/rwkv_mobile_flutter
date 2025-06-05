@@ -16,7 +16,11 @@ sealed class FromRWKV {
   FromRWKV({this.toRWKV});
 }
 
-class CurrentPrompt extends FromRWKV {}
+class CurrentPrompt extends FromRWKV {
+  final String prompt;
+
+  CurrentPrompt({required this.prompt, super.toRWKV});
+}
 
 class EnableReasoning extends FromRWKV {}
 
@@ -29,11 +33,31 @@ class Error extends FromRWKV {
   Error(this.message, [this.to]) : super(toRWKV: to);
 }
 
-class GenerateStart extends FromRWKV {}
+class GenerateStart extends FromRWKV {
+  GenerateStart({super.toRWKV});
+}
 
-class GenerateStop extends FromRWKV {}
+class GenerateStop extends FromRWKV {
+  final String? error;
 
-class InitRuntimeDone extends FromRWKV {}
+  GenerateStop({this.error, super.toRWKV});
+}
+
+/// 重新加载新的 weights 时, 会调用该 response
+class ReInitSteps extends FromRWKV {
+  final bool done;
+  final bool? success;
+  final String? error;
+  final String? step;
+
+  ReInitSteps({
+    required this.done,
+    this.success,
+    this.error,
+    this.step,
+    super.toRWKV,
+  });
+}
 
 class Speed extends FromRWKV {
   final double prefillSpeed;
@@ -42,7 +66,18 @@ class Speed extends FromRWKV {
   Speed({required this.prefillSpeed, required this.decodeSpeed, super.toRWKV});
 }
 
-class ResponseBufferContent extends FromRWKV {}
+/// 获取本次推理已生成的 tokens 被 decode 为普通字符串的值
+///
+/// 目前, 前端通过周期性调用该方法, 来获取 decode 的值渲染到 UI 上
+///
+/// 1. stop 之后 responseBufferContent 还保留着
+/// 2. 然后 resume 之后 responseBufferContent 会先短暂清空
+/// 3. 然后变成 stop 前已经生成了的内容并接着生成
+class ResponseBufferContent extends FromRWKV {
+  final String responseBufferContent;
+
+  ResponseBufferContent({required this.responseBufferContent, super.toRWKV});
+}
 
 class SamplerParams extends FromRWKV {
   final num temperature;
@@ -67,9 +102,9 @@ class SpksNames extends FromRWKV {}
 
 /// 在每次新生成 token 的时候, 都会被调用
 class StreamResponse extends FromRWKV {
-  static const requestType = Generate;
+  static const requestType = SudokuOthelloGenerate;
 
-  /// 调用 [Generate] 后, 生成的所有解码后的字符串
+  /// 调用 [SudokuOthelloGenerate] 后, 生成的所有解码后的字符串
   final String streamResponse;
 
   /// 新生成的 token
@@ -159,4 +194,10 @@ class LatestRuntimeAddress extends FromRWKV {
   final int latestRuntimeAddress;
 
   LatestRuntimeAddress({required this.latestRuntimeAddress, super.toRWKV});
+}
+
+class RuntimeLog extends FromRWKV {
+  final String runtimeLog;
+
+  RuntimeLog({required this.runtimeLog, super.toRWKV});
 }

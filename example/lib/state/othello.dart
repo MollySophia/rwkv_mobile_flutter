@@ -23,6 +23,7 @@ class _Othello {
   /// row, col
   late final eatCountMatrixForWhite = qs<List<List<int>>>(List.generate(8, (_) => List.filled(8, 0)));
 
+  @Deprecated("Use P.rwkv.receiving instead")
   late final receivingTokens = qs(false);
 
   late final blackTurn = qs(_blackFirst);
@@ -41,7 +42,7 @@ class _Othello {
 
   late final modelPlacingController = StreamController<(int col, int row)>();
 
-  late final latestPlacing = qsn<(int col, int row)>();
+  late final latestPlacing = qs<(int col, int row)?>(null);
 
   late final usePortrait = qs(true);
 
@@ -123,9 +124,17 @@ extension $Othello on _Othello {
 }
 
 /// Private methods
-extension _$ on _Othello {
+extension _$Othello on _Othello {
   FV _init() async {
-    if (P.app.demoType.q != DemoType.othello) return;
+    switch (P.app.demoType.q) {
+      case DemoType.fifthteenPuzzle:
+      case DemoType.sudoku:
+      case DemoType.chat:
+      case DemoType.tts:
+      case DemoType.world:
+        return;
+      case DemoType.othello:
+    }
     qq;
 
     P.app.pageKey.lb((_, next) {
@@ -134,23 +143,8 @@ extension _$ on _Othello {
       }
     }, fireImmediately: true);
 
-    P.rwkv.oldBroadcastStream.listen(
-      (event) {
-        final demoType = P.app.demoType.q;
-        if (demoType != DemoType.othello) return;
-        _onStreamEvent(event: event);
-      },
-      onDone: () {
-        final demoType = P.app.demoType.q;
-        if (demoType != DemoType.othello) return;
-        _onStreamDone();
-      },
-      onError: (error, stackTrace) {
-        final demoType = P.app.demoType.q;
-        if (demoType != DemoType.othello) return;
-        _onStreamError(error: error, stackTrace: stackTrace);
-      },
-    );
+    P.rwkv.oldBroadcastStream.listen(_onOldStreamEvent, onDone: _onStreamDone, onError: _onStreamError);
+    P.rwkv.broadcastStream.listen(_onStreamEvent, onDone: _onStreamDone, onError: _onStreamError);
 
     blackTurn.lv(_onBlackTurnChanged, fireImmediately: true);
     state.lv(_onStateChanged, fireImmediately: true);
@@ -248,10 +242,8 @@ extension _$ on _Othello {
     latestPlacing.q = null;
   }
 
-  FV _onStreamEvent({required LLMEvent event}) async {
-    final pageKey = P.app.pageKey.q;
-    if (pageKey != PageKey.othello) return;
-
+  @Deprecated("Use _onStreamEvent instead")
+  void _onOldStreamEvent(LLMEvent event) async {
     switch (event.type) {
       case _RWKVMessageType.responseBufferIds:
         final ids = event.responseBufferIds;
@@ -266,27 +258,13 @@ extension _$ on _Othello {
         final isGenerating = event.content == "true";
         receivingTokens.q = isGenerating;
         break;
-      case _RWKVMessageType.responseBufferContent:
+      case _RWKVMessageType.sudokuOthelloResponse:
         received.q = event.content;
-        break;
-      case _RWKVMessageType.response:
-        received.q = event.content;
-        break;
-      case _RWKVMessageType.generateStart:
-        receivingTokens.q = true;
-        received.q = "";
         break;
       case _RWKVMessageType.streamResponse:
         received.q = event.content;
         final token = event.token;
         _onStreamingToken(token);
-        break;
-      case _RWKVMessageType.currentPrompt:
-        received.q = event.content;
-        receivingTokens.q = false;
-        break;
-      case _RWKVMessageType.generateStop:
-        receivingTokens.q = false;
         break;
     }
 
@@ -348,17 +326,34 @@ extension _$ on _Othello {
     );
   }
 
-  FV _onStreamDone() async {
+  void _onStreamEvent(from_rwkv.FromRWKV event) {
+    switch (event) {
+      case from_rwkv.ResponseBufferContent res:
+        received.q = res.responseBufferContent;
+        break;
+
+      case from_rwkv.GenerateStart _:
+        receivingTokens.q = true;
+        received.q = "";
+        break;
+
+      case from_rwkv.GenerateStop _:
+        receivingTokens.q = false;
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  void _onStreamDone() async {
     final pageKey = P.app.pageKey.q;
     if (pageKey != PageKey.othello) return;
     qqq("_onStreamDone");
     receivingTokens.q = false;
   }
 
-  FV _onStreamError({
-    required Object error,
-    required StackTrace stackTrace,
-  }) async {
+  void _onStreamError(Object error, StackTrace stackTrace) async {
     final pageKey = P.app.pageKey.q;
     if (pageKey != PageKey.othello) return;
     qqq("_onStreamError");

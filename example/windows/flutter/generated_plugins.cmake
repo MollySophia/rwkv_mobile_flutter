@@ -6,6 +6,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_windows
   dynamic_color
   file_selector_windows
+  gal
   permission_handler_windows
   record_windows
   sentry_flutter

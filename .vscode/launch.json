@@ -10,7 +10,6 @@
       "type": "dart",
       "program": "example/lib/main.dart",
       "flutterMode": "debug",
-      "args": []
     },
     {
       "name": "debug (halo)",
@@ -20,6 +19,7 @@
       "flutterMode": "debug",
       "args": [
         "--dart-define=disableRemoteConfig=true",
+        "--dart-define=logLevel=3"
       ]
     },
     {
@@ -38,7 +38,6 @@
       "type": "dart",
       "program": "example/lib/main.dart",
       "flutterMode": "release",
-      "args": []
     },
   ]
 }

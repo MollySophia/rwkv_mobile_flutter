@@ -1,4 +1,7 @@
+// ignore_for_file: dead_code
+
 import 'package:flutter/foundation.dart';
+import 'package:zone/args.dart';
 import 'package:zone/config.dart';
 import 'package:zone/model/demo_type.dart';
 import 'package:zone/state/p.dart';
@@ -34,41 +37,42 @@ class Debugger extends ConsumerWidget {
     final visualFloatHeight = ref.watch(P.world.visualFloatHeight);
     final loading = ref.watch(P.rwkv.loading);
     final playing = ref.watch(P.world.playing);
-    final latestClickedMessage = ref.watch(P.chat.latestClickedMessage);
+    final latestClickedMessage = ref.watch(P.msg.latestClicked);
     final inputHeight = ref.watch(P.chat.inputHeight);
     final hasFocus = ref.watch(P.chat.hasFocus);
     final isOthello = demoType == DemoType.othello;
     final paddingTop = ref.watch(P.app.paddingTop);
     final page = ref.watch(Pager.page);
-    final mainPageNotIgnoring = ref.watch(Pager.mainPageNotIgnoring);
+    final atMainPage = ref.watch(Pager.atMainPage);
     final conversation = ref.watch(P.conversation.current);
-    final chains = ref.watch(P.chat.chains);
-    final currentChain = ref.watch(P.chat.currentChain);
-    final editingIndex = ref.watch(P.chat.editingIndex);
-    final branchesCountList = ref.watch(P.chat.branchesCountList);
+    final editingIndex = ref.watch(P.msg.editingOrRegeneratingIndex);
     final receiveId = ref.watch(P.chat.receiveId);
-    final ttsDone = ref.watch(P.tts.ttsDone);
-    final spkNames = ref.watch(P.tts.spkPairs);
-
-    final spkShown = ref.watch(P.tts.spkShown);
-    final audioInteractorShown = ref.watch(P.tts.audioInteractorShown);
-    final intonationShown = ref.watch(P.tts.intonationShown);
-    final selectSpkName = ref.watch(P.tts.selectedSpkName);
-    final selectSourceAudioPath = ref.watch(P.tts.selectSourceAudioPath);
-
-    final textInInput = ref.watch(P.tts.textInInput);
-    final ttsCores = ref.watch(P.fileManager.ttsCores);
-
-    final interactingInstruction = ref.watch(P.tts.interactingInstruction);
-
-    final selectedIndex = ref.watch(P.tts.instructions(interactingInstruction));
-    final selectedInstruction = selectedIndex != null ? interactingInstruction.options[selectedIndex] : null;
-
-    final recording = ref.watch(P.world.recording);
-
-    final latestRuntimeAddress = ref.watch(P.preference.latestRuntimeAddress);
-
     final kB = ref.watch(P.app.qb);
+    final drawerWidth = ref.watch(Pager.drawerWidth);
+    final screenWidth = ref.watch(P.app.screenWidth);
+    final thinkingMode = ref.watch(P.rwkv.thinkingMode);
+    final editingBotMessage = ref.watch(P.msg.editingBotMessage);
+    final messages = ref.watch(P.msg.list);
+    final ids = ref.watch(P.msg.ids);
+    final pool = ref.watch(P.msg.pool);
+    final socName = ref.watch(P.rwkv.socName);
+    final socBrand = ref.watch(P.rwkv.socBrand);
+    final availableModels = ref.watch(P.fileManager.availableModels);
+    final unavailableModels = ref.watch(P.fileManager.unavailableModels);
+    final disableRemoteConfig = Args.disableRemoteConfig;
+
+    const showDrawerWidth = false;
+    const showEditingBotMessage = false;
+    const showAvailableModels = false;
+    const showUnavailableModels = false;
+    const showSocName = false;
+    const showSocBrand = false;
+    const showIds = false;
+    const showPool = false;
+    const showMessages = false;
+    const showEditingIndex = false;
+    const showAtMainPage = false;
+    const showPage = false;
 
     return Positioned(
       left: 0,
@@ -86,9 +90,9 @@ class Debugger extends ConsumerWidget {
           child: SB(
             child: C(
               decoration: const BD(color: kC),
-              child: Co(
-                m: MAA.start,
-                c: CAA.end,
+              child: Column(
+                mainAxisAlignment: MAA.start,
+                crossAxisAlignment: CAA.end,
                 children:
                     [
                       paddingTop.h,
@@ -108,8 +112,10 @@ class Debugger extends ConsumerWidget {
                       T(inputHeight.toString()),
                       if (!isOthello) T("hasFocus".codeToName),
                       T(hasFocus.toString()),
-                      if (Config.enableConversation) T("mainPageNotIgnoring".codeToName),
-                      if (Config.enableConversation) T(mainPageNotIgnoring.toString()),
+                      if (showAtMainPage) T("atMainPage".codeToName),
+                      if (showAtMainPage) T(atMainPage.toString()),
+                      if (showPage) T("page".codeToName),
+                      if (showPage) T(page.toString()),
                       if (Config.enableConversation) T("conversation".codeToName),
                       if (Config.enableConversation) T(conversation?.name ?? "null"),
                       // T("receivingTokens".codeToName),
@@ -120,40 +126,38 @@ class Debugger extends ConsumerWidget {
                       // T(lifecycleState.toString().split(".").last),
                       // T("autoPauseId".codeToName),
                       // T(autoPauseId.toString()),
-                      T("editingIndex".codeToName),
-                      T(editingIndex.toString()),
-                      T("latestRuntimeAddress".codeToName),
-                      T(latestRuntimeAddress.toString()),
-                      if (demoType == DemoType.tts) ...[
-                        T("ttsDone".codeToName),
-                        T(ttsDone.toString()),
-                        T("spkNames length".codeToName),
-                        T(spkNames.length.toString()),
-                        T("spkShown".codeToName),
-                        T(spkShown.toString()),
-                        T("audioInteractorShown".codeToName),
-                        T(audioInteractorShown.toString()),
-                        T("intonationShown".codeToName),
-                        T(intonationShown.toString()),
-                        T("selectSpkName".codeToName),
-                        T(selectSpkName.toString()),
-                        T("selectSourceAudioPath".codeToName),
-                        T(selectSourceAudioPath.toString()),
-                        T("textInInput".codeToName),
-                        T(textInInput.toString()),
-                        // T("ttsCores".codeToName),
-                        // T(ttsCores.map((e) => e.name).join("\n")),
-                        T("interactingInstruction".codeToName),
-                        T(interactingInstruction.toString()),
-                        T("selectedInstruction".codeToName),
-                        T(selectedInstruction.toString()),
-                        T("recording".codeToName),
-                        T(recording.toString()),
-                      ],
+                      if (showEditingIndex) T("editingIndex".codeToName),
+                      if (showEditingIndex) T(editingIndex.toString()),
+                      if (showDrawerWidth) T("drawerWidth".codeToName),
+                      if (showDrawerWidth) T(drawerWidth.toString()),
+                      T("screenWidth".codeToName),
+                      T(screenWidth.toString()),
+                      T("thinkingMode".codeToName),
+                      T(thinkingMode.toString()),
+                      if (showEditingBotMessage) T("editingBotMessage".codeToName),
+                      if (showEditingBotMessage) T(editingBotMessage.toString()),
+                      if (showMessages) T("messages length".codeToName),
+                      if (showMessages) T(messages.length.toString()),
+                      if (showMessages) T("messages changing".codeToName),
+                      if (showMessages) T(messages.m((e) => e.changing).join(", ")),
+                      if (showIds) T("ids".codeToName),
+                      if (showIds) T(ids.toString()),
+                      if (showPool) T("pool length".codeToName),
+                      if (showPool) T(pool.length.toString()),
+                      if (showSocName) T("socName".codeToName),
+                      if (showSocName) T(socName),
+                      if (showSocBrand) T("socBrand".codeToName),
+                      if (showSocBrand) T(socBrand.toString()),
+                      if (showAvailableModels) T("availableModels".codeToName),
+                      if (showAvailableModels) T(availableModels.map((e) => e.name).join("\n")),
+                      if (showUnavailableModels) T("unavailableModels".codeToName),
+                      if (showUnavailableModels) T(unavailableModels.map((e) => e.name).join("\n")),
+                      T("disableRemoteConfig".codeToName),
+                      T(disableRemoteConfig.toString()),
                     ].indexMap((index, e) {
                       return C(
                         margin: EI.o(t: index % 2 == 0 ? 0 : 1),
-                        decoration: BD(color: kB.q(.33)),
+                        decoration: BD(color: kB.q(.55)),
                         child: e,
                       );
                     }),
@@ -175,10 +179,12 @@ class _SudokuDebugger extends ConsumerWidget {
     final loaded = ref.watch(P.rwkv.loaded);
     final running = ref.watch(P.sudoku.running);
     final page = ref.watch(Pager.page);
-    final mainPageNotIgnoring = ref.watch(Pager.mainPageNotIgnoring);
+    final mainPageNotIgnoring = ref.watch(Pager.atMainPage);
 
     final kW = ref.watch(P.app.qw);
     final kB = ref.watch(P.app.qb);
+
+    final modelSelectorShown = ref.watch(P.fileManager.modelSelectorShown);
 
     return Positioned(
       left: 0,
@@ -196,9 +202,9 @@ class _SudokuDebugger extends ConsumerWidget {
           child: SB(
             child: C(
               decoration: const BD(color: kC),
-              child: Co(
-                m: MAA.start,
-                c: CAA.end,
+              child: Column(
+                mainAxisAlignment: MAA.start,
+                crossAxisAlignment: CAA.end,
                 children:
                     [
                       paddingTop.h,
@@ -212,6 +218,8 @@ class _SudokuDebugger extends ConsumerWidget {
                       T(page.toString()),
                       T("mainPageNotIgnoring".codeToName),
                       T(mainPageNotIgnoring.toString()),
+                      T("modelSelectorShown".codeToName),
+                      T(modelSelectorShown.toString()),
                     ].indexMap((index, e) {
                       return C(
                         margin: EI.o(t: index % 2 == 0 ? 0 : 1),
@@ -233,22 +241,29 @@ class _TTSDebugger extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final paddingTop = ref.watch(P.app.paddingTop);
-
-    final overallProgress = ref.watch(P.tts.overallProgress);
-    final perWavProgress = ref.watch(P.tts.perWavProgress);
-    final filePaths = ref.watch(P.tts.filePaths);
-    final receiveId = ref.watch(P.chat.receiveId);
-
-    final selectedSpkPanelFilter = ref.watch(P.tts.selectedSpkPanelFilter);
-    final selectedLanguage = ref.watch(P.tts.selectedLanguage);
-
-    final startTime = ref.watch(P.world.startTime);
+    final audioInteractorShown = ref.watch(P.tts.audioInteractorShown);
     final endTime = ref.watch(P.world.endTime);
-
-    final selectedSpkName = ref.watch(P.tts.selectedSpkName);
-    final selectSourceAudioPath = ref.watch(P.tts.selectSourceAudioPath);
+    final filePaths = ref.watch(P.tts.filePaths);
+    final interactingInstruction = ref.watch(P.tts.interactingInstruction);
+    final intonationShown = ref.watch(P.tts.intonationShown);
     final kB = ref.watch(P.app.qb);
+    final overallProgress = ref.watch(P.tts.overallProgress);
+    final paddingTop = ref.watch(P.app.paddingTop);
+    final perWavProgress = ref.watch(P.tts.perWavProgress);
+    final receiveId = ref.watch(P.chat.receiveId);
+    final recording = ref.watch(P.world.recording);
+    final selectSourceAudioPath = ref.watch(P.tts.selectSourceAudioPath);
+    final selectSpkName = ref.watch(P.tts.selectedSpkName);
+    final selectedIndex = ref.watch(P.tts.instructions(interactingInstruction));
+    final selectedInstruction = selectedIndex != null ? interactingInstruction.options[selectedIndex] : null;
+    final selectedLanguage = ref.watch(P.tts.selectedLanguage);
+    final selectedSpkName = ref.watch(P.tts.selectedSpkName);
+    final selectedSpkPanelFilter = ref.watch(P.tts.selectedSpkPanelFilter);
+    final spkNames = ref.watch(P.tts.spkPairs);
+    final spkShown = ref.watch(P.tts.spkShown);
+    final startTime = ref.watch(P.world.startTime);
+    final textInInput = ref.watch(P.tts.textInInput);
+    final ttsDone = ref.watch(P.tts.ttsDone);
 
     return Positioned(
       left: 0,
@@ -266,9 +281,9 @@ class _TTSDebugger extends ConsumerWidget {
           child: SB(
             child: C(
               decoration: const BD(color: kC),
-              child: Co(
-                m: MAA.start,
-                c: CAA.end,
+              child: Column(
+                mainAxisAlignment: MAA.start,
+                crossAxisAlignment: CAA.end,
                 children:
                     [
                       paddingTop.h,
@@ -279,7 +294,7 @@ class _TTSDebugger extends ConsumerWidget {
                       T("perWavProgress".codeToName),
                       T(perWavProgress.toString()),
                       T("filePaths".codeToName),
-                      Co(
+                      Column(
                         children: filePaths.map((e) => T(e)).toList(),
                       ),
                       T("receiveId".codeToName),
@@ -296,6 +311,30 @@ class _TTSDebugger extends ConsumerWidget {
                       T(selectedSpkName.toString()),
                       T("selectSourceAudioPath".codeToName),
                       T(selectSourceAudioPath.toString()),
+                      T("ttsDone".codeToName),
+                      T(ttsDone.toString()),
+                      T("spkNames length".codeToName),
+                      T(spkNames.length.toString()),
+                      T("spkShown".codeToName),
+                      T(spkShown.toString()),
+                      T("audioInteractorShown".codeToName),
+                      T(audioInteractorShown.toString()),
+                      T("intonationShown".codeToName),
+                      T(intonationShown.toString()),
+                      T("selectSpkName".codeToName),
+                      T(selectSpkName.toString()),
+                      T("selectSourceAudioPath".codeToName),
+                      T(selectSourceAudioPath.toString()),
+                      T("textInInput".codeToName),
+                      T(textInInput.toString()),
+                      // T("ttsCores".codeToName),
+                      // T(ttsCores.map((e) => e.name).join("\n")),
+                      T("interactingInstruction".codeToName),
+                      T(interactingInstruction.toString()),
+                      T("selectedInstruction".codeToName),
+                      T(selectedInstruction.toString()),
+                      T("recording".codeToName),
+                      T(recording.toString()),
                     ].indexMap((index, e) {
                       return C(
                         margin: EI.o(t: index % 2 == 0 ? 0 : 1),

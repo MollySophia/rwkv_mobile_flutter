@@ -17,11 +17,13 @@ import 'package:path_provider/path_provider.dart';
 class ScrollShotArea extends ConsumerStatefulWidget {
   final Widget child;
   final ScrollController controller;
+  final Color? repaintBoundaryColor;
 
   const ScrollShotArea({
     super.key,
     required this.child,
     required this.controller,
+    this.repaintBoundaryColor,
   });
 
   @override
@@ -37,9 +39,10 @@ class _ScrollShotAreaState extends ConsumerState<ScrollShotArea> {
 
   @override
   Widget build(BuildContext context) {
+    final color = widget.repaintBoundaryColor ?? Theme.of(context).scaffoldBackgroundColor;
     return RepaintBoundary(
       child: ColoredBox(
-        color: Theme.of(context).scaffoldBackgroundColor,
+        color: color,
         child: widget.child,
       ),
     );
@@ -324,7 +327,7 @@ class _ScreenshotState extends ConsumerState<Screenshot> {
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.2),
-              offset: Offset(2, 4),
+              offset: const Offset(2, 4),
               blurRadius: 6,
             ),
           ],

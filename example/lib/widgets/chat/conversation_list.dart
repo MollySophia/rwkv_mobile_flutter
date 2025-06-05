@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gaimon/gaimon.dart';
 import 'package:halo/halo.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/conversation.dart';
@@ -21,7 +20,7 @@ class ConversationList extends ConsumerWidget {
 
     return RefreshIndicator.adaptive(
       onRefresh: () async {
-        Gaimon.light();
+        P.app.hapticLight();
         await P.conversation.load();
       },
       child: ListView.builder(
@@ -50,15 +49,15 @@ class _Empty extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final s = S.of(context);
     final kB = ref.watch(P.app.qb);
-    return Co(
-      m: MAA.center,
-      c: CAA.stretch,
+    return Column(
+      mainAxisAlignment: MAA.center,
+      crossAxisAlignment: CAA.stretch,
       children: [
         IconButton(
           onPressed: _onPressed,
-          icon: Co(
+          icon: Column(
             mainAxisSize: MainAxisSize.min,
-            c: CAA.center,
+            crossAxisAlignment: CAA.center,
             children: [
               const Icon(Icons.add),
               T(s.new_chat, s: const TS(s: 20)),

@@ -4,7 +4,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gaimon/gaimon.dart';
 import 'package:halo/halo.dart';
 import 'package:halo_alert/halo_alert.dart';
 import 'package:halo_state/halo_state.dart';
@@ -129,7 +128,7 @@ class AudioInput extends ConsumerWidget {
               Positioned(
                 left: 0,
                 right: 0,
-                child: Co(
+                child: Column(
                   children: [
                     GD(
                       onTapDown: _onTapDown,
@@ -187,7 +186,7 @@ class AudioInput extends ConsumerWidget {
   FV _onTapDown(TapDownDetails details) async {
     final receiving = P.chat.receivingTokens.q;
     if (receiving) return;
-    Gaimon.light();
+    P.app.hapticLight();
     Alert.info(S.current.recording_your_voice);
     await P.world.startRecord();
   }
@@ -195,14 +194,14 @@ class AudioInput extends ConsumerWidget {
   FV _onTapCancel() async {
     final receiving = P.chat.receivingTokens.q;
     if (receiving) return;
-    Gaimon.light();
+    P.app.hapticLight();
     await P.world.stopRecord(isCancel: true);
   }
 
   FV _onTapUp(TapUpDetails details) async {
     final receiving = P.chat.receivingTokens.q;
     if (receiving) return;
-    Gaimon.medium();
+    P.app.hapticMedium();
     final success = await P.world.stopRecord();
     if (!success) return;
     Alert.success(S.current.finish_recording);

@@ -37,7 +37,7 @@ class _BotTtsContentState extends ConsumerState<BotTtsContent> {
     final demoType = P.app.demoType.q;
     if (demoType != DemoType.tts) return;
 
-    ref.listenManual(P.chat.latestClickedMessage, (previous, next) {
+    ref.listenManual(P.msg.latestClicked, (previous, next) {
       if (next?.id == widget.msg.id) {
         _timer?.cancel();
         _timer = Timer.periodic(500.ms, (timer) {
@@ -101,7 +101,7 @@ class _BotTtsContentState extends ConsumerState<BotTtsContent> {
     final base = 4000;
     final width = 80 * (length / (length + base)) + 55;
     final isPlaying = ref.watch(P.world.playing);
-    final latestClickedMessage = ref.watch(P.chat.latestClickedMessage);
+    final latestClickedMessage = ref.watch(P.msg.latestClicked);
     final isLatestClickedMessage = latestClickedMessage?.id == widget.msg.id;
 
     final overallProgress = widget.msg.ttsOverallProgress ?? 0.0;
@@ -115,15 +115,15 @@ class _BotTtsContentState extends ConsumerState<BotTtsContent> {
       padding: const EI.o(),
       width: changing ? 130 : width,
       // height: 50,
-      child: Co(
+      child: Column(
         mainAxisSize: MainAxisSize.min,
-        c: CAA.stretch,
+        crossAxisAlignment: CAA.stretch,
         children: [
           if (!allDone)
             Wrap(
               children: [
                 ...perWavProgress.map((e) {
-                  return Co(
+                  return Column(
                     children: [
                       Icon(Icons.audio_file, color: primaryColor),
                       2.h,
@@ -141,8 +141,8 @@ class _BotTtsContentState extends ConsumerState<BotTtsContent> {
           if (changing)
             Padding(
               padding: const EI.o(v: 4),
-              child: Ro(
-                m: MAA.start,
+              child: Row(
+                mainAxisAlignment: MAA.start,
                 children: [
                   TweenAnimationBuilder(
                     tween: Tween(begin: .0, end: 1.0),
@@ -168,8 +168,8 @@ class _BotTtsContentState extends ConsumerState<BotTtsContent> {
           if (!changing || widget.msg.ttsHasContent)
             Padding(
               padding: const EI.o(v: 4),
-              child: Ro(
-                m: MAA.start,
+              child: Row(
+                mainAxisAlignment: MAA.start,
                 children: [
                   if (_tick % 3 == 0 || !isPlaying || !isLatestClickedMessage)
                     Icon(
@@ -205,8 +205,8 @@ class _BotTtsContentState extends ConsumerState<BotTtsContent> {
             ),
           if (allDone) 12.h,
           if (!changing && !allDone)
-            Ro(
-              m: MAA.start,
+            Row(
+              mainAxisAlignment: MAA.start,
               children: [
                 GD(
                   onTap: _onSharePressed,

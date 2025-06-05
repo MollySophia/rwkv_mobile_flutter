@@ -32,6 +32,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:zone/args.dart';
 import 'package:zone/config.dart';
+import 'package:zone/func/check_model_selection.dart';
 import 'package:zone/func/from_assets_to_temp.dart';
 import 'package:zone/gen/assets.gen.dart';
 import 'package:zone/gen/l10n.dart';
@@ -46,13 +47,16 @@ import 'package:zone/model/group_info.dart';
 import 'package:zone/model/language.dart';
 import 'package:zone/model/local_file.dart';
 import 'package:zone/model/message.dart';
-import 'package:zone/model/message_chain.dart';
+import 'package:zone/model/msg_node.dart';
+import 'package:zone/model/thinking_mode.dart';
 import 'package:zone/model/tts_instruction.dart';
 import 'package:zone/model/world_type.dart';
 import 'package:zone/route/page_key.dart';
 import 'package:zone/route/router.dart';
+import 'package:zone/widgets/app_update_dialog.dart' show AppUpdateDialog;
 import 'package:zone/widgets/model_selector.dart';
 import 'package:zone/widgets/pager.dart';
+import 'package:zone/model/thinking_mode.dart' as thinking_mode;
 import 'package:zone/func/sudoku.dart' as func_sudoku;
 
 part "app.dart";
@@ -62,7 +66,6 @@ part "othello.dart";
 part "file_manager.dart";
 part "device.dart";
 part "adapter.dart";
-part "debugger.dart";
 part "world.dart";
 part "conversation.dart";
 part "networking.dart";
@@ -72,6 +75,7 @@ part "guard.dart";
 part "sudoku.dart";
 part "suggestion.dart";
 part "dump.dart";
+part "msg.dart";
 
 abstract class P {
   static final app = _App();
@@ -81,7 +85,6 @@ abstract class P {
   static final fileManager = _FileManager();
   static final device = _Device();
   static final adapter = _Adapter();
-  static final debugger = _Debugger();
   static final world = _World();
   static final conversation = _Conversation();
   static final tts = _TTS();
@@ -90,6 +93,7 @@ abstract class P {
   static final sudoku = _Sudoku();
   static final suggestion = _Suggestion();
   static final dump = _Dump();
+  static final msg = _Msg();
 
   static FV init() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -106,7 +110,6 @@ abstract class P {
       fileManager._init(),
       device._init(),
       adapter._init(),
-      debugger._init(),
       world._init(),
       conversation._init(),
       tts._init(),
@@ -114,6 +117,7 @@ abstract class P {
       sudoku._init(),
       suggestion._init(),
       dump._init(),
+      msg._init(),
     ]);
   }
 }
