@@ -48,7 +48,7 @@ class _Empty extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = S.of(context);
-    final kB = ref.watch(P.app.qb);
+    final qb = ref.watch(P.app.qb);
     return Column(
       mainAxisAlignment: MAA.center,
       crossAxisAlignment: CAA.stretch,
@@ -61,7 +61,7 @@ class _Empty extends ConsumerWidget {
             children: [
               const Icon(Icons.add),
               T(s.new_chat, s: const TS(s: 20)),
-              T(s.create_a_new_one_by_clicking_the_button_above, s: TS(s: 10, c: kB.q(.5))),
+              T(s.create_a_new_one_by_clicking_the_button_above, s: TS(s: 10, c: qb.q(.5))),
             ],
           ),
         ),
@@ -86,8 +86,8 @@ class _Item extends ConsumerWidget {
     final isCurrent = current?.id == conversation.id;
     final primary = Theme.of(context).colorScheme.primary;
     final primaryContainer = Theme.of(context).colorScheme.primaryContainer;
-    final kW = ref.watch(P.app.qw);
-    final kB = ref.watch(P.app.qb);
+    final qw = ref.watch(P.app.qw);
+    final qb = ref.watch(P.app.qb);
     return CupertinoContextMenu(
       actions: [
         CupertinoContextMenuAction(
@@ -97,18 +97,18 @@ class _Item extends ConsumerWidget {
       ],
       enableHapticFeedback: true,
       child: Material(
-        color: kW,
+        color: qw,
         child: GD(
           onTap: _onTap,
           child: C(
             decoration: BD(
-              color: isCurrent ? primaryContainer : kW,
+              color: isCurrent ? primaryContainer : qw,
               borderRadius: 8.r,
             ),
             padding: const EI.a(8),
             child: T(
               conversation.name,
-              s: TS(s: 16, w: FW.w600, c: isCurrent ? primary : kB),
+              s: TS(s: 16, w: FW.w600, c: isCurrent ? primary : qb),
             ),
           ),
         ),

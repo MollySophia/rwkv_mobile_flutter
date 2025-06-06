@@ -194,5 +194,15 @@
   "downloading": "下载中",
   "download_server_": "下载服务器(请试试哪个快)",
   "overseas": "(境外)",
-  "x_message_selected": "已选 %d 条消息"
+  "x_message_selected": "已选 %d 条消息",
+  "appearance": "外观",
+  "dark_mode": "深色模式",
+  "force_dark_mode": "强制使用深色模式",
+  "light_mode": "浅色模式",
+  "system_mode": "跟随系统",
+  "color_theme_follow_system": "色彩模式跟随系统",
+  "dark_mode_theme": "深色模式主题",
+  "theme_dim": "深色",
+  "theme_lights_out": "黑色",
+  "theme_light": "浅色"
 }

@@ -11,6 +11,12 @@ class _Preference {
   /// 非空表示使用指定的 textScaleFactor
   late final preferredTextScaleFactor = qs<double>(-1.0);
 
+  /// 偏好的主题模式设置，跟随系统、深色模式、浅色模式
+  late final themeMode = qs<ThemeMode>(ThemeMode.system);
+
+  /// 偏好的深色模式主题
+  late final preferredDarkCustomTheme = qs<custom_theme.CustomTheme>(custom_theme.LightsOut());
+
   final textScaleFactorSystem = -1.0;
   // late final availableTextScaleFactors = [_textScaleFactorSystem, .8, .9, 1.0, 1.1, 1.2, 1.3, 1.4];
   // late final availableTextScaleNames = [
@@ -54,6 +60,8 @@ extension _$Preference on _Preference {
       preferredLanguage.q = Language.none;
     }
 
+    await S.load(preferredLanguage.q.resolved.locale);
+
     final textScaleFactor = sp.getDouble("halo_state.textScaleFactor");
     if (textScaleFactor != null) {
       preferredTextScaleFactor.q = textScaleFactor;
@@ -72,6 +80,16 @@ extension _$Preference on _Preference {
       } else {
         await _saveDumpping(false);
       }
+    }
+
+    final themeMode = sp.getString("halo_state.themeMode");
+    if (themeMode != null) {
+      this.themeMode.q = ThemeMode.values.firstWhereOrNull((e) => e.name == themeMode) ?? ThemeMode.system;
+    }
+
+    final preferredDarkCustomTheme = sp.getString("halo_state.preferredDarkCustomTheme");
+    if (preferredDarkCustomTheme != null) {
+      P.app.customTheme.q = custom_theme.CustomTheme.fromString(preferredDarkCustomTheme) ?? custom_theme.LightsOut();
     }
   }
 
@@ -141,5 +159,12 @@ extension $Preference on _Preference {
     preferredLanguage.q = res;
     final sp = await SharedPreferences.getInstance();
     await sp.setString("halo_state.language", res.locale.toString());
+  }
+
+  FV showThemeSettings() async {
+    final context = getContext();
+    if (context == null) return;
+    if (!context.mounted) return;
+    await ThemeSelector.show();
   }
 }

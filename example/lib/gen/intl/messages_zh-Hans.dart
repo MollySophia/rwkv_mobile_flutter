@@ -41,6 +41,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "all": MessageLookupByLibrary.simpleMessage("全部"),
     "all_done": MessageLookupByLibrary.simpleMessage("全部完成"),
     "all_prompt": MessageLookupByLibrary.simpleMessage("全部 Prompt"),
+    "appearance": MessageLookupByLibrary.simpleMessage("外观"),
     "application_internal_test_group": MessageLookupByLibrary.simpleMessage(
       "应用内测群",
     ),
@@ -84,6 +85,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "click_to_load_image": MessageLookupByLibrary.simpleMessage("点击加载图片"),
     "click_to_select_model": MessageLookupByLibrary.simpleMessage("点击选择模型"),
+    "color_theme_follow_system": MessageLookupByLibrary.simpleMessage(
+      "色彩模式跟随系统",
+    ),
     "continue_download": MessageLookupByLibrary.simpleMessage("继续下载"),
     "continue_using_smaller_model": MessageLookupByLibrary.simpleMessage(
       "继续使用较小模型",
@@ -91,6 +95,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "create_a_new_one_by_clicking_the_button_above":
         MessageLookupByLibrary.simpleMessage("点击上方按钮创建新会话"),
     "current_turn": MessageLookupByLibrary.simpleMessage("当前回合"),
+    "dark_mode": MessageLookupByLibrary.simpleMessage("深色模式"),
+    "dark_mode_theme": MessageLookupByLibrary.simpleMessage("深色模式主题"),
     "decode": MessageLookupByLibrary.simpleMessage("解码"),
     "delete": MessageLookupByLibrary.simpleMessage("删除"),
     "delete_all": MessageLookupByLibrary.simpleMessage("全部删除"),
@@ -132,6 +138,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "font_size": MessageLookupByLibrary.simpleMessage("字体大小"),
     "font_size_default": MessageLookupByLibrary.simpleMessage("默认 (100%)"),
     "foo_bar": MessageLookupByLibrary.simpleMessage("foo bar"),
+    "force_dark_mode": MessageLookupByLibrary.simpleMessage("强制使用深色模式"),
     "game_over": MessageLookupByLibrary.simpleMessage("游戏结束！"),
     "generate": MessageLookupByLibrary.simpleMessage("生成"),
     "generate_hardest_sudoku_in_the_world":
@@ -167,6 +174,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "just_watch_me": MessageLookupByLibrary.simpleMessage("😎 看我表演！"),
     "large": MessageLookupByLibrary.simpleMessage("大 (120%)"),
     "license": MessageLookupByLibrary.simpleMessage("开源许可证"),
+    "light_mode": MessageLookupByLibrary.simpleMessage("浅色模式"),
     "loading": MessageLookupByLibrary.simpleMessage("加载中..."),
     "medium": MessageLookupByLibrary.simpleMessage("中 (110%)"),
     "memory_used": m4,
@@ -266,9 +274,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "storage_permission_not_granted": MessageLookupByLibrary.simpleMessage(
       "存储权限未授予",
     ),
+    "system_mode": MessageLookupByLibrary.simpleMessage("跟随系统"),
     "take_photo": MessageLookupByLibrary.simpleMessage("拍照"),
     "technical_research_group": MessageLookupByLibrary.simpleMessage("技术研发群"),
     "the_puzzle_is_not_valid": MessageLookupByLibrary.simpleMessage("数独无效"),
+    "theme_dim": MessageLookupByLibrary.simpleMessage("深色"),
+    "theme_light": MessageLookupByLibrary.simpleMessage("浅色"),
+    "theme_lights_out": MessageLookupByLibrary.simpleMessage("黑色"),
     "then_you_can_start_to_chat_with_rwkv":
         MessageLookupByLibrary.simpleMessage("然后您就可以开始与 RWKV 对话了"),
     "thinking": MessageLookupByLibrary.simpleMessage("思考中..."),

@@ -43,6 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "all": MessageLookupByLibrary.simpleMessage("All"),
     "all_done": MessageLookupByLibrary.simpleMessage("All Done"),
     "all_prompt": MessageLookupByLibrary.simpleMessage("All Prompt"),
+    "appearance": MessageLookupByLibrary.simpleMessage("Appearance"),
     "application_internal_test_group": MessageLookupByLibrary.simpleMessage(
       "Application Internal Test Group",
     ),
@@ -102,6 +103,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "click_to_select_model": MessageLookupByLibrary.simpleMessage(
       "Click to select model",
     ),
+    "color_theme_follow_system": MessageLookupByLibrary.simpleMessage(
+      "Follow system appearance",
+    ),
     "continue_download": MessageLookupByLibrary.simpleMessage(
       "Continue Download",
     ),
@@ -113,6 +117,8 @@ class MessageLookup extends MessageLookupByLibrary {
           "Create a new one by clicking the button above",
         ),
     "current_turn": MessageLookupByLibrary.simpleMessage("Current Turn"),
+    "dark_mode": MessageLookupByLibrary.simpleMessage("Dark Mode"),
+    "dark_mode_theme": MessageLookupByLibrary.simpleMessage("Dark Mode Theme"),
     "decode": MessageLookupByLibrary.simpleMessage("Decode"),
     "delete": MessageLookupByLibrary.simpleMessage("Delete"),
     "delete_all": MessageLookupByLibrary.simpleMessage("Delete All"),
@@ -166,6 +172,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "font_size": MessageLookupByLibrary.simpleMessage("Font Size"),
     "font_size_default": MessageLookupByLibrary.simpleMessage("Default (100%)"),
     "foo_bar": MessageLookupByLibrary.simpleMessage("foo bar"),
+    "force_dark_mode": MessageLookupByLibrary.simpleMessage("Force Dark Mode"),
     "game_over": MessageLookupByLibrary.simpleMessage("Game Over!"),
     "generate": MessageLookupByLibrary.simpleMessage("Generate"),
     "generate_hardest_sudoku_in_the_world":
@@ -213,6 +220,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "just_watch_me": MessageLookupByLibrary.simpleMessage("😎 Watch me!"),
     "large": MessageLookupByLibrary.simpleMessage("Large (120%)"),
     "license": MessageLookupByLibrary.simpleMessage("Open Source License"),
+    "light_mode": MessageLookupByLibrary.simpleMessage("Light Mode"),
     "loading": MessageLookupByLibrary.simpleMessage("Loading..."),
     "medium": MessageLookupByLibrary.simpleMessage("Medium (110%)"),
     "memory_used": m4,
@@ -358,6 +366,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "storage_permission_not_granted": MessageLookupByLibrary.simpleMessage(
       "Storage permission not granted",
     ),
+    "system_mode": MessageLookupByLibrary.simpleMessage("System Mode"),
     "take_photo": MessageLookupByLibrary.simpleMessage("Take Photo"),
     "technical_research_group": MessageLookupByLibrary.simpleMessage(
       "Technical Research Group",
@@ -365,6 +374,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "the_puzzle_is_not_valid": MessageLookupByLibrary.simpleMessage(
       "The Sudoku puzzle is not valid",
     ),
+    "theme_dim": MessageLookupByLibrary.simpleMessage("Dim"),
+    "theme_light": MessageLookupByLibrary.simpleMessage("Light"),
+    "theme_lights_out": MessageLookupByLibrary.simpleMessage("Lights out"),
     "then_you_can_start_to_chat_with_rwkv":
         MessageLookupByLibrary.simpleMessage(
           "Then you can start to chat with RWKV",

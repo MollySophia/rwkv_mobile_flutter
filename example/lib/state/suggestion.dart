@@ -133,7 +133,7 @@ class _Suggestion {
     try {
       resp = await _get("http://120.77.3.4:3010/suggestions.json") as dynamic;
       if (resp == null) {
-        return;
+        throw "empty response";
       }
       final lang = shouldUseEn ? "en" : "zh";
       final sConfig = SuggestionConfig.fromJson(resp[lang]);

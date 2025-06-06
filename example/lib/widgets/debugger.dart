@@ -19,7 +19,7 @@ class Debugger extends ConsumerWidget {
     if (!kDebugMode) return const SizedBox.shrink();
     final demoType = ref.watch(P.app.demoType);
 
-    final kW = ref.watch(P.app.qw);
+    final qw = ref.watch(P.app.qw);
 
     switch (demoType) {
       case DemoType.sudoku:
@@ -47,7 +47,7 @@ class Debugger extends ConsumerWidget {
     final conversation = ref.watch(P.conversation.current);
     final editingIndex = ref.watch(P.msg.editingOrRegeneratingIndex);
     final receiveId = ref.watch(P.chat.receiveId);
-    final kB = ref.watch(P.app.qb);
+    final qb = ref.watch(P.app.qb);
     final drawerWidth = ref.watch(Pager.drawerWidth);
     final screenWidth = ref.watch(P.app.screenWidth);
     final thinkingMode = ref.watch(P.rwkv.thinkingMode);
@@ -60,6 +60,10 @@ class Debugger extends ConsumerWidget {
     final availableModels = ref.watch(P.fileManager.availableModels);
     final unavailableModels = ref.watch(P.fileManager.unavailableModels);
     final disableRemoteConfig = Args.disableRemoteConfig;
+    final preferredThemeMode = ref.watch(P.app.preferredThemeMode);
+    final customTheme = ref.watch(P.app.customTheme);
+    final themeMode = ref.watch(P.preference.themeMode);
+    final preferredDarkCustomTheme = ref.watch(P.preference.preferredDarkCustomTheme);
 
     const showDrawerWidth = false;
     const showEditingBotMessage = false;
@@ -83,7 +87,7 @@ class Debugger extends ConsumerWidget {
         child: Material(
           textStyle: TS(
             ff: "Monospace",
-            c: kW,
+            c: qw,
             s: 8,
           ),
           color: kC,
@@ -154,10 +158,18 @@ class Debugger extends ConsumerWidget {
                       if (showUnavailableModels) T(unavailableModels.map((e) => e.name).join("\n")),
                       T("disableRemoteConfig".codeToName),
                       T(disableRemoteConfig.toString()),
+                      T("preferredThemeMode".codeToName),
+                      T(preferredThemeMode.toString()),
+                      T("customTheme".codeToName),
+                      T(customTheme.runtimeType.toString()),
+                      T("themeMode".codeToName),
+                      T(themeMode.toString()),
+                      T("preferredDarkCustomTheme".codeToName),
+                      T(preferredDarkCustomTheme.runtimeType.toString()),
                     ].indexMap((index, e) {
                       return C(
                         margin: EI.o(t: index % 2 == 0 ? 0 : 1),
-                        decoration: BD(color: kB.q(.55)),
+                        decoration: BD(color: qb.q(.55)),
                         child: e,
                       );
                     }),
@@ -181,8 +193,8 @@ class _SudokuDebugger extends ConsumerWidget {
     final page = ref.watch(Pager.page);
     final mainPageNotIgnoring = ref.watch(Pager.atMainPage);
 
-    final kW = ref.watch(P.app.qw);
-    final kB = ref.watch(P.app.qb);
+    final qw = ref.watch(P.app.qw);
+    final qb = ref.watch(P.app.qb);
 
     final modelSelectorShown = ref.watch(P.fileManager.modelSelectorShown);
 
@@ -195,7 +207,7 @@ class _SudokuDebugger extends ConsumerWidget {
         child: Material(
           textStyle: TS(
             ff: "Monospace",
-            c: kW,
+            c: qw,
             s: 8,
           ),
           color: kC,
@@ -223,7 +235,7 @@ class _SudokuDebugger extends ConsumerWidget {
                     ].indexMap((index, e) {
                       return C(
                         margin: EI.o(t: index % 2 == 0 ? 0 : 1),
-                        decoration: BD(color: kB.q(.66)),
+                        decoration: BD(color: qb.q(.66)),
                         child: e,
                       );
                     }),
@@ -246,7 +258,7 @@ class _TTSDebugger extends ConsumerWidget {
     final filePaths = ref.watch(P.tts.filePaths);
     final interactingInstruction = ref.watch(P.tts.interactingInstruction);
     final intonationShown = ref.watch(P.tts.intonationShown);
-    final kB = ref.watch(P.app.qb);
+    final qb = ref.watch(P.app.qb);
     final overallProgress = ref.watch(P.tts.overallProgress);
     final paddingTop = ref.watch(P.app.paddingTop);
     final perWavProgress = ref.watch(P.tts.perWavProgress);
@@ -264,6 +276,7 @@ class _TTSDebugger extends ConsumerWidget {
     final startTime = ref.watch(P.world.startTime);
     final textInInput = ref.watch(P.tts.textInInput);
     final ttsDone = ref.watch(P.tts.ttsDone);
+    final qw = ref.watch(P.app.qw);
 
     return Positioned(
       left: 0,
@@ -272,9 +285,9 @@ class _TTSDebugger extends ConsumerWidget {
       bottom: 0,
       child: IgnorePointer(
         child: Material(
-          textStyle: const TS(
+          textStyle: TS(
             ff: "Monospace",
-            c: kW,
+            c: qw,
             s: 8,
           ),
           color: kC,
@@ -338,7 +351,7 @@ class _TTSDebugger extends ConsumerWidget {
                     ].indexMap((index, e) {
                       return C(
                         margin: EI.o(t: index % 2 == 0 ? 0 : 1),
-                        decoration: BD(color: kB.q(.66)),
+                        decoration: BD(color: qb.q(.66)),
                         child: e,
                       );
                     }),

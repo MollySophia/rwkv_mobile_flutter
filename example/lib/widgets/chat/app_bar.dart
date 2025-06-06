@@ -60,8 +60,8 @@ class ChatAppBar extends ConsumerWidget {
       displayName = currentModel.name;
     }
 
-    final kW = ref.watch(P.app.qw);
-    final kB = ref.watch(P.app.qb);
+    final scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
+    final qb = ref.watch(P.app.qb);
 
     return Positioned(
       top: 0,
@@ -233,8 +233,9 @@ class _MenuButton extends ConsumerWidget {
 class _TrianglePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
+    final qb = P.app.qb.q;
     final paint = Paint()
-      ..color = Colors.black.q(.667)
+      ..color = qb.q(.667)
       ..style = PaintingStyle.fill;
 
     final path = Path()

@@ -143,12 +143,12 @@ class TTSGroupItem extends ConsumerWidget {
     final currentModel = ref.watch(P.rwkv.currentModel);
     final alreadyStarted = currentModel == fileInfo;
     final loading = ref.watch(P.rwkv.loading);
-    final kW = ref.watch(P.app.qw);
+    final qw = ref.watch(P.app.qw);
 
     return ClipRRect(
       borderRadius: 8.r,
       child: C(
-        decoration: BD(color: kW, borderRadius: 8.r),
+        decoration: BD(color: qw, borderRadius: 8.r),
         margin: const EI.o(t: 8),
         padding: const EI.o(t: 8, l: 8, r: 8, b: 8),
         child: Column(

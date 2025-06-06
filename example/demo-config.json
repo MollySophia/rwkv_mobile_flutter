@@ -1,7 +1,7 @@
 {
   "chat": {
-    "latest_build": 423,
-    "latest_build_ios": 423,
+    "latest_build": 427,
+    "latest_build_ios": 427,
     "note_zh": ["提升应用程序的稳定性", "修复了已知问题"],
     "note_en": ["Improve application stability", "Fix known issues"],
     "android_url": "https://www.pgyer.com/rwkvchat",
@@ -417,6 +417,20 @@
         "socLimitations": ["8 Gen 2"]
       },
       {
+        "name": "RWKV7-G1 0.4B",
+        "type": "zip",
+        "modelSize": 0.4,
+        "fileName": "rwkv7-g1-0.4b-20250324-ctx4096_fp16.mlmodelc.zip",
+        "url": "mollysama/rwkv-mobile-models/resolve/main/coreml/rwkv7-g1-0.4b-20250324-ctx4096_fp16.mlmodelc.zip",
+        "fileSize": 716981009,
+        "sha256": "be1e0e8e8826d6dc55d506c48228516231732cd80d1d2090a0e4f4002571d32d",
+        "quantization": "FP16",
+        "platforms": ["macos", "ios"],
+        "backends": ["coreml"],
+        "tags": ["reason", "npu"],
+        "isDebug": true
+      },
+      {
         "name": "test: github-releases",
         "type": "gguf",
         "fileName": "test",
@@ -438,7 +452,7 @@
   },
   "world": {
     "latest_build": 420,
-    "latest_build_ios": 420,
+    "latest_build_ios": 422,
     "note_zh": ["提升应用程序的稳定性", "修复了已知问题"],
     "note_en": ["Improve application stability", "Fix known issues"],
     "android_url": "https://www.pgyer.com/rwkv-see",

@@ -126,6 +126,7 @@ class RWKVMobile {
       case Backend.llamacpp:
       case Backend.webRwkv:
       case Backend.mnn:
+      case Backend.coreml:
         runtime = rwkvMobile.rwkvmobile_runtime_init_with_name(modelBackendString.toNativeUtf8().cast<ffi.Char>());
     }
 
@@ -410,6 +411,7 @@ class RWKVMobile {
             case Backend.llamacpp:
             case Backend.webRwkv:
             case Backend.mnn:
+            case Backend.coreml:
               runtime = rwkvMobile.rwkvmobile_runtime_init_with_name(
                 modelBackendString.toNativeUtf8().cast<ffi.Char>(),
               );

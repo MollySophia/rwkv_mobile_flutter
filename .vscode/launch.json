@@ -12,14 +12,16 @@
       "flutterMode": "debug",
     },
     {
-      "name": "debug (halo)",
+      "name": "debug (Halo)",
       "request": "launch",
       "type": "dart",
       "program": "example/lib/main.dart",
       "flutterMode": "debug",
       "args": [
         "--dart-define=disableRemoteConfig=true",
-        "--dart-define=logLevel=3"
+        "--dart-define=logLevel=3",
+        "--dart-define=disableAutoShowOfWeightsPanel=true",
+        "--dart-define=debuggingThemes=true",
       ]
     },
     {

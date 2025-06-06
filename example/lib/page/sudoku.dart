@@ -12,7 +12,6 @@ import 'package:zone/gen/l10n.dart';
 import 'dart:math' as math;
 
 import 'package:zone/state/p.dart';
-import 'package:zone/widgets/chat/app_bar.dart';
 import 'package:zone/widgets/menu.dart';
 import 'package:zone/widgets/model_selector.dart';
 import 'package:zone/widgets/pager.dart';
@@ -57,10 +56,10 @@ class _Page extends ConsumerWidget {
     final screenHeight = ref.watch(P.app.screenHeight);
     final isPortrait = (screenHeight - kToolbarHeight) > screenWidth;
     final paddingTop = ref.watch(P.app.paddingTop);
-    final kW = ref.watch(P.app.qw);
+    final qw = ref.watch(P.app.qw);
 
     return Scaffold(
-      backgroundColor: kW,
+      backgroundColor: qw,
       floatingActionButton: FloatingActionButton.small(
         onPressed: () {
           Pager.toggle();
@@ -378,11 +377,11 @@ class _UI extends ConsumerWidget {
       ],
     ];
 
-    final kW = ref.watch(P.app.qw);
+    final qw = ref.watch(P.app.qw);
     return C(
       width: shouldUseVerticalLayout ? min / 1.428 : min * (isPortrait ? 1 : 1.428),
       height: shouldUseVerticalLayout ? min : min * (isPortrait ? 0.7 : 1),
-      decoration: BD(color: kW),
+      decoration: BD(color: qw),
       margin: !isPortrait ? EI.o(t: paddingTop) : null,
       child: shouldUseVerticalLayout
           ? Column(
@@ -669,7 +668,7 @@ class _Terminal extends ConsumerWidget {
     final padding = MediaQuery.of(context).padding;
     final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
     final isDesktop = ref.watch(P.app.isDesktop);
-    final kW = ref.watch(P.app.qw);
+    final qw = ref.watch(P.app.qw);
     return SelectionArea(
       child: C(
         decoration: const BD(color: _kGridBGColor),
@@ -690,7 +689,7 @@ class _Terminal extends ConsumerWidget {
                 s: isDesktop ? 16 : 10,
                 letterSpacing: 0,
                 height: 1.2,
-                c: kW.q(0.8),
+                c: qw.q(0.8),
               ),
             );
           },

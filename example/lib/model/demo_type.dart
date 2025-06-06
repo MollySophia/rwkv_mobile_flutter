@@ -20,13 +20,21 @@ enum DemoType {
   /// RWKV_See
   world;
 
-  ColorScheme? get colorScheme => switch (this) {
-    DemoType.chat => ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-    DemoType.tts => ColorScheme.fromSeed(seedColor: Colors.green),
-    DemoType.world => ColorScheme.fromSeed(seedColor: Colors.blue),
-    DemoType.fifthteenPuzzle => ColorScheme.fromSeed(seedColor: Colors.blue),
-    DemoType.othello => ColorScheme.fromSeed(seedColor: Colors.green),
-    DemoType.sudoku => ColorScheme.fromSeed(seedColor: Colors.teal),
+  Color get seedColor => switch (this) {
+    DemoType.chat => Colors.deepPurple,
+    DemoType.tts => Colors.green,
+    DemoType.world => Colors.blue,
+    DemoType.fifthteenPuzzle => Colors.blue,
+    DemoType.othello => Colors.green,
+    DemoType.sudoku => Colors.teal,
+  };
+
+  ColorScheme get colorScheme => switch (this) {
+    _ => ColorScheme.fromSeed(seedColor: seedColor),
+  };
+
+  ColorScheme get colorSchemeDark => switch (this) {
+    _ => ColorScheme.fromSeed(seedColor: seedColor, brightness: Brightness.dark),
   };
 
   List<DeviceOrientation>? get mobileOrientations => switch (this) {

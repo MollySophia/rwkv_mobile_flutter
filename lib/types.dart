@@ -33,7 +33,10 @@ enum Backend {
   qnn,
 
   /// dummy mnn backend string
-  mnn;
+  mnn,
+
+  /// Apple CoreML
+  coreml;
 
   String get asArgument => switch (this) {
     Backend.ncnn => 'ncnn',
@@ -41,6 +44,7 @@ enum Backend {
     Backend.llamacpp => 'llama.cpp',
     Backend.qnn => 'qnn',
     Backend.mnn => 'mnn',
+    Backend.coreml => 'coreml',
   };
 
   static Backend fromString(String value) {
@@ -50,6 +54,7 @@ enum Backend {
     if (toLower.contains('llama')) return Backend.llamacpp;
     if (toLower.contains('qnn')) return Backend.qnn;
     if (toLower.contains('mnn')) return Backend.mnn;
+    if (toLower.contains('coreml')) return Backend.coreml;
     throw Exception('Unknown backend: $value');
   }
 }

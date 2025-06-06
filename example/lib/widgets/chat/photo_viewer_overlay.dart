@@ -11,7 +11,7 @@ class PhotoViewerOverlay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final kW = ref.watch(P.app.qw);
+    final qw = ref.watch(P.app.qw);
     final paddingTop = ref.watch(P.app.paddingTop);
     final paddingRight = ref.watch(P.app.paddingRight);
     return Row(
@@ -25,7 +25,7 @@ class PhotoViewerOverlay extends ConsumerWidget {
             },
             icon: Icon(
               Icons.close,
-              color: kW,
+              color: qw,
             ),
           ),
         ),
