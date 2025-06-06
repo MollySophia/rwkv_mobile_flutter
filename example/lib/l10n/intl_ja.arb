@@ -135,7 +135,7 @@
   "can_not_generate": "生成できません",
   "difficulty_must_be_greater_than_0": "難易度は0より大きくなければなりません",
   "generate_random_sudoku_puzzle": "ランダムな数独パズルを生成",
-  "please_enter_the_difficulty": "難易度を入力してください",
+  "please_select_the_difficulty": "難易度を入力してください",
   "difficulty_must_be_less_than_81": "難易度は81未満でなければなりません",
   "number": "数字",
   "ok": "OK",

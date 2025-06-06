@@ -194,9 +194,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_enter_a_number_0_means_empty": MessageLookupByLibrary.simpleMessage(
       "숫자를 입력하세요. 0은 빈칸을 의미합니다.",
     ),
-    "please_enter_the_difficulty": MessageLookupByLibrary.simpleMessage(
-      "난이도를 입력하세요",
-    ),
     "please_grant_permission_to_use_microphone":
         MessageLookupByLibrary.simpleMessage("마이크 사용 권한을 허용해주세요"),
     "please_load_model_first": MessageLookupByLibrary.simpleMessage(
@@ -210,6 +207,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "please_select_font_size": MessageLookupByLibrary.simpleMessage(
       "글꼴 크기를 선택하세요",
+    ),
+    "please_select_the_difficulty": MessageLookupByLibrary.simpleMessage(
+      "난이도를 입력하세요",
     ),
     "please_wait_for_it_to_finish": MessageLookupByLibrary.simpleMessage(
       "완료될 때까지 기다려 주세요",

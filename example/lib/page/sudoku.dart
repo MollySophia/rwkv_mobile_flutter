@@ -557,6 +557,7 @@ class _TokensInfo extends ConsumerWidget {
     final ratio = screenWidth / screenHeight;
     final isDesktop = ref.watch(P.app.isDesktop);
     final shouldUseVerticalLayout = isDesktop && ratio < 2.2 && !isPortrait;
+    final difficulty = ref.watch(P.sudoku.difficulty);
     return shouldUseVerticalLayout
         ? Row(
             mainAxisAlignment: MAA.center,
@@ -572,6 +573,14 @@ class _TokensInfo extends ConsumerWidget {
                 textAlign: TextAlign.center,
                 s: const TS(s: 10, c: Color(0xFF888888)),
               ),
+              if (difficulty != null) ...[
+                const SB(width: 4, height: 4),
+                T(
+                  "Unknown grid count: $difficulty",
+                  textAlign: TextAlign.center,
+                  s: const TS(s: 10, c: Color(0xFF888888)),
+                ),
+              ],
             ],
           )
         : Column(
@@ -645,14 +654,21 @@ class _Grid extends ConsumerWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         decoration: BD(color: bg, borderRadius: (2 * magnification).r),
-        child: Center(
-          child: T(
-            value != 0 ? value.toString() : "",
-            s: TS(
-              s: isDesktop ? 30 : 18,
-              w: isDesktop ? FontWeight.w600 : null,
-            ),
-          ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final maxWidth = constraints.maxWidth;
+            double textSize = maxWidth / 2;
+            return Center(
+              child: T(
+                value != 0 ? value.toString() : "",
+                s: TS(
+                  c: kB,
+                  s: textSize,
+                  w: isDesktop ? FontWeight.w600 : null,
+                ),
+              ),
+            );
+          },
         ),
       ),
     );

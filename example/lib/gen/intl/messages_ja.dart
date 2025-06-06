@@ -201,9 +201,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_enter_a_number_0_means_empty": MessageLookupByLibrary.simpleMessage(
       "数字を入力してください。0は空を意味します。",
     ),
-    "please_enter_the_difficulty": MessageLookupByLibrary.simpleMessage(
-      "難易度を入力してください",
-    ),
     "please_grant_permission_to_use_microphone":
         MessageLookupByLibrary.simpleMessage("マイクの使用許可を与えてください"),
     "please_load_model_first": MessageLookupByLibrary.simpleMessage(
@@ -217,6 +214,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "please_select_font_size": MessageLookupByLibrary.simpleMessage(
       "フォントサイズを選択してください",
+    ),
+    "please_select_the_difficulty": MessageLookupByLibrary.simpleMessage(
+      "難易度を入力してください",
     ),
     "please_wait_for_it_to_finish": MessageLookupByLibrary.simpleMessage(
       "完了するまでお待ちください",

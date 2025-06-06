@@ -262,9 +262,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_enter_a_number_0_means_empty": MessageLookupByLibrary.simpleMessage(
       "Please enter a number. 0 means empty.",
     ),
-    "please_enter_the_difficulty": MessageLookupByLibrary.simpleMessage(
-      "Please enter the difficulty",
-    ),
     "please_grant_permission_to_use_microphone":
         MessageLookupByLibrary.simpleMessage(
           "Please grant permission to use the microphone",
@@ -284,6 +281,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "please_select_font_size": MessageLookupByLibrary.simpleMessage(
       "Please select font size",
+    ),
+    "please_select_the_difficulty": MessageLookupByLibrary.simpleMessage(
+      "Please select the difficulty",
     ),
     "please_wait_for_it_to_finish": MessageLookupByLibrary.simpleMessage(
       "Please wait for it to finish",
@@ -367,6 +367,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "storage_permission_not_granted": MessageLookupByLibrary.simpleMessage(
       "Storage permission not granted",
     ),
+    "sudoku_easy": MessageLookupByLibrary.simpleMessage("Easy"),
+    "sudoku_hard": MessageLookupByLibrary.simpleMessage("Hard"),
+    "sudoku_medium": MessageLookupByLibrary.simpleMessage("Medium"),
     "system_mode": MessageLookupByLibrary.simpleMessage("System Mode"),
     "take_photo": MessageLookupByLibrary.simpleMessage("Take Photo"),
     "technical_research_group": MessageLookupByLibrary.simpleMessage(

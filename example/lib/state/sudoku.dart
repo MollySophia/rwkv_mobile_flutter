@@ -10,6 +10,7 @@ class _Sudoku {
   final staticData = qs<List<List<int>>>([]);
   final dynamicData = qs<List<List<int>>>([]);
   final logs = qs<List<String>>([]);
+  final difficulty = qs<int?>(null);
 
   late final hasPuzzle = qp<bool>((ref) {
     final puzzle = ref.watch(staticData);
@@ -66,52 +67,32 @@ extension $Sudoku on _Sudoku {
       return;
     }
 
-    final difficulty = await showTextInputDialog(
+    final difficulty = await showConfirmationDialog<int?>(
       context: context,
       title: S.current.generate_random_sudoku_puzzle,
-      message: S.current.please_enter_the_difficulty,
-      textFields: [
-        DialogTextField(
-          hintText: S.current.difficulty,
-          initialText: kDebugMode ? "40" : "10",
-          keyboardType: const TextInputType.numberWithOptions(
-            signed: false,
-            decimal: false,
-          ),
+      message: S.current.please_select_the_difficulty,
+      actions: [
+        AlertDialogAction(
+          label: S.current.sudoku_easy,
+          key: HF.randomInt(min: 19, max: 25),
+        ),
+        AlertDialogAction(
+          label: S.current.sudoku_medium,
+          key: HF.randomInt(min: 26, max: 35),
+        ),
+        AlertDialogAction(
+          label: S.current.sudoku_hard,
+          key: HF.randomInt(min: 36, max: 45),
         ),
       ],
     );
+
     if (difficulty == null) return;
-    if (difficulty.isEmpty) return;
-    final value = difficulty.first;
-    final difficultyInt = int.tryParse(value);
-    if (difficultyInt == null) return;
-
-    if (difficultyInt < 1) {
-      if (context.mounted) {
-        await showOkAlertDialog(
-          context: context,
-          title: S.current.can_not_generate,
-          message: S.current.difficulty_must_be_greater_than_0,
-        );
-      }
-      return;
-    }
-
-    if (difficultyInt > 81) {
-      if (context.mounted) {
-        await showOkAlertDialog(
-          context: context,
-          title: S.current.can_not_generate,
-          message: S.current.difficulty_must_be_less_than_81,
-        );
-      }
-      return;
-    }
 
     clear();
-    final (solved, puzzle) = generate(difficulty: difficultyInt);
+    final (solved, puzzle) = generate(difficulty: difficulty);
     staticData.q = puzzle;
+    this.difficulty.q = difficulty;
   }
 
   FV onInferencePressed(BuildContext context) async {
@@ -153,6 +134,7 @@ extension $Sudoku on _Sudoku {
     _recordingTagBoard = false;
     _recordingTagStack = false;
     _tempStackEvents.clear();
+    difficulty.q = null;
   }
 
   void debugRenderingRandom() {
@@ -160,6 +142,7 @@ extension $Sudoku on _Sudoku {
     final difficulty = HF.randomInt(min: 1, max: 1);
     final newValue = func_sudoku.genPuzzle(solvedGrid, difficulty: difficulty);
     staticData.q = newValue;
+    this.difficulty.q = difficulty;
   }
 
   void onGridPressed(BuildContext context, int col, int row) async {

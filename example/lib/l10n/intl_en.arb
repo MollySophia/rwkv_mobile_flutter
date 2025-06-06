@@ -135,7 +135,7 @@
   "can_not_generate": "Cannot Generate",
   "difficulty_must_be_greater_than_0": "Difficulty must be greater than 0",
   "generate_random_sudoku_puzzle": "Generate Random Sudoku Puzzle",
-  "please_enter_the_difficulty": "Please enter the difficulty",
+  "please_select_the_difficulty": "Please select the difficulty",
   "difficulty_must_be_less_than_81": "Difficulty must be less than 81",
   "number": "Number",
   "ok": "OK",
@@ -204,5 +204,8 @@
   "theme_dim": "Dim",
   "theme_lights_out": "Lights out",
   "theme_light": "Light",
-  "lazy": "Lazy"
+  "lazy": "Lazy",
+  "sudoku_easy": "Easy",
+  "sudoku_medium": "Medium",
+  "sudoku_hard": "Hard"
 }

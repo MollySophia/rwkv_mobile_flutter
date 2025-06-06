@@ -206,9 +206,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_enter_a_number_0_means_empty": MessageLookupByLibrary.simpleMessage(
       "请输入一个数字。0 表示空。",
     ),
-    "please_enter_the_difficulty": MessageLookupByLibrary.simpleMessage(
-      "请输入难度",
-    ),
     "please_grant_permission_to_use_microphone":
         MessageLookupByLibrary.simpleMessage("请授予使用麦克风的权限"),
     "please_load_model_first": MessageLookupByLibrary.simpleMessage("请先加载模型"),
@@ -221,6 +218,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "请选择应用语言",
     ),
     "please_select_font_size": MessageLookupByLibrary.simpleMessage("请选择字体大小"),
+    "please_select_the_difficulty": MessageLookupByLibrary.simpleMessage(
+      "请选择难度",
+    ),
     "please_wait_for_it_to_finish": MessageLookupByLibrary.simpleMessage(
       "请等待推理完成",
     ),
@@ -275,6 +275,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "storage_permission_not_granted": MessageLookupByLibrary.simpleMessage(
       "存储权限未授予",
     ),
+    "sudoku_easy": MessageLookupByLibrary.simpleMessage("入门"),
+    "sudoku_hard": MessageLookupByLibrary.simpleMessage("专家"),
+    "sudoku_medium": MessageLookupByLibrary.simpleMessage("普通"),
     "system_mode": MessageLookupByLibrary.simpleMessage("跟随系统"),
     "take_photo": MessageLookupByLibrary.simpleMessage("拍照"),
     "technical_research_group": MessageLookupByLibrary.simpleMessage("技术研发群"),

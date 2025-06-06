@@ -135,7 +135,7 @@
   "can_not_generate": "생성할 수 없음",
   "difficulty_must_be_greater_than_0": "난이도는 0보다 커야 합니다",
   "generate_random_sudoku_puzzle": "무작위 스도쿠 퍼즐 생성",
-  "please_enter_the_difficulty": "난이도를 입력하세요",
+  "please_select_the_difficulty": "난이도를 입력하세요",
   "difficulty_must_be_less_than_81": "난이도는 81보다 작아야 합니다",
   "number": "숫자",
   "ok": "확인",
