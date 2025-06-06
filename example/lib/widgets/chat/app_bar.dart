@@ -60,7 +60,8 @@ class ChatAppBar extends ConsumerWidget {
       displayName = currentModel.name;
     }
 
-    final scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
+    final theme =Theme.of(context);
+    final scaffoldBackgroundColor = theme.scaffoldBackgroundColor;
     final qb = ref.watch(P.app.qb);
 
     return Positioned(
@@ -70,9 +71,16 @@ class ChatAppBar extends ConsumerWidget {
       child: ClipRRect(
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-          child: selectMessageMode
-              ? _SelectMessageAppBar() //
-              : _buildAppBar(context, displayName, primary, demoType),
+          child: Theme(
+            data: theme.copyWith(
+              appBarTheme: theme.appBarTheme.copyWith(
+                backgroundColor: scaffoldBackgroundColor,
+              )
+            ),
+            child: selectMessageMode
+                ? _SelectMessageAppBar() //
+                : _buildAppBar(context, displayName, primary, demoType),
+          ),
         ),
       ),
     );
@@ -80,7 +88,6 @@ class ChatAppBar extends ConsumerWidget {
 
   Widget _buildAppBar(BuildContext context, String displayName, Color primary, DemoType demoType) {
     return AppBar(
-      backgroundColor: kW.q(.6),
       elevation: 0,
       centerTitle: true,
       title: GD(
@@ -278,20 +285,11 @@ class _SelectMessageAppBar extends ConsumerWidget {
     sprintf("", []);
 
     return AppBar(
-      backgroundColor: kW.q(.6),
       elevation: 0,
       centerTitle: true,
       title: T(sprintf(S.of(context).x_message_selected, [selected.length]), s: TS(s: 18)),
       leading: leading,
       leadingWidth: 100,
-      actions: [
-        TextButton(
-          onPressed: () {
-            P.chat.selectMessageMode.q = false;
-          },
-          child: T(S.of(context).share_chat),
-        ),
-      ],
     );
   }
 }

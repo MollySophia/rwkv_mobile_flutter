@@ -43,7 +43,7 @@ class BotMessageBottom extends ConsumerWidget {
     bool showBotCopyButton = true;
     bool showBotRegenerateButton = true;
     bool showResumeButton = true;
-    bool showShareButton = true;
+    bool showShareButton = false;
 
     switch (worldType) {
       case null:
@@ -59,6 +59,10 @@ class BotMessageBottom extends ConsumerWidget {
         showBotCopyButton = false;
         showBotRegenerateButton = false;
         showResumeButton = false;
+        break;
+      case DemoType.chat:
+        showShareButton = true;
+        break;
       default:
         break;
     }
@@ -191,6 +195,11 @@ class BotMessageBottom extends ConsumerWidget {
   }
 
   void _onSharePressed() {
+    final list = P.msg.list.q;
+    final index = list.indexOf(msg);
+    if (index > 0) {
+      P.chat.selectedMessages.q = {list[index - 1].id, msg.id};
+    }
     P.chat.selectMessageMode.q = true;
   }
 

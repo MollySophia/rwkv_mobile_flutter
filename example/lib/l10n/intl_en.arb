@@ -204,5 +204,11 @@
   "theme_dim": "Dim",
   "theme_lights_out": "Lights out",
   "theme_light": "Light",
-  "x_message_selected": "%d Selected"
+  "x_message_selected": "%d Selected",
+  "share": "Share",
+  "save": "Save",
+  "confirm": "Confirm",
+  "scan_qrcode": "Scan QR Code",
+  "download_app": "Download App",
+  "end": "End"
 }

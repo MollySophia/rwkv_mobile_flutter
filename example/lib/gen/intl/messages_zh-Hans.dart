@@ -88,6 +88,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "color_theme_follow_system": MessageLookupByLibrary.simpleMessage(
       "色彩模式跟随系统",
     ),
+    "confirm": MessageLookupByLibrary.simpleMessage("确认"),
     "continue_download": MessageLookupByLibrary.simpleMessage("继续下载"),
     "continue_using_smaller_model": MessageLookupByLibrary.simpleMessage(
       "继续使用较小模型",
@@ -109,6 +110,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "discord": MessageLookupByLibrary.simpleMessage("Discord"),
     "download_all": MessageLookupByLibrary.simpleMessage("下载全部"),
+    "download_app": MessageLookupByLibrary.simpleMessage("下载App"),
     "download_from_browser": MessageLookupByLibrary.simpleMessage("从浏览器下载"),
     "download_missing": MessageLookupByLibrary.simpleMessage("下载缺失文件"),
     "download_model": MessageLookupByLibrary.simpleMessage("下载模型"),
@@ -121,6 +123,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "dump_see_files_subtitle": MessageLookupByLibrary.simpleMessage("协助我们改进算法"),
     "dump_started": MessageLookupByLibrary.simpleMessage("自动 dump 已开启"),
     "dump_stopped": MessageLookupByLibrary.simpleMessage("自动 dump 已关闭"),
+    "end": MessageLookupByLibrary.simpleMessage("完"),
     "ensure_you_have_enough_memory_to_load_the_model":
         MessageLookupByLibrary.simpleMessage("请确保设备内存充足，否则可能导致应用崩溃"),
     "exploring": MessageLookupByLibrary.simpleMessage("探索中..."),
@@ -247,6 +250,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "rwkv": MessageLookupByLibrary.simpleMessage("RWKV"),
     "rwkv_chat": MessageLookupByLibrary.simpleMessage("RWKV 聊天"),
     "rwkv_othello": MessageLookupByLibrary.simpleMessage("RWKV 黑白棋"),
+    "save": MessageLookupByLibrary.simpleMessage("保存"),
+    "scan_qrcode": MessageLookupByLibrary.simpleMessage("扫描二维码"),
     "search_breadth": MessageLookupByLibrary.simpleMessage("搜索宽度"),
     "search_depth": MessageLookupByLibrary.simpleMessage("搜索深度"),
     "select_a_model": MessageLookupByLibrary.simpleMessage("选择模型"),
@@ -258,6 +263,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "server_error": MessageLookupByLibrary.simpleMessage("服务器错误"),
     "session_configuration": MessageLookupByLibrary.simpleMessage("会话配置"),
     "set_the_value_of_grid": MessageLookupByLibrary.simpleMessage("设置网格值"),
+    "share": MessageLookupByLibrary.simpleMessage("分享"),
     "share_chat": MessageLookupByLibrary.simpleMessage("分享聊天"),
     "show_stack": MessageLookupByLibrary.simpleMessage("显示思维链堆栈"),
     "size_recommendation": MessageLookupByLibrary.simpleMessage(

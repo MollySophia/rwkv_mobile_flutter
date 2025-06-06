@@ -30,11 +30,12 @@ const double _kTextScaleFactorForCotContent = 1;
 
 class Message extends ConsumerWidget {
   final model.Message msg;
+  final bool selectMode;
 
   /// 页面中第一个消息的 index 为 0
   final int index;
 
-  const Message(this.msg, this.index, {super.key});
+  const Message(this.msg, this.index, {super.key, required this.selectMode});
 
   void _onTapLink(String text, String? href, String title) async {
     if (href == null) return;
@@ -322,7 +323,7 @@ class Message extends ConsumerWidget {
         child: C(
           padding: padding,
           decoration: BD(
-            color: isMine ? primaryContainer : scaffoldBackgroundColor,
+            color: isMine ? primaryContainer : null,
             border: border,
             borderRadius: borderRadius,
           ),
@@ -414,7 +415,7 @@ class Message extends ConsumerWidget {
                     styleSheet: markdownStyleSheet,
                     onTapLink: _onTapLink,
                   ),
-                BotMessageBottom(msg, index),
+                if (!selectMode) BotMessageBottom(msg, index),
                 BotTtsContent(msg, index),
               ],
             ],

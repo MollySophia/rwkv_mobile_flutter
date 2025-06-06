@@ -106,6 +106,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "color_theme_follow_system": MessageLookupByLibrary.simpleMessage(
       "Follow system appearance",
     ),
+    "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
     "continue_download": MessageLookupByLibrary.simpleMessage(
       "Continue Download",
     ),
@@ -131,6 +132,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "discord": MessageLookupByLibrary.simpleMessage("Discord"),
     "download_all": MessageLookupByLibrary.simpleMessage("Download All"),
+    "download_app": MessageLookupByLibrary.simpleMessage("Download App"),
     "download_from_browser": MessageLookupByLibrary.simpleMessage(
       "Download from browser",
     ),
@@ -151,6 +153,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "dump_started": MessageLookupByLibrary.simpleMessage("Auto dump enabled"),
     "dump_stopped": MessageLookupByLibrary.simpleMessage("Auto dump disabled"),
+    "end": MessageLookupByLibrary.simpleMessage("End"),
     "ensure_you_have_enough_memory_to_load_the_model":
         MessageLookupByLibrary.simpleMessage(
           "Please ensure your device has enough memory, otherwise the application might crash",
@@ -321,6 +324,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "rwkv": MessageLookupByLibrary.simpleMessage("RWKV"),
     "rwkv_chat": MessageLookupByLibrary.simpleMessage("RWKV Chat"),
     "rwkv_othello": MessageLookupByLibrary.simpleMessage("RWKV Othello"),
+    "save": MessageLookupByLibrary.simpleMessage("Save"),
+    "scan_qrcode": MessageLookupByLibrary.simpleMessage("Scan QR Code"),
     "search_breadth": MessageLookupByLibrary.simpleMessage("Search Breadth"),
     "search_depth": MessageLookupByLibrary.simpleMessage("Search Depth"),
     "select_a_model": MessageLookupByLibrary.simpleMessage("Select a Model"),
@@ -344,6 +349,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "set_the_value_of_grid": MessageLookupByLibrary.simpleMessage(
       "Set Grid Value",
     ),
+    "share": MessageLookupByLibrary.simpleMessage("Share"),
     "share_chat": MessageLookupByLibrary.simpleMessage("Share Chat"),
     "show_stack": MessageLookupByLibrary.simpleMessage("Show Thought Stack"),
     "size_recommendation": MessageLookupByLibrary.simpleMessage(

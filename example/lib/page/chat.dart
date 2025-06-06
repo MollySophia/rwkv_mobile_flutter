@@ -15,6 +15,7 @@ import 'package:zone/widgets/chat/audio_input.dart';
 import 'package:zone/widgets/chat/empty.dart';
 import 'package:zone/widgets/chat/bottom_bar.dart';
 import 'package:zone/widgets/chat/message.dart';
+import 'package:zone/widgets/chat/share_chat.dart';
 import 'package:zone/widgets/chat/suggestions.dart';
 import 'package:zone/widgets/chat/visual_empty.dart';
 import 'package:zone/widgets/menu.dart';
@@ -51,6 +52,14 @@ class _Page extends ConsumerWidget {
           const AudioEmpty(),
           const ChatAppBar(),
           const _NavigationBarBottomLine(),
+          if (selectMessageMode)
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              top: 0,
+              child: const ShareChatSheet(),
+            ),
           if (!selectMessageMode) const Suggestions(),
           if (!selectMessageMode) const BottomBar(),
           if (!selectMessageMode) const AudioInput(),
@@ -186,16 +195,23 @@ class _MessageWrap extends ConsumerWidget {
     final selectMessageMode = ref.watch(P.chat.selectMessageMode);
 
     if (!selectMessageMode) {
-      return Message(msg, finalIndex);
+      return Message(msg, finalIndex, selectMode: false);
     }
     final selectedIds = ref.watch(P.chat.selectedMessages);
     final selected = selectedIds.contains(msg.id);
 
-    void toggle() {
-      P.chat.selectedMessages.q =
-          !selected //
-          ? {...selectedIds, msg.id}
-          : selectedIds.where((id) => id != msg.id).toSet();
+    void toggle() async {
+      final ids = P.chat.selectedMessages.q;
+      final messages = P.msg.list.q;
+      final index = messages.indexOf(msg);
+      final previous = index > 0 ? messages[index - 1] : null;
+      final next = index < messages.length - 1 ? messages[index + 1] : null;
+      final pair = msg.isMine ? next : previous;
+      if (selected) {
+        P.chat.selectedMessages.q = ids.where((id) => id != msg.id && id != pair?.id).toSet();
+      } else {
+        P.chat.selectedMessages.q = {...ids, msg.id, ?pair?.id};
+      }
     }
 
     return GestureDetector(
@@ -209,7 +225,9 @@ class _MessageWrap extends ConsumerWidget {
             onChanged: (checked) => toggle(),
           ),
           Exp(
-            child: Message(msg, finalIndex),
+            child: IgnorePointer(
+              child: Message(msg, finalIndex, selectMode: true),
+            ),
           ),
         ],
       ),
