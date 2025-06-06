@@ -448,7 +448,7 @@ class RWKVMobile {
 
         // 🟥 initRuntime
         case ReInitRuntime req:
-          final modelPath = req.modelPath;
+          String modelPath = req.modelPath;
           final modelBackendString = req.backend.asArgument;
           final backend = req.backend;
           final tokenizerPath = req.tokenizerPath;
