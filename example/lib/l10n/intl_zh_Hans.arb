@@ -203,5 +203,6 @@
   "dark_mode_theme": "深色模式主题",
   "theme_dim": "深色",
   "theme_lights_out": "黑色",
-  "theme_light": "浅色"
+  "theme_light": "浅色",
+  "lazy": "懒"
 }

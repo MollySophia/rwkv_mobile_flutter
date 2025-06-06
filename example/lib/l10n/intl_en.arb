@@ -203,5 +203,6 @@
   "dark_mode_theme": "Dark Mode Theme",
   "theme_dim": "Dim",
   "theme_lights_out": "Lights out",
-  "theme_light": "Light"
+  "theme_light": "Light",
+  "lazy": "Lazy"
 }

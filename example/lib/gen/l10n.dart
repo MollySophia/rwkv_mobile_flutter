@@ -1486,6 +1486,11 @@ class S {
   String get theme_light {
     return Intl.message('浅色', name: 'theme_light', desc: '', args: []);
   }
+
+  /// `懒`
+  String get lazy {
+    return Intl.message('懒', name: 'lazy', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

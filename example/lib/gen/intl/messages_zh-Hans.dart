@@ -173,6 +173,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "join_the_community": MessageLookupByLibrary.simpleMessage("加入社区"),
     "just_watch_me": MessageLookupByLibrary.simpleMessage("😎 看我表演！"),
     "large": MessageLookupByLibrary.simpleMessage("大 (120%)"),
+    "lazy": MessageLookupByLibrary.simpleMessage("懒"),
     "license": MessageLookupByLibrary.simpleMessage("开源许可证"),
     "light_mode": MessageLookupByLibrary.simpleMessage("浅色模式"),
     "loading": MessageLookupByLibrary.simpleMessage("加载中..."),

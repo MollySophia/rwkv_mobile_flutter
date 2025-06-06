@@ -311,6 +311,7 @@ class FileKeyItem extends ConsumerWidget {
     final primary = Theme.of(getContext()!).colorScheme.primary;
     final qw = ref.watch(P.app.qw);
     final qb = ref.watch(P.app.qb);
+
     return Column(
       crossAxisAlignment: CAA.start,
       children: [
@@ -335,41 +336,7 @@ class FileKeyItem extends ConsumerWidget {
           ],
         ),
         4.h,
-        Wrap(
-          spacing: 4,
-          runSpacing: 8,
-          children: [
-            ...tags.where((tag) => tag != "encoder" && tag != "reason").map((tag) {
-              final showHighlight = tag == Config.reasonTag || tag == "npu" || tag == "gpu";
-              return C(
-                decoration: BD(
-                  borderRadius: 4.r,
-                  color: showHighlight ? kCG : kG.q(.2),
-                ),
-                padding: const EI.s(h: 4),
-                child: T(
-                  tag,
-                  s: TS(
-                    c: showHighlight ? qw : qb,
-                    w: showHighlight ? FW.w500 : FW.w400,
-                  ),
-                ),
-              );
-            }),
-            if (kDebugMode && fileInfo.isDebug)
-              Container(
-                decoration: BD(color: kCR, borderRadius: 4.r),
-                padding: const EI.s(h: 4),
-                child: T("DEBUG", s: TS(c: qw)),
-              ),
-            if (quantization != null && quantization.isNotEmpty)
-              C(
-                decoration: BD(color: kG.q(.2), borderRadius: 4.r),
-                padding: const EI.s(h: 4),
-                child: T(quantization),
-              ),
-          ],
-        ),
+        _Tags(fileInfo: fileInfo),
         if (downloading) 8.h,
         if (downloading)
           LayoutBuilder(
@@ -415,6 +382,59 @@ class FileKeyItem extends ConsumerWidget {
               if (timeRemaining.inMinutes > 0) T("${timeRemaining.inMinutes}m"),
               if (timeRemaining.inMinutes == 0) T("${timeRemaining.inSeconds}s"),
             ],
+          ),
+      ],
+    );
+  }
+}
+
+class _Tags extends ConsumerWidget {
+  const _Tags({required this.fileInfo});
+
+  final FileInfo fileInfo;
+
+  static const _blockedTags = ["encoder", "reason", "ENCODER", "REASON"];
+  static const _highlightTags = ["NPU", "GPU", "npu", "gpu"];
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final quantization = fileInfo.quantization?.toUpperCase();
+    final tags = fileInfo.tags.where((e) => !_blockedTags.contains(e));
+    final qw = ref.watch(P.app.qw);
+    final qb = ref.watch(P.app.qb);
+
+    return Wrap(
+      spacing: 4,
+      runSpacing: 8,
+      children: [
+        ...tags.map((tag) {
+          final showHighlight = _highlightTags.contains(tag);
+          return C(
+            decoration: BD(
+              borderRadius: 4.r,
+              color: showHighlight ? kCG : kG.q(.2),
+            ),
+            padding: const EI.s(h: 4),
+            child: T(
+              tag.toUpperCase(),
+              s: TS(
+                c: showHighlight ? qw : qb,
+                w: showHighlight ? FW.w500 : FW.w400,
+              ),
+            ),
+          );
+        }),
+        if (kDebugMode && fileInfo.isDebug)
+          Container(
+            decoration: BD(color: kCR, borderRadius: 4.r),
+            padding: const EI.s(h: 4),
+            child: T("DEBUG", s: TS(c: qw)),
+          ),
+        if (quantization != null && quantization.isNotEmpty)
+          C(
+            decoration: BD(color: kG.q(.2), borderRadius: 4.r),
+            padding: const EI.s(h: 4),
+            child: T(quantization),
           ),
       ],
     );

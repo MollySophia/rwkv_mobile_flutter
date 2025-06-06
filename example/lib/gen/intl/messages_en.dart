@@ -219,6 +219,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "just_watch_me": MessageLookupByLibrary.simpleMessage("😎 Watch me!"),
     "large": MessageLookupByLibrary.simpleMessage("Large (120%)"),
+    "lazy": MessageLookupByLibrary.simpleMessage("Lazy"),
     "license": MessageLookupByLibrary.simpleMessage("Open Source License"),
     "light_mode": MessageLookupByLibrary.simpleMessage("Light Mode"),
     "loading": MessageLookupByLibrary.simpleMessage("Loading..."),
