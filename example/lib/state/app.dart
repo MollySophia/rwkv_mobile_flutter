@@ -167,6 +167,8 @@ extension _$App on _App {
       });
     }
 
+    preferredThemeMode.q = P.preference.themeMode.q;
+    customTheme.q = P.preference.preferredDarkCustomTheme.q;
     customTheme.lv(_onCustomThemeChanged, fireImmediately: true);
     preferredThemeMode.lv(_syncTheme, fireImmediately: true);
     light.lv(_syncTheme, fireImmediately: true);
@@ -194,9 +196,10 @@ extension _$App on _App {
   }
 
   FV _statusBarToLightMode() async {
+    final scaffold = customTheme.q.scaffold;
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        systemNavigationBarColor: customTheme.q.scaffold,
+        systemNavigationBarColor: scaffold,
         systemNavigationBarIconBrightness: Brightness.dark,
         statusBarBrightness: Brightness.dark,
       ),
@@ -204,9 +207,10 @@ extension _$App on _App {
   }
 
   FV _statusBarToDarkMode() async {
+    final scaffold = customTheme.q.scaffold;
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        systemNavigationBarColor: customTheme.q.scaffold,
+        systemNavigationBarColor: scaffold,
         systemNavigationBarIconBrightness: Brightness.light,
         statusBarBrightness: Brightness.light,
       ),
@@ -214,27 +218,17 @@ extension _$App on _App {
   }
 
   FV _onCustomThemeChanged() async {
-    switch (customTheme.q) {
-      case custom_theme.Light():
-        _statusBarToLightMode();
-      case custom_theme.LightsOut():
-      case custom_theme.Dim():
-        _statusBarToDarkMode();
+    await HF.wait(100);
+    if (customTheme.q.light) {
+      qqr("Light");
+      _statusBarToLightMode();
+    } else {
+      qqr("Dark");
+      _statusBarToDarkMode();
     }
   }
 
-  FV _onLifecycleStateChanged() async {
-    qqr("lifecycleState: ${lifecycleState.q}");
-    switch (lifecycleState.q) {
-      case AppLifecycleState.resumed:
-        await HF.wait(500);
-        _statusBarToLightMode();
-      case AppLifecycleState.detached:
-      case AppLifecycleState.inactive:
-      case AppLifecycleState.hidden:
-      case AppLifecycleState.paused:
-    }
-  }
+  FV _onLifecycleStateChanged() async {}
 
   FV _showNewVersionDialogIfNeeded() async {
     qq;
