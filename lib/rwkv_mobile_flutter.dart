@@ -448,9 +448,10 @@ class RWKVMobile {
 
         // 🟥 initRuntime
         case ReInitRuntime req:
-          modelPath = req.modelPath;
-          modelBackendString = req.backend.asArgument;
-          tokenizerPath = req.tokenizerPath;
+          final modelPath = req.modelPath;
+          final modelBackendString = req.backend.asArgument;
+          final backend = req.backend;
+          final tokenizerPath = req.tokenizerPath;
           if (runtime.address != 0) {
             sendPort.send(ReInitSteps(done: false, step: 'release runtime if runtime.address != 0', toRWKV: req));
             rwkvMobile.rwkvmobile_runtime_release(runtime);
