@@ -15,8 +15,8 @@ class _App extends RawApp {
   late final androidUrl = qsn<String?>(null);
   late final androidApkUrl = qsn<String?>(null);
   late final iosUrl = qsn<String>();
-  late final shareChatQrCodeZh = qsn<String>("");
-  late final shareChatQrCodeEn = qsn<String>("");
+  late final shareChatQrCodeZh = qsn<String?>(null);
+  late final shareChatQrCodeEn = qsn<String?>(null);
 
   late final newVersionDialogShown = qs(false);
 

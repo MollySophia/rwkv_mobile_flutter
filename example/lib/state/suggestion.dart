@@ -129,19 +129,54 @@ class _Suggestion {
 
   FV loadSuggestions() async {
     final shouldUseEn = P.preference.preferredLanguage.q.resolved.locale.languageCode != "zh";
-    dynamic resp;
+    final lang = shouldUseEn ? "en" : "zh";
+    dynamic config;
     try {
-      resp = await _get("http://120.77.3.4:3010/suggestions.json") as dynamic;
-      if (resp == null) {
+      config = await _get("http://120.77.3.4:3010/suggestions.json") as dynamic;
+      if (config == null) {
         throw "empty response";
       }
-      final lang = shouldUseEn ? "en" : "zh";
-      final sConfig = SuggestionConfig.fromJson(resp[lang]);
-      config.q = sConfig;
+      final sConfig = SuggestionConfig.fromJson(config[lang]);
+      this.config.q = sConfig;
+      _persistConfig(config);
     } catch (e) {
       qqe("load suggestions failed: $e");
-      config.q = shouldUseEn ? _DefaultSuggestion.en : _DefaultSuggestion.zh;
+      this.config.q = shouldUseEn ? _DefaultSuggestion.en : _DefaultSuggestion.zh;
+      config = await _restoreConfig();
+      if (config != null) {
+        final sConfig = SuggestionConfig.fromJson(config[lang]);
+        this.config.q = sConfig;
+        qqq('config restored');
+      }
       return;
+    }
+  }
+
+  void _persistConfig(dynamic json) async {
+    final dir = await getApplicationDocumentsDirectory();
+    final cache = File("${dir.path}${Platform.pathSeparator}suggestion.json");
+    if (cache.existsSync()) {
+      await cache.delete();
+    }
+    await cache.create();
+    final string = jsonEncode(json);
+    cache.writeAsString(string);
+  }
+
+  Future<dynamic> _restoreConfig() async {
+    try {
+      final dir = await getApplicationDocumentsDirectory();
+      final cache = File("${dir.path}${Platform.pathSeparator}suggestion.json");
+      if (!cache.existsSync()) {
+        return null;
+      }
+      final json = await cache.readAsString();
+      if (json.isEmpty) {
+        return null;
+      }
+      return jsonDecode(json);
+    } catch (e) {
+      return null;
     }
   }
 
