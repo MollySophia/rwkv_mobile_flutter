@@ -209,7 +209,7 @@
   "sudoku_medium": "Medium",
   "sudoku_hard": "Hard",
   "custom_difficulty": "Custom Difficulty",
-  "please_enter_the_difficulty": "Please enter the difficulty"
+  "please_enter_the_difficulty": "Please enter the difficulty",
   "x_message_selected": "%d Selected",
   "share": "Share",
   "save": "Save",
