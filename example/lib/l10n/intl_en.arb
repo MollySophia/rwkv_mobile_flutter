@@ -207,5 +207,7 @@
   "lazy": "Lazy",
   "sudoku_easy": "Easy",
   "sudoku_medium": "Medium",
-  "sudoku_hard": "Hard"
+  "sudoku_hard": "Hard",
+  "custom_difficulty": "Custom Difficulty",
+  "please_enter_the_difficulty": "Please enter the difficulty"
 }

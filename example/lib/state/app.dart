@@ -196,23 +196,25 @@ extension _$App on _App {
   }
 
   FV _statusBarToLightMode() async {
+    qq;
     final scaffold = customTheme.q.scaffold;
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         systemNavigationBarColor: scaffold,
         systemNavigationBarIconBrightness: Brightness.dark,
-        statusBarBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
       ),
     );
   }
 
   FV _statusBarToDarkMode() async {
+    qq;
     final scaffold = customTheme.q.scaffold;
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         systemNavigationBarColor: scaffold,
         systemNavigationBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
       ),
     );
   }

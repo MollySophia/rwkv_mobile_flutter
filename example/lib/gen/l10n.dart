@@ -1506,6 +1506,21 @@ class S {
   String get sudoku_hard {
     return Intl.message('专家', name: 'sudoku_hard', desc: '', args: []);
   }
+
+  /// `自定义难度`
+  String get custom_difficulty {
+    return Intl.message('自定义难度', name: 'custom_difficulty', desc: '', args: []);
+  }
+
+  /// `请输入难度`
+  String get please_enter_the_difficulty {
+    return Intl.message(
+      '请输入难度',
+      name: 'please_enter_the_difficulty',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -207,5 +207,7 @@
   "lazy": "懒",
   "sudoku_easy": "入门",
   "sudoku_medium": "普通",
-  "sudoku_hard": "专家"
+  "sudoku_hard": "专家",
+  "custom_difficulty": "自定义难度",
+  "please_enter_the_difficulty": "请输入难度"
 }

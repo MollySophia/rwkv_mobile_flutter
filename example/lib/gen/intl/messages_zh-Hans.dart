@@ -95,6 +95,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "create_a_new_one_by_clicking_the_button_above":
         MessageLookupByLibrary.simpleMessage("点击上方按钮创建新会话"),
     "current_turn": MessageLookupByLibrary.simpleMessage("当前回合"),
+    "custom_difficulty": MessageLookupByLibrary.simpleMessage("自定义难度"),
     "dark_mode": MessageLookupByLibrary.simpleMessage("深色模式"),
     "dark_mode_theme": MessageLookupByLibrary.simpleMessage("深色模式主题"),
     "decode": MessageLookupByLibrary.simpleMessage("解码"),
@@ -205,6 +206,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_check_the_result": MessageLookupByLibrary.simpleMessage("请检查结果"),
     "please_enter_a_number_0_means_empty": MessageLookupByLibrary.simpleMessage(
       "请输入一个数字。0 表示空。",
+    ),
+    "please_enter_the_difficulty": MessageLookupByLibrary.simpleMessage(
+      "请输入难度",
     ),
     "please_grant_permission_to_use_microphone":
         MessageLookupByLibrary.simpleMessage("请授予使用麦克风的权限"),

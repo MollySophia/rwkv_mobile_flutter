@@ -272,7 +272,6 @@ class _ButtonShowStack extends ConsumerWidget {
   const _ButtonShowStack();
 
   void _onPressed(BuildContext context, WidgetRef ref) async {
-    // P.sudoku.onShowStackPressed(context);
     P.sudoku.onToggleShowStack(context);
   }
 
@@ -478,7 +477,6 @@ class _Stack extends ConsumerWidget {
         child: Stack(children: []),
       );
     }
-
     final widgetPosition = ref.watch(P.sudoku.widgetPosition);
     final uiOffset = ref.watch(P.sudoku.uiOffset);
     final padding = MediaQuery.of(context).padding;
@@ -486,6 +484,7 @@ class _Stack extends ConsumerWidget {
     final currentStack = ref.watch(P.sudoku.currentStack);
     ref.watch(P.app.screenHeight);
     ref.watch(P.app.screenWidth);
+    ref.watch(Pager.atMainPage);
 
     // debugger();
     return IgnorePointer(
@@ -705,7 +704,7 @@ class _Terminal extends ConsumerWidget {
                 s: isDesktop ? 16 : 10,
                 letterSpacing: 0,
                 height: 1.2,
-                c: qw.q(0.8),
+                c: kW.q(0.8),
               ),
             );
           },

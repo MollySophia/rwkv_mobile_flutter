@@ -84,10 +84,21 @@ extension $Sudoku on _Sudoku {
           label: S.current.sudoku_hard,
           key: HF.randomInt(min: 36, max: 45),
         ),
+        AlertDialogAction(
+          label: S.current.custom_difficulty,
+          key: -1,
+        ),
       ],
     );
 
     if (difficulty == null) return;
+
+    if (difficulty == -1) {
+      if (context.mounted) {
+        await onCustomDifficultyPressed(context);
+      }
+      return;
+    }
 
     clear();
     final (solved, puzzle) = generate(difficulty: difficulty);
@@ -121,6 +132,65 @@ extension $Sudoku on _Sudoku {
         wantRawJSON: false,
       ),
     );
+  }
+
+  FV onCustomDifficultyPressed(BuildContext context) async {
+    final _running = running.q;
+    if (_running) {
+      await showOkAlertDialog(
+        context: context,
+        title: S.current.inference_is_running,
+        message: S.current.please_wait_for_it_to_finish,
+      );
+      return;
+    }
+
+    final difficulty = await showTextInputDialog(
+      context: context,
+      title: S.current.generate_random_sudoku_puzzle,
+      message: S.current.please_enter_the_difficulty,
+      textFields: [
+        DialogTextField(
+          hintText: S.current.difficulty,
+          initialText: kDebugMode ? "40" : "10",
+          keyboardType: const TextInputType.numberWithOptions(
+            signed: false,
+            decimal: false,
+          ),
+        ),
+      ],
+    );
+    if (difficulty == null) return;
+    if (difficulty.isEmpty) return;
+    final value = difficulty.first;
+    final difficultyInt = int.tryParse(value);
+    if (difficultyInt == null) return;
+
+    if (difficultyInt < 1) {
+      if (context.mounted) {
+        await showOkAlertDialog(
+          context: context,
+          title: S.current.can_not_generate,
+          message: S.current.difficulty_must_be_greater_than_0,
+        );
+      }
+      return;
+    }
+
+    if (difficultyInt > 81) {
+      if (context.mounted) {
+        await showOkAlertDialog(
+          context: context,
+          title: S.current.can_not_generate,
+          message: S.current.difficulty_must_be_less_than_81,
+        );
+      }
+      return;
+    }
+
+    clear();
+    final (solved, puzzle) = generate(difficulty: difficultyInt);
+    staticData.q = puzzle;
   }
 
   void clear() {

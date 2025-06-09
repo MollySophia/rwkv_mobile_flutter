@@ -117,6 +117,9 @@ class MessageLookup extends MessageLookupByLibrary {
           "Create a new one by clicking the button above",
         ),
     "current_turn": MessageLookupByLibrary.simpleMessage("Current Turn"),
+    "custom_difficulty": MessageLookupByLibrary.simpleMessage(
+      "Custom Difficulty",
+    ),
     "dark_mode": MessageLookupByLibrary.simpleMessage("Dark Mode"),
     "dark_mode_theme": MessageLookupByLibrary.simpleMessage("Dark Mode Theme"),
     "decode": MessageLookupByLibrary.simpleMessage("Decode"),
@@ -261,6 +264,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "please_enter_a_number_0_means_empty": MessageLookupByLibrary.simpleMessage(
       "Please enter a number. 0 means empty.",
+    ),
+    "please_enter_the_difficulty": MessageLookupByLibrary.simpleMessage(
+      "Please enter the difficulty",
     ),
     "please_grant_permission_to_use_microphone":
         MessageLookupByLibrary.simpleMessage(
