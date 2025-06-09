@@ -210,5 +210,8 @@
   "confirm": "Confirm",
   "scan_qrcode": "Scan QR Code",
   "download_app": "Download App",
-  "end": "End"
+  "end": "End",
+  "from_model": "From Model: %s",
+  "source_code": "Source Code",
+  "explore_rwkv": "Explore RWKV"
 }

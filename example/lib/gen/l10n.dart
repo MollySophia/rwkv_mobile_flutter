@@ -1525,6 +1525,16 @@ class S {
   String get end {
     return Intl.message('完', name: 'end', desc: '', args: []);
   }
+
+  /// `来自模型: %s`
+  String get from_model {
+    return Intl.message('来自模型: %s', name: 'from_model', desc: '', args: []);
+  }
+
+  /// `探索RWKV`
+  String get explore_rwkv {
+    return Intl.message('探索RWKV', name: 'explore_rwkv', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -18,6 +18,7 @@ class _Preference {
   late final preferredDarkCustomTheme = qs<custom_theme.CustomTheme>(custom_theme.LightsOut());
 
   final textScaleFactorSystem = -1.0;
+
   // late final availableTextScaleFactors = [_textScaleFactorSystem, .8, .9, 1.0, 1.1, 1.2, 1.3, 1.4];
   // late final availableTextScaleNames = [
   //   "跟随系统",
@@ -44,6 +45,8 @@ class _Preference {
   late final latestRuntimeAddress = qs<int>(0);
 
   late final dumpping = qs(false);
+
+  bool isZhLang() => preferredLanguage.q.resolved.locale.languageCode == "zh";
 }
 
 /// Private methods

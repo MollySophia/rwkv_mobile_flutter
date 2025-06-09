@@ -158,6 +158,7 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Please ensure your device has enough memory, otherwise the application might crash",
         ),
+    "explore_rwkv": MessageLookupByLibrary.simpleMessage("Explore RWKV"),
     "exploring": MessageLookupByLibrary.simpleMessage("Exploring..."),
     "extra_large": MessageLookupByLibrary.simpleMessage("Extra Large (130%)"),
     "feedback": MessageLookupByLibrary.simpleMessage("Feedback"),
@@ -176,6 +177,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "font_size_default": MessageLookupByLibrary.simpleMessage("Default (100%)"),
     "foo_bar": MessageLookupByLibrary.simpleMessage("foo bar"),
     "force_dark_mode": MessageLookupByLibrary.simpleMessage("Force Dark Mode"),
+    "from_model": MessageLookupByLibrary.simpleMessage("From Model: %s"),
     "game_over": MessageLookupByLibrary.simpleMessage("Game Over!"),
     "generate": MessageLookupByLibrary.simpleMessage("Generate"),
     "generate_hardest_sudoku_in_the_world":

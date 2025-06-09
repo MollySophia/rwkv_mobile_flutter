@@ -8,7 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gal/gal.dart' show Gal;
 import 'package:halo_state/halo_state.dart';
 import 'package:path_provider/path_provider.dart' show getApplicationDocumentsDirectory;
+import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:sprintf/sprintf.dart';
 import 'package:zone/config.dart' show Config;
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/message.dart' as model;
@@ -124,13 +126,12 @@ class _ShareChatSheetState extends ConsumerState<ShareChatSheet> {
   }
 }
 
-class _Preview extends ConsumerWidget {
+class _Preview extends ConsumerStatefulWidget {
   final List<model.Message> messages;
   final VoidCallback onCancelTap;
   final VoidCallback onComplete;
 
   final bool share;
-  final keyRepaintBoundary = GlobalKey();
 
   _Preview({
     required this.share,
@@ -138,6 +139,21 @@ class _Preview extends ConsumerWidget {
     required this.onCancelTap,
     required this.onComplete,
   });
+
+  @override
+  ConsumerState<_Preview> createState() => _PreviewState();
+}
+
+class _PreviewState extends ConsumerState<_Preview> {
+  final keyRepaintBoundary = GlobalKey();
+  late QrImage qrImage;
+
+  @override
+  void initState() {
+    super.initState();
+    final url = P.preference.isZhLang() ? P.app.shareChatQrCodeZh : P.app.shareChatQrCodeEn;
+    qrImage = QrImage(QrCode(8, QrErrorCorrectLevel.H)..addData(url.q ?? "https://www.rwkv.com/"));
+  }
 
   void onConfirmTap(BuildContext context) async {
     final repaintBoundary = keyRepaintBoundary.currentContext!.findRenderObject() as RenderRepaintBoundary;
@@ -148,14 +164,13 @@ class _Preview extends ConsumerWidget {
     final dir = await getApplicationDocumentsDirectory();
     final file = File("${dir.path}${Platform.pathSeparator}chat_$timestamp.png");
 
-
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     final bytes = byteData!.buffer.asUint8List();
     if (await file.exists()) await file.delete();
     await file.create();
     await file.writeAsBytes(bytes);
 
-    if (share) {
+    if (widget.share) {
       final xFile = XFile(file.path, mimeType: 'image/png');
       await SharePlus.instance.share(
         ShareParams(previewThumbnail: xFile, files: [xFile]),
@@ -168,11 +183,11 @@ class _Preview extends ConsumerWidget {
       }
       await Gal.putImage(file.path);
     }
-    onComplete();
+    widget.onComplete();
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final dark = ref.watch(P.app.dark);
 
@@ -197,7 +212,7 @@ class _Preview extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextButton.icon(
-                    onPressed: onCancelTap,
+                    onPressed: widget.onCancelTap,
                     icon: Icon(Icons.close),
                     label: Text(S.of(context).cancel),
                   ),
@@ -231,7 +246,7 @@ class _Preview extends ConsumerWidget {
                     const SizedBox(height: 12),
                     _buildHeader(),
                     Divider(height: 28, indent: 16, endIndent: 16, thickness: 0.5),
-                    for (var msg in messages) Message(msg, 1, selectMode: true),
+                    for (var msg in widget.messages) Message(msg, 1, selectMode: true),
                     const SizedBox(height: 24),
                     Stack(
                       children: [
@@ -267,11 +282,13 @@ class _Preview extends ConsumerWidget {
     final now = DateTime.now();
     final date = now.toIso8601String().split('T')[0];
 
-    final qrCode = Image.asset(
-      "assets/img/chat/download_qrcode.png",
+    final qrCode = SizedBox(
       width: 50,
       height: 50,
-      fit: BoxFit.cover,
+      child: PrettyQrView(
+        qrImage: qrImage,
+        decoration: const PrettyQrDecoration(),
+      ),
     );
 
     return Row(
@@ -285,15 +302,14 @@ class _Preview extends ConsumerWidget {
           children: [
             Text(S.current.scan_qrcode, style: TextStyle(fontSize: 10, color: Colors.grey, height: 1)),
             const SizedBox(height: 4),
-            Text(S.current.download_app, style: TextStyle(fontSize: 10, color: Colors.grey, height: 1)),
-            const SizedBox(height: 4),
+            Text(S.current.explore_rwkv, style: TextStyle(fontSize: 10, color: Colors.grey, height: 1)),
           ],
         ),
         const SizedBox(width: 8),
         !dark
             ? qrCode
             : ColorFiltered(
-                colorFilter: ColorFilter.mode(Colors.grey, BlendMode.srcIn),
+                colorFilter: ColorFilter.mode(Colors.white54, BlendMode.srcIn),
                 child: qrCode,
               ),
         const SizedBox(width: 16),
@@ -326,11 +342,9 @@ class _Preview extends ConsumerWidget {
               ),
             ),
             Text(
-              P.rwkv.currentModel.q?.name ?? "",
+              sprintf(S.current.from_model, [P.rwkv.currentModel.q?.name ?? ""]),
               style: TextStyle(
                 fontSize: 10,
-                height: 1,
-                color: Colors.grey,
               ),
             ),
           ],

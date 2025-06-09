@@ -210,5 +210,7 @@
   "confirm": "确认",
   "scan_qrcode": "扫描二维码",
   "download_app": "下载App",
-  "end": "完"
+  "end": "完",
+  "from_model": "来自模型: %s",
+  "explore_rwkv": "探索RWKV"
 }
