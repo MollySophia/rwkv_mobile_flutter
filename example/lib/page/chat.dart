@@ -20,18 +20,15 @@ import 'package:zone/widgets/chat/suggestions.dart';
 import 'package:zone/widgets/chat/visual_empty.dart';
 import 'package:zone/widgets/menu.dart';
 import 'package:zone/widgets/pager.dart';
-import 'package:zone/widgets/screenshot.dart';
 
 class PageChat extends ConsumerWidget {
   const PageChat({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Screenshot(
-      child: const Pager(
-        drawer: Menu(),
-        child: _Page(),
-      ),
+    return const Pager(
+      drawer: Menu(),
+      child: _Page(),
     );
   }
 }
@@ -88,8 +85,6 @@ class _NavigationBarBottomLine extends ConsumerWidget {
     );
   }
 }
-
-final GlobalKey keyChatList = GlobalKey(debugLabel: "chatListShot");
 
 class _List extends ConsumerWidget {
   const _List();
@@ -158,25 +153,21 @@ class _List extends ConsumerWidget {
             t: top,
           ),
           controller: P.chat.scrollController,
-          child: ScrollShotArea(
-            key: keyChatList,
+          child: ListView.separated(
+            reverse: true,
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: EI.o(t: top, b: bottom, l: paddingLeft, r: paddingRight),
             controller: P.chat.scrollController,
-            child: ListView.separated(
-              reverse: true,
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: EI.o(t: top, b: bottom, l: paddingLeft, r: paddingRight),
-              controller: P.chat.scrollController,
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                final finalIndex = messages.length - 1 - index;
-                final msg = messages[finalIndex];
-                return _MessageWrap(msg: msg, finalIndex: finalIndex);
-              },
-              separatorBuilder: (context, index) {
-                return const SB(height: 15);
-              },
-            ),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
+            itemCount: messages.length,
+            itemBuilder: (context, index) {
+              final finalIndex = messages.length - 1 - index;
+              final msg = messages[finalIndex];
+              return _MessageWrap(msg: msg, finalIndex: finalIndex);
+            },
+            separatorBuilder: (context, index) {
+              return const SB(height: 15);
+            },
           ),
         ),
       ),

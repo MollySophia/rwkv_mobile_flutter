@@ -10,21 +10,15 @@ import 'package:zone/config.dart';
 import 'package:zone/func/check_model_selection.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/demo_type.dart';
-import 'package:zone/page/chat.dart' show keyChatList;
 import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
 import 'package:zone/widgets/arguments_panel.dart';
 import 'package:zone/widgets/model_selector.dart';
 import 'package:zone/widgets/pager.dart';
-import 'package:zone/widgets/screenshot.dart' show Screenshot;
 import 'package:sprintf/sprintf.dart';
 
 class ChatAppBar extends ConsumerWidget {
   const ChatAppBar({super.key});
-
-  void onShareChatPressed() async {
-    Screenshot.startScrollShot(keyChatList);
-  }
 
   void onSettingsPressed() async {
     if (!checkModelSelection()) return;
@@ -144,52 +138,12 @@ class ChatAppBar extends ConsumerWidget {
       ),
       actions: [
         if (demoType == DemoType.chat) const _NewConversationButton(),
-        if (demoType == DemoType.chat) _buildMorePopupMenuButton(context),
-        if (demoType != DemoType.chat && demoType != DemoType.sudoku)
+        if (demoType != DemoType.sudoku)
           IconButton(
             onPressed: onSettingsPressed,
             icon: const Icon(Icons.tune),
           ),
       ],
-    );
-  }
-
-  Widget _buildMorePopupMenuButton(BuildContext context) {
-    return PopupMenuButton(
-      onSelected: (v) {
-        switch (v) {
-          case 1:
-            onShareChatPressed();
-            break;
-          case 2:
-            onSettingsPressed();
-            break;
-        }
-      },
-      itemBuilder: (v) {
-        return [
-          PopupMenuItem(
-            value: 1,
-            child: Row(
-              children: [
-                const Icon(Icons.share_rounded),
-                8.w,
-                Text(S.of(context).share_chat),
-              ],
-            ),
-          ),
-          PopupMenuItem(
-            value: 2,
-            child: Row(
-              children: [
-                const Icon(Icons.settings_rounded),
-                8.w,
-                Text(S.of(context).session_configuration),
-              ],
-            ),
-          ),
-        ];
-      },
     );
   }
 }

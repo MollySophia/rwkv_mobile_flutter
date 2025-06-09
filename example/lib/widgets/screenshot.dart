@@ -10,9 +10,10 @@ import 'package:gal/gal.dart' show Gal;
 import 'package:halo/halo.dart';
 import 'package:halo_state/halo_state.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:zone/page/chat.dart' show keyChatList;
 import 'package:zone/state/p.dart' show P;
 import 'package:path_provider/path_provider.dart';
+
+final keyChatList = GlobalKey();
 
 class ScrollShotArea extends ConsumerStatefulWidget {
   final Widget child;
