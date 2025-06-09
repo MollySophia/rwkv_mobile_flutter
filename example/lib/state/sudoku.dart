@@ -10,6 +10,7 @@ class _Sudoku {
   final staticData = qs<List<List<int>>>([]);
   final dynamicData = qs<List<List<int>>>([]);
   final logs = qs<List<String>>([]);
+  final difficulty = qs<int?>(null);
 
   late final hasPuzzle = qp<bool>((ref) {
     final puzzle = ref.watch(staticData);
@@ -56,6 +57,84 @@ extension $Sudoku on _Sudoku {
   }
 
   FV onGeneratePressed(BuildContext context) async {
+    final _running = running.q;
+    if (_running) {
+      await showOkAlertDialog(
+        context: context,
+        title: S.current.inference_is_running,
+        message: S.current.please_wait_for_it_to_finish,
+      );
+      return;
+    }
+
+    final difficulty = await showConfirmationDialog<int?>(
+      context: context,
+      title: S.current.generate_random_sudoku_puzzle,
+      message: S.current.please_select_the_difficulty,
+      actions: [
+        AlertDialogAction(
+          label: S.current.sudoku_easy,
+          key: HF.randomInt(min: 19, max: 25),
+        ),
+        AlertDialogAction(
+          label: S.current.sudoku_medium,
+          key: HF.randomInt(min: 26, max: 35),
+        ),
+        AlertDialogAction(
+          label: S.current.sudoku_hard,
+          key: HF.randomInt(min: 36, max: 45),
+        ),
+        AlertDialogAction(
+          label: S.current.custom_difficulty,
+          key: -1,
+        ),
+      ],
+    );
+
+    if (difficulty == null) return;
+
+    if (difficulty == -1) {
+      if (context.mounted) {
+        await onCustomDifficultyPressed(context);
+      }
+      return;
+    }
+
+    clear();
+    final (solved, puzzle) = generate(difficulty: difficulty);
+    staticData.q = puzzle;
+    this.difficulty.q = difficulty;
+  }
+
+  FV onInferencePressed(BuildContext context) async {
+    qq;
+    final _running = running.q;
+    if (_running) {
+      await showOkAlertDialog(
+        context: context,
+        title: S.current.inference_is_running,
+        message: S.current.please_wait_for_it_to_finish,
+      );
+      return;
+    }
+
+    tokensCount.q = 0;
+    _hiddenCounter = 0;
+    running.q = true;
+
+    func_sudoku.SudokuGrid grid = staticData.q;
+    final prompt = _genPrompt(grid);
+    P.rwkv.send(to_rwkv.ClearStates());
+    P.rwkv.send(
+      to_rwkv.SudokuOthelloGenerate(
+        prompt,
+        decodeStream: false,
+        wantRawJSON: false,
+      ),
+    );
+  }
+
+  FV onCustomDifficultyPressed(BuildContext context) async {
     final _running = running.q;
     if (_running) {
       await showOkAlertDialog(
@@ -114,34 +193,6 @@ extension $Sudoku on _Sudoku {
     staticData.q = puzzle;
   }
 
-  FV onInferencePressed(BuildContext context) async {
-    qq;
-    final _running = running.q;
-    if (_running) {
-      await showOkAlertDialog(
-        context: context,
-        title: S.current.inference_is_running,
-        message: S.current.please_wait_for_it_to_finish,
-      );
-      return;
-    }
-
-    tokensCount.q = 0;
-    _hiddenCounter = 0;
-    running.q = true;
-
-    func_sudoku.SudokuGrid grid = staticData.q;
-    final prompt = _genPrompt(grid);
-    P.rwkv.send(to_rwkv.ClearStates());
-    P.rwkv.send(
-      to_rwkv.SudokuOthelloGenerate(
-        prompt,
-        decodeStream: false,
-        wantRawJSON: false,
-      ),
-    );
-  }
-
   void clear() {
     final newValue = func_sudoku.genEmpty();
     staticData.q = func_sudoku.deepCopyList(newValue);
@@ -153,6 +204,7 @@ extension $Sudoku on _Sudoku {
     _recordingTagBoard = false;
     _recordingTagStack = false;
     _tempStackEvents.clear();
+    difficulty.q = null;
   }
 
   void debugRenderingRandom() {
@@ -160,6 +212,7 @@ extension $Sudoku on _Sudoku {
     final difficulty = HF.randomInt(min: 1, max: 1);
     final newValue = func_sudoku.genPuzzle(solvedGrid, difficulty: difficulty);
     staticData.q = newValue;
+    this.difficulty.q = difficulty;
   }
 
   void onGridPressed(BuildContext context, int col, int row) async {

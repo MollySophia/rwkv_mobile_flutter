@@ -135,7 +135,7 @@
   "can_not_generate": "無法生成",
   "difficulty_must_be_greater_than_0": "難度必須大於 0",
   "generate_random_sudoku_puzzle": "生成隨機數獨",
-  "please_enter_the_difficulty": "請輸入難度",
+  "please_select_the_difficulty": "請輸入難度",
   "difficulty_must_be_less_than_81": "難度必須小於 81",
   "number": "數字",
   "ok": "確定",

@@ -92,7 +92,7 @@ extension _$Preference on _Preference {
 
     final preferredDarkCustomTheme = sp.getString("halo_state.preferredDarkCustomTheme");
     if (preferredDarkCustomTheme != null) {
-      P.app.customTheme.q = custom_theme.CustomTheme.fromString(preferredDarkCustomTheme) ?? custom_theme.LightsOut();
+      this.preferredDarkCustomTheme.q = custom_theme.CustomTheme.fromString(preferredDarkCustomTheme) ?? custom_theme.LightsOut();
     }
   }
 

@@ -171,7 +171,7 @@ class _SecondaryOptionsButton extends ConsumerWidget {
 
     final textWidget = switch (thinkingMode) {
       thinking_mode.Lighting() => null,
-      thinking_mode.None() => null,
+      thinking_mode.None() => T(s.lazy, s: TS(c: textColor, s: 14, height: 1)),
       _ => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MAA.center,

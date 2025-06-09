@@ -118,6 +118,9 @@ class MessageLookup extends MessageLookupByLibrary {
           "Create a new one by clicking the button above",
         ),
     "current_turn": MessageLookupByLibrary.simpleMessage("Current Turn"),
+    "custom_difficulty": MessageLookupByLibrary.simpleMessage(
+      "Custom Difficulty",
+    ),
     "dark_mode": MessageLookupByLibrary.simpleMessage("Dark Mode"),
     "dark_mode_theme": MessageLookupByLibrary.simpleMessage("Dark Mode Theme"),
     "decode": MessageLookupByLibrary.simpleMessage("Decode"),
@@ -224,6 +227,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "just_watch_me": MessageLookupByLibrary.simpleMessage("😎 Watch me!"),
     "large": MessageLookupByLibrary.simpleMessage("Large (120%)"),
+    "lazy": MessageLookupByLibrary.simpleMessage("Lazy"),
     "license": MessageLookupByLibrary.simpleMessage("Open Source License"),
     "light_mode": MessageLookupByLibrary.simpleMessage("Light Mode"),
     "loading": MessageLookupByLibrary.simpleMessage("Loading..."),
@@ -288,6 +292,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "please_select_font_size": MessageLookupByLibrary.simpleMessage(
       "Please select font size",
+    ),
+    "please_select_the_difficulty": MessageLookupByLibrary.simpleMessage(
+      "Please select the difficulty",
     ),
     "please_wait_for_it_to_finish": MessageLookupByLibrary.simpleMessage(
       "Please wait for it to finish",
@@ -374,6 +381,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "storage_permission_not_granted": MessageLookupByLibrary.simpleMessage(
       "Storage permission not granted",
     ),
+    "sudoku_easy": MessageLookupByLibrary.simpleMessage("Easy"),
+    "sudoku_hard": MessageLookupByLibrary.simpleMessage("Hard"),
+    "sudoku_medium": MessageLookupByLibrary.simpleMessage("Medium"),
     "system_mode": MessageLookupByLibrary.simpleMessage("System Mode"),
     "take_photo": MessageLookupByLibrary.simpleMessage("Take Photo"),
     "technical_research_group": MessageLookupByLibrary.simpleMessage(

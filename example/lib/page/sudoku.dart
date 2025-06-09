@@ -272,7 +272,6 @@ class _ButtonShowStack extends ConsumerWidget {
   const _ButtonShowStack();
 
   void _onPressed(BuildContext context, WidgetRef ref) async {
-    // P.sudoku.onShowStackPressed(context);
     P.sudoku.onToggleShowStack(context);
   }
 
@@ -478,7 +477,6 @@ class _Stack extends ConsumerWidget {
         child: Stack(children: []),
       );
     }
-
     final widgetPosition = ref.watch(P.sudoku.widgetPosition);
     final uiOffset = ref.watch(P.sudoku.uiOffset);
     final padding = MediaQuery.of(context).padding;
@@ -486,6 +484,7 @@ class _Stack extends ConsumerWidget {
     final currentStack = ref.watch(P.sudoku.currentStack);
     ref.watch(P.app.screenHeight);
     ref.watch(P.app.screenWidth);
+    ref.watch(Pager.atMainPage);
 
     // debugger();
     return IgnorePointer(
@@ -557,6 +556,7 @@ class _TokensInfo extends ConsumerWidget {
     final ratio = screenWidth / screenHeight;
     final isDesktop = ref.watch(P.app.isDesktop);
     final shouldUseVerticalLayout = isDesktop && ratio < 2.2 && !isPortrait;
+    final difficulty = ref.watch(P.sudoku.difficulty);
     return shouldUseVerticalLayout
         ? Row(
             mainAxisAlignment: MAA.center,
@@ -572,6 +572,14 @@ class _TokensInfo extends ConsumerWidget {
                 textAlign: TextAlign.center,
                 s: const TS(s: 10, c: Color(0xFF888888)),
               ),
+              if (difficulty != null) ...[
+                const SB(width: 4, height: 4),
+                T(
+                  "Unknown grid count: $difficulty",
+                  textAlign: TextAlign.center,
+                  s: const TS(s: 10, c: Color(0xFF888888)),
+                ),
+              ],
             ],
           )
         : Column(
@@ -645,14 +653,21 @@ class _Grid extends ConsumerWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         decoration: BD(color: bg, borderRadius: (2 * magnification).r),
-        child: Center(
-          child: T(
-            value != 0 ? value.toString() : "",
-            s: TS(
-              s: isDesktop ? 30 : 18,
-              w: isDesktop ? FontWeight.w600 : null,
-            ),
-          ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final maxWidth = constraints.maxWidth;
+            double textSize = maxWidth / 2;
+            return Center(
+              child: T(
+                value != 0 ? value.toString() : "",
+                s: TS(
+                  c: kB,
+                  s: textSize,
+                  w: isDesktop ? FontWeight.w600 : null,
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -689,7 +704,7 @@ class _Terminal extends ConsumerWidget {
                 s: isDesktop ? 16 : 10,
                 letterSpacing: 0,
                 height: 1.2,
-                c: qw.q(0.8),
+                c: kW.q(0.8),
               ),
             );
           },

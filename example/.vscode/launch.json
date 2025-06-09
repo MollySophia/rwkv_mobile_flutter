@@ -21,7 +21,7 @@
         // "--dart-define=disableRemoteConfig=true",
         "--dart-define=logLevel=3",
         "--dart-define=disableAutoShowOfWeightsPanel=true",
-        // ke
+        // "--dart-define=debuggingThemes=true",
       ]
     },
     {

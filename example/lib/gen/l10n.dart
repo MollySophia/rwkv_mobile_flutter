@@ -961,11 +961,11 @@ class S {
     );
   }
 
-  /// `请输入难度`
-  String get please_enter_the_difficulty {
+  /// `请选择难度`
+  String get please_select_the_difficulty {
     return Intl.message(
-      '请输入难度',
-      name: 'please_enter_the_difficulty',
+      '请选择难度',
+      name: 'please_select_the_difficulty',
       desc: '',
       args: [],
     );
@@ -1494,6 +1494,41 @@ class S {
   /// `浅色`
   String get theme_light {
     return Intl.message('浅色', name: 'theme_light', desc: '', args: []);
+  }
+
+  /// `懒`
+  String get lazy {
+    return Intl.message('懒', name: 'lazy', desc: '', args: []);
+  }
+
+  /// `入门`
+  String get sudoku_easy {
+    return Intl.message('入门', name: 'sudoku_easy', desc: '', args: []);
+  }
+
+  /// `普通`
+  String get sudoku_medium {
+    return Intl.message('普通', name: 'sudoku_medium', desc: '', args: []);
+  }
+
+  /// `专家`
+  String get sudoku_hard {
+    return Intl.message('专家', name: 'sudoku_hard', desc: '', args: []);
+  }
+
+  /// `自定义难度`
+  String get custom_difficulty {
+    return Intl.message('自定义难度', name: 'custom_difficulty', desc: '', args: []);
+  }
+
+  /// `请输入难度`
+  String get please_enter_the_difficulty {
+    return Intl.message(
+      '请输入难度',
+      name: 'please_enter_the_difficulty',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `分享`

@@ -55,6 +55,7 @@ class ThemeSelector extends ConsumerWidget {
     final preferredThemeMode = ref.watch(P.app.preferredThemeMode);
     final preferredDarkCustomTheme = ref.watch(P.preference.preferredDarkCustomTheme);
     final primary = Theme.of(context).colorScheme.primary;
+    final themeMode = ref.watch(P.preference.themeMode);
 
     final items = <Widget>[
       FormItem(
@@ -176,14 +177,15 @@ class ThemeSelector extends ConsumerWidget {
   }
 
   void _onAutoModeSwitchChanged(bool value) async {
+    qq;
     if (value) {
       P.app.preferredThemeMode.q = ThemeMode.system;
     } else {
       P.app.preferredThemeMode.q = ThemeMode.light;
     }
-    P.app.preferredThemeMode.q = P.app.preferredThemeMode.q;
+    P.preference.themeMode.q = P.app.preferredThemeMode.q;
     final sp = await SharedPreferences.getInstance();
-    await sp.setString("halo_state.themeMode", P.app.preferredThemeMode.q.name);
+    await sp.setString("halo_state.themeMode", P.preference.themeMode.q.name);
   }
 
   void _onDarkModeSwitchChanged(bool value) async {
@@ -192,8 +194,8 @@ class ThemeSelector extends ConsumerWidget {
     } else {
       P.app.preferredThemeMode.q = ThemeMode.light;
     }
-    P.app.preferredThemeMode.q = P.app.preferredThemeMode.q;
+    P.preference.themeMode.q = P.app.preferredThemeMode.q;
     final sp = await SharedPreferences.getInstance();
-    await sp.setString("halo_state.themeMode", P.app.preferredThemeMode.q.name);
+    await sp.setString("halo_state.themeMode", P.preference.themeMode.q.name);
   }
 }

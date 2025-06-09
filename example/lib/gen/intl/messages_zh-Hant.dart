@@ -179,9 +179,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_enter_a_number_0_means_empty": MessageLookupByLibrary.simpleMessage(
       "請輸入一個數字。0 表示空。",
     ),
-    "please_enter_the_difficulty": MessageLookupByLibrary.simpleMessage(
-      "請輸入難度",
-    ),
     "please_grant_permission_to_use_microphone":
         MessageLookupByLibrary.simpleMessage("請授予使用麥克風的權限"),
     "please_load_model_first": MessageLookupByLibrary.simpleMessage("請先載入模型"),
@@ -192,6 +189,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "請選擇應用程式語言",
     ),
     "please_select_font_size": MessageLookupByLibrary.simpleMessage("請選擇字體大小"),
+    "please_select_the_difficulty": MessageLookupByLibrary.simpleMessage(
+      "請輸入難度",
+    ),
     "please_wait_for_it_to_finish": MessageLookupByLibrary.simpleMessage(
       "請等待推論完成",
     ),

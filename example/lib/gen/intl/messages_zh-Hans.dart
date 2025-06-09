@@ -96,6 +96,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "create_a_new_one_by_clicking_the_button_above":
         MessageLookupByLibrary.simpleMessage("点击上方按钮创建新会话"),
     "current_turn": MessageLookupByLibrary.simpleMessage("当前回合"),
+    "custom_difficulty": MessageLookupByLibrary.simpleMessage("自定义难度"),
     "dark_mode": MessageLookupByLibrary.simpleMessage("深色模式"),
     "dark_mode_theme": MessageLookupByLibrary.simpleMessage("深色模式主题"),
     "decode": MessageLookupByLibrary.simpleMessage("解码"),
@@ -178,6 +179,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "join_the_community": MessageLookupByLibrary.simpleMessage("加入社区"),
     "just_watch_me": MessageLookupByLibrary.simpleMessage("😎 看我表演！"),
     "large": MessageLookupByLibrary.simpleMessage("大 (120%)"),
+    "lazy": MessageLookupByLibrary.simpleMessage("懒"),
     "license": MessageLookupByLibrary.simpleMessage("开源许可证"),
     "light_mode": MessageLookupByLibrary.simpleMessage("浅色模式"),
     "loading": MessageLookupByLibrary.simpleMessage("加载中..."),
@@ -225,6 +227,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "请选择应用语言",
     ),
     "please_select_font_size": MessageLookupByLibrary.simpleMessage("请选择字体大小"),
+    "please_select_the_difficulty": MessageLookupByLibrary.simpleMessage(
+      "请选择难度",
+    ),
     "please_wait_for_it_to_finish": MessageLookupByLibrary.simpleMessage(
       "请等待推理完成",
     ),
@@ -282,6 +287,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "storage_permission_not_granted": MessageLookupByLibrary.simpleMessage(
       "存储权限未授予",
     ),
+    "sudoku_easy": MessageLookupByLibrary.simpleMessage("入门"),
+    "sudoku_hard": MessageLookupByLibrary.simpleMessage("专家"),
+    "sudoku_medium": MessageLookupByLibrary.simpleMessage("普通"),
     "system_mode": MessageLookupByLibrary.simpleMessage("跟随系统"),
     "take_photo": MessageLookupByLibrary.simpleMessage("拍照"),
     "technical_research_group": MessageLookupByLibrary.simpleMessage("技术研发群"),
