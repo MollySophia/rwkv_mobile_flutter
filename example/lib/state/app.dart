@@ -15,6 +15,8 @@ class _App extends RawApp {
   late final androidUrl = qsn<String?>(null);
   late final androidApkUrl = qsn<String?>(null);
   late final iosUrl = qsn<String>();
+  late final shareChatQrCodeZh = qsn<String>("");
+  late final shareChatQrCodeEn = qsn<String>("");
 
   late final newVersionDialogShown = qs(false);
 
@@ -332,6 +334,8 @@ extension _$App on _App {
     modelConfig.q = HF.listJSON(config["model_config"]);
     androidUrl.q = config["android_url"];
     androidApkUrl.q = config["android_apk_url"];
+    shareChatQrCodeEn.q = config["share_chat_qrcode_en"];
+    shareChatQrCodeZh.q = config["share_chat_qrcode_zh"];
     iosUrl.q = config["ios_url"].toString();
     await P.fileManager.syncAvailableModels();
     await P.fileManager.checkLocal();

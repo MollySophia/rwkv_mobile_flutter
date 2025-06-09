@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:halo/halo.dart';
 import 'package:halo_alert/halo_alert.dart';
+import 'package:halo_state/halo_state.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/demo_type.dart';
 import 'package:zone/model/message.dart' as model;
@@ -28,6 +29,7 @@ class BotMessageBottom extends ConsumerWidget {
     if (demoType == DemoType.tts) return const SizedBox.shrink();
 
     final receiveId = ref.watch(P.chat.receiveId);
+    final selectMessageMode = ref.watch(P.chat.selectMessageMode);
 
     final paused = msg.paused;
 
@@ -41,6 +43,7 @@ class BotMessageBottom extends ConsumerWidget {
     bool showBotCopyButton = true;
     bool showBotRegenerateButton = true;
     bool showResumeButton = true;
+    bool showShareButton = false;
 
     switch (worldType) {
       case null:
@@ -56,14 +59,22 @@ class BotMessageBottom extends ConsumerWidget {
         showBotCopyButton = false;
         showBotRegenerateButton = false;
         showResumeButton = false;
+        break;
+      case DemoType.chat:
+        showShareButton = true;
+        break;
       default:
         break;
     }
 
-    if (msg.isSensitive) {
+    if (msg.isSensitive || selectMessageMode) {
       showResumeButton = false;
       showBotCopyButton = false;
       showBotEditButton = false;
+      showShareButton = false;
+    }
+    if (selectMessageMode) {
+      showBotRegenerateButton = false;
     }
 
     final thinkingMode = ThinkingMode.fromString(msg.runningMode);
@@ -132,15 +143,31 @@ class BotMessageBottom extends ConsumerWidget {
               ),
             ),
           ),
+        if (showShareButton)
+          GD(
+            onTap: _onSharePressed,
+            child: Padding(
+              padding: const EI.o(v: 12, l: 4, r: 4),
+              child: Icon(
+                Icons.share_rounded,
+                color: primaryColor.q(.8),
+                size: 20,
+              ),
+            ),
+          ),
         BranchSwitcher(msg, index),
         if (msg.modelName != null) 4.w,
         if (msg.modelName != null)
-          Expanded(
-            child: T(
-              msg.modelName!,
-              s: TS(c: primaryColor.q(.8), s: 10),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+          Container(
+            alignment: Alignment.centerRight,
+            constraints: BoxConstraints(minHeight: 36),
+            child: Expanded(
+              child: T(
+                msg.modelName!,
+                s: TS(c: primaryColor.q(.8), s: 10),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ),
         modeWidget,
@@ -165,6 +192,15 @@ class BotMessageBottom extends ConsumerWidget {
           ),
       ],
     );
+  }
+
+  void _onSharePressed() {
+    final list = P.msg.list.q;
+    final index = list.indexOf(msg);
+    if (index > 0) {
+      P.chat.selectedMessages.q = {list[index - 1].id, msg.id};
+    }
+    P.chat.selectMessageMode.q = true;
   }
 
   void _onResumePressed() {

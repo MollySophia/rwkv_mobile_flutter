@@ -37,6 +37,10 @@ class _Chat {
 
   late final autoPauseId = qs<int?>(null);
 
+  late final selectedMessages = qs<Set<int>>({});
+
+  late final selectMessageMode = qs(false);
+
   late final _sensitiveThrottler = Throttler(milliseconds: 333, trailing: true);
 }
 

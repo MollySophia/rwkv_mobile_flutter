@@ -1,6 +1,7 @@
 // ignore: unused_import
 import 'dart:developer';
 
+import 'package:halo_state/halo_state.dart';
 import 'package:zone/model/demo_type.dart';
 import 'package:zone/model/message.dart' as model;
 import 'package:zone/model/world_type.dart';
@@ -14,22 +15,20 @@ import 'package:zone/widgets/chat/audio_input.dart';
 import 'package:zone/widgets/chat/empty.dart';
 import 'package:zone/widgets/chat/bottom_bar.dart';
 import 'package:zone/widgets/chat/message.dart';
+import 'package:zone/widgets/chat/share_chat.dart';
 import 'package:zone/widgets/chat/suggestions.dart';
 import 'package:zone/widgets/chat/visual_empty.dart';
 import 'package:zone/widgets/menu.dart';
 import 'package:zone/widgets/pager.dart';
-import 'package:zone/widgets/screenshot.dart';
 
 class PageChat extends ConsumerWidget {
   const PageChat({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Screenshot(
-      child: const Pager(
-        drawer: Menu(),
-        child: _Page(),
-      ),
+    return const Pager(
+      drawer: Menu(),
+      child: _Page(),
     );
   }
 }
@@ -39,18 +38,28 @@ class _Page extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const Scaffold(
+    final selectMessageMode = ref.watch(P.chat.selectMessageMode);
+
+    return Scaffold(
       body: Stack(
         children: [
-          _List(),
-          Empty(),
-          VisualEmpty(),
-          AudioEmpty(),
-          ChatAppBar(),
-          _NavigationBarBottomLine(),
-          Suggestions(),
-          BottomBar(),
-          AudioInput(),
+          const _List(),
+          const Empty(),
+          const VisualEmpty(),
+          const AudioEmpty(),
+          const ChatAppBar(),
+          const _NavigationBarBottomLine(),
+          if (selectMessageMode)
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              top: 0,
+              child: const ShareChatSheet(),
+            ),
+          if (!selectMessageMode) const Suggestions(),
+          if (!selectMessageMode) const BottomBar(),
+          if (!selectMessageMode) const AudioInput(),
         ],
       ),
     );
@@ -76,8 +85,6 @@ class _NavigationBarBottomLine extends ConsumerWidget {
     );
   }
 }
-
-final GlobalKey keyChatList = GlobalKey(debugLabel: "chatListShot");
 
 class _List extends ConsumerWidget {
   const _List();
@@ -146,27 +153,74 @@ class _List extends ConsumerWidget {
             t: top,
           ),
           controller: P.chat.scrollController,
-          child: ScrollShotArea(
-            key: keyChatList,
+          child: ListView.separated(
+            reverse: true,
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: EI.o(t: top, b: bottom, l: paddingLeft, r: paddingRight),
             controller: P.chat.scrollController,
-            child: ListView.separated(
-              reverse: true,
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: EI.o(t: top, b: bottom, l: paddingLeft, r: paddingRight),
-              controller: P.chat.scrollController,
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                final finalIndex = messages.length - 1 - index;
-                final msg = messages[finalIndex];
-                return Message(msg, finalIndex);
-              },
-              separatorBuilder: (context, index) {
-                return const SB(height: 15);
-              },
-            ),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
+            itemCount: messages.length,
+            itemBuilder: (context, index) {
+              final finalIndex = messages.length - 1 - index;
+              final msg = messages[finalIndex];
+              return _MessageWrap(msg: msg, finalIndex: finalIndex);
+            },
+            separatorBuilder: (context, index) {
+              return const SB(height: 15);
+            },
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _MessageWrap extends ConsumerWidget {
+  final model.Message msg;
+  final int finalIndex;
+
+  _MessageWrap({required this.msg, required this.finalIndex});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectMessageMode = ref.watch(P.chat.selectMessageMode);
+
+    if (!selectMessageMode) {
+      return Message(msg, finalIndex, selectMode: false);
+    }
+    final selectedIds = ref.watch(P.chat.selectedMessages);
+    final selected = selectedIds.contains(msg.id);
+
+    void toggle() async {
+      final ids = P.chat.selectedMessages.q;
+      final messages = P.msg.list.q;
+      final index = messages.indexOf(msg);
+      final previous = index > 0 ? messages[index - 1] : null;
+      final next = index < messages.length - 1 ? messages[index + 1] : null;
+      final pair = msg.isMine ? next : previous;
+      if (selected) {
+        P.chat.selectedMessages.q = ids.where((id) => id != msg.id && id != pair?.id).toSet();
+      } else {
+        P.chat.selectedMessages.q = {...ids, msg.id, ?pair?.id};
+      }
+    }
+
+    return GestureDetector(
+      onTap: () => toggle(),
+      behavior: HitTestBehavior.opaque,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Checkbox(
+            value: selected,
+            onChanged: (checked) => toggle(),
+          ),
+          Exp(
+            child: IgnorePointer(
+              child: Message(msg, finalIndex, selectMode: true),
+            ),
+          ),
+        ],
       ),
     );
   }

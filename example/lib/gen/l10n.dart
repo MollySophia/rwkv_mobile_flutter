@@ -28,10 +28,9 @@ class S {
   static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
-    final name =
-        (locale.countryCode?.isEmpty ?? false)
-            ? locale.languageCode
-            : locale.toString();
+    final name = (locale.countryCode?.isEmpty ?? false)
+        ? locale.languageCode
+        : locale.toString();
     final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
@@ -1427,6 +1426,16 @@ class S {
     return Intl.message('(境外)', name: 'overseas', desc: '', args: []);
   }
 
+  /// `已选 %d 条消息`
+  String get x_message_selected {
+    return Intl.message(
+      '已选 %d 条消息',
+      name: 'x_message_selected',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `外观`
   String get appearance {
     return Intl.message('外观', name: 'appearance', desc: '', args: []);
@@ -1520,6 +1529,46 @@ class S {
       desc: '',
       args: [],
     );
+  }
+
+  /// `分享`
+  String get share {
+    return Intl.message('分享', name: 'share', desc: '', args: []);
+  }
+
+  /// `保存`
+  String get save {
+    return Intl.message('保存', name: 'save', desc: '', args: []);
+  }
+
+  /// `确认`
+  String get confirm {
+    return Intl.message('确认', name: 'confirm', desc: '', args: []);
+  }
+
+  /// `扫描二维码`
+  String get scan_qrcode {
+    return Intl.message('扫描二维码', name: 'scan_qrcode', desc: '', args: []);
+  }
+
+  /// `下载App`
+  String get download_app {
+    return Intl.message('下载App', name: 'download_app', desc: '', args: []);
+  }
+
+  /// `完`
+  String get end {
+    return Intl.message('完', name: 'end', desc: '', args: []);
+  }
+
+  /// `来自模型: %s`
+  String get from_model {
+    return Intl.message('来自模型: %s', name: 'from_model', desc: '', args: []);
+  }
+
+  /// `探索RWKV`
+  String get explore_rwkv {
+    return Intl.message('探索RWKV', name: 'explore_rwkv', desc: '', args: []);
   }
 }
 

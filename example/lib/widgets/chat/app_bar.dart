@@ -10,20 +10,15 @@ import 'package:zone/config.dart';
 import 'package:zone/func/check_model_selection.dart';
 import 'package:zone/gen/l10n.dart';
 import 'package:zone/model/demo_type.dart';
-import 'package:zone/page/chat.dart' show keyChatList;
 import 'package:zone/route/router.dart';
 import 'package:zone/state/p.dart';
 import 'package:zone/widgets/arguments_panel.dart';
 import 'package:zone/widgets/model_selector.dart';
 import 'package:zone/widgets/pager.dart';
-import 'package:zone/widgets/screenshot.dart' show Screenshot;
+import 'package:sprintf/sprintf.dart';
 
 class ChatAppBar extends ConsumerWidget {
   const ChatAppBar({super.key});
-
-  void onShareChatPressed() async {
-    Screenshot.startScrollShot(keyChatList);
-  }
 
   void onSettingsPressed() async {
     if (!checkModelSelection()) return;
@@ -45,13 +40,12 @@ class ChatAppBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = S.of(context);
-    final loaded = ref.watch(P.rwkv.loaded);
 
     final demoType = ref.watch(P.app.demoType);
     final primary = Theme.of(context).colorScheme.primary;
     final currentModel = ref.watch(P.rwkv.currentModel);
-    final currentWorldType = ref.watch(P.rwkv.currentWorldType);
     final currentGroupInfo = ref.watch(P.rwkv.currentGroupInfo);
+    final selectMessageMode = ref.watch(P.chat.selectMessageMode);
 
     String displayName = s.click_to_select_model;
     if (currentGroupInfo != null) {
@@ -60,7 +54,8 @@ class ChatAppBar extends ConsumerWidget {
       displayName = currentModel.name;
     }
 
-    final scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
+    final theme =Theme.of(context);
+    final scaffoldBackgroundColor = theme.scaffoldBackgroundColor;
     final qb = ref.watch(P.app.qb);
 
     return Positioned(
@@ -70,113 +65,85 @@ class ChatAppBar extends ConsumerWidget {
       child: ClipRRect(
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-          child: AppBar(
-            backgroundColor: scaffoldBackgroundColor.q(.6),
-            elevation: 0,
-            centerTitle: true,
-            title: GD(
-              onTap: _onTitlePressed,
-              child: C(
-                decoration: const BD(
-                  color: kC,
-                ),
-                child: Column(
-                  crossAxisAlignment: CAA.center,
-                  children: [
-                    const T(
-                      Config.appTitle,
-                      s: TS(s: 18),
-                    ),
-                    2.h,
-                    C(
-                      padding: const EI.o(l: 4, r: 4, t: 1, b: 1),
-                      decoration: BD(
-                        color: qb.q(.1),
-                        borderRadius: 10.r,
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CAA.center,
-                        mainAxisAlignment: MAA.center,
-                        children: [
-                          T(
-                            displayName,
-                            s: TS(s: 10, c: primary),
-                          ),
-                          4.w,
-                          Transform.rotate(
-                            angle: 0, // 90度
-                            child: SB(
-                              width: 10,
-                              height: 5,
-                              child: CustomPaint(
-                                painter: _TrianglePainter(),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+          child: Theme(
+            data: theme.copyWith(
+              appBarTheme: theme.appBarTheme.copyWith(
+                backgroundColor: scaffoldBackgroundColor,
+              )
             ),
-            leading: const Row(
-              children: [
-                _MenuButton(),
-              ],
-            ),
-            actions: [
-              if (demoType == DemoType.chat) const _NewConversationButton(),
-              if (demoType == DemoType.chat) _buildMorePopupMenuButton(context),
-              if (demoType != DemoType.chat && demoType != DemoType.sudoku)
-                IconButton(
-                  onPressed: onSettingsPressed,
-                  icon: const Icon(Icons.tune),
-                ),
-            ],
+            child: selectMessageMode
+                ? _SelectMessageAppBar() //
+                : _buildAppBar(context, displayName, primary, demoType),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildMorePopupMenuButton(BuildContext context) {
-    return PopupMenuButton(
-      onSelected: (v) {
-        switch (v) {
-          case 1:
-            onShareChatPressed();
-            break;
-          case 2:
-            onSettingsPressed();
-            break;
-        }
-      },
-      itemBuilder: (v) {
-        return [
-          PopupMenuItem(
-            value: 1,
-            child: Row(
-              children: [
-                const Icon(Icons.share_rounded),
-                8.w,
-                Text(S.of(context).share_chat),
-              ],
-            ),
+  Widget _buildAppBar(BuildContext context, String displayName, Color primary, DemoType demoType) {
+    return AppBar(
+      elevation: 0,
+      centerTitle: true,
+      title: GD(
+        onTap: _onTitlePressed,
+        child: C(
+          decoration: const BD(
+            color: kC,
           ),
-          PopupMenuItem(
-            value: 2,
-            child: Row(
-              children: [
-                const Icon(Icons.settings_rounded),
-                8.w,
-                Text(S.of(context).session_configuration),
-              ],
-            ),
+          child: Column(
+            crossAxisAlignment: CAA.center,
+            children: [
+              const T(
+                Config.appTitle,
+                s: TS(s: 18),
+              ),
+              2.h,
+              C(
+                padding: const EI.o(l: 4, r: 4, t: 1, b: 1),
+                decoration: BD(
+                  color: kB.q(.1),
+                  borderRadius: 10.r,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CAA.center,
+                  mainAxisAlignment: MAA.center,
+                  children: [
+                    T(
+                      displayName,
+                      s: TS(s: 10, c: primary),
+                    ),
+                    4.w,
+                    Transform.rotate(
+                      angle: 0, // 90度
+                      child: SB(
+                        width: 10,
+                        height: 5,
+                        child: CustomPaint(
+                          painter: _TrianglePainter(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ];
-      },
+        ),
+      ),
+      leading: const Row(
+        children: [
+          _MenuButton(),
+        ],
+      ),
+      actions: [
+        if (demoType == DemoType.chat) const _NewConversationButton(),
+        if (demoType != DemoType.sudoku)
+          IconButton(
+            onPressed: onSettingsPressed,
+            icon: const Icon(Icons.tune),
+          ),
+      ],
     );
   }
 }
@@ -243,4 +210,40 @@ class _TrianglePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
+}
+
+class _SelectMessageAppBar extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selected = ref.watch(P.chat.selectedMessages);
+    final allMessage = ref.watch(P.msg.list);
+
+    final all = allMessage.length == selected.length;
+
+    void onAllTap() {
+      P.chat.selectedMessages.q = all ? {} : allMessage.map((e) => e.id).toSet();
+    }
+
+    final leading = Row(
+      children: [
+        Checkbox(
+          value: all,
+          onChanged: (v) => onAllTap(),
+        ),
+        GD(
+          onTap: onAllTap,
+          child: T(S.of(context).all),
+        ),
+      ],
+    );
+    sprintf("", []);
+
+    return AppBar(
+      elevation: 0,
+      centerTitle: true,
+      title: T(sprintf(S.of(context).x_message_selected, [selected.length]), s: TS(s: 18)),
+      leading: leading,
+      leadingWidth: 100,
+    );
+  }
 }

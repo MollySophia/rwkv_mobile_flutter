@@ -209,5 +209,15 @@
   "sudoku_medium": "Medium",
   "sudoku_hard": "Hard",
   "custom_difficulty": "Custom Difficulty",
-  "please_enter_the_difficulty": "Please enter the difficulty"
+  "please_enter_the_difficulty": "Please enter the difficulty",
+  "x_message_selected": "%d Selected",
+  "share": "Share",
+  "save": "Save",
+  "confirm": "Confirm",
+  "scan_qrcode": "Scan QR Code",
+  "download_app": "Download App",
+  "end": "End",
+  "from_model": "From Model: %s",
+  "source_code": "Source Code",
+  "explore_rwkv": "Explore RWKV"
 }
