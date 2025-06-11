@@ -470,14 +470,15 @@ class RWKVMobile {
             case Backend.qnn:
               // TODO: better solution for this
               final tempDir = await getTemporaryDirectory();
-              sendPort.send(ReInitSteps(done: false, step: 'add adsp library path', toRWKV: req));
-              rwkvMobile.rwkvmobile_runtime_add_adsp_library_path((tempDir.path + '/assets/lib/').toNativeUtf8().cast<ffi.Char>());
 
               sendPort.send(ReInitSteps(done: false, step: 'init with name extra', toRWKV: req));
               runtime = rwkvMobile.rwkvmobile_runtime_init_with_name_extra(
                 modelBackendString.toNativeUtf8().cast<ffi.Char>(),
                 (tempDir.path + '/assets/lib/libQnnHtp.so').toNativeUtf8().cast<ffi.Void>(),
               );
+
+              sendPort.send(ReInitSteps(done: false, step: 'set qnn library path', toRWKV: req));
+              rwkvMobile.rwkvmobile_runtime_set_qnn_library_path(runtime, (tempDir.path + '/assets/lib/').toNativeUtf8().cast<ffi.Char>());
           }
 
           if (runtime.address == 0) {

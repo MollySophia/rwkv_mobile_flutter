@@ -356,6 +356,7 @@ class rwkv_mobile {
   late final _rwkvmobile_runtime_set_penalty_params =
       _rwkvmobile_runtime_set_penalty_paramsPtr.asFunction<void Function(rwkvmobile_runtime_t, penalty_params)>();
 
+  @Deprecated('Use rwkvmobile_runtime_set_qnn_library_path instead')
   void rwkvmobile_runtime_add_adsp_library_path(
     ffi.Pointer<ffi.Char> path,
   ) {
