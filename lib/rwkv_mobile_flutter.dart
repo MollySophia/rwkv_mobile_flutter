@@ -33,7 +33,12 @@ class RWKVMobile {
     if (Platform.isAndroid) return ffi.DynamicLibrary.open('librwkv_mobile.so');
     if (Platform.isIOS) return ffi.DynamicLibrary.process();
     if (Platform.isMacOS) return ffi.DynamicLibrary.open('librwkv_mobile.dylib');
-    if (Platform.isWindows) return ffi.DynamicLibrary.open('rwkv_mobile.dll');
+    if (Platform.isWindows) {
+      final abi = ffi.Abi.current();
+      if (abi == ffi.Abi.windowsX64) return ffi.DynamicLibrary.open('rwkv_mobile.dll');
+      if (abi == ffi.Abi.windowsArm64) return ffi.DynamicLibrary.open('rwkv_mobile-arm64.dll');
+      throw Exception('😡 Unsupported ABI: ${abi.toString()}');
+    }
     if (Platform.isLinux) {
       final abi = ffi.Abi.current();
       if (abi == ffi.Abi.linuxX64) return ffi.DynamicLibrary.open('librwkv_mobile-linux-x86_64.so');

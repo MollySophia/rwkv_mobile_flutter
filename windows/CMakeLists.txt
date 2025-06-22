@@ -16,5 +16,6 @@ project(${PROJECT_NAME} LANGUAGES CXX)
 # external build triggered from this build file.
 set(rwkv_mobile_flutter_bundled_libraries
   "${CMAKE_CURRENT_SOURCE_DIR}/rwkv_mobile.dll"
+  "${CMAKE_CURRENT_SOURCE_DIR}/rwkv_mobile-arm64.dll"
   PARENT_SCOPE
 )

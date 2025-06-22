@@ -10,7 +10,8 @@ $files = @(
     "librwkv_mobile-dev-latest-aarch64-android-ndk-r25c.zip",
     "librwkv_mobile-dev-latest-linux-aarch64.zip",
     "librwkv_mobile-dev-latest-linux-x86_64.zip",
-    "librwkv_mobile-dev-latest-windows-x64.zip"
+    "librwkv_mobile-dev-latest-windows-x64.zip",
+    "librwkv_mobile-dev-latest-windows-arm64.zip"
 )
 
 foreach ($file in $files) {
@@ -25,7 +26,7 @@ $platforms = @{
     "macos" = @("librwkv_mobile-dev-latest-macos.zip")
     "android" = @("librwkv_mobile-dev-latest-aarch64-android-ndk-r25c.zip")
     "linux" = @("librwkv_mobile-dev-latest-linux-aarch64.zip", "librwkv_mobile-dev-latest-linux-x86_64.zip")
-    "windows" = @("librwkv_mobile-dev-latest-windows-x64.zip")
+    "windows" = @("librwkv_mobile-dev-latest-windows-x64.zip", "librwkv_mobile-dev-latest-windows-arm64.zip")
 }
 
 foreach ($platform in $platforms.Keys) {
