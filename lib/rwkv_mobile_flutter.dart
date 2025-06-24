@@ -599,7 +599,8 @@ class RWKVMobile {
         case GetPrefillAndDecodeSpeed req:
           final prefillSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime);
           final decodeSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime);
-          sendPort.send(Speed(prefillSpeed: prefillSpeed, decodeSpeed: decodeSpeed, toRWKV: req));
+          final progress = rwkvMobile.rwkvmobile_runtime_get_prefill_progress(runtime);
+          sendPort.send(Speed(prefillSpeed: prefillSpeed, decodeSpeed: decodeSpeed, prefillProgress: progress, toRWKV: req));
 
         // 🟥 getResponseBufferIds
         case GetResponseBufferIds _:

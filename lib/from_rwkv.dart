@@ -62,8 +62,14 @@ class ReInitSteps extends FromRWKV {
 class Speed extends FromRWKV {
   final double prefillSpeed;
   final double decodeSpeed;
+  final double prefillProgress;
 
-  Speed({required this.prefillSpeed, required this.decodeSpeed, super.toRWKV});
+  Speed({
+    required this.prefillProgress,
+    required this.prefillSpeed,
+    required this.decodeSpeed,
+    super.toRWKV,
+  });
 }
 
 /// 获取本次推理已生成的 tokens 被 decode 为普通字符串的值
