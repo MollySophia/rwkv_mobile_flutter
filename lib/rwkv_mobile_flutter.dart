@@ -293,47 +293,54 @@ class RWKVMobile {
           }
           retVal = rwkvMobile.rwkvmobile_runtime_set_token_banned(runtime, tokenBannedPtr, req.tokenBanned.length);
           calloc.free(tokenBannedPtr);
-          if (retVal != 0) sendPort.send(Error('Failed to set token banned', req));
+          if (retVal != 0) sendPort.send(Error('Failed to set token banned: retVal: $retVal', req, retVal));
 
         // 🟥 setUserRole
         case SetUserRole req:
           final userRolePtr = req.userRole.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_set_user_role(runtime, userRolePtr);
-          if (retVal != 0) sendPort.send(Error('Failed to set user role', req));
+          if (retVal != 0) sendPort.send(Error('Failed to set user role: retVal: $retVal', req, retVal));
 
         // 🟥 loadVisionEncoder
         case LoadVisionEncoder req:
           final encoderPathPtr = req.encoderPath.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_load_vision_encoder(runtime, encoderPathPtr);
-          if (retVal != 0) sendPort.send(Error('Failed to load vision encoder', req));
+          if (retVal != 0) sendPort.send(Error('Failed to load vision encoder: retVal: $retVal', req, retVal));
+
+        // 🟥 loadVisionEncoderAndAdapter
+        case LoadVisionEncoderAndAdapter req:
+          final encoderPathPtr = req.encoderPath.toNativeUtf8().cast<ffi.Char>();
+          final adapterPathPtr = req.adapterPath.toNativeUtf8().cast<ffi.Char>();
+          retVal = rwkvMobile.rwkvmobile_runtime_load_vision_encoder_and_adapter(runtime, encoderPathPtr, adapterPathPtr);
+          if (retVal != 0) sendPort.send(Error('Failed to load vision encoder and adapter: retVal: $retVal', req, retVal));
 
         // 🟥 releaseVisionEncoder
         case ReleaseVisionEncoder req:
           retVal = rwkvMobile.rwkvmobile_runtime_release_vision_encoder(runtime);
-          if (retVal != 0) sendPort.send(Error('Failed to release vision encoder', req));
+          if (retVal != 0) sendPort.send(Error('Failed to release vision encoder', req, retVal));
 
         // 🟥 setVisionPrompt
         case SetVisionPrompt req:
           final imagePathPtr = req.imagePathPtr.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_set_image_prompt(runtime, imagePathPtr);
-          if (retVal != 0) sendPort.send(Error('Failed to set image prompt', req));
+          if (retVal != 0) sendPort.send(Error('Failed to set image prompt', req, retVal));
 
         // 🟥 loadWhisperEncoder
         case LoadWhisperEncoder req:
           final encoderPathPtr = req.encoderPath.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_load_whisper_encoder(runtime, encoderPathPtr);
-          if (retVal != 0) sendPort.send(Error('Failed to load whisper encoder', req));
+          if (retVal != 0) sendPort.send(Error('Failed to load whisper encoder', req, retVal));
 
         // 🟥 releaseWhisperEncoder
         case ReleaseWhisperEncoder req:
           retVal = rwkvMobile.rwkvmobile_runtime_release_whisper_encoder(runtime);
-          if (retVal != 0) sendPort.send(Error('Failed to release whisper encoder', req));
+          if (retVal != 0) sendPort.send(Error('Failed to release whisper encoder', req, retVal));
 
         // 🟥 setAudioPrompt
         case SetAudioPrompt req:
           final audioPathPtr = req.audioPathPtr.toNativeUtf8().cast<ffi.Char>();
           retVal = rwkvMobile.rwkvmobile_runtime_set_audio_prompt(runtime, audioPathPtr);
-          if (retVal != 0) sendPort.send(Error('Failed to set audio prompt', req));
+          if (retVal != 0) sendPort.send(Error('Failed to set audio prompt', req, retVal));
 
         // 🟥 message
         case ChatAsync req:
@@ -343,7 +350,7 @@ class RWKVMobile {
           final numInputs = req.messages.length;
 
           if (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) != 0) {
-            sendPort.send(Error('LLM is already generating', req));
+            sendPort.send(Error('LLM is already generating', req, retVal));
             break;
           }
 

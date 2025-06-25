@@ -121,6 +121,13 @@ class LoadVisionEncoder extends ToRWKV {
   LoadVisionEncoder(this.encoderPath);
 }
 
+class LoadVisionEncoderAndAdapter extends ToRWKV {
+  final String encoderPath;
+  final String adapterPath;
+
+  LoadVisionEncoderAndAdapter(this.encoderPath, this.adapterPath);
+}
+
 class LoadWhisperEncoder extends ToRWKV {
   final String encoderPath;
 

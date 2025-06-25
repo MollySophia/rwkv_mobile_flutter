@@ -29,8 +29,9 @@ class Error extends FromRWKV {
 
   /// 用于追踪产生该 response 的 request
   final ToRWKV? to;
+  final int? retVal;
 
-  Error(this.message, [this.to]) : super(toRWKV: to);
+  Error(this.message, [this.to, this.retVal]) : super(toRWKV: to);
 }
 
 class GenerateStart extends FromRWKV {
