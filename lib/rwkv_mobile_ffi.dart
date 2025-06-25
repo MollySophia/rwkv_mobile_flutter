@@ -492,6 +492,25 @@ class rwkv_mobile {
   late final _rwkvmobile_runtime_load_vision_encoder = _rwkvmobile_runtime_load_vision_encoderPtr
       .asFunction<int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>)>();
 
+  int rwkvmobile_runtime_load_vision_encoder_and_adapter(
+    rwkvmobile_runtime_t runtime,
+    ffi.Pointer<ffi.Char> encoder_path,
+    ffi.Pointer<ffi.Char> adapter_path,
+  ) {
+    return _rwkvmobile_runtime_load_vision_encoder_and_adapter(
+      runtime,
+      encoder_path,
+      adapter_path,
+    );
+  }
+
+  late final _rwkvmobile_runtime_load_vision_encoder_and_adapterPtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>>(
+        'rwkvmobile_runtime_load_vision_encoder_and_adapter',
+      );
+  late final _rwkvmobile_runtime_load_vision_encoder_and_adapter = _rwkvmobile_runtime_load_vision_encoder_and_adapterPtr
+      .asFunction<int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
+
   int rwkvmobile_runtime_release_vision_encoder(
     rwkvmobile_runtime_t runtime,
   ) {
