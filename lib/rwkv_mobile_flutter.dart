@@ -301,6 +301,12 @@ class RWKVMobile {
           retVal = rwkvMobile.rwkvmobile_runtime_set_user_role(runtime, userRolePtr);
           if (retVal != 0) sendPort.send(Error('Failed to set user role: retVal: $retVal', req, retVal));
 
+        // 🟥 setResponseRole
+        case SetResponseRole req:
+          final responseRolePtr = req.responseRole.toNativeUtf8().cast<ffi.Char>();
+          retVal = rwkvMobile.rwkvmobile_runtime_set_response_role(runtime, responseRolePtr);
+          if (retVal != 0) sendPort.send(Error('Failed to set response role: retVal: $retVal', req, retVal));
+
         // 🟥 loadVisionEncoder
         case LoadVisionEncoder req:
           final encoderPathPtr = req.encoderPath.toNativeUtf8().cast<ffi.Char>();

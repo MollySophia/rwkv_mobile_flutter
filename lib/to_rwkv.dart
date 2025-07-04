@@ -262,3 +262,17 @@ class SetVisionPrompt extends ToRWKV {
 }
 
 class GetLatestRuntimeAddress extends ToRWKV {}
+
+// rwkvmobile_runtime_set_response_role
+// rwkvmobile_runtime_set_user_role
+
+/// 把user role设置成English
+///
+/// response role设置成Chinese 然后像聊天一样用户输入英文就行
+///
+/// 原本的格式是User: xxx\n\nAssistant:，现在是English: xxx\n\nChinese:，可以直接换
+class SetResponseRole extends ToRWKV {
+  final String responseRole;
+
+  SetResponseRole([this.responseRole = 'Assistant']);
+}
