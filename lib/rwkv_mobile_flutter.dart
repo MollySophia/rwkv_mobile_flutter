@@ -263,8 +263,9 @@ class RWKVMobile {
           );
 
         // 🟥 getIsGenerating
-        case GetIsGenerating _:
+        case GetIsGenerating req:
           bool isGeneratingBool = (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) != 0);
+          sendPort.send(IsGenerating(isGenerating: isGeneratingBool, toRWKV: req));
           sendPort.send({'isGenerating': isGeneratingBool});
 
         // 🟥 setThinkingToken

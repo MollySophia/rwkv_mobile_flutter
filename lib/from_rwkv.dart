@@ -208,3 +208,9 @@ class RuntimeLog extends FromRWKV {
 
   RuntimeLog({required this.runtimeLog, super.toRWKV});
 }
+
+class IsGenerating extends FromRWKV {
+  final bool isGenerating;
+
+  IsGenerating({required this.isGenerating, super.toRWKV});
+}
