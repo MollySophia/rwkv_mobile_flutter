@@ -22,7 +22,7 @@
 ./fetch_latest_libraries.sh
 ```
 
-## Demos （源码：https://github.com/RWKV-APP/RWKV_APP）
+## Demos （源码：[github.com/RWKV-APP/RWKV_APP](https://github.com/RWKV-APP/RWKV_APP)）
 
 ### RWKV Chat
 
