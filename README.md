@@ -1,12 +1,5 @@
-# RWKV Demos
-
-## 技术架构
-
-- [DeepWiki](https://deepwiki.com/MollySophia/rwkv_mobile_flutter)
-- 前端: [flutter](https://github.com/MollySophia/rwkv_mobile_flutter/tree/master/example)
-- adapter (dart ffi): [本项目](https://github.com/MollySophia/rwkv_mobile_flutter)
-- 后端 (C++): [rwkv-mobile](https://github.com/MollySophia/rwkv-mobile)
-- 权重: [mollysama/rwkv-mobile-models](https://huggingface.co/mollysama/rwkv-mobile-models/tree/main)
+# A Flutter interface package for rwkv-mobile
+## For demos: https://github.com/RWKV-APP/RWKV_APP
 
 ## 更新后端二进制库文件
 当遇到`Invalid argument(s): Failed to lookup symbol 'xxx': undefined symbol: xxx`错误时，可以尝试更新本地repo的后端二进制library：
@@ -21,28 +14,6 @@
 ```sh
 ./fetch_latest_libraries.sh
 ```
-
-## Demos （源码：[github.com/RWKV-APP/RWKV_APP](https://github.com/RWKV-APP/RWKV_APP)）
-
-### RWKV Chat
-
-[Android](https://www.pgyer.com/rwkvchat) | [iOS TestFlight](https://testflight.apple.com/join/DaMqCNKh) | [Python](https://github.com/BlinkDL/RWKV-LM)
-
-### RWKV Talk 语音
-
-[Android](https://www.pgyer.com/rwkv-talk) | [iOS TestFlight](https://testflight.apple.com/join/mfsdWS4b) | [Python](https://github.com/yynil/RWKVTTS)
-
-### RWKV See 视觉理解
-
-[Android](https://www.pgyer.com/rwkv-see) | [iOS TestFlight](https://testflight.apple.com/join/vAjawMJc) | [Python](https://github.com/JL-er/WorldRWKV)
-
-### RWKV Othello 黑白棋
-
-[Android](https://www.pgyer.com/rwkv-othello) | [iOS TestFlight](https://testflight.apple.com/join/f5SVf76c) | [Python](https://github.com/Jellyfish042/RWKV_Othello)
-
-### RWKV Sudoku 数独
-
-[Android](https://www.pgyer.com/rwkv-sudoku) | _🚧 审核中_ iOS TestFlight | [Python](https://github.com/Jellyfish042/Sudoku-RWKV)
 
 ## 前后端通讯方式
 
