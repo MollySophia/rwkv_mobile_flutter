@@ -81,7 +81,10 @@ class Speed extends FromRWKV {
 /// 2. 然后 resume 之后 responseBufferContent 会先短暂清空
 /// 3. 然后变成 stop 前已经生成了的内容并接着生成
 class ResponseBufferContent extends FromRWKV {
+  /// 当前已生成的 tokens 被 decode 为普通字符串的值
   final String responseBufferContent;
+
+  /// 是否已生成 EOS token, 代表本次生成是否已完结
   final bool eosFound;
 
   ResponseBufferContent({
