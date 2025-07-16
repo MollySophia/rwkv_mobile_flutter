@@ -1066,6 +1066,9 @@ final class response_buffer extends ffi.Struct {
 
   @ffi.Int()
   external int length;
+
+  @ffi.Int()
+  external int eos_found;
 }
 
 typedef rwkvmobile_runtime_t = ffi.Pointer<ffi.Void>;

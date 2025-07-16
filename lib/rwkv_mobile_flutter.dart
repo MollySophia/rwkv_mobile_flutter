@@ -483,9 +483,7 @@ class RWKVMobile {
             case Backend.webRwkv:
             case Backend.mnn:
             case Backend.coreml:
-              runtime = rwkvMobile.rwkvmobile_runtime_init_with_name(
-                modelBackendString.toNativeUtf8().cast<ffi.Char>(),
-              );
+              runtime = rwkvMobile.rwkvmobile_runtime_init_with_name(modelBackendString.toNativeUtf8().cast<ffi.Char>());
             case Backend.qnn:
               // TODO: better solution for this
               final tempDir = await getTemporaryDirectory();
@@ -515,12 +513,7 @@ class RWKVMobile {
           retVal = rwkvMobile.rwkvmobile_runtime_load_tokenizer(runtime, tokenizerPath.toNativeUtf8().cast<ffi.Char>());
           if (retVal != 0) {
             sendPort.send(
-              ReInitSteps(
-                done: false,
-                error: 'Failed to load tokenizer, tokenizer path: $tokenizerPath',
-                toRWKV: req,
-                success: false,
-              ),
+              ReInitSteps(done: false, error: 'Failed to load tokenizer, tokenizer path: $tokenizerPath', toRWKV: req, success: false),
             );
             break;
           }
@@ -577,14 +570,7 @@ class RWKVMobile {
 
           retVal = rwkvMobile.rwkvmobile_runtime_load_model(runtime, modelPath.toNativeUtf8().cast<ffi.Char>());
           if (retVal != 0) {
-            sendPort.send(
-              ReInitSteps(
-                done: false,
-                error: 'Failed to load model, model path: $modelPath',
-                toRWKV: req,
-                success: false,
-              ),
-            );
+            sendPort.send(ReInitSteps(done: false, error: 'Failed to load model, model path: $modelPath', toRWKV: req, success: false));
             break;
           }
 
