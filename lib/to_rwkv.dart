@@ -65,6 +65,7 @@ class GetTTSOutputFileList extends ToRWKV {
 /// 2. 然后 resume 之后 responseBufferContent 会先短暂清空
 /// 3. 然后变成 stop 前已经生成了的内容并接着生成
 class GetResponseBufferContent extends ToRWKV {
+  /// 发起 `GetResponseBufferContent` 请求时, 是为的哪些 messages 发起的
   final List<String> messages;
 
   GetResponseBufferContent([this.messages = const []]);
