@@ -593,7 +593,8 @@ class RWKVMobile {
           int length = responseBufferContent.length;
           final Uint8List byteList = responseBufferContent.content.cast<ffi.Uint8>().asTypedList(length);
           final String str = _codec.decode(byteList);
-          sendPort.send(ResponseBufferContent(responseBufferContent: str, toRWKV: req));
+          final eosFound = responseBufferContent.eos_found == 1;
+          sendPort.send(ResponseBufferContent(responseBufferContent: str, eosFound: eosFound, toRWKV: req));
 
         // 🟥 getPrefillAndDecodeSpeed
         case GetPrefillAndDecodeSpeed req:

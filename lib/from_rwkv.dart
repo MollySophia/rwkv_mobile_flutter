@@ -82,8 +82,13 @@ class Speed extends FromRWKV {
 /// 3. 然后变成 stop 前已经生成了的内容并接着生成
 class ResponseBufferContent extends FromRWKV {
   final String responseBufferContent;
+  final bool eosFound;
 
-  ResponseBufferContent({required this.responseBufferContent, super.toRWKV});
+  ResponseBufferContent({
+    required this.responseBufferContent,
+    required this.eosFound,
+    super.toRWKV,
+  });
 }
 
 class SamplerParams extends FromRWKV {
