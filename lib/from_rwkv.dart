@@ -222,3 +222,15 @@ class IsGenerating extends FromRWKV {
 
   IsGenerating({required this.isGenerating, super.toRWKV});
 }
+
+class TextEmbeddingResult extends FromRWKV {
+  final List<List<double>> embeddings;
+
+  TextEmbeddingResult({super.toRWKV, required this.embeddings});
+}
+
+class LoadEmbeddingModelResult extends FromRWKV {
+  bool success;
+
+  LoadEmbeddingModelResult({super.toRWKV, required this.success});
+}

@@ -8,6 +8,7 @@ import 'dart:math';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+
 // TODO: 由前端提供各个路径 @WangCe @Molly
 import 'package:path_provider/path_provider.dart';
 import 'package:rwkv_mobile_flutter/from_rwkv.dart';
@@ -200,6 +201,31 @@ class RWKVMobile {
     // TODO: @WangCe 逐渐地迁移到 handler 方法中, 最好不要在该方法声明局部变量
     await for (final _FromFrontend message in receivePort) {
       switch (message) {
+        case LoadEmbeddingModel req:
+          final modelPath = req.path.toNativeUtf8().cast<ffi.Char>();
+          int r = rwkvMobile.rwkvmobile_init_embedding(runtime, modelPath);
+          sendPort.send(LoadEmbeddingModelResult(success: r == 0, toRWKV: req));
+          break;
+
+        case TextEmbedding req:
+          final List<List<double>> result = [];
+          try {
+            for (final st in req.sentences) {
+              final textPtr = st.toNativeUtf8().cast<ffi.Char>();
+              final size = 1024 * ffi.sizeOf<ffi.Float>();
+              final embedding = calloc.allocate<ffi.Float>(size);
+              int ret = rwkvMobile.rwkvmobile_embed(runtime, textPtr, embedding);
+              if (ret != 0) sendPort.send(Error('Failed to embed text: $st', req));
+              final ebd = embedding.asTypedList(1024).toList();
+              calloc.free(embedding);
+              result.add(ebd);
+            }
+          } catch (e) {
+            //
+          }
+          sendPort.send(TextEmbeddingResult(embeddings: result, toRWKV: req));
+          break;
+
         // 🟥 getLatestRuntimeAddress
         case GetLatestRuntimeAddress req:
           if (kDebugMode) print('✅ getLatestRuntimeAddress: ${runtime.address}');

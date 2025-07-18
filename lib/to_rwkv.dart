@@ -147,6 +147,18 @@ class ReleaseVisionEncoder extends ToRWKV {}
 
 class ReleaseWhisperEncoder extends ToRWKV {}
 
+class LoadEmbeddingModel extends ToRWKV {
+  final String path;
+
+  LoadEmbeddingModel({required this.path});
+}
+
+class TextEmbedding extends ToRWKV {
+  final List<String> sentences;
+
+  TextEmbedding({required this.sentences});
+}
+
 class ChatAsync extends ToRWKV {
   final List<String> messages;
   final bool reasoning;
