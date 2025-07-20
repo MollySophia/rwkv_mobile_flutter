@@ -579,7 +579,6 @@ class RWKVMobile {
           bool generating = rwkvMobile.rwkvmobile_runtime_is_generating(runtime) == 1;
           while (generating) {
             rwkvMobile.rwkvmobile_runtime_stop_generation(runtime);
-            if (kDebugMode) print('💬 Waiting for generation to stop...');
             await Future.delayed(const Duration(milliseconds: 5));
             generating = rwkvMobile.rwkvmobile_runtime_is_generating(runtime) == 1;
             if (!generating) sendPort.send(GenerateStop(toRWKV: req));
