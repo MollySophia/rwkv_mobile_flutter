@@ -362,7 +362,6 @@ class RWKVMobile {
           }
 
           sendPort.send(GenerateStart(toRWKV: req));
-          if (kDebugMode) print('💬 Starting LLM generation thread (chat mode)');
           retVal = rwkvMobile.rwkvmobile_runtime_eval_chat_with_history_async(
             runtime,
             inputsPtr,
@@ -371,7 +370,6 @@ class RWKVMobile {
             ffi.nullptr,
             req.reasoning ? 1 : 0,
           );
-          if (kDebugMode) print('💬 Started LLM generation thread (chat mode)');
           if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation thread: retVal: $retVal', toRWKV: req));
 
         // 🟥 generateAsync
