@@ -953,6 +953,81 @@ class rwkv_mobile {
   late final _rwkvmobile_runtime_tts_get_generation_progress = _rwkvmobile_runtime_tts_get_generation_progressPtr
       .asFunction<double Function(rwkvmobile_runtime_t)>();
 
+  int rwkvmobile_runtime_sparktts_load_models(
+    rwkvmobile_runtime_t runtime,
+    ffi.Pointer<ffi.Char> wav2vec2_path,
+    ffi.Pointer<ffi.Char> bicodec_tokenizer_path,
+    ffi.Pointer<ffi.Char> bicodec_detokenizer_path,
+  ) {
+    return _rwkvmobile_runtime_sparktts_load_models(
+      runtime,
+      wav2vec2_path,
+      bicodec_tokenizer_path,
+      bicodec_detokenizer_path,
+    );
+  }
+
+  late final _rwkvmobile_runtime_sparktts_load_modelsPtr =
+      _lookup<
+        ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>
+      >('rwkvmobile_runtime_sparktts_load_models');
+  late final _rwkvmobile_runtime_sparktts_load_models = _rwkvmobile_runtime_sparktts_load_modelsPtr
+      .asFunction<int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
+
+  int rwkvmobile_runtime_sparktts_release_models(
+    rwkvmobile_runtime_t runtime,
+  ) {
+    return _rwkvmobile_runtime_sparktts_release_models(
+      runtime,
+    );
+  }
+
+  late final _rwkvmobile_runtime_sparktts_release_modelsPtr = _lookup<ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t)>>(
+    'rwkvmobile_runtime_sparktts_release_models',
+  );
+  late final _rwkvmobile_runtime_sparktts_release_models = _rwkvmobile_runtime_sparktts_release_modelsPtr
+      .asFunction<int Function(rwkvmobile_runtime_t)>();
+
+  int rwkvmobile_runtime_run_spark_tts_streaming_async(
+    rwkvmobile_runtime_t runtime,
+    ffi.Pointer<ffi.Char> tts_text,
+    ffi.Pointer<ffi.Char> prompt_audio_text,
+    ffi.Pointer<ffi.Char> prompt_audio_path,
+    ffi.Pointer<ffi.Char> output_wav_path,
+  ) {
+    return _rwkvmobile_runtime_run_spark_tts_streaming_async(
+      runtime,
+      tts_text,
+      prompt_audio_text,
+      prompt_audio_path,
+      output_wav_path,
+    );
+  }
+
+  late final _rwkvmobile_runtime_run_spark_tts_streaming_asyncPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)
+        >
+      >('rwkvmobile_runtime_run_spark_tts_streaming_async');
+  late final _rwkvmobile_runtime_run_spark_tts_streaming_async = _rwkvmobile_runtime_run_spark_tts_streaming_asyncPtr
+      .asFunction<
+        int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)
+      >();
+
+  tts_streaming_buffer rwkvmobile_runtime_get_tts_streaming_buffer(
+    rwkvmobile_runtime_t runtime,
+  ) {
+    return _rwkvmobile_runtime_get_tts_streaming_buffer(
+      runtime,
+    );
+  }
+
+  late final _rwkvmobile_runtime_get_tts_streaming_bufferPtr =
+      _lookup<ffi.NativeFunction<tts_streaming_buffer Function(rwkvmobile_runtime_t)>>('rwkvmobile_runtime_get_tts_streaming_buffer');
+  late final _rwkvmobile_runtime_get_tts_streaming_buffer = _rwkvmobile_runtime_get_tts_streaming_bufferPtr
+      .asFunction<tts_streaming_buffer Function(rwkvmobile_runtime_t)>();
+
   double rwkvmobile_runtime_get_prefill_progress(
     rwkvmobile_runtime_t runtime,
   ) {
@@ -1069,6 +1144,13 @@ final class response_buffer extends ffi.Struct {
 
   @ffi.Int()
   external int eos_found;
+}
+
+final class tts_streaming_buffer extends ffi.Struct {
+  external ffi.Pointer<ffi.Float> samples;
+
+  @ffi.Int()
+  external int length;
 }
 
 typedef rwkvmobile_runtime_t = ffi.Pointer<ffi.Void>;
