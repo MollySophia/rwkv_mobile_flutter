@@ -695,6 +695,7 @@ class RWKVMobile {
 
         // 🟥 getTTSStreamingBuffer
         case GetTTSStreamingBuffer req:
+          final generating = rwkvMobile.rwkvmobile_runtime_is_generating(runtime) == 1;
           final ttsStreamingBuffer = rwkvMobile.rwkvmobile_runtime_get_tts_streaming_buffer(runtime);
           final ttsStreamingBufferList = ttsStreamingBuffer.samples.asTypedList(ttsStreamingBuffer.length).map((e) {
             // Handle Infinity and NaN values
@@ -705,6 +706,7 @@ class RWKVMobile {
           }).toList();
           sendPort.send(
             TTSStreamingBuffer(
+              generating: generating,
               ttsStreamingBuffer: ttsStreamingBufferList,
               ttsStreamingBufferLength: ttsStreamingBuffer.length,
               toRWKV: req,

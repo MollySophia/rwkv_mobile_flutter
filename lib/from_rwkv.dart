@@ -238,10 +238,12 @@ class TTSStreamingBuffer extends FromRWKV {
   // TODO: 不通过 ffi 传递, 而是直接传递内存块的权限
   final List<int> ttsStreamingBuffer;
   final int ttsStreamingBufferLength;
+  final bool generating;
 
   TTSStreamingBuffer({
     required this.ttsStreamingBuffer,
     required this.ttsStreamingBufferLength,
+    required this.generating,
     super.toRWKV,
   });
 }
