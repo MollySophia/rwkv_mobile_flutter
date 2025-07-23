@@ -611,6 +611,19 @@ class RWKVMobile {
         case LoadTTSModels req:
           throw UnimplementedError('TODO: rwkvmobile_runtime_sparktts_load_models');
 
+        case LoadSparkTTSModels req:
+          final wav2vec2Path = req.wav2vec2Path;
+          final bicodecTokenizerPath = req.bicodecTokenizerPath;
+          final bicodecDetokenizerPath = req.bicodecDetokenizerPath;
+
+          retVal = rwkvMobile.rwkvmobile_runtime_sparktts_load_models(
+            runtime,
+            wav2vec2Path.toNativeUtf8().cast<ffi.Char>(),
+            bicodecTokenizerPath.toNativeUtf8().cast<ffi.Char>(),
+            bicodecDetokenizerPath.toNativeUtf8().cast<ffi.Char>(),
+          );
+          if (retVal != 0) sendPort.send(Error('Failed to load Spark TTS models', req));
+
         // 🟥 loadTTSTextNormalizer
         case LoadTTSTextNormalizer req:
           final fstPath = req.fstPath;

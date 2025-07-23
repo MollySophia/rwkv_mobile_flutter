@@ -118,6 +118,18 @@ class LoadTTSModels extends ToRWKV {
   });
 }
 
+class LoadSparkTTSModels extends ToRWKV {
+  final String wav2vec2Path;
+  final String bicodecTokenizerPath;
+  final String bicodecDetokenizerPath;
+
+  LoadSparkTTSModels({
+    required this.wav2vec2Path,
+    required this.bicodecTokenizerPath,
+    required this.bicodecDetokenizerPath,
+  });
+}
+
 class LoadTTSTextNormalizer extends ToRWKV {
   final String fstPath;
 
@@ -271,6 +283,7 @@ class SetVisionPrompt extends ToRWKV {
   SetVisionPrompt(this.imagePathPtr);
 }
 
+@Deprecated("Backend can't use this")
 class GetLatestRuntimeAddress extends ToRWKV {}
 
 // rwkvmobile_runtime_set_response_role
