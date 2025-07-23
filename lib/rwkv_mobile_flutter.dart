@@ -682,7 +682,7 @@ class RWKVMobile {
 
         // 🟥 setTTSCFMSteps
         case SetTTSCFMSteps req:
-
+          break;
         // 🟥 dumpLog
         case DumpLog req:
           final log = rwkvMobile.rwkvmobile_dump_log();
