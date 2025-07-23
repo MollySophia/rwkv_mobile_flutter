@@ -139,8 +139,16 @@ class RWKVMobile {
 
     if (runtime.address == 0) throw Exception('😡 Failed to initialize runtime');
 
-    retVal = rwkvMobile.rwkvmobile_runtime_load_tokenizer(runtime, tokenizerPath.toNativeUtf8().cast<ffi.Char>());
-    if (retVal != 0) throw Exception('😡 Failed to load tokenizer, tokenizer path: $tokenizerPath');
+    final tempDir = await getTemporaryDirectory();
+    rwkvMobile.rwkvmobile_set_cache_dir(
+        runtime, tempDir.path.toNativeUtf8().cast<ffi.Char>());
+
+    if (tokenizerPath.isNotEmpty) {
+      retVal = rwkvMobile.rwkvmobile_runtime_load_tokenizer(
+          runtime, tokenizerPath.toNativeUtf8().cast<ffi.Char>());
+      if (retVal != 0) throw Exception(
+          '😡 Failed to load tokenizer, tokenizer path: $tokenizerPath');
+    }
 
     if (backend == Backend.coreml) {
       final modelDir = modelPath.substring(0, modelPath.lastIndexOf('/'));
@@ -192,20 +200,24 @@ class RWKVMobile {
       modelPath = modelPathWithoutZip;
     }
 
-    retVal = rwkvMobile.rwkvmobile_runtime_load_model(runtime, modelPath.toNativeUtf8().cast<ffi.Char>());
-    if (retVal != 0) throw Exception('😡 Failed to load model, model path: $modelPath');
-
-    final tempDir = await getTemporaryDirectory();
-    rwkvMobile.rwkvmobile_set_cache_dir(runtime, tempDir.path.toNativeUtf8().cast<ffi.Char>());
+    if (modelPath.isNotEmpty) {
+      retVal = rwkvMobile.rwkvmobile_runtime_load_model(
+          runtime, modelPath.toNativeUtf8().cast<ffi.Char>());
+      if (retVal != 0) throw Exception('😡 Failed to load model, model path: $modelPath');
+    }
 
     // TODO: @WangCe 逐渐地迁移到 handler 方法中, 最好不要在该方法声明局部变量
     await for (final _FromFrontend message in receivePort) {
       switch (message) {
         case LoadEmbeddingModel req:
           final modelPath = req.path.toNativeUtf8().cast<ffi.Char>();
-          int r = rwkvMobile.rwkvmobile_init_embedding(runtime, modelPath);
+          int r = 0;
+          try {
+            r = rwkvMobile.rwkvmobile_init_embedding(runtime, modelPath);
+          } catch (e) {
+            r = -1;
+          }
           sendPort.send(LoadEmbeddingModelResult(success: r == 0, toRWKV: req));
-          break;
 
         case TextEmbedding req:
           final List<List<double>> result = [];
@@ -224,7 +236,6 @@ class RWKVMobile {
             //
           }
           sendPort.send(TextEmbeddingResult(embeddings: result, toRWKV: req));
-          break;
 
         // 🟥 getLatestRuntimeAddress
         case GetLatestRuntimeAddress req:
