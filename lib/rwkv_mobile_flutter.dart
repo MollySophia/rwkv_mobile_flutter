@@ -695,17 +695,18 @@ class RWKVMobile {
 
         // 🟥 getTTSStreamingBuffer
         case GetTTSStreamingBuffer req:
-        // TODO: 正确的的数据类型?
-
-        // final ttsStreamingBuffer = rwkvMobile.rwkvmobile_runtime_get_tts_streaming_buffer(runtime);
-        // final ttsStreamingBufferList = ttsStreamingBuffer.samples.asTypedList(ttsStreamingBuffer.length).map((e) => e.toInt()).toList();
-        // sendPort.send(
-        //   TTSStreamingBuffer(
-        //     ttsStreamingBuffer: ttsStreamingBufferList,
-        //     ttsStreamingBufferLength: ttsStreamingBuffer.length,
-        //     toRWKV: req,
-        //   ),
-        // );
+          final ttsStreamingBuffer = rwkvMobile.rwkvmobile_runtime_get_tts_streaming_buffer(runtime);
+          final ttsStreamingBufferList = ttsStreamingBuffer.samples
+              .asTypedList(ttsStreamingBuffer.length)
+              .map((e) => (e * 32768.0).toInt()) // convert to int16; remove this if you need raw float samples
+              .toList();
+          sendPort.send(
+            TTSStreamingBuffer(
+              ttsStreamingBuffer: ttsStreamingBufferList,
+              ttsStreamingBufferLength: ttsStreamingBuffer.length,
+              toRWKV: req,
+            ),
+          );
 
         // 🟥 setTTSCFMSteps
         case SetTTSCFMSteps req:
