@@ -205,6 +205,7 @@ class TTSResult extends FromRWKV {
 
 class TTSCFMSteps extends FromRWKV {}
 
+@Deprecated("Backend can't use this")
 class LatestRuntimeAddress extends FromRWKV {
   final int latestRuntimeAddress;
 

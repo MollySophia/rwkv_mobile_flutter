@@ -44,6 +44,7 @@ class GetPrefillAndDecodeSpeed extends ToRWKV {
 
 class GetPrompt extends ToRWKV {}
 
+@Deprecated('Use sparktts instead')
 class GetTTSGenerationProgress extends ToRWKV {
   static const responseType = TTSGenerationProgress;
 }
@@ -52,6 +53,7 @@ class GetTTSGenerationProgress extends ToRWKV {
 ///
 /// - TODO: 每次重新调用生成语音会置空吗? @WangCe
 /// - TODO: 在单次生成中会不断变化吗? @WangCe
+@Deprecated('Use sparktts instead')
 class GetTTSOutputFileList extends ToRWKV {
   // TODO: 其实改成类似于 protoBuffer 那种形式也行
   static const responseType = TTSOutputFileList;
@@ -84,6 +86,7 @@ class ReInitRuntime extends ToRWKV {
   final String modelPath;
   final Backend backend;
   final String tokenizerPath;
+  @Deprecated("Backend can't use this")
   final int latestRuntimeAddress;
 
   static const responseType = ReInitSteps;
@@ -96,6 +99,7 @@ class ReInitRuntime extends ToRWKV {
   });
 }
 
+@Deprecated('Use sparktts instead')
 class LoadTTSModels extends ToRWKV {
   final String campPlusPath;
   final String flowDecoderEstimatorPath;
@@ -236,6 +240,7 @@ class SetSamplerParams extends ToRWKV {
 /// 范围3～10吧，越高越慢越精细，可以做成参数
 ///
 /// args['cfmSteps'] as int
+@Deprecated('Use sparktts instead')
 class SetTTSCFMSteps extends ToRWKV {
   final int cfmSteps;
 
