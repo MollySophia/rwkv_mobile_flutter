@@ -682,7 +682,6 @@ class RWKVMobile {
 
         // 🟥 setTTSCFMSteps
         case SetTTSCFMSteps req:
-          throw UnimplementedError('TODO: deprecated');
 
         // 🟥 dumpLog
         case DumpLog req:

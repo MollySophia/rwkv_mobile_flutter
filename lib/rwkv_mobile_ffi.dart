@@ -926,7 +926,7 @@ final class penalty_params extends ffi.Struct {
 }
 
 final class token_ids extends ffi.Struct {
-  external ffi.Pointer<ffi.Int> ids;
+  external ffi.Pointer<ffi.Int32> ids;
 
   @ffi.Int()
   external int len;
