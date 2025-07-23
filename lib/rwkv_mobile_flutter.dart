@@ -698,8 +698,8 @@ class RWKVMobile {
           final ttsStreamingBuffer = rwkvMobile.rwkvmobile_runtime_get_tts_streaming_buffer(runtime);
           final ttsStreamingBufferList = ttsStreamingBuffer.samples.asTypedList(ttsStreamingBuffer.length).map((e) {
             // Handle Infinity and NaN values
-            if (e.isInfinite || e.isNaN) {
-              return -32768; // or another appropriate default value
+            if (e.isInfinite || e.isNaN || e == 0 || e.isNegative) {
+              return 0; // or another appropriate default value
             }
             return (e * 32768.0).toInt(); // convert to int16; remove this if you need raw float samples
           }).toList();
