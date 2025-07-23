@@ -693,6 +693,20 @@ class RWKVMobile {
           // sendPort.send(TTSOutputFileList(outputFileList: fileList, toRWKV: req));
           throw UnimplementedError('TODO: deprecated');
 
+        // 🟥 getTTSStreamingBuffer
+        case GetTTSStreamingBuffer req:
+        // TODO: 正确的的数据类型?
+
+        // final ttsStreamingBuffer = rwkvMobile.rwkvmobile_runtime_get_tts_streaming_buffer(runtime);
+        // final ttsStreamingBufferList = ttsStreamingBuffer.samples.asTypedList(ttsStreamingBuffer.length).map((e) => e.toInt()).toList();
+        // sendPort.send(
+        //   TTSStreamingBuffer(
+        //     ttsStreamingBuffer: ttsStreamingBufferList,
+        //     ttsStreamingBufferLength: ttsStreamingBuffer.length,
+        //     toRWKV: req,
+        //   ),
+        // );
+
         // 🟥 setTTSCFMSteps
         case SetTTSCFMSteps req:
           break;

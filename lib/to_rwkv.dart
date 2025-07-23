@@ -59,6 +59,11 @@ class GetTTSOutputFileList extends ToRWKV {
   static const responseType = TTSOutputFileList;
 }
 
+// rwkvmobile_runtime_get_tts_streaming_buffer获取到音频buffer以及它当前的长度（单位为样本数不是字节数，即是float数组长度）
+class GetTTSStreamingBuffer extends ToRWKV {
+  static const responseType = TTSStreamingBuffer;
+}
+
 /// 获取本次推理已生成的 tokens 被 decode 为普通字符串的值
 ///
 /// 目前, 前端通过周期性调用该方法, 来获取 decode 的值渲染到 UI 上
