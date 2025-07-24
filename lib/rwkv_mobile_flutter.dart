@@ -697,7 +697,8 @@ class RWKVMobile {
         case GetTTSStreamingBuffer req:
           final generating = rwkvMobile.rwkvmobile_runtime_is_generating(runtime) == 1;
           final ttsStreamingBuffer = rwkvMobile.rwkvmobile_runtime_get_tts_streaming_buffer(runtime);
-          final ttsStreamingBufferList = ttsStreamingBuffer.samples.asTypedList(ttsStreamingBuffer.length).map((e) {
+          final rawFloatList = ttsStreamingBuffer.samples.asTypedList(ttsStreamingBuffer.length).toList();
+          final ttsStreamingBufferList = rawFloatList.map((e) {
             // Handle Infinity and NaN values
             if (e.isInfinite || e.isNaN || e == 0 || e.isNegative) {
               return 0; // or another appropriate default value
@@ -709,6 +710,7 @@ class RWKVMobile {
               generating: generating,
               ttsStreamingBuffer: ttsStreamingBufferList,
               ttsStreamingBufferLength: ttsStreamingBuffer.length,
+              rawFloatList: rawFloatList,
               toRWKV: req,
             ),
           );

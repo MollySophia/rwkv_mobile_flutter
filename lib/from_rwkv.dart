@@ -237,6 +237,7 @@ class IsGenerating extends FromRWKV {
 class TTSStreamingBuffer extends FromRWKV {
   // TODO: 不通过 ffi 传递, 而是直接传递内存块的权限
   final List<int> ttsStreamingBuffer;
+  final List<double> rawFloatList;
   final int ttsStreamingBufferLength;
   final bool generating;
 
@@ -244,6 +245,7 @@ class TTSStreamingBuffer extends FromRWKV {
     required this.ttsStreamingBuffer,
     required this.ttsStreamingBufferLength,
     required this.generating,
+    required this.rawFloatList,
     super.toRWKV,
   });
 }
