@@ -140,14 +140,11 @@ class RWKVMobile {
     if (runtime.address == 0) throw Exception('😡 Failed to initialize runtime');
 
     final tempDir = await getTemporaryDirectory();
-    rwkvMobile.rwkvmobile_set_cache_dir(
-        runtime, tempDir.path.toNativeUtf8().cast<ffi.Char>());
+    rwkvMobile.rwkvmobile_set_cache_dir(runtime, tempDir.path.toNativeUtf8().cast<ffi.Char>());
 
     if (tokenizerPath.isNotEmpty) {
-      retVal = rwkvMobile.rwkvmobile_runtime_load_tokenizer(
-          runtime, tokenizerPath.toNativeUtf8().cast<ffi.Char>());
-      if (retVal != 0) throw Exception(
-          '😡 Failed to load tokenizer, tokenizer path: $tokenizerPath');
+      retVal = rwkvMobile.rwkvmobile_runtime_load_tokenizer(runtime, tokenizerPath.toNativeUtf8().cast<ffi.Char>());
+      if (retVal != 0) throw Exception('😡 Failed to load tokenizer, tokenizer path: $tokenizerPath');
     }
 
     if (backend == Backend.coreml) {
@@ -201,8 +198,7 @@ class RWKVMobile {
     }
 
     if (modelPath.isNotEmpty) {
-      retVal = rwkvMobile.rwkvmobile_runtime_load_model(
-          runtime, modelPath.toNativeUtf8().cast<ffi.Char>());
+      retVal = rwkvMobile.rwkvmobile_runtime_load_model(runtime, modelPath.toNativeUtf8().cast<ffi.Char>());
       if (retVal != 0) throw Exception('😡 Failed to load model, model path: $modelPath');
     }
 
@@ -213,27 +209,34 @@ class RWKVMobile {
           final modelPath = req.path.toNativeUtf8().cast<ffi.Char>();
           int r = 0;
           try {
-            r = rwkvMobile.rwkvmobile_init_embedding(runtime, modelPath);
+            r = rwkvMobile.rwkvmobile_load_embedding_model(runtime, modelPath);
           } catch (e) {
             r = -1;
           }
           sendPort.send(LoadEmbeddingModelResult(success: r == 0, toRWKV: req));
 
         case TextEmbedding req:
+          const dimension = 1024;
           final List<List<double>> result = [];
+          final textPtr = calloc.allocate<ffi.Pointer<ffi.Char>>(req.sentences.length);
+          final size = req.sentences.length * dimension * ffi.sizeOf<ffi.Float>();
+          final embedding = calloc.allocate<ffi.Pointer<ffi.Float>>(size);
           try {
-            for (final st in req.sentences) {
-              final textPtr = st.toNativeUtf8().cast<ffi.Char>();
-              final size = 1024 * ffi.sizeOf<ffi.Float>();
-              final embedding = calloc.allocate<ffi.Float>(size);
-              int ret = rwkvMobile.rwkvmobile_embed(runtime, textPtr, embedding);
-              if (ret != 0) sendPort.send(Error('Failed to embed text: $st', req));
-              final ebd = embedding.asTypedList(1024).toList();
-              calloc.free(embedding);
-              result.add(ebd);
+            for (var i = 0; i < req.sentences.length; i++) {
+              textPtr[i] = req.sentences[i].toNativeUtf8().cast<ffi.Char>();
+            }
+            int ret = rwkvMobile.rwkvmobile_get_embedding(runtime, textPtr, req.sentences.length, embedding);
+            if (ret != 0) sendPort.send(Error('Failed to get embedding', req));
+            for (var i = 0; i < req.sentences.length; i++) {
+              final embeddingPtr = embedding + i * dimension;
+              final embeddingList = embeddingPtr.cast<ffi.Float>().asTypedList(dimension);
+              result.add(embeddingList);
             }
           } catch (e) {
-            //
+            sendPort.send(Error('Failed to get embedding', req));
+          } finally {
+            calloc.free(textPtr);
+            calloc.free(embedding);
           }
           sendPort.send(TextEmbeddingResult(embeddings: result, toRWKV: req));
 
@@ -643,9 +646,9 @@ class RWKVMobile {
         // 🟥 getResponseBufferIds
         case GetResponseBufferIds _:
           final responseBufferIds = rwkvMobile.rwkvmobile_runtime_get_response_buffer_ids(runtime);
-          final responseBufferIdsList = responseBufferIds.ids.asTypedList(responseBufferIds.len).toList();
-          rwkvMobile.rwkvmobile_runtime_free_token_ids(responseBufferIds);
-          sendPort.send({'responseBufferIds': responseBufferIdsList});
+          // final responseBufferIdsList = responseBufferIds.ids.asTypedList(responseBufferIds.len).toList();
+          // rwkvMobile.rwkvmobile_runtime_free_token_ids(responseBufferIds);
+          // sendPort.send({'responseBufferIds': responseBufferIdsList}); todo
 
         // 🟥 loadTTSModels
         case LoadTTSModels req:
