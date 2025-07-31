@@ -220,23 +220,26 @@ class RWKVMobile {
           final List<List<double>> result = [];
           final textPtr = calloc.allocate<ffi.Pointer<ffi.Char>>(req.sentences.length);
           final size = req.sentences.length * dimension * ffi.sizeOf<ffi.Float>();
-          final embedding = calloc.allocate<ffi.Pointer<ffi.Float>>(size);
+          final outputs = calloc.allocate<ffi.Float>(size);
           try {
             for (var i = 0; i < req.sentences.length; i++) {
               textPtr[i] = req.sentences[i].toNativeUtf8().cast<ffi.Char>();
             }
-            int ret = rwkvMobile.rwkvmobile_get_embedding(runtime, textPtr, req.sentences.length, embedding);
+            int ret = rwkvMobile.rwkvmobile_get_embedding(runtime, textPtr, req.sentences.length, outputs);
             if (ret != 0) sendPort.send(Error('Failed to get embedding', req));
+            final list = outputs.asTypedList(dimension * req.sentences.length);
             for (var i = 0; i < req.sentences.length; i++) {
-              final embeddingPtr = embedding + i * dimension;
-              final embeddingList = embeddingPtr.cast<ffi.Float>().asTypedList(dimension);
-              result.add(embeddingList);
+              final List<double> row = [];
+              for (var j = 0; j < dimension; j++) {
+                row.add(list[i * dimension + j]);
+              }
+              result.add(row);
             }
           } catch (e) {
             sendPort.send(Error('Failed to get embedding', req));
           } finally {
             calloc.free(textPtr);
-            calloc.free(embedding);
+            calloc.free(outputs);
           }
           sendPort.send(TextEmbeddingResult(embeddings: result, toRWKV: req));
 
