@@ -44,6 +44,7 @@ class GetPrefillAndDecodeSpeed extends ToRWKV {
 
 class GetPrompt extends ToRWKV {}
 
+@Deprecated('Use sparktts instead')
 class GetTTSGenerationProgress extends ToRWKV {
   static const responseType = TTSGenerationProgress;
 }
@@ -52,9 +53,15 @@ class GetTTSGenerationProgress extends ToRWKV {
 ///
 /// - TODO: 每次重新调用生成语音会置空吗? @WangCe
 /// - TODO: 在单次生成中会不断变化吗? @WangCe
+@Deprecated('Use sparktts instead')
 class GetTTSOutputFileList extends ToRWKV {
   // TODO: 其实改成类似于 protoBuffer 那种形式也行
   static const responseType = TTSOutputFileList;
+}
+
+// rwkvmobile_runtime_get_tts_streaming_buffer获取到音频buffer以及它当前的长度（单位为样本数不是字节数，即是float数组长度）
+class GetTTSStreamingBuffer extends ToRWKV {
+  static const responseType = TTSStreamingBuffer;
 }
 
 /// 获取本次推理已生成的 tokens 被 decode 为普通字符串的值
@@ -84,6 +91,7 @@ class ReInitRuntime extends ToRWKV {
   final String modelPath;
   final Backend backend;
   final String tokenizerPath;
+  @Deprecated("Backend can't use this")
   final int latestRuntimeAddress;
 
   static const responseType = ReInitSteps;
@@ -96,6 +104,7 @@ class ReInitRuntime extends ToRWKV {
   });
 }
 
+@Deprecated('Use sparktts instead')
 class LoadTTSModels extends ToRWKV {
   final String campPlusPath;
   final String flowDecoderEstimatorPath;
@@ -111,6 +120,18 @@ class LoadTTSModels extends ToRWKV {
     required this.hiftGeneratorPath,
     required this.speechTokenizerPath,
     required this.ttsTokenizerPath,
+  });
+}
+
+class LoadSparkTTSModels extends ToRWKV {
+  final String wav2vec2Path;
+  final String bicodecTokenizerPath;
+  final String bicodecDetokenizerPath;
+
+  LoadSparkTTSModels({
+    required this.wav2vec2Path,
+    required this.bicodecTokenizerPath,
+    required this.bicodecDetokenizerPath,
   });
 }
 
@@ -248,6 +269,7 @@ class SetSamplerParams extends ToRWKV {
 /// 范围3～10吧，越高越慢越精细，可以做成参数
 ///
 /// args['cfmSteps'] as int
+@Deprecated('Use sparktts instead')
 class SetTTSCFMSteps extends ToRWKV {
   final int cfmSteps;
 
@@ -278,6 +300,7 @@ class SetVisionPrompt extends ToRWKV {
   SetVisionPrompt(this.imagePathPtr);
 }
 
+@Deprecated("Backend can't use this")
 class GetLatestRuntimeAddress extends ToRWKV {}
 
 // rwkvmobile_runtime_set_response_role

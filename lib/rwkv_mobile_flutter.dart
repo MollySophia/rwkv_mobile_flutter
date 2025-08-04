@@ -405,7 +405,6 @@ class RWKVMobile {
           }
 
           sendPort.send(GenerateStart(toRWKV: req));
-          if (kDebugMode) print('💬 Starting LLM generation thread (chat mode)');
           retVal = rwkvMobile.rwkvmobile_runtime_eval_chat_with_history_async(
             runtime,
             inputsPtr,
@@ -414,7 +413,6 @@ class RWKVMobile {
             ffi.nullptr,
             req.reasoning ? 1 : 0,
           );
-          if (kDebugMode) print('💬 Started LLM generation thread (chat mode)');
           if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation thread: retVal: $retVal', toRWKV: req));
 
         // 🟥 generateAsync
@@ -624,7 +622,6 @@ class RWKVMobile {
           bool generating = rwkvMobile.rwkvmobile_runtime_is_generating(runtime) == 1;
           while (generating) {
             rwkvMobile.rwkvmobile_runtime_stop_generation(runtime);
-            if (kDebugMode) print('💬 Waiting for generation to stop...');
             await Future.delayed(const Duration(milliseconds: 5));
             generating = rwkvMobile.rwkvmobile_runtime_is_generating(runtime) == 1;
             if (!generating) sendPort.send(GenerateStop(toRWKV: req));
@@ -655,23 +652,20 @@ class RWKVMobile {
 
         // 🟥 loadTTSModels
         case LoadTTSModels req:
-          final campPlusPath = req.campPlusPath;
-          final flowDecoderEstimatorPath = req.flowDecoderEstimatorPath;
-          final flowEncoderPath = req.flowEncoderPath;
-          final hiftGeneratorPath = req.hiftGeneratorPath;
-          final speechTokenizerPath = req.speechTokenizerPath;
-          final ttsTokenizerPath = req.ttsTokenizerPath;
-          retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_load_models(
+          throw UnimplementedError('TODO: rwkvmobile_runtime_sparktts_load_models');
+
+        case LoadSparkTTSModels req:
+          final wav2vec2Path = req.wav2vec2Path;
+          final bicodecTokenizerPath = req.bicodecTokenizerPath;
+          final bicodecDetokenizerPath = req.bicodecDetokenizerPath;
+
+          retVal = rwkvMobile.rwkvmobile_runtime_sparktts_load_models(
             runtime,
-            speechTokenizerPath.toNativeUtf8().cast<ffi.Char>(),
-            campPlusPath.toNativeUtf8().cast<ffi.Char>(),
-            flowEncoderPath.toNativeUtf8().cast<ffi.Char>(),
-            flowDecoderEstimatorPath.toNativeUtf8().cast<ffi.Char>(),
-            hiftGeneratorPath.toNativeUtf8().cast<ffi.Char>(),
-            ttsTokenizerPath.toNativeUtf8().cast<ffi.Char>(),
+            wav2vec2Path.toNativeUtf8().cast<ffi.Char>(),
+            bicodecTokenizerPath.toNativeUtf8().cast<ffi.Char>(),
+            bicodecDetokenizerPath.toNativeUtf8().cast<ffi.Char>(),
           );
-          if (retVal != 0) sendPort.send(Error('Failed to load TTS models', req));
-          rwkvMobile.rwkvmobile_runtime_cosyvoice_set_cfm_steps(runtime, 5);
+          if (retVal != 0) sendPort.send(Error('Failed to load Spark TTS models', req));
 
         // 🟥 loadTTSTextNormalizer
         case LoadTTSTextNormalizer req:
@@ -681,20 +675,18 @@ class RWKVMobile {
 
         // 🟥 releaseTTSModels
         case ReleaseTTSModels req:
-          retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_release_models(runtime);
+          retVal = rwkvMobile.rwkvmobile_runtime_sparktts_release_models(runtime);
           if (retVal != 0) sendPort.send(Error('Failed to release TTS models', req));
 
         // 🟥 runTTSAsync
         case StartTTS req:
           final ttsText = req.ttsText;
-          final instructionText = req.instructionText;
           final promptSpeechText = req.promptSpeechText;
           final promptWavPath = req.promptWavPath;
           final outputWavPath = req.outputWavPath;
-          retVal = rwkvMobile.rwkvmobile_runtime_run_tts_async(
+          retVal = rwkvMobile.rwkvmobile_runtime_run_spark_tts_streaming_async(
             runtime,
             ttsText.toNativeUtf8().cast<ffi.Char>(),
-            instructionText.toNativeUtf8().cast<ffi.Char>(),
             promptSpeechText.toNativeUtf8().cast<ffi.Char>(),
             promptWavPath.toNativeUtf8().cast<ffi.Char>(),
             outputWavPath.toNativeUtf8().cast<ffi.Char>(),
@@ -707,47 +699,68 @@ class RWKVMobile {
 
         // 🟥 getTTSGenerationProgress
         case GetTTSGenerationProgress req:
-          int numCurrentGeneratedWavs = 0;
-          List<double> perWavProgress = [];
-          List<String> fileList = [];
-          try {
-            final ttsOutputFiles = rwkvMobile.rwkvmobile_runtime_tts_get_current_output_files(runtime);
-            final outputFiles = ttsOutputFiles.cast<Utf8>().toDartString();
-            fileList = outputFiles.split(',').map((f) => f.replaceAll('"', '').trim()).toList();
-          } catch (_) {
-            fileList = [];
-          }
-          // remove empty string from fileList
-          fileList = fileList.where((f) => f.isNotEmpty).toList();
-          numCurrentGeneratedWavs = fileList.length;
-          if (numCurrentGeneratedWavs > 0) perWavProgress = List.filled(numCurrentGeneratedWavs, 1.0).toList();
-          final numTotalWavs = rwkvMobile.rwkvmobile_runtime_tts_get_num_total_output_wavs(runtime);
-          final ttsPerWavProgress = rwkvMobile.rwkvmobile_runtime_tts_get_generation_progress(runtime);
-          if (ttsPerWavProgress < 1.0) perWavProgress.add(ttsPerWavProgress);
-          double ttsOverallProgress = numCurrentGeneratedWavs.toDouble();
-          if (ttsPerWavProgress < 1.0) ttsOverallProgress += ttsPerWavProgress;
-          ttsOverallProgress = ttsOverallProgress / numTotalWavs.toDouble();
-          // Range from 0.0 to 1.0
-          sendPort.send(TTSResult(filePaths: fileList, perWavProgress: perWavProgress, overallProgress: ttsOverallProgress, toRWKV: req));
+          // int numCurrentGeneratedWavs = 0;
+          // List<double> perWavProgress = [];
+          // List<String> fileList = [];
+          // try {
+          //   final ttsOutputFiles = rwkvMobile.rwkvmobile_runtime_tts_get_current_output_files(runtime);
+          //   final outputFiles = ttsOutputFiles.cast<Utf8>().toDartString();
+          //   fileList = outputFiles.split(',').map((f) => f.replaceAll('"', '').trim()).toList();
+          // } catch (_) {
+          //   fileList = [];
+          // }
+          // // remove empty string from fileList
+          // fileList = fileList.where((f) => f.isNotEmpty).toList();
+          // numCurrentGeneratedWavs = fileList.length;
+          // if (numCurrentGeneratedWavs > 0) perWavProgress = List.filled(numCurrentGeneratedWavs, 1.0).toList();
+          // final numTotalWavs = rwkvMobile.rwkvmobile_runtime_tts_get_num_total_output_wavs(runtime);
+          // final ttsPerWavProgress = rwkvMobile.rwkvmobile_runtime_tts_get_generation_progress(runtime);
+          // if (ttsPerWavProgress < 1.0) perWavProgress.add(ttsPerWavProgress);
+          // double ttsOverallProgress = numCurrentGeneratedWavs.toDouble();
+          // if (ttsPerWavProgress < 1.0) ttsOverallProgress += ttsPerWavProgress;
+          // ttsOverallProgress = ttsOverallProgress / numTotalWavs.toDouble();
+          // // Range from 0.0 to 1.0
+          // sendPort.send(TTSResult(filePaths: fileList, perWavProgress: perWavProgress, overallProgress: ttsOverallProgress, toRWKV: req));
+          throw UnimplementedError('TODO: deprecated');
 
         // 🟥 getTTSOutputFileList
         case GetTTSOutputFileList req:
-          List<String> fileList = [];
-          try {
-            final ttsOutputFiles = rwkvMobile.rwkvmobile_runtime_tts_get_current_output_files(runtime);
-            final outputFiles = ttsOutputFiles.cast<Utf8>().toDartString();
-            fileList = outputFiles.split(',').map((f) => f.replaceAll('"', '').trim()).toList();
-          } catch (_) {
-            fileList = [];
-          }
-          sendPort.send(TTSOutputFileList(outputFileList: fileList, toRWKV: req));
+          // List<String> fileList = [];
+          // try {
+          //   final ttsOutputFiles = rwkvMobile.rwkvmobile_runtime_tts_get_current_output_files(runtime);
+          //   final outputFiles = ttsOutputFiles.cast<Utf8>().toDartString();
+          //   fileList = outputFiles.split(',').map((f) => f.replaceAll('"', '').trim()).toList();
+          // } catch (_) {
+          //   fileList = [];
+          // }
+          // sendPort.send(TTSOutputFileList(outputFileList: fileList, toRWKV: req));
+          throw UnimplementedError('TODO: deprecated');
+
+        // 🟥 getTTSStreamingBuffer
+        case GetTTSStreamingBuffer req:
+          final generating = rwkvMobile.rwkvmobile_runtime_is_generating(runtime) == 1;
+          final ttsStreamingBuffer = rwkvMobile.rwkvmobile_runtime_get_tts_streaming_buffer(runtime);
+          final rawFloatList = ttsStreamingBuffer.samples.asTypedList(ttsStreamingBuffer.length).toList();
+          final ttsStreamingBufferList = rawFloatList.map((e) {
+            // Handle Infinity and NaN values
+            if (e.isInfinite || e.isNaN || e == 0 || e.isNegative) {
+              return 0; // or another appropriate default value
+            }
+            return (e * 32768.0).toInt(); // convert to int16; remove this if you need raw float samples
+          }).toList();
+          sendPort.send(
+            TTSStreamingBuffer(
+              generating: generating,
+              ttsStreamingBuffer: ttsStreamingBufferList,
+              ttsStreamingBufferLength: ttsStreamingBuffer.length,
+              rawFloatList: rawFloatList,
+              toRWKV: req,
+            ),
+          );
 
         // 🟥 setTTSCFMSteps
         case SetTTSCFMSteps req:
-          final cfmSteps = req.cfmSteps;
-          retVal = rwkvMobile.rwkvmobile_runtime_cosyvoice_set_cfm_steps(runtime, cfmSteps);
-          if (retVal != 0) sendPort.send(Error('Failed to set TTS CFM steps', req));
-
+          break;
         // 🟥 dumpLog
         case DumpLog req:
           final log = rwkvMobile.rwkvmobile_dump_log();

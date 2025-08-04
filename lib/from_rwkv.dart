@@ -150,7 +150,7 @@ class TTSGenerationStart extends FromRWKV {
   TTSGenerationStart({required this.start, super.toRWKV});
 }
 
-@Deprecated("Use TTSResult instead")
+@Deprecated('Use TTSResult instead')
 class TTSGenerationProgress extends FromRWKV {
   final double overallProgress;
   final double perWavProgress;
@@ -158,7 +158,7 @@ class TTSGenerationProgress extends FromRWKV {
   TTSGenerationProgress({required this.overallProgress, required this.perWavProgress, super.toRWKV});
 }
 
-@Deprecated("Use TTSResult instead")
+@Deprecated('Use TTSResult instead')
 class TTSOutputFileList extends FromRWKV {
   final List<String> outputFileList;
 
@@ -168,6 +168,7 @@ class TTSOutputFileList extends FromRWKV {
 /// 调用 [GetTTSGenerationProgress] 或 [GetTTSOutputFileList] 后，返回的结果
 ///
 /// 调用 [StartTTS] 时，response 会被重置
+@Deprecated('Use TTSStreamingBuffer instead')
 class TTSResult extends FromRWKV {
   /// 每个文件的路径
   ///
@@ -205,6 +206,7 @@ class TTSResult extends FromRWKV {
 
 class TTSCFMSteps extends FromRWKV {}
 
+@Deprecated("Backend can't use this")
 class LatestRuntimeAddress extends FromRWKV {
   final int latestRuntimeAddress;
 
@@ -222,6 +224,32 @@ class IsGenerating extends FromRWKV {
 
   IsGenerating({required this.isGenerating, super.toRWKV});
 }
+
+// rwkvmobile_runtime_get_tts_streaming_buffer获取到音频buffer以及它当前的长度（单位为样本数不是字节数，即是float数组长度）
+// 转成16bit pcm的话只要for i in len(samples): data = static_cast<int16_t>(samples[i] * 32768.0f)就
+// 是单声道的16000采样率的浮点数
+// final class tts_streaming_buffer extends ffi.Struct {
+//   external ffi.Pointer<ffi.Float> samples;
+
+//   @ffi.Int()
+//   external int length;
+// }
+class TTSStreamingBuffer extends FromRWKV {
+  // TODO: 不通过 ffi 传递, 而是直接传递内存块的权限
+  final List<int> ttsStreamingBuffer;
+  final List<double> rawFloatList;
+  final int ttsStreamingBufferLength;
+  final bool generating;
+
+  TTSStreamingBuffer({
+    required this.ttsStreamingBuffer,
+    required this.ttsStreamingBufferLength,
+    required this.generating,
+    required this.rawFloatList,
+    super.toRWKV,
+  });
+}
+
 
 class TextEmbeddingResult extends FromRWKV {
   final List<List<double>> embeddings;
