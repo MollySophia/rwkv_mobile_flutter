@@ -206,10 +206,14 @@ class RWKVMobile {
     await for (final _FromFrontend message in receivePort) {
       switch (message) {
         case LoadEmbeddingModel req:
-          final modelPath = req.path.toNativeUtf8().cast<ffi.Char>();
+          final modelPath = req.embeddingModelPath.toNativeUtf8().cast<ffi.Char>();
+          final rerankerPath = req.rerankerModelPath.toNativeUtf8().cast<ffi.Char>();
           int r = 0;
           try {
             r = rwkvMobile.rwkvmobile_load_embedding_model(runtime, modelPath);
+            if (r == 0) {
+              r = rwkvMobile.rwkvmobile_load_rerank_model(runtime, rerankerPath);
+            }
           } catch (e) {
             r = -1;
           }
@@ -646,9 +650,9 @@ class RWKVMobile {
         // 🟥 getResponseBufferIds
         case GetResponseBufferIds _:
           final responseBufferIds = rwkvMobile.rwkvmobile_runtime_get_response_buffer_ids(runtime);
-          // final responseBufferIdsList = responseBufferIds.ids.asTypedList(responseBufferIds.len).toList();
-          // rwkvMobile.rwkvmobile_runtime_free_token_ids(responseBufferIds);
-          // sendPort.send({'responseBufferIds': responseBufferIdsList}); todo
+        // final responseBufferIdsList = responseBufferIds.ids.asTypedList(responseBufferIds.len).toList();
+        // rwkvMobile.rwkvmobile_runtime_free_token_ids(responseBufferIds);
+        // sendPort.send({'responseBufferIds': responseBufferIdsList}); todo
 
         // 🟥 loadTTSModels
         case LoadTTSModels req:

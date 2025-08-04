@@ -169,9 +169,10 @@ class ReleaseVisionEncoder extends ToRWKV {}
 class ReleaseWhisperEncoder extends ToRWKV {}
 
 class LoadEmbeddingModel extends ToRWKV {
-  final String path;
+  final String embeddingModelPath;
+  final String rerankerModelPath;
 
-  LoadEmbeddingModel({required this.path});
+  LoadEmbeddingModel({required this.embeddingModelPath, required this.rerankerModelPath});
 }
 
 class TextEmbedding extends ToRWKV {
