@@ -181,6 +181,13 @@ class TextEmbedding extends ToRWKV {
   TextEmbedding({required this.sentences});
 }
 
+class RerankDocument extends ToRWKV {
+  final String query;
+  final List<String> documents;
+
+  RerankDocument({required this.query, required this.documents});
+}
+
 class ChatAsync extends ToRWKV {
   final List<String> messages;
   final bool reasoning;

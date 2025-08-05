@@ -257,6 +257,12 @@ class TextEmbeddingResult extends FromRWKV {
   TextEmbeddingResult({super.toRWKV, required this.embeddings});
 }
 
+class RerankDocumentResult extends FromRWKV {
+  final List<num> scores;
+
+  RerankDocumentResult({super.toRWKV, required this.scores});
+}
+
 class LoadEmbeddingModelResult extends FromRWKV {
   bool success;
 

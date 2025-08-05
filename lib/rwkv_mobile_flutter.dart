@@ -219,6 +219,28 @@ class RWKVMobile {
           }
           sendPort.send(LoadEmbeddingModelResult(success: r == 0, toRWKV: req));
 
+        case RerankDocument req:
+          final docs = calloc.allocate<ffi.Pointer<ffi.Char>>(req.documents.length);
+          final scores = calloc.allocate<ffi.Float>(req.documents.length * ffi.sizeOf<ffi.Float>());
+          try {
+            final query = req.query.toNativeUtf8().cast<ffi.Char>();
+            for (var i = 0; i < req.documents.length; i++) {
+              docs[i] = req.documents[i].toNativeUtf8().cast<ffi.Char>();
+            }
+            final ret = rwkvMobile.rerank(runtime, query, docs, req.documents.length, scores);
+            if (ret == 0) {
+              final list = scores.asTypedList(req.documents.length);
+              sendPort.send(RerankDocumentResult(scores: list, toRWKV: req));
+            } else {
+              sendPort.send(RerankDocumentResult(scores: [], toRWKV: req));
+            }
+          } catch (_) {
+            sendPort.send(RerankDocumentResult(scores: [], toRWKV: req));
+          } finally {
+            calloc.free(docs);
+            calloc.free(scores);
+          }
+
         case TextEmbedding req:
           const dimension = 1024;
           final List<List<double>> result = [];
