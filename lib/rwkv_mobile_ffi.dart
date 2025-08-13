@@ -360,6 +360,35 @@ class rwkv_mobile {
   );
   late final _rwkvmobile_runtime_clear_state = _rwkvmobile_runtime_clear_statePtr.asFunction<int Function(rwkvmobile_runtime_t)>();
 
+  int rwkvmobile_runtime_load_initial_state(
+    rwkvmobile_runtime_t runtime,
+    ffi.Pointer<ffi.Char> state_path,
+  ) {
+    return _rwkvmobile_runtime_load_initial_state(
+      runtime,
+      state_path,
+    );
+  }
+
+  late final _rwkvmobile_runtime_load_initial_statePtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>)>>('rwkvmobile_runtime_load_initial_state');
+  late final _rwkvmobile_runtime_load_initial_state = _rwkvmobile_runtime_load_initial_statePtr
+      .asFunction<int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>)>();
+
+  void rwkvmobile_runtime_clear_initial_state(
+    rwkvmobile_runtime_t runtime,
+  ) {
+    return _rwkvmobile_runtime_clear_initial_state(
+      runtime,
+    );
+  }
+
+  late final _rwkvmobile_runtime_clear_initial_statePtr = _lookup<ffi.NativeFunction<ffi.Void Function(rwkvmobile_runtime_t)>>(
+    'rwkvmobile_runtime_clear_initial_state',
+  );
+  late final _rwkvmobile_runtime_clear_initial_state = _rwkvmobile_runtime_clear_initial_statePtr
+      .asFunction<void Function(rwkvmobile_runtime_t)>();
+
   sampler_params rwkvmobile_runtime_get_sampler_params(
     rwkvmobile_runtime_t runtime,
   ) {
@@ -837,6 +866,60 @@ class rwkv_mobile {
   );
   late final _rwkvmobile_runtime_get_prefill_progress = _rwkvmobile_runtime_get_prefill_progressPtr
       .asFunction<double Function(rwkvmobile_runtime_t)>();
+
+  int rwkvmobile_load_embedding_model(
+    rwkvmobile_runtime_t runtime,
+    ffi.Pointer<ffi.Char> model_path,
+  ) {
+    return _rwkvmobile_load_embedding_model(
+      runtime,
+      model_path,
+    );
+  }
+
+  late final _rwkvmobile_load_embedding_modelPtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>)>>('rwkvmobile_load_embedding_model');
+  late final _rwkvmobile_load_embedding_model = _rwkvmobile_load_embedding_modelPtr
+      .asFunction<int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>)>();
+
+  int rwkvmobile_load_rerank_model(
+    rwkvmobile_runtime_t runtime,
+    ffi.Pointer<ffi.Char> model_path,
+  ) {
+    return _rwkvmobile_load_rerank_model(
+      runtime,
+      model_path,
+    );
+  }
+
+  late final _rwkvmobile_load_rerank_modelPtr = _lookup<ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>)>>(
+    'rwkvmobile_load_rerank_model',
+  );
+  late final _rwkvmobile_load_rerank_model = _rwkvmobile_load_rerank_modelPtr
+      .asFunction<int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Char>)>();
+
+  int rwkvmobile_get_embedding(
+    rwkvmobile_runtime_t runtime,
+    ffi.Pointer<ffi.Pointer<ffi.Char>> input,
+    int input_length,
+    ffi.Pointer<ffi.Pointer<ffi.Float>> embedding,
+  ) {
+    return _rwkvmobile_get_embedding(
+      runtime,
+      input,
+      input_length,
+      embedding,
+    );
+  }
+
+  late final _rwkvmobile_get_embeddingPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Pointer<ffi.Char>>, ffi.Int, ffi.Pointer<ffi.Pointer<ffi.Float>>)
+        >
+      >('rwkvmobile_get_embedding');
+  late final _rwkvmobile_get_embedding = _rwkvmobile_get_embeddingPtr
+      .asFunction<int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Pointer<ffi.Char>>, int, ffi.Pointer<ffi.Pointer<ffi.Float>>)>();
 
   ffi.Pointer<ffi.Char> rwkvmobile_get_platform_name() {
     return _rwkvmobile_get_platform_name();
