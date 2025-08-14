@@ -18,6 +18,8 @@ sealed class ToRWKV {
 
 class ClearStates extends ToRWKV {}
 
+class ClearInitialStates extends ToRWKV {}
+
 class DumpLog extends ToRWKV {}
 
 class GenerateAsync extends ToRWKV {
@@ -158,6 +160,12 @@ class LoadWhisperEncoder extends ToRWKV {
   final String encoderPath;
 
   LoadWhisperEncoder(this.encoderPath);
+}
+
+class LoadInitialStates extends ToRWKV {
+  final String statePath;
+
+  LoadInitialStates(this.statePath);
 }
 
 class ReleaseModel extends ToRWKV {}

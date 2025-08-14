@@ -214,6 +214,15 @@ class RWKVMobile {
         case ClearStates _:
           rwkvMobile.rwkvmobile_runtime_clear_state(runtime);
 
+        // 🟥 clearInitialStates
+        case ClearInitialStates _:
+          rwkvMobile.rwkvmobile_runtime_clear_initial_state(runtime);
+
+        // 🟥 loadInitialStates
+        case LoadInitialStates req:
+          final statePathPtr = req.statePath.toNativeUtf8().cast<ffi.Char>();
+          rwkvMobile.rwkvmobile_runtime_load_initial_state(runtime, statePathPtr);
+
         // 🟥 setGenerationStopToken
         case SetGenerationStopToken req:
           final arg = req.stopToken;
