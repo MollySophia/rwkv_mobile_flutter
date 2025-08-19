@@ -114,32 +114,9 @@ class RWKVMobile {
     var modelBackendString = backend.asArgument;
     var tokenizerPath = options.tokenizerPath;
 
-    rwkvmobile_runtime_t runtime;
-
-    // runtime initializations
-    switch (backend) {
-      case Backend.qnn:
-        // TODO: better solution for this
-        final tempDir = await getTemporaryDirectory();
-        if (kDebugMode) print('💬 tempDir: ${tempDir.path}');
-
-        runtime = rwkvMobile.rwkvmobile_runtime_init_with_name_extra(
-          modelBackendString.toNativeUtf8().cast<ffi.Char>(),
-          (tempDir.path + '/assets/lib/libQnnHtp.so').toNativeUtf8().cast<ffi.Void>(),
-        );
-        rwkvMobile.rwkvmobile_runtime_set_qnn_library_path(runtime, (tempDir.path + '/assets/lib/').toNativeUtf8().cast<ffi.Char>());
-      case Backend.ncnn:
-      case Backend.llamacpp:
-      case Backend.webRwkv:
-      case Backend.mnn:
-      case Backend.coreml:
-        runtime = rwkvMobile.rwkvmobile_runtime_init_with_name(modelBackendString.toNativeUtf8().cast<ffi.Char>());
-    }
+    rwkvmobile_runtime_t runtime = rwkvMobile.rwkvmobile_runtime_init();
 
     if (runtime.address == 0) throw Exception('😡 Failed to initialize runtime');
-
-    retVal = rwkvMobile.rwkvmobile_runtime_load_tokenizer(runtime, tokenizerPath.toNativeUtf8().cast<ffi.Char>());
-    if (retVal != 0) throw Exception('😡 Failed to load tokenizer, tokenizer path: $tokenizerPath');
 
     if (backend == Backend.coreml) {
       final modelDir = modelPath.substring(0, modelPath.lastIndexOf('/'));
@@ -190,9 +167,38 @@ class RWKVMobile {
       }
       modelPath = modelPathWithoutZip;
     }
+    int model_id = 0;
 
-    retVal = rwkvMobile.rwkvmobile_runtime_load_model(runtime, modelPath.toNativeUtf8().cast<ffi.Char>());
-    if (retVal != 0) throw Exception('😡 Failed to load model, model path: $modelPath');
+    // @HaloWang 目前load_model实际上已经和runtime_init解耦了，这一部分的load_model其实可以去掉（靠_FromFrontend.ReInitRuntime来加载模型）
+    switch (backend) {
+      case Backend.qnn:
+        // TODO: better solution for this
+        final tempDir = await getTemporaryDirectory();
+        if (kDebugMode) print('💬 tempDir: ${tempDir.path}');
+
+        rwkvMobile.rwkvmobile_runtime_set_qnn_library_path(runtime, (tempDir.path + '/assets/lib/').toNativeUtf8().cast<ffi.Char>());
+        model_id = rwkvMobile.rwkvmobile_runtime_load_model_with_extra(
+          runtime,
+          modelPath.toNativeUtf8().cast<ffi.Char>(),
+          modelBackendString.toNativeUtf8().cast<ffi.Char>(),
+          tokenizerPath.toNativeUtf8().cast<ffi.Char>(),
+          (tempDir.path + '/assets/lib/libQnnHtp.so').toNativeUtf8().cast<ffi.Void>(),
+        );
+      case Backend.ncnn:
+      case Backend.llamacpp:
+      case Backend.webRwkv:
+      case Backend.mnn:
+      case Backend.coreml:
+        model_id = rwkvMobile.rwkvmobile_runtime_load_model(
+          runtime,
+          modelPath.toNativeUtf8().cast<ffi.Char>(),
+          modelBackendString.toNativeUtf8().cast<ffi.Char>(),
+          tokenizerPath.toNativeUtf8().cast<ffi.Char>(),
+        );
+    }
+
+    if (model_id < 0)
+      throw Exception('😡 Failed to load model, model path: $modelPath, model backend: $backend, tokenizer path: $tokenizerPath');
 
     final tempDir = await getTemporaryDirectory();
     rwkvMobile.rwkvmobile_set_cache_dir(runtime, tempDir.path.toNativeUtf8().cast<ffi.Char>());
@@ -212,16 +218,16 @@ class RWKVMobile {
 
         // 🟥 clearStates
         case ClearStates _:
-          rwkvMobile.rwkvmobile_runtime_clear_state(runtime);
+          rwkvMobile.rwkvmobile_runtime_clear_state(runtime, model_id);
 
         // 🟥 clearInitialStates
         case ClearInitialStates _:
-          rwkvMobile.rwkvmobile_runtime_clear_initial_state(runtime);
+          rwkvMobile.rwkvmobile_runtime_clear_initial_state(runtime, model_id);
 
         // 🟥 loadInitialStates
         case LoadInitialStates req:
           final statePathPtr = req.statePath.toNativeUtf8().cast<ffi.Char>();
-          rwkvMobile.rwkvmobile_runtime_load_initial_state(runtime, statePathPtr);
+          rwkvMobile.rwkvmobile_runtime_load_initial_state(runtime, model_id, statePathPtr);
 
         // 🟥 setGenerationStopToken
         case SetGenerationStopToken req:
@@ -231,13 +237,13 @@ class RWKVMobile {
         // 🟥 setPrompt
         case SetPrompt req:
           final promptPtr = req.prompt.toNativeUtf8().cast<ffi.Char>();
-          retVal = rwkvMobile.rwkvmobile_runtime_set_prompt(runtime, promptPtr);
+          retVal = rwkvMobile.rwkvmobile_runtime_set_prompt(runtime, model_id, promptPtr);
           if (retVal != 0) sendPort.send(Error('Failed to set prompt: return value: $retVal', req));
 
         // 🟥 getPrompt
         case GetPrompt req:
           final stringBuffer = calloc.allocate<ffi.Char>(maxLength);
-          rwkvMobile.rwkvmobile_runtime_get_prompt(runtime, stringBuffer, maxLength);
+          rwkvMobile.rwkvmobile_runtime_get_prompt(runtime, model_id, stringBuffer, maxLength);
           final prompt = stringBuffer.cast<Utf8>().toDartString();
           sendPort.send(CurrentPrompt(prompt: prompt, toRWKV: req));
           calloc.free(stringBuffer);
@@ -252,13 +258,13 @@ class RWKVMobile {
           penaltyParams.presence_penalty = req.presencePenalty.toDouble();
           penaltyParams.frequency_penalty = req.frequencyPenalty.toDouble();
           penaltyParams.penalty_decay = req.penaltyDecay.toDouble();
-          rwkvMobile.rwkvmobile_runtime_set_sampler_params(runtime, samplerParams);
-          rwkvMobile.rwkvmobile_runtime_set_penalty_params(runtime, penaltyParams);
+          rwkvMobile.rwkvmobile_runtime_set_sampler_params(runtime, model_id, samplerParams);
+          rwkvMobile.rwkvmobile_runtime_set_penalty_params(runtime, model_id, penaltyParams);
 
         // 🟥 getSamplerParams
         case GetSamplerParams req:
-          final samplerParams = rwkvMobile.rwkvmobile_runtime_get_sampler_params(runtime);
-          final penaltyParams = rwkvMobile.rwkvmobile_runtime_get_penalty_params(runtime);
+          final samplerParams = rwkvMobile.rwkvmobile_runtime_get_sampler_params(runtime, model_id);
+          final penaltyParams = rwkvMobile.rwkvmobile_runtime_get_penalty_params(runtime, model_id);
           sendPort.send(
             SamplerParams(
               temperature: samplerParams.temperature,
@@ -273,26 +279,26 @@ class RWKVMobile {
 
         // 🟥 getIsGenerating
         case GetIsGenerating req:
-          bool isGeneratingBool = (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) != 0);
+          bool isGeneratingBool = (rwkvMobile.rwkvmobile_runtime_is_generating(runtime, model_id) != 0);
           sendPort.send(IsGenerating(isGenerating: isGeneratingBool, toRWKV: req));
           sendPort.send({'isGenerating': isGeneratingBool});
 
         // 🟥 setThinkingToken
         case SetThinkingToken req:
           final thinkingTokenPtr = req.thinkingToken.toNativeUtf8().cast<ffi.Char>();
-          retVal = rwkvMobile.rwkvmobile_runtime_set_thinking_token(runtime, thinkingTokenPtr);
+          retVal = rwkvMobile.rwkvmobile_runtime_set_thinking_token(runtime, model_id, thinkingTokenPtr);
           if (retVal != 0) sendPort.send(Error('Failed to set thinking token', req));
 
         // 🟥 setEosToken
         case SetEosToken req:
           final eosTokenPtr = req.eosToken.toNativeUtf8().cast<ffi.Char>();
-          retVal = rwkvMobile.rwkvmobile_runtime_set_eos_token(runtime, eosTokenPtr);
+          retVal = rwkvMobile.rwkvmobile_runtime_set_eos_token(runtime, model_id, eosTokenPtr);
           if (retVal != 0) sendPort.send(Error('Failed to set eos token', req));
 
         // 🟥 setBosToken
         case SetBosToken req:
           final bosTokenPtr = req.bosToken.toNativeUtf8().cast<ffi.Char>();
-          retVal = rwkvMobile.rwkvmobile_runtime_set_bos_token(runtime, bosTokenPtr);
+          retVal = rwkvMobile.rwkvmobile_runtime_set_bos_token(runtime, model_id, bosTokenPtr);
           if (retVal != 0) sendPort.send(Error('Failed to set bos token', req));
 
         // 🟥 setTokenBanned
@@ -301,61 +307,61 @@ class RWKVMobile {
           for (var i = 0; i < req.tokenBanned.length; i++) {
             tokenBannedPtr[i] = req.tokenBanned[i];
           }
-          retVal = rwkvMobile.rwkvmobile_runtime_set_token_banned(runtime, tokenBannedPtr, req.tokenBanned.length);
+          retVal = rwkvMobile.rwkvmobile_runtime_set_token_banned(runtime, model_id, tokenBannedPtr, req.tokenBanned.length);
           calloc.free(tokenBannedPtr);
           if (retVal != 0) sendPort.send(Error('Failed to set token banned: retVal: $retVal', req, retVal));
 
         // 🟥 setUserRole
         case SetUserRole req:
           final userRolePtr = req.userRole.toNativeUtf8().cast<ffi.Char>();
-          retVal = rwkvMobile.rwkvmobile_runtime_set_user_role(runtime, userRolePtr);
+          retVal = rwkvMobile.rwkvmobile_runtime_set_user_role(runtime, model_id, userRolePtr);
           if (retVal != 0) sendPort.send(Error('Failed to set user role: retVal: $retVal', req, retVal));
 
         // 🟥 setResponseRole
         case SetResponseRole req:
           final responseRolePtr = req.responseRole.toNativeUtf8().cast<ffi.Char>();
-          retVal = rwkvMobile.rwkvmobile_runtime_set_response_role(runtime, responseRolePtr);
+          retVal = rwkvMobile.rwkvmobile_runtime_set_response_role(runtime, model_id, responseRolePtr);
           if (retVal != 0) sendPort.send(Error('Failed to set response role: retVal: $retVal', req, retVal));
 
         // 🟥 loadVisionEncoder
         case LoadVisionEncoder req:
           final encoderPathPtr = req.encoderPath.toNativeUtf8().cast<ffi.Char>();
-          retVal = rwkvMobile.rwkvmobile_runtime_load_vision_encoder(runtime, encoderPathPtr);
+          retVal = rwkvMobile.rwkvmobile_runtime_load_vision_encoder(runtime, model_id, encoderPathPtr);
           if (retVal != 0) sendPort.send(Error('Failed to load vision encoder: retVal: $retVal', req, retVal));
 
         // 🟥 loadVisionEncoderAndAdapter
         case LoadVisionEncoderAndAdapter req:
           final encoderPathPtr = req.encoderPath.toNativeUtf8().cast<ffi.Char>();
           final adapterPathPtr = req.adapterPath.toNativeUtf8().cast<ffi.Char>();
-          retVal = rwkvMobile.rwkvmobile_runtime_load_vision_encoder_and_adapter(runtime, encoderPathPtr, adapterPathPtr);
+          retVal = rwkvMobile.rwkvmobile_runtime_load_vision_encoder_and_adapter(runtime, model_id, encoderPathPtr, adapterPathPtr);
           if (retVal != 0) sendPort.send(Error('Failed to load vision encoder and adapter: retVal: $retVal', req, retVal));
 
         // 🟥 releaseVisionEncoder
         case ReleaseVisionEncoder req:
-          retVal = rwkvMobile.rwkvmobile_runtime_release_vision_encoder(runtime);
+          retVal = rwkvMobile.rwkvmobile_runtime_release_vision_encoder(runtime, model_id);
           if (retVal != 0) sendPort.send(Error('Failed to release vision encoder', req, retVal));
 
         // 🟥 setVisionPrompt
         case SetVisionPrompt req:
           final imagePathPtr = req.imagePathPtr.toNativeUtf8().cast<ffi.Char>();
-          retVal = rwkvMobile.rwkvmobile_runtime_set_image_prompt(runtime, imagePathPtr);
+          retVal = rwkvMobile.rwkvmobile_runtime_set_image_prompt(runtime, model_id, imagePathPtr);
           if (retVal != 0) sendPort.send(Error('Failed to set image prompt', req, retVal));
 
         // 🟥 loadWhisperEncoder
         case LoadWhisperEncoder req:
           final encoderPathPtr = req.encoderPath.toNativeUtf8().cast<ffi.Char>();
-          retVal = rwkvMobile.rwkvmobile_runtime_load_whisper_encoder(runtime, encoderPathPtr);
+          retVal = rwkvMobile.rwkvmobile_runtime_load_whisper_encoder(runtime, model_id, encoderPathPtr);
           if (retVal != 0) sendPort.send(Error('Failed to load whisper encoder', req, retVal));
 
         // 🟥 releaseWhisperEncoder
         case ReleaseWhisperEncoder req:
-          retVal = rwkvMobile.rwkvmobile_runtime_release_whisper_encoder(runtime);
+          retVal = rwkvMobile.rwkvmobile_runtime_release_whisper_encoder(runtime, model_id);
           if (retVal != 0) sendPort.send(Error('Failed to release whisper encoder', req, retVal));
 
         // 🟥 setAudioPrompt
         case SetAudioPrompt req:
           final audioPathPtr = req.audioPathPtr.toNativeUtf8().cast<ffi.Char>();
-          retVal = rwkvMobile.rwkvmobile_runtime_set_audio_prompt(runtime, audioPathPtr);
+          retVal = rwkvMobile.rwkvmobile_runtime_set_audio_prompt(runtime, model_id, audioPathPtr);
           if (retVal != 0) sendPort.send(Error('Failed to set audio prompt', req, retVal));
 
         // 🟥 message
@@ -365,7 +371,7 @@ class RWKVMobile {
           }
           final numInputs = req.messages.length;
 
-          if (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) != 0) {
+          if (rwkvMobile.rwkvmobile_runtime_is_generating(runtime, model_id) != 0) {
             sendPort.send(Error('LLM is already generating', req, retVal));
             break;
           }
@@ -373,6 +379,7 @@ class RWKVMobile {
           sendPort.send(GenerateStart(toRWKV: req));
           retVal = rwkvMobile.rwkvmobile_runtime_eval_chat_with_history_async(
             runtime,
+            model_id,
             inputsPtr,
             numInputs,
             maxLength,
@@ -385,14 +392,21 @@ class RWKVMobile {
         case GenerateAsync req:
           final promptPtr = req.prompt.toNativeUtf8().cast<ffi.Char>();
 
-          if (rwkvMobile.rwkvmobile_runtime_is_generating(runtime) != 0) {
+          if (rwkvMobile.rwkvmobile_runtime_is_generating(runtime, model_id) != 0) {
             sendPort.send(Error('LLM is already generating', req));
             break;
           }
 
           sendPort.send(GenerateStart(toRWKV: req));
           if (kDebugMode) print('🔥 Starting LLM generation thread (gen mode), maxlength = $maxLength');
-          retVal = rwkvMobile.rwkvmobile_runtime_gen_completion_async(runtime, promptPtr, maxLength, generationStopToken, ffi.nullptr);
+          retVal = rwkvMobile.rwkvmobile_runtime_gen_completion_async(
+            runtime,
+            model_id,
+            promptPtr,
+            maxLength,
+            generationStopToken,
+            ffi.nullptr,
+          );
           if (kDebugMode) print('🔥 Started LLM generation thread (gen mode)');
           if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation: retVal: $retVal', toRWKV: req));
 
@@ -407,8 +421,8 @@ class RWKVMobile {
           callbackFunction(ffi.Pointer<ffi.Char> cppStream, int idx, ffi.Pointer<ffi.Char> cppNewText) {
             // final start = DateTime.now().microsecondsSinceEpoch;
             final showQuerySpeed = (randon.nextDouble() * 100) <= 3;
-            final prefillSpeed = showQuerySpeed ? rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime) : -1.0;
-            final decodeSpeed = showQuerySpeed ? rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime) : -1.0;
+            final prefillSpeed = showQuerySpeed ? rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime, model_id) : -1.0;
+            final decodeSpeed = showQuerySpeed ? rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime, model_id) : -1.0;
 
             final newText = cppNewText.cast<Utf8>().toDartString();
 
@@ -455,6 +469,7 @@ class RWKVMobile {
           if (kDebugMode) print('🔥 Start to call LLM (gen mode), maxlength = $maxLength');
           retVal = rwkvMobile.rwkvmobile_runtime_gen_completion(
             runtime,
+            model_id,
             promptPtr,
             maxLength,
             generationStopToken,
@@ -469,8 +484,7 @@ class RWKVMobile {
         // 🟥 releaseModel
         case ReleaseModel _:
           if (kDebugMode) print('💬 Releasing model');
-          rwkvMobile.rwkvmobile_runtime_release(runtime);
-          runtime = ffi.nullptr;
+          rwkvMobile.rwkvmobile_runtime_release_model(runtime, model_id);
 
         // 🟥 initRuntime
         case ReInitRuntime req:
@@ -478,52 +492,6 @@ class RWKVMobile {
           final modelBackendString = req.backend.asArgument;
           final backend = req.backend;
           final tokenizerPath = req.tokenizerPath;
-          if (runtime.address != 0) {
-            sendPort.send(ReInitSteps(done: false, step: 'release runtime if runtime.address != 0', toRWKV: req));
-            rwkvMobile.rwkvmobile_runtime_release(runtime);
-          }
-
-          sendPort.send(ReInitSteps(done: false, step: 'init backend: ${backend.asArgument}', toRWKV: req));
-          switch (backend) {
-            case Backend.ncnn:
-            case Backend.llamacpp:
-            case Backend.webRwkv:
-            case Backend.mnn:
-            case Backend.coreml:
-              runtime = rwkvMobile.rwkvmobile_runtime_init_with_name(modelBackendString.toNativeUtf8().cast<ffi.Char>());
-            case Backend.qnn:
-              // TODO: better solution for this
-              final tempDir = await getTemporaryDirectory();
-
-              sendPort.send(ReInitSteps(done: false, step: 'init with name extra', toRWKV: req));
-              runtime = rwkvMobile.rwkvmobile_runtime_init_with_name_extra(
-                modelBackendString.toNativeUtf8().cast<ffi.Char>(),
-                (tempDir.path + '/assets/lib/libQnnHtp.so').toNativeUtf8().cast<ffi.Void>(),
-              );
-
-              sendPort.send(ReInitSteps(done: false, step: 'set qnn library path', toRWKV: req));
-              rwkvMobile.rwkvmobile_runtime_set_qnn_library_path(runtime, (tempDir.path + '/assets/lib/').toNativeUtf8().cast<ffi.Char>());
-          }
-
-          if (runtime.address == 0) {
-            sendPort.send(
-              ReInitSteps(
-                done: false,
-                error: 'Failed to initialize runtime: runtime.address: ${runtime.address}',
-                toRWKV: req,
-                success: false,
-              ),
-            );
-            break;
-          }
-
-          retVal = rwkvMobile.rwkvmobile_runtime_load_tokenizer(runtime, tokenizerPath.toNativeUtf8().cast<ffi.Char>());
-          if (retVal != 0) {
-            sendPort.send(
-              ReInitSteps(done: false, error: 'Failed to load tokenizer, tokenizer path: $tokenizerPath', toRWKV: req, success: false),
-            );
-            break;
-          }
 
           if (backend == Backend.coreml) {
             final modelDir = modelPath.substring(0, modelPath.lastIndexOf('/'));
@@ -575,9 +543,45 @@ class RWKVMobile {
             modelPath = modelPathWithoutZip;
           }
 
-          retVal = rwkvMobile.rwkvmobile_runtime_load_model(runtime, modelPath.toNativeUtf8().cast<ffi.Char>());
-          if (retVal != 0) {
-            sendPort.send(ReInitSteps(done: false, error: 'Failed to load model, model path: $modelPath', toRWKV: req, success: false));
+          sendPort.send(ReInitSteps(done: false, step: 'init backend: ${backend.asArgument}', toRWKV: req));
+          switch (backend) {
+            case Backend.ncnn:
+            case Backend.llamacpp:
+            case Backend.webRwkv:
+            case Backend.mnn:
+            case Backend.coreml:
+              model_id = rwkvMobile.rwkvmobile_runtime_load_model(
+                runtime,
+                modelPath.toNativeUtf8().cast<ffi.Char>(),
+                modelBackendString.toNativeUtf8().cast<ffi.Char>(),
+                tokenizerPath.toNativeUtf8().cast<ffi.Char>(),
+              );
+            case Backend.qnn:
+              // TODO: better solution for this
+              final tempDir = await getTemporaryDirectory();
+
+              sendPort.send(ReInitSteps(done: false, step: 'init with name extra', toRWKV: req));
+              model_id = rwkvMobile.rwkvmobile_runtime_load_model_with_extra(
+                runtime,
+                modelPath.toNativeUtf8().cast<ffi.Char>(),
+                modelBackendString.toNativeUtf8().cast<ffi.Char>(),
+                tokenizerPath.toNativeUtf8().cast<ffi.Char>(),
+                (tempDir.path + '/assets/lib/libQnnHtp.so').toNativeUtf8().cast<ffi.Void>(),
+              );
+
+              sendPort.send(ReInitSteps(done: false, step: 'set qnn library path', toRWKV: req));
+              rwkvMobile.rwkvmobile_runtime_set_qnn_library_path(runtime, (tempDir.path + '/assets/lib/').toNativeUtf8().cast<ffi.Char>());
+          }
+
+          if (model_id < 0) {
+            sendPort.send(
+              ReInitSteps(
+                done: false,
+                error: 'Failed to load model: model_path: $modelPath, model_backend: $modelBackendString, tokenizer_path: $tokenizerPath',
+                toRWKV: req,
+                success: false,
+              ),
+            );
             break;
           }
 
@@ -585,17 +589,17 @@ class RWKVMobile {
 
         // 🟥 stop
         case Stop req:
-          bool generating = rwkvMobile.rwkvmobile_runtime_is_generating(runtime) == 1;
+          bool generating = rwkvMobile.rwkvmobile_runtime_is_generating(runtime, model_id) == 1;
           while (generating) {
-            rwkvMobile.rwkvmobile_runtime_stop_generation(runtime);
+            rwkvMobile.rwkvmobile_runtime_stop_generation(runtime, model_id);
             await Future.delayed(const Duration(milliseconds: 5));
-            generating = rwkvMobile.rwkvmobile_runtime_is_generating(runtime) == 1;
+            generating = rwkvMobile.rwkvmobile_runtime_is_generating(runtime, model_id) == 1;
             if (!generating) sendPort.send(GenerateStop(toRWKV: req));
           }
 
         // 🟥 getResponseBufferContent
         case GetResponseBufferContent req:
-          final responseBufferContent = rwkvMobile.rwkvmobile_runtime_get_response_buffer_content(runtime);
+          final responseBufferContent = rwkvMobile.rwkvmobile_runtime_get_response_buffer_content(runtime, model_id);
           int length = responseBufferContent.length;
           final Uint8List byteList = responseBufferContent.content.cast<ffi.Uint8>().asTypedList(length);
           final String str = _codec.decode(byteList);
@@ -604,14 +608,14 @@ class RWKVMobile {
 
         // 🟥 getPrefillAndDecodeSpeed
         case GetPrefillAndDecodeSpeed req:
-          final prefillSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime);
-          final decodeSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime);
-          final progress = rwkvMobile.rwkvmobile_runtime_get_prefill_progress(runtime);
+          final prefillSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime, model_id);
+          final decodeSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime, model_id);
+          final progress = rwkvMobile.rwkvmobile_runtime_get_prefill_progress(runtime, model_id);
           sendPort.send(Speed(prefillSpeed: prefillSpeed, decodeSpeed: decodeSpeed, prefillProgress: progress, toRWKV: req));
 
         // 🟥 getResponseBufferIds
         case GetResponseBufferIds _:
-          final responseBufferIds = rwkvMobile.rwkvmobile_runtime_get_response_buffer_ids(runtime);
+          final responseBufferIds = rwkvMobile.rwkvmobile_runtime_get_response_buffer_ids(runtime, model_id);
           final responseBufferIdsList = responseBufferIds.ids.asTypedList(responseBufferIds.len).toList();
           rwkvMobile.rwkvmobile_runtime_free_token_ids(responseBufferIds);
           sendPort.send({'responseBufferIds': responseBufferIdsList});
@@ -652,6 +656,7 @@ class RWKVMobile {
           final outputWavPath = req.outputWavPath;
           retVal = rwkvMobile.rwkvmobile_runtime_run_spark_tts_streaming_async(
             runtime,
+            model_id,
             ttsText.toNativeUtf8().cast<ffi.Char>(),
             promptSpeechText.toNativeUtf8().cast<ffi.Char>(),
             promptWavPath.toNativeUtf8().cast<ffi.Char>(),
@@ -704,7 +709,7 @@ class RWKVMobile {
 
         // 🟥 getTTSStreamingBuffer
         case GetTTSStreamingBuffer req:
-          final generating = rwkvMobile.rwkvmobile_runtime_is_generating(runtime) == 1;
+          final generating = rwkvMobile.rwkvmobile_runtime_is_generating(runtime, model_id) == 1;
           final ttsStreamingBuffer = rwkvMobile.rwkvmobile_runtime_get_tts_streaming_buffer(runtime);
           final rawFloatList = ttsStreamingBuffer.samples.asTypedList(ttsStreamingBuffer.length).toList();
           final ttsStreamingBufferList = rawFloatList.map((e) {
