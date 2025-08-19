@@ -543,13 +543,13 @@ class RWKVMobile {
             modelPath = modelPathWithoutZip;
           }
 
-          sendPort.send(ReInitSteps(done: false, step: 'init backend: ${backend.asArgument}', toRWKV: req));
           switch (backend) {
             case Backend.ncnn:
             case Backend.llamacpp:
             case Backend.webRwkv:
             case Backend.mnn:
             case Backend.coreml:
+              sendPort.send(ReInitSteps(done: false, step: 'load model', toRWKV: req));
               model_id = rwkvMobile.rwkvmobile_runtime_load_model(
                 runtime,
                 modelPath.toNativeUtf8().cast<ffi.Char>(),
@@ -559,8 +559,10 @@ class RWKVMobile {
             case Backend.qnn:
               // TODO: better solution for this
               final tempDir = await getTemporaryDirectory();
+              sendPort.send(ReInitSteps(done: false, step: 'set qnn library path', toRWKV: req));
+              rwkvMobile.rwkvmobile_runtime_set_qnn_library_path(runtime, (tempDir.path + '/assets/lib/').toNativeUtf8().cast<ffi.Char>());
 
-              sendPort.send(ReInitSteps(done: false, step: 'init with name extra', toRWKV: req));
+              sendPort.send(ReInitSteps(done: false, step: 'load model with extra', toRWKV: req));
               model_id = rwkvMobile.rwkvmobile_runtime_load_model_with_extra(
                 runtime,
                 modelPath.toNativeUtf8().cast<ffi.Char>(),
@@ -568,9 +570,6 @@ class RWKVMobile {
                 tokenizerPath.toNativeUtf8().cast<ffi.Char>(),
                 (tempDir.path + '/assets/lib/libQnnHtp.so').toNativeUtf8().cast<ffi.Void>(),
               );
-
-              sendPort.send(ReInitSteps(done: false, step: 'set qnn library path', toRWKV: req));
-              rwkvMobile.rwkvmobile_runtime_set_qnn_library_path(runtime, (tempDir.path + '/assets/lib/').toNativeUtf8().cast<ffi.Char>());
           }
 
           if (model_id < 0) {
