@@ -94,6 +94,17 @@ class ResponseBufferContent extends FromRWKV {
   });
 }
 
+class LoadedModelPathByID extends FromRWKV {
+  final String loadedModelPath;
+  final int modelID;
+  LoadedModelPathByID({required this.loadedModelPath, required this.modelID, super.toRWKV});
+}
+
+class LoadedModelIDs extends FromRWKV {
+  final List<int> loadedModelIDs;
+  LoadedModelIDs({required this.loadedModelIDs, super.toRWKV});
+}
+
 class SamplerParams extends FromRWKV {
   final num temperature;
   final num topK;

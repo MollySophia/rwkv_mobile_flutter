@@ -493,6 +493,9 @@ class RWKVMobile {
           final backend = req.backend;
           final tokenizerPath = req.tokenizerPath;
 
+          // TODO: @HaloWang rename ReInitRuntime to LoadModel, and move this relaseModel logic out
+          rwkvMobile.rwkvmobile_runtime_release_model(runtime, model_id);
+
           if (backend == Backend.coreml) {
             final modelDir = modelPath.substring(0, modelPath.lastIndexOf('/'));
             final modelPathWithoutZip = modelPath.substring(0, modelPath.lastIndexOf('.zip'));
@@ -618,6 +621,20 @@ class RWKVMobile {
           final responseBufferIdsList = responseBufferIds.ids.asTypedList(responseBufferIds.len).toList();
           rwkvMobile.rwkvmobile_runtime_free_token_ids(responseBufferIds);
           sendPort.send({'responseBufferIds': responseBufferIdsList});
+
+        // 🟥 getLoadedModelIDs
+        case GetLoadedModelIDs req:
+          final model_ids = calloc<ffi.Int32>(16);
+          final loadedModelIDsList = rwkvMobile.rwkvmobile_runtime_get_loaded_model_ids(runtime, model_ids.cast<ffi.Int>(), 16);
+          final loadedModelIDsListList = model_ids.asTypedList(loadedModelIDsList).toList();
+          calloc.free(model_ids);
+          sendPort.send(LoadedModelIDs(loadedModelIDs: loadedModelIDsListList, toRWKV: req));
+
+        // 🟥 getLoadedModelPathByID
+        case GetLoadedModelPathByID req:
+          final loadedModelPath = rwkvMobile.rwkvmobile_runtime_get_model_path_by_id(runtime, model_id);
+          final loadedModelPathString = loadedModelPath.cast<Utf8>().toDartString();
+          sendPort.send(LoadedModelPathByID(loadedModelPath: loadedModelPathString, modelID: model_id, toRWKV: req));
 
         // 🟥 loadTTSModels
         case LoadTTSModels req:
