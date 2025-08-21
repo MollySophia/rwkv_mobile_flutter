@@ -216,6 +216,40 @@ class StartTTS extends ToRWKV {
   });
 }
 
+class StartTTSWithGlobalTokens extends ToRWKV {
+  final String ttsText;
+  final String outputWavPath;
+  final List<int> globalTokens;
+
+  StartTTSWithGlobalTokens({
+    required this.ttsText,
+    required this.outputWavPath,
+    required this.globalTokens,
+  });
+}
+
+class StartTTSWithProperties extends ToRWKV {
+  final String ttsText;
+  final String outputWavPath;
+  final TTSPropertyAge age;
+  final TTSPropertyGender gender;
+  final TTSPropertyEmotion emotion;
+  final TTSPropertySpeed speed;
+  final TTSPropertyPitch pitch;
+
+  StartTTSWithProperties({
+    required this.ttsText,
+    required this.outputWavPath,
+    required this.age,
+    required this.gender,
+    required this.emotion,
+    required this.speed,
+    required this.pitch,
+  });
+}
+
+class GetCurrentTTSGlobalTokens extends ToRWKV {}
+
 class SetAudioPrompt extends ToRWKV {
   final String audioPathPtr;
 

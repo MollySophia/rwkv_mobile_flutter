@@ -79,3 +79,113 @@ class StartOptions {
     required this.latestRuntimeAddress,
   });
 }
+
+enum TTSPropertyAge {
+  child,
+  teenager,
+  youthAdult,
+  middleAged,
+  elderly;
+
+  String get asArgument => switch (this) {
+    TTSPropertyAge.child => 'child',
+    TTSPropertyAge.teenager => 'teenager',
+    TTSPropertyAge.youthAdult => 'youth-adult',
+    TTSPropertyAge.middleAged => 'middle-aged',
+    TTSPropertyAge.elderly => 'elderly',
+  };
+}
+
+enum TTSPropertyGender {
+  male,
+  female;
+
+  String get asArgument => switch (this) {
+    TTSPropertyGender.male => 'male',
+    TTSPropertyGender.female => 'female',
+  };
+}
+
+enum TTSPropertyEmotion {
+  unknown,
+  neutral,
+  angry,
+  happy,
+  sad,
+  fearful,
+  disgusted,
+  surprised,
+  sarcastic,
+  excited,
+  sleepy,
+  confused,
+  emphasis,
+  laughing,
+  singing,
+  worried,
+  anxious,
+  noAgreement,
+  apologetic,
+  concerned,
+  enunciated,
+  assertive,
+  encouraging,
+  contemptuous;
+
+  String get asArgument => switch (this) {
+    TTSPropertyEmotion.unknown => 'UNKNOWN',
+    TTSPropertyEmotion.neutral => 'NEUTRAL',
+    TTSPropertyEmotion.angry => 'ANGRY',
+    TTSPropertyEmotion.happy => 'HAPPY',
+    TTSPropertyEmotion.sad => 'SAD',
+    TTSPropertyEmotion.fearful => 'FEARFUL',
+    TTSPropertyEmotion.disgusted => 'DISGUSTED',
+    TTSPropertyEmotion.surprised => 'SURPRISED',
+    TTSPropertyEmotion.sarcastic => 'SARCASTIC',
+    TTSPropertyEmotion.excited => 'EXCITED',
+    TTSPropertyEmotion.sleepy => 'SLEEPY',
+    TTSPropertyEmotion.confused => 'CONFUSED',
+    TTSPropertyEmotion.emphasis => 'EMPHASIS',
+    TTSPropertyEmotion.laughing => 'LAUGHING',
+    TTSPropertyEmotion.singing => 'SINGING',
+    TTSPropertyEmotion.worried => 'WORRIED',
+    TTSPropertyEmotion.anxious => 'ANXIOUS',
+    TTSPropertyEmotion.noAgreement => 'NO-AGREEMENT',
+    TTSPropertyEmotion.apologetic => 'APOLOGETIC',
+    TTSPropertyEmotion.concerned => 'CONCERNED',
+    TTSPropertyEmotion.enunciated => 'ENUNCIATED',
+    TTSPropertyEmotion.assertive => 'ASSERTIVE',
+    TTSPropertyEmotion.encouraging => 'ENCOURAGING',
+    TTSPropertyEmotion.contemptuous => 'CONTEMPT',
+  };
+}
+
+enum TTSPropertySpeed {
+  verySlow,
+  slow,
+  medium,
+  fast,
+  veryFast;
+
+  String get asArgument => switch (this) {
+    TTSPropertySpeed.verySlow => 'very_slow',
+    TTSPropertySpeed.slow => 'slow',
+    TTSPropertySpeed.medium => 'medium',
+    TTSPropertySpeed.fast => 'fast',
+    TTSPropertySpeed.veryFast => 'very_fast',
+  };
+}
+
+enum TTSPropertyPitch {
+  lowPitch,
+  mediumPitch,
+  highPitch,
+  veryHighPitch;
+
+  String get asArgument => switch (this) {
+    TTSPropertyPitch.lowPitch => 'low_pitch',
+    TTSPropertyPitch.mediumPitch => 'medium_pitch',
+    TTSPropertyPitch.highPitch => 'high_pitch',
+    TTSPropertyPitch.veryHighPitch => 'very_high_pitch',
+  };
+}

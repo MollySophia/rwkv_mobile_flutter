@@ -684,6 +684,56 @@ class RWKVMobile {
 
           sendPort.send(TTSGenerationStart(start: true, toRWKV: req));
 
+        // 🟥 runTTSWithGlobalTokensAsync
+        case StartTTSWithGlobalTokens req:
+          final ttsText = req.ttsText;
+          final outputWavPath = req.outputWavPath;
+          if (req.globalTokens.length != 32) throw Exception('😡 globalTokens length must be 32');
+          final globalTokensPtr = calloc.allocate<ffi.Int32>(req.globalTokens.length);
+          for (int i = 0; i < req.globalTokens.length; i++) {
+            globalTokensPtr[i] = req.globalTokens[i];
+          }
+          retVal = rwkvMobile.rwkvmobile_runtime_run_spark_tts_with_global_tokens_streaming_async(
+            runtime,
+            model_id,
+            ttsText.toNativeUtf8().cast<ffi.Char>(),
+            outputWavPath.toNativeUtf8().cast<ffi.Char>(),
+            globalTokensPtr.cast<ffi.Int>(),
+          );
+          calloc.free(globalTokensPtr);
+
+          if (retVal != 0) sendPort.send(Error('Failed to run TTS', req));
+          if (retVal != 0) break;
+
+          sendPort.send(TTSGenerationStart(start: true, toRWKV: req));
+
+        // 🟥 runTTSWithPropertiesAsync
+        case StartTTSWithProperties req:
+          final ttsText = req.ttsText;
+          final outputWavPath = req.outputWavPath;
+          retVal = rwkvMobile.rwkvmobile_runtime_run_spark_tts_with_properties_streaming_async(
+            runtime,
+            model_id,
+            ttsText.toNativeUtf8().cast<ffi.Char>(),
+            outputWavPath.toNativeUtf8().cast<ffi.Char>(),
+            req.age.asArgument.toNativeUtf8().cast<ffi.Char>(),
+            req.gender.asArgument.toNativeUtf8().cast<ffi.Char>(),
+            req.emotion.asArgument.toNativeUtf8().cast<ffi.Char>(),
+            req.speed.asArgument.toNativeUtf8().cast<ffi.Char>(),
+            req.pitch.asArgument.toNativeUtf8().cast<ffi.Char>(),
+          );
+
+          if (retVal != 0) sendPort.send(Error('Failed to run TTS', req));
+          if (retVal != 0) break;
+
+          sendPort.send(TTSGenerationStart(start: true, toRWKV: req));
+
+        // 🟥 getCurrentTTSGlobalTokens
+        case GetCurrentTTSGlobalTokens _:
+          final ttsGlobalTokensPtr = rwkvMobile.rwkvmobile_runtime_get_tts_global_tokens_output(runtime);
+          final ttsGlobalTokensList = ttsGlobalTokensPtr.cast<ffi.Int32>().asTypedList(32).toList();
+          sendPort.send({'ttsGlobalTokens': ttsGlobalTokensList});
+
         // 🟥 getTTSGenerationProgress
         case GetTTSGenerationProgress req:
           // int numCurrentGeneratedWavs = 0;
