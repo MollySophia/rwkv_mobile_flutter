@@ -991,6 +991,34 @@ class rwkv_mobile {
   late final _rwkvmobile_runtime_get_tts_streaming_buffer = _rwkvmobile_runtime_get_tts_streaming_bufferPtr
       .asFunction<tts_streaming_buffer Function(rwkvmobile_runtime_t)>();
 
+  int rwkvmobile_runtime_get_tts_streaming_buffer_length(
+    rwkvmobile_runtime_t runtime,
+  ) {
+    return _rwkvmobile_runtime_get_tts_streaming_buffer_length(
+      runtime,
+    );
+  }
+
+  late final _rwkvmobile_runtime_get_tts_streaming_buffer_lengthPtr = _lookup<ffi.NativeFunction<ffi.Int Function(rwkvmobile_runtime_t)>>(
+    'rwkvmobile_runtime_get_tts_streaming_buffer_length',
+  );
+  late final _rwkvmobile_runtime_get_tts_streaming_buffer_length = _rwkvmobile_runtime_get_tts_streaming_buffer_lengthPtr
+      .asFunction<int Function(rwkvmobile_runtime_t)>();
+
+  void rwkvmobile_runtime_free_tts_streaming_buffer(
+    tts_streaming_buffer buffer,
+  ) {
+    return _rwkvmobile_runtime_free_tts_streaming_buffer(
+      buffer,
+    );
+  }
+
+  late final _rwkvmobile_runtime_free_tts_streaming_bufferPtr = _lookup<ffi.NativeFunction<ffi.Void Function(tts_streaming_buffer)>>(
+    'rwkvmobile_runtime_free_tts_streaming_buffer',
+  );
+  late final _rwkvmobile_runtime_free_tts_streaming_buffer = _rwkvmobile_runtime_free_tts_streaming_bufferPtr
+      .asFunction<void Function(tts_streaming_buffer)>();
+
   ffi.Pointer<ffi.Int> rwkvmobile_runtime_get_tts_global_tokens_output(
     rwkvmobile_runtime_t runtime,
   ) {

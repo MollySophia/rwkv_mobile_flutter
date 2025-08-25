@@ -108,6 +108,8 @@ class RWKVMobile {
     int retVal = 0;
 
     final inputsPtr = calloc.allocate<ffi.Pointer<ffi.Char>>(maxMessages);
+    List<int> ttsStreamingBufferList = [];
+    List<double> ttsStreamingBufferListDouble = [];
 
     var modelPath = options.modelPath;
     final backend = options.backend;
@@ -670,6 +672,8 @@ class RWKVMobile {
           final promptSpeechText = req.promptSpeechText;
           final promptWavPath = req.promptWavPath;
           final outputWavPath = req.outputWavPath;
+          ttsStreamingBufferList.clear();
+          ttsStreamingBufferListDouble.clear();
           retVal = rwkvMobile.rwkvmobile_runtime_run_spark_tts_streaming_async(
             runtime,
             model_id,
@@ -688,6 +692,8 @@ class RWKVMobile {
         case StartTTSWithGlobalTokens req:
           final ttsText = req.ttsText;
           final outputWavPath = req.outputWavPath;
+          ttsStreamingBufferList.clear();
+          ttsStreamingBufferListDouble.clear();
           if (req.globalTokens.length != 32) throw Exception('😡 globalTokens length must be 32');
           final globalTokensPtr = calloc.allocate<ffi.Int32>(req.globalTokens.length);
           for (int i = 0; i < req.globalTokens.length; i++) {
@@ -711,6 +717,8 @@ class RWKVMobile {
         case StartTTSWithProperties req:
           final ttsText = req.ttsText;
           final outputWavPath = req.outputWavPath;
+          ttsStreamingBufferList.clear();
+          ttsStreamingBufferListDouble.clear();
           retVal = rwkvMobile.rwkvmobile_runtime_run_spark_tts_with_properties_streaming_async(
             runtime,
             model_id,
@@ -776,21 +784,21 @@ class RWKVMobile {
         // 🟥 getTTSStreamingBuffer
         case GetTTSStreamingBuffer req:
           final generating = rwkvMobile.rwkvmobile_runtime_is_generating(runtime, model_id) == 1;
-          final ttsStreamingBuffer = rwkvMobile.rwkvmobile_runtime_get_tts_streaming_buffer(runtime);
-          final rawFloatList = ttsStreamingBuffer.samples.asTypedList(ttsStreamingBuffer.length).toList();
-          final ttsStreamingBufferList = rawFloatList.map((e) {
-            // Handle Infinity and NaN values
-            if (e.isInfinite || e.isNaN || e == 0 || e.isNegative) {
-              return 0; // or another appropriate default value
-            }
-            return (e * 32768.0).toInt(); // convert to int16; remove this if you need raw float samples
-          }).toList();
+          final currentLength = rwkvMobile.rwkvmobile_runtime_get_tts_streaming_buffer_length(runtime);
+          if (currentLength != ttsStreamingBufferList.length) {
+            final ttsStreamingBuffer = rwkvMobile.rwkvmobile_runtime_get_tts_streaming_buffer(runtime);
+            ttsStreamingBufferListDouble = ttsStreamingBuffer.samples.asTypedList(ttsStreamingBuffer.length).toList();
+            ttsStreamingBufferList = ttsStreamingBufferListDouble.map((e) {
+              return (e * 32768.0).toInt();
+            }).toList();
+            rwkvMobile.rwkvmobile_runtime_free_tts_streaming_buffer(ttsStreamingBuffer);
+          }
           sendPort.send(
             TTSStreamingBuffer(
               generating: generating,
               ttsStreamingBuffer: ttsStreamingBufferList,
-              ttsStreamingBufferLength: ttsStreamingBuffer.length,
-              rawFloatList: rawFloatList,
+              ttsStreamingBufferLength: ttsStreamingBufferList.length,
+              rawFloatList: ttsStreamingBufferListDouble,
               toRWKV: req,
             ),
           );
