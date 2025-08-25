@@ -792,16 +792,16 @@ class RWKVMobile {
               return (e * 32768.0).toInt();
             }).toList();
             rwkvMobile.rwkvmobile_runtime_free_tts_streaming_buffer(ttsStreamingBuffer);
+            sendPort.send(
+              TTSStreamingBuffer(
+                generating: generating,
+                ttsStreamingBuffer: ttsStreamingBufferList,
+                ttsStreamingBufferLength: ttsStreamingBufferList.length,
+                rawFloatList: ttsStreamingBufferListDouble,
+                toRWKV: req,
+              ),
+            );
           }
-          sendPort.send(
-            TTSStreamingBuffer(
-              generating: generating,
-              ttsStreamingBuffer: ttsStreamingBufferList,
-              ttsStreamingBufferLength: ttsStreamingBufferList.length,
-              rawFloatList: ttsStreamingBufferListDouble,
-              toRWKV: req,
-            ),
-          );
 
         // 🟥 setTTSCFMSteps
         case SetTTSCFMSteps req:
