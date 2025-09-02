@@ -88,7 +88,7 @@ class GetBatchResponseBufferContent extends ToRWKV {
 
   GetBatchResponseBufferContent([this.messages = const []]);
 
-  static const responseType = BatchResponseBufferContent;
+  static const responseType = ResponseBatchBufferContent;
 }
 
 class GetLoadedModelPathByID extends ToRWKV {
