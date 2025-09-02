@@ -390,6 +390,31 @@ class RWKVMobile {
           );
           if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation thread: retVal: $retVal', toRWKV: req));
 
+        case ChatBatchAsync req:
+          for (var i = 0; i < req.messages.length; i++) {
+            inputsPtr[i] = req.messages[i].toNativeUtf8().cast<ffi.Char>();
+          }
+          final numInputs = req.messages.length;
+          final batchSize = req.batchSize;
+
+          if (rwkvMobile.rwkvmobile_runtime_is_generating(runtime, model_id) != 0) {
+            sendPort.send(Error('LLM is already generating', req, retVal));
+            break;
+          }
+
+          sendPort.send(GenerateStart(toRWKV: req));
+          retVal = rwkvMobile.rwkvmobile_runtime_eval_chat_batch_with_history_async(
+            runtime,
+            model_id,
+            inputsPtr,
+            numInputs,
+            maxLength,
+            batchSize,
+            ffi.nullptr,
+            req.reasoning ? 1 : 0,
+          );
+          if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation thread: retVal: $retVal', toRWKV: req));
+
         // 🟥 generateAsync
         case GenerateAsync req:
           final promptPtr = req.prompt.toNativeUtf8().cast<ffi.Char>();
@@ -609,6 +634,30 @@ class RWKVMobile {
           final String str = _codec.decode(byteList);
           final eosFound = responseBufferContent.eos_found == 1;
           sendPort.send(ResponseBufferContent(responseBufferContent: str, eosFound: eosFound, toRWKV: req));
+
+        // 🟥 getBatchResponseBufferContent
+        case GetBatchResponseBufferContent req:
+          final responseBufferContent = rwkvMobile.rwkvmobile_runtime_get_response_buffer_content_batch(runtime, model_id);
+          int batchSize = responseBufferContent.batch_size;
+          List<String> responseBufferContentList = [];
+          List<bool> eosFoundList = [];
+
+          for (int i = 0; i < batchSize; i++) {
+            int length = responseBufferContent.lengths[i];
+            final Uint8List byteList = responseBufferContent.contents[i].cast<ffi.Uint8>().asTypedList(length);
+            final String str = _codec.decode(byteList);
+            final eosFound = responseBufferContent.eos_founds[i] == 1;
+            responseBufferContentList.add(str);
+            eosFoundList.add(eosFound);
+          }
+          sendPort.send(
+            ResponseBatchBufferContent(
+              responseBufferContent: responseBufferContentList,
+              eosFound: eosFoundList,
+              batchSize: batchSize,
+              toRWKV: req,
+            ),
+          );
 
         // 🟥 getPrefillAndDecodeSpeed
         case GetPrefillAndDecodeSpeed req:

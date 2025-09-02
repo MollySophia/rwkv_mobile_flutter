@@ -297,6 +297,70 @@ class rwkv_mobile {
         )
       >();
 
+  int rwkvmobile_runtime_eval_chat_batch_with_history_async(
+    rwkvmobile_runtime_t handle,
+    int model_id,
+    ffi.Pointer<ffi.Pointer<ffi.Char>> inputs,
+    int num_inputs,
+    int batch_size,
+    int max_tokens,
+    ffi.Pointer<
+      ffi.NativeFunction<
+        ffi.Void Function(ffi.Int, ffi.Pointer<ffi.Pointer<ffi.Char>>, ffi.Pointer<ffi.Int>, ffi.Pointer<ffi.Pointer<ffi.Char>>)
+      >
+    >
+    callback_batch,
+    int enable_reasoning,
+  ) {
+    return _rwkvmobile_runtime_eval_chat_batch_with_history_async(
+      handle,
+      model_id,
+      inputs,
+      num_inputs,
+      batch_size,
+      max_tokens,
+      callback_batch,
+      enable_reasoning,
+    );
+  }
+
+  late final _rwkvmobile_runtime_eval_chat_batch_with_history_asyncPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Int Function(
+            rwkvmobile_runtime_t,
+            ffi.Int,
+            ffi.Pointer<ffi.Pointer<ffi.Char>>,
+            ffi.Int,
+            ffi.Int,
+            ffi.Int,
+            ffi.Pointer<
+              ffi.NativeFunction<
+                ffi.Void Function(ffi.Int, ffi.Pointer<ffi.Pointer<ffi.Char>>, ffi.Pointer<ffi.Int>, ffi.Pointer<ffi.Pointer<ffi.Char>>)
+              >
+            >,
+            ffi.Int,
+          )
+        >
+      >('rwkvmobile_runtime_eval_chat_batch_with_history_async');
+  late final _rwkvmobile_runtime_eval_chat_batch_with_history_async = _rwkvmobile_runtime_eval_chat_batch_with_history_asyncPtr
+      .asFunction<
+        int Function(
+          rwkvmobile_runtime_t,
+          int,
+          ffi.Pointer<ffi.Pointer<ffi.Char>>,
+          int,
+          int,
+          int,
+          ffi.Pointer<
+            ffi.NativeFunction<
+              ffi.Void Function(ffi.Int, ffi.Pointer<ffi.Pointer<ffi.Char>>, ffi.Pointer<ffi.Int>, ffi.Pointer<ffi.Pointer<ffi.Char>>)
+            >
+          >,
+          int,
+        )
+      >();
+
   int rwkvmobile_runtime_gen_completion(
     rwkvmobile_runtime_t runtime,
     int model_id,
@@ -783,6 +847,23 @@ class rwkv_mobile {
   late final _rwkvmobile_runtime_get_response_buffer_content = _rwkvmobile_runtime_get_response_buffer_contentPtr
       .asFunction<response_buffer Function(rwkvmobile_runtime_t, int)>();
 
+  response_buffer_batch rwkvmobile_runtime_get_response_buffer_content_batch(
+    rwkvmobile_runtime_t runtime,
+    int model_id,
+  ) {
+    return _rwkvmobile_runtime_get_response_buffer_content_batch(
+      runtime,
+      model_id,
+    );
+  }
+
+  late final _rwkvmobile_runtime_get_response_buffer_content_batchPtr =
+      _lookup<ffi.NativeFunction<response_buffer_batch Function(rwkvmobile_runtime_t, ffi.Int)>>(
+        'rwkvmobile_runtime_get_response_buffer_content_batch',
+      );
+  late final _rwkvmobile_runtime_get_response_buffer_content_batch = _rwkvmobile_runtime_get_response_buffer_content_batchPtr
+      .asFunction<response_buffer_batch Function(rwkvmobile_runtime_t, int)>();
+
   void rwkvmobile_runtime_free_response_buffer(
     response_buffer buffer,
   ) {
@@ -796,6 +877,20 @@ class rwkv_mobile {
   );
   late final _rwkvmobile_runtime_free_response_buffer = _rwkvmobile_runtime_free_response_bufferPtr
       .asFunction<void Function(response_buffer)>();
+
+  void rwkvmobile_runtime_free_response_buffer_batch(
+    response_buffer_batch buffer,
+  ) {
+    return _rwkvmobile_runtime_free_response_buffer_batch(
+      buffer,
+    );
+  }
+
+  late final _rwkvmobile_runtime_free_response_buffer_batchPtr = _lookup<ffi.NativeFunction<ffi.Void Function(response_buffer_batch)>>(
+    'rwkvmobile_runtime_free_response_buffer_batch',
+  );
+  late final _rwkvmobile_runtime_free_response_buffer_batch = _rwkvmobile_runtime_free_response_buffer_batchPtr
+      .asFunction<void Function(response_buffer_batch)>();
 
   token_ids rwkvmobile_runtime_get_response_buffer_ids(
     rwkvmobile_runtime_t runtime,
@@ -1283,6 +1378,17 @@ final class response_buffer extends ffi.Struct {
 
   @ffi.Int()
   external int eos_found;
+}
+
+final class response_buffer_batch extends ffi.Struct {
+  external ffi.Pointer<ffi.Pointer<ffi.Char>> contents;
+
+  external ffi.Pointer<ffi.Int> lengths;
+
+  external ffi.Pointer<ffi.Int> eos_founds;
+
+  @ffi.Int()
+  external int batch_size;
 }
 
 final class tts_streaming_buffer extends ffi.Struct {

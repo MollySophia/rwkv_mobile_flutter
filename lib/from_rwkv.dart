@@ -94,6 +94,23 @@ class ResponseBufferContent extends FromRWKV {
   });
 }
 
+class ResponseBatchBufferContent extends FromRWKV {
+  /// 当前已生成的 tokens 被 decode 为普通字符串的值
+  final List<String> responseBufferContent;
+
+  /// 是否已生成 EOS token, 代表本次生成是否已完结
+  final List<bool> eosFound;
+
+  final int batchSize;
+
+  ResponseBatchBufferContent({
+    required this.responseBufferContent,
+    required this.eosFound,
+    required this.batchSize,
+    super.toRWKV,
+  });
+}
+
 class LoadedModelPathByID extends FromRWKV {
   final String loadedModelPath;
   final int modelID;

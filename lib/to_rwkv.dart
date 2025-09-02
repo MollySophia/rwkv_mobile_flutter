@@ -82,6 +82,15 @@ class GetResponseBufferContent extends ToRWKV {
   static const responseType = ResponseBufferContent;
 }
 
+class GetBatchResponseBufferContent extends ToRWKV {
+  /// 发起 `GetBatchResponseBufferContent` 请求时, 是为的哪些 messages 发起的
+  final List<String> messages;
+
+  GetBatchResponseBufferContent([this.messages = const []]);
+
+  static const responseType = BatchResponseBufferContent;
+}
+
 class GetLoadedModelPathByID extends ToRWKV {
   final int modelID;
 
@@ -191,6 +200,14 @@ class ChatAsync extends ToRWKV {
   final bool reasoning;
 
   ChatAsync(this.messages, {required this.reasoning});
+}
+
+class ChatBatchAsync extends ToRWKV {
+  final List<String> messages;
+  final bool reasoning;
+  final int batchSize;
+
+  ChatBatchAsync(this.messages, {required this.reasoning, required this.batchSize});
 }
 
 /// 开始 TTS 任务
