@@ -44,6 +44,11 @@ class GenerateStop extends FromRWKV {
   GenerateStop({this.error, super.toRWKV});
 }
 
+class SupportedBatchSizes extends FromRWKV {
+  final List<int> supportedBatchSizes;
+  SupportedBatchSizes({required this.supportedBatchSizes, super.toRWKV});
+}
+
 /// 重新加载新的 weights 时, 会调用该 response
 class ReInitSteps extends FromRWKV {
   final bool done;

@@ -415,6 +415,18 @@ class RWKVMobile {
           );
           if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation thread: retVal: $retVal', toRWKV: req));
 
+        // 🟥 getSupportedBatchSizes
+        case GetSupportedBatchSizes req:
+          final supportedBatchSizes = rwkvMobile.rwkvmobile_runtime_get_supported_batch_sizes(runtime, model_id);
+          final List<int> batchSizes = [];
+          for (var i = 0; i < supportedBatchSizes.length; i++) {
+            if (supportedBatchSizes.sizes[i] > 1) {
+              // we don't actually need to use batch size 1, so we skip it
+              batchSizes.add(supportedBatchSizes.sizes[i]);
+            }
+          }
+          sendPort.send(SupportedBatchSizes(supportedBatchSizes: batchSizes, toRWKV: req));
+
         // 🟥 generateAsync
         case GenerateAsync req:
           final promptPtr = req.prompt.toNativeUtf8().cast<ffi.Char>();

@@ -210,6 +210,10 @@ class ChatBatchAsync extends ToRWKV {
   ChatBatchAsync(this.messages, {required this.reasoning, required this.batchSize});
 }
 
+class GetSupportedBatchSizes extends ToRWKV {
+  GetSupportedBatchSizes();
+}
+
 /// 开始 TTS 任务
 ///
 /// 发送消息给 ffi thread
