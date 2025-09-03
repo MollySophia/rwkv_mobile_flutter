@@ -408,8 +408,8 @@ class RWKVMobile {
             model_id,
             inputsPtr,
             numInputs,
-            maxLength,
             batchSize,
+            maxLength,
             ffi.nullptr,
             req.reasoning ? 1 : 0,
           );
