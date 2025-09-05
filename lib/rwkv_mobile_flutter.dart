@@ -862,7 +862,18 @@ class RWKVMobile {
                 toRWKV: req,
               ),
             );
+            return;
           }
+
+          sendPort.send(
+            TTSStreamingBuffer(
+              generating: generating,
+              ttsStreamingBuffer: ttsStreamingBufferList,
+              ttsStreamingBufferLength: ttsStreamingBufferList.length,
+              rawFloatList: ttsStreamingBufferListDouble,
+              toRWKV: req,
+            ),
+          );
 
         // 🟥 setTTSCFMSteps
         case SetTTSCFMSteps req:
