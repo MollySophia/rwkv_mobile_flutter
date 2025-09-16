@@ -208,11 +208,6 @@ class RWKVMobile {
     // TODO: @WangCe 逐渐地迁移到 handler 方法中, 最好不要在该方法声明局部变量
     await for (final _FromFrontend message in receivePort) {
       switch (message) {
-        // 🟥 getLatestRuntimeAddress
-        case GetLatestRuntimeAddress req:
-          if (kDebugMode) print('✅ getLatestRuntimeAddress: ${runtime.address}');
-          sendPort.send(LatestRuntimeAddress(latestRuntimeAddress: runtime.address, toRWKV: req));
-
         // 🟥 setMaxLength
         case SetMaxLength req:
           final arg = req.maxLength;
@@ -699,10 +694,6 @@ class RWKVMobile {
           final loadedModelPathString = loadedModelPath.cast<Utf8>().toDartString();
           sendPort.send(LoadedModelPathByID(loadedModelPath: loadedModelPathString, modelID: model_id, toRWKV: req));
 
-        // 🟥 loadTTSModels
-        case LoadTTSModels req:
-          throw UnimplementedError('TODO: rwkvmobile_runtime_sparktts_load_models');
-
         case LoadSparkTTSModels req:
           final wav2vec2Path = req.wav2vec2Path;
           final bicodecTokenizerPath = req.bicodecTokenizerPath;
@@ -803,45 +794,6 @@ class RWKVMobile {
           final ttsGlobalTokensList = ttsGlobalTokensPtr.cast<ffi.Int32>().asTypedList(32).toList();
           sendPort.send({'ttsGlobalTokens': ttsGlobalTokensList});
 
-        // 🟥 getTTSGenerationProgress
-        case GetTTSGenerationProgress req:
-          // int numCurrentGeneratedWavs = 0;
-          // List<double> perWavProgress = [];
-          // List<String> fileList = [];
-          // try {
-          //   final ttsOutputFiles = rwkvMobile.rwkvmobile_runtime_tts_get_current_output_files(runtime);
-          //   final outputFiles = ttsOutputFiles.cast<Utf8>().toDartString();
-          //   fileList = outputFiles.split(',').map((f) => f.replaceAll('"', '').trim()).toList();
-          // } catch (_) {
-          //   fileList = [];
-          // }
-          // // remove empty string from fileList
-          // fileList = fileList.where((f) => f.isNotEmpty).toList();
-          // numCurrentGeneratedWavs = fileList.length;
-          // if (numCurrentGeneratedWavs > 0) perWavProgress = List.filled(numCurrentGeneratedWavs, 1.0).toList();
-          // final numTotalWavs = rwkvMobile.rwkvmobile_runtime_tts_get_num_total_output_wavs(runtime);
-          // final ttsPerWavProgress = rwkvMobile.rwkvmobile_runtime_tts_get_generation_progress(runtime);
-          // if (ttsPerWavProgress < 1.0) perWavProgress.add(ttsPerWavProgress);
-          // double ttsOverallProgress = numCurrentGeneratedWavs.toDouble();
-          // if (ttsPerWavProgress < 1.0) ttsOverallProgress += ttsPerWavProgress;
-          // ttsOverallProgress = ttsOverallProgress / numTotalWavs.toDouble();
-          // // Range from 0.0 to 1.0
-          // sendPort.send(TTSResult(filePaths: fileList, perWavProgress: perWavProgress, overallProgress: ttsOverallProgress, toRWKV: req));
-          throw UnimplementedError('TODO: deprecated');
-
-        // 🟥 getTTSOutputFileList
-        case GetTTSOutputFileList req:
-          // List<String> fileList = [];
-          // try {
-          //   final ttsOutputFiles = rwkvMobile.rwkvmobile_runtime_tts_get_current_output_files(runtime);
-          //   final outputFiles = ttsOutputFiles.cast<Utf8>().toDartString();
-          //   fileList = outputFiles.split(',').map((f) => f.replaceAll('"', '').trim()).toList();
-          // } catch (_) {
-          //   fileList = [];
-          // }
-          // sendPort.send(TTSOutputFileList(outputFileList: fileList, toRWKV: req));
-          throw UnimplementedError('TODO: deprecated');
-
         // 🟥 getTTSStreamingBuffer
         case GetTTSStreamingBuffer req:
           final generating = rwkvMobile.rwkvmobile_runtime_is_generating(runtime, model_id) == 1;
@@ -864,9 +816,6 @@ class RWKVMobile {
             );
           }
 
-        // 🟥 setTTSCFMSteps
-        case SetTTSCFMSteps req:
-          break;
         // 🟥 dumpLog
         case DumpLog req:
           final log = rwkvMobile.rwkvmobile_dump_log();

@@ -66,17 +66,12 @@ class StartOptions {
   final SendPort sendPort;
   final RootIsolateToken rootIsolateToken;
 
-  /// 这样就可以得到runtime的地址了，然后再在start isolate的时候加一个runtime地址的参数，正常启动时传0，hot reload后传保存好的地址
-  @Deprecated("Backend can't use this")
-  final int latestRuntimeAddress;
-
   const StartOptions({
     required this.modelPath,
     required this.tokenizerPath,
     required this.backend,
     required this.sendPort,
     required this.rootIsolateToken,
-    required this.latestRuntimeAddress,
   });
 }
 
