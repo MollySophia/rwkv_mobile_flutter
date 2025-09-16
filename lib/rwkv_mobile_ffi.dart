@@ -297,11 +297,71 @@ class rwkv_mobile {
         )
       >();
 
+  int rwkvmobile_runtime_gen_completion_batch_async(
+    rwkvmobile_runtime_t runtime,
+    int model_id,
+    ffi.Pointer<ffi.Pointer<ffi.Char>> prompts,
+    int batch_size,
+    int max_tokens,
+    int stop_code,
+    ffi.Pointer<
+      ffi.NativeFunction<
+        ffi.Void Function(ffi.Int, ffi.Pointer<ffi.Pointer<ffi.Char>>, ffi.Pointer<ffi.Int>, ffi.Pointer<ffi.Pointer<ffi.Char>>)
+      >
+    >
+    callback_batch,
+  ) {
+    return _rwkvmobile_runtime_gen_completion_batch_async(
+      runtime,
+      model_id,
+      prompts,
+      batch_size,
+      max_tokens,
+      stop_code,
+      callback_batch,
+    );
+  }
+
+  late final _rwkvmobile_runtime_gen_completion_batch_asyncPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Int Function(
+            rwkvmobile_runtime_t,
+            ffi.Int,
+            ffi.Pointer<ffi.Pointer<ffi.Char>>,
+            ffi.Int,
+            ffi.Int,
+            ffi.Int,
+            ffi.Pointer<
+              ffi.NativeFunction<
+                ffi.Void Function(ffi.Int, ffi.Pointer<ffi.Pointer<ffi.Char>>, ffi.Pointer<ffi.Int>, ffi.Pointer<ffi.Pointer<ffi.Char>>)
+              >
+            >,
+          )
+        >
+      >('rwkvmobile_runtime_gen_completion_batch_async');
+  late final _rwkvmobile_runtime_gen_completion_batch_async = _rwkvmobile_runtime_gen_completion_batch_asyncPtr
+      .asFunction<
+        int Function(
+          rwkvmobile_runtime_t,
+          int,
+          ffi.Pointer<ffi.Pointer<ffi.Char>>,
+          int,
+          int,
+          int,
+          ffi.Pointer<
+            ffi.NativeFunction<
+              ffi.Void Function(ffi.Int, ffi.Pointer<ffi.Pointer<ffi.Char>>, ffi.Pointer<ffi.Int>, ffi.Pointer<ffi.Pointer<ffi.Char>>)
+            >
+          >,
+        )
+      >();
+
   int rwkvmobile_runtime_eval_chat_batch_with_history_async(
     rwkvmobile_runtime_t handle,
     int model_id,
-    ffi.Pointer<ffi.Pointer<ffi.Char>> inputs,
-    int num_inputs,
+    ffi.Pointer<ffi.Pointer<ffi.Pointer<ffi.Char>>> inputs,
+    ffi.Pointer<ffi.Int> num_inputs,
     int batch_size,
     int max_tokens,
     ffi.Pointer<
@@ -330,8 +390,8 @@ class rwkv_mobile {
           ffi.Int Function(
             rwkvmobile_runtime_t,
             ffi.Int,
-            ffi.Pointer<ffi.Pointer<ffi.Char>>,
-            ffi.Int,
+            ffi.Pointer<ffi.Pointer<ffi.Pointer<ffi.Char>>>,
+            ffi.Pointer<ffi.Int>,
             ffi.Int,
             ffi.Int,
             ffi.Pointer<
@@ -348,8 +408,8 @@ class rwkv_mobile {
         int Function(
           rwkvmobile_runtime_t,
           int,
-          ffi.Pointer<ffi.Pointer<ffi.Char>>,
-          int,
+          ffi.Pointer<ffi.Pointer<ffi.Pointer<ffi.Char>>>,
+          ffi.Pointer<ffi.Int>,
           int,
           int,
           ffi.Pointer<

@@ -386,11 +386,33 @@ class RWKVMobile {
           if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation thread: retVal: $retVal', toRWKV: req));
 
         case ChatBatchAsync req:
+          final numInputs = req.messages.length;
+          final batchSize = req.batchSize;
+
+          // TODO: 传入多组相同或不同的history
+          // 如输入为List<List<String>> messages_batch, 则：
+          // final inputsBatchPtr = calloc.allocate<ffi.Pointer<ffi.Pointer<ffi.Char>>>(batchSize);
+          // final numInputsBatchPtr = calloc.allocate<ffi.Int>(batchSize);
+          // for (var b = 0; b < batchSize; b++) {
+          //   inputsBatchPtr[b] = calloc.allocate<ffi.Pointer<ffi.Char>>(req.messages_batch[b].length);
+          //   for (var i = 0; i < req.messages_batch[b].length; i++) {
+          //     inputsBatchPtr[b][i] = req.messages[b][i].toNativeUtf8().cast<ffi.Char>();
+          //   }
+          //   numInputsBatchPtr[b] = req.messages_batch[b].length;
+          // }
+
           for (var i = 0; i < req.messages.length; i++) {
             inputsPtr[i] = req.messages[i].toNativeUtf8().cast<ffi.Char>();
           }
-          final numInputs = req.messages.length;
-          final batchSize = req.batchSize;
+
+          final inputsBatchPtr = calloc.allocate<ffi.Pointer<ffi.Pointer<ffi.Char>>>(batchSize);
+          for (var b = 0; b < batchSize; b++) {
+            inputsBatchPtr[b] = inputsPtr;
+          }
+          final numInputsBatchPtr = calloc.allocate<ffi.Int>(batchSize);
+          for (var b = 0; b < batchSize; b++) {
+            numInputsBatchPtr[b] = numInputs;
+          }
 
           if (rwkvMobile.rwkvmobile_runtime_is_generating(runtime, model_id) != 0) {
             sendPort.send(Error('LLM is already generating', req, retVal));
@@ -401,14 +423,16 @@ class RWKVMobile {
           retVal = rwkvMobile.rwkvmobile_runtime_eval_chat_batch_with_history_async(
             runtime,
             model_id,
-            inputsPtr,
-            numInputs,
+            inputsBatchPtr,
+            numInputsBatchPtr,
             batchSize,
             maxLength,
             ffi.nullptr,
             req.reasoning ? 1 : 0,
           );
           if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation thread: retVal: $retVal', toRWKV: req));
+          calloc.free(inputsBatchPtr);
+          calloc.free(numInputsBatchPtr);
 
         // 🟥 getSupportedBatchSizes
         case GetSupportedBatchSizes req:
@@ -443,6 +467,9 @@ class RWKVMobile {
           );
           if (kDebugMode) print('🔥 Started LLM generation thread (gen mode)');
           if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation: retVal: $retVal', toRWKV: req));
+
+        // 🟥 generateBatchAsync
+        // TODO: 完成调用
 
         // 🟥 generate
         case SudokuOthelloGenerate req:
