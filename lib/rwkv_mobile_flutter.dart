@@ -217,9 +217,9 @@ class RWKVMobile {
         case ClearStates _:
           rwkvMobile.rwkvmobile_runtime_clear_state(runtime, model_id);
 
-        // 🟥 clearInitialStates
-        case ClearInitialStates _:
-          rwkvMobile.rwkvmobile_runtime_clear_initial_state(runtime, model_id);
+        // 🟥 unloadInitialStates
+        case UnloadInitialStates req:
+          rwkvMobile.rwkvmobile_runtime_unload_initial_state(runtime, model_id, req.statePath.toNativeUtf8().cast<ffi.Char>());
 
         // 🟥 loadInitialStates
         case LoadInitialStates req:
