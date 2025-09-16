@@ -469,21 +469,24 @@ class rwkv_mobile {
   late final _rwkvmobile_runtime_load_initial_state = _rwkvmobile_runtime_load_initial_statePtr
       .asFunction<int Function(rwkvmobile_runtime_t, int, ffi.Pointer<ffi.Char>)>();
 
-  void rwkvmobile_runtime_clear_initial_state(
+  void rwkvmobile_runtime_unload_initial_state(
     rwkvmobile_runtime_t runtime,
     int model_id,
+    ffi.Pointer<ffi.Char> state_path,
   ) {
-    return _rwkvmobile_runtime_clear_initial_state(
+    return _rwkvmobile_runtime_unload_initial_state(
       runtime,
       model_id,
+      state_path,
     );
   }
 
-  late final _rwkvmobile_runtime_clear_initial_statePtr = _lookup<ffi.NativeFunction<ffi.Void Function(rwkvmobile_runtime_t, ffi.Int)>>(
-    'rwkvmobile_runtime_clear_initial_state',
-  );
-  late final _rwkvmobile_runtime_clear_initial_state = _rwkvmobile_runtime_clear_initial_statePtr
-      .asFunction<void Function(rwkvmobile_runtime_t, int)>();
+  late final _rwkvmobile_runtime_unload_initial_statePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(rwkvmobile_runtime_t, ffi.Int, ffi.Pointer<ffi.Char>)>>(
+        'rwkvmobile_runtime_unload_initial_state',
+      );
+  late final _rwkvmobile_runtime_unload_initial_state = _rwkvmobile_runtime_unload_initial_statePtr
+      .asFunction<void Function(rwkvmobile_runtime_t, int, ffi.Pointer<ffi.Char>)>();
 
   sampler_params rwkvmobile_runtime_get_sampler_params(
     rwkvmobile_runtime_t runtime,
