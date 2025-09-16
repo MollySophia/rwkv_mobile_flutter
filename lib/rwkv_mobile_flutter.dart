@@ -108,6 +108,8 @@ class RWKVMobile {
     int retVal = 0;
 
     final inputsPtr = calloc.allocate<ffi.Pointer<ffi.Char>>(maxMessages);
+    final inputsBatchPtr = calloc.allocate<ffi.Pointer<ffi.Pointer<ffi.Char>>>(20);
+    final numInputsBatchPtr = calloc.allocate<ffi.Int>(20);
     List<int> ttsStreamingBufferList = [];
     List<double> ttsStreamingBufferListDouble = [];
 
@@ -405,11 +407,10 @@ class RWKVMobile {
             inputsPtr[i] = req.messages[i].toNativeUtf8().cast<ffi.Char>();
           }
 
-          final inputsBatchPtr = calloc.allocate<ffi.Pointer<ffi.Pointer<ffi.Char>>>(batchSize);
           for (var b = 0; b < batchSize; b++) {
             inputsBatchPtr[b] = inputsPtr;
           }
-          final numInputsBatchPtr = calloc.allocate<ffi.Int>(batchSize);
+
           for (var b = 0; b < batchSize; b++) {
             numInputsBatchPtr[b] = numInputs;
           }
@@ -431,8 +432,6 @@ class RWKVMobile {
             req.reasoning ? 1 : 0,
           );
           if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation thread: retVal: $retVal', toRWKV: req));
-          calloc.free(inputsBatchPtr);
-          calloc.free(numInputsBatchPtr);
 
         // 🟥 getSupportedBatchSizes
         case GetSupportedBatchSizes req:
