@@ -60,14 +60,12 @@ class RWKVMobile {
   static String getPlatformName() {
     final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
     final platformName = rwkvMobile.rwkvmobile_get_platform_name();
-    if (kDebugMode) print('💬 platformName: ${platformName.cast<Utf8>().toDartString()}');
     return platformName.cast<Utf8>().toDartString();
   }
 
   static String getSocName() {
     final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
     final socName = rwkvMobile.rwkvmobile_get_soc_name();
-    if (kDebugMode) print('💬 socName: ${socName.cast<Utf8>().toDartString()}');
     return socName.cast<Utf8>().toDartString();
   }
 
@@ -80,7 +78,6 @@ class RWKVMobile {
   static String getSnapdragonHtpArch() {
     final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
     final snapdragonHtpArch = rwkvMobile.rwkvmobile_get_htp_arch();
-    if (kDebugMode) print('💬 snapdragonHtpArch: ${snapdragonHtpArch.cast<Utf8>().toDartString()}');
     return snapdragonHtpArch.cast<Utf8>().toDartString();
   }
 
@@ -178,7 +175,6 @@ class RWKVMobile {
       case Backend.qnn:
         // TODO: better solution for this
         final tempDir = await getTemporaryDirectory();
-        if (kDebugMode) print('💬 tempDir: ${tempDir.path}');
 
         rwkvMobile.rwkvmobile_runtime_set_qnn_library_path(runtime, (tempDir.path + '/assets/lib/').toNativeUtf8().cast<ffi.Char>());
         model_id = rwkvMobile.rwkvmobile_runtime_load_model_with_extra(
@@ -455,7 +451,6 @@ class RWKVMobile {
           }
 
           sendPort.send(GenerateStart(toRWKV: req));
-          if (kDebugMode) print('🔥 Starting LLM generation thread (gen mode), maxlength = $maxLength');
           retVal = rwkvMobile.rwkvmobile_runtime_gen_completion_async(
             runtime,
             model_id,
@@ -464,7 +459,6 @@ class RWKVMobile {
             generationStopToken,
             ffi.nullptr,
           );
-          if (kDebugMode) print('🔥 Started LLM generation thread (gen mode)');
           if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation: retVal: $retVal', toRWKV: req));
 
         // 🟥 generateBatchAsync
@@ -516,17 +510,12 @@ class RWKVMobile {
                 toRWKV: req,
               ),
             );
-
-            // final end = DateTime.now().microsecondsSinceEpoch;
-            // final duration = end - start;
-            // if (kDebugMode) print("🔥 duration: $duration");
           }
 
           final nativeCallable = ffi.NativeCallable<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int, ffi.Pointer<ffi.Char>)>.isolateLocal(
             callbackFunction,
           );
           sendPort.send(GenerateStart(toRWKV: req));
-          if (kDebugMode) print('🔥 Start to call LLM (gen mode), maxlength = $maxLength');
           retVal = rwkvMobile.rwkvmobile_runtime_gen_completion(
             runtime,
             model_id,
@@ -535,7 +524,6 @@ class RWKVMobile {
             generationStopToken,
             nativeCallable.nativeFunction,
           );
-          if (kDebugMode) print('🔥 Call LLM done (gen mode)');
           if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation: retVal: $retVal', toRWKV: req));
 
           sendPort.send({'sudokuOthelloResponse': responseStr});
@@ -543,7 +531,6 @@ class RWKVMobile {
 
         // 🟥 releaseModel
         case ReleaseModel _:
-          if (kDebugMode) print('💬 Releasing model');
           rwkvMobile.rwkvmobile_runtime_release_model(runtime, model_id);
 
         // 🟥 initRuntime
