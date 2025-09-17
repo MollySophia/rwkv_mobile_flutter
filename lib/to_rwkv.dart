@@ -310,6 +310,7 @@ class SetUserRole extends ToRWKV {
   SetUserRole(this.userRole);
 }
 
+@Deprecated('')
 class SetVisionPrompt extends ToRWKV {
   final String imagePathPtr;
 

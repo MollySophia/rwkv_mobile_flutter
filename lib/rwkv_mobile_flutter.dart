@@ -342,9 +342,9 @@ class RWKVMobile {
 
         // 🟥 setVisionPrompt
         case SetVisionPrompt req:
-          final imagePathPtr = req.imagePathPtr.toNativeUtf8().cast<ffi.Char>();
-          retVal = rwkvMobile.rwkvmobile_runtime_set_image_prompt(runtime, model_id, imagePathPtr);
-          if (retVal != 0) sendPort.send(Error('Failed to set image prompt', req, retVal));
+          // final imagePathPtr = req.imagePathPtr.toNativeUtf8().cast<ffi.Char>();
+          // retVal = rwkvMobile.rwkvmobile_runtime_set_image_prompt(runtime, model_id, imagePathPtr);
+          sendPort.send(Error('Failed to set image prompt', req, retVal));
 
         // 🟥 loadWhisperEncoder
         case LoadWhisperEncoder req:
