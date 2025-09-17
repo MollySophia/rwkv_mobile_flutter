@@ -119,11 +119,17 @@ class ResponseBatchBufferContent extends FromRWKV {
 class LoadedModelPathByID extends FromRWKV {
   final String loadedModelPath;
   final int modelID;
-  LoadedModelPathByID({required this.loadedModelPath, required this.modelID, super.toRWKV});
+
+  LoadedModelPathByID({
+    required this.loadedModelPath,
+    required this.modelID,
+    super.toRWKV,
+  });
 }
 
 class LoadedModelIDs extends FromRWKV {
   final List<int> loadedModelIDs;
+
   LoadedModelIDs({required this.loadedModelIDs, super.toRWKV});
 }
 

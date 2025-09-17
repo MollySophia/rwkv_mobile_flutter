@@ -695,10 +695,10 @@ class RWKVMobile {
 
         // 🟥 getLoadedModelIDs
         case GetLoadedModelIDs req:
-          final model_ids = calloc<ffi.Int32>(16);
-          final loadedModelIDsList = rwkvMobile.rwkvmobile_runtime_get_loaded_model_ids(runtime, model_ids.cast<ffi.Int>(), 16);
-          final loadedModelIDsListList = model_ids.asTypedList(loadedModelIDsList).toList();
-          calloc.free(model_ids);
+          final modelIDs = calloc<ffi.Int32>(16);
+          final loadedModelIDsList = rwkvMobile.rwkvmobile_runtime_get_loaded_model_ids(runtime, modelIDs.cast<ffi.Int>(), 16);
+          final loadedModelIDsListList = modelIDs.asTypedList(loadedModelIDsList).toList();
+          calloc.free(modelIDs);
           sendPort.send(LoadedModelIDs(loadedModelIDs: loadedModelIDsListList, toRWKV: req));
 
         // 🟥 getLoadedModelPathByID

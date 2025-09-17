@@ -14,6 +14,14 @@ sealed class ToRWKV {
   final int requestId;
 
   ToRWKV() : requestId = DateTime.now().microsecondsSinceEpoch;
+
+  @override
+  bool operator ==(Object other) {
+    return other is ToRWKV && other.requestId == requestId && other.runtimeType == runtimeType;
+  }
+
+  @override
+  int get hashCode => requestId.hashCode;
 }
 
 class ClearStates extends ToRWKV {}
@@ -82,7 +90,9 @@ class GetLoadedModelPathByID extends ToRWKV {
   static const responseType = LoadedModelPathByID;
 }
 
-class GetLoadedModelIDs extends ToRWKV {}
+class GetLoadedModelIDs extends ToRWKV {
+  static const responseType = LoadedModelIDs;
+}
 
 /// stop之后responseBufferContent还保留着，然后resume之后responseBufferContent会先短暂清空，然后变成stop前已经生成了的内容并接着生成
 class Stop extends ToRWKV {}
@@ -310,7 +320,7 @@ class SetUserRole extends ToRWKV {
   SetUserRole(this.userRole);
 }
 
-@Deprecated('')
+@Deprecated('Already replaced by new Vision Model API')
 class SetVisionPrompt extends ToRWKV {
   final String imagePathPtr;
 
