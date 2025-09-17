@@ -197,8 +197,9 @@ class RWKVMobile {
         );
     }
 
-    if (model_id < 0)
+    if (model_id < 0) {
       throw Exception('😡 Failed to load model, model path: $modelPath, model backend: $backend, tokenizer path: $tokenizerPath');
+    }
 
     final tempDir = await getTemporaryDirectory();
     rwkvMobile.rwkvmobile_set_cache_dir(runtime, tempDir.path.toNativeUtf8().cast<ffi.Char>());
