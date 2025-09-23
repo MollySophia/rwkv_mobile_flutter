@@ -217,8 +217,13 @@ class RuntimeLog extends FromRWKV {
 
 class IsGenerating extends FromRWKV {
   final bool isGenerating;
+  final int modelID;
 
-  IsGenerating({required this.isGenerating, super.toRWKV});
+  IsGenerating({
+    required this.isGenerating,
+    required this.modelID,
+    super.toRWKV,
+  });
 }
 
 // rwkvmobile_runtime_get_tts_streaming_buffer获取到音频buffer以及它当前的长度（单位为样本数不是字节数，即是float数组长度）

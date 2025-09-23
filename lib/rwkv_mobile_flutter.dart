@@ -275,8 +275,9 @@ class RWKVMobile {
 
         // 🟥 getIsGenerating
         case GetIsGenerating req:
-          bool isGeneratingBool = (rwkvMobile.rwkvmobile_runtime_is_generating(runtime, model_id) != 0);
-          sendPort.send(IsGenerating(isGenerating: isGeneratingBool, toRWKV: req));
+          final modelID = req.modelID ?? model_id;
+          bool isGeneratingBool = (rwkvMobile.rwkvmobile_runtime_is_generating(runtime, modelID) != 0);
+          sendPort.send(IsGenerating(isGenerating: isGeneratingBool, modelID: modelID, toRWKV: req));
           sendPort.send({'isGenerating': isGeneratingBool});
 
         // 🟥 setThinkingToken
@@ -709,9 +710,10 @@ class RWKVMobile {
 
         // 🟥 getPrefillAndDecodeSpeed
         case GetPrefillAndDecodeSpeed req:
-          final prefillSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime, model_id);
-          final decodeSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime, model_id);
-          final progress = rwkvMobile.rwkvmobile_runtime_get_prefill_progress(runtime, model_id);
+          final modelID = req.modelID ?? model_id;
+          final prefillSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime, modelID);
+          final decodeSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime, modelID);
+          final progress = rwkvMobile.rwkvmobile_runtime_get_prefill_progress(runtime, modelID);
           sendPort.send(Speed(prefillSpeed: prefillSpeed, decodeSpeed: decodeSpeed, prefillProgress: progress, toRWKV: req));
 
         // 🟥 getResponseBufferIds
@@ -731,9 +733,10 @@ class RWKVMobile {
 
         // 🟥 getLoadedModelPathByID
         case GetLoadedModelPathByID req:
-          final loadedModelPath = rwkvMobile.rwkvmobile_runtime_get_model_path_by_id(runtime, model_id);
+          final modelID = req.modelID;
+          final loadedModelPath = rwkvMobile.rwkvmobile_runtime_get_model_path_by_id(runtime, modelID);
           final loadedModelPathString = loadedModelPath.cast<Utf8>().toDartString();
-          sendPort.send(LoadedModelPathByID(loadedModelPath: loadedModelPathString, modelID: model_id, toRWKV: req));
+          sendPort.send(LoadedModelPathByID(loadedModelPath: loadedModelPathString, modelID: modelID, toRWKV: req));
 
         case LoadSparkTTSModels req:
           final wav2vec2Path = req.wav2vec2Path;
@@ -769,7 +772,7 @@ class RWKVMobile {
           ttsStreamingBufferListDouble.clear();
           retVal = rwkvMobile.rwkvmobile_runtime_run_spark_tts_streaming_async(
             runtime,
-            model_id,
+            req.modelID ?? model_id,
             ttsText.toNativeUtf8().cast<ffi.Char>(),
             promptSpeechText.toNativeUtf8().cast<ffi.Char>(),
             promptWavPath.toNativeUtf8().cast<ffi.Char>(),

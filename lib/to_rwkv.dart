@@ -44,9 +44,17 @@ class SudokuOthelloGenerate extends ToRWKV {
   static const responseType = StreamResponse;
 }
 
-class GetIsGenerating extends ToRWKV {}
+class GetIsGenerating extends ToRWKV {
+  final int? modelID;
+
+  GetIsGenerating({this.modelID});
+}
 
 class GetPrefillAndDecodeSpeed extends ToRWKV {
+  final int? modelID;
+
+  GetPrefillAndDecodeSpeed({this.modelID});
+
   static const responseType = Speed;
 }
 
@@ -54,6 +62,10 @@ class GetPrompt extends ToRWKV {}
 
 // rwkvmobile_runtime_get_tts_streaming_buffer获取到音频buffer以及它当前的长度（单位为样本数不是字节数，即是float数组长度）
 class GetTTSStreamingBuffer extends ToRWKV {
+  final int? modelID;
+
+  GetTTSStreamingBuffer({this.modelID});
+
   static const responseType = TTSStreamingBuffer;
 }
 
@@ -128,11 +140,7 @@ class ReInitRuntime extends ToRWKV {
 
   static const responseType = ReInitSteps;
 
-  ReInitRuntime({
-    required this.modelPath,
-    required this.backend,
-    required this.tokenizerPath,
-  });
+  ReInitRuntime({required this.modelPath, required this.backend, required this.tokenizerPath});
 }
 
 class LoadSparkTTSModels extends ToRWKV {
@@ -140,11 +148,7 @@ class LoadSparkTTSModels extends ToRWKV {
   final String bicodecTokenizerPath;
   final String bicodecDetokenizerPath;
 
-  LoadSparkTTSModels({
-    required this.wav2vec2Path,
-    required this.bicodecTokenizerPath,
-    required this.bicodecDetokenizerPath,
-  });
+  LoadSparkTTSModels({required this.wav2vec2Path, required this.bicodecTokenizerPath, required this.bicodecDetokenizerPath});
 }
 
 class LoadTTSTextNormalizer extends ToRWKV {
@@ -224,6 +228,7 @@ class StartTTS extends ToRWKV {
   final String promptWavPath;
   final String outputWavPath;
   final String promptSpeechText;
+  final int? modelID;
 
   StartTTS({
     required this.ttsText,
@@ -231,6 +236,7 @@ class StartTTS extends ToRWKV {
     required this.promptWavPath,
     required this.outputWavPath,
     required this.promptSpeechText,
+    this.modelID,
   });
 }
 
@@ -239,11 +245,7 @@ class StartTTSWithGlobalTokens extends ToRWKV {
   final String outputWavPath;
   final List<int> globalTokens;
 
-  StartTTSWithGlobalTokens({
-    required this.ttsText,
-    required this.outputWavPath,
-    required this.globalTokens,
-  });
+  StartTTSWithGlobalTokens({required this.ttsText, required this.outputWavPath, required this.globalTokens});
 }
 
 class StartTTSWithProperties extends ToRWKV {
