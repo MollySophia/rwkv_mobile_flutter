@@ -101,6 +101,26 @@ class GetResponseBufferIds extends ToRWKV {}
 
 class GetSamplerParams extends ToRWKV {}
 
+class AddTTSModel extends ToRWKV {
+  final String modelPath;
+  final Backend backend;
+  final String tokenizerPath;
+  final String wav2vec2Path;
+  final String bicodecTokenizerPath;
+  final String bicodecDetokenizerPath;
+
+  static const responseType = LoadSteps;
+
+  AddTTSModel({
+    required this.modelPath,
+    required this.backend,
+    required this.tokenizerPath,
+    required this.wav2vec2Path,
+    required this.bicodecTokenizerPath,
+    required this.bicodecDetokenizerPath,
+  });
+}
+
 class ReInitRuntime extends ToRWKV {
   final String modelPath;
   final Backend backend;

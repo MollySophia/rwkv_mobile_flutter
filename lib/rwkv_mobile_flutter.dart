@@ -534,6 +534,33 @@ class RWKVMobile {
         case ReleaseModel _:
           rwkvMobile.rwkvmobile_runtime_release_model(runtime, model_id);
 
+        case AddTTSModel req:
+          final modelPath = req.modelPath;
+          final backend = req.backend;
+          final tokenizerPath = req.tokenizerPath;
+          final modelID = rwkvMobile.rwkvmobile_runtime_load_model(
+            runtime,
+            modelPath.toNativeUtf8().cast<ffi.Char>(),
+            backend.asArgument.toNativeUtf8().cast<ffi.Char>(),
+            tokenizerPath.toNativeUtf8().cast<ffi.Char>(),
+          );
+          if (modelID < 0) {
+            sendPort.send(Error('Failed to add TTS model', req));
+            break;
+          }
+          final wav2vec2Path = req.wav2vec2Path;
+          final bicodecTokenizerPath = req.bicodecTokenizerPath;
+          final bicodecDetokenizerPath = req.bicodecDetokenizerPath;
+          retVal = rwkvMobile.rwkvmobile_runtime_sparktts_load_models(
+            runtime,
+            wav2vec2Path.toNativeUtf8().cast<ffi.Char>(),
+            bicodecTokenizerPath.toNativeUtf8().cast<ffi.Char>(),
+            bicodecDetokenizerPath.toNativeUtf8().cast<ffi.Char>(),
+          );
+          if (retVal != 0) sendPort.send(Error('Failed to add TTS model', req));
+          if (retVal != 0) break;
+          sendPort.send(LoadSteps(done: true, modelID: modelID, toRWKV: req));
+
         // 🟥 initRuntime
         case ReInitRuntime req:
           String modelPath = req.modelPath;

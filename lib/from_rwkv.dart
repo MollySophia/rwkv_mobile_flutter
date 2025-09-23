@@ -49,7 +49,25 @@ class SupportedBatchSizes extends FromRWKV {
   SupportedBatchSizes({required this.supportedBatchSizes, super.toRWKV});
 }
 
+class LoadSteps extends FromRWKV {
+  final bool done;
+  final int? modelID;
+  final bool? success;
+  final String? error;
+  final String? step;
+
+  LoadSteps({
+    required this.done,
+    this.modelID,
+    this.success,
+    this.error,
+    this.step,
+    super.toRWKV,
+  });
+}
+
 /// 重新加载新的 weights 时, 会调用该 response
+@Deprecated('Use ReInitSteps instead')
 class ReInitSteps extends FromRWKV {
   final bool done;
   final bool? success;
