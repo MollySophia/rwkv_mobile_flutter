@@ -699,6 +699,7 @@ class RWKVMobile {
             responseBufferContentList.add(str);
             eosFoundList.add(eosFound);
           }
+          rwkvMobile.rwkvmobile_runtime_free_response_buffer_batch(responseBufferContent);
           sendPort.send(
             ResponseBatchBufferContent(
               responseBufferContent: responseBufferContentList,
