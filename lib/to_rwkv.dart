@@ -30,8 +30,9 @@ class DumpLog extends ToRWKV {}
 
 class GenerateAsync extends ToRWKV {
   final String prompt;
+  final int batch;
 
-  GenerateAsync(this.prompt);
+  GenerateAsync(this.prompt, {this.batch = 1}) : super();
 }
 
 class SudokuOthelloGenerate extends ToRWKV {

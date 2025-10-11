@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_interpolation_to_compose_strings
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
@@ -8,6 +9,7 @@ import 'dart:math';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+
 // TODO: 由前端提供各个路径 @WangCe @Molly
 import 'package:path_provider/path_provider.dart';
 import 'package:rwkv_mobile_flutter/from_rwkv.dart';
@@ -453,18 +455,35 @@ class RWKVMobile {
           }
 
           sendPort.send(GenerateStart(toRWKV: req));
-          retVal = rwkvMobile.rwkvmobile_runtime_gen_completion_async(
-            runtime,
-            model_id,
-            promptPtr,
-            maxLength,
-            generationStopToken,
-            ffi.nullptr,
-          );
-          if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation: retVal: $retVal', toRWKV: req));
-
-        // 🟥 generateBatchAsync
-        // TODO: 完成调用
+          if (req.batch <= 1) {
+            retVal = rwkvMobile.rwkvmobile_runtime_gen_completion_async(
+              runtime,
+              model_id,
+              promptPtr,
+              maxLength,
+              generationStopToken,
+              ffi.nullptr,
+            );
+          } else {
+            final prompts = calloc.allocate<ffi.Pointer<ffi.Char>>(req.batch);
+            for  (var i = 0; i < req.batch; i++) {
+              prompts[i] = promptPtr;
+            }
+            retVal = rwkvMobile.rwkvmobile_runtime_gen_completion_batch_async(
+              runtime,
+              model_id,
+              prompts,
+              req.batch,
+              maxLength,
+              generationStopToken,
+              ffi.nullptr,
+            );
+            calloc.free(prompts);
+          }
+          if (retVal != 0) {
+            sendPort.send(GenerateStop(error: 'Failed to start generation: retVal: $retVal', toRWKV: req));
+            return;
+          }
 
         // 🟥 generate
         case SudokuOthelloGenerate req:
@@ -867,5 +886,82 @@ class RWKVMobile {
           sendPort.send(RuntimeLog(runtimeLog: log.cast<Utf8>().toDartString(), toRWKV: req));
       }
     }
+  }
+}
+
+class _GenerationContentNotifier {
+  final int modelId;
+  final rwkvmobile_runtime_t runtime;
+  final SendPort sendPort;
+  final rwkv_mobile rwkvMobile;
+  final int requestId;
+  final bool batchMode;
+
+  static StreamSubscription? _sp;
+
+  _GenerationContentNotifier({
+    required this.modelId,
+    required this.runtime,
+    required this.sendPort,
+    required this.rwkvMobile,
+    required this.requestId,
+    required this.batchMode,
+  });
+
+  void startPoll() async {
+    _sp?.cancel();
+    _sp = Stream.periodic(const Duration(milliseconds: 20))
+        .map((_) => _getContent())
+        .where((e) => e.contents.isNotEmpty && e.eosFound.isNotEmpty)
+        .listen(
+          (e) {
+            sendPort.send(e);
+          },
+          cancelOnError: true,
+          onError: (e) {
+            sendPort.send(Error(e.toString(), null));
+          },
+          onDone: () {},
+        );
+  }
+
+  CompletionContent _getContent() {
+    final eosList = <bool>[];
+    final contents = <String>[];
+    if (batchMode) {
+      final response = rwkvMobile.rwkvmobile_runtime_get_response_buffer_content_batch(runtime, modelId);
+      for (int i = 0; i < response.batch_size; i++) {
+        final len = response.lengths[i];
+        if (len <= 0) {
+          eosList.add(false);
+          contents.add('');
+          continue;
+        }
+        final Uint8List byteList = response.contents[i].cast<ffi.Uint8>().asTypedList(len);
+        eosList.add(response.eos_founds[i] == 1);
+        contents.add(_codec.decode(byteList));
+      }
+    } else {
+      final response = rwkvMobile.rwkvmobile_runtime_get_response_buffer_content(runtime, modelId);
+      if (response.length > 0) {
+        final Uint8List byteList = response.content.cast<ffi.Uint8>().asTypedList(response.length);
+        final str = _codec.decode(byteList);
+        contents.add(str);
+        eosList.add(response.eos_found == 1);
+      }
+    }
+    final prefillSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_prefill_speed(runtime, modelId);
+    final decodeSpeed = rwkvMobile.rwkvmobile_runtime_get_avg_decode_speed(runtime, modelId);
+    final progress = rwkvMobile.rwkvmobile_runtime_get_prefill_progress(runtime, modelId);
+    sendPort.send(Speed(prefillSpeed: prefillSpeed, decodeSpeed: decodeSpeed, prefillProgress: progress));
+    final generating = rwkvMobile.rwkvmobile_runtime_is_generating(runtime, modelId) != 0;
+    final completed = eosList.isNotEmpty && eosList.every((e) => e);
+    sendPort.send(IsGenerating(isGenerating: generating, modelID: modelId));
+    if (!generating || completed) {
+      Future.delayed(const Duration(milliseconds: 100), () {
+        _sp?.cancel();
+      });
+    }
+    return CompletionContent(requestId: requestId, contents: contents, eosFound: eosList);
   }
 }
