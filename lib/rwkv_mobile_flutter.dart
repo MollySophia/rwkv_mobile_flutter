@@ -466,7 +466,7 @@ class RWKVMobile {
             );
           } else {
             final prompts = calloc.allocate<ffi.Pointer<ffi.Char>>(req.batch);
-            for  (var i = 0; i < req.batch; i++) {
+            for (var i = 0; i < req.batch; i++) {
               prompts[i] = promptPtr;
             }
             retVal = rwkvMobile.rwkvmobile_runtime_gen_completion_batch_async(
@@ -884,6 +884,34 @@ class RWKVMobile {
         case DumpLog req:
           final log = rwkvMobile.rwkvmobile_dump_log();
           sendPort.send(RuntimeLog(runtimeLog: log.cast<Utf8>().toDartString(), toRWKV: req));
+
+        // 🟥 dumpStateInfo
+        case DumpStateInfo req:
+          final stateInfo = rwkvMobile.rwkvmobile_get_state_cache_info(runtime, req.modelID ?? model_id);
+          sendPort.send(StateInfo(stateInfo: stateInfo.cast<Utf8>().toDartString(), toRWKV: req));
+          rwkvMobile.rwkvmobile_free_state_cache_info(stateInfo);
+
+        // 🟥 saveRuntimeStateByHistory
+        case SaveRuntimeStateByHistory req:
+          for (var i = 0; i < req.messages.length; i++) {
+            inputsPtr[i] = req.messages[i].toNativeUtf8().cast<ffi.Char>();
+          }
+          final numInputs = req.messages.length;
+          final stateSavePathPtr = req.stateSavePath.toNativeUtf8().cast<ffi.Char>();
+          final retVal = rwkvMobile.rwkvmobile_runtime_save_history_to_state(
+            runtime,
+            req.modelID ?? model_id,
+            inputsPtr,
+            numInputs,
+            stateSavePathPtr,
+          );
+          if (retVal != 0) sendPort.send(Error('Failed to save runtime state by history', req, retVal));
+
+        // 🟥 loadRuntimeStateToMemory
+        case LoadRuntimeStateToMemory req:
+          final stateLoadPathPtr = req.stateLoadPath.toNativeUtf8().cast<ffi.Char>();
+          final retVal = rwkvMobile.rwkvmobile_runtime_load_history_state_to_memory(runtime, req.modelID ?? model_id, stateLoadPathPtr);
+          if (retVal != 0) sendPort.send(Error('Failed to load runtime state to memory', req, retVal));
       }
     }
   }

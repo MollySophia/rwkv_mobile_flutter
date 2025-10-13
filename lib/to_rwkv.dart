@@ -28,6 +28,27 @@ class ClearStates extends ToRWKV {}
 
 class DumpLog extends ToRWKV {}
 
+class DumpStateInfo extends ToRWKV {
+  final int? modelID;
+
+  DumpStateInfo({this.modelID});
+}
+
+class SaveRuntimeStateByHistory extends ToRWKV {
+  final List<String> messages;
+  final String stateSavePath;
+  final int? modelID;
+
+  SaveRuntimeStateByHistory({required this.messages, required this.stateSavePath, this.modelID});
+}
+
+class LoadRuntimeStateToMemory extends ToRWKV {
+  final String stateLoadPath;
+  final int? modelID;
+
+  LoadRuntimeStateToMemory({required this.stateLoadPath, this.modelID});
+}
+
 class GenerateAsync extends ToRWKV {
   final String prompt;
   final int batch;

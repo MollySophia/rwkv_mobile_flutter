@@ -215,6 +215,12 @@ class RuntimeLog extends FromRWKV {
   RuntimeLog({required this.runtimeLog, super.toRWKV});
 }
 
+class StateInfo extends FromRWKV {
+  final String stateInfo;
+
+  StateInfo({required this.stateInfo, super.toRWKV});
+}
+
 class IsGenerating extends FromRWKV {
   final bool isGenerating;
   final int modelID;
