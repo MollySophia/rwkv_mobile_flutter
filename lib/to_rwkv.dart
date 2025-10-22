@@ -56,6 +56,14 @@ class GenerateAsync extends ToRWKV {
   GenerateAsync(this.prompt, {this.batch = 1}) : super();
 }
 
+class RunEvaluation extends ToRWKV {
+  final String sourceText;
+  final String targetText;
+
+  RunEvaluation(this.sourceText, this.targetText) : super();
+  static const responseType = EvaluationResults;
+}
+
 class SudokuOthelloGenerate extends ToRWKV {
   final String prompt;
   final bool decodeStream;

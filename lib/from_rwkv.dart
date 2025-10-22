@@ -201,6 +201,13 @@ class StreamResponse extends FromRWKV {
   });
 }
 
+class EvaluationResults extends FromRWKV {
+  final List<double> logits;
+  final List<bool> corrects;
+
+  EvaluationResults({required this.logits, required this.corrects, super.toRWKV});
+}
+
 class TTSGenerationStart extends FromRWKV {
   final bool start;
 

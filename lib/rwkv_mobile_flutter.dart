@@ -482,8 +482,22 @@ class RWKVMobile {
           }
           if (retVal != 0) {
             sendPort.send(GenerateStop(error: 'Failed to start generation: retVal: $retVal', toRWKV: req));
-            return;
           }
+
+        // 🟥 runEvaluation
+        case RunEvaluation req:
+          final sourceTextPtr = req.sourceText.toNativeUtf8().cast<ffi.Char>();
+          final targetTextPtr = req.targetText.toNativeUtf8().cast<ffi.Char>();
+          final evaluationResults = rwkvMobile.rwkvmobile_runtime_run_evaluation(runtime, model_id, sourceTextPtr, targetTextPtr);
+          final List<double> logits = evaluationResults.logits_vals.asTypedList(evaluationResults.count).toList();
+          final List<bool> corrects = evaluationResults.corrects
+              .cast<ffi.Int32>()
+              .asTypedList(evaluationResults.count)
+              .toList()
+              .map((e) => e != 0)
+              .toList();
+          sendPort.send(EvaluationResults(logits: logits, corrects: corrects, toRWKV: req));
+          rwkvMobile.rwkvmobile_runtime_free_evaluation_results(evaluationResults);
 
         // 🟥 generate
         case SudokuOthelloGenerate req:
