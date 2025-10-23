@@ -565,8 +565,8 @@ class RWKVMobile {
           if (retVal == 0) sendPort.send(GenerateStop(toRWKV: req));
 
         // 🟥 releaseModel
-        case ReleaseModel _:
-          rwkvMobile.rwkvmobile_runtime_release_model(runtime, model_id);
+        case ReleaseModel req:
+          rwkvMobile.rwkvmobile_runtime_release_model(runtime, req.modelID ?? model_id);
 
         case AddTTSModel req:
           final modelPath = req.modelPath;

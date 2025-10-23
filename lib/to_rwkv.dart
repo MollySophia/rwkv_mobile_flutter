@@ -218,7 +218,11 @@ class UnloadInitialStates extends ToRWKV {
   UnloadInitialStates(this.statePath);
 }
 
-class ReleaseModel extends ToRWKV {}
+class ReleaseModel extends ToRWKV {
+  final int? modelID;
+
+  ReleaseModel({this.modelID});
+}
 
 class ReleaseTTSModels extends ToRWKV {}
 
