@@ -109,6 +109,7 @@ class RWKVMobile {
     final inputsPtr = calloc.allocate<ffi.Pointer<ffi.Char>>(maxMessages);
     final inputsBatchPtr = calloc.allocate<ffi.Pointer<ffi.Pointer<ffi.Char>>>(20);
     final numInputsBatchPtr = calloc.allocate<ffi.Int>(20);
+    final inputsBatchPtrCompletionAsync = calloc.allocate<ffi.Pointer<ffi.Char>>(20);
     List<int> ttsStreamingBufferList = [];
     List<double> ttsStreamingBufferListDouble = [];
 
@@ -465,20 +466,18 @@ class RWKVMobile {
               ffi.nullptr,
             );
           } else {
-            final prompts = calloc.allocate<ffi.Pointer<ffi.Char>>(req.batch);
             for (var i = 0; i < req.batch; i++) {
-              prompts[i] = promptPtr;
+              inputsBatchPtrCompletionAsync[i] = promptPtr;
             }
             retVal = rwkvMobile.rwkvmobile_runtime_gen_completion_batch_async(
               runtime,
               model_id,
-              prompts,
+              inputsBatchPtrCompletionAsync,
               req.batch,
               maxLength,
               generationStopToken,
               ffi.nullptr,
             );
-            calloc.free(prompts);
           }
           if (retVal != 0) {
             sendPort.send(GenerateStop(error: 'Failed to start generation: retVal: $retVal', toRWKV: req));
@@ -928,5 +927,10 @@ class RWKVMobile {
           if (retVal != 0) sendPort.send(Error('Failed to load runtime state to memory', req, retVal));
       }
     }
+
+    calloc.free(inputsPtr);
+    calloc.free(inputsBatchPtr);
+    calloc.free(numInputsBatchPtr);
+    calloc.free(inputsBatchPtrCompletionAsync);
   }
 }
