@@ -392,28 +392,19 @@ class RWKVMobile {
           final numInputs = req.messages.length;
           final batchSize = req.batchSize;
 
-          // TODO: 传入多组相同或不同的history
-          // 如输入为List<List<String>> messages_batch, 则：
-          // final inputsBatchPtr = calloc.allocate<ffi.Pointer<ffi.Pointer<ffi.Char>>>(batchSize);
-          // final numInputsBatchPtr = calloc.allocate<ffi.Int>(batchSize);
-          // for (var b = 0; b < batchSize; b++) {
-          //   inputsBatchPtr[b] = calloc.allocate<ffi.Pointer<ffi.Char>>(req.messages_batch[b].length);
-          //   for (var i = 0; i < req.messages_batch[b].length; i++) {
-          //     inputsBatchPtr[b][i] = req.messages[b][i].toNativeUtf8().cast<ffi.Char>();
-          //   }
-          //   numInputsBatchPtr[b] = req.messages_batch[b].length;
-          // }
-
-          for (var i = 0; i < req.messages.length; i++) {
-            inputsPtr[i] = req.messages[i].toNativeUtf8().cast<ffi.Char>();
+          if (batchSize != req.messages.length) {
+            sendPort.send(Error('Batch size does not match messages length', req, -1));
+            break;
           }
 
-          for (var b = 0; b < batchSize; b++) {
-            inputsBatchPtr[b] = inputsPtr;
-          }
-
-          for (var b = 0; b < batchSize; b++) {
-            numInputsBatchPtr[b] = numInputs;
+          final List<List<String>> messages = req.messages;
+          for (var i = 0; i < batchSize; i++) {
+            final _inputsPtr = calloc.allocate<ffi.Pointer<ffi.Char>>(maxMessages);
+            for (var j = 0; j < messages[i].length; j++) {
+              _inputsPtr[j] = messages[i][j].toNativeUtf8().cast<ffi.Char>();
+            }
+            inputsBatchPtr[i] = _inputsPtr;
+            numInputsBatchPtr[i] = messages[i].length;
           }
 
           if (rwkvMobile.rwkvmobile_runtime_is_generating(runtime, model_id) != 0) {

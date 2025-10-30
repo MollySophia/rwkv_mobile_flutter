@@ -238,7 +238,7 @@ class ChatAsync extends ToRWKV {
 }
 
 class ChatBatchAsync extends ToRWKV {
-  final List<String> messages;
+  final List<List<String>> messages;
   final bool reasoning;
   final int batchSize;
 
