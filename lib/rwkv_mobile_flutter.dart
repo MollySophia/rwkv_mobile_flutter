@@ -389,7 +389,6 @@ class RWKVMobile {
           if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation thread: retVal: $retVal', toRWKV: req));
 
         case ChatBatchAsync req:
-          final numInputs = req.messages.length;
           final batchSize = req.batchSize;
 
           if (batchSize != req.messages.length) {
@@ -398,12 +397,12 @@ class RWKVMobile {
           }
 
           final List<List<String>> messages = req.messages;
+          final singleBatch = calloc.allocate<ffi.Pointer<ffi.Char>>(maxMessages);
           for (var i = 0; i < batchSize; i++) {
-            final _inputsPtr = calloc.allocate<ffi.Pointer<ffi.Char>>(maxMessages);
             for (var j = 0; j < messages[i].length; j++) {
-              _inputsPtr[j] = messages[i][j].toNativeUtf8().cast<ffi.Char>();
+              singleBatch[j] = messages[i][j].toNativeUtf8().cast<ffi.Char>();
             }
-            inputsBatchPtr[i] = _inputsPtr;
+            inputsBatchPtr[i] = singleBatch;
             numInputsBatchPtr[i] = messages[i].length;
           }
 
@@ -423,6 +422,7 @@ class RWKVMobile {
             ffi.nullptr,
             req.reasoning ? 1 : 0,
           );
+          calloc.free(singleBatch);
           if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation thread: retVal: $retVal', toRWKV: req));
 
         // 🟥 getSupportedBatchSizes
