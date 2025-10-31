@@ -110,9 +110,6 @@ class RWKVMobile {
     final inputsPtr = calloc.allocate<ffi.Pointer<ffi.Char>>(maxMessages);
     final inputsBatchPtr = calloc.allocate<ffi.Pointer<ffi.Pointer<ffi.Char>>>(maxBatchSize);
     final numInputsBatchPtr = calloc.allocate<ffi.Int>(maxBatchSize);
-    for (var i = 0; i < maxBatchSize; i++) {
-      inputsBatchPtr[i] = calloc.allocate<ffi.Pointer<ffi.Char>>(maxMessages);
-    }
     final inputsBatchPtrCompletionAsync = calloc.allocate<ffi.Pointer<ffi.Char>>(maxBatchSize);
     List<int> ttsStreamingBufferList = [];
     List<double> ttsStreamingBufferListDouble = [];
@@ -406,6 +403,9 @@ class RWKVMobile {
           }
 
           for (var i = 0; i < batchSize; i++) {
+            if (inputsBatchPtr[i] == ffi.nullptr) {
+              inputsBatchPtr[i] = calloc.allocate<ffi.Pointer<ffi.Char>>(maxMessages);
+            }
             for (var j = 0; j < req.messages[i].length; j++) {
               final raw = req.messages[i][j];
               print(raw);
