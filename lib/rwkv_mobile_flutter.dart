@@ -400,7 +400,9 @@ class RWKVMobile {
           final singleBatch = calloc.allocate<ffi.Pointer<ffi.Char>>(maxMessages);
           for (var i = 0; i < batchSize; i++) {
             for (var j = 0; j < messages[i].length; j++) {
-              singleBatch[j] = messages[i][j].toNativeUtf8().cast<ffi.Char>();
+              final raw = messages[i][j];
+              print(raw);
+              singleBatch[j] = raw.toNativeUtf8().cast<ffi.Char>();
             }
             inputsBatchPtr[i] = singleBatch;
             numInputsBatchPtr[i] = messages[i].length;
