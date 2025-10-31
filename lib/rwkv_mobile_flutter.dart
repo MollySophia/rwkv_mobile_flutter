@@ -105,11 +105,15 @@ class RWKVMobile {
     int maxMessages = 1000;
     int generationStopToken = 0; // Takes effect in 'generation' mode; not used in 'chat' mode
     int retVal = 0;
+    int maxBatchSize = 20;
 
     final inputsPtr = calloc.allocate<ffi.Pointer<ffi.Char>>(maxMessages);
-    final inputsBatchPtr = calloc.allocate<ffi.Pointer<ffi.Pointer<ffi.Char>>>(20);
-    final numInputsBatchPtr = calloc.allocate<ffi.Int>(20);
-    final inputsBatchPtrCompletionAsync = calloc.allocate<ffi.Pointer<ffi.Char>>(20);
+    final inputsBatchPtr = calloc.allocate<ffi.Pointer<ffi.Pointer<ffi.Char>>>(maxBatchSize);
+    final numInputsBatchPtr = calloc.allocate<ffi.Int>(maxBatchSize);
+    for (var i = 0; i < maxBatchSize; i++) {
+      inputsBatchPtr[i] = calloc.allocate<ffi.Pointer<ffi.Char>>(maxMessages);
+    }
+    final inputsBatchPtrCompletionAsync = calloc.allocate<ffi.Pointer<ffi.Char>>(maxBatchSize);
     List<int> ttsStreamingBufferList = [];
     List<double> ttsStreamingBufferListDouble = [];
 
@@ -396,21 +400,18 @@ class RWKVMobile {
             break;
           }
 
-          final List<List<String>> messages = req.messages;
-          final singleBatch = calloc.allocate<ffi.Pointer<ffi.Char>>(maxMessages);
-          for (var i = 0; i < batchSize; i++) {
-            for (var j = 0; j < messages[i].length; j++) {
-              final raw = messages[i][j];
-              print(raw);
-              singleBatch[j] = raw.toNativeUtf8().cast<ffi.Char>();
-            }
-            inputsBatchPtr[i] = singleBatch;
-            numInputsBatchPtr[i] = messages[i].length;
-          }
-
           if (rwkvMobile.rwkvmobile_runtime_is_generating(runtime, model_id) != 0) {
             sendPort.send(Error('LLM is already generating', req, retVal));
             break;
+          }
+
+          for (var i = 0; i < batchSize; i++) {
+            for (var j = 0; j < req.messages[i].length; j++) {
+              final raw = req.messages[i][j];
+              print(raw);
+              inputsBatchPtr[i][j] = raw.toNativeUtf8().cast<ffi.Char>();
+            }
+            numInputsBatchPtr[i] = req.messages[i].length;
           }
 
           sendPort.send(GenerateStart(toRWKV: req));
@@ -424,7 +425,6 @@ class RWKVMobile {
             ffi.nullptr,
             req.reasoning ? 1 : 0,
           );
-          calloc.free(singleBatch);
           if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation thread: retVal: $retVal', toRWKV: req));
 
         // 🟥 getSupportedBatchSizes
@@ -921,6 +921,11 @@ class RWKVMobile {
       }
     }
 
+    for (var i = 0; i < maxBatchSize; i++) {
+      if (inputsBatchPtr[i] != ffi.nullptr) {
+        calloc.free(inputsBatchPtr[i]);
+      }
+    }
     calloc.free(inputsPtr);
     calloc.free(inputsBatchPtr);
     calloc.free(numInputsBatchPtr);
