@@ -53,7 +53,7 @@ class RWKVMobile {
   static String getAvailableBackendNames() {
     final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
     const backendNamesLength = 64; // should be enough
-    ffi.Pointer<ffi.Char> responseBuffer = calloc.allocate<ffi.Char>(backendNamesLength);
+    ffi.Pointer<ffi.Char> responseBuffer = malloc.allocate<ffi.Char>(backendNamesLength);
     rwkvMobile.rwkvmobile_runtime_get_available_backend_names(responseBuffer, backendNamesLength);
     final response = responseBuffer.cast<Utf8>().toDartString();
     return response;
@@ -107,10 +107,19 @@ class RWKVMobile {
     int retVal = 0;
     int maxBatchSize = 20;
 
-    final inputsPtr = calloc.allocate<ffi.Pointer<ffi.Char>>(maxMessages);
-    final inputsBatchPtr = calloc.allocate<ffi.Pointer<ffi.Pointer<ffi.Char>>>(maxBatchSize);
-    final numInputsBatchPtr = calloc.allocate<ffi.Int>(maxBatchSize);
-    final inputsBatchPtrCompletionAsync = calloc.allocate<ffi.Pointer<ffi.Char>>(maxBatchSize);
+    ffi.Pointer<ffi.Pointer<ffi.Char>> inputsPtr = malloc.allocate<ffi.Pointer<ffi.Char>>(
+      maxMessages * ffi.sizeOf<ffi.Pointer<ffi.Char>>(),
+    );
+    ffi.Pointer<ffi.Pointer<ffi.Pointer<ffi.Char>>> inputsBatchPtr = malloc.allocate<ffi.Pointer<ffi.Pointer<ffi.Char>>>(
+      maxBatchSize * ffi.sizeOf<ffi.Pointer<ffi.Pointer<ffi.Char>>>(),
+    );
+    ffi.Pointer<ffi.Int> numInputsBatchPtr = malloc.allocate<ffi.Int>(maxBatchSize * ffi.sizeOf<ffi.Int>());
+    for (var i = 0; i < maxBatchSize; i++) {
+      inputsBatchPtr[i] = malloc.allocate<ffi.Pointer<ffi.Char>>(maxMessages * ffi.sizeOf<ffi.Pointer<ffi.Char>>());
+    }
+    ffi.Pointer<ffi.Pointer<ffi.Char>> inputsBatchPtrCompletionAsync = malloc.allocate<ffi.Pointer<ffi.Char>>(
+      maxBatchSize * ffi.sizeOf<ffi.Pointer<ffi.Char>>(),
+    );
     List<int> ttsStreamingBufferList = [];
     List<double> ttsStreamingBufferListDouble = [];
 
@@ -242,11 +251,11 @@ class RWKVMobile {
 
         // 🟥 getPrompt
         case GetPrompt req:
-          final stringBuffer = calloc.allocate<ffi.Char>(maxLength);
+          final stringBuffer = malloc.allocate<ffi.Char>(maxLength);
           rwkvMobile.rwkvmobile_runtime_get_prompt(runtime, model_id, stringBuffer, maxLength);
           final prompt = stringBuffer.cast<Utf8>().toDartString();
           sendPort.send(CurrentPrompt(prompt: prompt, toRWKV: req));
-          calloc.free(stringBuffer);
+          malloc.free(stringBuffer);
 
         // 🟥 setSamplerParams
         case SetSamplerParams req:
@@ -304,12 +313,12 @@ class RWKVMobile {
 
         // 🟥 setTokenBanned
         case SetTokenBanned req:
-          final tokenBannedPtr = calloc.allocate<ffi.Int>(req.tokenBanned.length);
+          ffi.Pointer<ffi.Int> tokenBannedPtr = malloc.allocate<ffi.Int>(req.tokenBanned.length * ffi.sizeOf<ffi.Int>());
           for (var i = 0; i < req.tokenBanned.length; i++) {
             tokenBannedPtr[i] = req.tokenBanned[i];
           }
           retVal = rwkvMobile.rwkvmobile_runtime_set_token_banned(runtime, model_id, tokenBannedPtr, req.tokenBanned.length);
-          calloc.free(tokenBannedPtr);
+          malloc.free(tokenBannedPtr);
           if (retVal != 0) sendPort.send(Error('Failed to set token banned: retVal: $retVal', req, retVal));
 
         // 🟥 setUserRole
@@ -751,10 +760,10 @@ class RWKVMobile {
 
         // 🟥 getLoadedModelIDs
         case GetLoadedModelIDs req:
-          final modelIDs = calloc<ffi.Int32>(16);
+          final modelIDs = malloc.allocate<ffi.Int32>(16 * ffi.sizeOf<ffi.Int32>());
           final loadedModelIDsList = rwkvMobile.rwkvmobile_runtime_get_loaded_model_ids(runtime, modelIDs.cast<ffi.Int>(), 16);
           final loadedModelIDsListList = modelIDs.asTypedList(loadedModelIDsList).toList();
-          calloc.free(modelIDs);
+          malloc.free(modelIDs);
           sendPort.send(LoadedModelIDs(loadedModelIDs: loadedModelIDsListList, toRWKV: req));
 
         // 🟥 getLoadedModelPathByID
@@ -817,7 +826,7 @@ class RWKVMobile {
           ttsStreamingBufferList.clear();
           ttsStreamingBufferListDouble.clear();
           if (req.globalTokens.length != 32) throw Exception('😡 globalTokens length must be 32');
-          final globalTokensPtr = calloc.allocate<ffi.Int32>(req.globalTokens.length);
+          ffi.Pointer<ffi.Int32> globalTokensPtr = malloc.allocate<ffi.Int32>(req.globalTokens.length * ffi.sizeOf<ffi.Int32>());
           for (int i = 0; i < req.globalTokens.length; i++) {
             globalTokensPtr[i] = req.globalTokens[i];
           }
@@ -828,7 +837,7 @@ class RWKVMobile {
             outputWavPath.toNativeUtf8().cast<ffi.Char>(),
             globalTokensPtr.cast<ffi.Int>(),
           );
-          calloc.free(globalTokensPtr);
+          malloc.free(globalTokensPtr);
 
           if (retVal != 0) sendPort.send(Error('Failed to run TTS', req));
           if (retVal != 0) break;
@@ -923,12 +932,12 @@ class RWKVMobile {
 
     for (var i = 0; i < maxBatchSize; i++) {
       if (inputsBatchPtr[i] != ffi.nullptr) {
-        calloc.free(inputsBatchPtr[i]);
+        malloc.free(inputsBatchPtr[i]);
       }
     }
-    calloc.free(inputsPtr);
-    calloc.free(inputsBatchPtr);
-    calloc.free(numInputsBatchPtr);
-    calloc.free(inputsBatchPtrCompletionAsync);
+    malloc.free(inputsPtr);
+    malloc.free(inputsBatchPtr);
+    malloc.free(numInputsBatchPtr);
+    malloc.free(inputsBatchPtrCompletionAsync);
   }
 }
