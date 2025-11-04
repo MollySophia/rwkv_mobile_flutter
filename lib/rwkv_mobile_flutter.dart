@@ -286,6 +286,17 @@ class RWKVMobile {
             ),
           );
 
+        // 🟥 setSeed
+        case SetSeed req:
+          final seed = req.seed;
+          retVal = rwkvMobile.rwkvmobile_runtime_set_seed(runtime, req.modelID ?? model_id, seed);
+          if (retVal != 0) sendPort.send(Error('Failed to set seed: retVal: $retVal', req, retVal));
+
+        // 🟥 getSeed
+        case GetSeed req:
+          final seed = rwkvMobile.rwkvmobile_runtime_get_seed(runtime, req.modelID ?? model_id);
+          sendPort.send(CurrentSeed(seed: seed, modelID: req.modelID ?? model_id, toRWKV: req));
+
         // 🟥 getIsGenerating
         case GetIsGenerating req:
           final modelID = req.modelID ?? model_id;

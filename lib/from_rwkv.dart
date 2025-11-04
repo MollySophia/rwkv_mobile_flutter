@@ -263,3 +263,10 @@ class TTSStreamingBuffer extends FromRWKV {
     super.toRWKV,
   });
 }
+
+class CurrentSeed extends FromRWKV {
+  final int seed;
+  final int modelID;
+
+  CurrentSeed({required this.seed, required this.modelID, super.toRWKV});
+}

@@ -358,6 +358,21 @@ class SetSamplerParams extends ToRWKV {
   });
 }
 
+class SetSeed extends ToRWKV {
+  final int seed;
+  final int? modelID;
+
+  SetSeed(this.seed, {this.modelID});
+}
+
+class GetSeed extends ToRWKV {
+  final int? modelID;
+
+  GetSeed({this.modelID});
+
+  static const responseType = CurrentSeed;
+}
+
 class SetThinkingToken extends ToRWKV {
   final String thinkingToken;
 
