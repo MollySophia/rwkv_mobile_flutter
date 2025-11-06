@@ -16,7 +16,6 @@ import 'package:rwkv_mobile_flutter/from_rwkv.dart';
 import 'package:rwkv_mobile_flutter/to_rwkv.dart';
 import 'package:rwkv_mobile_flutter/types.dart';
 import 'package:rwkv_mobile_flutter/rwkv_mobile_ffi.dart';
-import 'package:archive/archive_io.dart';
 
 typedef _FromFrontend = ToRWKV;
 
@@ -132,59 +131,6 @@ class RWKVMobile {
 
     if (runtime.address == 0) throw Exception('😡 Failed to initialize runtime');
 
-    if ((backend == Backend.coreml || backend == Backend.mlx) && modelPath.endsWith('.zip')) {
-      if (kDebugMode) {
-        print('⚠️ Warning: decompressing model zip file in rwkv_mobile_flutter.dart');
-        print('⚠️ Ideally this should be done by the frontend');
-      }
-      final modelDir = modelPath.substring(0, modelPath.lastIndexOf('/'));
-      final modelPathWithoutZip = modelPath.substring(0, modelPath.lastIndexOf('.zip'));
-      // delete modelPathWithoutZip directory if exists
-      if (File(modelPathWithoutZip).existsSync()) {
-        File(modelPathWithoutZip).deleteSync();
-      }
-
-      final inputStream = InputFileStream(modelPath);
-      // Decode the zip from the InputFileStream. The archive will have the contents of the
-      // zip, without having stored the data in memory.
-      final archive = ZipDecoder().decodeStream(inputStream);
-      final symbolicLinks = []; // keep a list of the symbolic link entities, if any.
-      // For all of the entries in the archive
-      for (final file in archive) {
-        // You should create symbolic links **after** the rest of the archive has been
-        // extracted, otherwise the file being linked might not exist yet.
-        if (file.isSymbolicLink) {
-          symbolicLinks.add(file);
-          continue;
-        }
-        if (file.isFile) {
-          // Write the file content to a directory called 'out'.
-          // In practice, you should make sure file.name doesn't include '..' paths
-          // that would put it outside of the extraction directory.
-          // An OutputFileStream will write the data to disk.
-          final outputStream = OutputFileStream(modelDir + '/' + file.name);
-          // The writeContent method will decompress the file content directly to disk without
-          // storing the decompressed data in memory.
-          file.writeContent(outputStream);
-          // Make sure to close the output stream so the File is closed.
-          outputStream.closeSync();
-        } else {
-          // If the entity is a directory, create it. Normally writing a file will create
-          // the directories necessary, but sometimes an archive will have an empty directory
-          // with no files.
-          Directory(modelDir + '/' + file.name).createSync(recursive: true);
-        }
-      }
-      // Create symbolic links **after** the rest of the archive has been extracted to make sure
-      // the file being linked exists.
-      for (final entity in symbolicLinks) {
-        // Before using this in production code, you should ensure the symbolicLink path
-        // points to a file within the archive, otherwise it could be a security issue.
-        final link = Link(modelDir + '/' + entity.fullPathName);
-        link.createSync(entity.symbolicLink!, recursive: true);
-      }
-      modelPath = modelPathWithoutZip;
-    }
     int model_id = 0;
 
     // @HaloWang 目前load_model实际上已经和runtime_init解耦了，这一部分的load_model其实可以去掉（靠_FromFrontend.ReInitRuntime来加载模型）
@@ -621,60 +567,6 @@ class RWKVMobile {
 
           // TODO: @HaloWang rename ReInitRuntime to LoadModel, and move this relaseModel logic out
           rwkvMobile.rwkvmobile_runtime_release_model(runtime, model_id);
-
-          if ((backend == Backend.coreml || backend == Backend.mlx) && modelPath.endsWith('.zip')) {
-            if (kDebugMode) {
-              print('Warning: decompressing model zip file in rwkv_mobile_flutter.dart');
-              print('Ideally this should be done by the frontend');
-            }
-            final modelDir = modelPath.substring(0, modelPath.lastIndexOf('/'));
-            final modelPathWithoutZip = modelPath.substring(0, modelPath.lastIndexOf('.zip'));
-            // delete modelPathWithoutZip directory if exists
-            if (File(modelPathWithoutZip).existsSync()) {
-              File(modelPathWithoutZip).deleteSync();
-            }
-
-            final inputStream = InputFileStream(modelPath);
-            // Decode the zip from the InputFileStream. The archive will have the contents of the
-            // zip, without having stored the data in memory.
-            final archive = ZipDecoder().decodeStream(inputStream);
-            final symbolicLinks = []; // keep a list of the symbolic link entities, if any.
-            // For all of the entries in the archive
-            for (final file in archive) {
-              // You should create symbolic links **after** the rest of the archive has been
-              // extracted, otherwise the file being linked might not exist yet.
-              if (file.isSymbolicLink) {
-                symbolicLinks.add(file);
-                continue;
-              }
-              if (file.isFile) {
-                // Write the file content to a directory called 'out'.
-                // In practice, you should make sure file.name doesn't include '..' paths
-                // that would put it outside of the extraction directory.
-                // An OutputFileStream will write the data to disk.
-                final outputStream = OutputFileStream(modelDir + '/' + file.name);
-                // The writeContent method will decompress the file content directly to disk without
-                // storing the decompressed data in memory.
-                file.writeContent(outputStream);
-                // Make sure to close the output stream so the File is closed.
-                outputStream.closeSync();
-              } else {
-                // If the entity is a directory, create it. Normally writing a file will create
-                // the directories necessary, but sometimes an archive will have an empty directory
-                // with no files.
-                Directory(modelDir + '/' + file.name).createSync(recursive: true);
-              }
-            }
-            // Create symbolic links **after** the rest of the archive has been extracted to make sure
-            // the file being linked exists.
-            for (final entity in symbolicLinks) {
-              // Before using this in production code, you should ensure the symbolicLink path
-              // points to a file within the archive, otherwise it could be a security issue.
-              final link = Link(modelDir + '/' + entity.fullPathName);
-              link.createSync(entity.symbolicLink!, recursive: true);
-            }
-            modelPath = modelPathWithoutZip;
-          }
 
           switch (backend) {
             case Backend.ncnn:
