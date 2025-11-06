@@ -95,10 +95,10 @@ class RWKVMobile {
     // TODO: We can load the runtime in the future. Only Apple cannot.
     final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
 
-    if (kDebugMode) {
-      const logLevel = int.fromEnvironment('logLevel', defaultValue: RWKV_LOG_LEVEL_DEBUG);
-      rwkvMobile.rwkvmobile_set_loglevel(logLevel);
-    }
+    // if (kDebugMode) {
+    //   const logLevel = int.fromEnvironment('logLevel', defaultValue: RWKV_LOG_LEVEL_DEBUG);
+    rwkvMobile.rwkvmobile_set_loglevel(RWKV_LOG_LEVEL_DEBUG);
+    // }
 
     // definitions
     int maxLength = 2000;
@@ -132,7 +132,11 @@ class RWKVMobile {
 
     if (runtime.address == 0) throw Exception('😡 Failed to initialize runtime');
 
-    if (backend == Backend.coreml) {
+    if ((backend == Backend.coreml || backend == Backend.mlx) && modelPath.endsWith('.zip')) {
+      if (kDebugMode) {
+        print('⚠️ Warning: decompressing model zip file in rwkv_mobile_flutter.dart');
+        print('⚠️ Ideally this should be done by the frontend');
+      }
       final modelDir = modelPath.substring(0, modelPath.lastIndexOf('/'));
       final modelPathWithoutZip = modelPath.substring(0, modelPath.lastIndexOf('.zip'));
       // delete modelPathWithoutZip directory if exists
@@ -202,6 +206,7 @@ class RWKVMobile {
       case Backend.webRwkv:
       case Backend.mnn:
       case Backend.coreml:
+      case Backend.mlx:
         model_id = rwkvMobile.rwkvmobile_runtime_load_model(
           runtime,
           modelPath.toNativeUtf8().cast<ffi.Char>(),
@@ -617,7 +622,11 @@ class RWKVMobile {
           // TODO: @HaloWang rename ReInitRuntime to LoadModel, and move this relaseModel logic out
           rwkvMobile.rwkvmobile_runtime_release_model(runtime, model_id);
 
-          if (backend == Backend.coreml) {
+          if ((backend == Backend.coreml || backend == Backend.mlx) && modelPath.endsWith('.zip')) {
+            if (kDebugMode) {
+              print('Warning: decompressing model zip file in rwkv_mobile_flutter.dart');
+              print('Ideally this should be done by the frontend');
+            }
             final modelDir = modelPath.substring(0, modelPath.lastIndexOf('/'));
             final modelPathWithoutZip = modelPath.substring(0, modelPath.lastIndexOf('.zip'));
             // delete modelPathWithoutZip directory if exists
@@ -673,6 +682,7 @@ class RWKVMobile {
             case Backend.webRwkv:
             case Backend.mnn:
             case Backend.coreml:
+            case Backend.mlx:
               sendPort.send(ReInitSteps(done: false, step: 'load model', toRWKV: req));
               model_id = rwkvMobile.rwkvmobile_runtime_load_model(
                 runtime,
