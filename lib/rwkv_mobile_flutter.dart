@@ -295,6 +295,11 @@ class RWKVMobile {
           retVal = rwkvMobile.rwkvmobile_runtime_set_response_role(runtime, model_id, responseRolePtr);
           if (retVal != 0) sendPort.send(Error('Failed to set response role: retVal: $retVal', req, retVal));
 
+        // 🟥 setSpaceAfterRoles
+        case SetSpaceAfterRoles req:
+          retVal = rwkvMobile.rwkvmobile_runtime_set_space_after_roles(runtime, model_id, req.spaceAfterRoles ? 1 : 0);
+          if (retVal != 0) sendPort.send(Error('Failed to set space after roles: retVal: $retVal', req, retVal));
+
         // 🟥 loadVisionEncoder
         case LoadVisionEncoder req:
           final encoderPathPtr = req.encoderPath.toNativeUtf8().cast<ffi.Char>();

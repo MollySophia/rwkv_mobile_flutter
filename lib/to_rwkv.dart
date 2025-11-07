@@ -411,3 +411,10 @@ class SetResponseRole extends ToRWKV {
 
   SetResponseRole([this.responseRole = 'Assistant']);
 }
+
+/// Modrwkv v3模型要求"User:" "Assistant:" 之后没有空格，用这个api设置False表示不加空格。
+class SetSpaceAfterRoles extends ToRWKV {
+  final bool spaceAfterRoles;
+
+  SetSpaceAfterRoles(this.spaceAfterRoles);
+}
