@@ -300,6 +300,11 @@ class RWKVMobile {
           retVal = rwkvMobile.rwkvmobile_runtime_set_space_after_roles(runtime, model_id, req.spaceAfterRoles ? 1 : 0);
           if (retVal != 0) sendPort.send(Error('Failed to set space after roles: retVal: $retVal', req, retVal));
 
+        case SetImageUniqueIdentifier req:
+          final uniqueIdentifierPtr = req.uniqueIdentifier.toNativeUtf8().cast<ffi.Char>();
+          retVal = rwkvMobile.rwkvmobile_runtime_set_image_unique_identifier(runtime, uniqueIdentifierPtr);
+          if (retVal != 0) sendPort.send(Error('Failed to set image unique identifier: retVal: $retVal', req, retVal));
+
         // 🟥 loadVisionEncoder
         case LoadVisionEncoder req:
           final encoderPathPtr = req.encoderPath.toNativeUtf8().cast<ffi.Char>();

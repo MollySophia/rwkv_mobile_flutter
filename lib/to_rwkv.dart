@@ -418,3 +418,9 @@ class SetSpaceAfterRoles extends ToRWKV {
 
   SetSpaceAfterRoles(this.spaceAfterRoles);
 }
+
+class SetImageUniqueIdentifier extends ToRWKV {
+  final String uniqueIdentifier;
+
+  SetImageUniqueIdentifier(this.uniqueIdentifier);
+}
