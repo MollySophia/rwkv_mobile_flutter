@@ -607,6 +607,25 @@ class rwkv_mobile {
   late final _rwkvmobile_runtime_get_sampler_params = _rwkvmobile_runtime_get_sampler_paramsPtr
       .asFunction<sampler_params Function(rwkvmobile_runtime_t, int)>();
 
+  sampler_params rwkvmobile_runtime_get_sampler_params_on_batch_slot(
+    rwkvmobile_runtime_t runtime,
+    int model_id,
+    int slot,
+  ) {
+    return _rwkvmobile_runtime_get_sampler_params_on_batch_slot(
+      runtime,
+      model_id,
+      slot,
+    );
+  }
+
+  late final _rwkvmobile_runtime_get_sampler_params_on_batch_slotPtr =
+      _lookup<ffi.NativeFunction<sampler_params Function(rwkvmobile_runtime_t, ffi.Int, ffi.Int)>>(
+        'rwkvmobile_runtime_get_sampler_params_on_batch_slot',
+      );
+  late final _rwkvmobile_runtime_get_sampler_params_on_batch_slot = _rwkvmobile_runtime_get_sampler_params_on_batch_slotPtr
+      .asFunction<sampler_params Function(rwkvmobile_runtime_t, int, int)>();
+
   void rwkvmobile_runtime_set_sampler_params(
     rwkvmobile_runtime_t runtime,
     int model_id,
@@ -693,6 +712,25 @@ class rwkv_mobile {
       _lookup<ffi.NativeFunction<penalty_params Function(rwkvmobile_runtime_t, ffi.Int)>>('rwkvmobile_runtime_get_penalty_params');
   late final _rwkvmobile_runtime_get_penalty_params = _rwkvmobile_runtime_get_penalty_paramsPtr
       .asFunction<penalty_params Function(rwkvmobile_runtime_t, int)>();
+
+  penalty_params rwkvmobile_runtime_get_penalty_params_on_batch_slot(
+    rwkvmobile_runtime_t runtime,
+    int model_id,
+    int slot,
+  ) {
+    return _rwkvmobile_runtime_get_penalty_params_on_batch_slot(
+      runtime,
+      model_id,
+      slot,
+    );
+  }
+
+  late final _rwkvmobile_runtime_get_penalty_params_on_batch_slotPtr =
+      _lookup<ffi.NativeFunction<penalty_params Function(rwkvmobile_runtime_t, ffi.Int, ffi.Int)>>(
+        'rwkvmobile_runtime_get_penalty_params_on_batch_slot',
+      );
+  late final _rwkvmobile_runtime_get_penalty_params_on_batch_slot = _rwkvmobile_runtime_get_penalty_params_on_batch_slotPtr
+      .asFunction<penalty_params Function(rwkvmobile_runtime_t, int, int)>();
 
   void rwkvmobile_runtime_set_penalty_params(
     rwkvmobile_runtime_t runtime,
