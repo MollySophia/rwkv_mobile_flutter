@@ -270,3 +270,22 @@ class CurrentSeed extends FromRWKV {
 
   CurrentSeed({required this.seed, required this.modelID, super.toRWKV});
 }
+
+class SamplerAndPenaltyParams extends FromRWKV {
+  final num temperature;
+  final num topK;
+  final num topP;
+  final num presencePenalty;
+  final num frequencyPenalty;
+  final num penaltyDecay;
+
+  SamplerAndPenaltyParams({
+    required this.temperature,
+    required this.topK,
+    required this.topP,
+    required this.presencePenalty,
+    required this.frequencyPenalty,
+    required this.penaltyDecay,
+    super.toRWKV,
+  });
+}

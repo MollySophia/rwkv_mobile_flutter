@@ -424,3 +424,29 @@ class SetImageUniqueIdentifier extends ToRWKV {
 
   SetImageUniqueIdentifier(this.uniqueIdentifier);
 }
+
+class SetSamplerAndPenaltyParams extends ToRWKV {
+  final num temperature;
+  final num topK;
+  final num topP;
+  final num presencePenalty;
+  final num frequencyPenalty;
+  final num penaltyDecay;
+
+  SetSamplerAndPenaltyParams({
+    required this.temperature,
+    this.topK = 500,
+    required this.topP,
+    required this.presencePenalty,
+    required this.frequencyPenalty,
+    required this.penaltyDecay,
+  });
+}
+
+class GetSamplerAndPenaltyParams extends ToRWKV {
+  final int? modelID;
+
+  GetSamplerAndPenaltyParams({this.modelID});
+
+  static const responseType = SamplerAndPenaltyParams;
+}

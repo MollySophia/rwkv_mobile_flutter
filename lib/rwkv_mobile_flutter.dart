@@ -850,6 +850,33 @@ class RWKVMobile {
           final stateLoadPathPtr = req.stateLoadPath.toNativeUtf8().cast<ffi.Char>();
           final retVal = rwkvMobile.rwkvmobile_runtime_load_history_state_to_memory(runtime, req.modelID ?? model_id, stateLoadPathPtr);
           if (retVal != 0) sendPort.send(Error('Failed to load runtime state to memory', req, retVal));
+
+        case SetSamplerAndPenaltyParams req:
+          final samplerParams = ffi.Struct.create<sampler_params>();
+          samplerParams.temperature = req.temperature.toDouble();
+          samplerParams.top_k = req.topK.toInt();
+          samplerParams.top_p = req.topP.toDouble();
+          final penaltyParams = ffi.Struct.create<penalty_params>();
+          penaltyParams.presence_penalty = req.presencePenalty.toDouble();
+          penaltyParams.frequency_penalty = req.frequencyPenalty.toDouble();
+          penaltyParams.penalty_decay = req.penaltyDecay.toDouble();
+          rwkvMobile.rwkvmobile_runtime_set_sampler_params(runtime, model_id, samplerParams);
+          rwkvMobile.rwkvmobile_runtime_set_penalty_params(runtime, model_id, penaltyParams);
+
+        case GetSamplerAndPenaltyParams req:
+          final samplerParams = rwkvMobile.rwkvmobile_runtime_get_sampler_params(runtime, model_id);
+          final penaltyParams = rwkvMobile.rwkvmobile_runtime_get_penalty_params(runtime, model_id);
+          sendPort.send(
+            SamplerAndPenaltyParams(
+              temperature: samplerParams.temperature,
+              topK: samplerParams.top_k,
+              topP: samplerParams.top_p,
+              presencePenalty: penaltyParams.presence_penalty,
+              frequencyPenalty: penaltyParams.frequency_penalty,
+              penaltyDecay: penaltyParams.penalty_decay,
+              toRWKV: req,
+            ),
+          );
       }
     }
 
