@@ -12,8 +12,8 @@ import 'package:flutter/services.dart';
 
 // TODO: 由前端提供各个路径 @WangCe @Molly
 import 'package:path_provider/path_provider.dart';
-import 'package:rwkv_mobile_flutter/io/from_rwkv.dart';
-import 'package:rwkv_mobile_flutter/io/to_rwkv.dart';
+import 'package:rwkv_mobile_flutter/from_rwkv.dart';
+import 'package:rwkv_mobile_flutter/to_rwkv.dart';
 import 'package:rwkv_mobile_flutter/types.dart';
 import 'package:rwkv_mobile_flutter/rwkv_mobile_ffi.dart';
 

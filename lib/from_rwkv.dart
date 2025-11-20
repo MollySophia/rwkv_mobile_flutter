@@ -1,4 +1,4 @@
-import 'package:rwkv_mobile_flutter/io/to_rwkv.dart';
+import 'package:rwkv_mobile_flutter/to_rwkv.dart';
 
 /// Send response from rwkv isolate to frontend isolate
 ///
