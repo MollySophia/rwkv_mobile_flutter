@@ -853,27 +853,48 @@ class RWKVMobile {
 
         case SetSamplerAndPenaltyParams req:
           final samplerParams = ffi.Struct.create<sampler_params>();
-          samplerParams.temperature = req.temperature.toDouble();
-          samplerParams.top_k = req.topK.toInt();
-          samplerParams.top_p = req.topP.toDouble();
           final penaltyParams = ffi.Struct.create<penalty_params>();
-          penaltyParams.presence_penalty = req.presencePenalty.toDouble();
-          penaltyParams.frequency_penalty = req.frequencyPenalty.toDouble();
-          penaltyParams.penalty_decay = req.penaltyDecay.toDouble();
-          rwkvMobile.rwkvmobile_runtime_set_sampler_params(runtime, model_id, samplerParams);
-          rwkvMobile.rwkvmobile_runtime_set_penalty_params(runtime, model_id, penaltyParams);
+
+          for (var i = 0; i < req.temperatures.length; i++) {
+            samplerParams.temperature = req.temperatures[i].toDouble();
+            samplerParams.top_k = req.topKs[i].toInt();
+            samplerParams.top_p = req.topPs[i].toDouble();
+
+            penaltyParams.presence_penalty = req.presencePenalties[i].toDouble();
+            penaltyParams.frequency_penalty = req.frequencyPenalties[i].toDouble();
+            penaltyParams.penalty_decay = req.penaltyDecays[i].toDouble();
+
+            rwkvMobile.rwkvmobile_runtime_set_sampler_params_on_batch_slot(runtime, model_id, i, samplerParams);
+            rwkvMobile.rwkvmobile_runtime_set_penalty_params_on_batch_slot(runtime, model_id, i, penaltyParams);
+          }
 
         case GetSamplerAndPenaltyParams req:
-          final samplerParams = rwkvMobile.rwkvmobile_runtime_get_sampler_params(runtime, model_id);
-          final penaltyParams = rwkvMobile.rwkvmobile_runtime_get_penalty_params(runtime, model_id);
+          final List<double> temperatures = [];
+          final List<double> topKs = [];
+          final List<double> topPs = [];
+          final List<double> presencePenalties = [];
+          final List<double> frequencyPenalties = [];
+          final List<double> penaltyDecays = [];
+
+          for (var i = 0; i < req.batchSize; i++) {
+            final samplerParams = rwkvMobile.rwkvmobile_runtime_get_sampler_params_on_batch_slot(runtime, model_id, i);
+            final penaltyParams = rwkvMobile.rwkvmobile_runtime_get_penalty_params_on_batch_slot(runtime, model_id, i);
+            temperatures.add(samplerParams.temperature);
+            topKs.add(samplerParams.top_k.toDouble());
+            topPs.add(samplerParams.top_p);
+            presencePenalties.add(penaltyParams.presence_penalty);
+            frequencyPenalties.add(penaltyParams.frequency_penalty);
+            penaltyDecays.add(penaltyParams.penalty_decay);
+          }
+
           sendPort.send(
             SamplerAndPenaltyParams(
-              temperature: samplerParams.temperature,
-              topK: samplerParams.top_k,
-              topP: samplerParams.top_p,
-              presencePenalty: penaltyParams.presence_penalty,
-              frequencyPenalty: penaltyParams.frequency_penalty,
-              penaltyDecay: penaltyParams.penalty_decay,
+              temperatures: temperatures,
+              topKs: topKs,
+              topPs: topPs,
+              presencePenalties: presencePenalties,
+              frequencyPenalties: frequencyPenalties,
+              penaltyDecays: penaltyDecays,
               toRWKV: req,
             ),
           );

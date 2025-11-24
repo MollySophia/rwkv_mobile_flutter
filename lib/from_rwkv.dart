@@ -272,20 +272,20 @@ class CurrentSeed extends FromRWKV {
 }
 
 class SamplerAndPenaltyParams extends FromRWKV {
-  final num temperature;
-  final num topK;
-  final num topP;
-  final num presencePenalty;
-  final num frequencyPenalty;
-  final num penaltyDecay;
+  final List<double> temperatures;
+  final List<double> topKs;
+  final List<double> topPs;
+  final List<double> presencePenalties;
+  final List<double> frequencyPenalties;
+  final List<double> penaltyDecays;
 
   SamplerAndPenaltyParams({
-    required this.temperature,
-    required this.topK,
-    required this.topP,
-    required this.presencePenalty,
-    required this.frequencyPenalty,
-    required this.penaltyDecay,
+    required this.temperatures,
+    required this.topKs,
+    required this.topPs,
+    required this.presencePenalties,
+    required this.frequencyPenalties,
+    required this.penaltyDecays,
     super.toRWKV,
   });
 }

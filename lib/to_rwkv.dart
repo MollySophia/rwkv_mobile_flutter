@@ -426,27 +426,28 @@ class SetImageUniqueIdentifier extends ToRWKV {
 }
 
 class SetSamplerAndPenaltyParams extends ToRWKV {
-  final num temperature;
-  final num topK;
-  final num topP;
-  final num presencePenalty;
-  final num frequencyPenalty;
-  final num penaltyDecay;
+  final List<double> temperatures;
+  final List<double> topKs;
+  final List<double> topPs;
+  final List<double> presencePenalties;
+  final List<double> frequencyPenalties;
+  final List<double> penaltyDecays;
 
   SetSamplerAndPenaltyParams({
-    required this.temperature,
-    this.topK = 500,
-    required this.topP,
-    required this.presencePenalty,
-    required this.frequencyPenalty,
-    required this.penaltyDecay,
+    required this.temperatures,
+    required this.topKs,
+    required this.topPs,
+    required this.presencePenalties,
+    required this.frequencyPenalties,
+    required this.penaltyDecays,
   });
 }
 
 class GetSamplerAndPenaltyParams extends ToRWKV {
   final int? modelID;
+  final int batchSize;
 
-  GetSamplerAndPenaltyParams({this.modelID});
+  GetSamplerAndPenaltyParams({this.modelID, this.batchSize = 1});
 
   static const responseType = SamplerAndPenaltyParams;
 }
