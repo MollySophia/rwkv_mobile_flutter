@@ -7,7 +7,7 @@ $baseUrl = "https://github.com/MollySophia/rwkv-mobile/releases/download/latest"
 $files = @(
     "librwkv_mobile-dev-latest-ios-static.zip",
     "librwkv_mobile-dev-latest-macos.zip",
-    "librwkv_mobile-dev-latest-aarch64-android-ndk-r29.zip",
+    "librwkv_mobile-dev-latest-aarch64-android-ndk-r25c.zip",
     "librwkv_mobile-dev-latest-linux-aarch64.zip",
     "librwkv_mobile-dev-latest-linux-x86_64.zip",
     "librwkv_mobile-dev-latest-windows-x64.zip",
@@ -24,7 +24,7 @@ foreach ($file in $files) {
 $platforms = @{
     "ios" = @("librwkv_mobile-dev-latest-ios-static.zip")
     "macos" = @("librwkv_mobile-dev-latest-macos.zip")
-    "android" = @("librwkv_mobile-dev-latest-aarch64-android-ndk-r29.zip")
+    "android" = @("librwkv_mobile-dev-latest-aarch64-android-ndk-r25c.zip")
     "linux" = @("librwkv_mobile-dev-latest-linux-aarch64.zip", "librwkv_mobile-dev-latest-linux-x86_64.zip")
     "windows" = @("librwkv_mobile-dev-latest-windows-x64.zip", "librwkv_mobile-dev-latest-windows-arm64.zip")
 }
