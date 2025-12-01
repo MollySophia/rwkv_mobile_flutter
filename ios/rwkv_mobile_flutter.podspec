@@ -30,7 +30,7 @@ Pod::Spec.new do |s|
     }
     s.vendored_libraries = 'librwkv_mobile.a', 'libncnn.a', 'libMLXModelFFI.a'
     # s.vendored_frameworks = 'librwkv_mobile.xcframework', 'libweb_rwkv_ffi.xcframework'
-    s.platform = :ios, '11.0'
+    s.platform = :ios, '16.0'
     s.static_framework = true
     s.resources =['mlx-swift_Cmlx.bundle']
   
