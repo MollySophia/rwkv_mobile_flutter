@@ -24,43 +24,49 @@ sealed class ToRWKV {
   int get hashCode => requestId.hashCode;
 }
 
-class ClearStates extends ToRWKV {}
+class ClearStates extends ToRWKV {
+  final int modelID;
+
+  ClearStates({required this.modelID});
+}
 
 class DumpLog extends ToRWKV {}
 
 class DumpStateInfo extends ToRWKV {
-  final int? modelID;
+  final int modelID;
 
-  DumpStateInfo({this.modelID});
+  DumpStateInfo({required this.modelID});
 }
 
 class SaveRuntimeStateByHistory extends ToRWKV {
   final List<String> messages;
   final String stateSavePath;
-  final int? modelID;
+  final int modelID;
 
-  SaveRuntimeStateByHistory({required this.messages, required this.stateSavePath, this.modelID});
+  SaveRuntimeStateByHistory({required this.messages, required this.stateSavePath, required this.modelID});
 }
 
 class LoadRuntimeStateToMemory extends ToRWKV {
   final String stateLoadPath;
-  final int? modelID;
+  final int modelID;
 
-  LoadRuntimeStateToMemory({required this.stateLoadPath, this.modelID});
+  LoadRuntimeStateToMemory({required this.stateLoadPath, required this.modelID});
 }
 
 class GenerateAsync extends ToRWKV {
   final String prompt;
   final int batch;
+  final int modelID;
 
-  GenerateAsync(this.prompt, {this.batch = 1}) : super();
+  GenerateAsync(this.prompt, {required this.modelID, this.batch = 1}) : super();
 }
 
 class RunEvaluation extends ToRWKV {
   final String sourceText;
   final String targetText;
+  final int modelID;
 
-  RunEvaluation(this.sourceText, this.targetText) : super();
+  RunEvaluation(this.sourceText, this.targetText, {required this.modelID}) : super();
   static const responseType = EvaluationResults;
 }
 
@@ -68,33 +74,38 @@ class SudokuOthelloGenerate extends ToRWKV {
   final String prompt;
   final bool decodeStream;
   final bool wantRawJSON;
+  final int modelID;
 
-  SudokuOthelloGenerate(this.prompt, {this.decodeStream = true, this.wantRawJSON = true});
+  SudokuOthelloGenerate(this.prompt, {required this.modelID, this.decodeStream = true, this.wantRawJSON = true});
 
   static const responseType = StreamResponse;
 }
 
 class GetIsGenerating extends ToRWKV {
-  final int? modelID;
+  final int modelID;
 
-  GetIsGenerating({this.modelID});
+  GetIsGenerating({required this.modelID});
 }
 
 class GetPrefillAndDecodeSpeed extends ToRWKV {
-  final int? modelID;
+  final int modelID;
 
-  GetPrefillAndDecodeSpeed({this.modelID});
+  GetPrefillAndDecodeSpeed({required this.modelID});
 
   static const responseType = Speed;
 }
 
-class GetPrompt extends ToRWKV {}
+class GetPrompt extends ToRWKV {
+  final int modelID;
+
+  GetPrompt({required this.modelID});
+}
 
 // rwkvmobile_runtime_get_tts_streaming_buffer获取到音频buffer以及它当前的长度（单位为样本数不是字节数，即是float数组长度）
 class GetTTSStreamingBuffer extends ToRWKV {
-  final int? modelID;
+  final int modelID;
 
-  GetTTSStreamingBuffer({this.modelID});
+  GetTTSStreamingBuffer({required this.modelID});
 
   static const responseType = TTSStreamingBuffer;
 }
@@ -109,8 +120,9 @@ class GetTTSStreamingBuffer extends ToRWKV {
 class GetResponseBufferContent extends ToRWKV {
   /// 发起 `GetResponseBufferContent` 请求时, 是为的哪些 messages 发起的
   final List<String> messages;
+  final int modelID;
 
-  GetResponseBufferContent([this.messages = const []]);
+  GetResponseBufferContent({required this.messages, required this.modelID});
 
   static const responseType = ResponseBufferContent;
 }
@@ -118,8 +130,9 @@ class GetResponseBufferContent extends ToRWKV {
 class GetBatchResponseBufferContent extends ToRWKV {
   /// 发起 `GetBatchResponseBufferContent` 请求时, 是为的哪些 messages 发起的
   final List<String> messages;
+  final int modelID;
 
-  GetBatchResponseBufferContent([this.messages = const []]);
+  GetBatchResponseBufferContent({required this.messages, required this.modelID});
 
   static const responseType = ResponseBatchBufferContent;
 }
@@ -137,11 +150,23 @@ class GetLoadedModelIDs extends ToRWKV {
 }
 
 /// stop之后responseBufferContent还保留着，然后resume之后responseBufferContent会先短暂清空，然后变成stop前已经生成了的内容并接着生成
-class Stop extends ToRWKV {}
+class Stop extends ToRWKV {
+  final int modelID;
 
-class GetResponseBufferIds extends ToRWKV {}
+  Stop({required this.modelID});
+}
 
-class GetSamplerParams extends ToRWKV {}
+class GetResponseBufferIds extends ToRWKV {
+  final int modelID;
+
+  GetResponseBufferIds({required this.modelID});
+}
+
+class GetSamplerParams extends ToRWKV {
+  final int modelID;
+
+  GetSamplerParams({required this.modelID});
+}
 
 class AddTTSModel extends ToRWKV {
   final String modelPath;
@@ -163,14 +188,14 @@ class AddTTSModel extends ToRWKV {
   });
 }
 
-class ReInitRuntime extends ToRWKV {
+class LoadRWKVModel extends ToRWKV {
   final String modelPath;
   final Backend backend;
   final String tokenizerPath;
 
-  static const responseType = ReInitSteps;
+  static const responseType = LoadModelSteps;
 
-  ReInitRuntime({required this.modelPath, required this.backend, required this.tokenizerPath});
+  LoadRWKVModel({required this.modelPath, required this.backend, required this.tokenizerPath});
 }
 
 class LoadSparkTTSModels extends ToRWKV {
@@ -189,64 +214,81 @@ class LoadTTSTextNormalizer extends ToRWKV {
 
 class LoadVisionEncoder extends ToRWKV {
   final String encoderPath;
+  final int modelID;
 
-  LoadVisionEncoder(this.encoderPath);
+  LoadVisionEncoder(this.encoderPath, {required this.modelID});
 }
 
 class LoadVisionEncoderAndAdapter extends ToRWKV {
   final String encoderPath;
   final String adapterPath;
+  final int modelID;
 
-  LoadVisionEncoderAndAdapter(this.encoderPath, this.adapterPath);
+  LoadVisionEncoderAndAdapter(this.encoderPath, this.adapterPath, {required this.modelID});
 }
 
 class LoadWhisperEncoder extends ToRWKV {
   final String encoderPath;
+  final int modelID;
 
-  LoadWhisperEncoder(this.encoderPath);
+  LoadWhisperEncoder(this.encoderPath, {required this.modelID});
 }
 
 class LoadInitialStates extends ToRWKV {
   final String statePath;
+  final int modelID;
 
-  LoadInitialStates(this.statePath);
+  LoadInitialStates(this.statePath, {required this.modelID});
 }
 
 class UnloadInitialStates extends ToRWKV {
   final String statePath;
+  final int modelID;
 
-  UnloadInitialStates(this.statePath);
+  UnloadInitialStates(this.statePath, {required this.modelID});
 }
 
-class ReleaseModel extends ToRWKV {
-  final int? modelID;
+class ReleaseRWKVModel extends ToRWKV {
+  final int modelID;
 
-  ReleaseModel({this.modelID});
+  ReleaseRWKVModel({required this.modelID});
 }
 
 class ReleaseTTSModels extends ToRWKV {}
 
-class ReleaseVisionEncoder extends ToRWKV {}
+class ReleaseVisionEncoder extends ToRWKV {
+  final int modelID;
 
-class ReleaseWhisperEncoder extends ToRWKV {}
+  ReleaseVisionEncoder({required this.modelID});
+}
+
+class ReleaseWhisperEncoder extends ToRWKV {
+  final int modelID;
+
+  ReleaseWhisperEncoder({required this.modelID});
+}
 
 class ChatAsync extends ToRWKV {
   final List<String> messages;
   final bool reasoning;
+  final int modelID;
 
-  ChatAsync(this.messages, {required this.reasoning});
+  ChatAsync(this.messages, {required this.reasoning, required this.modelID});
 }
 
 class ChatBatchAsync extends ToRWKV {
   final List<List<String>> messages;
   final bool reasoning;
   final int batchSize;
+  final int modelID;
 
-  ChatBatchAsync(this.messages, {required this.reasoning, required this.batchSize});
+  ChatBatchAsync(this.messages, {required this.reasoning, required this.batchSize, required this.modelID});
 }
 
 class GetSupportedBatchSizes extends ToRWKV {
-  GetSupportedBatchSizes();
+  final int modelID;
+
+  GetSupportedBatchSizes({required this.modelID});
 }
 
 /// 开始 TTS 任务
@@ -262,7 +304,7 @@ class StartTTS extends ToRWKV {
   final String promptWavPath;
   final String outputWavPath;
   final String promptSpeechText;
-  final int? modelID;
+  final int modelID;
 
   StartTTS({
     required this.ttsText,
@@ -270,7 +312,7 @@ class StartTTS extends ToRWKV {
     required this.promptWavPath,
     required this.outputWavPath,
     required this.promptSpeechText,
-    this.modelID,
+    required this.modelID,
   });
 }
 
@@ -278,8 +320,14 @@ class StartTTSWithGlobalTokens extends ToRWKV {
   final String ttsText;
   final String outputWavPath;
   final List<int> globalTokens;
+  final int modelID;
 
-  StartTTSWithGlobalTokens({required this.ttsText, required this.outputWavPath, required this.globalTokens});
+  StartTTSWithGlobalTokens({
+    required this.ttsText,
+    required this.outputWavPath,
+    required this.globalTokens,
+    required this.modelID,
+  });
 }
 
 class StartTTSWithProperties extends ToRWKV {
@@ -290,6 +338,7 @@ class StartTTSWithProperties extends ToRWKV {
   final TTSPropertyEmotion emotion;
   final TTSPropertySpeed speed;
   final TTSPropertyPitch pitch;
+  final int modelID;
 
   StartTTSWithProperties({
     required this.ttsText,
@@ -299,6 +348,7 @@ class StartTTSWithProperties extends ToRWKV {
     required this.emotion,
     required this.speed,
     required this.pitch,
+    required this.modelID,
   });
 }
 
@@ -306,38 +356,44 @@ class GetCurrentTTSGlobalTokens extends ToRWKV {}
 
 class SetAudioPrompt extends ToRWKV {
   final String audioPathPtr;
+  final int modelID;
 
-  SetAudioPrompt(this.audioPathPtr);
+  SetAudioPrompt(this.audioPathPtr, {required this.modelID});
 }
 
 class SetBosToken extends ToRWKV {
   final String bosToken;
+  final int modelID;
 
-  SetBosToken(this.bosToken);
+  SetBosToken(this.bosToken, {required this.modelID});
 }
 
 class SetEosToken extends ToRWKV {
   final String eosToken;
+  final int modelID;
 
-  SetEosToken(this.eosToken);
+  SetEosToken(this.eosToken, {required this.modelID});
 }
 
 class SetGenerationStopToken extends ToRWKV {
   final int stopToken;
+  final int modelID;
 
-  SetGenerationStopToken(this.stopToken);
+  SetGenerationStopToken(this.stopToken, {required this.modelID});
 }
 
 class SetMaxLength extends ToRWKV {
   final int maxLength;
+  final int modelID;
 
-  SetMaxLength(this.maxLength);
+  SetMaxLength(this.maxLength, {required this.modelID});
 }
 
 class SetPrompt extends ToRWKV {
   final String prompt;
+  final int modelID;
 
-  SetPrompt(this.prompt);
+  SetPrompt(this.prompt, {required this.modelID});
 }
 
 class SetSamplerParams extends ToRWKV {
@@ -347,6 +403,7 @@ class SetSamplerParams extends ToRWKV {
   final num presencePenalty;
   final num frequencyPenalty;
   final num penaltyDecay;
+  final int modelID;
 
   SetSamplerParams({
     required this.temperature,
@@ -355,47 +412,52 @@ class SetSamplerParams extends ToRWKV {
     required this.presencePenalty,
     required this.frequencyPenalty,
     required this.penaltyDecay,
+    required this.modelID,
   });
 }
 
 class SetSeed extends ToRWKV {
   final int seed;
-  final int? modelID;
+  final int modelID;
 
-  SetSeed(this.seed, {this.modelID});
+  SetSeed(this.seed, {required this.modelID});
 }
 
 class GetSeed extends ToRWKV {
-  final int? modelID;
+  final int modelID;
 
-  GetSeed({this.modelID});
+  GetSeed({required this.modelID});
 
   static const responseType = CurrentSeed;
 }
 
 class SetThinkingToken extends ToRWKV {
   final String thinkingToken;
+  final int modelID;
 
-  SetThinkingToken(this.thinkingToken);
+  SetThinkingToken(this.thinkingToken, {required this.modelID});
 }
 
 class SetTokenBanned extends ToRWKV {
   final List<int> tokenBanned;
+  final int modelID;
 
-  SetTokenBanned(this.tokenBanned);
+  SetTokenBanned(this.tokenBanned, {required this.modelID});
 }
 
 class SetUserRole extends ToRWKV {
   final String userRole;
+  final int modelID;
 
-  SetUserRole(this.userRole);
+  SetUserRole(this.userRole, {required this.modelID});
 }
 
 @Deprecated('Already replaced by new Vision Model API')
 class SetVisionPrompt extends ToRWKV {
   final String imagePathPtr;
+  final int modelID;
 
-  SetVisionPrompt(this.imagePathPtr);
+  SetVisionPrompt(this.imagePathPtr, {required this.modelID});
 }
 
 // rwkvmobile_runtime_set_response_role
@@ -408,15 +470,17 @@ class SetVisionPrompt extends ToRWKV {
 /// 原本的格式是User: xxx\n\nAssistant:，现在是English: xxx\n\nChinese:，可以直接换
 class SetResponseRole extends ToRWKV {
   final String responseRole;
+  final int modelID;
 
-  SetResponseRole([this.responseRole = 'Assistant']);
+  SetResponseRole({this.responseRole = 'Assistant', required this.modelID});
 }
 
 /// Modrwkv v3模型要求"User:" "Assistant:" 之后没有空格，用这个api设置False表示不加空格。
 class SetSpaceAfterRoles extends ToRWKV {
   final bool spaceAfterRoles;
+  final int modelID;
 
-  SetSpaceAfterRoles(this.spaceAfterRoles);
+  SetSpaceAfterRoles(this.spaceAfterRoles, {required this.modelID});
 }
 
 class SetImageUniqueIdentifier extends ToRWKV {
@@ -432,6 +496,7 @@ class SetSamplerAndPenaltyParams extends ToRWKV {
   final List<double> presencePenalties;
   final List<double> frequencyPenalties;
   final List<double> penaltyDecays;
+  final int modelID;
 
   SetSamplerAndPenaltyParams({
     required this.temperatures,
@@ -440,14 +505,15 @@ class SetSamplerAndPenaltyParams extends ToRWKV {
     required this.presencePenalties,
     required this.frequencyPenalties,
     required this.penaltyDecays,
+    required this.modelID,
   });
 }
 
 class GetSamplerAndPenaltyParams extends ToRWKV {
-  final int? modelID;
+  final int modelID;
   final int batchSize;
 
-  GetSamplerAndPenaltyParams({this.modelID, this.batchSize = 1});
+  GetSamplerAndPenaltyParams({required this.modelID, this.batchSize = 1});
 
   static const responseType = SamplerAndPenaltyParams;
 }
