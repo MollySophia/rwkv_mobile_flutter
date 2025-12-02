@@ -67,18 +67,20 @@ class LoadSteps extends FromRWKV {
 }
 
 /// 重新加载新的 weights 时, 会调用该 response
-@Deprecated('Use ReInitSteps instead')
-class ReInitSteps extends FromRWKV {
+@Deprecated('Use LoadModelSteps instead')
+class LoadModelSteps extends FromRWKV {
   final bool done;
+  final int? modelID;
   final bool? success;
   final String? error;
   final String? step;
 
-  ReInitSteps({
+  LoadModelSteps({
     required this.done,
     this.success,
     this.error,
     this.step,
+    this.modelID,
     super.toRWKV,
   });
 }
