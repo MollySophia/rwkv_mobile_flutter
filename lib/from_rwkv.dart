@@ -66,8 +66,6 @@ class LoadSteps extends FromRWKV {
   });
 }
 
-/// 重新加载新的 weights 时, 会调用该 response
-@Deprecated('Use LoadModelSteps instead')
 class LoadModelSteps extends FromRWKV {
   final bool done;
   final int? modelID;
