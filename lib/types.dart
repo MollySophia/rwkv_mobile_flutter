@@ -3,10 +3,12 @@ import 'dart:ui';
 
 enum SocBrand {
   snapdragon,
+  mediatek,
   unknown;
 
   static SocBrand fromString(String value) {
     if (value.toLowerCase().contains('snapdragon')) return SocBrand.snapdragon;
+    if (value.toLowerCase().contains('mediatek')) return SocBrand.mediatek;
     return SocBrand.unknown;
   }
 }
@@ -39,7 +41,10 @@ enum Backend {
   coreml,
 
   /// Apple MLX
-  mlx;
+  mlx,
+
+  /// MediaTek Neuropilot7
+  mtkNeuropilot7;
 
   String get asArgument => switch (this) {
     Backend.ncnn => 'ncnn',
@@ -49,6 +54,7 @@ enum Backend {
     Backend.mnn => 'mnn',
     Backend.coreml => 'coreml',
     Backend.mlx => 'mlx',
+    Backend.mtkNeuropilot7 => 'mtk_np7',
   };
 
   static Backend fromString(String value) {
@@ -60,6 +66,7 @@ enum Backend {
     if (toLower.contains('mnn')) return Backend.mnn;
     if (toLower.contains('coreml')) return Backend.coreml;
     if (toLower.contains('mlx')) return Backend.mlx;
+    if (toLower.contains('mtk_np7')) return Backend.mtkNeuropilot7;
     throw Exception('Unknown backend: $value');
   }
 }

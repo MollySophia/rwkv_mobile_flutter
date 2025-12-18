@@ -544,6 +544,7 @@ class RWKVMobile {
             case Backend.mnn:
             case Backend.coreml:
             case Backend.mlx:
+            case Backend.mtkNeuropilot7:
               sendPort.send(LoadModelSteps(done: false, step: 'load model', toRWKV: req));
               modelID = rwkvMobile.rwkvmobile_runtime_load_model(
                 runtime,
