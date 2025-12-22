@@ -1,4 +1,5 @@
 import 'package:rwkv_mobile_flutter/to_rwkv.dart';
+import 'package:rwkv_mobile_flutter/types.dart';
 
 /// Send response from rwkv isolate to frontend isolate
 ///
@@ -11,15 +12,15 @@ import 'package:rwkv_mobile_flutter/to_rwkv.dart';
 /// 建议同时打开 lib/rwkv_mobile_flutter.dart 文件以获得快速智能提示
 sealed class FromRWKV {
   /// 用于追踪产生该 response 的 request
-  final ToRWKV? toRWKV;
+  final ToRWKV? req;
 
-  FromRWKV({this.toRWKV});
+  FromRWKV({this.req});
 }
 
 class CurrentPrompt extends FromRWKV {
   final String prompt;
 
-  CurrentPrompt({required this.prompt, super.toRWKV});
+  CurrentPrompt({required this.prompt, super.req});
 }
 
 class EnableReasoning extends FromRWKV {}
@@ -31,55 +32,34 @@ class Error extends FromRWKV {
   final ToRWKV? to;
   final int? retVal;
 
-  Error(this.message, [this.to, this.retVal]) : super(toRWKV: to);
+  Error(this.message, [this.to, this.retVal]) : super(req: to);
 }
 
 class GenerateStart extends FromRWKV {
-  GenerateStart({super.toRWKV});
+  GenerateStart({super.req});
 }
 
 class GenerateStop extends FromRWKV {
   final String? error;
 
-  GenerateStop({this.error, super.toRWKV});
+  GenerateStop({this.error, super.req});
 }
 
 class SupportedBatchSizes extends FromRWKV {
   final List<int> supportedBatchSizes;
-  SupportedBatchSizes({required this.supportedBatchSizes, super.toRWKV});
-}
-
-class LoadSteps extends FromRWKV {
-  final bool done;
-  final int? modelID;
-  final bool? success;
-  final String? error;
-  final String? step;
-
-  LoadSteps({
-    required this.done,
-    this.modelID,
-    this.success,
-    this.error,
-    this.step,
-    super.toRWKV,
-  });
+  SupportedBatchSizes({required this.supportedBatchSizes, super.req});
 }
 
 class LoadModelSteps extends FromRWKV {
-  final bool done;
   final int? modelID;
-  final bool? success;
-  final String? error;
-  final String? step;
+  final String? info;
+  final LoadingStatus status;
 
   LoadModelSteps({
-    required this.done,
-    this.success,
-    this.error,
-    this.step,
+    required this.status,
+    required super.req,
+    this.info,
     this.modelID,
-    super.toRWKV,
   });
 }
 
@@ -92,7 +72,7 @@ class Speed extends FromRWKV {
     required this.prefillProgress,
     required this.prefillSpeed,
     required this.decodeSpeed,
-    super.toRWKV,
+    super.req,
   });
 }
 
@@ -113,7 +93,7 @@ class ResponseBufferContent extends FromRWKV {
   ResponseBufferContent({
     required this.responseBufferContent,
     required this.eosFound,
-    super.toRWKV,
+    super.req,
   });
 }
 
@@ -130,7 +110,7 @@ class ResponseBatchBufferContent extends FromRWKV {
     required this.responseBufferContent,
     required this.eosFound,
     required this.batchSize,
-    super.toRWKV,
+    super.req,
   });
 }
 
@@ -141,14 +121,14 @@ class LoadedModelPathByID extends FromRWKV {
   LoadedModelPathByID({
     required this.loadedModelPath,
     required this.modelID,
-    super.toRWKV,
+    super.req,
   });
 }
 
 class LoadedModelIDs extends FromRWKV {
   final List<int> loadedModelIDs;
 
-  LoadedModelIDs({required this.loadedModelIDs, super.toRWKV});
+  LoadedModelIDs({required this.loadedModelIDs, super.req});
 }
 
 class SamplerParams extends FromRWKV {
@@ -166,7 +146,7 @@ class SamplerParams extends FromRWKV {
     required this.presencePenalty,
     required this.frequencyPenalty,
     required this.penaltyDecay,
-    super.toRWKV,
+    super.req,
   });
 }
 
@@ -197,7 +177,7 @@ class StreamResponse extends FromRWKV {
     required this.streamResponseNewText,
     required this.prefillSpeed,
     required this.decodeSpeed,
-    super.toRWKV,
+    super.req,
   });
 }
 
@@ -205,13 +185,13 @@ class EvaluationResults extends FromRWKV {
   final List<double> logits;
   final List<bool> corrects;
 
-  EvaluationResults({required this.logits, required this.corrects, super.toRWKV});
+  EvaluationResults({required this.logits, required this.corrects, super.req});
 }
 
 class TTSGenerationStart extends FromRWKV {
   final bool start;
 
-  TTSGenerationStart({required this.start, super.toRWKV});
+  TTSGenerationStart({required this.start, super.req});
 }
 
 class TTSCFMSteps extends FromRWKV {}
@@ -219,13 +199,13 @@ class TTSCFMSteps extends FromRWKV {}
 class RuntimeLog extends FromRWKV {
   final String runtimeLog;
 
-  RuntimeLog({required this.runtimeLog, super.toRWKV});
+  RuntimeLog({required this.runtimeLog, super.req});
 }
 
 class StateInfo extends FromRWKV {
   final String stateInfo;
 
-  StateInfo({required this.stateInfo, super.toRWKV});
+  StateInfo({required this.stateInfo, super.req});
 }
 
 class IsGenerating extends FromRWKV {
@@ -235,7 +215,7 @@ class IsGenerating extends FromRWKV {
   IsGenerating({
     required this.isGenerating,
     required this.modelID,
-    super.toRWKV,
+    super.req,
   });
 }
 
@@ -260,7 +240,7 @@ class TTSStreamingBuffer extends FromRWKV {
     required this.ttsStreamingBufferLength,
     required this.generating,
     required this.rawFloatList,
-    super.toRWKV,
+    super.req,
   });
 }
 
@@ -268,7 +248,7 @@ class CurrentSeed extends FromRWKV {
   final int seed;
   final int modelID;
 
-  CurrentSeed({required this.seed, required this.modelID, super.toRWKV});
+  CurrentSeed({required this.seed, required this.modelID, super.req});
 }
 
 class SamplerAndPenaltyParams extends FromRWKV {
@@ -286,6 +266,6 @@ class SamplerAndPenaltyParams extends FromRWKV {
     required this.presencePenalties,
     required this.frequencyPenalties,
     required this.penaltyDecays,
-    super.toRWKV,
+    super.req,
   });
 }

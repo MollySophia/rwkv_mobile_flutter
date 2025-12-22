@@ -72,16 +72,10 @@ enum Backend {
 }
 
 class StartOptions {
-  final String modelPath;
-  final String tokenizerPath;
-  final Backend backend;
   final SendPort sendPort;
   final RootIsolateToken rootIsolateToken;
 
   const StartOptions({
-    required this.modelPath,
-    required this.tokenizerPath,
-    required this.backend,
     required this.sendPort,
     required this.rootIsolateToken,
   });
@@ -195,4 +189,17 @@ enum TTSPropertyPitch {
     TTSPropertyPitch.highPitch => 'high_pitch',
     TTSPropertyPitch.veryHighPitch => 'very_high_pitch',
   };
+}
+
+// TODO: Too complex, need to be simplified @WangCe
+enum LoadingStatus {
+  none,
+  loading,
+  loaded,
+  failedInLoading,
+  releasing,
+  released,
+  failedInReleasing,
+  setQnnLibraryPath,
+  loadModelWithExtra,
 }

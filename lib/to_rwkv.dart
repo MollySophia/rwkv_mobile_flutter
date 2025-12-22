@@ -176,7 +176,7 @@ class AddTTSModel extends ToRWKV {
   final String bicodecTokenizerPath;
   final String bicodecDetokenizerPath;
 
-  static const responseType = LoadSteps;
+  static const responseType = LoadModelSteps;
 
   AddTTSModel({
     required this.modelPath,
@@ -193,9 +193,21 @@ class LoadRWKVModel extends ToRWKV {
   final Backend backend;
   final String tokenizerPath;
 
+  /// Extra data for loading model
+  ///
+  /// Used for mark with [FileInfo] is loading
+  ///
+  /// [FileInfo]: Check github repo: RWKV_APP
+  final dynamic extra;
+
   static const responseType = LoadModelSteps;
 
-  LoadRWKVModel({required this.modelPath, required this.backend, required this.tokenizerPath});
+  LoadRWKVModel({
+    required this.modelPath,
+    required this.backend,
+    required this.tokenizerPath,
+    this.extra,
+  });
 }
 
 class LoadSparkTTSModels extends ToRWKV {
