@@ -263,7 +263,14 @@ class UnloadInitialStates extends ToRWKV {
 class ReleaseRWKVModel extends ToRWKV {
   final int modelID;
 
-  ReleaseRWKVModel({required this.modelID});
+  /// Extra data for loading model
+  ///
+  /// Used for mark with [FileInfo] is loading
+  ///
+  /// [FileInfo]: Check github repo: RWKV_APP
+  final dynamic extra;
+
+  ReleaseRWKVModel({required this.modelID, this.extra});
 }
 
 class ReleaseTTSModels extends ToRWKV {}

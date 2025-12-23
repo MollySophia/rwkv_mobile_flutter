@@ -503,8 +503,9 @@ class RWKVMobile {
         case ReleaseRWKVModel req:
           sendPort.send(LoadModelSteps(modelID: req.modelID, req: req, status: LoadingStatus.releasing));
           final retVal = rwkvMobile.rwkvmobile_runtime_release_model(runtime, req.modelID);
-          if (retVal != 0) sendPort.send(Error('Failed to release RWKV model', req));
+
           if (retVal != 0) {
+            sendPort.send(Error('Failed to release RWKV model', req));
             sendPort.send(
               LoadModelSteps(
                 modelID: req.modelID,
@@ -514,7 +515,13 @@ class RWKVMobile {
               ),
             );
           } else {
-            sendPort.send(LoadModelSteps(modelID: req.modelID, req: req, status: LoadingStatus.released));
+            sendPort.send(
+              LoadModelSteps(
+                modelID: req.modelID,
+                req: req,
+                status: LoadingStatus.released,
+              ),
+            );
           }
 
         case AddTTSModel req:
@@ -600,10 +607,18 @@ class RWKVMobile {
 
           if (modelID < 0) {
             final error =
-                '''Failed to load model: model_path: $modelPath
-model_backend: $modelBackendString
-tokenizer_path: $tokenizerPath''';
-            sendPort.send(LoadModelSteps(info: error, req: req, status: LoadingStatus.failedInLoading));
+                '''Failed to load model: 
+path: $modelPath
+backend: $modelBackendString
+tokenizerPath: $tokenizerPath
+modelID: $modelID''';
+            sendPort.send(
+              LoadModelSteps(
+                info: error,
+                req: req,
+                status: LoadingStatus.failedInLoading,
+              ),
+            );
             break;
           }
 
