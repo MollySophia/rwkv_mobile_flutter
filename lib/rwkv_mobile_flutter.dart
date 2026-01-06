@@ -328,7 +328,8 @@ class RWKVMobile {
             numInputs,
             maxLength,
             nullptr,
-            req.reasoning ? 1 : 0,
+            req.enableReasoning ? 1 : 0,
+            req.forceReasoning ? 1 : 0,
           );
           if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation thread: retVal: $retVal', req: req));
 
@@ -351,7 +352,6 @@ class RWKVMobile {
             }
             for (var j = 0; j < req.messages[i].length; j++) {
               final raw = req.messages[i][j];
-              print(raw);
               inputsBatchPtr[i][j] = raw.ptr;
             }
             numInputsBatchPtr[i] = req.messages[i].length;
@@ -366,7 +366,8 @@ class RWKVMobile {
             batchSize,
             maxLength,
             nullptr,
-            req.reasoning ? 1 : 0,
+            req.enableReasoning ? 1 : 0,
+            req.forceReasoning ? 1 : 0,
           );
           if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation thread: retVal: $retVal', req: req));
 
@@ -431,7 +432,11 @@ class RWKVMobile {
               .toList()
               .map((e) => e != 0)
               .toList();
-          sendPort.send(EvaluationResults(logits: logits, corrects: corrects, req: req));
+          List<String> outputTexts = [];
+          for (var i = 0; i < evaluationResults.count; i++) {
+            outputTexts.add(evaluationResults.output_texts[i].cast<Utf8>().toDartString());
+          }
+          sendPort.send(EvaluationResults(logits: logits, corrects: corrects, outputTexts: outputTexts, req: req));
           rwkvMobile.rwkvmobile_runtime_free_evaluation_results(evaluationResults);
 
         // 🟥 generate
@@ -588,7 +593,6 @@ class RWKVMobile {
                 tokenizerPath.ptr,
               );
             case Backend.qnn:
-              // TODO: better solution for this
               final tempDir = await getTemporaryDirectory();
               sendPort.send(LoadModelSteps(req: req, status: LoadingStatus.setQnnLibraryPath));
               rwkvMobile.rwkvmobile_runtime_set_qnn_library_path(runtime, (tempDir.path + '/assets/lib/').ptr);

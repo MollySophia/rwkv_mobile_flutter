@@ -289,19 +289,27 @@ class ReleaseWhisperEncoder extends ToRWKV {
 
 class ChatAsync extends ToRWKV {
   final List<String> messages;
-  final bool reasoning;
+  final bool enableReasoning;
+  final bool forceReasoning;
   final int modelID;
 
-  ChatAsync(this.messages, {required this.reasoning, required this.modelID});
+  ChatAsync(this.messages, {required this.enableReasoning, required this.forceReasoning, required this.modelID});
 }
 
 class ChatBatchAsync extends ToRWKV {
   final List<List<String>> messages;
-  final bool reasoning;
+  final bool enableReasoning;
+  final bool forceReasoning;
   final int batchSize;
   final int modelID;
 
-  ChatBatchAsync(this.messages, {required this.reasoning, required this.batchSize, required this.modelID});
+  ChatBatchAsync(
+    this.messages, {
+    required this.enableReasoning,
+    required this.forceReasoning,
+    required this.batchSize,
+    required this.modelID,
+  });
 }
 
 class GetSupportedBatchSizes extends ToRWKV {
