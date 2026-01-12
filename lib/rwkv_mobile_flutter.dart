@@ -310,6 +310,7 @@ class RWKVMobile {
 
         // 🟥 message
         case ChatAsync req:
+          final finalMaxLength = req.maxLength ?? maxLength;
           for (var i = 0; i < req.messages.length; i++) {
             inputsPtr[i] = req.messages[i].ptr;
           }
@@ -326,7 +327,7 @@ class RWKVMobile {
             req.modelID,
             inputsPtr,
             numInputs,
-            maxLength,
+            finalMaxLength,
             nullptr,
             req.enableReasoning ? 1 : 0,
             req.forceReasoning ? 1 : 0,
@@ -335,6 +336,7 @@ class RWKVMobile {
 
         case ChatBatchAsync req:
           final batchSize = req.batchSize;
+          final finalMaxLength = req.maxLength ?? maxLength;
 
           if (batchSize != req.messages.length) {
             sendPort.send(Error('Batch size does not match messages length', req, -1));
@@ -364,7 +366,7 @@ class RWKVMobile {
             inputsBatchPtr,
             numInputsBatchPtr,
             batchSize,
-            maxLength,
+            finalMaxLength,
             nullptr,
             req.enableReasoning ? 1 : 0,
             req.forceReasoning ? 1 : 0,
