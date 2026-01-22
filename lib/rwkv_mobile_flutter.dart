@@ -83,6 +83,16 @@ class RWKVMobile {
     return snapdragonHtpArch.cast<Utf8>().toDartString();
   }
 
+  static int convertPthToSafetensors(String pthPath, String stPath) {
+    final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
+    final retVal = rwkvMobile.rwkvmobile_convert_pth_to_safetensors(
+      pthPath.toNativeUtf8().cast<Char>(),
+      stPath.toNativeUtf8().cast<Char>(),
+    );
+    if (retVal != 0) throw Exception('😡 Failed to convert PTH to safetensors: $retVal');
+    return retVal;
+  }
+
   void _isolateMain(StartOptions options) async {
     final sendPort = options.sendPort;
     final rootIsolateToken = options.rootIsolateToken;
@@ -582,7 +592,6 @@ class RWKVMobile {
           switch (backend) {
             case Backend.ncnn:
             case Backend.llamacpp:
-            case Backend.webRwkv:
             case Backend.mnn:
             case Backend.coreml:
             case Backend.mlx:
@@ -609,6 +618,20 @@ class RWKVMobile {
                 tokenizerPath.ptr,
                 (tempDir.path + '/assets/lib/libQnnHtp.so').toNativeUtf8().cast<Void>(),
               );
+            case Backend.webRwkv:
+              sendPort.send(LoadModelSteps(req: req, status: LoadingStatus.loading));
+              final webRwkvArgs = calloc<web_rwkv_args>();
+              // TODO: @wangce 从前端获取 quant_type 和 quant_layers
+              webRwkvArgs.ref.quant_type = 0; // 0: fp16, 1: int8, 2: nf4
+              webRwkvArgs.ref.quant_layers = 0; // number of quantized layers
+              modelID = rwkvMobile.rwkvmobile_runtime_load_model_with_extra(
+                runtime,
+                modelPath.ptr,
+                modelBackendString.ptr,
+                tokenizerPath.ptr,
+                webRwkvArgs.cast<Void>(),
+              );
+              calloc.free(webRwkvArgs);
           }
 
           if (modelID < 0) {
