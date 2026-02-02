@@ -295,7 +295,11 @@ class ChatAsync extends ToRWKV {
   final bool forceReasoning;
 
   final int? maxLength;
-  final int? forceLang;
+
+  /// 约束模型输出的第一个 token
+  ///
+  /// 0: 无限制, 1: 中文字符
+  final int forceLang;
 
   ChatAsync(
     this.messages, {
@@ -303,7 +307,7 @@ class ChatAsync extends ToRWKV {
     required this.forceReasoning,
     required this.modelID,
     this.maxLength,
-    this.forceLang,
+    this.forceLang = 0,
   });
 }
 
@@ -317,7 +321,11 @@ class ChatBatchAsync extends ToRWKV {
   final int batchSize;
 
   final int? maxLength;
-  final int? forceLang;
+
+  /// 约束模型输出的第一个 token
+  ///
+  /// 0: 无限制, 1: 中文字符
+  final int forceLang;
 
   ChatBatchAsync(
     this.messages, {
@@ -326,7 +334,7 @@ class ChatBatchAsync extends ToRWKV {
     required this.batchSize,
     required this.modelID,
     this.maxLength,
-    this.forceLang,
+    this.forceLang = 0,
   });
 }
 
