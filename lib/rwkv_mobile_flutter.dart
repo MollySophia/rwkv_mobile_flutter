@@ -341,6 +341,7 @@ class RWKVMobile {
             nullptr,
             req.enableReasoning ? 1 : 0,
             req.forceReasoning ? 1 : 0,
+            req.forceLang ?? FORCE_LANG_NONE,
           );
           if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation thread: retVal: $retVal', req: req));
 
@@ -380,6 +381,7 @@ class RWKVMobile {
             nullptr,
             req.enableReasoning ? 1 : 0,
             req.forceReasoning ? 1 : 0,
+            req.forceLang ?? FORCE_LANG_NONE,
           );
           if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation thread: retVal: $retVal', req: req));
 

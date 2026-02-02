@@ -295,8 +295,16 @@ class ChatAsync extends ToRWKV {
   final bool forceReasoning;
 
   final int? maxLength;
+  final int? forceLang;
 
-  ChatAsync(this.messages, {required this.enableReasoning, required this.forceReasoning, required this.modelID, this.maxLength});
+  ChatAsync(
+    this.messages, {
+    required this.enableReasoning,
+    required this.forceReasoning,
+    required this.modelID,
+    this.maxLength,
+    this.forceLang,
+  });
 }
 
 class ChatBatchAsync extends ToRWKV {
@@ -309,6 +317,7 @@ class ChatBatchAsync extends ToRWKV {
   final int batchSize;
 
   final int? maxLength;
+  final int? forceLang;
 
   ChatBatchAsync(
     this.messages, {
@@ -317,6 +326,7 @@ class ChatBatchAsync extends ToRWKV {
     required this.batchSize,
     required this.modelID,
     this.maxLength,
+    this.forceLang,
   });
 }
 
