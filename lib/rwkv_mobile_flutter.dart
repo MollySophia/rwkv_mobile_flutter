@@ -608,18 +608,32 @@ class RWKVMobile {
             case Backend.qnn:
               final tempDir = await getTemporaryDirectory();
               sendPort.send(LoadModelSteps(req: req, status: LoadingStatus.setQnnLibraryPath));
-              rwkvMobile.rwkvmobile_runtime_set_qnn_library_path(runtime, (tempDir.path + '/assets/lib/').ptr);
+              if (Platform.isWindows) {
+                rwkvMobile.rwkvmobile_runtime_set_qnn_library_path(runtime, (tempDir.path + '\\assets\\lib\\').ptr);
+              } else {
+                rwkvMobile.rwkvmobile_runtime_set_qnn_library_path(runtime, (tempDir.path + '/assets/lib/').ptr);
+              }
 
               sendPort.send(
                 LoadModelSteps(req: req, status: LoadingStatus.loadModelWithExtra),
               );
-              modelID = rwkvMobile.rwkvmobile_runtime_load_model_with_extra(
-                runtime,
-                modelPath.ptr,
-                modelBackendString.ptr,
-                tokenizerPath.ptr,
-                (tempDir.path + '/assets/lib/libQnnHtp.so').toNativeUtf8().cast<Void>(),
-              );
+              if (Platform.isWindows) {
+                modelID = rwkvMobile.rwkvmobile_runtime_load_model_with_extra(
+                  runtime,
+                  modelPath.ptr,
+                  modelBackendString.ptr,
+                  tokenizerPath.ptr,
+                  (tempDir.path + '\\assets\\lib\\QnnHtp.dll').toNativeUtf8().cast<Void>(),
+                );
+              } else {
+                modelID = rwkvMobile.rwkvmobile_runtime_load_model_with_extra(
+                  runtime,
+                  modelPath.ptr,
+                  modelBackendString.ptr,
+                  tokenizerPath.ptr,
+                  (tempDir.path + '/assets/lib/libQnnHtp.so').toNativeUtf8().cast<Void>(),
+                );
+              }
             case Backend.webRwkv:
               sendPort.send(LoadModelSteps(req: req, status: LoadingStatus.loading));
               final webRwkvArgs = calloc<web_rwkv_args>();
