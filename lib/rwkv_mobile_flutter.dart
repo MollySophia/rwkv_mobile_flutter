@@ -400,6 +400,8 @@ class RWKVMobile {
         // 🟥 generateAsync
         case GenerateAsync req:
           final promptPtr = req.prompt.ptr;
+          final finalMaxLength = req.maxLength ?? maxLength;
+          final finalStopToken = req.stopToken ?? generationStopToken;
 
           if (rwkvMobile.rwkvmobile_runtime_is_generating(runtime, req.modelID) != 0) {
             sendPort.send(Error('LLM is already generating', req));
@@ -412,8 +414,8 @@ class RWKVMobile {
               runtime,
               req.modelID,
               promptPtr,
-              maxLength,
-              generationStopToken,
+              finalMaxLength,
+              finalStopToken,
               nullptr,
             );
           } else {
@@ -425,7 +427,7 @@ class RWKVMobile {
               req.modelID,
               inputsBatchPtrCompletionAsync,
               req.batch,
-              maxLength,
+              finalMaxLength,
               generationStopToken,
               nullptr,
             );

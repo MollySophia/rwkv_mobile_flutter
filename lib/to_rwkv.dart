@@ -58,7 +58,10 @@ class GenerateAsync extends ToRWKV {
   final int batch;
   final int modelID;
 
-  GenerateAsync(this.prompt, {required this.modelID, this.batch = 1}) : super();
+  final int? maxLength;
+  final int? stopToken;
+
+  GenerateAsync(this.prompt, {required this.modelID, this.batch = 1, this.maxLength, this.stopToken}) : super();
 }
 
 class RunEvaluation extends ToRWKV {
