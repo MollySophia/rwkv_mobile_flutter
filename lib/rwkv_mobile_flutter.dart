@@ -593,6 +593,7 @@ class RWKVMobile {
           final tokenizerPath = req.tokenizerPath;
 
           int modelID = -1;
+          int retVal = 0;
           switch (backend) {
             case Backend.ncnn:
             case Backend.llamacpp:
@@ -601,7 +602,7 @@ class RWKVMobile {
             case Backend.mlx:
             case Backend.mtkNeuropilot7:
               sendPort.send(LoadModelSteps(req: req, status: LoadingStatus.loading));
-              modelID = rwkvMobile.rwkvmobile_runtime_load_model(
+              retVal = rwkvMobile.rwkvmobile_runtime_load_model_async(
                 runtime,
                 modelPath.ptr,
                 modelBackendString.ptr,
@@ -620,7 +621,7 @@ class RWKVMobile {
                 LoadModelSteps(req: req, status: LoadingStatus.loadModelWithExtra),
               );
               if (Platform.isWindows) {
-                modelID = rwkvMobile.rwkvmobile_runtime_load_model_with_extra(
+                retVal = rwkvMobile.rwkvmobile_runtime_load_model_with_extra_async(
                   runtime,
                   modelPath.ptr,
                   modelBackendString.ptr,
@@ -628,7 +629,7 @@ class RWKVMobile {
                   (tempDir.path + '\\assets\\lib\\QnnHtp.dll').toNativeUtf8().cast<Void>(),
                 );
               } else {
-                modelID = rwkvMobile.rwkvmobile_runtime_load_model_with_extra(
+                retVal = rwkvMobile.rwkvmobile_runtime_load_model_with_extra_async(
                   runtime,
                   modelPath.ptr,
                   modelBackendString.ptr,
@@ -642,7 +643,7 @@ class RWKVMobile {
               // TODO: @wangce 从前端获取 quant_type 和 quant_layers
               webRwkvArgs.ref.quant_type = 0; // 0: fp16, 1: int8, 2: nf4
               webRwkvArgs.ref.quant_layers = 0; // number of quantized layers
-              modelID = rwkvMobile.rwkvmobile_runtime_load_model_with_extra(
+              retVal = rwkvMobile.rwkvmobile_runtime_load_model_with_extra_async(
                 runtime,
                 modelPath.ptr,
                 modelBackendString.ptr,
@@ -652,7 +653,7 @@ class RWKVMobile {
               calloc.free(webRwkvArgs);
           }
 
-          if (modelID < 0) {
+          if (retVal != 0) {
             final error =
                 '''Failed to load model: 
 path: $modelPath
@@ -669,6 +670,37 @@ modelID: $modelID''';
             break;
           }
 
+          // poll the loading progress every 200ms
+          while (rwkvMobile.rwkvmobile_runtime_is_loading_model(runtime) != 0) {
+            final progress = rwkvMobile.rwkvmobile_runtime_get_load_model_progress(runtime);
+            // @wangce 将 progress 发送给前端
+            print('Loading model progress: $progress');
+            await Future.delayed(const Duration(milliseconds: 200));
+          }
+
+          final ptr0 = malloc.allocate<Int32>(sizeOf<Int32>());
+          final ptr1 = malloc.allocate<Int32>(sizeOf<Int32>());
+          rwkvMobile.rwkvmobile_runtime_get_load_model_status(runtime, ptr0.cast<Int>(), ptr1.cast<Int>());
+          retVal = ptr0.value;
+          modelID = ptr1.value;
+          malloc.free(ptr0);
+          malloc.free(ptr1);
+          if (retVal != 0 || modelID < 0) {
+            final error =
+                '''Failed to load model: 
+path: $modelPath
+backend: $modelBackendString
+tokenizerPath: $tokenizerPath
+modelID: $modelID''';
+            sendPort.send(
+              LoadModelSteps(
+                info: error,
+                req: req,
+                status: LoadingStatus.failedInLoading,
+              ),
+            );
+            break;
+          }
           sendPort.send(LoadModelSteps(modelID: modelID, req: req, status: LoadingStatus.loaded));
 
         // 🟥 stop
