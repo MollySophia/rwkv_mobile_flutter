@@ -10,7 +10,6 @@ import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
-// TODO: 由前端提供各个路径 @WangCe @Molly
 import 'package:path_provider/path_provider.dart';
 import 'package:rwkv_mobile_flutter/from_rwkv.dart';
 import 'package:rwkv_mobile_flutter/func.dart';
@@ -673,8 +672,7 @@ modelID: $modelID''';
           // poll the loading progress every 200ms
           while (rwkvMobile.rwkvmobile_runtime_is_loading_model(runtime) != 0) {
             final progress = rwkvMobile.rwkvmobile_runtime_get_load_model_progress(runtime);
-            // @wangce 将 progress 发送给前端
-            print('Loading model progress: $progress');
+            sendPort.send(LoadModelProgress(progress: progress, req: req));
             await Future.delayed(const Duration(milliseconds: 200));
           }
 

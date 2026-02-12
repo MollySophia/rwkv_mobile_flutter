@@ -270,3 +270,9 @@ class SamplerAndPenaltyParams extends FromRWKV {
     super.req,
   });
 }
+
+class LoadModelProgress extends FromRWKV {
+  final double progress;
+
+  LoadModelProgress({required this.progress, super.req});
+}
