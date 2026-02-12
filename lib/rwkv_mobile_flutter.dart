@@ -672,7 +672,7 @@ modelID: $modelID''';
           // poll the loading progress every 200ms
           while (rwkvMobile.rwkvmobile_runtime_is_loading_model(runtime) != 0) {
             final progress = rwkvMobile.rwkvmobile_runtime_get_load_model_progress(runtime);
-            sendPort.send(LoadModelProgress(progress: progress, req: req));
+            sendPort.send(LoadModelSteps(progress: progress, req: req, status: LoadingStatus.loading));
             await Future.delayed(const Duration(milliseconds: 200));
           }
 

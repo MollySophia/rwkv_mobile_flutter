@@ -54,12 +54,14 @@ class LoadModelSteps extends FromRWKV {
   final int? modelID;
   final String? info;
   final LoadingStatus status;
+  final double? progress;
 
   LoadModelSteps({
     required this.status,
     required super.req,
     this.info,
     this.modelID,
+    this.progress,
   });
 }
 
@@ -269,10 +271,4 @@ class SamplerAndPenaltyParams extends FromRWKV {
     required this.penaltyDecays,
     super.req,
   });
-}
-
-class LoadModelProgress extends FromRWKV {
-  final double progress;
-
-  LoadModelProgress({required this.progress, super.req});
 }
