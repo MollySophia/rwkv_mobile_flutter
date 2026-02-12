@@ -673,8 +673,10 @@ modelID: $modelID''';
             break;
           }
 
+          double lastProgress = 0.0;
           while (rwkvMobile.rwkvmobile_runtime_is_loading_model(runtime) != 0) {
-            final progress = rwkvMobile.rwkvmobile_runtime_get_load_model_progress(runtime);
+            double progress = rwkvMobile.rwkvmobile_runtime_get_load_model_progress(runtime);
+            if (progress < lastProgress) progress = lastProgress;
             sendPort.send(LoadModelSteps(progress: progress, req: req, status: LoadingStatus.loading));
             // We don't need to consider the performance of `rwkvmobile_runtime_get_load_model_progress`
             const duration = Duration(milliseconds: 199);
