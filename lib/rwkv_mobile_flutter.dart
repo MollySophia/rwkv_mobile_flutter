@@ -401,6 +401,7 @@ class RWKVMobile {
           final promptPtr = req.prompt.ptr;
           final finalMaxLength = req.maxLength ?? maxLength;
           final finalStopToken = req.stopToken ?? generationStopToken;
+          final disableCache = (req.disableCache ?? false) ? 1 : 0;
 
           if (rwkvMobile.rwkvmobile_runtime_is_generating(runtime, req.modelID) != 0) {
             sendPort.send(Error('LLM is already generating', req));
@@ -416,6 +417,7 @@ class RWKVMobile {
               finalMaxLength,
               finalStopToken,
               nullptr,
+              disableCache,
             );
           } else {
             for (var i = 0; i < req.batch; i++) {
@@ -429,6 +431,7 @@ class RWKVMobile {
               finalMaxLength,
               generationStopToken,
               nullptr,
+              disableCache,
             );
           }
           if (retVal != 0) {
@@ -513,6 +516,7 @@ class RWKVMobile {
             maxLength,
             generationStopToken,
             nativeCallable.nativeFunction,
+            1,
           );
           if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation: retVal: $retVal', req: req));
 

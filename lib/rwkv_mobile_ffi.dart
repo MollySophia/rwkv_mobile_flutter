@@ -427,6 +427,7 @@ class rwkv_mobile {
     int max_tokens,
     int stop_code,
     ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int, ffi.Pointer<ffi.Char>)>> callback,
+    int disable_cache,
   ) {
     return _rwkvmobile_runtime_gen_completion_async(
       runtime,
@@ -435,6 +436,7 @@ class rwkv_mobile {
       max_tokens,
       stop_code,
       callback,
+      disable_cache,
     );
   }
 
@@ -448,6 +450,7 @@ class rwkv_mobile {
             ffi.Int,
             ffi.Int,
             ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int, ffi.Pointer<ffi.Char>)>>,
+            ffi.Int,
           )
         >
       >('rwkvmobile_runtime_gen_completion_async');
@@ -460,6 +463,7 @@ class rwkv_mobile {
           int,
           int,
           ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int, ffi.Pointer<ffi.Char>)>>,
+          int,
         )
       >();
 
@@ -476,6 +480,7 @@ class rwkv_mobile {
       >
     >
     callback_batch,
+    int disable_cache,
   ) {
     return _rwkvmobile_runtime_gen_completion_batch_async(
       runtime,
@@ -485,6 +490,7 @@ class rwkv_mobile {
       max_tokens,
       stop_code,
       callback_batch,
+      disable_cache,
     );
   }
 
@@ -503,6 +509,7 @@ class rwkv_mobile {
                 ffi.Void Function(ffi.Int, ffi.Pointer<ffi.Pointer<ffi.Char>>, ffi.Pointer<ffi.Int>, ffi.Pointer<ffi.Pointer<ffi.Char>>)
               >
             >,
+            ffi.Int,
           )
         >
       >('rwkvmobile_runtime_gen_completion_batch_async');
@@ -520,6 +527,7 @@ class rwkv_mobile {
               ffi.Void Function(ffi.Int, ffi.Pointer<ffi.Pointer<ffi.Char>>, ffi.Pointer<ffi.Int>, ffi.Pointer<ffi.Pointer<ffi.Char>>)
             >
           >,
+          int,
         )
       >();
 
@@ -633,6 +641,7 @@ class rwkv_mobile {
     int max_tokens,
     int stop_code,
     ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int, ffi.Pointer<ffi.Char>)>> callback,
+    int disable_cache,
   ) {
     return _rwkvmobile_runtime_gen_completion(
       runtime,
@@ -641,6 +650,7 @@ class rwkv_mobile {
       max_tokens,
       stop_code,
       callback,
+      disable_cache,
     );
   }
 
@@ -654,6 +664,7 @@ class rwkv_mobile {
             ffi.Int,
             ffi.Int,
             ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int, ffi.Pointer<ffi.Char>)>>,
+            ffi.Int,
           )
         >
       >('rwkvmobile_runtime_gen_completion');
@@ -666,6 +677,7 @@ class rwkv_mobile {
           int,
           int,
           ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int, ffi.Pointer<ffi.Char>)>>,
+          int,
         )
       >();
 
