@@ -669,11 +669,12 @@ modelID: $modelID''';
             break;
           }
 
-          // poll the loading progress every 200ms
+          // poll the loading progress
+          final duration = backend == Backend.coreml ? const Duration(milliseconds: 1000) : const Duration(milliseconds: 250);
           while (rwkvMobile.rwkvmobile_runtime_is_loading_model(runtime) != 0) {
             final progress = rwkvMobile.rwkvmobile_runtime_get_load_model_progress(runtime);
             sendPort.send(LoadModelSteps(progress: progress, req: req, status: LoadingStatus.loading));
-            await Future.delayed(const Duration(milliseconds: 200));
+            await Future.delayed(duration);
           }
 
           final ptr0 = malloc.allocate<Int32>(sizeOf<Int32>());
