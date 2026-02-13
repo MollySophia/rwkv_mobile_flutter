@@ -677,6 +677,7 @@ modelID: $modelID''';
           while (rwkvMobile.rwkvmobile_runtime_is_loading_model(runtime) != 0) {
             double progress = rwkvMobile.rwkvmobile_runtime_get_load_model_progress(runtime);
             if (progress < lastProgress) progress = lastProgress;
+            lastProgress = progress;
             sendPort.send(LoadModelSteps(progress: progress, req: req, status: LoadingStatus.loading));
             // We don't need to consider the performance of `rwkvmobile_runtime_get_load_model_progress`
             const duration = Duration(milliseconds: 199);
