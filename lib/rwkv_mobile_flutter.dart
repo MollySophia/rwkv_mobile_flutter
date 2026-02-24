@@ -613,33 +613,23 @@ class RWKVMobile {
               );
             case Backend.qnn:
               final tempDir = await getTemporaryDirectory();
+              final separator = Platform.pathSeparator;
+              final qnnLibDirPath = [tempDir.path, 'assets', 'lib', ''].join(separator);
+              final qnnHtpLibName = Platform.isWindows ? 'QnnHtp.dll' : 'libQnnHtp.so';
+              final qnnHtpLibPath = '$qnnLibDirPath$qnnHtpLibName';
               sendPort.send(LoadModelSteps(req: req, status: LoadingStatus.setQnnLibraryPath));
-              if (Platform.isWindows) {
-                rwkvMobile.rwkvmobile_runtime_set_qnn_library_path(runtime, (tempDir.path + '\\assets\\lib\\').ptr);
-              } else {
-                rwkvMobile.rwkvmobile_runtime_set_qnn_library_path(runtime, (tempDir.path + '/assets/lib/').ptr);
-              }
+              rwkvMobile.rwkvmobile_runtime_set_qnn_library_path(runtime, qnnLibDirPath.ptr);
 
               sendPort.send(
                 LoadModelSteps(req: req, status: LoadingStatus.loadModelWithExtra),
               );
-              if (Platform.isWindows) {
-                retVal = rwkvMobile.rwkvmobile_runtime_load_model_with_extra_async(
-                  runtime,
-                  modelPath.ptr,
-                  modelBackendString.ptr,
-                  tokenizerPath.ptr,
-                  (tempDir.path + '\\assets\\lib\\QnnHtp.dll').toNativeUtf8().cast<Void>(),
-                );
-              } else {
-                retVal = rwkvMobile.rwkvmobile_runtime_load_model_with_extra_async(
-                  runtime,
-                  modelPath.ptr,
-                  modelBackendString.ptr,
-                  tokenizerPath.ptr,
-                  (tempDir.path + '/assets/lib/libQnnHtp.so').toNativeUtf8().cast<Void>(),
-                );
-              }
+              retVal = rwkvMobile.rwkvmobile_runtime_load_model_with_extra_async(
+                runtime,
+                modelPath.ptr,
+                modelBackendString.ptr,
+                tokenizerPath.ptr,
+                qnnHtpLibPath.toNativeUtf8().cast<Void>(),
+              );
             case Backend.webRwkv:
               sendPort.send(LoadModelSteps(req: req, status: LoadingStatus.loading));
               final webRwkvArgs = calloc<web_rwkv_args>();
