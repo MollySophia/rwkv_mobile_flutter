@@ -709,6 +709,22 @@ modelID: $modelID''';
             if (!generating) sendPort.send(GenerateStop(req: req));
           }
 
+        case CalculateTokensCountFromMessages req:
+          for (var i = 0; i < req.messages.length; i++) {
+            inputsPtr[i] = req.messages[i].ptr;
+          }
+          final tokensCount = rwkvMobile.rwkvmobile_runtime_calculate_tokens_count_from_messages(
+            runtime,
+            req.modelID,
+            inputsPtr,
+            req.messages.length,
+          );
+          sendPort.send(TokensCount(tokensCount: tokensCount, req: req));
+
+        case CalculateTokensCountRaw req:
+          final tokensCount = rwkvMobile.rwkvmobile_runtime_calculate_tokens_count_from_text(runtime, req.modelID, req.text.ptr);
+          sendPort.send(TokensCount(tokensCount: tokensCount, req: req));
+
         // 🟥 getResponseBufferContent
         case GetResponseBufferContent req:
           final responseBufferContent = rwkvMobile.rwkvmobile_runtime_get_response_buffer_content(runtime, req.modelID);
@@ -717,6 +733,10 @@ modelID: $modelID''';
           final String str = _codec.decode(byteList);
           final eosFound = responseBufferContent.eos_found == 1;
           sendPort.send(ResponseBufferContent(responseBufferContent: str, eosFound: eosFound, req: req));
+
+        case GetResponseBufferTokensCount req:
+          final tokensCount = rwkvMobile.rwkvmobile_runtime_get_response_buffer_tokens_count(runtime, req.modelID);
+          sendPort.send(TokensCount(tokensCount: tokensCount, req: req));
 
         // 🟥 getBatchResponseBufferContent
         case GetBatchResponseBufferContent req:

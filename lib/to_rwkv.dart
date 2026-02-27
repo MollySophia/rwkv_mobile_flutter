@@ -131,6 +131,14 @@ class GetResponseBufferContent extends ToRWKV {
   static const responseType = ResponseBufferContent;
 }
 
+class GetResponseBufferTokensCount extends ToRWKV {
+  final int modelID;
+
+  GetResponseBufferTokensCount({required this.modelID});
+
+  static const responseType = TokensCount;
+}
+
 class GetBatchResponseBufferContent extends ToRWKV {
   /// 发起 `GetBatchResponseBufferContent` 请求时, 是为的哪些 messages 发起的
   final List<String> messages;
@@ -573,4 +581,22 @@ class GetSamplerAndPenaltyParams extends ToRWKV {
   GetSamplerAndPenaltyParams({required this.modelID, this.batchSize = 1});
 
   static const responseType = SamplerAndPenaltyParams;
+}
+
+class CalculateTokensCountFromMessages extends ToRWKV {
+  final int modelID;
+
+  final List<String> messages;
+
+  CalculateTokensCountFromMessages(
+    this.messages, {
+    required this.modelID,
+  });
+}
+
+class CalculateTokensCountRaw extends ToRWKV {
+  final int modelID;
+  final String text;
+
+  CalculateTokensCountRaw(this.text, {required this.modelID});
 }
