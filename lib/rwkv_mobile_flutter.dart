@@ -738,6 +738,11 @@ modelID: $modelID''';
           final tokensCount = rwkvMobile.rwkvmobile_runtime_get_response_buffer_tokens_count(runtime, req.modelID);
           sendPort.send(TokensCount(tokensCount: tokensCount, req: req));
 
+        case GetResponseBufferTokensCountBatch req:
+          final batchTokensCount = rwkvMobile.rwkvmobile_runtime_get_response_buffer_tokens_count_batch(runtime, req.modelID);
+          final tokensCountList = batchTokensCount.counts.asTypedList(batchTokensCount.batch_size).toList();
+          sendPort.send(TokensCountBatch(tokensCount: tokensCountList, req: req));
+
         // 🟥 getBatchResponseBufferContent
         case GetBatchResponseBufferContent req:
           final responseBufferContent = rwkvMobile.rwkvmobile_runtime_get_response_buffer_content_batch(runtime, req.modelID);

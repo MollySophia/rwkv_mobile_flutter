@@ -105,6 +105,12 @@ class TokensCount extends FromRWKV {
   TokensCount({required this.tokensCount, super.req});
 }
 
+class TokensCountBatch extends FromRWKV {
+  final List<int> tokensCount;
+
+  TokensCountBatch({required this.tokensCount, super.req});
+}
+
 class ResponseBatchBufferContent extends FromRWKV {
   /// 当前已生成的 tokens 被 decode 为普通字符串的值
   final List<String> responseBufferContent;

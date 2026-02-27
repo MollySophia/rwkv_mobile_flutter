@@ -1429,6 +1429,23 @@ class rwkv_mobile {
   late final _rwkvmobile_runtime_get_response_buffer_tokens_count = _rwkvmobile_runtime_get_response_buffer_tokens_countPtr
       .asFunction<int Function(rwkvmobile_runtime_t, int)>();
 
+  batch_tokens_count rwkvmobile_runtime_get_response_buffer_tokens_count_batch(
+    rwkvmobile_runtime_t runtime,
+    int model_id,
+  ) {
+    return _rwkvmobile_runtime_get_response_buffer_tokens_count_batch(
+      runtime,
+      model_id,
+    );
+  }
+
+  late final _rwkvmobile_runtime_get_response_buffer_tokens_count_batchPtr =
+      _lookup<ffi.NativeFunction<batch_tokens_count Function(rwkvmobile_runtime_t, ffi.Int)>>(
+        'rwkvmobile_runtime_get_response_buffer_tokens_count_batch',
+      );
+  late final _rwkvmobile_runtime_get_response_buffer_tokens_count_batch = _rwkvmobile_runtime_get_response_buffer_tokens_count_batchPtr
+      .asFunction<batch_tokens_count Function(rwkvmobile_runtime_t, int)>();
+
   int rwkvmobile_runtime_calculate_tokens_count_from_messages(
     rwkvmobile_runtime_t runtime,
     int model_id,
@@ -2112,6 +2129,13 @@ final class web_rwkv_args extends ffi.Struct {
 
   @ffi.Int()
   external int quant_layers;
+}
+
+final class batch_tokens_count extends ffi.Struct {
+  external ffi.Pointer<ffi.Int32> counts;
+
+  @ffi.Int()
+  external int batch_size;
 }
 
 typedef rwkvmobile_runtime_t = ffi.Pointer<ffi.Void>;

@@ -139,6 +139,14 @@ class GetResponseBufferTokensCount extends ToRWKV {
   static const responseType = TokensCount;
 }
 
+class GetResponseBufferTokensCountBatch extends ToRWKV {
+  final int modelID;
+
+  GetResponseBufferTokensCountBatch({required this.modelID});
+
+  static const responseType = TokensCountBatch;
+}
+
 class GetBatchResponseBufferContent extends ToRWKV {
   /// 发起 `GetBatchResponseBufferContent` 请求时, 是为的哪些 messages 发起的
   final List<String> messages;
