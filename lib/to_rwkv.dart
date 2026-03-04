@@ -313,6 +313,7 @@ class ChatAsync extends ToRWKV {
   final List<String> messages;
   final bool enableReasoning;
   final bool forceReasoning;
+  final bool addGenerationPrompt;
 
   final int? maxLength;
 
@@ -325,6 +326,7 @@ class ChatAsync extends ToRWKV {
     this.messages, {
     required this.enableReasoning,
     required this.forceReasoning,
+    required this.addGenerationPrompt,
     required this.modelID,
     this.maxLength,
     this.forceLang,
@@ -337,6 +339,7 @@ class ChatBatchAsync extends ToRWKV {
   final List<List<String>> messages;
   final bool enableReasoning;
   final bool forceReasoning;
+  final bool addGenerationPrompt;
 
   final int batchSize;
 
@@ -351,6 +354,7 @@ class ChatBatchAsync extends ToRWKV {
     this.messages, {
     required this.enableReasoning,
     required this.forceReasoning,
+    required this.addGenerationPrompt,
     required this.batchSize,
     required this.modelID,
     this.maxLength,
