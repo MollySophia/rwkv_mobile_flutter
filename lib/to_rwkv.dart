@@ -13,7 +13,14 @@ import 'package:rwkv_mobile_flutter/types.dart';
 sealed class ToRWKV {
   final int requestId;
 
-  ToRWKV() : requestId = DateTime.now().microsecondsSinceEpoch;
+  static int _nextRequestId = 0;
+
+  static int _allocateRequestId() {
+    _nextRequestId = _nextRequestId + 1;
+    return _nextRequestId;
+  }
+
+  ToRWKV() : requestId = _allocateRequestId();
 
   @override
   bool operator ==(Object other) {
