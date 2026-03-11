@@ -306,6 +306,7 @@ class rwkv_mobile {
     int enable_reasoning,
     int force_reasoning,
     int force_lang,
+    int add_generation_prompt,
   ) {
     return _rwkvmobile_runtime_eval_chat_with_history_async(
       handle,
@@ -317,6 +318,7 @@ class rwkv_mobile {
       enable_reasoning,
       force_reasoning,
       force_lang,
+      add_generation_prompt,
     );
   }
 
@@ -333,6 +335,7 @@ class rwkv_mobile {
             ffi.Int,
             ffi.Int,
             ffi.Int,
+            ffi.Int,
           )
         >
       >('rwkvmobile_runtime_eval_chat_with_history_async');
@@ -345,6 +348,7 @@ class rwkv_mobile {
           int,
           int,
           ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>, ffi.Int, ffi.Pointer<ffi.Char>)>>,
+          int,
           int,
           int,
           int,
@@ -547,6 +551,7 @@ class rwkv_mobile {
     int enable_reasoning,
     int force_reasoning,
     int force_lang,
+    int add_generation_prompt,
   ) {
     return _rwkvmobile_runtime_eval_chat_batch_with_history_async(
       handle,
@@ -559,6 +564,7 @@ class rwkv_mobile {
       enable_reasoning,
       force_reasoning,
       force_lang,
+      add_generation_prompt,
     );
   }
 
@@ -580,6 +586,7 @@ class rwkv_mobile {
             ffi.Int,
             ffi.Int,
             ffi.Int,
+            ffi.Int,
           )
         >
       >('rwkvmobile_runtime_eval_chat_batch_with_history_async');
@@ -597,6 +604,7 @@ class rwkv_mobile {
               ffi.Void Function(ffi.Int, ffi.Pointer<ffi.Pointer<ffi.Char>>, ffi.Pointer<ffi.Int>, ffi.Pointer<ffi.Pointer<ffi.Char>>)
             >
           >,
+          int,
           int,
           int,
           int,

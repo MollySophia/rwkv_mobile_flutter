@@ -320,6 +320,7 @@ class ChatAsync extends ToRWKV {
   final List<String> messages;
   final bool enableReasoning;
   final bool forceReasoning;
+  final bool addGenerationPrompt;
 
   final int? maxLength;
 
@@ -332,6 +333,7 @@ class ChatAsync extends ToRWKV {
     this.messages, {
     required this.enableReasoning,
     required this.forceReasoning,
+    required this.addGenerationPrompt,
     required this.modelID,
     this.maxLength,
     this.forceLang,
@@ -344,6 +346,7 @@ class ChatBatchAsync extends ToRWKV {
   final List<List<String>> messages;
   final bool enableReasoning;
   final bool forceReasoning;
+  final bool addGenerationPrompt;
 
   final int batchSize;
 
@@ -358,6 +361,7 @@ class ChatBatchAsync extends ToRWKV {
     this.messages, {
     required this.enableReasoning,
     required this.forceReasoning,
+    required this.addGenerationPrompt,
     required this.batchSize,
     required this.modelID,
     this.maxLength,
@@ -441,6 +445,7 @@ class SetAudioPrompt extends ToRWKV {
   SetAudioPrompt(this.audioPathPtr, {required this.modelID});
 }
 
+/// Set Beginning of Sequence|Sentence Token
 class SetBosToken extends ToRWKV {
   final String bosToken;
   final int modelID;
@@ -448,6 +453,7 @@ class SetBosToken extends ToRWKV {
   SetBosToken(this.bosToken, {required this.modelID});
 }
 
+/// Set End of Sequence|Sentence Token
 class SetEosToken extends ToRWKV {
   final String eosToken;
   final int modelID;
@@ -455,6 +461,9 @@ class SetEosToken extends ToRWKV {
   SetEosToken(this.eosToken, {required this.modelID});
 }
 
+/// Set Generation Stop Token, currently only used in Othello and Sudoku
+///
+/// TODO: @Molly will be changed in the future (or not)
 class SetGenerationStopToken extends ToRWKV {
   final int stopToken;
   final int modelID;
