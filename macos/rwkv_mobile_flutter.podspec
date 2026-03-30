@@ -23,6 +23,7 @@ Pod::Spec.new do |s|
     s.vendored_libraries = '*.dylib'
     s.platform = :osx, '10.14'
     s.static_framework = true
+    s.resources =['mlx-swift_Cmlx.bundle']
     s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
     s.swift_version = '5.0'
   end
