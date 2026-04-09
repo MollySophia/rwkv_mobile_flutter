@@ -340,6 +340,30 @@ class ChatAsync extends ToRWKV {
   });
 }
 
+class ChatBatchSlotConfig {
+  final List<String> messages;
+  final bool enableReasoning;
+  final bool forceReasoning;
+  final String? assistantPrefix;
+
+  const ChatBatchSlotConfig({
+    required this.messages,
+    this.enableReasoning = false,
+    this.forceReasoning = false,
+    this.assistantPrefix,
+  });
+
+  List<String> materializedMessages() {
+    if (assistantPrefix == null) {
+      return messages;
+    }
+    return <String>[
+      ...messages,
+      assistantPrefix!,
+    ];
+  }
+}
+
 class ChatBatchAsync extends ToRWKV {
   final int modelID;
 
@@ -347,6 +371,7 @@ class ChatBatchAsync extends ToRWKV {
   final bool enableReasoning;
   final bool forceReasoning;
   final bool addGenerationPrompt;
+  final List<ChatBatchSlotConfig>? slotConfigs;
 
   final int batchSize;
 
@@ -366,7 +391,48 @@ class ChatBatchAsync extends ToRWKV {
     required this.modelID,
     this.maxLength,
     this.forceLang,
-  });
+  }) : slotConfigs = null;
+
+  ChatBatchAsync.withSlotConfigs(
+    List<ChatBatchSlotConfig> slotConfigs, {
+    required this.modelID,
+    this.maxLength,
+    this.forceLang,
+  }) : slotConfigs = List<ChatBatchSlotConfig>.unmodifiable(slotConfigs),
+       messages = List<List<String>>.unmodifiable(
+         slotConfigs.map((ChatBatchSlotConfig slot) {
+           return List<String>.unmodifiable(slot.materializedMessages());
+         }).toList(),
+       ),
+       enableReasoning = _resolveEnableReasoning(slotConfigs),
+       forceReasoning = _resolveForceReasoning(slotConfigs),
+       addGenerationPrompt = _resolveAddGenerationPrompt(slotConfigs),
+       batchSize = slotConfigs.length;
+
+  static bool _resolveEnableReasoning(List<ChatBatchSlotConfig> slotConfigs) {
+    if (slotConfigs.isEmpty) {
+      return false;
+    }
+    return slotConfigs.every((ChatBatchSlotConfig slot) => slot.enableReasoning);
+  }
+
+  static bool _resolveForceReasoning(List<ChatBatchSlotConfig> slotConfigs) {
+    if (slotConfigs.isEmpty) {
+      return false;
+    }
+    return slotConfigs.every((ChatBatchSlotConfig slot) => slot.forceReasoning);
+  }
+
+  static bool _resolveAddGenerationPrompt(List<ChatBatchSlotConfig> slotConfigs) {
+    if (slotConfigs.isEmpty) {
+      return true;
+    }
+    final bool hasAssistantPrefix = slotConfigs.any((ChatBatchSlotConfig slot) => slot.assistantPrefix != null);
+    if (hasAssistantPrefix) {
+      return false;
+    }
+    return slotConfigs.every((ChatBatchSlotConfig slot) => slot.messages.length.isOdd);
+  }
 }
 
 class GetSupportedBatchSizes extends ToRWKV {
