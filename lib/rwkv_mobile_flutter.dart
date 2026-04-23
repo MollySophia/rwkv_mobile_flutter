@@ -601,7 +601,6 @@ class RWKVMobile {
           int retVal = 0;
           switch (backend) {
             case Backend.ncnn:
-            case Backend.llamacpp:
             case Backend.mnn:
             case Backend.coreml:
             case Backend.mlx:
@@ -613,6 +612,18 @@ class RWKVMobile {
                 modelBackendString.ptr,
                 tokenizerPath.ptr,
               );
+            case Backend.llamacpp:
+              sendPort.send(LoadModelSteps(req: req, status: LoadingStatus.loadModelWithExtra));
+              final llamaCppArgs = calloc<llama_cpp_args>();
+              llamaCppArgs.ref.n_gpu_layers = req.llamaCppNGpuLayers ?? 99;
+              retVal = rwkvMobile.rwkvmobile_runtime_load_model_with_extra_async(
+                runtime,
+                modelPath.ptr,
+                modelBackendString.ptr,
+                tokenizerPath.ptr,
+                llamaCppArgs.cast<Void>(),
+              );
+              calloc.free(llamaCppArgs);
             case Backend.qnn:
               final tempDir = await getTemporaryDirectory();
               final separator = Platform.pathSeparator;

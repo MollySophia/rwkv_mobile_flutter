@@ -2139,6 +2139,11 @@ final class web_rwkv_args extends ffi.Struct {
   external int quant_layers;
 }
 
+final class llama_cpp_args extends ffi.Struct {
+  @ffi.Int()
+  external int n_gpu_layers;
+}
+
 final class batch_tokens_count extends ffi.Struct {
   external ffi.Pointer<ffi.Int32> counts;
 

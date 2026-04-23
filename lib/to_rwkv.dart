@@ -219,6 +219,7 @@ class LoadRWKVModel extends ToRWKV {
   final String modelPath;
   final Backend backend;
   final String tokenizerPath;
+  final int? llamaCppNGpuLayers;
 
   /// Extra data for loading model
   ///
@@ -233,6 +234,7 @@ class LoadRWKVModel extends ToRWKV {
     required this.modelPath,
     required this.backend,
     required this.tokenizerPath,
+    this.llamaCppNGpuLayers,
     this.extra,
   });
 }
