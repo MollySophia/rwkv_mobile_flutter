@@ -82,6 +82,12 @@ class RWKVMobile {
     return snapdragonHtpArch.cast<Utf8>().toDartString();
   }
 
+  static String getRWKVMobileCommitHash() {
+    final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
+    final commitHash = rwkvMobile.rwkvmobile_get_commit_hash();
+    return commitHash.cast<Utf8>().toDartString();
+  }
+
   static int convertPthToSafetensors(String pthPath, String stPath) {
     final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
     final retVal = rwkvMobile.rwkvmobile_convert_pth_to_safetensors(
@@ -107,6 +113,8 @@ class RWKVMobile {
     if (kDebugMode) {
       const logLevel = int.fromEnvironment('logLevel', defaultValue: RWKV_LOG_LEVEL_DEBUG);
       rwkvMobile.rwkvmobile_set_loglevel(logLevel);
+
+      print('rwkv-mobile version: ${getRWKVMobileCommitHash()}');
     }
 
     // definitions

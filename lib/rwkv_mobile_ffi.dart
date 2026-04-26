@@ -1801,6 +1801,13 @@ class rwkv_mobile {
   late final _rwkvmobile_get_embedding = _rwkvmobile_get_embeddingPtr
       .asFunction<int Function(rwkvmobile_runtime_t, ffi.Pointer<ffi.Pointer<ffi.Char>>, int, ffi.Pointer<ffi.Pointer<ffi.Float>>)>();
 
+  ffi.Pointer<ffi.Char> rwkvmobile_get_commit_hash() {
+    return _rwkvmobile_get_commit_hash();
+  }
+
+  late final _rwkvmobile_get_commit_hashPtr = _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('rwkvmobile_get_commit_hash');
+  late final _rwkvmobile_get_commit_hash = _rwkvmobile_get_commit_hashPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
   ffi.Pointer<ffi.Char> rwkvmobile_get_platform_name() {
     return _rwkvmobile_get_platform_name();
   }
