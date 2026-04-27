@@ -347,12 +347,14 @@ class ChatBatchSlotConfig {
   final bool enableReasoning;
   final bool forceReasoning;
   final String? assistantPrefix;
+  final int? forceLang;
 
   const ChatBatchSlotConfig({
     required this.messages,
     this.enableReasoning = false,
     this.forceReasoning = false,
     this.assistantPrefix,
+    this.forceLang,
   });
 
   List<String> materializedMessages() {
@@ -367,6 +369,8 @@ class ChatBatchSlotConfig {
 }
 
 class ChatBatchAsync extends ToRWKV {
+  static const int _forceLangNone = 0;
+
   final int modelID;
 
   final List<List<String>> messages;
@@ -381,8 +385,15 @@ class ChatBatchAsync extends ToRWKV {
 
   /// 约束模型输出的第一个 token
   ///
-  /// 0 或者 null: 无限制, 1: 中文字符
+  /// 0 或者 null: 无限制, 1: 中文字符.
+  ///
+  /// 旧接口: 传入 int 时会应用到所有 batch slot.
   final int? forceLang;
+
+  /// 每个 batch slot 独立的 force lang.
+  ///
+  /// 长度必须等于 [batchSize]. 也可以通过 [forceLang] 参数传入 List<int>, 以兼容旧参数名.
+  final List<int>? forceLangs;
 
   ChatBatchAsync(
     this.messages, {
@@ -392,15 +403,26 @@ class ChatBatchAsync extends ToRWKV {
     required this.batchSize,
     required this.modelID,
     this.maxLength,
-    this.forceLang,
-  }) : slotConfigs = null;
+    Object? forceLang,
+    List<int>? forceLangs,
+  }) : forceLang = _resolveLegacyForceLang(forceLang, forceLangs),
+       forceLangs = _resolveForceLangs(forceLang, forceLangs),
+       slotConfigs = null {
+    _validateForceLangsLength(this.forceLangs, batchSize);
+  }
 
   ChatBatchAsync.withSlotConfigs(
     List<ChatBatchSlotConfig> slotConfigs, {
     required this.modelID,
     this.maxLength,
-    this.forceLang,
+    Object? forceLang,
+    List<int>? forceLangs,
   }) : slotConfigs = List<ChatBatchSlotConfig>.unmodifiable(slotConfigs),
+       forceLang = _resolveLegacyForceLang(forceLang, forceLangs),
+       forceLangs = _resolveForceLangs(
+         forceLang,
+         forceLangs ?? (forceLang == null ? _resolveSlotForceLangs(slotConfigs) : null),
+       ),
        messages = List<List<String>>.unmodifiable(
          slotConfigs.map((ChatBatchSlotConfig slot) {
            return List<String>.unmodifiable(slot.materializedMessages());
@@ -409,7 +431,75 @@ class ChatBatchAsync extends ToRWKV {
        enableReasoning = _resolveEnableReasoning(slotConfigs),
        forceReasoning = _resolveForceReasoning(slotConfigs),
        addGenerationPrompt = _resolveAddGenerationPrompt(slotConfigs),
-       batchSize = slotConfigs.length;
+       batchSize = slotConfigs.length {
+    _validateForceLangsLength(this.forceLangs, batchSize);
+  }
+
+  List<int> resolvedForceLangs({int noneValue = _forceLangNone}) {
+    final forceLangs = this.forceLangs;
+    if (forceLangs != null) {
+      _validateForceLangsLength(forceLangs, batchSize);
+      return List<int>.unmodifiable(forceLangs);
+    }
+    return List<int>.filled(batchSize, forceLang ?? noneValue, growable: false);
+  }
+
+  static int? _resolveLegacyForceLang(Object? forceLang, List<int>? forceLangs) {
+    if (forceLangs != null && forceLang != null) {
+      throw ArgumentError('Use either forceLang or forceLangs, not both.');
+    }
+    if (forceLang == null) {
+      return null;
+    }
+    if (forceLang is int) {
+      return forceLang;
+    }
+    if (forceLang is Iterable) {
+      return null;
+    }
+    throw ArgumentError.value(forceLang, 'forceLang', 'must be an int or iterable of int values');
+  }
+
+  static List<int>? _resolveForceLangs(Object? forceLang, List<int>? forceLangs) {
+    if (forceLangs != null && forceLang != null) {
+      throw ArgumentError('Use either forceLang or forceLangs, not both.');
+    }
+    if (forceLangs != null) {
+      return List<int>.unmodifiable(forceLangs);
+    }
+    if (forceLang == null || forceLang is int) {
+      return null;
+    }
+    if (forceLang is Iterable) {
+      return List<int>.unmodifiable(forceLang.map<int>(_resolveForceLangValue));
+    }
+    throw ArgumentError.value(forceLang, 'forceLang', 'must be an int or iterable of int values');
+  }
+
+  static int _resolveForceLangValue(Object? forceLang) {
+    if (forceLang is int) {
+      return forceLang;
+    }
+    throw ArgumentError.value(forceLang, 'forceLangs', 'must contain only int values');
+  }
+
+  static List<int>? _resolveSlotForceLangs(List<ChatBatchSlotConfig> slotConfigs) {
+    if (!slotConfigs.any((ChatBatchSlotConfig slot) => slot.forceLang != null)) {
+      return null;
+    }
+    return List<int>.unmodifiable(
+      slotConfigs.map((ChatBatchSlotConfig slot) => slot.forceLang ?? _forceLangNone),
+    );
+  }
+
+  static void _validateForceLangsLength(List<int>? forceLangs, int batchSize) {
+    if (forceLangs == null) {
+      return;
+    }
+    if (forceLangs.length != batchSize) {
+      throw ArgumentError.value(forceLangs.length, 'forceLangs.length', 'must match batchSize ($batchSize)');
+    }
+  }
 
   static bool _resolveEnableReasoning(List<ChatBatchSlotConfig> slotConfigs) {
     if (slotConfigs.isEmpty) {

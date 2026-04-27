@@ -550,7 +550,7 @@ class rwkv_mobile {
     callback_batch,
     int enable_reasoning,
     int force_reasoning,
-    int force_lang,
+    ffi.Pointer<ffi.Int> force_langs,
     int add_generation_prompt,
   ) {
     return _rwkvmobile_runtime_eval_chat_batch_with_history_async(
@@ -563,7 +563,7 @@ class rwkv_mobile {
       callback_batch,
       enable_reasoning,
       force_reasoning,
-      force_lang,
+      force_langs,
       add_generation_prompt,
     );
   }
@@ -585,7 +585,7 @@ class rwkv_mobile {
             >,
             ffi.Int,
             ffi.Int,
-            ffi.Int,
+            ffi.Pointer<ffi.Int>,
             ffi.Int,
           )
         >
@@ -606,7 +606,7 @@ class rwkv_mobile {
           >,
           int,
           int,
-          int,
+          ffi.Pointer<ffi.Int>,
           int,
         )
       >();

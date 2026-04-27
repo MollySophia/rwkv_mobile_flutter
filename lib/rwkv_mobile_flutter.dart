@@ -131,6 +131,7 @@ class RWKVMobile {
       maxBatchSize * sizeOf<Pointer<Pointer<Char>>>(),
     );
     Pointer<Int> numInputsBatchPtr = malloc.allocate<Int>(maxBatchSize * sizeOf<Int>());
+    Pointer<Int> forceLangsBatchPtr = malloc.allocate<Int>(maxBatchSize * sizeOf<Int>());
     for (var i = 0; i < maxBatchSize; i++) {
       inputsBatchPtr[i] = malloc.allocate<Pointer<Char>>(maxMessages * sizeOf<Pointer<Char>>());
     }
@@ -362,6 +363,14 @@ class RWKVMobile {
             break;
           }
 
+          late final List<int> forceLangs;
+          try {
+            forceLangs = req.resolvedForceLangs(noneValue: FORCE_LANG_NONE);
+          } catch (e) {
+            sendPort.send(Error('Invalid forceLangs: $e', req, -1));
+            break;
+          }
+
           if (rwkvMobile.rwkvmobile_runtime_is_generating(runtime, req.modelID) != 0) {
             sendPort.send(Error('LLM is already generating', req, retVal));
             break;
@@ -376,6 +385,7 @@ class RWKVMobile {
               inputsBatchPtr[i][j] = raw.ptr;
             }
             numInputsBatchPtr[i] = req.messages[i].length;
+            forceLangsBatchPtr[i] = forceLangs[i];
           }
 
           sendPort.send(GenerateStart(req: req));
@@ -389,7 +399,7 @@ class RWKVMobile {
             nullptr,
             req.enableReasoning ? 1 : 0,
             req.forceReasoning ? 1 : 0,
-            req.forceLang ?? FORCE_LANG_NONE,
+            forceLangsBatchPtr,
             req.addGenerationPrompt ? 1 : 0,
           );
           if (retVal != 0) sendPort.send(GenerateStop(error: 'Failed to start generation thread: retVal: $retVal', req: req));
@@ -1032,6 +1042,7 @@ modelID: $modelID''';
     malloc.free(inputsPtr);
     malloc.free(inputsBatchPtr);
     malloc.free(numInputsBatchPtr);
+    malloc.free(forceLangsBatchPtr);
     malloc.free(inputsBatchPtrCompletionAsync);
   }
 }
