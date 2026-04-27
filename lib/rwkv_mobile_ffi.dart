@@ -2165,6 +2165,8 @@ const int FORCE_LANG_NONE = 0;
 
 const int FORCE_LANG_CHN = 1;
 
+const int FORCE_LANG_EN = 2;
+
 const int RWKV_LOG_LEVEL_DEBUG = 0;
 
 const int RWKV_LOG_LEVEL_INFO = 1;
