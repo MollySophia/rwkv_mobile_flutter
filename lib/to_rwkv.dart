@@ -346,26 +346,14 @@ class ChatBatchSlotConfig {
   final List<String> messages;
   final bool enableReasoning;
   final bool forceReasoning;
-  final String? assistantPrefix;
   final int? forceLang;
 
   const ChatBatchSlotConfig({
     required this.messages,
     this.enableReasoning = false,
     this.forceReasoning = false,
-    this.assistantPrefix,
     this.forceLang,
   });
-
-  List<String> materializedMessages() {
-    if (assistantPrefix == null) {
-      return messages;
-    }
-    return <String>[
-      ...messages,
-      assistantPrefix!,
-    ];
-  }
 }
 
 class ChatBatchAsync extends ToRWKV {
@@ -425,7 +413,7 @@ class ChatBatchAsync extends ToRWKV {
        ),
        messages = List<List<String>>.unmodifiable(
          slotConfigs.map((ChatBatchSlotConfig slot) {
-           return List<String>.unmodifiable(slot.materializedMessages());
+           return List<String>.unmodifiable(slot.messages);
          }).toList(),
        ),
        enableReasoning = _resolveEnableReasoning(slotConfigs),
@@ -518,10 +506,6 @@ class ChatBatchAsync extends ToRWKV {
   static bool _resolveAddGenerationPrompt(List<ChatBatchSlotConfig> slotConfigs) {
     if (slotConfigs.isEmpty) {
       return true;
-    }
-    final bool hasAssistantPrefix = slotConfigs.any((ChatBatchSlotConfig slot) => slot.assistantPrefix != null);
-    if (hasAssistantPrefix) {
-      return false;
     }
     return slotConfigs.every((ChatBatchSlotConfig slot) => slot.messages.length.isOdd);
   }
