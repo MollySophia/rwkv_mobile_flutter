@@ -2151,6 +2151,14 @@ final class llama_cpp_args extends ffi.Struct {
   external int n_gpu_layers;
 }
 
+final class coreml_args extends ffi.Struct {
+  @ffi.Int()
+  external int load_prefill_async;
+
+  @ffi.Int()
+  external int async_prefill_decode_load_threshold_ms;
+}
+
 final class batch_tokens_count extends ffi.Struct {
   external ffi.Pointer<ffi.Int32> counts;
 

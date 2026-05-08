@@ -620,7 +620,6 @@ class RWKVMobile {
           switch (backend) {
             case Backend.ncnn:
             case Backend.mnn:
-            case Backend.coreml:
             case Backend.mlx:
             case Backend.mtkNeuropilot7:
               sendPort.send(LoadModelSteps(req: req, status: LoadingStatus.loading));
@@ -633,6 +632,7 @@ class RWKVMobile {
             case Backend.llamacpp:
               sendPort.send(LoadModelSteps(req: req, status: LoadingStatus.loadModelWithExtra));
               final llamaCppArgs = calloc<llama_cpp_args>();
+              // TODO @HaloWang 从前端获取 n_gpu_layers （for windows，有的用户可能会想部分层放gpu或者纯cpu推理）
               llamaCppArgs.ref.n_gpu_layers = req.llamaCppNGpuLayers ?? 99;
               retVal = rwkvMobile.rwkvmobile_runtime_load_model_with_extra_async(
                 runtime,
@@ -675,6 +675,19 @@ class RWKVMobile {
                 webRwkvArgs.cast<Void>(),
               );
               calloc.free(webRwkvArgs);
+            case Backend.coreml:
+              final coremlArgs = calloc<coreml_args>();
+              coremlArgs.ref.load_prefill_async = 1;
+              coremlArgs.ref.async_prefill_decode_load_threshold_ms =
+                  10000; // do not load prefill functions async when decode loaded under 10000ms(cache hit case)
+              retVal = rwkvMobile.rwkvmobile_runtime_load_model_with_extra_async(
+                runtime,
+                modelPath.ptr,
+                modelBackendString.ptr,
+                tokenizerPath.ptr,
+                coremlArgs.cast<Void>(),
+              );
+              calloc.free(coremlArgs);
           }
 
           if (retVal != 0) {
