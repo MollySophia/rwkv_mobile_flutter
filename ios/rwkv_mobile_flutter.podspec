@@ -23,12 +23,12 @@ Pod::Spec.new do |s|
     s.dependency 'Flutter'
     s.preserve_paths = '*.a'
 
-    s.xcconfig = {
-      'OTHER_LDFLAGS' => '-all_load -lrwkv_mobile -lncnn -lMLXModelFFI',
+    s.user_target_xcconfig = {
+      'OTHER_LDFLAGS' => '-force_load "$(PODS_ROOT)/../.symlinks/plugins/rwkv_mobile_flutter/ios/librwkv_mobile.a"',
       'DEAD_CODE_STRIPPING' => 'NO',
       "STRIP_INSTALLED_PRODUCT" => "NO",
     }
-    s.vendored_libraries = 'librwkv_mobile.a', 'libncnn.a', 'libMLXModelFFI.a'
+    s.vendored_libraries = 'libncnn.a', 'libMLXModelFFI.a'
     # s.vendored_frameworks = 'librwkv_mobile.xcframework', 'libweb_rwkv_ffi.xcframework'
     s.platform = :ios, '16.0'
     s.static_framework = true
