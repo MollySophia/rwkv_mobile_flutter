@@ -22,3 +22,5 @@ cp -r tmp/android/*.so android/src/main/jniLibs/arm64-v8a/
 cp -r tmp/linux/* linux/
 cp -r tmp/windows/Release/* windows/
 rm -rf tmp
+
+mv ios/default.metallib ios/mlx-swift_Cmlx.bundle/default.metallib
