@@ -44,7 +44,10 @@ enum Backend {
   mlx,
 
   /// MediaTek Neuropilot7
-  mtkNeuropilot7;
+  mtkNeuropilot7,
+
+  /// MediaTek Neuropilot9
+  mtkNeuropilot9;
 
   String get asArgument => switch (this) {
     Backend.ncnn => 'ncnn',
@@ -55,6 +58,7 @@ enum Backend {
     Backend.coreml => 'coreml',
     Backend.mlx => 'mlx',
     Backend.mtkNeuropilot7 => 'mtk_np7',
+    Backend.mtkNeuropilot9 => 'mtk_np9',
   };
 
   static Backend fromString(String value) {
@@ -67,6 +71,7 @@ enum Backend {
     if (toLower.contains('coreml')) return Backend.coreml;
     if (toLower.contains('mlx')) return Backend.mlx;
     if (toLower.contains('mtk_np7')) return Backend.mtkNeuropilot7;
+    if (toLower.contains('mtk_np9')) return Backend.mtkNeuropilot9;
     throw Exception('Unknown backend: $value');
   }
 }

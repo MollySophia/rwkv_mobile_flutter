@@ -622,6 +622,7 @@ class RWKVMobile {
             case Backend.mnn:
             case Backend.mlx:
             case Backend.mtkNeuropilot7:
+            case Backend.mtkNeuropilot9:
               sendPort.send(LoadModelSteps(req: req, status: LoadingStatus.loading));
               retVal = rwkvMobile.rwkvmobile_runtime_load_model_async(
                 runtime,
