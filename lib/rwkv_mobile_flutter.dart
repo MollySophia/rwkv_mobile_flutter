@@ -358,6 +358,16 @@ class RWKVMobile {
           final batchSize = req.batchSize;
           final finalMaxLength = req.maxLength ?? maxLength;
 
+          if (batchSize <= 0) {
+            sendPort.send(Error('Invalid batch size: $batchSize', req, -1));
+            break;
+          }
+
+          if (batchSize > maxBatchSize) {
+            sendPort.send(Error('Batch size $batchSize exceeds max batch size $maxBatchSize', req, -1));
+            break;
+          }
+
           if (batchSize != req.messages.length) {
             sendPort.send(Error('Batch size does not match messages length', req, -1));
             break;
@@ -422,6 +432,11 @@ class RWKVMobile {
           final finalMaxLength = req.maxLength ?? maxLength;
           final finalStopToken = req.stopToken ?? generationStopToken;
           final disableCache = (req.disableCache ?? false) ? 1 : 0;
+
+          if (req.batch > maxBatchSize) {
+            sendPort.send(Error('Batch size ${req.batch} exceeds max batch size $maxBatchSize', req, -1));
+            break;
+          }
 
           if (rwkvMobile.rwkvmobile_runtime_is_generating(runtime, req.modelID) != 0) {
             sendPort.send(Error('LLM is already generating', req));
