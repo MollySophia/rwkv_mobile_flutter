@@ -714,6 +714,13 @@ class SetSpaceAfterRoles extends ToRWKV {
   SetSpaceAfterRoles(this.spaceAfterRoles, {required this.modelID});
 }
 
+class SetFlowerTemplate extends ToRWKV {
+  final bool flowerTemplate;
+  final int modelID;
+
+  SetFlowerTemplate(this.flowerTemplate, {required this.modelID});
+}
+
 class SetImageUniqueIdentifier extends ToRWKV {
   final String uniqueIdentifier;
 

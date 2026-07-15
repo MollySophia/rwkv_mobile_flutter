@@ -280,6 +280,10 @@ class RWKVMobile {
           retVal = rwkvMobile.rwkvmobile_runtime_set_space_after_roles(runtime, req.modelID, req.spaceAfterRoles ? 1 : 0);
           if (retVal != 0) sendPort.send(Error('Failed to set space after roles: retVal: $retVal', req, retVal));
 
+        case SetFlowerTemplate req:
+          retVal = rwkvMobile.rwkvmobile_runtime_set_flower_template(runtime, req.modelID, req.flowerTemplate ? 1 : 0);
+          if (retVal != 0) sendPort.send(Error('Failed to set flower template: retVal: $retVal', req, retVal));
+
         case SetImageUniqueIdentifier req:
           final uniqueIdentifierPtr = req.uniqueIdentifier.ptr;
           retVal = rwkvMobile.rwkvmobile_runtime_set_image_unique_identifier(runtime, uniqueIdentifierPtr);
