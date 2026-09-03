@@ -636,6 +636,7 @@ class RWKVMobile {
 
           int modelID = -1;
           int retVal = 0;
+          Pointer<Void>? loadModelExtra;
           switch (backend) {
             case Backend.ncnn:
             case Backend.mnn:
@@ -652,6 +653,7 @@ class RWKVMobile {
             case Backend.llamacpp:
               sendPort.send(LoadModelSteps(req: req, status: LoadingStatus.loadModelWithExtra));
               final llamaCppArgs = calloc<llama_cpp_args>();
+              loadModelExtra = llamaCppArgs.cast<Void>();
               // TODO @HaloWang 从前端获取 n_gpu_layers （for windows，有的用户可能会想部分层放gpu或者纯cpu推理）
               llamaCppArgs.ref.n_gpu_layers = req.llamaCppNGpuLayers ?? 99;
               retVal = rwkvMobile.rwkvmobile_runtime_load_model_with_extra_async(
@@ -659,9 +661,8 @@ class RWKVMobile {
                 modelPath.ptr,
                 modelBackendString.ptr,
                 tokenizerPath.ptr,
-                llamaCppArgs.cast<Void>(),
+                loadModelExtra,
               );
-              calloc.free(llamaCppArgs);
             case Backend.qnn:
               final tempDir = await getTemporaryDirectory();
               final separator = Platform.pathSeparator;
@@ -674,16 +675,18 @@ class RWKVMobile {
               sendPort.send(
                 LoadModelSteps(req: req, status: LoadingStatus.loadModelWithExtra),
               );
+              loadModelExtra = qnnHtpLibPath.toNativeUtf8(allocator: calloc).cast<Void>();
               retVal = rwkvMobile.rwkvmobile_runtime_load_model_with_extra_async(
                 runtime,
                 modelPath.ptr,
                 modelBackendString.ptr,
                 tokenizerPath.ptr,
-                qnnHtpLibPath.toNativeUtf8().cast<Void>(),
+                loadModelExtra,
               );
             case Backend.webRwkv:
               sendPort.send(LoadModelSteps(req: req, status: LoadingStatus.loading));
               final webRwkvArgs = calloc<web_rwkv_args>();
+              loadModelExtra = webRwkvArgs.cast<Void>();
               // TODO: @wangce 从前端获取 quant_type 和 quant_layers
               webRwkvArgs.ref.quant_type = 0; // 0: fp16, 1: int8, 2: nf4
               webRwkvArgs.ref.quant_layers = 0; // number of quantized layers
@@ -692,11 +695,11 @@ class RWKVMobile {
                 modelPath.ptr,
                 modelBackendString.ptr,
                 tokenizerPath.ptr,
-                webRwkvArgs.cast<Void>(),
+                loadModelExtra,
               );
-              calloc.free(webRwkvArgs);
             case Backend.coreml:
               final coremlArgs = calloc<coreml_args>();
+              loadModelExtra = coremlArgs.cast<Void>();
               coremlArgs.ref.load_prefill_async = 1;
               coremlArgs.ref.async_prefill_decode_load_threshold_ms =
                   10000; // do not load prefill functions async when decode loaded under 10000ms(cache hit case)
@@ -705,12 +708,12 @@ class RWKVMobile {
                 modelPath.ptr,
                 modelBackendString.ptr,
                 tokenizerPath.ptr,
-                coremlArgs.cast<Void>(),
+                loadModelExtra,
               );
-              calloc.free(coremlArgs);
           }
 
           if (retVal != 0) {
+            if (loadModelExtra != null) calloc.free(loadModelExtra);
             final error =
                 '''Failed to load model: 
 path: $modelPath
@@ -737,6 +740,9 @@ modelID: $modelID''';
             const duration = Duration(milliseconds: 199);
             await Future.delayed(duration);
           }
+          // The native async loader captures `extra` and reads it on its load
+          // thread. Keep it alive until that thread reports completion.
+          if (loadModelExtra != null) calloc.free(loadModelExtra);
 
           final ptr0 = malloc.allocate<Int32>(sizeOf<Int32>());
           final ptr1 = malloc.allocate<Int32>(sizeOf<Int32>());
