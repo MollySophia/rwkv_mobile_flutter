@@ -14,9 +14,11 @@ project(${PROJECT_NAME} LANGUAGES CXX)
 # List of absolute paths to libraries that should be bundled with the plugin.
 # This list could contain prebuilt libraries, or libraries created by an
 # external build triggered from this build file.
-set(rwkv_mobile_flutter_bundled_libraries
-  "${CMAKE_CURRENT_SOURCE_DIR}/rwkv_mobile.dll"
-  "${CMAKE_CURRENT_SOURCE_DIR}/rwkv_mobile-arm64.dll"
-  "${CMAKE_CURRENT_SOURCE_DIR}/libomp140.aarch64.dll"
-  PARENT_SCOPE
-)
+if(FLUTTER_TARGET_PLATFORM STREQUAL "windows-arm64")
+  set(native_library "${CMAKE_CURRENT_SOURCE_DIR}/rwkv_mobile-arm64.dll")
+  file(GLOB openmp_libraries "${CMAKE_CURRENT_SOURCE_DIR}/arm64/libomp*.dll")
+else()
+  set(native_library "${CMAKE_CURRENT_SOURCE_DIR}/rwkv_mobile.dll")
+  set(openmp_libraries "${CMAKE_CURRENT_SOURCE_DIR}/libomp.dll")
+endif()
+set(rwkv_mobile_flutter_bundled_libraries ${native_library} ${openmp_libraries} PARENT_SCOPE)

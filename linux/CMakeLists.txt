@@ -14,8 +14,10 @@ project(${PROJECT_NAME} LANGUAGES CXX)
 # List of absolute paths to libraries that should be bundled with the plugin.
 # This list could contain prebuilt libraries, or libraries created by an
 # external build triggered from this build file.
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64")
+  set(native_arch "aarch64")
+else()
+  set(native_arch "x86_64")
+endif()
 set(rwkv_mobile_flutter_bundled_libraries
-  "${CMAKE_CURRENT_SOURCE_DIR}/librwkv_mobile-linux-x86_64.so"
-  "${CMAKE_CURRENT_SOURCE_DIR}/librwkv_mobile-linux-aarch64.so"
-  PARENT_SCOPE
-)
+  "${CMAKE_CURRENT_SOURCE_DIR}/librwkv_mobile-linux-${native_arch}.so" PARENT_SCOPE)

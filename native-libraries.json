@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "repository": "RWKV-APP/rwkv-mobile",
+  "tag": "4.8.0-native.1",
+  "commit": "1425665b7f00aa2fdda67c454b0c6fdcd0208937",
+  "workflowRun": "https://github.com/RWKV-APP/rwkv-mobile/actions/runs/33985502306",
+  "palmCommit": "3da00340257369c686dd30f7077cf2e5a9293e6c",
+  "mlxCommit": "34b276b9c774a8d6465e009382dae12f4e97b849",
+  "platforms": {
+    "android": {
+      "archive": "librwkv_mobile-1425665-aarch64-android-ndk-r25c.zip",
+      "sha256": "79bb166bc4b7497ccd96374e655ae88c981380d0da92fcb1cbf1d45a018a93ab",
+      "files": {
+        "librwkv_mobile.so": {
+          "path": "android/src/main/jniLibs/arm64-v8a/librwkv_mobile.so",
+          "size": 34768528,
+          "sha256": "510bb66b915316be87210f066cba7f072238e01ad11d2503d8ab05119bfda1fd"
+        },
+        "librwkv_mtk_np7.so": {
+          "path": "android/src/main/jniLibs/arm64-v8a/librwkv_mtk_np7.so",
+          "size": 1052480,
+          "sha256": "aaedfc773fea53e1f27df115f75d8f0011b4e41fdced3a4a9bb543ed82dd35bd"
+        },
+        "librwkv_mtk_np9.so": {
+          "path": "android/src/main/jniLibs/arm64-v8a/librwkv_mtk_np9.so",
+          "size": 1104480,
+          "sha256": "683d88035fac4ea5f0c4df71a0e95d52f1b3dadacc6ba2eeac9db7201abd08e9"
+        }
+      }
+    },
+    "ios": {
+      "archive": "librwkv_mobile-1425665-ios-static.zip",
+      "sha256": "38b85313b0fb142fa058ead08277f2c6163e8895f110242fb3236252055fa09f",
+      "files": {
+        "default.metallib": {
+          "path": "ios/mlx-swift_Cmlx.bundle/default.metallib",
+          "size": 2900572,
+          "sha256": "4caf9f5d548af28fbf3b9413c3343a13ee56222ee64518ce409414cbdb228120"
+        },
+        "libMLXModelFFI.a": {
+          "path": "ios/libMLXModelFFI.a",
+          "size": 37533104,
+          "sha256": "7bfc489978005af0b72ddbc5b50262efe1312998566daaa1245c50c75ee56726"
+        },
+        "libncnn.a": {
+          "path": "ios/libncnn.a",
+          "size": 4772776,
+          "sha256": "6218bcd6546cd9263649e504738ff9f3c4991d7c8159d7ade8038cc56ea85291"
+        },
+        "librwkv_mobile.a": {
+          "path": "ios/librwkv_mobile.a",
+          "size": 65655296,
+          "sha256": "afef20f4e1130eac80c6fba3b5911569b90dd6d505d854c02d6c7480a5f46ae4"
+        }
+      }
+    },
+    "macos": {
+      "archive": "librwkv_mobile-1425665-macos-aarch64.zip",
+      "sha256": "7330407483eac748c2aca6101b473733704538e96f537c6e28bb94a10af9ee3b",
+      "files": {
+        "librwkv_mobile.dylib": {
+          "path": "macos/librwkv_mobile.dylib",
+          "size": 42298296,
+          "sha256": "ce147b5d9a0554d3c99cb9fca77761a8dc5cee21e6494b521ad0e1368b09588d"
+        },
+        "mlx-swift_Cmlx.bundle/Contents/Info.plist": {
+          "path": "macos/mlx-swift_Cmlx.bundle/Contents/Info.plist",
+          "size": 1119,
+          "sha256": "7f317127d20a8d332a516e2f91230b83acff3b5c8fe36dbc3dfbafb048417361"
+        },
+        "mlx-swift_Cmlx.bundle/Contents/Resources/default.metallib": {
+          "path": "macos/mlx-swift_Cmlx.bundle/Contents/Resources/default.metallib",
+          "size": 2902796,
+          "sha256": "7fec3dfb951564f9862bbabfaaec485cf71ab08ee75c395d4200746236ee5c8e"
+        }
+      }
+    },
+    "linux-x64": {
+      "archive": "librwkv_mobile-1425665-linux-x86_64.zip",
+      "sha256": "c9f4970502db3d04cd0d81140ba4abe5f67540d8403fc31bf35788171284fb76",
+      "files": {
+        "librwkv_mobile-linux-x86_64.so": {
+          "path": "linux/librwkv_mobile-linux-x86_64.so",
+          "size": 88331272,
+          "sha256": "0aaf80a640077e805f9daf81309dacee5d6ed63952b3201081339fdc38a533ae"
+        }
+      }
+    },
+    "linux-arm64": {
+      "archive": "librwkv_mobile-1425665-linux-aarch64.zip",
+      "sha256": "ba5d71cd7a35df3ad5be873fa2572dc36a55074ec7efa7f359ea2ddc27ba2ff0",
+      "files": {
+        "librwkv_mobile-linux-aarch64.so": {
+          "path": "linux/librwkv_mobile-linux-aarch64.so",
+          "size": 30509512,
+          "sha256": "646b7a3f96cdbd5f2e8ce86bfc617b344d8621f0dbc0cdde1ea9af6ccc58ae5b"
+        }
+      }
+    },
+    "windows-x64": {
+      "archive": "librwkv_mobile-1425665-windows-x64.zip",
+      "sha256": "11ba3d9faa19785665eab35cc6b79da32ab3d8c6605052e4d16ce2b6e8c3098f",
+      "files": {
+        "Release/libomp.dll": {
+          "path": "windows/libomp.dll",
+          "size": 768000,
+          "sha256": "a12116ba72d1d6820407cf30be23da04ce79d6bb8a71a5ee71759c5a1faa6f1c"
+        },
+        "Release/rwkv_mobile.dll": {
+          "path": "windows/rwkv_mobile.dll",
+          "size": 102757376,
+          "sha256": "fab8e3e925787efc3d871fd865b04583c96837c17fc5f6f475c28a11b243e8a6"
+        }
+      }
+    },
+    "windows-arm64": {
+      "archive": "librwkv_mobile-1425665-windows-arm64.zip",
+      "sha256": "9adc5ffb600957100bfe4473636ff431b5be90d557430357cd0007bafa3b8e43",
+      "files": {
+        "Release/libomp.dll": {
+          "path": "windows/arm64/libomp.dll",
+          "size": 764928,
+          "sha256": "9a8f1b6335b9418a8136c7dfb61f4c95336f0fe28d28c6a665a91b5028fce729"
+        },
+        "Release/rwkv_mobile-arm64.dll": {
+          "path": "windows/rwkv_mobile-arm64.dll",
+          "size": 15774720,
+          "sha256": "ebd695de0dc96d71763f3f8fde46085ab84426c4fa02690a8f7add087a8d82e4"
+        }
+      }
+    }
+  }
+}

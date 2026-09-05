@@ -51,11 +51,15 @@ class RWKVMobile {
 
   static String getAvailableBackendNames() {
     final rwkvMobile = rwkv_mobile(_getDynamicLibrary());
-    const backendNamesLength = 64; // should be enough
-    Pointer<Char> responseBuffer = malloc.allocate<Char>(backendNamesLength);
-    rwkvMobile.rwkvmobile_runtime_get_available_backend_names(responseBuffer, backendNamesLength);
-    final response = responseBuffer.cast<Utf8>().toDartString();
-    return response;
+    const backendNamesLength = 128;
+    final responseBuffer = calloc<Char>(backendNamesLength);
+    try {
+      final result = rwkvMobile.rwkvmobile_runtime_get_available_backend_names(responseBuffer, backendNamesLength);
+      if (result != 0) throw Exception('😡 Failed to list available backends: $result');
+      return responseBuffer.cast<Utf8>().toDartString();
+    } finally {
+      calloc.free(responseBuffer);
+    }
   }
 
   static String getPlatformName() {
@@ -643,6 +647,7 @@ class RWKVMobile {
             case Backend.mlx:
             case Backend.mtkNeuropilot7:
             case Backend.mtkNeuropilot9:
+            case Backend.palm:
               sendPort.send(LoadModelSteps(req: req, status: LoadingStatus.loading));
               retVal = rwkvMobile.rwkvmobile_runtime_load_model_async(
                 runtime,

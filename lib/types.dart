@@ -47,7 +47,10 @@ enum Backend {
   mtkNeuropilot7,
 
   /// MediaTek Neuropilot9
-  mtkNeuropilot9;
+  mtkNeuropilot9,
+
+  /// Bundled Palm-Infra CPU backend using a downloaded .mollm model package
+  palm;
 
   String get asArgument => switch (this) {
     Backend.ncnn => 'ncnn',
@@ -59,6 +62,7 @@ enum Backend {
     Backend.mlx => 'mlx',
     Backend.mtkNeuropilot7 => 'mtk_np7',
     Backend.mtkNeuropilot9 => 'mtk_np9',
+    Backend.palm => 'palm',
   };
 
   static Backend fromString(String value) {
@@ -72,6 +76,7 @@ enum Backend {
     if (toLower.contains('mlx')) return Backend.mlx;
     if (toLower.contains('mtk_np7')) return Backend.mtkNeuropilot7;
     if (toLower.contains('mtk_np9')) return Backend.mtkNeuropilot9;
+    if (toLower == 'palm') return Backend.palm;
     throw Exception('Unknown backend: $value');
   }
 }

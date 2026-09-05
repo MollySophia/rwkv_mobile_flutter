@@ -19,6 +19,19 @@
 - **One bridge for multiple backends:** Reuse the same Dart-side protocol across CPU, GPU, and NPU-backed runtimes provided by `rwkv-mobile`.
 - **Production-oriented packaging:** Ship prebuilt native libraries for Android, iOS, macOS, Windows, and Linux as part of the plugin.
 
+### Pinned native release
+
+`native-libraries.json` records the RWKV-APP native fork commit, immutable
+release tag, archive checksums and installed-file checksums. The legacy-named
+`fetch_latest_libraries.sh` and `.ps1` now restore that exact release. They do
+not follow an upstream `latest` tag.
+
+Run `python3 tools/fetch_native_libraries.py --verify-only` to verify all
+vendored libraries without downloading. Omit `--verify-only` to restore a
+changed file; repeat `--platform` to select individual manifest platforms.
+Windows and Linux packaging selects only the target architecture's libraries.
+Palm is bundled as the optional `palm` CPU backend for external `.mollm` files.
+
 ## ✨ Core Features
 
 - **Cross-platform Flutter FFI plugin:** Android, iOS, macOS, Windows, and Linux.
