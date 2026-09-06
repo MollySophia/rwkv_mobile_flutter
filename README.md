@@ -43,6 +43,9 @@ Palm is bundled as the optional `palm` CPU backend for external `.mollm` files.
 - **Speech support:** SparkTTS model loading, streaming TTS buffers, global tokens, and property-driven speech generation.
 - **Runtime diagnostics:** Load progress, prefill/decode speed, logs, SoC/platform detection, and state cache inspection.
 
+Native log entries can be byte-truncated. Diagnostic decoding tolerates an
+incomplete UTF-8 character so reading logs cannot terminate the runtime isolate.
+
 ## 🧭 Architecture Position
 
 This repository is best understood as the middle layer in a three-part stack:

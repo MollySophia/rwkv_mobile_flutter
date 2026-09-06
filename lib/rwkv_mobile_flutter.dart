@@ -998,7 +998,7 @@ modelID: $modelID''';
         // 🟥 dumpLog
         case DumpLog req:
           final log = rwkvMobile.rwkvmobile_dump_log();
-          sendPort.send(RuntimeLog(runtimeLog: log.cast<Utf8>().toDartString(), req: req));
+          sendPort.send(RuntimeLog(runtimeLog: readRuntimeLog(log), req: req));
 
         // 🟥 dumpStateInfo
         case DumpStateInfo req:
