@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
   "repository": "RWKV-APP/rwkv-mobile",
-  "tag": "4.8.0-native.3",
-  "commit": "2454afccd75532bab8dd8ea62edf44e1caaed443",
-  "workflowRun": "https://github.com/RWKV-APP/rwkv-mobile/actions/runs/34047994402",
+  "tag": "4.8.0-native.4",
+  "commit": "205d4848f2b769efe4a1df268e1cdf6548158b5d",
+  "workflowRun": "https://github.com/RWKV-APP/rwkv-mobile/actions/runs/34058057293",
   "palmCommit": "3da00340257369c686dd30f7077cf2e5a9293e6c",
   "mlxCommit": "34b276b9c774a8d6465e009382dae12f4e97b849",
   "platforms": {
     "android": {
-      "archive": "librwkv_mobile-2454afc-aarch64-android-ndk-r25c.zip",
-      "sha256": "5cc4841ac5febe15949540109c03a9c121ae618a0b49a9dc7f3d401b785f92b7",
+      "archive": "librwkv_mobile-205d484-aarch64-android-ndk-r25c.zip",
+      "sha256": "37372b0a90019c03e0c90c9385e264c79278f1ad32e77d397a7068a18dc73ae2",
       "files": {
         "librwkv_mobile.so": {
           "path": "android/src/main/jniLibs/arm64-v8a/librwkv_mobile.so",
           "size": 34767760,
-          "sha256": "9fe1e74f9936c5149310c49bbdffdfc3fd15e988216abfbda255621986764737"
+          "sha256": "bd9581211e1ee46cb7b3a65730b8882d201454dd04d260d3092f5b7656cc1e1c"
         },
         "librwkv_mtk_np7.so": {
           "path": "android/src/main/jniLibs/arm64-v8a/librwkv_mtk_np7.so",
@@ -29,8 +29,8 @@
       }
     },
     "ios": {
-      "archive": "librwkv_mobile-2454afc-ios-static.zip",
-      "sha256": "0a80aa0b29db064ee6851183d927823036d33e9eb885b3973e78fa358b981b51",
+      "archive": "librwkv_mobile-205d484-ios-static.zip",
+      "sha256": "c927e15d071b248c8fcaf1e88913764b76f1c672694521394f4a9fff227e4709",
       "files": {
         "default.metallib": {
           "path": "ios/mlx-swift_Cmlx.bundle/default.metallib",
@@ -40,28 +40,28 @@
         "libMLXModelFFI.a": {
           "path": "ios/libMLXModelFFI.a",
           "size": 37533104,
-          "sha256": "1e8abe56ac95d4bc12ee8d4970768689f0501c3c656e1d3eef60cb24e21edc5b"
+          "sha256": "08bc2f6ebf55f8bdb7306d85054e3f71a5c6751c3a791caa915b9417683e8193"
         },
         "libncnn.a": {
           "path": "ios/libncnn.a",
           "size": 4772776,
-          "sha256": "c17a6c3e323fc6b7f209dab1e9bb285daf103b48276a5dd7510726ae6480d94e"
+          "sha256": "06ab925099d1798ba3a86576205d39619bf8203a205420c626f12f7f8c811994"
         },
         "librwkv_mobile.a": {
           "path": "ios/librwkv_mobile.a",
           "size": 65656704,
-          "sha256": "02e687c7f175a81c01667aa5db937118806bd75a7afe838495482efa5289c24a"
+          "sha256": "e50bd29e8720847d98793c81af1bc0b1e3e97f4d42a425068ba5f55bd41fd25b"
         }
       }
     },
     "macos": {
-      "archive": "librwkv_mobile-2454afc-macos-aarch64.zip",
-      "sha256": "db7108ffe805b15e60d1460d6adad60dc47392f6ddd19955ca112d56a6b5b8ab",
+      "archive": "librwkv_mobile-205d484-macos-aarch64.zip",
+      "sha256": "a6f5bd09c9c15838148a72c13bb625333baa5b6c9d376c020a0c6aa2b68b6bdc",
       "files": {
         "librwkv_mobile.dylib": {
           "path": "macos/librwkv_mobile.dylib",
           "size": 42298296,
-          "sha256": "c0b4904bc1391751d0678ce0104837f102893f55f057b99c76272d9a0b395b98"
+          "sha256": "7e1fdf16abfe5cddb4d1d0689dabc5c4e0b6de31339e3f9572d24f004e8a55a9"
         },
         "mlx-swift_Cmlx.bundle/Contents/Info.plist": {
           "path": "macos/mlx-swift_Cmlx.bundle/Contents/Info.plist",
@@ -76,30 +76,30 @@
       }
     },
     "linux-x64": {
-      "archive": "librwkv_mobile-2454afc-linux-x86_64.zip",
-      "sha256": "e19a40baac8dd90bb7f0cca33c15698b4758f161fd1479b0653393a3ebf32ca3",
+      "archive": "librwkv_mobile-205d484-linux-x86_64.zip",
+      "sha256": "eda38d13fe9e27d1beb5982a914a1795ce5bb2448a978e48c5d01b458047967f",
       "files": {
         "librwkv_mobile-linux-x86_64.so": {
           "path": "linux/librwkv_mobile-linux-x86_64.so",
           "size": 88335400,
-          "sha256": "7fed8e36de233b70843a5d566c2435d8cf6e1bb73452f297d785e0c1303d1734"
+          "sha256": "f5a7a511342b6c8fbdbdc9fad482e2e51e90ed05b703c8e0c1c5321cc795d694"
         }
       }
     },
     "linux-arm64": {
-      "archive": "librwkv_mobile-2454afc-linux-aarch64.zip",
-      "sha256": "af5f2f13fa5920b50545d6b2ee786572befa3aa9a281a1b7b1601d7602b97178",
+      "archive": "librwkv_mobile-205d484-linux-aarch64.zip",
+      "sha256": "47a095e3db4a1568f3c280443a472dbd65b86be2a394a9fe39212ca19ce4dad7",
       "files": {
         "librwkv_mobile-linux-aarch64.so": {
           "path": "linux/librwkv_mobile-linux-aarch64.so",
           "size": 30558664,
-          "sha256": "b1b0ae85f0a682ad5c1479a74d3a44ce592b121b7bfc7dd33d96cd18d3ad2eec"
+          "sha256": "d2202b0b023d195ed4332d45e08da802841a3ed885984529edb3eae30a1a6589"
         }
       }
     },
     "windows-x64": {
-      "archive": "librwkv_mobile-2454afc-windows-x64.zip",
-      "sha256": "cdb0e88cfb0120a5f6368e629e8bdd1589861c6c7c98fd64266dab7378e6fef5",
+      "archive": "librwkv_mobile-205d484-windows-x64.zip",
+      "sha256": "fdb6827e77bac395adebd070e43fc320c9b7ea156d2e34ab0b8e0b0d0629e70a",
       "files": {
         "Release/libomp.dll": {
           "path": "windows/libomp.dll",
@@ -109,13 +109,13 @@
         "Release/rwkv_mobile.dll": {
           "path": "windows/rwkv_mobile.dll",
           "size": 102757888,
-          "sha256": "bf5f35733ef5388bb1e860e55abc590d4602ca079ea1fc3b3216669fc01f26df"
+          "sha256": "9e280603ffeadd57e264025e8532a2bedfa62c9b1b662c519483f8c1a685aef1"
         }
       }
     },
     "windows-arm64": {
-      "archive": "librwkv_mobile-2454afc-windows-arm64.zip",
-      "sha256": "2582a9feb9694caa76102e49c063ecf3eb2c127f38ccf143ad7bd0ce268b122a",
+      "archive": "librwkv_mobile-205d484-windows-arm64.zip",
+      "sha256": "adb23460ccd7cd21eea171c080d7bc9bab38f9c45a22814305e391fef0bfc39c",
       "files": {
         "Release/libomp.dll": {
           "path": "windows/arm64/libomp.dll",
@@ -125,7 +125,7 @@
         "Release/rwkv_mobile-arm64.dll": {
           "path": "windows/rwkv_mobile-arm64.dll",
           "size": 15775232,
-          "sha256": "446de33f0b81cb93d5befaf2d6feb33bbe7d8ef5f7b89558dcca3483a19bd048"
+          "sha256": "f697bb252e2e8715a21594e12aa1bebc434998c1a29754175654279625f3e429"
         }
       }
     }
