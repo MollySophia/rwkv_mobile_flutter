@@ -207,7 +207,7 @@ When you see errors such as:
 Invalid argument(s): Failed to lookup symbol 'xxx': undefined symbol: xxx
 ```
 
-the bundled native libraries are usually out of sync with the generated FFI bindings or the underlying engine build. Refresh them from the latest `rwkv-mobile` release:
+the bundled native libraries may be out of sync with the generated FFI bindings or the underlying engine build. Restore the release pinned by this checkout's `native-libraries.json`:
 
 - Windows:
 
@@ -221,7 +221,7 @@ the bundled native libraries are usually out of sync with the generated FFI bind
 ./fetch_latest_libraries.sh
 ```
 
-These scripts download the latest platform archives from `rwkv-mobile` releases and copy the extracted artifacts into this plugin repository.
+These scripts fetch the pinned platform archives and verify their SHA-256 hashes before replacing local libraries. To update the native version, update the manifest and matching binaries together.
 
 ## 💻 Develop With RWKV_APP
 
